@@ -7,7 +7,10 @@ How it works: it opens the agent-protocol SSE stream with `scope=all&filter=all`
 every message in every room the agent belongs to. It sends a heartbeat every 2 s and reconnects
 with `Last-Event-ID`. For each message it:
 
-- maps the speaker to a roster id and the room to a `RoomId`
+- maps the speaker to a roster id, and tags the event with its Switch room (`meta.switch_room_id`, `room_name`,
+  `chat_id` when known, `switch_thread_id`). The office server decides which workspace the room belongs to and
+  which topic (department) the thread is; `room` is only a placeholder (config `rooms`, else the speaker's home
+  department, else `war_room`). Rooms with no workspace are forwarded too: that is how link codes arrive (v3).
 - infers `type` from keywords: `approval_needed`, `pushback`, `approved`, otherwise `message`
 - adds `meta.targets` for each `@d2c-*` mention
 - POSTs the event to `{server}/api/events`
@@ -24,14 +27,13 @@ Requires Node ≥ 22.18. It runs the `.ts` files directly and has no runtime dep
    agent id, the bridge URL and the API key. If it isn't there, set `"credentials": ".claude/settings.local.json"`
    in `config.json`, because Console writes the same `env` block there. You can also export
    `SWITCH_AGENT_ID`, `SWITCH_API_ENDPOINT` and `SWITCH_API_TOKEN`.
-3. In **each** Telegram group, send `/invite_agent @d2c-observer`.
+3. Nothing per group: when a user links a group (docs/GO_LIVE.md), the office server joins the observer to it.
 
 ## Run
 ```bash
 npm install        # dev deps only (typescript, for `npm run build`)
 npm start          # live: needs the office server on config.server (http://localhost:8787)
-npm run mock       # no Switch needed: fake bridge + real observer → office server; exits 0 if mapped right
-OFFICE_URL=http://localhost:8797 npm run mock   # point at another office server
+npm run mock       # no Switch or office needed: fake bridge + real observer → fake office; exits 0 if tagged right
 npm run build      # typecheck
 ```
 
@@ -42,6 +44,6 @@ npm run build      # typecheck
 | `speakers` | Map from `sender_name` to roster id, e.g. `{"Snehal K": "founder"}`. Roster ids and names already match. |
 | `unknownSpeaker` | Roster id used for unmapped senders (default `founder`, logged), or `null` to skip them. |
 | `ignoreSpeakers` | Sender names to drop, e.g. Switch's own voice. |
-| `rooms` | Map from room name or room id to a `RoomId`. If no entry matches, it looks for a roster room label in the name ("Kesar HQ · War Room" becomes `war_room`). |
+| `rooms` | Optional fixed map from room name or room id to a `RoomId` (the placeholder department). |
 
-Unknown speakers and rooms are logged, never fatal.
+Unknown speakers are logged, never fatal. With `OBSERVER_TOKEN` set it also reads `GET /api/people` to know hired agents.
