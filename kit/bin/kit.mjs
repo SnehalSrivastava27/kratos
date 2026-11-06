@@ -63,7 +63,7 @@ async function main() {
   const name = (spec, ext, fb) => outPath(o.out ?? spec.out ?? (String(spec.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || fb), ext, fb);
   switch (cmd) {
     case 'sql': return data.query(dir, args.join(' '), o.limit);
-    case 'tables': return { tables: data.openDb(dir).tables };
+    case 'tables': { const { tables, marts } = data.openDb(dir); return { tables, marts: marts.map((m) => ({ table: m.table, rows: m.rows, columns: m.columns.map((c) => c.name) })) }; }
     case 'stats': if (args.length < 2) fail(HELP.stats.usage); return data.stats(dir, args[0], args[1], o.by);
     case 'forecast': return data.forecast(dir, { table: o.table, date: o.date, value: o.value, by: o.by, days: o.days ?? 5, uplift: o.uplift ?? 1 });
     case 'chart': {

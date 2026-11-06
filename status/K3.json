@@ -1,0 +1,11 @@
+{
+ "task": "K3",
+ "state": "working",
+ "progress": 10,
+ "done": ["read brief, kit, data, evals"],
+ "next": "SQLite cache + marts, then kit metric / brief",
+ "blockers": [],
+ "contract_requests": [],
+ "findings": [],
+ "updated": "2026-11-07T10:00:00+05:30"
+}
