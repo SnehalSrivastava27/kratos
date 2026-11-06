@@ -327,6 +327,10 @@ How the build was split: [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md) and
 - **Live Shopify data** instead of CSVs.
 - **Returns triage** and **restock alerts**.
 
+## Docs
+
+Blog pack: [post](docs/blog/post.md) · [every feature](docs/blog/features.md) · [findings](docs/blog/findings.md) · [#HowISwitch posts](docs/blog/social.md) · Switch pages and 13 Excalidraw diagrams: [docs/switch/](docs/switch/README.md).
+
 ## Credits
 
 Powered by [Switch](https://github.com/sandbox-quantum/switch).
