@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import type { Group } from 'three';
+import type { Group, Mesh } from 'three';
 import type { AgentState, Person } from '../shared/types';
 import type { PersonState } from './officeState';
 import { spot } from './data';
 
 const SPEED = 3.5; // m/s
 const JUMP_S = 0.7;
+const BUBBLE_MS = 5000;
 const xz = ([x, z]: [number, number]) => [x, 0, z] as const;
 
 export default function Character({ person, ps }: { person: Person; ps: PersonState }) {
@@ -17,6 +18,13 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
   const jumpAt = useRef(-1);
   const [walking, setWalking] = useState(false);
   const [start] = useState(() => spot(ps.zone, person.id));
+  const beacon = useRef<Mesh>(null);
+  const [bubble, setBubble] = useState<string>();
+  useEffect(() => {
+    setBubble(ps.bubble?.text);
+    const id = window.setTimeout(() => setBubble(undefined), BUBBLE_MS);
+    return () => clearTimeout(id);
+  }, [ps.bubble?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     waypoints.current = ps.route.map((z) => spot(z, person.id));
@@ -56,6 +64,7 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
     else if (ps.state === 'waiting') b.scale.setScalar(1 + Math.sin(t * 6) * 0.04);
     else if (ps.state === 'idle') b.rotation.z = Math.sin(t * 1.5) * 0.06;
     if (ps.state !== 'waiting') b.scale.setScalar(1);
+    if (beacon.current) beacon.current.scale.setScalar(1 + Math.sin(t * 8) * 0.25);
   });
 
   const shown: AgentState = walking ? 'walking' : ps.state;
@@ -71,10 +80,21 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
           <meshStandardMaterial color="#f1c27d" />
         </mesh>
       </group>
-      <Html position={[0, 1.6, 0]} center style={{ pointerEvents: 'none', fontSize: 18, textAlign: 'center' }}>
-        <div>{person.emoji}</div>
-        <div style={{ font: '10px system-ui' }}>{shown}</div>
+      {ps.beacon && (
+        <mesh ref={beacon} position-y={2.35}>
+          <sphereGeometry args={[0.14, 12, 8]} />
+          <meshBasicMaterial color="#E5484D" />
+        </mesh>
+      )}
+      <Html position={[0, 1.85, 0]} center zIndexRange={[10, 0]} style={{ pointerEvents: 'none', textAlign: 'center' }}>
+        <div style={{ fontSize: 18 }}>{person.emoji}{ps.state === 'done' && !walking ? '✅' : ''}</div>
+        <div className="hq-state">{shown}</div>
       </Html>
+      {bubble && (
+        <Html position={[0, 2.9, 0]} center zIndexRange={[20, 10]} style={{ pointerEvents: 'none' }}>
+          <div className="hq-bubble">{bubble}</div>
+        </Html>
+      )}
     </group>
   );
 }
