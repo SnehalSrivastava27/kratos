@@ -7,3 +7,4 @@ dist/
 .switch/
 .claude/settings.local.json
 .data/
+observer/topics.json
