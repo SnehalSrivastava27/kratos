@@ -37,6 +37,7 @@ findings list. It feeds the blog.
 | 04:00 | E2 merged: tier 2 (65 questions: joins, date windows, ranks, judgement, 8 unanswerables, 4 prompt injections); Haiku 142/148 → 149/149 over 5 runs, p50 6 s, ~1 tool call/question, $0.21/run; Sonnet 148/149 at $3.07. LV2 started: hard tool allowlist for live agents, sync instructions, live War Room demo. |
 | 04:20 | Full CI on backend-v2 caught one cross-task break (a K3 kit test still expected order lines after E2 fixed the truth to distinct orders); fixed, CI green. |
 | 04:40 | W2 merged: private Switch notes now a clear violet pulse with a lock (text only in the Switch panel; also stopped it leaking into the header caption and agent card), 🎭 role badges, morning-brief strip. |
+| 05:10 | LV2 merged: live agents locked down (per-agent tool list + repo `.claude/settings.json`: kit allowed, .env/.switch/~/.ssh reads denied, everything else needs a human); 16/16 synced; live SYSTEM OVERRIDE refused in 5 s. **Live War Room demo:** kickoff → approval ask in 5 min 1 s, 65 messages, 89 tool calls, deck + 3 banners, plan pinned; numbers match check_numbers.py (3,340 units, ₹20.42L, marketing ₹4.68L, EBITDA +₹1.61L). Fixes from the run (no ack messages, fresh numbers, default dates, Captain order) added to all 16 agents; re-running Haiku evals. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
@@ -64,3 +65,7 @@ findings list. It feeds the blog.
 - On this eval Haiku matched Sonnet (149 vs 148 of 149) at ~1/15 of the cost. (E2)
 - The Captain answering "team status" from the chat it already sees, instead of querying data, cut 37 tool calls to 0. (E2)
 - Headless Chrome's software GPU (SwiftShader) silently drops the office's instanced pulse beads; screenshots of the Switch hub need the real GPU (`--use-angle=metal`). (W2)
+- Claude Code's **auto** permission mode is not a lockdown: in a scratch repo it let `rm`, `touch` and `node -e` file writes through. Default mode + explicit allow/deny rules is. (LV2)
+- Claude Code agent definitions' `tools`/`disallowedTools` match tool names only (`Bash(echo:*)` removes Bash entirely); path-level rules only work in settings `permissions`. (LV2)
+- Live, about a third of the 65 demo messages were acknowledgement loops ("confirmed", "on hold") — the cost of agents that all see each other. A one-line "post only when you add something new" rule targets it. (LV2)
+- Switch-run agents resume their old Claude sessions, so they can reuse numbers from a previous run ("same as before"); the fix is an explicit "every run starts fresh" rule. (LV2)
