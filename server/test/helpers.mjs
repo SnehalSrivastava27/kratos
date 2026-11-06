@@ -23,6 +23,7 @@ export const fake = {
   agentsFlaky: 0 /* the next N GET /gateway/agents → 503 */, agentsMissing: [] /* names left out of GET /gateway/agents */,
   tgEditError: null /* editForumTopic answers { ok: false, description } with HTTP 500 */, tgDelay: 0 /* ms before each Bot API answer */, tg429: 0 /* the next N createForumTopic → 429 */, streamSilent: false /* office SSE never says connection_state */,
   chats: { "room-1": "-100", old: "-5" }, // Switch room → Telegram chat id
+  obsRooms: [] /* the observer's list_rooms result */, obsFrames: [] /* message payloads its stream sends after connection_state */,
   tg: { ok: true, forum: true, admin: true, type: "supergroup", topics: new Set(), next: 100 },
 };
 import { readFileSync } from "node:fs";
@@ -73,13 +74,22 @@ const sw = createServer(async (req, res) => {
     res.writeHead(200, { "content-type": "text/event-stream" });
     return res.write(fake.streamSilent ? ": keepalive\n\n" : "event: connection_state\ndata: {}\n\n"); // stays open until the client aborts
   }
+  // the observer (agent "obs"): one SSE stream with fake.obsFrames, list_rooms, heartbeat
+  if (r === "GET /agents/obs/events") {
+    res.writeHead(200, { "content-type": "text/event-stream" });
+    res.write("event: connection_state\ndata: {}\n\n");
+    fake.obsFrames.forEach((f, i) => res.write(`event: message\nid: ${i + 1}\ndata: ${JSON.stringify({ type: "message", sequence: i + 1, ...f })}\n\n`));
+    return; // stays open until the client aborts
+  }
+  if (r === "POST /agents/obs/ops/list_rooms") return ok({ result: fake.obsRooms });
+  if (r === "POST /agents/obs/connection/beat") return ok({});
   if (r === "POST /agents/office-1/ops/connect_to_room") return ok({ result: {} });
   if (r === "POST /agents/office-1/ops/post_message") return ok({ result: { event_id: "e2" } });
   ok({ detail: "unexpected " + r }, 418);
 });
 await new Promise((r) => sw.listen(0, "127.0.0.1", r));
 export const swDir = tmp();
-const upstream = `http://127.0.0.1:${sw.address().port}`;
+export const upstream = `http://127.0.0.1:${sw.address().port}`;
 writeFileSync(join(swDir, "core.env"), `SERVER_PORT=${sw.address().port}\nGATEWAY_ADMIN_EMAIL=a@x\nGATEWAY_ADMIN_PASSWORD='pw'\n`);
 
 after(() => {
