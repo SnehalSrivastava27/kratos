@@ -240,7 +240,8 @@ test("security headers: gallery is sandboxed, built site has CSP + asset caching
     assert.match(page.headers.get("content-type"), /text\/html/);
     const csp = page.headers.get("content-security-policy");
     assert.match(csp, /default-src 'self'/);
-    assert.match(csp, /script-src 'self'(;|$)/);
+    // wasm-unsafe-eval lets three.js' meshopt decoder compile WebAssembly; plain eval stays blocked.
+    assert.match(csp, /script-src 'self' 'wasm-unsafe-eval'(;|$)/);
     assert.match(csp, /https:\/\/fonts\.googleapis\.com/);
     assert.match(csp, /https:\/\/fonts\.gstatic\.com/);
     assert.equal(page.headers.get("x-content-type-options"), "nosniff");

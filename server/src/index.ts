@@ -99,7 +99,7 @@ function rateLimit(ip: string) {
 const BASE_HEADERS = { "x-content-type-options": "nosniff", "referrer-policy": "strict-origin-when-cross-origin" };
 // Vite build: same-origin module scripts, inline styles (React style props), Google Fonts CSS + font files.
 const CSP = [
-  "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "default-src 'self'", "script-src 'self' 'wasm-unsafe-eval'", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com", "img-src 'self' data: blob:", "connect-src 'self'",
   "worker-src 'self' blob:", "frame-src 'self'", "frame-ancestors 'self'", "object-src 'none'", "base-uri 'self'",
 ].join("; ");

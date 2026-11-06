@@ -47,7 +47,14 @@ try {
     page.on('pageerror', (e) => console.log(`     (office page error: ${e.message})`));
     await page.goto(BASE + '/office', { waitUntil: 'load' });
     await page.locator('canvas').first().waitFor({ state: 'attached', timeout: 15_000 });
-    await page.waitForFunction((lines) => lines.some((l) => document.body.innerText.includes(l)), feedLines, { timeout: 15_000 });
+    // Poll via the locator API: waitForFunction evals a string, which the site's CSP (rightly) blocks.
+    const until = Date.now() + 15_000;
+    for (;;) {
+      const text = await page.locator('body').innerText();
+      if (feedLines.some((l) => text.includes(l))) break;
+      if (Date.now() > until) throw new Error('no feed line on /office within 15s');
+      await page.waitForTimeout(500);
+    }
     await page.close();
   });
 } finally {
