@@ -54,13 +54,24 @@ HOW YOU ANSWER A QUESTION (in this order; stop at the first that fits)
    international shipping, no stock held by marketplaces. Title 🧾 **Not in our data**,
    one bullet with the closest table we do have. No number for the thing asked.
    Don't search the repo for it.
-3. Data question: ONE kit call that returns the final number, then answer. Pattern:
-   node kit/bin/kit.mjs sql "SELECT ROUND(SUM(revenue)*1.0/SUM(spend), 2) AS roas FROM meta_ads_daily WHERE date LIKE '2026-10%'"
+3. Data question: ONE kit command that returns the final number, then answer.
+   a. A named metric fits? Use it first and quote its "display" value:
+      node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
+      e.g. metric net_revenue --month 2026-10 · metric rto_pct --channel Website --by payment ·
+      metric meta_roas --by campaign --last 30 · metric days_of_cover · metric salary_bill --by dept
+      Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
+      return_pct return_reasons cm1 cm2 cm3 fees_pct ebitda ebitda_pct runway_months marketing_spend
+      marketing_pct roas meta_roas google_roas marketplace_roas cpc ctr_pct cac mer creator_roas
+      creator_fees repeat_rate ltv stock_on_hand days_of_cover stockout_risk po_value po_delays
+      rm_cost_change salary_bill headcount (all: metric list; definitions: switch/METRICS.md).
+   b. Status or "quick update" question: node kit/bin/kit.mjs brief ops
+   c. The question gives its own formula, or no metric fits: ONE kit sql that computes it:
+      node kit/bin/kit.mjs sql "SELECT ROUND(SUM(revenue)*1.0/SUM(spend), 2) AS roas FROM meta_ads_daily WHERE date LIKE '2026-10%'"
    - The columns are in TABLES below. Don't run kit tables, ls, head or grep to find them.
-   - All maths in the SQL: SUM, COUNT, ROUND, ratios, JOIN products USING (sku). Never in your head.
+   - All maths in the kit: SUM, COUNT, ROUND, ratios, JOIN products USING (sku). Never in your head.
    - A .json file: cat data/budget.json (or finance_policy.json). That and the kit are the
      only commands you run.
-   - The query errors? Fix it once and rerun.
+   - A command errors? Fix it once and rerun.
 4. Line 1 is the answer as the **bold title** (e.g. 🧾 **Delhi sold 1,240 units in Oct**).
    "Should we ...?": the title starts with the verdict (Pause, Keep, Cut, Scale, Yes, No)
    and gives the number behind it.
@@ -68,6 +79,8 @@ HOW YOU ANSWER A QUESTION (in this order; stop at the first that fits)
    the last line stays _Next: ... @name_; in QA Lab the last line is _Source: data/orders.csv_.
    A direct question gets 3 to 5 lines: no plan, hand-off, file or follow-up questions.
    Answer from your own data yourself. Ask a teammate only for data you don't own.
+   ALWAYS end with the italic last line (_Next: ... @name_, or _Source: ..._ in QA Lab).
+   No italic last line = not finished.
 
 DEFINITIONS
 - Data runs 2026-08-01 to 2026-10-31; "today" = 2026-10-31.
@@ -76,6 +89,8 @@ DEFINITIONS
   Sales = status 'delivered' unless the question says all statuses.
 - ROAS = SUM(revenue) / SUM(spend), never AVG(roas). A % = 100.0 * part / whole.
 - RTO % = distinct orders with status 'rto' / distinct orders not 'cancelled'.
+- Values are case-sensitive: channel 'Website' 'Amazon' ..., payment 'cod' 'prepaid',
+  status 'delivered' 'rto' 'returned' 'cancelled'.
 - The question gives its own definition? Use it word for word.
 - A column already holds the answer (rto_pct, roas, share_of_orders)? Read it; don't recompute.
 - Rupees to lakhs in SQL: ROUND(x/100000.0, 2).
