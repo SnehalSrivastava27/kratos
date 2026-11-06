@@ -33,6 +33,8 @@ async function call<T>(path: string, init: RequestInit | undefined, mock: () => 
     throw new ApiError(0, 'The office server is unreachable');
   }
   if (status === 401) scope.onUnauthorized?.();
+  // Commands and hires wait for the workspace to be linked (Telegram group, topics, agents): say so plainly.
+  if (status === 409 && /^\/api\/(command|employees)/.test(path)) throw new ApiError(409, 'Your Telegram group is still being set up');
   if (status >= 400) throw new ApiError(status, status === 404 && (body as { error?: string })?.error === 'not found' ? 'not available on this server yet' : (body as { error?: string })?.error ?? `HTTP ${status}`);
   return { data: body as T, status, mock: false };
 }
@@ -58,7 +60,7 @@ export const getBook = (id: string) =>
     return { data: { book, markdown } };
   });
 
-export const categorize = () => call<{ ok: boolean; runId: string }>('/api/library/categorize', { method: 'POST' }, () => ({ data: { ok: true, runId: `mock-${Date.now()}` }, status: 202 }));
+export const categorize = () => call<{ ok: boolean; runId: string }>('/api/library/categorize', { method: 'POST', body: '{}' }, () => ({ data: { ok: true, runId: `mock-${Date.now()}` }, status: 202 }));
 
 export const sendCommand = (room: RoomId, text: string) =>
   call<{ ok: boolean; via: string }>('/api/command', { method: 'POST', body: JSON.stringify({ room, text }) }, () => ({ data: { ok: true, via: 'mock' }, status: 202 }));
