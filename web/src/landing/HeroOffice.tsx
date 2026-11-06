@@ -1,9 +1,7 @@
-// Placeholder. T8 replaces this with <Office mode="autoplay" />.
+// Lazy-loaded by Hero so three.js never blocks first paint.
+import Office from '@/office/Office';
+import { saleDemo } from './data';
+
 export default function HeroOffice() {
-  return (
-    <div className="hero-office-placeholder">
-      <span>Live office on autoplay</span>
-      <small>Agents planning the festive sale</small>
-    </div>
-  );
+  return <Office mode="autoplay" feed={saleDemo} />;
 }
