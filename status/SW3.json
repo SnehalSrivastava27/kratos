@@ -1,0 +1,4 @@
+{ "task": "SW3", "state": "working", "progress": 20,
+  "done": ["verified send_targeted_message in switch-core 0.31.0: it is a normal room post with @mentions prepended, so it reaches Telegram; privacy needs an internal_only room"],
+  "next": "Finance desk instructions, lead sections, observer/server private events, tests, docs",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
