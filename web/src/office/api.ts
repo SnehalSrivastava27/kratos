@@ -1,7 +1,7 @@
 // Office actions (contracts/api.md "Office actions (v2)", scoped per v3). Live: the signed-in user's
 // workspace (`?ws=<id>`, the session cookie), a 401 calls onUnauthorized, errors are thrown, and nothing
 // is ever faked. Demo (landing hero, explicit demo): no request leaves the page; local fake data answers.
-import type { Employee, Library, LibraryBook, Person, RoomId } from '../shared/types';
+import type { Employee, GalleryItem, Library, LibraryBook, Person, RoomId } from '../shared/types';
 import exampleLib from '../../../data/library.example.json';
 import { DESKS, deskById, freeDesks, roomZone, roster } from './data';
 
@@ -42,6 +42,9 @@ const mockHires: (Person & { desk: string; hiredAt: number })[] = [];
 const mockLib: Library = { ...(exampleLib as Library), librarian: 'idle' };
 
 export const getPeople = () => call<(Person & { desk?: string; hiredAt?: number })[]>('/api/people', undefined, () => ({ data: [...mockHires] })); // the static roster is already in; the mock adds hires
+
+/** The Design agent's banners (live only; the demo pins its own as the story plays). */
+export const getGallery = () => call<GalleryItem[]>('/api/gallery', undefined, () => ({ data: [] }));
 
 export const getLibrary = () => call<Library>('/api/library', undefined, () => ({ data: mockLib }));
 

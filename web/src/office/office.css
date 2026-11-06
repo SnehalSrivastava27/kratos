@@ -92,7 +92,7 @@
 .ao-pill.live i { animation: hq-pulse 1s infinite }
 .ao-controls { display: flex; gap: 7px; padding: 7px; flex-wrap: wrap; justify-content: flex-end }
 .ao-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border: 3px solid var(--paper); border-radius: 14px;
-  padding: 9px 15px; font-weight: 800; font-size: 15px; box-shadow: 0 4px 0 rgba(0,0,0,.35); display: flex; gap: 14px; align-items: center; white-space: nowrap; pointer-events: none !important;
+  padding: 9px 15px; font-weight: 800; font-size: 15px; box-shadow: 0 4px 0 rgba(0,0,0,.35); display: flex; gap: 14px; align-items: center; white-space: nowrap; cursor: pointer; font-family: var(--font);
   animation: ao-rise .18s ease-out }
 .ao-hint .title { color: #ffd166 }
 .ao-hint.red { background: #c8303a }
@@ -186,3 +186,4 @@
 .hq-hero .hq-tag-badge { background: rgba(255,255,255,.92); border: 0; box-shadow: 0 1px 2px rgba(16,35,47,.18), 0 3px 10px rgba(16,35,47,.12); padding: 4px }
 .hq-hero .hq-bubble { animation-duration: .5s; transition: opacity .4s, transform .4s }
 .hq-hero .hq-dim { opacity: 0; transition: opacity .3s }
+.hq-woof { background: var(--warn) }

@@ -15,7 +15,7 @@ import { LibraryWindow } from './LibraryWindow';
 import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { HelpDialog, Hint } from './Hud';
-import { Command, Expand, Eye, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
+import { Command, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
@@ -91,13 +91,18 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   }, [events, peopleVer, poster]);
   // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
   const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
-  const gallery = useMemo(
-    () => events.flatMap((e) => {
+  const [walls, setWalls] = useState<{ url: string; title: string }[]>([]); // /api/gallery banners (live)
+  useEffect(() => {
+    if (!isDemo) api.getGallery().then((r) => setWalls(r.data.flatMap((g) => (galleryUrl(g.url) ? [{ url: g.url, title: g.title }] : []))), () => {});
+  }, [isDemo, workspace?.id]);
+  // The gallery wall: banners already in /gallery (live), then whatever the Designer pins as the story goes.
+  const gallery = useMemo(() => {
+    const pinned = events.flatMap((e) => {
       const url = e.type === 'artifact' ? galleryUrl(e.meta?.artifact_url) : null;
       return url ? [{ url, title: firstLine(e.text) }] : [];
-    }),
-    [events],
-  );
+    });
+    return [...walls.filter((w) => !pinned.some((p) => p.url === w.url)), ...pinned];
+  }, [events, walls]);
   const [focus, setFocus] = useState<Zone | null>(null);
   // stable handler for the memo'd Stage; always calls the latest pickZone
   const pickRef = useRef(pickZone);
@@ -156,6 +161,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [hireAt, setHireAt] = useState<{ desk?: string; room: string } | null>(null);
   const [libAt, setLibAt] = useState<{ shelf?: ShelfId } | null>(null);
   const [library, setLibrary] = useState<Library | null>(null);
+  const [music, setMusic] = useState(false); // muted until asked
   const loadLibrary = useCallback(() => api.getLibrary().then((r) => setLibrary(r.data), () => {}), []);
   useEffect(() => { if (mode === 'live') void loadLibrary(); }, [mode, loadLibrary]);
   useEffect(() => engine.current?.setLibrary(library), [library]);
@@ -222,7 +228,13 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   };
   const modalOpen = help || !!cmd || !!hireAt || !!libAt;
   useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
+  useEffect(() => engine.current?.setInsets(!narrow && drawer.open ? 332 : 0, !narrow && chat.open ? 402 : 0), [narrow, drawer.open, chat.open]);
 
+  function jumpToWaiting() {
+    if (!waiting) return;
+    engine.current?.jumpTo(waiting);
+    openRoom(ROOMS.find((r) => r.zone === personById[waiting]?.zone)?.id ?? 'war_room');
+  }
   /** E: use what you face. */
   function interact(t: Target | null) {
     if (!t) return;
@@ -236,12 +248,16 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       setHireAt({ desk: t.desk, room: ROOMS.find((r) => r.zone === z)?.id ?? 'war_room' });
     } else if (t.kind === 'library') setLibAt({ shelf: t.shelf });
     else if (t.kind === 'frame') window.open(t.url, '_blank', 'noopener');
+    else if (t.kind === 'dog') engine.current?.pet();
+    else if (t.kind === 'jukebox') setMusic(!!engine.current?.toggleMusic());
   }
   const hint = (t: Target | null): { title?: React.ReactNode; text: string } | null => {
     if (!t) return null;
     if (t.kind === 'desk') return { text: `Hire at this desk · ${zoneById[deskById[t.desk]?.zone]?.label ?? ''}` };
     if (t.kind === 'library') return { text: `Open the library · ${shelfLabel(t.shelf)} shelf`, title: <HintIcon dept={DEPT[t.shelf] ?? DEPT.general} /> };
     if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: <HintIcon dept={personDept(personById[t.id])} /> };
+    if (t.kind === 'dog') return { text: 'Pet the office dog', title: <HintIcon dept={{ ...DEPT.general, Icon: PawPrint }} /> };
+    if (t.kind === 'jukebox') return { text: music ? 'Stop the music' : 'Play some lo-fi', title: <HintIcon dept={{ ...DEPT.general, Icon: Music }} /> };
     return { text: 'Open this banner', title: <HintIcon dept={DEPT.design} /> };
   };
 
@@ -277,10 +293,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     if (typing || modalOpen || e.metaKey || e.ctrlKey || e.altKey) return;
     if (['KeyE', 'KeyN', 'KeyT', 'KeyF'].includes(e.code)) e.preventDefault(); // the key mustn't also type into the window it opens
     if (e.code === 'KeyE') interact(target);
-    else if (e.code === 'KeyN' && waiting) {
-      engine.current?.jumpTo(waiting);
-      openRoom(ROOMS.find((r) => r.zone === personById[waiting]?.zone)?.id ?? 'war_room');
-    } else if (e.code === 'KeyT') setChat((c) => ({ ...c, open: true }));
+    else if (e.code === 'KeyN') jumpToWaiting();
+    else if (e.code === 'KeyT') setChat((c) => ({ ...c, open: true }));
     else if (e.code === 'KeyF') toggleFull();
     else if (e.key === '?') setHelp(true);
   };
@@ -338,8 +352,10 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
               title={view === 'player' ? 'Spectator: watch the whole office' : 'Walk the office as the founder'} aria-label={view === 'player' ? 'Spectator view' : 'Walk as the founder'}>
               {view === 'player' ? <Eye /> : <User />}
             </button>
-            {isDemo && <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} title="Replay the demo story" aria-label="Replay the demo story"><RotateCcw /></button>}
-            <button type="button" className="ao-btn icon" onClick={toggleFull} title="Fullscreen (F)" aria-label="Fullscreen">{full ? <Shrink /> : <Expand />}</button>
+            <button type="button" className={`ao-btn icon !hidden sm:!inline-flex${music ? ' on' : ''}`} onClick={() => setMusic(!!engine.current?.toggleMusic())}
+              title={music ? 'Stop the jukebox' : 'Play the jukebox (lo-fi)'} aria-label={music ? 'Stop the music' : 'Play music'} aria-pressed={music}>{music ? <Music /> : <VolumeX />}</button>
+            {isDemo && <button type="button" className="ao-btn icon !hidden sm:!inline-flex" onClick={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} title="Replay the demo story" aria-label="Replay the demo story"><RotateCcw /></button>}
+            <button type="button" className="ao-btn icon !hidden sm:!inline-flex" onClick={toggleFull} title="Fullscreen (F)" aria-label="Fullscreen">{full ? <Shrink /> : <Expand />}</button>
             <button type="button" className="ao-btn icon" onClick={() => setHelp(true)} title="Controls (?)" aria-label="Controls"><HelpCircle /></button>
           </div>
         </header>
@@ -363,8 +379,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       )}
       {view === 'player' && !modalOpen && (() => {
         const h = hint(target);
-        if (h) return <Hint title={h.title} text={h.text} />;
-        if (waiting) return <Hint k="N" text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
+        if (h) return <Hint title={h.title} text={h.text} onClick={() => interact(target)} />;
+        if (waiting) return <Hint k="N" onClick={jumpToWaiting} text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
         return null;
       })()}
       {help && <HelpDialog onClose={() => setHelp(false)} />}

@@ -59,11 +59,12 @@ export function HelpDialog({ onClose }: { onClose: () => void }) {
 }
 
 /** "E · Hire at this desk": what pressing E would do, at the bottom of the screen. */
-export function Hint({ k = 'E', title, text, red }: { k?: string; title?: ReactNode; text: string; red?: boolean }) {
+export function Hint({ k = 'E', title, text, red, onClick }: { k?: string; title?: ReactNode; text: string; red?: boolean; onClick?: () => void }) {
+  // A button too: phones have no E key, so a tap on the chip does it.
   return (
-    <div className={`ao-hint${red ? ' red' : ''}`} role="status">
+    <button type="button" className={`ao-hint${red ? ' red' : ''}`} onClick={onClick} aria-live="polite">
       <span><span className="ao-key">{k}</span>{title && <span className="title">{title}</span>}{text}</span>
-    </div>
+    </button>
   );
 }
 

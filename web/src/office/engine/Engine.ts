@@ -15,6 +15,9 @@ import { initialState } from '../officeState';
 import { ctx, deskById, freeDesks, roster, seatOf, zoneById, zones } from '../data';
 import { Bookcases, SECTIONS, SHELF_LABEL, browseSpot } from './library';
 import { Player } from './player';
+import { Dog } from './dog';
+import { Lofi } from './music';
+import { mesh, roundedBox, toon, toonUnique } from '../toon';
 import { disposeTree } from '../toon';
 import { Agent } from './agent';
 import { Confetti } from './confetti';
@@ -28,7 +31,9 @@ export type Target =
   | { kind: 'desk'; desk: string }
   | { kind: 'library'; shelf: ShelfId }
   | { kind: 'agent'; id: string }
-  | { kind: 'frame'; url: string };
+  | { kind: 'frame'; url: string }
+  | { kind: 'dog' }
+  | { kind: 'jukebox' };
 
 export interface EngineOpts {
   /** Live /office: drag to orbit, wheel/pinch to zoom, click a zone or a gallery frame. Off for the hero. */
@@ -43,10 +48,11 @@ export interface EngineOpts {
   /** The world is built and its first frame drawn. */
   onReady?: () => void;
 }
-export const targetKey = (t: Target | null) => (t ? `${t.kind}:${'desk' in t ? t.desk : 'shelf' in t ? t.shelf : 'id' in t ? t.id : t.url}` : '');
+export const targetKey = (t: Target | null) => (t ? `${t.kind}:${'desk' in t ? t.desk : 'shelf' in t ? t.shelf : 'id' in t ? t.id : 'url' in t ? t.url : ''}` : '');
 export const shelfLabel = (s: ShelfId) => SHELF_LABEL[s];
 
 const DEG = Math.PI / 180;
+const JUKEBOX: [number, number] = [10.5, -4.3];
 const FOLLOW_PITCH = 0.8;
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
 const AZ = 0.12;
@@ -56,6 +62,7 @@ const FIT_PTS = [
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
 const ZOOM_OFF = new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1);
 
+const v3 = new THREE.Vector3();
 /** Camera pose as orbit coordinates round a target. */
 interface Pose { tx: number; ty: number; tz: number; yaw: number; pitch: number; dist: number }
 const KEYS = ['tx', 'ty', 'tz', 'yaw', 'pitch', 'dist'] as const;
@@ -159,6 +166,13 @@ export class OfficeEngine {
   private targetK = '';
   private shelves = new Bookcases();
   private tip = document.createElement('div');
+  private dog: Dog | null = null;
+  private woof = document.createElement('div');
+  private woofT = -9;
+  private music = new Lofi();
+  private juke = new THREE.Group();
+  private jukeGlow = toonUnique('#ffd166', { emissive: '#ffb703' });
+  private beat = 0;
   private nav = new NavGrid(FLOOR, [], 0.3);
   private props: LiveProps | null = null;
   private world: ReturnType<typeof buildWorld> | null = null;
@@ -221,13 +235,33 @@ export class OfficeEngine {
     this.tip.className = 'hq-tip';
     this.tip.hidden = true;
     this.overlay.append(this.tip);
-    if (opts.interactive) this.player = new Player(() => this.world?.solids ?? [], FLOOR);
+    if (opts.interactive) {
+      this.player = new Player(() => this.world?.solids ?? [], FLOOR);
+      // The office dog wanders the main floor; the jukebox stands in the Telegram Hub lounge (both live office only).
+      this.dog = new Dog(-1.5, 3.2, { minX: -10.5, maxX: 11, minZ: -6.8, maxZ: 7.6 });
+      this.dog.onBark = () => (this.woofT = this.t);
+      this.woof.className = 'hq-anchor';
+      this.woof.innerHTML = '<div class="hq-over"><span class="hq-tag-name hq-woof">Woof!</span></div>'; // static markup, no data
+      this.overlay.append(this.woof);
+      this.scene.add(this.dog.root);
+      const j = this.juke;
+      j.add(mesh(roundedBox(0.72, 1.15, 0.46, 0.08), toon('#d64545'), 0, 0.575, 0));
+      j.add(mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.46, 24, 1, false, 0, Math.PI).rotateZ(Math.PI / 2).rotateY(Math.PI / 2), toon('#d64545'), 0, 1.15, 0));
+      j.add(mesh(roundedBox(0.5, 0.42, 0.05, 0.04), this.jukeGlow, 0, 0.82, 0.235));
+      j.add(mesh(roundedBox(0.5, 0.26, 0.05, 0.03), toon('#2b2d42'), 0, 0.36, 0.235));
+      j.add(mesh(new THREE.BoxGeometry(0.84, 0.08, 0.56), toon('#2b2d42'), 0, 0.04, 0));
+      j.position.set(JUKEBOX[0], 0, JUKEBOX[1]);
+      j.rotation.y = -0.5;
+      this.scene.add(j);
+      this.music.onBeat = () => (this.beat = 1);
+    }
 
     // ---- The office, once the models and the sign font are in ----
     Promise.all([loadModels(), loadFont()])
       .then(([models]) => {
         if (this.disposed) return;
         this.world = buildWorld(models, !opts.hero);
+        if (this.player) this.world.solids.push({ minX: JUKEBOX[0] - 0.45, maxX: JUKEBOX[0] + 0.45, minZ: JUKEBOX[1] - 0.4, maxZ: JUKEBOX[1] + 0.4 });
         this.nav = new NavGrid(FLOOR, this.world.solids, 0.3);
         if (this.founder && this.view === 'player' && !this.nav.free(this.player!.x, this.player!.z)) this.placeNear(this.founder.pos.x, this.founder.pos.z + 0.6);
         this.props = new LiveProps();
@@ -341,6 +375,23 @@ export class OfficeEngine {
     return zones.find((zn) => Math.abs(p.x - zn.x) <= zn.w / 2 && Math.abs(p.z - zn.z) <= zn.d / 2)?.id ?? null;
   }
 
+  private inset = { left: 0, right: 0 };
+  /** Pixels covered by panels on each side (the follow camera centres you in the rest). */
+  setInsets(left: number, right: number) {
+    this.inset = { left, right };
+  }
+
+  /** E at the dog: a pat, a wag. */
+  pet() {
+    this.dog?.pet(this.t);
+  }
+  /** The jukebox (E there, or the HUD's music button). Off until asked: nothing plays by itself. */
+  toggleMusic(): boolean {
+    if (this.music.playing) this.music.stop();
+    else this.music.start();
+    return this.music.playing;
+  }
+
   /** The library's shelves follow /api/library. */
   setLibrary(lib: Library | null) {
     this.shelves.sync(lib);
@@ -414,6 +465,18 @@ export class OfficeEngine {
       a.update(dt, t);
     }
     this.props?.update(dt, t);
+    if (this.dog && this.world) {
+      const w = this.agents.find((a) => a.ps.beacon);
+      this.dog.alarm = w ? { x: w.pos.x, z: w.pos.z } : null;
+      this.dog.update(dt, t, this.nav);
+      this.woof.style.display = t - this.woofT < 1.1 ? '' : 'none';
+      if (this.woof.style.display === '') {
+        v3.copy(this.dog.pos).setY(0.9).project(this.camera);
+        this.woof.style.transform = `translate3d(${Math.round((v3.x * 0.5 + 0.5) * this.size.w)}px, ${Math.round((-v3.y * 0.5 + 0.5) * this.size.h)}px, 0)`;
+      }
+    }
+    this.beat = Math.max(0, this.beat - dt * 3);
+    this.jukeGlow.emissiveIntensity = this.music.playing ? 0.6 + this.beat * 1.4 : 0.15;
     if (t >= this.burstAt) {
       this.burstAt = Infinity;
       const war = zoneById.war_room;
@@ -439,7 +502,12 @@ export class OfficeEngine {
 
   /** A cartoon afternoon sun drifting slowly across the sky, so shadows creep like real ones (sky.ts). */
   private updateSky(t: number) {
-    const elD = 38 + Math.sin(t * 0.021) * 6;
+    // Ambient day light: the sun follows the viewer's own clock (low and warm early and late, high at noon),
+    // never below a cartoon-afternoon floor so the room stays readable at night.
+    const d = new Date(), hour = d.getHours() + d.getMinutes() / 60;
+    const day = Math.max(0, Math.sin(((hour - 6) / 12) * Math.PI)); // 0 at 6:00/18:00, 1 at noon
+    if (this.frames % 120 === 0) this.sun.color.set(day > 0.45 ? '#fff1d6' : day > 0.15 ? '#ffd9a8' : '#ffc39a');
+    const elD = 22 + day * 26 + Math.sin(t * 0.021) * 4;
     const az = -0.65 + Math.sin(t * 0.013) * 0.25;
     const lightEl = (25 + Math.max(0, elD) * 0.6) * DEG;
     this.sun.position.set(Math.cos(lightEl) * Math.sin(az), Math.sin(lightEl), Math.cos(lightEl) * Math.cos(az)).multiplyScalar(45);
@@ -452,7 +520,12 @@ export class OfficeEngine {
     if (this.view === 'player' && this.player) {
       // Third person: behind and above you, the same heading as the overview so the office reads the same way.
       const aspect = this.size.w / this.size.h;
-      goal = { tx: this.player.x, ty: 0.7, tz: this.player.z, yaw: AZ, pitch: FOLLOW_PITCH, dist: aspect < 1 ? 21 : 18 };
+      // Near the open front and side edges the camera stops short, so the frame stays on the office, not the void past it.
+      const dist = aspect < 1 ? 27 : 18;
+      // Panels over the canvas (topics left, chat right): keep you in the middle of what's still visible.
+      const halfW = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * dist * aspect;
+      const shift = ((this.inset.right - this.inset.left) / 2 / this.size.w) * 2 * halfW;
+      goal = { tx: THREE.MathUtils.clamp(this.player.x, FLOOR.minX + 3, FLOOR.maxX - 3) + shift, ty: 0.7, tz: Math.min(this.player.z, FLOOR.maxZ - 4.5), yaw: AZ, pitch: FOLLOW_PITCH, dist };
       lag = this.cur && Math.hypot(this.cur.tx - goal.tx, this.cur.tz - goal.tz) > 6 ? 0.6 : 0.28; // long jumps glide, walking stays tight
     } else if (this.opts.hero === 'hero' && !z) {
       // The hero: a slow cinematic orbit and a gentle push in, never wider than the shot that fits.
@@ -618,6 +691,8 @@ export class OfficeEngine {
     for (const d of freeDesks()) consider({ kind: 'desk', desk: d.id }, d.x, d.z + 0.6, 1.5);
     for (const s of SECTIONS) consider({ kind: 'library', shelf: s.id }, s.x, s.z + 0.3, 1.6);
     for (const a of this.agents) if (a !== this.founder) consider({ kind: 'agent', id: a.info.id }, a.pos.x, a.pos.z, 1.7);
+    if (this.dog) consider({ kind: 'dog' }, this.dog.pos.x, this.dog.pos.z, 1.4);
+    consider({ kind: 'jukebox' }, JUKEBOX[0], JUKEBOX[1] + 0.5, 1.5);
     for (const fr of this.props?.clickables ?? []) {
       const w = fr.getWorldPosition(new THREE.Vector3());
       consider({ kind: 'frame', url: fr.userData.url as string }, w.x, w.z + 0.4, 2.0);
@@ -677,6 +752,10 @@ export class OfficeEngine {
     for (const c of this.cleanup) c();
     for (const a of this.agents) a.dispose();
     this.player?.dispose();
+    this.dog?.dispose();
+    this.music.dispose();
+    this.jukeGlow.dispose();
+    this.juke.traverse((o) => (o as THREE.Mesh).isMesh && (o as THREE.Mesh).geometry.dispose());
     this.shelves.dispose();
     this.props?.dispose();
     if (this.world) disposeTree(this.world.group);
