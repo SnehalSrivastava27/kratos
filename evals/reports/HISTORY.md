@@ -8,3 +8,4 @@ plus 1 morning-brief format question from run 2. p50 = per-question wall time, c
 | 0 | sonnet | 84/84 | - | 84/84 | ~6s avg | - | $6.78 | E1 baseline (tier 1 only) |
 | 1 | haiku | 83/84 | 59/64 | 142/148 | 6s / 10s | 1.5 | $0.26 | Haiku baseline on the old instructions; tier 2 added |
 | 2 | haiku | 77/84 | 63/65 | 140/149 | 6s / 8s | 1.2 | $0.22 | Instructions v2: 4-step decision procedure (unsafe → not in data → ONE kit call → answer), DEFINITIONS, full TABLES list, "should we" = verdict in title. Tier 2 +4, tool calls -20%; tier 1 "fails" exposed 4 tier-1 truths that counted order lines, not orders |
+| 3 | haiku | 83/84 | 63/65 | 146/149 | 6s / 8s | 1.1 | $0.20 | Same instructions + Captain "team status from the chat only" (37 tool calls → 0). Stability check: fails were a lower-case 'website' filter, a safety reply that ran ls before refusing, and an ambiguous tier-1 question |
