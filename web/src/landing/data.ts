@@ -7,7 +7,8 @@ import roster from '../../../contracts/roster.json';
 
 type Mate = Person & { topic?: string };
 export const PEOPLE = Object.fromEntries((roster.people as Mate[]).map((p) => [p.id, p])) as Record<string, Mate>;
-export const AGENT_IDS = (roster.people as Mate[]).filter((p) => p.kind === 'agent').map((p) => p.id);
+// Department agents only (the librarian has no topic of its own).
+export const AGENT_IDS = (roster.people as Mate[]).filter((p) => p.kind === 'agent' && roster.rooms.some((r) => r.zone === p.zone)).map((p) => p.id);
 /** One Telegram group with forum topics; each room is a topic. */
 export const TG_GROUP = roster.telegram.group;
 export const TOPICS = roster.rooms.map((r) => ({ id: r.id, label: r.topic, emoji: (roster.people as Mate[]).find((p) => p.zone === r.zone)?.emoji ?? '💬' }));
