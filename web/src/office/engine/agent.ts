@@ -356,7 +356,7 @@ export class Agent {
   /** A local one-liner (a hello at the chai corner): a bubble that never touches the feed; the next feed bubble replaces it. */
   say(text: string, t: number) {
     this.bubbleEl?.remove();
-    this.bubbleT = t;
+    this.bubbleT = t - (this.hero ? HERO_BUBBLE_S : BUBBLE_S) + 2.6; // a short one: 2.6 s
     this.box.id = '';
     this.bubbleEl = this.makeBubble(text, Date.now());
     this.over.prepend(this.bubbleEl);

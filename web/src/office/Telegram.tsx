@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { OfficeEvent, RoomId } from '../shared/types';
 import type { SceneState } from './officeState';
-import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster, swMeta } from './data';
 import { Tg, tgPlain } from './md';
 import { PersonAvatar, RoomTile } from './icons';
 import { FileChip, isFile } from './FileChip';
@@ -148,6 +148,8 @@ function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean
           {!mine && <br />}
           <Tg text={body} />
         </div>
+        {swMeta(e).kind === 'catch_up' && <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-[#3390EC]/10 px-2 py-0.5 text-[11.5px] font-semibold text-[#1A6FB5]">↻ caught up via Switch</div>}
+        {swMeta(e).switch_document?.title && <div className="mt-1 ml-1 inline-flex items-center gap-1 rounded-full bg-[#F4A300]/15 px-2 py-0.5 text-[11.5px] font-semibold text-[#8a5a00]">📌 Pinned in Switch</div>}
         {e.type === 'artifact' && link && isFile(link) && <FileChip url={link} />}
         {e.type === 'artifact' && link && !isFile(link) && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">

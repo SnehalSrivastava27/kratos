@@ -4,7 +4,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { DEMO_GROUP, INTERNAL_ROOMS, roster, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import { DEMO_GROUP, INTERNAL_ROOMS, isPrivate, roster, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
 import { DEPT, personDept, type Dept } from './icons';
@@ -116,6 +116,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   }, [events, peopleVer, poster, peopleKey]);
   // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
   const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
+  // The Telegram side never shows private notes agents send each other through Switch (the hub still pulses them).
+  const chatEvents = useMemo(() => recent.filter((e) => !isPrivate(e)), [recent]);
   const [walls, setWalls] = useState<{ url: string; title: string }[]>([]); // /api/gallery banners (live)
   useEffect(() => {
     if (!isDemo) api.getGallery().then((r) => setWalls(r.data.flatMap((g) => (galleryUrl(g.url) ? [{ url: g.url, title: g.title }] : []))), () => {});
@@ -156,9 +158,9 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [seen, setSeen] = useState<Record<string, number>>({});
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
-    for (const e of recent) c[e.room] = (c[e.room] ?? 0) + 1;
+    for (const e of chatEvents) c[e.room] = (c[e.room] ?? 0) + 1;
     return c;
-  }, [recent]);
+  }, [chatEvents]);
   useEffect(() => setSeen((s) => (events.length === 0 ? {} : chat.open ? { ...s, [room]: counts[room] ?? 0 } : s)), [room, counts, events.length, chat.open]);
   const unread = Object.fromEntries(ROOMS.map((r) => [r.id, Math.max(0, (counts[r.id] ?? 0) - (seen[r.id] ?? 0))]));
   const totalUnread = Object.values(unread).reduce((a, b) => a + b, 0);
@@ -462,12 +464,12 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
         </header>
         {drawer.open && (
           <div className="ao-panel ao-drawer">
-            <ChatList events={recent} scene={scene} selected={room} unread={unread} onSelect={openRoom} className="border-r-0" actions={panelBtns(drawer, setDrawer, 'topics')} />
+            <ChatList events={chatEvents} scene={scene} selected={room} unread={unread} onSelect={openRoom} className="border-r-0" actions={panelBtns(drawer, setDrawer, 'topics')} />
           </div>
         )}
         {chat.open && (
           <div className="ao-panel ao-chat">
-            <ChatPane room={room} events={recent} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} onCommand={sendCommand} actions={panelBtns(chat, setChat, 'chat')} />
+            <ChatPane room={room} events={chatEvents} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} onCommand={sendCommand} actions={panelBtns(chat, setChat, 'chat')} />
           </div>
         )}
       </div>
@@ -479,8 +481,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
         </div>
       )}
       {view === 'spectator' && seated && !modalOpen && <Hint title={<HintIcon dept={{ ...DEPT.general, Icon: User }} />} text="Stand up and walk" onClick={() => sit(false)} />}
-      {view === 'player' && !modalOpen && <Coach touch={typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches} />}
-      {view === 'player' && !modalOpen && (() => {
+      {view === 'player' && !modalOpen && !(playable && director.phase === 'ready') && <Coach touch={typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches} />}
+      {view === 'player' && !modalOpen && !(playable && director.phase === 'waiting') && (() => { /* the approval card owns the bottom while it's up */
         const h = hint(target);
         if (h) return <Hint title={h.title} text={h.text} onClick={() => interact(target)} />;
         if (waiting && director.phase !== 'waiting') return <Hint k="N" onClick={jumpToWaiting} text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;

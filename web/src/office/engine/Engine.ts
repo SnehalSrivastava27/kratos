@@ -80,8 +80,10 @@ const KEYS = ['tx', 'ty', 'tz', 'yaw', 'pitch', 'dist'] as const;
 /** Distance + aim so the whole floor fits the canvas. */
 function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
   const c = new THREE.PerspectiveCamera(fov, aspect, 0.5, 200);
-  const EL = elevation(aspect);
-  const dir = new THREE.Vector3(Math.sin(AZ) * Math.cos(EL), Math.sin(EL), Math.cos(AZ) * Math.cos(EL));
+  // A tall, narrow pane (phones) looks along the floor from the open east side, so the long side runs up the screen.
+  const yaw = aspect < 0.8 ? Math.PI / 2 - 0.1 : AZ;
+  const EL = aspect < 0.8 ? 1.0 : elevation(aspect);
+  const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(EL), Math.sin(EL), Math.cos(yaw) * Math.cos(EL));
   const tgt = new THREE.Vector3((FLOOR.minX + FLOOR.maxX) / 2, 0, 0.5);
   const p = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3();
   let d = 40;
@@ -101,7 +103,7 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
     // The whole floor fits the visible part of the canvas (a hair of margin), phones included.
     d *= Math.max((y1 - y0) / 2, (x1 - x0) / 2) / (narrow ? 0.98 : 0.94);
   }
-  return { tx: tgt.x, ty: tgt.y, tz: tgt.z, yaw: AZ, pitch: EL, dist: d };
+  return { tx: tgt.x, ty: tgt.y, tz: tgt.z, yaw, pitch: EL, dist: d };
 }
 
 /**
@@ -478,8 +480,9 @@ export class OfficeEngine {
     const near = this.agents
       .filter((a) => a !== f && a.pos.distanceTo(f.pos) < 9 && !a.talking)
       .sort((a, b) => a.pos.distanceTo(f.pos) - b.pos.distanceTo(f.pos))
-      .slice(0, 3);
-    near.forEach((a, i) => setTimeout(() => !this.disposed && a.say(HELLOS[(Math.floor(this.t) + i) % HELLOS.length], this.t), 500 + i * 900));
+      .slice(0, 2);
+    // One at a time, so the two bubbles don't pile up on each other.
+    near.forEach((a, i) => setTimeout(() => !this.disposed && a.say(HELLOS[(Math.floor(this.t) + i) % HELLOS.length], this.t), 400 + i * 2600));
   }
 
   /** Fly to a zone (eased), or back to the whole office. Either way, drag/zoom offsets are let go. */

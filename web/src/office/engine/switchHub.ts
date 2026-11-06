@@ -6,13 +6,14 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { OfficeEvent } from '../../shared/types';
-import { DESKS, deskById, deskOf, personById, roomZone, roster, zoneById, zones } from '../data';
+import { DESKS, deskById, deskOf, personById, roomZone, roster, swMeta, zoneById, zones } from '../data';
 import { FONT, paint } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { WALL } from './world';
 import { LANES, corePos } from './layout';
 
 const TG = '#3390EC';
+const PRIVATE = '#9d4edd'; // private notes between agents
 const hub = zoneById.telegram_hub;
 /** The core stands between the Telegram wall and the lounge sofa. */
 export const CORE: [number, number] = corePos(hub);
@@ -208,6 +209,13 @@ export class SwitchHub {
       return r ? [{ c: r.curve, len: r.len, rev }] : [];
     };
     const targets = (e.meta?.targets ?? []).filter((t) => personById[t]?.kind === 'agent').slice(0, 6);
+    const sm = swMeta(e);
+    if (sm.private) {
+      // A private note through Switch (agent → agent): desk → core → their desk, in violet, never up to Telegram.
+      const from = this.zoneOf(e.speaker, e.room), to = this.zoneOf(sm.to ?? targets[0] ?? '', e.room);
+      if (to && to !== from) this.spawn([...leg(from, true), ...leg(to, false)], born, new THREE.Color(PRIVATE), to);
+      return;
+    }
     if (p.kind === 'human') {
       // Founder in Telegram → Switch → each agent they addressed (or the topic's room).
       const to = targets.length ? targets.map((t) => this.zoneOf(t, e.room)) : [this.zoneOf('', e.room)];
