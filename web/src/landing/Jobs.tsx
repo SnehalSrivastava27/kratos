@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { DEPT, PEOPLE } from './data';
 import { BANNERS, Banner } from './Banners';
-import { Band, Container, Reveal } from './ui';
+import { Band, Container, MateIcon, Reveal } from './ui';
 
 type Row = { label: string; value: string; pct?: number; tone?: 'pos' | 'neg' | 'muted' };
 type Job = { id: string; who: string; ask: string; steps: string[]; title: string; rows: Row[]; note: string };
@@ -70,7 +70,7 @@ export default function Jobs() {
                 const D = DEPT[j.who];
                 return (
                   <TabsTrigger key={j.id} value={j.id} className="h-8 rounded-full px-3.5 text-[13.5px] data-active:shadow-sm">
-                    <D.Icon strokeWidth={1.7} />{D.short}
+                    <D.Icon strokeWidth={1.6} style={{ color: PEOPLE[j.who].color }} />{D.short}
                   </TabsTrigger>
                 );
               })}
@@ -101,7 +101,7 @@ export default function Jobs() {
               <div className="border-t border-black/[0.07] bg-neutral-50/60 p-6 md:border-t-0 md:border-l md:p-10">
                 <motion.div key={id} animate={{ opacity: finished ? 1 : 0.45 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="rounded-xl border border-black/[0.07] bg-white p-5 shadow-[0_12px_32px_-20px_rgba(0,0,0,0.2)] md:p-6">
                   <div className="flex items-center justify-between text-[12px]">
-                    <span className="inline-flex items-center gap-1.5 text-neutral-500"><span className="size-1.5 rounded-full" style={{ background: p.color }} />{p.name}</span>
+                    <span className="inline-flex items-center gap-2 text-neutral-500"><MateIcon id={job.who} size="sm" />{p.name}</span>
                     <span className={cn('rounded-full px-2 py-0.5 font-medium', finished ? 'bg-emerald-50 text-emerald-700' : 'bg-neutral-100 text-neutral-500')}>{finished ? 'Ready' : 'Drafting…'}</span>
                   </div>
                   <h3 className="mt-3 text-[22px] font-medium tracking-tight">{job.title}</h3>

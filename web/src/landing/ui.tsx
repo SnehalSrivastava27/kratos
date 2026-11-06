@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { motion, type HTMLMotionProps } from 'framer-motion';
 import { ArrowRight, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { DEPT, PEOPLE } from './data';
 
 export const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -71,19 +72,16 @@ export function SectionRow({ id, a, b, children, cta }: { id?: string; a: ReactN
   );
 }
 
-/** macOS-style window chrome for product mockups. */
-export function Window({ title, right, className, children }: { title?: ReactNode; right?: ReactNode; className?: string; children: ReactNode }) {
+const MATE_SIZE = { sm: ['size-6 rounded-md', 'size-3.5'], md: ['size-8 rounded-[9px]', 'size-[18px]'], lg: ['size-10 rounded-xl', 'size-5'] } as const;
+
+/** A teammate's avatar: their Lucide line icon in their colour, on a soft tinted rounded square. */
+export function MateIcon({ id, size = 'md', className }: { id: string; size?: keyof typeof MATE_SIZE; className?: string }) {
+  const { Icon } = DEPT[id];
+  const color = PEOPLE[id].color;
   return (
-    <div className={cn('flex flex-col overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_24px_60px_-24px_rgba(0,0,0,0.18)]', className)}>
-      <div className="flex h-10 shrink-0 items-center gap-2 border-b border-black/[0.06] bg-neutral-50/80 px-3.5">
-        <span className="flex gap-1.5" aria-hidden="true">
-          <i className="size-2.5 rounded-full bg-[#FF5F57]" /><i className="size-2.5 rounded-full bg-[#FEBC2E]" /><i className="size-2.5 rounded-full bg-[#28C840]" />
-        </span>
-        {title && <span className="ml-2 truncate text-xs font-medium text-neutral-500">{title}</span>}
-        {right && <span className="ml-auto">{right}</span>}
-      </div>
-      <div className="relative min-h-0 flex-1">{children}</div>
-    </div>
+    <span className={cn('grid shrink-0 place-items-center', MATE_SIZE[size][0], className)} style={{ background: `${color}17`, color }}>
+      <Icon className={MATE_SIZE[size][1]} strokeWidth={1.5} />
+    </span>
   );
 }
 
