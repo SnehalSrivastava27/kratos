@@ -15,8 +15,10 @@ your account once (contracts/api.md "v3").
 3. **Send the code as a message in the group.** The server links that group to your account. It checks the bot
    is an admin, creates the topics War Room, Analytics, Ads, Creators, Ops and Design, and adds the agents
    and the observer.
-   - **Finance** and **QA Lab** are topics too (the roster has 8). If the group doesn't have them yet, create
-     them by hand (Topics → New topic), then send `/list_agents` once in each. QA Lab is for test questions
+   - **Finance** and **QA Lab** are topics too (the roster has 8). With task B3 merged, the server creates all 8
+     from `contracts/roster.json` when you link. Fallback (before B3, or one is missing): create it by hand
+     (Topics → New topic), then send `/list_agents` once in it. An agent whose topic has no thread id yet
+     replies in the thread that addressed it; it never guesses one. QA Lab is for test questions
      (evals): every agent answers there directly, in 3 to 5 lines, without handing off. /connect then shows **ready**, and /office shows only your group.
    - **"needs admin"**: step 1 is not done. Fix it, then send any message in the group to retry.
    - Nothing happens after ~15 s? Send the code again. A new group needs a few seconds before the observer
