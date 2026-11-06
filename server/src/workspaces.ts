@@ -9,6 +9,7 @@ import { sql, kvGet, kvSet, adoptLegacy, listEmployees, type OfficeEvent } from 
 import { sha, AuthError, type User } from "./auth.js";
 import { roomChatId, joinAgents, joinRoom, gw, switchAgents, backoff, sleep, OFFICE_AGENT } from "./switch.js";
 import { log } from "./log.js";
+import { ensureRoles } from "./roles.js";
 
 const env = process.env;
 const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
@@ -367,6 +368,7 @@ export async function upgradeAll() {
   for (const r of sql().prepare("SELECT * FROM workspaces WHERE status = 'ready'").all() as any[]) {
     const w = row2ws(r);
     if (needsUpgrade(w)) await setup(w.id, true);
+    else await rolesFor(w);
   }
 }
 
@@ -376,11 +378,19 @@ async function joinTeam(w: Workspace, upgrade: boolean) {
   const missing = [...TEAM, "d2c-observer"].filter((n) => !joined.includes(n));
   if (missing.length) log.warn("some agents don't exist in Switch yet; joined on a later setup", { ws: w.id, missing });
   else kvSet(agentsKey(w.id), AGENTS_SIG);
+  await rolesFor(w);
   w.status = "ready";
   w.detail = null;
   save(w);
   log.info(upgrade ? "workspace upgraded" : "workspace ready", { ws: w.id });
 }
+
+/** Switch room roles (roles.ts). Never blocks setup: a Switch without roles just means agents are addressed by name. */
+const rolesFor = (w: Workspace) =>
+  ensureRoles(w.id, w.switchRoomId).then(
+    (made) => made.length && log.info("switch roles defined", { ws: w.id, roles: made }),
+    (e) => log.warn("switch roles not defined", { ws: w.id, error: String(e?.message ?? e) }),
+  );
 
 const running = new Set<string>();
 /** Brings a linked workspace to ready (or a ready one up to the current roster: `upgrade`, it stays ready).
