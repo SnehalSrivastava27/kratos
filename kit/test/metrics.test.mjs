@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
+import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -177,25 +177,50 @@ test('brief: every dept, numbers carry the command behind them', () => {
   assert.match(run('brief', 'legal').error, /unknown dept/);
 });
 
-test('cache: read-only, rebuilt when a CSV changes, symlinked cache refused', () => {
+test('cache: other --data dirs stay in memory and see edits; symlinked or tampered cache is rebuilt', () => {
+  const cacheDir = path.join(REPO, 'data', '.cache');
+  const cacheDb = path.join(cacheDir, 'kratos.db');
   const d = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-cache-'));
   for (const f of ['orders.csv', 'products.csv']) fs.copyFileSync(path.join(REPO, 'kit/test/fixtures', f), path.join(d, f));
+  const before = fs.readdirSync(cacheDir);
   assert.equal(ok('sql', 'SELECT COUNT(*) n FROM orders', '--data', d).rows[0].n, 42);
-  // Change a CSV: the next call sees it (mtime/size key).
   fs.appendFileSync(path.join(d, 'products.csv'), 'SKU09,Test,100,x\n');
   assert.equal(ok('sql', 'SELECT COUNT(*) n FROM products', '--data', d).rows[0].n, 3);
-  // The cache file itself is opened read-only: writes fail even through the raw handle.
-  const cacheDir = path.join(REPO, 'data', '.cache');
-  assert.ok(fs.existsSync(path.join(cacheDir, 'kratos.db')));
-  // A symlink planted in place of the cache file is never opened or written through.
-  const target = path.join(d, 'victim.txt');
-  fs.writeFileSync(target, 'keep');
-  const hashed = [`kratos-${createHash('sha1').update(fs.realpathSync(d)).digest('hex').slice(0, 12)}.db`];
-  assert.ok(fs.existsSync(path.join(cacheDir, hashed[0])));
-  for (const f of hashed) { fs.rmSync(path.join(cacheDir, f)); fs.symlinkSync(target, path.join(cacheDir, f)); }
-  assert.equal(ok('sql', 'SELECT COUNT(*) n FROM products', '--data', d).rows[0].n, 3);
-  assert.equal(fs.readFileSync(target, 'utf8'), 'keep');
-  for (const f of hashed) { const p = path.join(cacheDir, f); assert.ok(!fs.lstatSync(p).isSymbolicLink(), 'symlink replaced by a real file'); fs.rmSync(p); }
+  assert.deepEqual(fs.readdirSync(cacheDir), before, 'no cache file for a non-repo --data dir');
+  ok('tables');
+  assert.equal(fs.statSync(cacheDb).mode & 0o222, 0, 'cache is chmod 0444');
+
+  // A symlink in place of the cache is never opened or written through; stray kratos-*.db files are pruned on rebuild.
+  const victim = path.join(d, 'victim.txt');
+  fs.writeFileSync(victim, 'keep');
+  fs.rmSync(cacheDb, { force: true });
+  fs.symlinkSync(victim, cacheDb);
+  fs.writeFileSync(path.join(cacheDir, 'kratos-0123456789ab.db'), 'stray');
+  assert.ok(m('net_revenue').value > 0);
+  assert.equal(fs.readFileSync(victim, 'utf8'), 'keep');
+  assert.ok(fs.lstatSync(cacheDb).isFile());
+  assert.ok(!fs.existsSync(path.join(cacheDir, 'kratos-0123456789ab.db')), 'stray cache pruned');
+
+  // A view planted in an otherwise valid cache (signature still matches) forces a rebuild.
+  const tmp = path.join(d, 'tampered.db');
+  fs.copyFileSync(cacheDb, tmp);
+  fs.chmodSync(tmp, 0o644);
+  const t = new DatabaseSync(tmp);
+  t.exec('CREATE VIEW planted AS SELECT 1 AS x');
+  t.close();
+  fs.renameSync(tmp, cacheDb);
+  assert.equal(sql("SELECT COUNT(*) n FROM sqlite_master WHERE type = 'view'")[0].n, 0);
+  assert.equal(run('sql', 'SELECT * FROM planted').ok, false);
+});
+
+test('names and dates: prototype keys and impossible dates are plain errors', () => {
+  assert.match(run('metric', 'constructor').error, /unknown metric "constructor"/);
+  assert.match(run('metric', '__proto__').error, /unknown metric/);
+  assert.match(run('metric', 'net_revenue', '--by', 'constructor').error, /not available/);
+  assert.match(run('metric', 'net_revenue', '--by', '__proto__').error, /not available/);
+  assert.match(run('brief', 'toString').error, /unknown dept/);
+  for (const d of ['2026-02-31', '2026-04-31', '2026-13-01']) assert.match(run('metric', 'orders', '--from', d).error, /real date/);
+  assert.equal(m('orders', '--from', '2026-10-01', '--to', '2026-10-31').value, m('orders', '--month', '2026-10').value);
 });
 
 test('cached DB handle refuses writes (authorizer + read-only file)', async () => {
