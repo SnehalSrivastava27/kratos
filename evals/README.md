@@ -40,7 +40,8 @@ Output: `evals/reports/<timestamp>.json` (gitignored, full replies) and `evals/r
 | `style` | `switch/TELEGRAM_STYLE.md`: line 1 has a **bold title**, has `- ` bullets, ≤ 10 non-empty lines, no tables / `#` headings / code blocks, no `**` inside the `**_key_**` line, last line `_italic_` |
 
 The style check also runs on every reply and is shown per agent as "Style ok (all replies)" (informational).
-Known leniency: a reply that lists many numbers can pass a `number` question by accident.
+Known leniency: a reply that lists many numbers can pass a `number` question by accident, and the sign is ignored
+(a loss of ₹2.3L matches -2,29,795).
 
 ## Add a question
 

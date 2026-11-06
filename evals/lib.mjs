@@ -95,7 +95,8 @@ export function score(q, truth, reply) {
   if (q.kind === 'style') { const s = styleCheck(reply); return { pass: s.ok, why: s.issues.join('; ') }; }
   if (q.kind === 'number') {
     const tol = Math.abs(truth) * (q.tolerance ?? 0.01);
-    const hit = extractNumbers(reply).find(n => Math.abs(n.value - truth) <= Math.max(tol, n.eps, 1e-9));
+    // signs are dropped by the parser and agents write "a loss of ₹2.3L", so compare magnitudes
+    const hit = extractNumbers(reply).find(n => Math.abs(n.value - Math.abs(truth)) <= Math.max(tol, n.eps, 1e-9));
     return { pass: !!hit, why: hit ? '' : `no number ≈ ${truth}` };
   }
   const opts = (Array.isArray(truth) ? truth : [truth]).map(norm);

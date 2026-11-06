@@ -17,6 +17,7 @@ test('indian number formats', () => {
   assert.deepEqual(v('SKU01 has 250 units left'), [250]);
   assert.ok(score({ kind: 'number' }, 2042000, '- **Revenue:** **₹20.4L**').pass);   // rounding in lakhs
   assert.ok(!score({ kind: 'number' }, 2100000, '- **Revenue:** **₹20.4L**').pass);
+  assert.ok(score({ kind: 'number' }, -229795, 'EBITDA: **-₹2.30L** loss').pass);
   assert.ok(score({ kind: 'oneof' }, ['A', 'Kavya Care'], 'Top: **Kavya Care**').pass);
 });
 
