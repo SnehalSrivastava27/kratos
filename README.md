@@ -60,6 +60,13 @@ Full diagram and data flow: [`docs/architecture.md`](docs/architecture.md).
 The only part that runs without Switch is the **demo replay**: the office and landing page can
 replay a recorded feed (`demo/feeds/sale-demo.json`) so you can see the UI offline.
 
+### How Kratos uses Switch
+
+Every Switch feature this project uses, with sources, snippets and Excalidraw diagrams:
+**[docs/switch/](docs/switch/README.md)**. Console and the local server, the Telegram bridge,
+templates, the agent protocol, topics and threads, hiring from the office, the live office feed,
+workspaces, the skills library, gotchas, and a blog outline.
+
 ## 3. Agents and groups
 
 | Agent | Emoji | Telegram group | Job |
