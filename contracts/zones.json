@@ -1,15 +1,126 @@
 {
   "_units": "metres on a 24 x 16 floor; origin = floor centre; x right, z towards camera",
   "zones": [
-    { "id": "design_studio",  "label": "Design Studio",   "x": -8, "z": -5, "w": 6, "d": 4, "props": ["moodboard", "gallery_wall"] },
-    { "id": "data_wall",      "label": "Data Wall",       "x":  0, "z": -6, "w": 6, "d": 3, "props": ["chart_screens"] },
-    { "id": "finance_cabin",  "label": "Finance Cabin",   "x":  8, "z": -5, "w": 6, "d": 4, "props": ["ebitda_meter", "ledger"] },
-    { "id": "creator_studio", "label": "Creator Studio",  "x": -8, "z":  0, "w": 6, "d": 4, "props": ["ring_light", "tripod", "polaroid_wall"] },
-    { "id": "war_room",       "label": "War Room",        "x":  0, "z":  0, "w": 7, "d": 5, "props": ["glass_walls", "big_screen", "table"] },
-    { "id": "growth_pod",     "label": "Growth Pod",      "x":  8, "z":  0, "w": 6, "d": 4, "props": ["monitors"] },
-    { "id": "dispatch_dock",  "label": "Dispatch Dock",   "x": -8, "z":  5.5, "w": 6, "d": 4, "props": ["boxes", "conveyor", "india_map"] },
-    { "id": "dark_store",     "label": "Dark-store Corner","x": -3, "z":  6, "w": 3, "d": 3, "props": ["qc_rack", "10min_sign"] },
-    { "id": "chai_pantry",    "label": "Chai Pantry",     "x":  2.5, "z": 6, "w": 4, "d": 3, "props": ["chai_counter", "beanbags"] },
-    { "id": "founder_desk",   "label": "Founder's Desk",  "x":  8, "z":  5.5, "w": 5, "d": 4, "props": ["desk", "phone"] }
+    {
+      "id": "design_studio",
+      "label": "Design Studio",
+      "x": -8,
+      "z": -5,
+      "w": 6,
+      "d": 4,
+      "props": [
+        "moodboard",
+        "gallery_wall"
+      ]
+    },
+    {
+      "id": "data_wall",
+      "label": "Data Wall",
+      "x": 0,
+      "z": -6,
+      "w": 6,
+      "d": 3,
+      "props": [
+        "chart_screens"
+      ]
+    },
+    {
+      "id": "telegram_hub",
+      "label": "Telegram Hub",
+      "x": 8,
+      "z": -5,
+      "w": 6,
+      "d": 4,
+      "props": [
+        "telegram_wall",
+        "topic_screens"
+      ]
+    },
+    {
+      "id": "creator_studio",
+      "label": "Creator Studio",
+      "x": -8,
+      "z": 0,
+      "w": 6,
+      "d": 4,
+      "props": [
+        "ring_light",
+        "tripod",
+        "polaroid_wall"
+      ]
+    },
+    {
+      "id": "war_room",
+      "label": "War Room",
+      "x": 0,
+      "z": 0,
+      "w": 7,
+      "d": 5,
+      "props": [
+        "glass_walls",
+        "big_screen",
+        "table"
+      ]
+    },
+    {
+      "id": "growth_pod",
+      "label": "Growth Pod",
+      "x": 8,
+      "z": 0,
+      "w": 6,
+      "d": 4,
+      "props": [
+        "monitors"
+      ]
+    },
+    {
+      "id": "dispatch_dock",
+      "label": "Dispatch Dock",
+      "x": -8,
+      "z": 5.5,
+      "w": 6,
+      "d": 4,
+      "props": [
+        "boxes",
+        "conveyor",
+        "india_map"
+      ]
+    },
+    {
+      "id": "dark_store",
+      "label": "Dark-store Corner",
+      "x": -3,
+      "z": 6,
+      "w": 3,
+      "d": 3,
+      "props": [
+        "qc_rack",
+        "10min_sign"
+      ]
+    },
+    {
+      "id": "chai_pantry",
+      "label": "Chai Pantry",
+      "x": 2.5,
+      "z": 6,
+      "w": 4,
+      "d": 3,
+      "props": [
+        "chai_counter",
+        "beanbags"
+      ]
+    },
+    {
+      "id": "founder_desk",
+      "label": "Founder's Desk",
+      "x": 8,
+      "z": 5.5,
+      "w": 5,
+      "d": 4,
+      "props": [
+        "desk",
+        "phone"
+      ]
+    }
   ]
 }
