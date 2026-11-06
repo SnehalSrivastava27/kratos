@@ -17,7 +17,7 @@ Paths resolve from the repo root (`server/..`): `contracts/`, `demo/feeds/`, `ga
 Events are stored in SQLite at `$DATA_DIR/events.db` (default `./.data`, newest 10,000 kept) with
 the newest 500 in memory. Without `node:sqlite` (Node < 22.13) it falls back to memory and warns.
 Env: `OBSERVER_TOKEN` guards `POST /api/events`, `ADMIN_TOKEN` guards replay (unset = open, dev),
-`RATE_LIMIT_PER_MIN` (120), `MAX_WS_CLIENTS` (500). Full contract: `contracts/api.md`.
+`RATE_LIMIT_PER_MIN` (120), `MAX_WS_CLIENTS` (400). Full contract: `contracts/api.md`.
 
 ## Endpoints
 

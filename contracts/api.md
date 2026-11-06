@@ -31,7 +31,7 @@ All errors are `{ "error": string }` JSON (400 adds `details` = ajv errors).
 - 400 invalid event or invalid JSON · 401 bad token · 404 unknown route/room/feed/file
 - 403 path traversal on `/gallery/*` or the site · 413 body over 64 KB
 - 429 more than `RATE_LIMIT_PER_MIN` (default 120) POSTs per client IP per minute
-- WS: frames from clients over 4 KB close the socket (1009); over `MAX_WS_CLIENTS` (default 500)
+- WS: frames from clients over 4 KB close the socket (1009); over `MAX_WS_CLIENTS` (default 400)
   the new socket is closed with 1013 (retry later); ping every 30 s, no pong by the next ping → dropped.
 
 ## Read models (types in web/src/shared/types.ts)

@@ -15,7 +15,7 @@ disk plan is needed (Render needs both).
 | `ADMIN_TOKEN` | Fly secret | Random string. Required for `POST /api/replay` and `/api/replay/stop`. |
 | `DATA_DIR` | `fly.toml` (`/data`) | Directory for `events.db`. Default `./.data`. |
 | `PORT` | `fly.toml` (`8787`) | Must match `internal_port`. |
-| `RATE_LIMIT_PER_MIN`, `MAX_WS_CLIENTS` | optional | Default 120 POSTs/IP/min, 500 sockets. |
+| `RATE_LIMIT_PER_MIN`, `MAX_WS_CLIENTS` | optional | Default 120 POSTs/IP/min, 400 sockets (keep below fly.toml hard_limit). |
 
 If a token is unset, its routes are open and the server logs a warning at startup. Always set
 both tokens in production.

@@ -21,8 +21,8 @@ primary_region = "bom"        # Mumbai
   min_machines_running = 1
   [http_service.concurrency]
     type = "connections"
-    soft_limit = 400
-    hard_limit = 500
+    soft_limit = 600
+    hard_limit = 1000   # above MAX_WS_CLIENTS (400) so the app, not Fly, turns sockets away with 1013
 
   [[http_service.checks]]
     grace_period = "10s"
