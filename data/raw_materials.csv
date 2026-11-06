@@ -1,0 +1,28 @@
+material_id,name,unit,unit_cost,supplier_id,moq,lead_time_days,stock,monthly_usage,last_po_cost
+RM01,Ethyl ascorbic acid (vitamin C),kg,5800,S02,5,14,11.65,5.85,6139.18
+RM02,Niacinamide,kg,1250,S02,10,10,3.15,2.1,1261.38
+RM03,Hyaluronic acid (sodium hyaluronate),kg,42000,S02,1,21,0.3,0.12,41588.86
+RM04,Ferulic acid,kg,14500,S02,1,21,0.34,0.18,14848.11
+RM05,Zinc oxide (non-nano),kg,640,S08,25,12,20.69,16.65,643.95
+RM06,Titanium dioxide,kg,520,S08,25,12,10.62,5.25,522.58
+RM07,Kashmiri saffron (kesar),g,260,S04,50,20,140,106.2,291.45
+RM08,Kumkumadi oil blend,litre,2400,S03,10,15,20.25,9.72,2426.03
+RM09,Squalane (plant),kg,3600,S03,5,18,3.79,2.16,3561.03
+RM10,Glycerin (vegetable),kg,130,S02,50,7,15,4.05,129.59
+RM11,Ceramide complex,kg,18500,S02,1,25,0.38,0.27,18551.61
+RM12,Vitamin E (tocopherol),kg,2600,S02,5,10,1.5,0.5,2644.43
+RM13,Base cream (CM formula),kg,420,S01,100,21,222.39,110.7,429.76
+PK01,30 ml amber glass dropper bottle,piece,22,S05,5000,30,2243,1200,22.07
+PK02,50 g sunscreen tube,piece,13,S06,10000,25,3000,2100,13.34
+PK03,50 g airless jar,piece,24,S06,5000,25,1500,900,23.78
+PK04,Mono carton,piece,6,S07,10000,12,4519,4560,6.09
+PK05,Front and back labels,set,2,S07,20000,10,7409,5460,2.01
+PK06,Glow kit gift box,piece,58,S07,2000,18,600,300,58.3
+PK07,10 ml mini bottle,piece,9,S05,5000,30,1500,300,8.87
+PK08,20 ml mini tube,piece,6,S06,5000,25,1500,600,5.99
+PK09,30 ml face oil bottle with dropper,piece,34,S05,3000,30,900,360,34.72
+JW01,Manufacturing and filling charge - Vitamin C Serum,unit,143.03,S01,1000,21,0,1200,143.03
+JW02,Manufacturing and filling charge - Sunscreen SPF 50,unit,98.21,S01,1000,21,0,2100,98.21
+JW03,Manufacturing and filling charge - Hydrating Moisturiser,unit,120.63,S01,1000,21,0,900,120.63
+JW04,Manufacturing and filling charge - Kesar Face Oil,unit,171.36,S01,1000,21,0,360,171.36
+JW05,Manufacturing and filling charge - Glow Kit (bundle),unit,373.48,S01,1000,21,0,300,373.48

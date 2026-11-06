@@ -1,0 +1,461 @@
+date,campaign,type,spend,impressions,clicks,conversions,revenue
+2026-08-01,Brand - Kesar & Co,search,378,587,61,2,2223
+2026-08-01,Generic - vitamin c serum,search,588,894,35,2,1158
+2026-08-01,Shopping - sunscreen,shopping,239,1851,27,1,523
+2026-08-01,PMax - all products,performance_max,689,5469,66,2,1638
+2026-08-01,YouTube - the kesar story,video,254,21416,72,0,116
+2026-08-02,Brand - Kesar & Co,search,345,402,56,4,3097
+2026-08-02,Generic - vitamin c serum,search,519,680,26,1,814
+2026-08-02,Shopping - sunscreen,shopping,324,1867,30,1,549
+2026-08-02,PMax - all products,performance_max,869,8127,89,3,2396
+2026-08-02,YouTube - the kesar story,video,462,21525,112,0,306
+2026-08-03,Brand - Kesar & Co,search,381,691,59,2,1875
+2026-08-03,Generic - vitamin c serum,search,572,753,32,2,1644
+2026-08-03,Shopping - sunscreen,shopping,281,1686,28,1,744
+2026-08-03,PMax - all products,performance_max,608,5613,62,1,1134
+2026-08-03,YouTube - the kesar story,video,338,29276,101,0,88
+2026-08-04,Brand - Kesar & Co,search,428,534,64,6,4642
+2026-08-04,Generic - vitamin c serum,search,479,650,26,2,1482
+2026-08-04,Shopping - sunscreen,shopping,289,1578,30,1,691
+2026-08-04,PMax - all products,performance_max,732,3286,54,2,1668
+2026-08-04,YouTube - the kesar story,video,506,32006,135,0,162
+2026-08-05,Brand - Kesar & Co,search,467,633,81,6,5638
+2026-08-05,Generic - vitamin c serum,search,492,581,29,1,946
+2026-08-05,Shopping - sunscreen,shopping,257,1639,32,1,749
+2026-08-05,PMax - all products,performance_max,633,6607,56,1,966
+2026-08-05,YouTube - the kesar story,video,407,31799,119,0,244
+2026-08-06,Brand - Kesar & Co,search,359,523,52,1,1130
+2026-08-06,Generic - vitamin c serum,search,568,1004,32,2,1456
+2026-08-06,Shopping - sunscreen,shopping,193,913,18,1,616
+2026-08-06,PMax - all products,performance_max,780,5474,60,3,2743
+2026-08-06,YouTube - the kesar story,video,349,19065,91,0,162
+2026-08-07,Brand - Kesar & Co,search,478,1150,79,3,2492
+2026-08-07,Generic - vitamin c serum,search,549,544,25,1,903
+2026-08-07,Shopping - sunscreen,shopping,243,1313,28,1,631
+2026-08-07,PMax - all products,performance_max,866,12178,91,2,1322
+2026-08-07,YouTube - the kesar story,video,375,26443,94,0,179
+2026-08-08,Brand - Kesar & Co,search,409,665,81,3,2325
+2026-08-08,Generic - vitamin c serum,search,620,572,32,2,1601
+2026-08-08,Shopping - sunscreen,shopping,250,1530,27,1,516
+2026-08-08,PMax - all products,performance_max,544,5373,60,3,2615
+2026-08-08,YouTube - the kesar story,video,256,12614,56,0,100
+2026-08-09,Brand - Kesar & Co,search,448,548,68,1,663
+2026-08-09,Generic - vitamin c serum,search,471,545,21,1,587
+2026-08-09,Shopping - sunscreen,shopping,303,1631,32,1,1050
+2026-08-09,PMax - all products,performance_max,906,7041,74,3,2140
+2026-08-09,YouTube - the kesar story,video,304,24457,67,0,207
+2026-08-10,Brand - Kesar & Co,search,314,403,52,3,1878
+2026-08-10,Generic - vitamin c serum,search,573,741,35,1,808
+2026-08-10,Shopping - sunscreen,shopping,319,2198,43,1,898
+2026-08-10,PMax - all products,performance_max,744,5211,65,6,4180
+2026-08-10,YouTube - the kesar story,video,356,25568,103,0,142
+2026-08-11,Brand - Kesar & Co,search,266,401,49,2,1963
+2026-08-11,Generic - vitamin c serum,search,494,598,23,1,1089
+2026-08-11,Shopping - sunscreen,shopping,269,1413,29,0,373
+2026-08-11,PMax - all products,performance_max,923,8390,93,2,1859
+2026-08-11,YouTube - the kesar story,video,451,30435,106,0,207
+2026-08-12,Brand - Kesar & Co,search,446,683,68,4,3063
+2026-08-12,Generic - vitamin c serum,search,534,442,24,1,1128
+2026-08-12,Shopping - sunscreen,shopping,263,1322,25,0,280
+2026-08-12,PMax - all products,performance_max,606,4468,45,3,2576
+2026-08-12,YouTube - the kesar story,video,317,26241,90,0,98
+2026-08-13,Brand - Kesar & Co,search,403,994,104,2,2214
+2026-08-13,Generic - vitamin c serum,search,529,485,26,1,828
+2026-08-13,Shopping - sunscreen,shopping,247,1625,27,1,995
+2026-08-13,PMax - all products,performance_max,794,8928,93,5,3576
+2026-08-13,YouTube - the kesar story,video,392,22563,103,0,260
+2026-08-14,Brand - Kesar & Co,search,340,752,56,3,2552
+2026-08-14,Generic - vitamin c serum,search,554,794,29,1,1240
+2026-08-14,Shopping - sunscreen,shopping,394,2551,61,2,1264
+2026-08-14,PMax - all products,performance_max,797,5506,79,2,1856
+2026-08-14,YouTube - the kesar story,video,397,23885,96,0,147
+2026-08-15,Brand - Kesar & Co,search,420,849,72,7,5609
+2026-08-15,Generic - vitamin c serum,search,511,530,26,1,723
+2026-08-15,Shopping - sunscreen,shopping,295,1945,34,1,755
+2026-08-15,PMax - all products,performance_max,996,6980,84,4,3190
+2026-08-15,YouTube - the kesar story,video,289,19587,68,0,197
+2026-08-16,Brand - Kesar & Co,search,345,657,64,3,2688
+2026-08-16,Generic - vitamin c serum,search,616,801,32,2,1394
+2026-08-16,Shopping - sunscreen,shopping,310,2420,42,1,990
+2026-08-16,PMax - all products,performance_max,683,4830,59,3,2306
+2026-08-16,YouTube - the kesar story,video,266,16129,64,0,147
+2026-08-17,Brand - Kesar & Co,search,349,589,53,3,2124
+2026-08-17,Generic - vitamin c serum,search,562,1679,39,2,1824
+2026-08-17,Shopping - sunscreen,shopping,327,2288,33,2,1598
+2026-08-17,PMax - all products,performance_max,699,3882,55,3,2412
+2026-08-17,YouTube - the kesar story,video,359,18485,83,0,130
+2026-08-18,Brand - Kesar & Co,search,429,1025,79,4,3303
+2026-08-18,Generic - vitamin c serum,search,610,604,28,2,1567
+2026-08-18,Shopping - sunscreen,shopping,334,2171,37,2,1772
+2026-08-18,PMax - all products,performance_max,606,6460,71,2,1919
+2026-08-18,YouTube - the kesar story,video,374,23486,107,0,131
+2026-08-19,Brand - Kesar & Co,search,345,322,45,5,4653
+2026-08-19,Generic - vitamin c serum,search,477,564,22,1,552
+2026-08-19,Shopping - sunscreen,shopping,316,2514,48,1,628
+2026-08-19,PMax - all products,performance_max,853,6375,76,3,1977
+2026-08-19,YouTube - the kesar story,video,370,31299,112,0,161
+2026-08-20,Brand - Kesar & Co,search,461,616,69,2,1321
+2026-08-20,Generic - vitamin c serum,search,593,920,31,2,1595
+2026-08-20,Shopping - sunscreen,shopping,212,1289,25,1,699
+2026-08-20,PMax - all products,performance_max,1008,10000,101,6,5133
+2026-08-20,YouTube - the kesar story,video,384,20204,91,0,368
+2026-08-21,Brand - Kesar & Co,search,341,498,53,2,2325
+2026-08-21,Generic - vitamin c serum,search,513,771,33,1,705
+2026-08-21,Shopping - sunscreen,shopping,292,1293,27,1,1294
+2026-08-21,PMax - all products,performance_max,849,7458,73,3,3089
+2026-08-21,YouTube - the kesar story,video,376,26184,112,0,255
+2026-08-22,Brand - Kesar & Co,search,490,879,78,6,4703
+2026-08-22,Generic - vitamin c serum,search,639,770,34,2,1604
+2026-08-22,Shopping - sunscreen,shopping,302,2027,33,1,470
+2026-08-22,PMax - all products,performance_max,891,5635,75,3,2252
+2026-08-22,YouTube - the kesar story,video,316,18221,83,0,160
+2026-08-23,Brand - Kesar & Co,search,354,397,54,1,1014
+2026-08-23,Generic - vitamin c serum,search,423,475,22,1,468
+2026-08-23,Shopping - sunscreen,shopping,235,1645,31,1,680
+2026-08-23,PMax - all products,performance_max,799,5893,74,4,2816
+2026-08-23,YouTube - the kesar story,video,431,35768,131,0,165
+2026-08-24,Brand - Kesar & Co,search,516,991,93,4,2942
+2026-08-24,Generic - vitamin c serum,search,677,782,31,2,1356
+2026-08-24,Shopping - sunscreen,shopping,267,2682,45,1,1010
+2026-08-24,PMax - all products,performance_max,991,6686,83,4,3154
+2026-08-24,YouTube - the kesar story,video,402,25409,100,0,131
+2026-08-25,Brand - Kesar & Co,search,341,358,46,6,3800
+2026-08-25,Generic - vitamin c serum,search,652,799,38,2,1956
+2026-08-25,Shopping - sunscreen,shopping,285,1625,32,1,760
+2026-08-25,PMax - all products,performance_max,826,6720,84,3,1775
+2026-08-25,YouTube - the kesar story,video,190,15183,52,0,90
+2026-08-26,Brand - Kesar & Co,search,319,345,52,3,2393
+2026-08-26,Generic - vitamin c serum,search,378,490,21,1,1075
+2026-08-26,Shopping - sunscreen,shopping,311,1630,30,0,372
+2026-08-26,PMax - all products,performance_max,742,6501,70,3,2271
+2026-08-26,YouTube - the kesar story,video,308,21301,81,0,151
+2026-08-27,Brand - Kesar & Co,search,438,904,100,2,1527
+2026-08-27,Generic - vitamin c serum,search,629,653,27,2,1725
+2026-08-27,Shopping - sunscreen,shopping,324,1819,33,1,825
+2026-08-27,PMax - all products,performance_max,772,5191,67,3,2947
+2026-08-27,YouTube - the kesar story,video,407,23373,101,0,198
+2026-08-28,Brand - Kesar & Co,search,415,954,81,6,4880
+2026-08-28,Generic - vitamin c serum,search,635,650,33,1,834
+2026-08-28,Shopping - sunscreen,shopping,285,2171,29,1,970
+2026-08-28,PMax - all products,performance_max,967,8282,89,3,2263
+2026-08-28,YouTube - the kesar story,video,425,24808,104,0,191
+2026-08-29,Brand - Kesar & Co,search,460,716,85,5,4096
+2026-08-29,Generic - vitamin c serum,search,649,853,37,1,943
+2026-08-29,Shopping - sunscreen,shopping,222,1666,24,0,455
+2026-08-29,PMax - all products,performance_max,735,4192,60,3,2721
+2026-08-29,YouTube - the kesar story,video,369,25172,90,0,225
+2026-08-30,Brand - Kesar & Co,search,415,672,83,2,1609
+2026-08-30,Generic - vitamin c serum,search,588,657,33,1,533
+2026-08-30,Shopping - sunscreen,shopping,287,1818,30,1,1041
+2026-08-30,PMax - all products,performance_max,1033,6666,93,1,716
+2026-08-30,YouTube - the kesar story,video,400,22065,84,0,219
+2026-08-31,Brand - Kesar & Co,search,327,485,54,1,758
+2026-08-31,Generic - vitamin c serum,search,600,734,40,2,1286
+2026-08-31,Shopping - sunscreen,shopping,206,1466,31,1,604
+2026-08-31,PMax - all products,performance_max,705,5849,68,3,2396
+2026-08-31,YouTube - the kesar story,video,284,27806,99,0,128
+2026-09-01,Brand - Kesar & Co,search,397,529,63,6,4966
+2026-09-01,Generic - vitamin c serum,search,561,641,24,1,1253
+2026-09-01,Shopping - sunscreen,shopping,260,1298,27,0,292
+2026-09-01,PMax - all products,performance_max,550,5669,55,3,2154
+2026-09-01,YouTube - the kesar story,video,499,33144,127,0,276
+2026-09-02,Brand - Kesar & Co,search,417,799,69,5,3976
+2026-09-02,Generic - vitamin c serum,search,519,568,25,1,693
+2026-09-02,Shopping - sunscreen,shopping,331,2221,36,2,1163
+2026-09-02,PMax - all products,performance_max,1117,10493,111,9,7197
+2026-09-02,YouTube - the kesar story,video,330,21172,87,0,234
+2026-09-03,Brand - Kesar & Co,search,363,644,62,3,2702
+2026-09-03,Generic - vitamin c serum,search,510,850,26,0,388
+2026-09-03,Shopping - sunscreen,shopping,229,1922,33,0,294
+2026-09-03,PMax - all products,performance_max,803,6565,63,3,2419
+2026-09-03,YouTube - the kesar story,video,423,25569,103,0,68
+2026-09-04,Brand - Kesar & Co,search,417,698,69,4,3384
+2026-09-04,Generic - vitamin c serum,search,431,518,21,1,1050
+2026-09-04,Shopping - sunscreen,shopping,281,1883,31,1,571
+2026-09-04,PMax - all products,performance_max,862,7660,97,4,3411
+2026-09-04,YouTube - the kesar story,video,351,19269,88,0,169
+2026-09-05,Brand - Kesar & Co,search,392,952,84,4,3283
+2026-09-05,Generic - vitamin c serum,search,663,825,33,1,972
+2026-09-05,Shopping - sunscreen,shopping,284,1398,27,0,336
+2026-09-05,PMax - all products,performance_max,812,7583,82,3,1895
+2026-09-05,YouTube - the kesar story,video,299,23008,92,0,55
+2026-09-06,Brand - Kesar & Co,search,439,556,68,6,4521
+2026-09-06,Generic - vitamin c serum,search,581,881,36,1,788
+2026-09-06,Shopping - sunscreen,shopping,252,2323,27,1,589
+2026-09-06,PMax - all products,performance_max,884,7796,79,3,2753
+2026-09-06,YouTube - the kesar story,video,371,24755,75,0,172
+2026-09-07,Brand - Kesar & Co,search,456,648,70,7,5337
+2026-09-07,Generic - vitamin c serum,search,782,697,40,1,396
+2026-09-07,Shopping - sunscreen,shopping,200,1406,23,0,211
+2026-09-07,PMax - all products,performance_max,809,6707,73,3,2415
+2026-09-07,YouTube - the kesar story,video,365,17970,86,0,129
+2026-09-08,Brand - Kesar & Co,search,464,964,94,4,2873
+2026-09-08,Generic - vitamin c serum,search,607,850,32,1,1163
+2026-09-08,Shopping - sunscreen,shopping,388,2237,45,1,729
+2026-09-08,PMax - all products,performance_max,794,4927,60,1,1209
+2026-09-08,YouTube - the kesar story,video,460,19448,95,0,208
+2026-09-09,Brand - Kesar & Co,search,278,521,47,1,706
+2026-09-09,Generic - vitamin c serum,search,565,569,25,1,1076
+2026-09-09,Shopping - sunscreen,shopping,282,1836,30,1,934
+2026-09-09,PMax - all products,performance_max,788,5890,91,5,3526
+2026-09-09,YouTube - the kesar story,video,351,26450,106,0,221
+2026-09-10,Brand - Kesar & Co,search,476,999,109,5,4379
+2026-09-10,Generic - vitamin c serum,search,661,729,29,2,1280
+2026-09-10,Shopping - sunscreen,shopping,277,2680,40,2,1215
+2026-09-10,PMax - all products,performance_max,653,3550,53,1,892
+2026-09-10,YouTube - the kesar story,video,384,26043,116,0,158
+2026-09-11,Brand - Kesar & Co,search,371,577,64,5,2937
+2026-09-11,Generic - vitamin c serum,search,381,434,20,1,572
+2026-09-11,Shopping - sunscreen,shopping,218,1288,25,1,583
+2026-09-11,PMax - all products,performance_max,611,4638,53,2,1773
+2026-09-11,YouTube - the kesar story,video,427,28483,109,0,204
+2026-09-12,Brand - Kesar & Co,search,351,742,64,2,1628
+2026-09-12,Generic - vitamin c serum,search,439,403,20,1,616
+2026-09-12,Shopping - sunscreen,shopping,283,1724,27,1,983
+2026-09-12,PMax - all products,performance_max,776,7366,85,2,1421
+2026-09-12,YouTube - the kesar story,video,389,31635,97,0,154
+2026-09-13,Brand - Kesar & Co,search,480,1056,78,1,994
+2026-09-13,Generic - vitamin c serum,search,631,724,35,1,1224
+2026-09-13,Shopping - sunscreen,shopping,327,1833,32,2,1523
+2026-09-13,PMax - all products,performance_max,726,7134,79,4,3032
+2026-09-13,YouTube - the kesar story,video,521,33415,160,0,186
+2026-09-14,Brand - Kesar & Co,search,413,717,71,3,2529
+2026-09-14,Generic - vitamin c serum,search,484,698,29,2,1706
+2026-09-14,Shopping - sunscreen,shopping,305,2109,37,1,781
+2026-09-14,PMax - all products,performance_max,734,5591,69,2,1372
+2026-09-14,YouTube - the kesar story,video,405,17962,82,0,221
+2026-09-15,Brand - Kesar & Co,search,328,532,60,3,2414
+2026-09-15,Generic - vitamin c serum,search,679,750,28,1,1030
+2026-09-15,Shopping - sunscreen,shopping,255,1721,30,1,568
+2026-09-15,PMax - all products,performance_max,713,5849,70,1,629
+2026-09-15,YouTube - the kesar story,video,311,24483,81,0,127
+2026-09-16,Brand - Kesar & Co,search,316,448,50,3,2390
+2026-09-16,Generic - vitamin c serum,search,535,513,25,1,609
+2026-09-16,Shopping - sunscreen,shopping,323,1550,37,1,775
+2026-09-16,PMax - all products,performance_max,870,5282,63,4,2696
+2026-09-16,YouTube - the kesar story,video,388,27413,85,0,196
+2026-09-17,Brand - Kesar & Co,search,371,446,50,4,2954
+2026-09-17,Generic - vitamin c serum,search,573,714,29,2,1413
+2026-09-17,Shopping - sunscreen,shopping,260,1409,28,0,135
+2026-09-17,PMax - all products,performance_max,881,7964,89,4,2427
+2026-09-17,YouTube - the kesar story,video,412,26409,97,0,92
+2026-09-18,Brand - Kesar & Co,search,440,696,72,4,3043
+2026-09-18,Generic - vitamin c serum,search,548,804,26,1,1167
+2026-09-18,Shopping - sunscreen,shopping,275,2255,33,0,221
+2026-09-18,PMax - all products,performance_max,929,5408,76,4,3050
+2026-09-18,YouTube - the kesar story,video,402,30274,101,0,154
+2026-09-19,Brand - Kesar & Co,search,275,383,47,1,1054
+2026-09-19,Generic - vitamin c serum,search,573,587,26,1,823
+2026-09-19,Shopping - sunscreen,shopping,284,1637,28,1,1117
+2026-09-19,PMax - all products,performance_max,616,4183,49,2,1836
+2026-09-19,YouTube - the kesar story,video,378,22685,84,0,141
+2026-09-20,Brand - Kesar & Co,search,471,621,82,5,4058
+2026-09-20,Generic - vitamin c serum,search,572,813,31,2,1709
+2026-09-20,Shopping - sunscreen,shopping,294,2081,34,1,595
+2026-09-20,PMax - all products,performance_max,1016,9605,95,6,5239
+2026-09-20,YouTube - the kesar story,video,486,28056,119,0,320
+2026-09-21,Brand - Kesar & Co,search,418,1106,74,4,3076
+2026-09-21,Generic - vitamin c serum,search,610,712,36,2,1887
+2026-09-21,Shopping - sunscreen,shopping,291,1661,32,1,693
+2026-09-21,PMax - all products,performance_max,829,6918,77,3,3079
+2026-09-21,YouTube - the kesar story,video,398,21726,90,0,181
+2026-09-22,Brand - Kesar & Co,search,385,629,65,6,4597
+2026-09-22,Generic - vitamin c serum,search,677,1780,40,3,2218
+2026-09-22,Shopping - sunscreen,shopping,299,2028,32,1,641
+2026-09-22,PMax - all products,performance_max,883,6491,82,2,1489
+2026-09-22,YouTube - the kesar story,video,302,17910,74,0,187
+2026-09-23,Brand - Kesar & Co,search,363,861,68,5,4093
+2026-09-23,Generic - vitamin c serum,search,532,558,27,2,1485
+2026-09-23,Shopping - sunscreen,shopping,336,2163,33,1,730
+2026-09-23,PMax - all products,performance_max,740,5242,69,4,2857
+2026-09-23,YouTube - the kesar story,video,417,31216,109,0,288
+2026-09-24,Brand - Kesar & Co,search,402,546,60,4,3449
+2026-09-24,Generic - vitamin c serum,search,580,739,30,2,1086
+2026-09-24,Shopping - sunscreen,shopping,251,1316,25,0,366
+2026-09-24,PMax - all products,performance_max,837,6194,76,2,1616
+2026-09-24,YouTube - the kesar story,video,467,28440,109,0,141
+2026-09-25,Brand - Kesar & Co,search,334,466,47,3,2194
+2026-09-25,Generic - vitamin c serum,search,493,469,25,0,220
+2026-09-25,Shopping - sunscreen,shopping,270,1936,28,1,731
+2026-09-25,PMax - all products,performance_max,885,6105,73,3,2783
+2026-09-25,YouTube - the kesar story,video,412,29103,110,0,203
+2026-09-26,Brand - Kesar & Co,search,438,514,67,5,3392
+2026-09-26,Generic - vitamin c serum,search,581,643,28,2,1304
+2026-09-26,Shopping - sunscreen,shopping,358,2195,42,1,1142
+2026-09-26,PMax - all products,performance_max,888,6268,76,4,2584
+2026-09-26,YouTube - the kesar story,video,431,23809,102,0,233
+2026-09-27,Brand - Kesar & Co,search,417,867,79,5,4037
+2026-09-27,Generic - vitamin c serum,search,578,1092,40,1,817
+2026-09-27,Shopping - sunscreen,shopping,257,1661,27,1,541
+2026-09-27,PMax - all products,performance_max,598,6498,66,1,980
+2026-09-27,YouTube - the kesar story,video,386,33618,116,0,324
+2026-09-28,Brand - Kesar & Co,search,436,495,67,4,3022
+2026-09-28,Generic - vitamin c serum,search,550,793,38,1,1107
+2026-09-28,Shopping - sunscreen,shopping,309,1844,39,1,495
+2026-09-28,PMax - all products,performance_max,932,6636,77,3,1802
+2026-09-28,YouTube - the kesar story,video,323,18147,76,0,88
+2026-09-29,Brand - Kesar & Co,search,375,482,58,3,2504
+2026-09-29,Generic - vitamin c serum,search,615,858,38,2,1774
+2026-09-29,Shopping - sunscreen,shopping,286,1942,32,1,596
+2026-09-29,PMax - all products,performance_max,835,6683,75,4,3341
+2026-09-29,YouTube - the kesar story,video,402,22004,105,1,397
+2026-09-30,Brand - Kesar & Co,search,262,382,41,3,2421
+2026-09-30,Generic - vitamin c serum,search,603,730,35,1,1116
+2026-09-30,Shopping - sunscreen,shopping,298,1460,35,2,1158
+2026-09-30,PMax - all products,performance_max,613,4222,54,3,2369
+2026-09-30,YouTube - the kesar story,video,401,20587,96,0,349
+2026-10-01,Brand - Kesar & Co,search,384,402,55,3,2761
+2026-10-01,Generic - vitamin c serum,search,824,1087,51,2,1350
+2026-10-01,Shopping - sunscreen,shopping,328,1932,38,0,171
+2026-10-01,PMax - all products,performance_max,927,8244,85,4,3292
+2026-10-01,YouTube - the kesar story,video,528,33256,121,0,377
+2026-10-02,Brand - Kesar & Co,search,433,614,74,7,5551
+2026-10-02,Generic - vitamin c serum,search,691,868,38,1,970
+2026-10-02,Shopping - sunscreen,shopping,271,1840,27,1,858
+2026-10-02,PMax - all products,performance_max,967,7628,95,3,2234
+2026-10-02,YouTube - the kesar story,video,374,27258,86,0,206
+2026-10-03,Brand - Kesar & Co,search,485,540,71,5,4431
+2026-10-03,Generic - vitamin c serum,search,698,626,34,1,768
+2026-10-03,Shopping - sunscreen,shopping,289,1682,28,1,662
+2026-10-03,PMax - all products,performance_max,833,6591,78,3,3118
+2026-10-03,YouTube - the kesar story,video,511,34123,132,0,298
+2026-10-04,Brand - Kesar & Co,search,522,637,81,4,2782
+2026-10-04,Generic - vitamin c serum,search,717,876,34,2,1775
+2026-10-04,Shopping - sunscreen,shopping,312,2052,36,1,1179
+2026-10-04,PMax - all products,performance_max,1102,8035,99,4,2916
+2026-10-04,YouTube - the kesar story,video,445,18199,100,0,228
+2026-10-05,Brand - Kesar & Co,search,554,1136,95,4,3948
+2026-10-05,Generic - vitamin c serum,search,757,733,43,3,2584
+2026-10-05,Shopping - sunscreen,shopping,311,1754,33,1,640
+2026-10-05,PMax - all products,performance_max,938,8234,91,1,1287
+2026-10-05,YouTube - the kesar story,video,428,24983,113,0,299
+2026-10-06,Brand - Kesar & Co,search,319,426,45,6,3844
+2026-10-06,Generic - vitamin c serum,search,623,692,32,1,1012
+2026-10-06,Shopping - sunscreen,shopping,243,1087,27,0,439
+2026-10-06,PMax - all products,performance_max,900,8093,88,1,901
+2026-10-06,YouTube - the kesar story,video,467,34333,124,0,71
+2026-10-07,Brand - Kesar & Co,search,437,787,96,6,4826
+2026-10-07,Generic - vitamin c serum,search,615,749,39,2,1522
+2026-10-07,Shopping - sunscreen,shopping,302,1701,28,1,532
+2026-10-07,PMax - all products,performance_max,835,7281,78,4,3118
+2026-10-07,YouTube - the kesar story,video,508,33918,139,1,483
+2026-10-08,Brand - Kesar & Co,search,432,676,62,2,1581
+2026-10-08,Generic - vitamin c serum,search,579,696,31,1,1141
+2026-10-08,Shopping - sunscreen,shopping,391,2258,43,0,203
+2026-10-08,PMax - all products,performance_max,815,4526,63,5,3677
+2026-10-08,YouTube - the kesar story,video,361,20761,101,0,120
+2026-10-09,Brand - Kesar & Co,search,517,822,76,4,3118
+2026-10-09,Generic - vitamin c serum,search,743,1206,51,2,1090
+2026-10-09,Shopping - sunscreen,shopping,210,1090,22,1,598
+2026-10-09,PMax - all products,performance_max,1189,8556,119,6,4737
+2026-10-09,YouTube - the kesar story,video,435,19036,85,0,243
+2026-10-10,Brand - Kesar & Co,search,609,982,88,4,3720
+2026-10-10,Generic - vitamin c serum,search,450,623,27,1,1147
+2026-10-10,Shopping - sunscreen,shopping,273,2003,34,1,1234
+2026-10-10,PMax - all products,performance_max,878,9898,75,5,3533
+2026-10-10,YouTube - the kesar story,video,325,21182,86,0,158
+2026-10-11,Brand - Kesar & Co,search,383,535,59,1,851
+2026-10-11,Generic - vitamin c serum,search,885,864,42,3,2361
+2026-10-11,Shopping - sunscreen,shopping,299,1669,37,1,666
+2026-10-11,PMax - all products,performance_max,879,6703,101,3,2476
+2026-10-11,YouTube - the kesar story,video,513,38545,144,0,145
+2026-10-12,Brand - Kesar & Co,search,344,724,61,3,2279
+2026-10-12,Generic - vitamin c serum,search,763,1197,41,2,1671
+2026-10-12,Shopping - sunscreen,shopping,312,1729,35,1,1008
+2026-10-12,PMax - all products,performance_max,1105,7123,99,5,3572
+2026-10-12,YouTube - the kesar story,video,300,16400,76,0,143
+2026-10-13,Brand - Kesar & Co,search,335,760,81,3,2754
+2026-10-13,Generic - vitamin c serum,search,675,890,39,2,1304
+2026-10-13,Shopping - sunscreen,shopping,377,1791,41,1,868
+2026-10-13,PMax - all products,performance_max,960,7235,91,4,3394
+2026-10-13,YouTube - the kesar story,video,481,37935,131,0,221
+2026-10-14,Brand - Kesar & Co,search,506,620,73,7,5826
+2026-10-14,Generic - vitamin c serum,search,662,1020,39,2,1316
+2026-10-14,Shopping - sunscreen,shopping,295,1497,29,1,1059
+2026-10-14,PMax - all products,performance_max,809,6648,74,4,2315
+2026-10-14,YouTube - the kesar story,video,396,22146,91,0,291
+2026-10-15,Brand - Kesar & Co,search,437,613,86,3,2043
+2026-10-15,Generic - vitamin c serum,search,698,805,34,1,1365
+2026-10-15,Shopping - sunscreen,shopping,294,1288,31,1,1291
+2026-10-15,PMax - all products,performance_max,582,5699,64,2,2051
+2026-10-15,YouTube - the kesar story,video,383,23917,96,0,250
+2026-10-16,Brand - Kesar & Co,search,336,611,70,2,1752
+2026-10-16,Generic - vitamin c serum,search,735,1032,40,2,1401
+2026-10-16,Shopping - sunscreen,shopping,296,1948,33,2,1353
+2026-10-16,PMax - all products,performance_max,843,6931,107,6,3801
+2026-10-16,YouTube - the kesar story,video,402,26610,114,0,155
+2026-10-17,Brand - Kesar & Co,search,362,324,50,7,4821
+2026-10-17,Generic - vitamin c serum,search,810,1315,50,2,1258
+2026-10-17,Shopping - sunscreen,shopping,274,1772,30,1,543
+2026-10-17,PMax - all products,performance_max,830,7388,73,3,2284
+2026-10-17,YouTube - the kesar story,video,472,30890,109,0,157
+2026-10-18,Brand - Kesar & Co,search,388,609,60,5,3530
+2026-10-18,Generic - vitamin c serum,search,539,407,23,1,1054
+2026-10-18,Shopping - sunscreen,shopping,320,2742,43,1,920
+2026-10-18,PMax - all products,performance_max,906,7222,98,3,2112
+2026-10-18,YouTube - the kesar story,video,462,37800,117,0,231
+2026-10-19,Brand - Kesar & Co,search,707,1197,136,3,2910
+2026-10-19,Generic - vitamin c serum,search,1082,809,45,2,1444
+2026-10-19,Shopping - sunscreen,shopping,431,2650,51,3,2031
+2026-10-19,PMax - all products,performance_max,1023,6930,88,3,2663
+2026-10-19,YouTube - the kesar story,video,659,36050,150,1,518
+2026-10-20,Brand - Kesar & Co,search,560,800,99,4,3051
+2026-10-20,Generic - vitamin c serum,search,937,1070,54,2,1864
+2026-10-20,Shopping - sunscreen,shopping,454,2112,40,1,1195
+2026-10-20,PMax - all products,performance_max,1493,14552,155,5,3498
+2026-10-20,YouTube - the kesar story,video,579,28469,132,0,202
+2026-10-21,Brand - Kesar & Co,search,552,1043,99,3,1961
+2026-10-21,Generic - vitamin c serum,search,954,678,40,2,1552
+2026-10-21,Shopping - sunscreen,shopping,412,3693,55,1,931
+2026-10-21,PMax - all products,performance_max,1468,12013,128,6,5032
+2026-10-21,YouTube - the kesar story,video,649,45791,177,0,65
+2026-10-22,Brand - Kesar & Co,search,768,1211,131,5,4295
+2026-10-22,Generic - vitamin c serum,search,936,1679,69,1,843
+2026-10-22,Shopping - sunscreen,shopping,422,2756,47,1,1150
+2026-10-22,PMax - all products,performance_max,1490,12784,165,1,1183
+2026-10-22,YouTube - the kesar story,video,384,24086,98,0,214
+2026-10-23,Brand - Kesar & Co,search,540,1005,92,5,4119
+2026-10-23,Generic - vitamin c serum,search,990,1012,47,3,2483
+2026-10-23,Shopping - sunscreen,shopping,505,3795,56,2,1260
+2026-10-23,PMax - all products,performance_max,1000,5949,78,4,3426
+2026-10-23,YouTube - the kesar story,video,618,37661,143,0,358
+2026-10-24,Brand - Kesar & Co,search,809,1560,142,5,4605
+2026-10-24,Generic - vitamin c serum,search,968,977,46,2,1995
+2026-10-24,Shopping - sunscreen,shopping,430,2261,44,2,1764
+2026-10-24,PMax - all products,performance_max,1093,10981,101,4,2723
+2026-10-24,YouTube - the kesar story,video,737,50268,199,0,389
+2026-10-25,Brand - Kesar & Co,search,744,1598,167,7,5834
+2026-10-25,Generic - vitamin c serum,search,801,773,34,0,365
+2026-10-25,Shopping - sunscreen,shopping,375,1889,43,1,1142
+2026-10-25,PMax - all products,performance_max,1269,9755,123,4,2679
+2026-10-25,YouTube - the kesar story,video,555,48179,156,0,356
+2026-10-26,Brand - Kesar & Co,search,408,534,72,7,5120
+2026-10-26,Generic - vitamin c serum,search,722,733,35,2,1614
+2026-10-26,Shopping - sunscreen,shopping,290,1712,32,1,1229
+2026-10-26,PMax - all products,performance_max,1000,6308,79,5,4247
+2026-10-26,YouTube - the kesar story,video,472,36993,117,0,330
+2026-10-27,Brand - Kesar & Co,search,379,702,74,5,3557
+2026-10-27,Generic - vitamin c serum,search,682,713,34,2,1295
+2026-10-27,Shopping - sunscreen,shopping,307,1712,34,1,577
+2026-10-27,PMax - all products,performance_max,998,10503,93,1,1323
+2026-10-27,YouTube - the kesar story,video,400,26438,94,0,299
+2026-10-28,Brand - Kesar & Co,search,382,799,67,4,3404
+2026-10-28,Generic - vitamin c serum,search,694,774,33,2,1760
+2026-10-28,Shopping - sunscreen,shopping,241,1774,33,0,125
+2026-10-28,PMax - all products,performance_max,909,6788,77,4,3307
+2026-10-28,YouTube - the kesar story,video,486,24298,111,0,211
+2026-10-29,Brand - Kesar & Co,search,359,736,71,3,2689
+2026-10-29,Generic - vitamin c serum,search,564,713,32,2,1390
+2026-10-29,Shopping - sunscreen,shopping,270,1678,28,1,691
+2026-10-29,PMax - all products,performance_max,787,5684,69,3,2329
+2026-10-29,YouTube - the kesar story,video,318,17709,76,0,184
+2026-10-30,Brand - Kesar & Co,search,566,828,91,7,6248
+2026-10-30,Generic - vitamin c serum,search,544,519,27,1,856
+2026-10-30,Shopping - sunscreen,shopping,247,1516,27,1,662
+2026-10-30,PMax - all products,performance_max,739,5927,71,4,2976
+2026-10-30,YouTube - the kesar story,video,437,20822,122,0,158
+2026-10-31,Brand - Kesar & Co,search,457,612,85,2,1161
+2026-10-31,Generic - vitamin c serum,search,619,697,32,2,1365
+2026-10-31,Shopping - sunscreen,shopping,324,1783,34,1,976
+2026-10-31,PMax - all products,performance_max,894,7112,82,4,2793
+2026-10-31,YouTube - the kesar story,video,436,34232,122,0,215
