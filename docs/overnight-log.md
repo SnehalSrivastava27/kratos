@@ -16,7 +16,7 @@ findings list. It feeds the blog.
 | A | LV1: live bring-up: Haiku model for team agents, switch-up.sh (16 agents), topic tags, live QA Lab eval, live check of SW1/SW2/SW3 | agent LV1 | running |
 | A | K3: fast answers: data marts + `kit metric` one-shot D2C metrics, cheat sheet for agents | agent K3 | running |
 | A | E2: harder eval tier (joins, date windows, refusals, multi-step), run on Haiku, fix agent instructions | agent E2 | running |
-| A | SW4: survey every Switch 0.31.0 feature, build the best 2–3 (roles, schedules, approvals…) | agent SW4 | running |
+| A | SW4: survey every Switch 0.31.0 feature, build the best 2–3 (roles, schedules, approvals…) | agent SW4 | done, in review |
 | A | DM1: demo feed with pinned plan, private nudge, catch-up beats; demo/script.md; README for v2 | agent DM1 | running |
 | B | Full live festive-sale demo in War Room (after LV1 + E2 fixes synced) | LV1 | |
 | B | BL1: blog pack: every feature documented, new Excalidraw diagrams, findings | agent BL1 | |
@@ -27,6 +27,7 @@ findings list. It feeds the blog.
 |---|---|
 | 01:40 | SW1 (read_context), SW2 (room documents), SW3 (private nudge) merged into backend-v2; 62/62 server tests pass. |
 | 01:50 | Wave A started: LV1 (live bring-up on Haiku), K3 (kit metric + marts), E2 (tier-2 evals on Haiku), DM1 (demo feed + README v2), SW4 (Switch feature survey + build). |
+| 02:05 | SW4 done: Switch room roles (finance-approver, ops-oncall) + server-side 09:00 morning brief; survey of ~40 Switch features in docs/switch/12. Adversarial review started; instruction patches routed to E2. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
@@ -39,3 +40,6 @@ findings list. It feeds the blog.
 - At 84/84 on trivial questions, evals stop separating good instructions from great ones; the signal is in
   harder questions (joins, date windows, refusals). (E1)
 - pptxgenjs wrote "Kesar & Co." into deck metadata without escaping `&`, which corrupted every deck. (K2)
+- Switch 0.31.0 has **no scheduler, cron or triggers**; recurring work (the 09:00 morning brief) has to come from outside, here the office server posting through Switch. (SW4)
+- Switch **room roles** route by mention: `@finance-approver` reaches whoever holds the role right now; roles are released shortly after the holder's session disconnects. (SW4)
+- Switch **approval cards** (Telegram buttons) exist, but the agent that opens one must hold a live connection or the card shows "Host offline". (SW4)
