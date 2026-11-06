@@ -37,6 +37,7 @@ agents:
     description: "Takes the founder's ask, assigns work to department leads, posts the final plan for approval"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -194,6 +195,7 @@ agents:
     description: "Analytics lead: sales, channel and cohort numbers; owns the forecast"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -330,6 +332,7 @@ agents:
     description: "Ads lead: Meta ads budget split by ROAS"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -463,6 +466,7 @@ agents:
     description: "Creators lead: creator shortlist by engagement and sales per rupee"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -597,6 +601,7 @@ agents:
     description: "Ops lead: stock by warehouse, transfers, no stockouts"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -735,6 +740,7 @@ agents:
     description: "Design lead: sale banners and decks"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -864,6 +870,7 @@ agents:
     description: "Demand forecast per SKU, channel and city from orders history"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -988,6 +995,7 @@ agents:
     description: "Customers, cohorts, repeat rate, returns and RTO by channel"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1110,6 +1118,7 @@ agents:
     description: "Amazon, Flipkart, Nykaa, Myntra, Blinkit and Zepto: ads, fees and listings"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1229,6 +1238,7 @@ agents:
     description: "Google Search, Shopping and YouTube campaigns"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1348,6 +1358,7 @@ agents:
     description: "Creator posts performance, UGC briefs and coupon tracking"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1469,6 +1480,7 @@ agents:
     description: "Suppliers, raw materials, purchase orders, MOQ and lead times"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1591,6 +1603,7 @@ agents:
     description: "Courier partners, delivery days, COD, RTO and returns"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1712,6 +1725,7 @@ agents:
     description: "Sale copy, ad headlines, product page and WhatsApp text"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1830,6 +1844,7 @@ agents:
     description: "Finance lead: P&L, marketing budget sign-off, EBITDA and cash"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]
@@ -1991,6 +2006,7 @@ agents:
     description: "Employees, salaries, PF, TDS and team cost"
     addressing: anyone
     provider: "{provider}"
+    model: "claude-haiku-5-5"
     location: "{location}"
     directory: "{directory}"
     join: ["{team_room}"]

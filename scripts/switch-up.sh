@@ -21,6 +21,7 @@ MAIN=$(cd "$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)/.
 ENV_FILE=${ENV_FILE:-$MAIN/.env}
 AGENT_DIR=${AGENT_DIR:-$MAIN}             # the template's `directory`: where Console runs the agents
 ROOM_NAME=${ROOM_NAME:-Kratos D2C}
+export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} # every team agent runs on Haiku (definition.model → claude --model)
 BOT_USERNAME=${BOT_USERNAME:-kratosd2c_bot}
 TEMPLATE_NAME="Kesar HQ D2C team"
 SWITCHDASH=${SWITCHDASH:-"$HOME/Library/Application Support/switchdash"}
@@ -42,7 +43,7 @@ json() { local code=$1; shift; python3 -c "import json,sys; d=json.load(sys.stdi
 # Exits 4 when given the controllers list and none is online (Switch Console not running).
 create_body() {
   python3 - "$1" "$ROSTER" "$ROOT/switch/agents/$1.md" "$AGENT_DIR" "${2:-}" "${3:-}" <<'PY'
-import json, sys
+import json, os, sys
 aid, roster, md, adir, mf, cf = sys.argv[1:7]
 p = next(x for x in json.load(open(roster))["people"] if x["id"] == aid)
 managed = json.load(open(mf)) if mf else []
@@ -54,7 +55,7 @@ base = (lead or {}).get("definition") or {"provider": "claude", "model": None, "
 keys = ("provider", "model", "advanced_config", "auto_mode", "auto_approve", "isolation")
 print(json.dumps({"name": aid, "description": p["role"], "display_name": p["name"], "icon_url": None,
   "controller_id": ctl["id"] if ctl else "<online console controller>", "desired_state": "running",
-  "definition": {**{k: base.get(k) for k in keys}, "directory": adir, "instructions": open(md).read().split("\n", 1)[1].strip()}}))
+  "definition": {**{k: base.get(k) for k in keys}, "model": os.environ["TEAM_MODEL"], "directory": adir, "instructions": open(md).read().split("\n", 1)[1].strip()}}))
 PY
 }
 
@@ -67,7 +68,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   say "would store template \"$TEMPLATE_NAME\" from switch/d2c-team.template.yaml"
   say "each team agent missing on the server: POST /gateway/management/agents, then PUT /agents/<id>/addressing-policy {policy:null}"
   for a in "${TEAM[@]}"; do
-    create_body "$a" | json 'print("•   %-17s display=%r, instructions %d chars, directory %s" % (d["name"], d["display_name"], len(d["definition"]["instructions"]), d["definition"]["directory"]))'
+    create_body "$a" | json 'print("•   %-17s display=%r, model %s, instructions %d chars, directory %s" % (d["name"], d["display_name"], d["definition"]["model"], len(d["definition"]["instructions"]), d["definition"]["directory"]))'
   done
   say "would join ${#TEAM[@]} agents + d2c-observer to \"$ROOM_NAME\", then start the office server (:8787) and the observer"
   exit 0

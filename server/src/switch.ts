@@ -207,9 +207,11 @@ export async function postAsOffice(o: { credsFile: string; roomId: string; body:
 export type HireSpec = { id: string; displayName: string; description: string; instructions: string; directory: string };
 type Definition = { provider: string; model: string | null; advanced_config: Record<string, unknown>; auto_mode: boolean; auto_approve: boolean; isolation: string; directory: string | null; instructions: string };
 const TEAM_LEAD = "d2c-captain";
+/** Every team agent and hire runs on Haiku (cost). Switch passes `definition.model` verbatim to `claude --model`. */
+export const TEAM_MODEL = process.env.TEAM_MODEL || "claude-haiku-5-5";
 
 /** Creates the agent on Console's own controller (Switch "managed agents"), so Console runs its Claude Code
- *  session like the rest of the team: no click needed. Provider settings (provider, model, advanced config,
+ *  session like the rest of the team: no click needed. Model is TEAM_MODEL (Haiku). Provider settings (provider, advanced config,
  *  auto mode, approvals, isolation) are copied from the team lead the Console template created; only the
  *  instructions differ, and the working directory is always the repo (`h.directory`), never the request's. */
 export async function createManagedAgent(h: HireSpec): Promise<string> {
@@ -223,7 +225,7 @@ export async function createManagedAgent(h: HireSpec): Promise<string> {
   const res = await gw("POST", "/management/agents", {
     name: h.id, description: h.description, display_name: h.displayName, icon_url: null, controller_id: ctl.id, desired_state: "running",
     definition: {
-      provider: base.provider, model: base.model, advanced_config: base.advanced_config, auto_mode: base.auto_mode,
+      provider: base.provider, model: TEAM_MODEL, advanced_config: base.advanced_config, auto_mode: base.auto_mode,
       auto_approve: base.auto_approve, isolation: base.isolation, directory: h.directory, instructions: h.instructions,
     },
   });
@@ -246,7 +248,7 @@ export async function storeHireTemplate(h: HireSpec, roomName: string): Promise<
   const content = JSON.stringify({
     version: 1,
     params: { directory: { type: "directory", default: h.directory }, team_room: { type: "room", default: [roomName] } },
-    agents: [{ name: h.id, description: h.description, addressing: "anyone", provider: "claude", location: "local", directory: "{directory}", join: ["{team_room}"], instructions: h.instructions }],
+    agents: [{ name: h.id, description: h.description, addressing: "anyone", provider: "claude", model: TEAM_MODEL, location: "local", directory: "{directory}", join: ["{team_room}"], instructions: h.instructions }],
   }, null, 2);
   const t = await gw("POST", "/templates", { name: `Hire: ${h.displayName} (${h.id})`, description: h.description, kind: "group", content });
   return t.id;
