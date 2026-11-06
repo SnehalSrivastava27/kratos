@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { C, DESKS, zoneById, zoneColor, zones } from '../data';
 import { BOOKCASE_SOLIDS } from './library';
-import { mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
+import { mergeByColor, mergeByMaterial, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { piece, plant, type Models } from './models';
 import { FONT, chartsTex, neonTex, paint, polaroidTex } from '../tex';
 import type { Rect } from './nav';
@@ -309,6 +309,37 @@ export const FLOOR: Rect = { minX: -18.0, maxX: 12.3, minZ: -8.0, maxZ: 8.3 };
 /** Where new hires walk in from: the open front edge between the pantry and the founder's corner. */
 export const DOOR: [number, number] = [5.0, 8.0];
 
+/**
+ * The world outside the office (agent-office's world/outside.ts, much reduced): a lawn running to the horizon
+ * and a ring of cartoon trees, so a camera near the open front or sides sees grass, not a void.
+ */
+function outside() {
+  const g = new THREE.Group();
+  const lawn = new THREE.Mesh(new THREE.CircleGeometry(140, 48), toon('#a7d98b'));
+  lawn.rotation.x = -Math.PI / 2;
+  lawn.position.set(-3, -0.42, 0);
+  lawn.receiveShadow = true;
+  g.add(lawn);
+  const path = mesh(new THREE.BoxGeometry(2.2, 0.02, 14), toon('#e9d8b4'), DOOR[0], -0.4, DOOR[1] + 7.2, false); // the walk up to the front door
+  path.receiveShadow = true;
+  g.add(path);
+  const trees = new THREE.Group();
+  let seed = 11;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  const leaf = [toon('#5fb760'), toon('#3f8f45'), toon('#78c26b')], bark = toon('#8a5a3b');
+  for (let i = 0; i < 46; i++) {
+    const a = rand() * Math.PI * 2, r = 24 + rand() * 30;
+    const x = -3 + Math.cos(a) * r * 1.25, z = Math.sin(a) * r;
+    if (z < -9 && Math.abs(x + 3) < 22) continue; // keep the view behind the back wall open
+    const s = 0.8 + rand() * 0.9;
+    trees.add(mesh(new THREE.CylinderGeometry(0.18 * s, 0.24 * s, 1.4 * s, 7), bark, x, -0.42 + 0.7 * s, z));
+    trees.add(mesh(new THREE.IcosahedronGeometry(1.15 * s, 0), leaf[i % 3], x, -0.42 + 2.1 * s, z));
+  }
+  g.add(mergeByMaterial(trees));
+  trees.traverse((o) => (o as THREE.Mesh).isMesh && (o as THREE.Mesh).geometry.dispose());
+  return g;
+}
+
 /** The whole static office: merged furniture, the textured plank floor, and every solid footprint. */
 export function buildWorld(models: Models, signs = true) {
   const solids: Rect[] = [];
@@ -323,6 +354,6 @@ export function buildWorld(models: Models, signs = true) {
   floor.receiveShadow = true;
   noOutline(floor);
   const group = new THREE.Group();
-  group.add(merged, floor);
+  group.add(merged, floor, outside());
   return { group, floor, solids };
 }

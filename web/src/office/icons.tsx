@@ -5,6 +5,7 @@ import {
   Shapes, ShoppingCart, Sparkles, Star, Target, UserRound, Zap, type LucideIcon,
 } from 'lucide-react';
 import type { Person } from '../shared/types';
+import { readable } from './data';
 
 export interface Dept { Icon: LucideIcon; color: string; name: string }
 const D = (Icon: LucideIcon, color: string, name: string): Dept => ({ Icon, color, name });
@@ -41,8 +42,8 @@ export function IconTile({ dept, size = 40, className = '' }: { dept: Dept; size
   const { Icon, color } = dept;
   return (
     <span className={`grid shrink-0 place-items-center ${className}`} aria-hidden
-      style={{ width: size, height: size, borderRadius: size * 0.32, background: tint(color, 0.13), boxShadow: `inset 0 0 0 1.5px ${tint(color, 0.3)}` }}>
-      <Icon size={size * 0.56} color={color} strokeWidth={1.5} />
+      style={{ width: size, height: size, borderRadius: size * 0.32, background: tint(color, 0.16), boxShadow: `inset 0 0 0 1.5px ${tint(color, 0.35)}` }}>
+      <Icon size={Math.round(size * 0.58)} color={readable(color)} strokeWidth={size < 36 ? 2 : 1.5} />
     </span>
   );
 }

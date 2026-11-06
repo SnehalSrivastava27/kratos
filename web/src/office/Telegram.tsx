@@ -133,9 +133,9 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
   return (
     <div className={cn('flex items-end gap-2', mine ? 'justify-end' : 'justify-start')}>
       {!mine && (last ? (
-        <PersonAvatar person={p} size={32} />
+        <PersonAvatar person={p} size={34} />
       ) : (
-        <div className="w-8 shrink-0" />
+        <div className="w-[34px] shrink-0" />
       ))}
       <div className={cn('relative max-w-[82%] rounded-2xl px-3 pt-1.5 pb-1 text-[14.5px] leading-snug shadow-[0_1px_1px_rgba(0,0,0,0.12)]', mine ? 'rounded-br-md bg-[#EEFFDE]' : 'rounded-bl-md bg-white')}
         style={accent ? { boxShadow: `inset 3px 0 0 ${accent}, 0 1px 1px rgba(0,0,0,.12)` } : undefined}>
