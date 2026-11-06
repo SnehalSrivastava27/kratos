@@ -1,1 +1,7 @@
-{ "task": "T5", "state": "queued", "progress": 0, "done": [], "next": "", "blockers": [], "contract_requests": [] }
+{ "task": "T5", "state": "done", "progress": 100,
+  "done": [
+    "server/: node:http + ws + ajv(2020) implementing every row of contracts/api.md; history last 500",
+    "replay of demo/feeds/<name>.json with loop/speed; sale-demo falls back to contracts/sample-feed.json",
+    "verified: WS got all 9 replayed events, bad POST -> 400 with ajv errors, /gallery traversal -> 403; npm run build passes"
+  ],
+  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T15:55:00+05:30" }
