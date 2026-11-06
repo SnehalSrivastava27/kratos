@@ -31,3 +31,11 @@ Keep `status/<TASK_ID>.json` updated at every milestone:
 - TypeScript for web and server. Small files. No new global installs.
 - Copy shared types from `web/src/shared/types.ts` (generated from contracts by the orchestrator).
 - Prefer working and simple over clever. The deadline is 7 Nov 2026, 9 PM IST.
+
+## 6. Validation gate (orchestrator, before every merge)
+Workflow per task: research → plan → implement → **validate**.
+- UI work: screenshot at 1440 and 390, critique against the references
+  (perplexity.ai/hub/products/teammate, gobblecube.ai), fix, repeat until it holds up.
+- Every branch: a fresh subagent does an adversarial review of `git diff main...task/<id>`
+  against the brief's intent and Acceptance list. Findings are fixed (or consciously waived
+  in docs/ORCHESTRATION.md "Run log") before merge.
