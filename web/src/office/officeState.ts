@@ -6,7 +6,7 @@ export interface PersonState {
   zone: string; // where they end up
   route: string[]; // zones to walk through, last = zone
   routeId?: string; // changes whenever a new walk starts
-  bubble?: { id: string; text: string };
+  bubble?: { id: string; text: string; t: number };
   jumpId?: string; // changes → jump once
   beacon?: string; // banner text while waiting
 }
@@ -55,7 +55,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
     const targets = (e.meta?.targets ?? []).filter((t) => s.people[t]);
     walk(e.speaker, [roomZone], e.id);
     for (const p of Object.values(s.people)) p.bubble = undefined; // one bubble on screen at a time
-    sp.bubble = { id: e.id, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
+    sp.bubble = { id: e.id, t: e.t, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
 
     switch (e.type) {
       case 'assign':

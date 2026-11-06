@@ -7,8 +7,11 @@ import type { OfficeEvent, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
 import Floor from './Floor';
 import Character from './Character';
-import { caption, ctx, firstLine, roster, zoneById } from './data';
-import SidePanel from './SidePanel';
+import { caption, ctx, firstLine, roomZone, roster, zoneById } from './data';
+import { ChatList, ChatPane, ROOMS } from './Telegram';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Maximize2, RotateCcw } from 'lucide-react';
 import { reduce } from './officeState';
 import { ScenePropsLayer } from './SceneProps';
 import { useEventFeed } from './useEventFeed';
@@ -24,45 +27,99 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     () => events.filter((e) => e.type === 'artifact' && e.meta?.artifact_url).map((e) => ({ url: e.meta!.artifact_url!, title: firstLine(e.text) })),
     [events],
   );
-  const cap = caption(events, scene);
   const [focus, setFocus] = useState<Zone | null>(null);
-  const live = mode === 'live';
   useEffect(() => {
     const esc = (e: KeyboardEvent) => e.key === 'Escape' && setFocus(null);
     window.addEventListener('keydown', esc);
     return () => window.removeEventListener('keydown', esc);
   }, []);
 
-  return (
-    // live = full page with top bar + side panel; autoplay fills its parent (e.g. the landing hero box).
-    <div className={live ? 'hq-root hq-live' : 'hq-root'} style={{ height: live ? '100vh' : '100%' }}>
-      <div className="hq-stage">
-        <Canvas dpr={[1, 2]} flat shadows={{ type: THREE.PCFShadowMap }} gl={{ alpha: true, antialias: true }} camera={{ fov: 32, near: 0.5, far: 200 }}>
-          <hemisphereLight args={['#fff5e6', '#c9a27a', 1.5]} />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[-8, 18, 10]} intensity={2.2} color="#fff1d6" castShadow shadow-mapSize={[2048, 2048]}
-            shadow-camera-left={-16} shadow-camera-right={16} shadow-camera-top={14} shadow-camera-bottom={-14} shadow-bias={-0.0008} shadow-normalBias={0.03} />
-          <Suspense fallback={null}>
-            <Floor onPick={(z) => live && setFocus((f) => (z && f?.id !== z.id ? z : null))} />
-          </Suspense>
-          <ScenePropsLayer scene={scene} gallery={gallery} />
-          {roster.map((p) => <Character key={p.id} person={p} ps={scene.people[p.id]} celebrateId={scene.confettiId} />)}
-          <CameraRig focus={focus} />
-          <Outlines />
-        </Canvas>
+  const stage = (
+    <Canvas dpr={[1, 2]} flat shadows={{ type: THREE.PCFShadowMap }} gl={{ alpha: true, antialias: true }} camera={{ fov: 32, near: 0.5, far: 200 }}>
+      <hemisphereLight args={['#fff5e6', '#c9a27a', 1.5]} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[-8, 18, 10]} intensity={2.2} color="#fff1d6" castShadow shadow-mapSize={[2048, 2048]}
+        shadow-camera-left={-16} shadow-camera-right={16} shadow-camera-top={14} shadow-camera-bottom={-14} shadow-bias={-0.0008} shadow-normalBias={0.03} />
+      <Suspense fallback={null}>
+        <Floor onPick={(z) => mode === 'live' && pickZone(z)} />
+      </Suspense>
+      <ScenePropsLayer scene={scene} gallery={gallery} events={events} />
+      {roster.map((p) => <Character key={p.id} person={p} ps={scene.people[p.id]} celebrateId={scene.confettiId} />)}
+      <CameraRig focus={focus} />
+      <Outlines />
+    </Canvas>
+  );
+
+  // Telegram side: which group is open (following the story until you pick one), unread counts, phone navigation.
+  const [follow, setFollow] = useState(true);
+  const [picked, setPicked] = useState('war_room');
+  const [mView, setMView] = useState<'list' | 'chat'>('list');
+  const latestRoom = events[events.length - 1]?.room ?? 'war_room';
+  const room = follow ? latestRoom : picked;
+  const [seen, setSeen] = useState<Record<string, number>>({});
+  const counts = useMemo(() => {
+    const c: Record<string, number> = {};
+    for (const e of events) c[e.room] = (c[e.room] ?? 0) + 1;
+    return c;
+  }, [events]);
+  useEffect(() => setSeen((s) => (events.length === 0 ? {} : { ...s, [room]: counts[room] ?? 0 })), [room, counts, events.length]);
+  const unread = Object.fromEntries(ROOMS.map((r) => [r.id, Math.max(0, (counts[r.id] ?? 0) - (seen[r.id] ?? 0))]));
+  const openRoom = (id: string) => {
+    setFollow(false);
+    setPicked(id);
+    setMView('chat');
+    setFocus(zoneById[roomZone[id]] ?? null);
+  };
+  function pickZone(z: Zone | null) {
+    const r = z && ROOMS.find((rm) => rm.zone === z.id);
+    if (!z || focus?.id === z.id) return setFocus(null);
+    if (r) openRoom(r.id);
+    else setFocus(z);
+  }
+  const overview = () => {
+    setFocus(null);
+    setFollow(true);
+  };
+  const cap = caption(events, scene);
+
+  if (mode === 'autoplay') {
+    // landing hero: chrome-less, just the scene with its bubbles
+    return (
+      <div className="hq-root" style={{ height: '100%', width: '100%' }}>
+        <div className="hq-stage">{stage}</div>
       </div>
-      {live ? (
-        <>
-          <div className="hq-top">
-            <div className="hq-brand"><i className="hq-live-dot" />Kesar HQ <small>· Live office</small></div>
-            <div className={`hq-caption hq-caption-${cap.tone}`}><span>{cap.tone === 'red' ? '🔴 ' : ''}{cap.text}</span></div>
-            <button className="hq-btn" onClick={() => { setFocus(null); setReplay((r) => r + 1); }}>↻ Replay</button>
-          </div>
-          <SidePanel events={events} scene={scene} onSelect={(id) => setFocus(zoneById[scene.people[id].zone] ?? null)} />
-        </>
-      ) : (
-        <div className={`hq-chip-caption hq-caption-${cap.tone}`}>{cap.tone === 'red' ? '🔴 ' : ''}{cap.text}</div>
-      )}
+    );
+  }
+  return (
+    <div className="flex h-svh flex-col overflow-hidden bg-[#F1F1F4] font-sans text-black antialiased">
+      <header className="z-10 flex h-12 shrink-0 items-center gap-3 border-b border-black/[0.06] bg-white px-3 md:px-4">
+        <div className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-[#F4A300] to-[#E07A00] text-sm font-bold text-white">K</div>
+        <div className="text-[15px] font-semibold">Kesar HQ</div>
+        <span className={cn('flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold', replay ? 'bg-[#3390EC]/10 text-[#3390EC]' : 'bg-[#3CCB8B]/15 text-[#14895A]')}>
+          <span className={cn('size-1.5 rounded-full', replay ? 'bg-[#3390EC]' : 'animate-pulse bg-[#3CCB8B]')} />
+          {replay ? 'Replay' : 'Live'}
+        </span>
+        <div className={cn('hidden min-w-0 flex-1 truncate text-sm md:block', cap.tone === 'red' ? 'text-[#E5484D]' : cap.tone === 'mint' ? 'text-[#14895A]' : 'text-[#707579]')}>
+          {cap.text}
+        </div>
+        <Button variant="outline" size="sm" className="ml-auto md:ml-0" onClick={() => { overview(); setSeen({}); setReplay((r) => r + 1); }}>
+          <RotateCcw /> Replay
+        </Button>
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+        <ChatList events={events} scene={scene} selected={room} unread={unread} onSelect={openRoom}
+          className={cn('md:flex md:w-[300px] lg:w-[330px]', mView === 'list' ? 'flex flex-1 md:flex-none' : 'hidden')} />
+        <div className="hq-root order-first h-[34svh] shrink-0 md:order-none md:h-auto md:min-w-0 md:flex-1">
+          <div className="hq-stage">{stage}</div>
+          {focus && (
+            <Button variant="outline" size="sm" className="absolute top-3 left-3 bg-white/90 shadow-sm" onClick={overview}>
+              <Maximize2 /> Whole office
+            </Button>
+          )}
+        </div>
+        <ChatPane room={room} events={events} scene={scene} onBack={() => setMView('list')}
+          className={cn('md:flex md:w-[360px] lg:w-[400px]', mView === 'chat' ? 'flex flex-1 md:flex-none' : 'hidden')} />
+      </div>
     </div>
   );
 }
@@ -84,13 +141,13 @@ function Outlines() {
 }
 
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
-const AZ = 0.26, EL = 0.86;
+const AZ = 0.2, EL = 0.86;
 const FIT_PTS = [
   [-12.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-12.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-12.4, 2.6, 8.4],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
 
 /** Distance + aim so the whole floor fits the canvas (a little cropped on narrow screens). */
-function fitHome(cam: THREE.PerspectiveCamera, aspect: number) {
+function fitHome(cam: THREE.PerspectiveCamera, aspect: number, narrow: boolean) {
   const c = cam.clone();
   c.aspect = aspect;
   c.updateProjectionMatrix();
@@ -111,7 +168,7 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number) {
     right.setFromMatrixColumn(c.matrixWorld, 0);
     up.setFromMatrixColumn(c.matrixWorld, 1);
     tgt.addScaledVector(right, ((x0 + x1) / 2) * half * aspect).addScaledVector(up, ((y0 + y1) / 2) * half);
-    const crop = aspect >= 1.2 ? 0.88 : 0.5; // portrait: let the sides run off rather than shrink everything
+    const crop = narrow ? 0.66 : THREE.MathUtils.clamp(0.45 + 0.35 * aspect, 0.6, 0.9); // phones: zoom in, let the sides run off // portrait: let the sides run off rather than shrink everything
     d *= Math.max((y1 - y0) / 2, ((x1 - x0) / 2) * crop) / 0.96;
   }
   return { pos: c.position.clone(), tgt };
@@ -120,7 +177,7 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number) {
 /** Home view with a slow drift; click a zone → fly there; click it again / Esc / empty floor → back home. */
 function CameraRig({ focus }: { focus: Zone | null }) {
   const { camera, size } = useThree();
-  const home = useMemo(() => fitHome(camera as THREE.PerspectiveCamera, size.width / size.height), [camera, size.width, size.height]);
+  const home = useMemo(() => fitHome(camera as THREE.PerspectiveCamera, size.width / size.height, size.width < 520), [camera, size.width, size.height]);
   const cur = useRef<{ pos: THREE.Vector3; tgt: THREE.Vector3 } | null>(null);
   const goal = useMemo(() => ({ pos: new THREE.Vector3(), tgt: new THREE.Vector3() }), []);
   useFrame(({ clock }, dt) => {

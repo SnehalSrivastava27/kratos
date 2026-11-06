@@ -3,7 +3,8 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { SceneState } from './officeState';
-import { C, DESK, roster, world, zoneById } from './data';
+import type { OfficeEvent } from '../shared/types';
+import { C, DESK, clean, personById, roster, world, zoneById } from './data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './Floor';
 import { CITIES, FONT, bannerTex, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from './tex';
 import { mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
@@ -246,9 +247,54 @@ export function Confetti({ id }: { id?: string }) {
   );
 }
 
-export function ScenePropsLayer({ scene, gallery }: { scene: SceneState; gallery: { url: string; title: string }[] }) {
+/** The founder's phone on their desk, showing the War Room chat in Telegram. */
+function FounderPhone({ events }: { events: OfficeEvent[] }) {
+  const tex = useMemo(() => paint(300, 540, () => {}), []);
+  const war = events.filter((e) => e.room === 'war_room').slice(-4);
+  useEffect(
+    () =>
+      repaint(tex, (g, W, H) => {
+        const wall = g.createLinearGradient(0, 0, 0, H); wall.addColorStop(0, '#D5E6B5'); wall.addColorStop(1, '#8DBFA3');
+        g.fillStyle = wall; g.fillRect(0, 0, W, H);
+        g.fillStyle = '#3390EC'; g.fillRect(0, 0, W, 64);
+        g.fillStyle = '#fff'; g.font = `700 22px ${FONT}`; g.fillText('Kesar HQ · War Room', 16, 40);
+        let y = H - 14;
+        for (const e of [...war].reverse()) {
+          const mine = personById[e.speaker]?.kind === 'human';
+          const lines = clean(e.text).split('\n').slice(0, 3).map((l) => (l.length > 22 ? l.slice(0, 21) + '…' : l));
+          const h = 34 + lines.length * 24;
+          y -= h;
+          if (y < 72) break;
+          const x = mine ? 70 : 14, w = W - 84;
+          g.fillStyle = mine ? '#EEFFDE' : '#fff';
+          g.beginPath(); g.roundRect(x, y, w, h - 8, 14); g.fill();
+          g.fillStyle = mine ? '#4FAE4E' : personById[e.speaker]?.color ?? '#3390EC'; g.font = `800 18px ${FONT}`;
+          g.fillText(mine ? 'You' : personById[e.speaker]?.name ?? '', x + 12, y + 24);
+          g.fillStyle = '#000'; g.font = `600 18px ${FONT}`;
+          lines.forEach((l, i) => g.fillText(l, x + 12, y + 48 + i * 24));
+        }
+      }),
+    [war.map((e) => e.id).join()], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const fd = personById.founder;
+  const [x, z] = world(fd.zone, DESK[fd.zone]);
+  return (
+    <group position={[x + 0.55, DESK_SIZE.h, z + 0.05]} rotation-x={-0.25}>
+      <mesh position-y={0.22} material={toon(PAL.ink)}>
+        <primitive object={roundedBox(0.27, 0.46, 0.03, 0.04).rotateX(Math.PI / 2)} attach="geometry" />
+      </mesh>
+      <mesh position={[0, 0.22, 0.017]}>
+        <planeGeometry args={[0.24, 0.43]} />
+        <meshBasicMaterial map={tex} toneMapped={false} />
+      </mesh>
+    </group>
+  );
+}
+
+export function ScenePropsLayer({ scene, gallery, events }: { scene: SceneState; gallery: { url: string; title: string }[]; events: OfficeEvent[] }) {
   return (
     <>
+      <FounderPhone events={events} />
       <Screens scene={scene} />
       <WarScreen scene={scene} />
       <EbitdaMeter ebitda={scene.ebitda} glow={scene.financeGlow} />
@@ -259,4 +305,3 @@ export function ScenePropsLayer({ scene, gallery }: { scene: SceneState; gallery
   );
 }
 
-export { DESK_SIZE };

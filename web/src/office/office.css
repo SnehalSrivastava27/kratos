@@ -7,14 +7,12 @@
   --good: #06d6a0; --warn: #ffd166; --bad: #ef476f; --info: #5bc0eb; --saffron: #f4a300;
   --shadow: 0 4px 0 var(--ink); --radius: 16px;
   --font: 'Nunito', ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, sans-serif;
-  position: relative; width: 100%; overflow: hidden; font-family: var(--font); color: var(--ink);
+  position: relative; overflow: hidden; font-family: var(--font); color: var(--ink);
   -webkit-font-smoothing: antialiased;
   background: linear-gradient(180deg, #a9d8ff 0%, #cdebff 55%, #ffe9cf 100%);
 }
 .hq-root * { box-sizing: border-box; }
 .hq-stage { position: absolute; inset: 0 }
-.hq-live .hq-stage { top: 64px; right: 326px }
-@media (max-width: 760px) { .hq-live .hq-stage { right: 0; top: 96px; bottom: 38vh } }
 
 /* Name tags and status, over each head (person.ts setLabel / setDoing). */
 .hq-over { position: absolute; left: 0; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px }
@@ -27,74 +25,28 @@
 .hq-tag-done .hq-tag-state { background: var(--good); color: #fff }
 .hq-tag-waiting .hq-tag-name { border-color: var(--bad) }
 
-/* Speech bubble: a cream card with an ink outline and a tail (toon.ts cardSprite). Grows upward from its anchor. */
-.hq-bubble { position: relative; width: max-content; max-width: 260px; margin-bottom: 8px;
-  background: var(--paper); border: 3px solid var(--ink); border-radius: 16px; padding: 14px 13px 9px; box-shadow: 0 4px 0 rgba(43,45,66,.85);
-  animation: hq-bubble 5.2s ease both }
-.hq-bubble::after { content: ''; position: absolute; left: 50%; bottom: -10px; width: 14px; height: 14px; background: var(--paper);
-  border-right: 3px solid var(--ink); border-bottom: 3px solid var(--ink); transform: translateX(-50%) rotate(45deg) }
-.hq-bubble-who { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 900 11px var(--font);
-  color: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 1px 9px 2px; text-shadow: 0 1px 0 rgba(0,0,0,.25) }
-.hq-bubble-text { font: 700 13px/1.35 var(--font); white-space: pre-line; text-align: center }
+/* In-scene speech bubble: a mini Telegram message (white, soft shadow, sender in colour, time). Grows upward. */
+.hq-bubble { position: relative; width: max-content; max-width: 250px; margin-bottom: 9px; background: #fff; border-radius: 14px 14px 14px 4px;
+  padding: 6px 10px 5px; box-shadow: 0 1px 2px rgba(16,35,47,.15), 0 6px 18px rgba(16,35,47,.14); font-family: 'Geist Variable', system-ui, sans-serif;
+  animation: hq-bubble 5.2s ease both; transform-origin: 50% 100% }
+.hq-bubble::after { content: ''; position: absolute; left: -6px; bottom: 0; width: 12px; height: 14px; background: #fff;
+  clip-path: path('M12 0 C12 8 8 13 0 14 L12 14 Z') }
+.hq-bubble-who { font: 600 12px 'Geist Variable', system-ui, sans-serif; margin-bottom: 1px }
+.hq-bubble-text { font: 400 12.5px/1.35 'Geist Variable', system-ui, sans-serif; color: #000; white-space: pre-line }
+.hq-bubble-time { float: right; margin: 3px 0 -2px 8px; font-size: 10px; color: #8E9AA6 }
 @keyframes hq-bubble { 0% { opacity: 0; transform: translateY(8px) scale(.9) } 6% { opacity: 1; transform: none }
   92% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-6px) } }
+@media (prefers-reduced-motion: reduce) { .hq-bubble, .hq-tag-waiting .hq-tag-state, .hq-dots::after { animation: none !important } }
+
+/* Telegram chat wallpaper + typing dots. */
+.hq-tg-wall { background-color: #C6DDB0; background-image: radial-gradient(circle at 20% 15%, rgba(255,255,255,.35) 0 2px, transparent 3px),
+  radial-gradient(circle at 70% 60%, rgba(255,255,255,.28) 0 2px, transparent 3px), linear-gradient(160deg, #D5E6B5 0%, #A9CFA0 55%, #8DBFA3 100%);
+  background-size: 38px 38px, 52px 52px, 100% 100% }
+.hq-dots::after { content: '…'; display: inline-block; width: 1em; animation: hq-dots 1.2s steps(4) infinite; overflow: hidden; vertical-align: bottom }
+@keyframes hq-dots { 0% { width: 0 } 100% { width: 1em } }
 @keyframes hq-pulse { 50% { transform: scale(1.07) } }
 
-/* Zone signs. */
-.hq-zone { font: 900 11px var(--font); letter-spacing: .02em; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 10px;
-  padding: 2px 8px 3px; white-space: nowrap; box-shadow: 0 3px 0 var(--ink); opacity: .92 }
 
-/* Top bar (live). */
-.hq-top { position: absolute; top: 12px; left: 12px; right: 338px; height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 8px 0 14px; z-index: 100;
-  background: var(--paper); border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow) }
-.hq-brand { font: 900 15px var(--font); white-space: nowrap; display: flex; align-items: center; gap: 8px }
-.hq-brand small { font-weight: 800; color: var(--muted) }
-.hq-live-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bad); border: 2px solid var(--ink); animation: hq-pulse 1.4s infinite }
-.hq-caption { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; font: 800 14px var(--font); overflow: hidden }
-.hq-caption span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.hq-caption-red { color: #c81e4a } .hq-caption-mint { color: #0a8f63 }
-.hq-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; font: 800 13px var(--font); color: var(--ink); background: #fff;
-  border: 3px solid var(--ink); border-radius: 12px; cursor: pointer; box-shadow: 0 3px 0 var(--ink); white-space: nowrap }
-.hq-btn:hover { background: var(--paper-2) } .hq-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink) }
-@media (max-width: 760px) { .hq-top { right: 12px; height: auto; flex-wrap: wrap; padding: 8px 10px; row-gap: 4px } .hq-caption { order: 3; flex-basis: 100% } }
-
-/* Autoplay caption chip. */
-.hq-chip-caption { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); max-width: calc(100% - 24px); z-index: 10;
-  font: 800 13px var(--font); background: var(--paper); border: 3px solid var(--ink); border-radius: 999px; padding: 5px 14px; box-shadow: 0 3px 0 var(--ink);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none }
-.hq-chip-caption.hq-caption-red { background: #ffe3ea }
-.hq-chip-caption.hq-caption-mint { background: #d8f5e3 }
-
-/* Side panel (live): teammates, then one person's thread. */
-.hq-panel { position: absolute; top: 12px; right: 12px; bottom: 12px; width: 302px; overflow-y: auto; z-index: 100; padding: 12px;
-  background: var(--paper); border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); font-size: 13px }
-.hq-panel h3 { margin: 2px 4px 10px; font: 900 17px var(--font) }
-.hq-panel h3 small { font-size: 12px; color: var(--muted); margin-left: 4px }
-.hq-row { display: flex; align-items: center; gap: 10px; width: 100%; border: 2px solid transparent; background: none; padding: 6px; border-radius: 12px;
-  cursor: pointer; font: inherit; color: inherit; text-align: left }
-.hq-row:hover { background: var(--paper-2) }
-.hq-row-alert { border-color: var(--bad); background: #ffe3ea; box-shadow: inset 5px 0 0 var(--bad) }
-.hq-dot { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; flex: none; border: 2.5px solid var(--ink) }
-.hq-dot-lg { width: 44px; height: 44px; font-size: 21px }
-.hq-name { flex: 1; font-weight: 800; display: flex; flex-direction: column; line-height: 1.15 }
-.hq-name small { font-weight: 700; font-size: 11px; color: var(--muted) }
-.hq-pill { font-size: 11px; font-weight: 900; padding: 1px 8px 2px; border-radius: 999px; border: 2px solid var(--ink); background: #e0f2fe; white-space: nowrap }
-.hq-pill-working { background: var(--warn) } .hq-pill-waiting { background: var(--bad); color: #fff; animation: hq-pulse 1s infinite }
-.hq-pill-done { background: var(--good); color: #fff }
-.hq-back { border: 0; background: none; cursor: pointer; color: var(--accent); font: 900 13px var(--font); padding: 4px }
-.hq-who { display: flex; align-items: center; gap: 10px; margin: 6px 4px 12px }
-.hq-who h3 { margin: 0 }
-.hq-sub { opacity: .7; font-size: 12px; font-weight: 700 }
-.hq-msg { background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 7px 10px 8px; margin-bottom: 8px }
-.hq-msg-mention { background: var(--paper-2); border-style: dashed }
-.hq-msg-pushback { border-color: var(--bad); box-shadow: inset 4px 0 0 var(--bad) }
-.hq-msg-approved, .hq-msg-done, .hq-msg-artifact { box-shadow: inset 4px 0 0 var(--good) }
-.hq-meta { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; color: var(--muted); margin-bottom: 3px }
-.hq-meta b { color: var(--ink) }
-.hq-text { white-space: pre-line; line-height: 1.4; font-weight: 700 }
-.hq-thinking { font-style: italic; opacity: .7; padding: 6px 4px; animation: hq-blink 1.4s infinite; font-weight: 800 }
-@keyframes hq-blink { 50% { opacity: .3 } }
-@media (max-width: 760px) { .hq-panel { top: auto; left: 12px; width: auto; height: calc(38vh - 12px) } }
 @media (max-width: 760px) {
   .hq-tag-name { font-size: 10px; padding: 0 6px 1px; border-width: 2px } .hq-tag-state { font-size: 9px }
   .hq-bubble { max-width: 200px; padding: 12px 10px 7px } .hq-bubble-text { font-size: 11.5px }

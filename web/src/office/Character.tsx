@@ -8,6 +8,7 @@ import { C, DESK, clean, isSeat, spot } from './data';
 import { Person, type Look } from './person';
 import { noOutline, toonUnique } from './toon';
 import { useAge } from './useAge';
+import { clock } from './Telegram';
 
 const SPEED = 3.4; // m/s
 const JUMP_S = 0.7;
@@ -45,7 +46,7 @@ export default function Character({ person, ps, celebrateId }: { person: RosterP
   const jumpAge = useAge(ps.jumpId);
   const partyAge = useAge(celebrateId);
   const [walking, setWalking] = useState(false);
-  const [bubble, setBubble] = useState<{ id: string; text: string }>();
+  const [bubble, setBubble] = useState<{ id: string; text: string; t: number }>();
 
   useEffect(() => {
     if (!ps.bubble) return;
@@ -109,8 +110,8 @@ export default function Character({ person, ps, celebrateId }: { person: RosterP
         <div className="hq-over">
           {talking && (
             <div key={bubble.id} className="hq-bubble">
-              <div className="hq-bubble-who" style={{ background: person.color }}>{person.emoji} {person.name}</div>
-              <div className="hq-bubble-text">{clean(bubble.text)}</div>
+              <div className="hq-bubble-who" style={{ color: person.color }}>{person.emoji} {person.name}</div>
+              <div className="hq-bubble-text">{clean(bubble.text)}<span className="hq-bubble-time">{clock(bubble.t)}</span></div>
             </div>
           )}
           <div className={`hq-tag hq-tag-${shown}`}>
