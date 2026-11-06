@@ -69,8 +69,7 @@ async function main() {
       const spec = loadSpec(args[0]);
       const { renderChart } = await import('../lib/chart.mjs');
       const r = await renderChart(spec, dir);
-      const svg = name(spec, '.svg', 'chart');
-      return { files: [writeOut(svg, r.svg), writeOut(svg.replace(/\.svg$/, '.png'), r.png)], width: r.width, height: r.height };
+      return { files: [writeOut(name(spec, '.svg', 'chart'), r.svg), writeOut(name(spec, '.png', 'chart'), r.png)], width: r.width, height: r.height };
     }
     case 'deck': {
       const spec = loadSpec(args[0]);
@@ -91,8 +90,8 @@ async function main() {
     case 'banner': {
       const spec = loadSpec(args[0]);
       const r = await (await import('../lib/banner.mjs')).buildBanner(spec);
-      const svg = name({ ...spec, title: spec.headline }, '.svg', 'banner');
-      return { files: [writeOut(svg, r.svg), writeOut(svg.replace(/\.svg$/, '.png'), r.png)] };
+      const s2 = { ...spec, title: spec.headline };
+      return { files: [writeOut(name(s2, '.svg', 'banner'), r.svg), writeOut(name(s2, '.png', 'banner'), r.png)] };
     }
     default: fail(`unknown command: ${cmd} (try: kit help)`);
   }

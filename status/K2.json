@@ -1,0 +1,14 @@
+{
+ "task": "K2",
+ "state": "done",
+ "progress": 100,
+ "done": [
+  "kit/bin/kit.mjs: sql, tables, stats, forecast, chart, deck, xlsx, docx, pdf, banner, help; one JSON object per call, files only in gallery/live-run/",
+  "Security: node:sqlite in-memory + query_only + authorizer (reads only) + text guard, path/name sanitizing, 1 MB spec / 10k rows / 40 slides / 60 s child-process timeout, no network in vega",
+  "switch/TOOLKIT.md manual + library shelf; 13 node:test tests on fixtures; root setup/kit/ci scripts"
+ ],
+ "next": "",
+ "blockers": [],
+ "contract_requests": [],
+ "updated": "2026-11-07T10:30:00+05:30"
+}

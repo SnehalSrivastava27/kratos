@@ -57,7 +57,7 @@ export function checkSql(sql) {
     .replace(/;\s*$/, '');
   if (bare.includes(';')) fail('only one statement allowed');
   if (!/^(select|with)\b/i.test(bare)) fail('only SELECT / WITH queries allowed');
-  const bad = bare.match(/\b(attach|detach|pragma|insert|update|delete|create|drop|alter|vacuum|reindex|analyze|into|load_extension|readfile|writefile)\b|\b(csv|xlsx|json|txt)\s*\(/i);
+  const bad = bare.match(/\b(attach|detach|pragma|insert|update|delete|create|drop|alter|vacuum|reindex|analyze|into|load_extension|readfile|writefile)\b|\b(csv|xlsx|xls|txt|tab)\s*\(/i);
   if (bad) fail(`forbidden in SQL: ${bad[0]}`);
   return sql;
 }
