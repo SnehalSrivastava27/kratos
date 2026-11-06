@@ -57,6 +57,7 @@
   .dm-ask, .dm-end { bottom: 64px }
   .dm-start { padding: 16px 16px 14px } .dm-start h2 { font-size: 19px }
   .dm-plan { max-height: 24svh }
+  .dm-alt { display: none }
 }
 @media (prefers-reduced-motion: reduce) { .dm-card, .hq-switch-dot, .sw-flow i, .sw-hops li { animation: none !important } }
 
@@ -68,4 +69,7 @@
 .sw-chip-text b { font-size: 15px; font-weight: 900 }
 .sw-chip-n { font-size: 12px; font-weight: 800; color: #1A6FB5; font-variant-numeric: tabular-nums; animation: sw-blink .6s ease-out }
 @keyframes sw-blink { from { color: #F4A300; transform: scale(1.12) } }
-@media (max-width: 760px) { .sw-chip { display: none } }
+@media (max-width: 760px) {
+  .sw-chip { position: absolute; top: 56px; left: 0; padding: 4px 10px 4px 4px; gap: 7px }
+  .sw-chip .sw-mark { width: 26px; height: 26px } .sw-chip-text b { font-size: 13px } .sw-chip-n { font-size: 11px }
+}

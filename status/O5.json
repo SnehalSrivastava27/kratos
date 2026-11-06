@@ -1,3 +1,10 @@
-{ "task": "O5", "state": "working", "progress": 10,
-  "done": ["read brief + office code"], "next": "switch hub in 3D (engine/switchHub.ts)",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
+{ "task": "O5", "state": "done", "progress": 100,
+  "done": [
+    "Switch hub in the 3D office: hex router core (SWITCH plate, orb, rings, light beam) in the Telegram Hub, floor cables to every department desk and in/out feeds to the Telegram wall; each event sends a coloured pulse Telegram -> Switch -> desk (and back for replies); ports flare on arrival; 'Switch · N routed' tag + header chip open a panel (counters, last routed hops); E at the core opens it too",
+    "Playable /demo (demoDirector.ts + demoScript.ts): Start card (or any command-bar message) starts the story; it pauses at every approval_needed addressed to the founder; Approve plan continues (approved + celebrate, confetti); Ask for changes plays a canned revision (founder ask, Captain ack, Finance/Ads moves one line, Captain re-asks) and waits again; Play again / Replay restart. Telegram Approve/Ask changes buttons drive it too. Landing hero loop and live /app unchanged",
+    "Checks: npm run build, officeState.check, nav.check, new demoScript.check pass; screenshots at 1440 and 390"
+  ],
+  "next": "",
+  "blockers": ["Pre-existing on backend-v2 (contracts v4, O4's lane): landing/data.ts TOPICS crashes on the qa_lab room (no owner) and landing DEPT lacks the new specialists, so / and /demo crash at runtime until O4 merges. Validated with a local, uncommitted ?.id patch."],
+  "contract_requests": [],
+  "updated": "2026-11-07T12:30:00+05:30" }
