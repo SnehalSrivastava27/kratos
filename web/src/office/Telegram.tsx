@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { OfficeEvent } from '../shared/types';
 import type { SceneState } from './officeState';
-import { ROOMS, TG_GROUP, clean, personById, roomZone, roster } from './data';
+import { ROOMS, TG_GROUP, clean, galleryUrl, personById, roomZone, roster } from './data';
 
 export { ROOMS };
 const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
@@ -131,6 +131,7 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
   const mine = p?.kind === 'human';
   const accent = e.type === 'pushback' ? '#E5484D' : e.type === 'approved' ? '#3CCB8B' : undefined;
   const body = strip(e);
+  const link = galleryUrl(e.meta?.artifact_url);
   return (
     <div className={cn('flex items-end gap-2', mine ? 'justify-end' : 'justify-start')}>
       {!mine && (last ? (
@@ -146,13 +147,13 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
           {!mine && <br />}
           {body}
         </div>
-        {e.type === 'artifact' && e.meta?.artifact_url && (
-          <a href={e.meta.artifact_url} target="_blank" rel="noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
+        {e.type === 'artifact' && link && (
+          <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
             <div className="size-11 shrink-0 rounded bg-gradient-to-br from-[#F4A300] to-[#DB2777]" />
             <div className="min-w-0">
               <div className="text-[13px] font-semibold text-[#3390EC]">Kesar Gallery</div>
               <div className="truncate text-[13px] text-black">{bannerTitle(e)}</div>
-              <div className="flex items-center gap-1 text-xs text-[#707579]">{e.meta.artifact_url} <ExternalLink className="size-3" /></div>
+              <div className="flex items-center gap-1 text-xs text-[#707579]">{link} <ExternalLink className="size-3" /></div>
             </div>
           </a>
         )}

@@ -48,6 +48,9 @@ export const isSeat = (personId: string, x: number, z: number) => {
   return Math.hypot(sx - x, sz - z) < 0.15;
 };
 
+/** Only same-origin gallery pages may become links: `/gallery/<file>` and nothing else (no schemes, no `..`). */
+export const galleryUrl = (u?: string): string | null => (u && /^\/gallery\/[\w.\/-]+$/.test(u) && !u.includes('..') ? u : null);
+
 const LEAD_EMOJI = /^\p{Extended_Pictographic}️?\s*/u;
 /** Feed text → display text: drop the leading speaker emoji, turn @ids into @Names. */
 export const clean = (text: string) =>

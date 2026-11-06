@@ -7,7 +7,7 @@ import type { OfficeEvent, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
 import Floor from './Floor';
 import Character from './Character';
-import { caption, ctx, firstLine, roomZone, roster, zoneById } from './data';
+import { caption, ctx, firstLine, galleryUrl, roomZone, roster, zoneById } from './data';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -24,7 +24,10 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   const events = useEventFeed(replay ? 'autoplay' : mode, replayFeed ?? feed);
   const scene = useMemo(() => reduce(events, ctx), [events]);
   const gallery = useMemo(
-    () => events.filter((e) => e.type === 'artifact' && e.meta?.artifact_url).map((e) => ({ url: e.meta!.artifact_url!, title: firstLine(e.text) })),
+    () => events.flatMap((e) => {
+      const url = e.type === 'artifact' ? galleryUrl(e.meta?.artifact_url) : null;
+      return url ? [{ url, title: firstLine(e.text) }] : [];
+    }),
     [events],
   );
   const [focus, setFocus] = useState<Zone | null>(null);

@@ -151,7 +151,7 @@ function Frame({ url, title, i, x }: { url: string; title: string; i: number; x:
     <group ref={g} position-x={x}>
       <primitive
         object={obj}
-        onClick={(e: { stopPropagation(): void }) => { e.stopPropagation(); window.open(url, '_blank'); }}
+        onClick={(e: { stopPropagation(): void }) => { e.stopPropagation(); window.open(url, '_blank', 'noopener'); }}
         onPointerOver={() => (document.body.style.cursor = 'pointer')}
         onPointerOut={() => (document.body.style.cursor = '')}
       />
