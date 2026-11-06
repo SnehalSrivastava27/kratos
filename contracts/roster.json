@@ -16,7 +16,9 @@
       "kind": "agent",
       "zone": "war_room",
       "color": "#F4A300",
-      "topic": "War Room"
+      "topic": "War Room",
+      "role": "Takes the founder's ask, assigns work to department leads, posts the final plan for approval",
+      "lead": true
     },
     {
       "id": "d2c-analyst",
@@ -25,7 +27,9 @@
       "kind": "agent",
       "zone": "data_wall",
       "color": "#2563EB",
-      "topic": "Analytics"
+      "topic": "Analytics",
+      "role": "Analytics lead: sales, channel and cohort numbers; owns the forecast",
+      "lead": true
     },
     {
       "id": "d2c-ads",
@@ -34,7 +38,9 @@
       "kind": "agent",
       "zone": "growth_pod",
       "color": "#DB2777",
-      "topic": "Ads"
+      "topic": "Ads",
+      "role": "Ads lead: Meta ads budget split by ROAS",
+      "lead": true
     },
     {
       "id": "d2c-influencers",
@@ -43,7 +49,9 @@
       "kind": "agent",
       "zone": "creator_studio",
       "color": "#F59E0B",
-      "topic": "Creators"
+      "topic": "Creators",
+      "role": "Creators lead: creator shortlist by engagement and sales per rupee",
+      "lead": true
     },
     {
       "id": "d2c-ops",
@@ -52,7 +60,9 @@
       "kind": "agent",
       "zone": "dispatch_dock",
       "color": "#059669",
-      "topic": "Ops"
+      "topic": "Ops",
+      "role": "Ops lead: stock by warehouse, transfers, no stockouts",
+      "lead": true
     },
     {
       "id": "d2c-design",
@@ -61,7 +71,119 @@
       "kind": "agent",
       "zone": "design_studio",
       "color": "#9333EA",
-      "topic": "Design"
+      "topic": "Design",
+      "role": "Design lead: sale banners and decks",
+      "lead": true
+    },
+    {
+      "id": "d2c-forecaster",
+      "name": "Forecaster",
+      "emoji": "🔮",
+      "kind": "agent",
+      "zone": "data_wall",
+      "color": "#3B82F6",
+      "topic": "Analytics",
+      "role": "Demand forecast per SKU, channel and city from orders history",
+      "reports_to": "d2c-analyst"
+    },
+    {
+      "id": "d2c-insights",
+      "name": "Insights Analyst",
+      "emoji": "🔎",
+      "kind": "agent",
+      "zone": "data_wall",
+      "color": "#1D4ED8",
+      "topic": "Analytics",
+      "role": "Customers, cohorts, repeat rate, returns and RTO by channel",
+      "reports_to": "d2c-analyst"
+    },
+    {
+      "id": "d2c-marketplaces",
+      "name": "Marketplaces Manager",
+      "emoji": "🛒",
+      "kind": "agent",
+      "zone": "growth_pod",
+      "color": "#E11D48",
+      "topic": "Ads",
+      "role": "Amazon, Flipkart, Nykaa, Myntra, Blinkit and Zepto: ads, fees and listings",
+      "reports_to": "d2c-ads"
+    },
+    {
+      "id": "d2c-google",
+      "name": "Google Ads Specialist",
+      "emoji": "🔍",
+      "kind": "agent",
+      "zone": "growth_pod",
+      "color": "#BE185D",
+      "topic": "Ads",
+      "role": "Google Search, Shopping and YouTube campaigns",
+      "reports_to": "d2c-ads"
+    },
+    {
+      "id": "d2c-ugc",
+      "name": "UGC Producer",
+      "emoji": "🎬",
+      "kind": "agent",
+      "zone": "creator_studio",
+      "color": "#D97706",
+      "topic": "Creators",
+      "role": "Creator posts performance, UGC briefs and coupon tracking",
+      "reports_to": "d2c-influencers"
+    },
+    {
+      "id": "d2c-procurement",
+      "name": "Procurement Lead",
+      "emoji": "🧾",
+      "kind": "agent",
+      "zone": "dispatch_dock",
+      "color": "#047857",
+      "topic": "Ops",
+      "role": "Suppliers, raw materials, purchase orders, MOQ and lead times",
+      "reports_to": "d2c-ops"
+    },
+    {
+      "id": "d2c-logistics",
+      "name": "Logistics Manager",
+      "emoji": "🚚",
+      "kind": "agent",
+      "zone": "dispatch_dock",
+      "color": "#065F46",
+      "topic": "Ops",
+      "role": "Courier partners, delivery days, COD, RTO and returns",
+      "reports_to": "d2c-ops"
+    },
+    {
+      "id": "d2c-copywriter",
+      "name": "Copywriter",
+      "emoji": "✍️",
+      "kind": "agent",
+      "zone": "design_studio",
+      "color": "#7E22CE",
+      "topic": "Design",
+      "role": "Sale copy, ad headlines, product page and WhatsApp text",
+      "reports_to": "d2c-design"
+    },
+    {
+      "id": "d2c-finance",
+      "name": "Finance Lead",
+      "emoji": "💰",
+      "kind": "agent",
+      "zone": "finance_cabin",
+      "color": "#0F766E",
+      "topic": "Finance",
+      "role": "Finance lead: P&L, marketing budget sign-off, EBITDA and cash",
+      "lead": true
+    },
+    {
+      "id": "d2c-payroll",
+      "name": "Payroll & HR",
+      "emoji": "🧑‍💼",
+      "kind": "agent",
+      "zone": "finance_cabin",
+      "color": "#115E59",
+      "topic": "Finance",
+      "role": "Employees, salaries, PF, TDS and team cost",
+      "reports_to": "d2c-finance"
     },
     {
       "id": "librarian",
@@ -110,6 +232,19 @@
       "label": "Design",
       "zone": "design_studio",
       "topic": "Design"
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "zone": "finance_cabin",
+      "topic": "Finance"
+    },
+    {
+      "id": "qa_lab",
+      "label": "QA Lab",
+      "zone": "telegram_hub",
+      "topic": "QA Lab",
+      "internal": true
     }
   ],
   "telegram": {
