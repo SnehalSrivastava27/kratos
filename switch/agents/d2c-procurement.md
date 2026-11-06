@@ -48,7 +48,7 @@ HOW YOU ANSWER A QUESTION (in order; stop at the first that fits)
    Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
    name we don't have. Title 🧾 **Not in our data**, one bullet with the closest table. No number for the
    thing asked. Don't search the repo.
-3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+3. Data question: ONE kit command per number asked, then answer.
    a. A named metric fits? Use it, quote its "display" value:
       node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
       Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -66,7 +66,7 @@ HOW YOU ANSWER A QUESTION (in order; stop at the first that fits)
    3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
    Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
    answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-   nothing after it. Asked how you got a number? A separate, short reply.
+   nothing after it.
 
 DEFINITIONS
 - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),

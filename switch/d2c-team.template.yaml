@@ -128,7 +128,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🎯 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -146,7 +146,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -275,7 +275,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 📊 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -293,7 +293,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -414,7 +414,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 📣 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -432,7 +432,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -552,7 +552,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title ⭐ **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -570,7 +570,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -701,7 +701,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 📦 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -719,7 +719,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -838,7 +838,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🎨 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -856,7 +856,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -971,7 +971,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🔮 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -989,7 +989,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1066,9 +1066,7 @@ agents:
       - Missing a detail (a date, a city)? Pick a sensible default, say it in one bullet, and keep going. Don't wait.
 
       YOUR DATA (data/)
-      - customers.csv (columns in TABLES).
-      - returns.csv (columns in TABLES).
-      - orders.csv (columns in TABLES).
+      - customers.csv, returns.csv, orders.csv (columns in TABLES).
 
       YOUR JOB
       - Repeat rate = customers with orders > 1 ÷ all customers (customers.csv).
@@ -1099,7 +1097,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🔎 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1117,7 +1115,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1226,7 +1224,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🛒 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1244,7 +1242,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1353,7 +1351,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🔍 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1371,7 +1369,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1447,8 +1445,7 @@ agents:
       - Missing a detail (a date, a city)? Pick a sensible default, say it in one bullet, and keep going. Don't wait.
 
       YOUR DATA (data/)
-      - creator_posts.csv (columns in TABLES).
-      - creators.csv (columns in TABLES).
+      - creator_posts.csv, creators.csv (columns in TABLES).
 
       YOUR JOB
       - Sales per ₹ = SUM(revenue) ÷ SUM(fee_paid), per handle or format. Coupon orders = orders
@@ -1478,7 +1475,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🎬 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1496,7 +1493,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1606,7 +1603,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🧾 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1624,7 +1621,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1702,10 +1699,7 @@ agents:
       - Missing a detail (a date, a city)? Pick a sensible default, say it in one bullet, and keep going. Don't wait.
 
       YOUR DATA (data/)
-      - couriers.csv (columns in TABLES).
-      - orders.csv (columns in TABLES).
-      - returns.csv (columns in TABLES).
-      - warehouses.csv (columns in TABLES).
+      - couriers.csv, orders.csv, returns.csv, warehouses.csv (columns in TABLES).
 
       YOUR JOB
       - Pick a courier per zone: cheapest that meets the delivery days asked; add cod_fee for COD.
@@ -1734,7 +1728,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🚚 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1752,7 +1746,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -1863,7 +1857,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title ✍️ **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -1881,7 +1875,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -2017,7 +2011,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 💰 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -2035,7 +2029,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -2130,8 +2124,7 @@ agents:
       - Missing a detail (a date, a city)? Pick a sensible default, say it in one bullet, and keep going. Don't wait.
 
       YOUR DATA (data/)
-      - employees.csv (columns in TABLES).
-      - payroll_2026_10.csv (columns in TABLES).
+      - employees.csv, payroll_2026_10.csv (columns in TABLES).
 
       YOUR JOB
       - Headcount and cost by dept: COUNT and SUM(ctc_annual) GROUP BY dept. Monthly cost = ctc_annual ÷ 12.
@@ -2160,7 +2153,7 @@ agents:
          Pinterest, international shipping, stock held by marketplaces; no SKU, product, campaign, creator or channel
          name we don't have. Title 🧑‍💼 **Not in our data**, one bullet with the closest table. No number for the
          thing asked. Don't search the repo.
-      3. Data question: ONE kit command that returns the final number (one per part if it asks for two), then answer.
+      3. Data question: ONE kit command per number asked, then answer.
          a. A named metric fits? Use it, quote its "display" value:
             node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --last N] [--by dim]
             Names: net_revenue booked_revenue orders orders_all units units_all aov cod_share rto_pct
@@ -2178,7 +2171,7 @@ agents:
          3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
          Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
          answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-         nothing after it. Asked how you got a number? A separate, short reply.
+         nothing after it.
 
       DEFINITIONS
       - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
