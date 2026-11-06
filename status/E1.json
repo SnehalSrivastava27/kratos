@@ -1,3 +1,4 @@
-{ "task": "E1", "state": "working", "progress": 10,
-  "done": [], "next": "evals lib + question bank",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
+{ "task": "E1", "state": "working", "progress": 60,
+  "done": ["evals/ harness: 84 questions (32 v1, 52 v2), truth/offline/live modes, node:test checks incl. mock live API", "npm run evals / evals:truth"],
+  "next": "offline smoke run on 6 existing agents; then full suite after backend-v2 merge",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T00:50:00+05:30" }
