@@ -52,12 +52,17 @@ GalleryItem  { name, url /* /gallery/<name> */, size, mtime /* epoch ms */, titl
 
 ## Office actions (v2: full-screen office, commands, hiring, skills library)
 
-**Who may call them:** requests from loopback (127.0.0.1 / ::1, i.e. the office opened on the same Mac)
-OR with `Authorization: Bearer $ADMIN_TOKEN`. Everyone else gets 401. They are never open, even in dev.
+**Who may call the writes** (`POST /api/command`, `POST /api/employees`, `POST /api/library/categorize`): requests
+from loopback (127.0.0.1 / ::1, i.e. the office opened on the same Mac) OR with `Authorization: Bearer $ADMIN_TOKEN`.
+Everyone else gets 401. They are never open, even in dev. `TRUST_LOOPBACK=0` (default under `NODE_ENV=production`)
+stops trusting loopback, for a same-host reverse proxy. The GETs are open like the other read APIs (`path` is hidden
+from non-loopback library readers).
+Errors: 400 invalid body · 401 · 429 more than 10 commands/min · 502 Switch refused the call · 503 local Switch server
+not running or unreachable.
 
 | Method | Path | Body / query | Result |
 |---|---|---|---|
-| POST | `/api/command` | `{ room: RoomId, text: string (1–2000 chars) }` | Posts `text` into that Telegram topic through Switch, as the founder's office console. `202 { ok, via }`. It comes back into the office through the observer like any Telegram message. |
+| POST | `/api/command` | `{ room: RoomId, text: string (1–2000 chars) }` | Posts `text` into that Telegram topic through Switch, as the founder's office console (Switch agent `d2c-office`; if no agent is @named, the room's lead is addressed). `202 { ok, via: "switch:d2c-office", thread: "topic" \| "group" }` (`group` = the topic has no Switch thread yet, so it went to General tagged `#Topic`). It comes back into the office through the observer like any Telegram message. |
 | GET | `/api/people` | none | `Person[]`: contracts/roster.json people plus hired employees (with `desk` and `hiredAt`). The office uses this, not the static roster, in live mode. |
 | GET | `/api/employees` | none | `Employee[]` (hired only) |
 | POST | `/api/employees` | `{ name, role, room: RoomId, emoji?, color?, instructions, skills?: string[] /* library book ids */ }` | Creates the agent in Switch, joins it to "Kratos D2C", gives it a free desk. `201 Employee`, or `202 { employee, action: { kind: "open_url", url, label } }` if a human must click in Switch Console. Emits a `hired` event (speaker = new id, meta.employee_id). |
