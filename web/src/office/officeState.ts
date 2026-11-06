@@ -67,6 +67,11 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         for (const t of targets) {
           s.people[t].state = 'working';
           walk(t, [home[t]], e.id);
+          // the lead's specialists gather at their department desks and get to work too
+          for (const sp of ctx.roster) if (sp.reports_to === t && s.people[sp.id]) {
+            s.people[sp.id].state = 'working';
+            walk(sp.id, [home[sp.id]], e.id);
+          }
         }
         break;
       case 'working':
@@ -79,6 +84,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         sp.jumpId = e.id;
         sp.beacon = undefined;
         if (e.type === 'artifact' && e.meta?.artifact_url) s.gallery.push(e.meta.artifact_url);
+        if (e.type === 'done') for (const sp of ctx.roster) if (sp.reports_to === e.speaker && s.people[sp.id]?.state === 'working') s.people[sp.id].state = 'done'; // the team ships with its lead
         break;
       case 'pushback':
         sp.state = 'working';

@@ -28,10 +28,27 @@ export interface OfficeEvent {
 export interface Person {
   id: string; name: string; emoji: string;
   kind: 'human' | 'agent'; zone: string; color: string; group?: string;
+  topic?: string; // roster v4: the forum topic this person posts in
+  role?: string; // one-line job description
+  lead?: boolean; // department lead (and the captain)
+  reports_to?: string; // specialist → their department lead's id
 }
+
+/** contracts/roster.json `rooms[]`. `internal` rooms (QA Lab) never show in the UI. */
+export interface Room { id: RoomId; label: string; zone: string; topic: string; internal?: boolean }
 
 export interface Zone {
   id: string; label: string; x: number; z: number; w: number; d: number; props: string[];
+  desks?: [number, number][]; // zone-local desk centres; desk id '<zone>#<i>'
+}
+
+/** GET /api/kpis (B3): made-up demo brand numbers from data/*.csv. Money in rupees; percentages 0–100; null = no data. */
+export interface Kpis {
+  updated: number | null; window: { from: string | null; to: string | null };
+  net_revenue: number | null; orders: number | null; aov: number | null; rto_pct: number | null; return_pct: number | null;
+  meta_roas: number | null; blended_roas: number | null; ebitda_last_month: number | null;
+  by_channel: { channel: string; orders: number; net_revenue: number; rto_pct: number | null }[];
+  top_skus: { sku: string; name: string; units: number; net_revenue: number }[];
 }
 
 export type AgentState = 'idle' | 'working' | 'walking' | 'waiting' | 'done';

@@ -15,7 +15,10 @@ const TEAM = [
   { id: 'd2c-ops', plate: 'Places stock so every region gets 1–2 day delivery.', own: 'A SKU will run out in a region: proposes a transfer.' },
   { id: 'd2c-analyst', plate: 'Forecasts sales per SKU and sets the live dashboard metrics.', own: 'Sales pace falls behind forecast: alerts the captain.' },
   { id: 'd2c-design', plate: 'Makes sale banners and creatives, pinned to the gallery.', own: 'A new campaign starts: drafts creatives for it.' },
+  { id: 'd2c-finance', plate: 'Keeps the P&L, signs off the marketing budget and watches EBITDA and cash.', own: 'Spend runs ahead of the plan: flags it before the money goes.' },
 ];
+/** Who works under each lead (roster `reports_to`). */
+const CREW = (lead: string) => Object.values(PEOPLE).filter((p) => p.reports_to === lead).map((p) => p.name);
 // The teammate's last real message in the demo, shown as proof.
 const LAST = Object.fromEntries(TEAM.map(({ id }) => [id, [...FEED].reverse().find((e) => e.speaker === id && e.type !== 'working')]));
 
@@ -50,6 +53,7 @@ export default function Departments() {
                   <div>
                     <h3 className="text-lg font-medium tracking-tight">{p.name}</h3>
                     <p className="text-[13px] text-neutral-500">{TG_GROUP} · {p.topic} topic · sits in the {room}</p>
+                    {CREW(id).length > 0 && <p className="mt-0.5 text-[13px] text-neutral-500">With {CREW(id).join(' and ')}</p>}
                   </div>
                 </div>
                 <dl className="grid gap-5 sm:grid-cols-2">

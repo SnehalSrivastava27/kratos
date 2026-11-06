@@ -1,0 +1,8 @@
+{ "task": "O4", "state": "done", "progress": 100,
+  "done": [
+    "Finance Cabin in the west wing (zones.json: library shrunk north, open desks south; cabinet, safe, P&L ledger screen, calculator, dual monitors); a desk per lead + specialist (data wall/growth pod/dispatch 3, creator/design/finance 2), k-th roster person in a zone sits at desk #k (matches server desk()); nav.check.mjs now proves all 21 desk seats reachable and non-overlapping",
+    "Types (role/lead/reports_to/topic/Room.internal/Kpis), internal rooms (QA Lab) hidden from topics, chat, walls and events; specialists get to work/finish with their lead; specialists wear a badge tag so 17 people stay readable; hire dialog 'Reports to' (sends reports_to); file chips for pptx/xlsx/docx/pdf, image thumbnails with fallback",
+    "Data Wall KPI panel (GET /api/kpis, mock in /demo and on failure, ₹ L/Cr via inr.ts + inr.check.mjs); landing shows Captain + 6 leads (Finance tab, 4x3 floor plan, copy). Checked /demo + / at 1440/390; build, office checks, demoScript check and e2e pass"
+  ],
+  "next": "",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T01:05:00+05:30" }

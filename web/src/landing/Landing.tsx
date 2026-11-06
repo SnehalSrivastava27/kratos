@@ -25,7 +25,7 @@ export default function Landing() {
         <main className="relative">
           <Hero />
           <SectionRow id="teammates" a="Every department" b="has a teammate." cta={{ href: '/demo', Icon: Users, label: 'Meet the team' }}>
-            <b>Five department teammates</b> plus a <b>Sale Captain</b> who splits the work and brings back one plan. Each knows what to take off your plate and <b>when to act on its own</b>.
+            <b>Six department leads</b> plus a <b>Sale Captain</b> who splits the work and brings back one plan. Each knows what to take off your plate and <b>when to act on its own</b>.
           </SectionRow>
           <Departments />
           <SectionRow id="threads" a="A dedicated thread" b="for every teammate." cta={{ href: '/demo', Icon: MessagesSquare, label: 'Read a thread' }}>

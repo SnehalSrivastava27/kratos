@@ -1,5 +1,5 @@
 {
-  "_units": "metres on a 30.3 x 16.3 floor (x -18..12.3, z -8..8.3); origin = old floor centre; x right, z towards camera. The west wing (x < -12.15, behind an inner wall with two doorways) holds the library and the open desks.",
+  "_units": "metres on a 30.3 x 16.3 floor (x -18..12.3, z -8..8.3); origin = old floor centre; x right, z towards camera. The west wing (x < -12.15, behind an inner wall with two doorways) holds the library (north), the finance cabin (middle) and the open desks (south).",
   "zones": [
     {
       "id": "design_studio",
@@ -35,11 +35,15 @@
       ],
       "desks": [
         [
-          1.4,
+          0,
           -0.15
         ],
         [
-          -1.4,
+          -2.0,
+          -0.15
+        ],
+        [
+          2.0,
           -0.15
         ]
       ]
@@ -71,6 +75,10 @@
       "desks": [
         [
           -1.5,
+          -0.6
+        ],
+        [
+          0.5,
           -0.6
         ]
       ]
@@ -106,6 +114,10 @@
         [
           2.0,
           -0.6
+        ],
+        [
+          -2.0,
+          -0.6
         ]
       ]
     },
@@ -123,8 +135,16 @@
       ],
       "desks": [
         [
-          1.5,
+          0.2,
           -0.9
+        ],
+        [
+          2.1,
+          -0.9
+        ],
+        [
+          2.1,
+          1.2
         ]
       ]
     },
@@ -174,9 +194,9 @@
       "id": "library",
       "label": "Skills Library",
       "x": -15.1,
-      "z": -4,
+      "z": -4.8,
       "w": 5.8,
-      "d": 8,
+      "d": 6.4,
       "props": [
         "bookcases",
         "librarian_desk"
@@ -184,7 +204,31 @@
       "desks": [
         [
           0.9,
-          1.7
+          2.5
+        ]
+      ]
+    },
+    {
+      "id": "finance_cabin",
+      "label": "Finance Cabin",
+      "x": -15.1,
+      "z": 0.2,
+      "w": 5.8,
+      "d": 3.2,
+      "props": [
+        "desk",
+        "safe",
+        "ledger_screen",
+        "filing_cabinet"
+      ],
+      "desks": [
+        [
+          -1.2,
+          -0.2
+        ],
+        [
+          1.2,
+          -0.2
         ]
       ]
     },
@@ -192,28 +236,28 @@
       "id": "open_desks",
       "label": "Open Desks",
       "x": -15.1,
-      "z": 4.2,
+      "z": 5.25,
       "w": 5.8,
-      "d": 7.6,
+      "d": 6.1,
       "props": [
         "desks"
       ],
       "desks": [
         [
           -1.5,
-          -2.0
+          -1.65
         ],
         [
           0.9,
-          -2.0
+          -1.65
         ],
         [
           -1.5,
-          1.0
+          1.2
         ],
         [
           0.9,
-          1.0
+          1.2
         ]
       ]
     }
