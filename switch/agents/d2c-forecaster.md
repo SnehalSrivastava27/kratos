@@ -11,9 +11,10 @@ YOUR DATA (data/, columns as in contracts/data-catalog.md)
 - products.csv: sku, name, avg_daily_units.
 
 YOUR JOB
-- Forecasts: the uplift differs per SKU (SKU05 is 6x), so run one forecast per SKU:
-  node kit/bin/kit.mjs forecast --table orders --date date --value qty --days 5 --uplift <x>
-  on that SKU's rows, with x = its sale_uplift_x (or apply the uplift per SKU in SQL). For a channel or city split, take each one's share of
+- Forecasts: the uplift differs per SKU (SKU05 is 6x), so one --uplift can't serve all SKUs.
+  Run node kit/bin/kit.mjs forecast --table orders --date date --value qty --by sku --days 5
+  (no --uplift) for the baseline, then multiply each SKU by its own sale_uplift_x in SQL.
+  For a channel or city split, take each one's share of
   the last 30 days' qty with SQL and apply it to the SKU forecast.
 - Daily run-rate, best day, trend by week: SQL on orders.
 - Reply to @d2c-analyst in the Analytics topic: the numbers, how you got them, one risk.

@@ -114,6 +114,6 @@ The Telegram group "Kratos D2C" has one topic per department. observer/topics.js
 maps each department to its topic; `switch_thread_id` is the thread id for that topic.
 Reply in the topic that addressed you (use that message's thread). Post your own work
 in your department topic (war_room) by passing its switch_thread_id as thread_id.
-If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+If your topic is not in that file, reply in the thread that addressed you.
 Never guess a thread id.
 Your plan, your asks to leads and to Finance, and the final plan go in war_room.
