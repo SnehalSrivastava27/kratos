@@ -25,11 +25,11 @@ const GAP = 0.2; // metres between trail beads
 const MAX_PULSES = 14;
 // Private notes are the story's quiet moment, so they read from the overview: slower, bigger beads lifted
 // off the floor, a longer glowing trail, and a lock riding the head.
-const P_SPEED = 4.8;
+const P_SPEED = 5.5;
 const P_TRAIL = [1, 0.86, 0.74, 0.63, 0.53, 0.44, 0.36, 0.29, 0.23, 0.18];
 const P_GAP = 0.17;
-const P_SCALE = 1.9;
-const P_LIFT = 0.22;
+const P_SCALE = 2.4;
+const P_LIFT = 0.3;
 const MAX_LOCKS = 4;
 const v = new THREE.Vector3();
 const m4 = new THREE.Matrix4();
@@ -169,8 +169,8 @@ export class SwitchHub {
     // Pulses: a bright bead with a fading trail, one instance each.
     this.beads = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 10, 8), new THREE.MeshBasicMaterial({ toneMapped: false }), MAX_PULSES * P_TRAIL.length);
     // Private notes: a soft additive halo round each bead, and a lock tag riding the head bead (both instanced).
-    this.glow = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshBasicMaterial({ color: '#b37cf0', transparent: true, opacity: 0.32, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }), MAX_LOCKS * P_TRAIL.length);
-    this.locks = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.46, 0.46), new THREE.MeshBasicMaterial({ map: lockTex(), transparent: true, depthWrite: false, toneMapped: false }), MAX_LOCKS);
+    this.glow = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 14, 10), new THREE.MeshBasicMaterial({ color: '#9d4edd', transparent: true, opacity: 0.28, depthWrite: false, toneMapped: false }), MAX_LOCKS * P_TRAIL.length);
+    this.locks = new THREE.InstancedMesh(new THREE.PlaneGeometry(1.05, 1.05), new THREE.MeshBasicMaterial({ map: lockTex(), transparent: true, depthWrite: false, toneMapped: false }), MAX_LOCKS);
     for (const o of [this.beads, this.glow, this.locks]) {
       o.frustumCulled = false;
       o.count = 0;
@@ -293,12 +293,12 @@ export class SwitchHub {
         v.y += p.priv ? P_LIFT : 0.07;
         m4.compose(v, q, s3.setScalar(k * size));
         this.beads.setMatrixAt(n, m4);
-        this.beads.setColorAt(n, col.copy(p.color).lerp(WHITE, i === 0 ? 0.55 : 0.1));
+        this.beads.setColorAt(n, col.copy(p.color).lerp(WHITE, i === 0 ? (p.priv ? 0.3 : 0.55) : 0.1));
         n++;
         if (!p.priv) return;
-        this.glow.setMatrixAt(ng++, m4.compose(v, q, s3.setScalar(k * size * 2.6)));
+        if (i % 3 === 0) this.glow.setMatrixAt(ng++, m4.compose(v, q, s3.setScalar(k * size * 2.3))); // a few soft halos, not one per bead
         if (i === 0) {
-          v.y += 0.5;
+          v.y += 0.85;
           this.locks.setMatrixAt(nl++, m4.compose(v, camera.quaternion, s3.setScalar(1 + Math.sin(t * 6) * 0.06)));
         }
       });

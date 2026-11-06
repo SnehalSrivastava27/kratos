@@ -352,7 +352,7 @@ export class Agent {
     const quiet = shown === 'idle' || (this.crew && !ps.beacon);
     if (!talking) span(you ? 'hq-tag-name hq-tag-you' : quiet ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : quiet ? '' : name, true);
     if (shown !== 'idle' && shown !== 'walking' && !(this.crew && !ps.beacon)) span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
-    this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
+    this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : ps.role ? '15' : '10';
   }
 
   /** A local one-liner (a hello at the chai corner): a bubble that never touches the feed; the next feed bubble replaces it. */

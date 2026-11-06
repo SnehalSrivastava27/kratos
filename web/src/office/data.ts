@@ -144,6 +144,7 @@ export function caption(events: OfficeEvent[], scene: SceneState): { text: strin
   if (!e) return { text: 'Waiting for the founder’s brief…', tone: 'idle' };
   const n = personById[e.speaker]?.name ?? e.speaker;
   const targets = (e.meta?.targets ?? []).map((t) => personById[t]?.name).filter(Boolean);
+  if (isPrivate(e)) return { text: `${n} · 🔒 private note via Switch${swMeta(e).to && personById[swMeta(e).to!] ? ` to ${personById[swMeta(e).to!].name}` : ''}`, tone: 'live' }; // never the text
   switch (e.type) {
     case 'assign':
       return { text: `${n} briefed ${targets.length > 2 ? 'the whole team' : targets.join(' & ')}`, tone: 'live' };

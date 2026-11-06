@@ -78,7 +78,7 @@ export function SwitchPanel({ events, onClose }: { events: OfficeEvent[]; onClos
         {brief && (
           <>
             <h3 className="sw-h">Morning brief</h3>
-            <div className="sw-brief"><Sunrise className="size-4 shrink-0" strokeWidth={2.5} /><span className="min-w-0 flex-1 truncate">{firstLine(brief.text)}</span><span className="sw-brief-t">{who(brief.speaker)} · #{topicOf(brief.room)}</span></div>
+            <div className="sw-brief"><Sunrise className="size-4 shrink-0" strokeWidth={2.5} /><span className="min-w-0 flex-auto truncate">{firstLine(brief.text)}</span><span className="sw-brief-t">{who(brief.speaker)} · #{topicOf(brief.room)}</span></div>
           </>
         )}
         {roles.size > 0 && (

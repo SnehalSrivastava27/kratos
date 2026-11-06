@@ -4,6 +4,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
+import { SWITCH_FIXTURE } from './switchFixture';
 import { DEMO_GROUP, INTERNAL_ROOMS, isPrivate, roster, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
@@ -72,16 +73,18 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const poster = import.meta.env.DEV && urlHas('poster');
   if (poster) mode = 'autoplay';
   const isDemo = mode === 'autoplay' || !!demo || (!workspace && urlHas('demo'));
+  // Dev only: /demo?demo&fixture=switch loops the Switch extras (roles, morning brief, catch-up, a private note).
+  const fixture = import.meta.env.DEV && isDemo && !feed && new URLSearchParams(location.search).get('fixture') === 'switch';
   const [run, setRun] = useState(0); // demo: Replay restarts the story (a fresh array restarts the feed hook)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const demoFeed = useMemo(() => [...(feed ?? (saleDemo as OfficeEvent[]))], [run, feed]);
+  const demoFeed = useMemo(() => [...(feed ?? (fixture ? SWITCH_FIXTURE : (saleDemo as OfficeEvent[])))], [run, feed, fixture]);
   const unauth = useRef(onUnauthorized);
   unauth.current = onUnauthorized;
   const onUnauth = useCallback(() => unauth.current?.(), []);
   api.configureApi(!isDemo, workspace?.id, onUnauth);
   setGroup(isDemo ? DEMO_GROUP : workspace?.name ?? 'Your Telegram group');
   // /demo is playable: the viewer starts the story and makes the approval call (the landing hero keeps its loop).
-  const playable = isDemo && mode === 'live' && !poster;
+  const playable = isDemo && mode === 'live' && !poster && !fixture;
   const director = useDemoDirector(demoFeed, playable);
   const streamed = useEventFeed(isDemo, isDemo ? (playable ? NO_FEED : demoFeed) : undefined, { ws: workspace?.id, onUnauthorized: onUnauth });
   const posterEvents = useMemo(() => (poster ? demoFeed.slice(0, POSTER_AT) : null), [poster, demoFeed]);
@@ -492,7 +495,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       {playable && !modalOpen && <DemoPrompt nudge={nudge} phase={director.phase} events={events} first={demoFeed[0]} onStart={director.start} onApprove={director.approve} onChanges={() => director.changes()} onRestart={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} />}
       {sw && <SwitchPanel events={events} onClose={() => setSw(false)} />}
       {card && personById[card] && (
-        <AgentCard person={personById[card]} ps={scene.people[card]} last={[...recent].reverse().find((e) => e.speaker === card)}
+        <AgentCard person={personById[card]} ps={scene.people[card]} last={[...chatEvents].reverse().find((e) => e.speaker === card)}
           topic={ROOMS.find((r) => r.id === roomOf(card))?.topic ?? 'War Room'} onClose={() => setCard(null)}
           onAsk={() => (setCard(null), askIn(card))} onAssign={() => (setCard(null), askIn(card, 'New task: '))} />
       )}
