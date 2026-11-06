@@ -6,15 +6,13 @@ export interface PersonState {
   zone: string; // where they end up
   route: string[]; // zones to walk through, last = zone
   routeId?: string; // changes whenever a new walk starts
-  bubble?: { id: string; text: string };
+  bubble?: { id: string; text: string; t: number };
   jumpId?: string; // changes → jump once
   beacon?: string; // banner text while waiting
 }
 
 export interface SceneState {
   people: Record<string, PersonState>;
-  ebitda: number | null;
-  financeGlow: boolean;
   gallery: string[];
   pinPulseId?: string;
   boxId?: string;
@@ -33,7 +31,7 @@ export function initialState({ roster }: Ctx): SceneState {
     const zone = p.kind === 'human' || p.id === 'd2c-captain' ? p.zone : IDLE_ZONE;
     people[p.id] = { state: 'idle', zone, route: [] };
   }
-  return { people, ebitda: null, financeGlow: false, gallery: [] };
+  return { people, gallery: [] };
 }
 
 export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
@@ -55,7 +53,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
     const targets = (e.meta?.targets ?? []).filter((t) => s.people[t]);
     walk(e.speaker, [roomZone], e.id);
     for (const p of Object.values(s.people)) p.bubble = undefined; // one bubble on screen at a time
-    sp.bubble = { id: e.id, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
+    sp.bubble = { id: e.id, t: e.t, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
 
     switch (e.type) {
       case 'assign':
@@ -79,7 +77,6 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         break;
       case 'pushback':
         sp.state = 'working';
-        s.financeGlow = false;
         for (const t of targets) {
           s.people[t].state = 'waiting';
           s.people[t].beacon = `${name[e.speaker]} pushed back on ${name[t]}`;
@@ -88,7 +85,6 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
       case 'approved':
         sp.state = 'done';
         sp.jumpId = e.id;
-        if (e.room === 'finance' || e.speaker === 'd2c-finance') s.financeGlow = true;
         for (const t of targets) s.people[t].beacon = undefined;
         break;
       case 'approval_needed': {
@@ -98,7 +94,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         break;
       }
       case 'celebrate':
-        s.confettiId = e.id;
+        s.confettiId ??= e.id; // several team celebrations in a row: one confetti burst, not a restart each time
         for (const p of Object.values(s.people)) {
           p.state = 'done';
           p.jumpId = e.id;
@@ -106,7 +102,6 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         }
         break;
     }
-    if (typeof e.meta?.ebitda === 'number') s.ebitda = e.meta.ebitda;
     if (e.meta?.transfers?.length) s.pinPulseId = s.boxId = e.id;
   }
   return s;

@@ -1,137 +1,191 @@
-// Feed-driven props (PLAN §9.6 scene events table).
-import { useLayoutEffect, useMemo, useRef } from 'react';
+// Feed-driven props (PLAN §9.6 scene events table), in the toon style of the office around them.
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
-import { Color, Object3D, type Group, type InstancedMesh, type Mesh, type MeshStandardMaterial } from 'three';
+import * as THREE from 'three';
 import type { SceneState } from './officeState';
-import { zoneById } from './data';
+import type { OfficeEvent } from '../shared/types';
+import { C, DESK, clean, personById, roster, world, zoneById } from './data';
+import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './Floor';
+import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from './tex';
+import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
 import { useAge } from './useAge';
 
-const RED = '#E5484D', MINT = '#3CCB8B';
-const lakh = (n: number) => `${n < 0 ? '−' : '+'}₹${(Math.abs(n) / 1e5).toFixed(2)}L`;
+const GW = 5.2, GH = 2.0;
+/** A geometry made once per mount and freed on unmount. */
+function useOwned<T extends { dispose(): void }>(make: () => T): T {
+  const o = useMemo(make, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => o.dispose(), [o]);
+  return o;
+}
 
-export function EbitdaMeter({ ebitda, glow }: { ebitda: number | null; glow: boolean }) {
-  const z = zoneById.finance_cabin;
-  const needle = useRef<Group>(null);
-  const face = useRef<MeshStandardMaterial>(null);
-  const target = ebitda == null ? 0 : ebitda < 0 ? 1 : -1; // swing left = red, right = green
-  const col = ebitda == null ? '#cfc6b8' : ebitda < 0 ? RED : MINT;
-  useFrame((_, dt) => {
-    if (needle.current) needle.current.rotation.z += (target - needle.current.rotation.z) * Math.min(1, dt * 4);
-    face.current?.color.lerp(new Color(col), Math.min(1, dt * 4));
-  });
+const WALL_FACE = WALL.backZ + WALL.t / 2 + 0.06;
+const popIn = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 + 2.7 * (x - 1) ** 3 + 1.7 * (x - 1) ** 2);
+const SCREEN: Record<string, string> = { idle: '#4a4e69', working: '#8ecae6', waiting: '#ff8fa3', done: '#95f2c3' };
+
+/** Monitor faces: dim when idle, lit while working, mint when done, pink while blocked. */
+function Screens({ scene }: { scene: SceneState }) {
+  const tex = useMemo(() => screenTex(), []);
+  const slots = useMemo(
+    () => roster.filter((p) => DESK[p.zone]).flatMap((p) => monitorXs(p.zone).map((dx) => ({ id: p.id, pos: [...world(p.zone, DESK[p.zone])], dx }))),
+    [],
+  );
   return (
     <group>
-      <group position={[z.x - 1.6, 1.2, z.z - z.d / 2 + 0.25]}>
-        <mesh>
-          <circleGeometry args={[0.8, 24, 0, Math.PI]} />
-          <meshStandardMaterial ref={face} color="#cfc6b8" />
-        </mesh>
-        <group ref={needle} position-z={0.02}>
-          <mesh position-y={0.35}>
-            <boxGeometry args={[0.06, 0.7, 0.02]} />
-            <meshStandardMaterial color="#1E1328" />
-          </mesh>
-        </group>
-        <Html position={[0, -0.25, 0]} center zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
-          <div className="hq-chip" style={{ background: col }}>EBITDA {ebitda == null ? '—' : lakh(ebitda)}</div>
-        </Html>
-      </group>
-      {glow && (
-        <mesh rotation-x={-Math.PI / 2} position={[z.x, 0.02, z.z]}>
-          <planeGeometry args={[z.w - 0.2, z.d - 0.2]} />
-          <meshBasicMaterial color={MINT} transparent opacity={0.35} />
-        </mesh>
-      )}
-    </group>
-  );
-}
-
-// Rough spots on a 1.6 x 1.2 map board: Delhi, Mumbai, Bengaluru.
-const PINS: [number, number][] = [[-0.15, 0.35], [-0.4, -0.05], [-0.1, -0.4]];
-
-export function DispatchDock({ pulseId, boxId }: { pulseId?: string; boxId?: string }) {
-  const z = zoneById.dispatch_dock;
-  const pins = useRef<Group>(null);
-  const box = useRef<Mesh>(null);
-  const pulseAge = useAge(pulseId), boxAge = useAge(boxId);
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    const pa = pulseAge(t);
-    pins.current?.children.forEach((c, i) => c.scale.setScalar(pa < 4 ? 1 + Math.abs(Math.sin(t * 6 + i)) * 0.8 : 1));
-    const ba = boxAge(t); // slides once along the belt over 3s
-    if (box.current) box.current.position.x = -1.8 + Math.min(1, ba / 3) * 3.6 * (ba === Infinity ? 0 : 1);
-  });
-  return (
-    <group position={[z.x, 0, z.z]}>
-      {/* India map board */}
-      <group position={[-1.6, 1.2, -z.d / 2 + 0.25]}>
-        <mesh>
-          <planeGeometry args={[1.6, 1.2]} />
-          <meshStandardMaterial color="#FFE3B0" />
-        </mesh>
-        <group ref={pins}>
-          {PINS.map(([x, y], i) => (
-            <mesh key={i} position={[x, y, 0.05]}>
-              <sphereGeometry args={[0.07, 10, 8]} />
-              <meshStandardMaterial color={RED} emissive={RED} emissiveIntensity={0.4} />
-            </mesh>
-          ))}
-        </group>
-      </group>
-      {/* Conveyor + sliding box */}
-      <mesh position={[0, 0.25, 1.2]}>
-        <boxGeometry args={[4, 0.1, 0.6]} />
-        <meshStandardMaterial color="#5b5566" />
-      </mesh>
-      <mesh ref={box} position={[-1.8, 0.48, 1.2]}>
-        <boxGeometry args={[0.4, 0.36, 0.4]} />
-        <meshStandardMaterial color="#C8935A" />
-      </mesh>
-    </group>
-  );
-}
-
-export function GalleryWall({ urls }: { urls: string[] }) {
-  const z = zoneById.design_studio;
-  return (
-    <group position={[z.x, 1.3, z.z - z.d / 2 + 0.2]}>
-      <mesh position-z={-0.05}>
-        <boxGeometry args={[z.w - 0.6, 1.6, 0.08]} />
-        <meshStandardMaterial color="#FFF6E5" />
-      </mesh>
-      {urls.slice(-4).map((u, i) => (
-        <mesh
-          key={u + i}
-          position={[-1.8 + i * 1.2, 0, 0.02]}
-          onClick={(e) => { e.stopPropagation(); window.open(u, '_blank'); }}
-          onPointerOver={() => (document.body.style.cursor = 'pointer')}
-          onPointerOut={() => (document.body.style.cursor = '')}
-        >
-          <planeGeometry args={[0.9, 1.1]} />
-          <meshStandardMaterial color={['#F4A300', '#DB2777', '#9333EA', '#2563EB'][i % 4]} />
+      {slots.map(({ id, pos: [x, z], dx }) => (
+        <mesh key={id + dx} position={[x + dx, MONITOR.y, z + MONITOR.z]}>
+          <planeGeometry args={[MONITOR.w, MONITOR.h]} />
+          <meshBasicMaterial map={tex} color={SCREEN[scene.people[id]?.state ?? 'idle']} toneMapped={false} />
         </mesh>
       ))}
     </group>
   );
 }
 
-const N_CONFETTI = 140;
-const dummy = new Object3D();
+/** War-room plan screen: checklist of every agent, team progress and the founder's sign-off, redrawn as the story moves. */
+function WarScreen({ scene }: { scene: SceneState }) {
+  const war = zoneById.war_room;
+  const tex = useMemo(() => paint(1024, 512, () => {}), []);
+  const board = useMemo(() => {
+    const b = wallBoard(3.2, 1.6, PAL.ink, tex);
+    b.position.set(war.x, 1.55, war.z - 2.15);
+    noOutline(b);
+    return b;
+  }, [tex, war]);
+  const shipped = !!scene.confettiId;
+  const key = Object.values(scene.people).map((p) => p.state).join() + shipped;
+  useEffect(() => repaint(tex, (g, W, H) => drawWarScreen(g, W, H, scene.people, shipped)), [key]); // eslint-disable-line react-hooks/exhaustive-deps
+  return <primitive object={board} />;
+}
 
+/** Telegram Hub showpiece: the Kratos D2C supergroup live on the back wall, topics on the left, the busiest thread on the right. */
+function TelegramWall({ events }: { events: OfficeEvent[] }) {
+  const hub = zoneById.telegram_hub;
+  const tex = useMemo(() => paint(1300, 500, () => {}), []);
+  const board = useMemo(() => {
+    const b = wallBoard(GW, GH, PAL.ink, tex);
+    noOutline(b);
+    return b;
+  }, [tex]);
+  useEffect(() => repaint(tex, (g, W, H) => drawTelegramWall(g, W, H, events)), [events.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  return <primitive object={board} position={[hub.x, 1.45, WALL_FACE]} />;
+}
+
+/** Dispatch dock: India map on the left wall (pins pulse on a transfer, an arc Mumbai → Delhi) and a box riding the conveyor. */
+export function DispatchDock({ pulseId, boxId }: { pulseId?: string; boxId?: string }) {
+  const z = zoneById.dispatch_dock;
+  const pins = useRef<THREE.Group>(null);
+  const box = useRef<THREE.Group>(null);
+  const pulseAge = useAge(pulseId), boxAge = useAge(boxId);
+  const S = 1.7;
+  const board = useMemo(() => {
+    const b = wallBoard(S, S, PAL.wood, indiaTex());
+    noOutline(b);
+    return b;
+  }, []);
+  const at = (c: readonly [number, number]) => {
+    const [u, v] = uv(c);
+    return new THREE.Vector3((u - 0.5) * S, (v - 0.5) * S, 0.12);
+  };
+  const arc = useMemo(() => {
+    const a = at(CITIES.Mumbai), b = at(CITIES.Delhi);
+    const mid = a.clone().add(b).multiplyScalar(0.5).add(new THREE.Vector3(-0.25, 0, 0.35));
+    return new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(a, mid, b), 24, 0.025, 6);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const arcMat = useMemo(() => toonUnique(C.saffron, { emissive: '#b36b00' }), []);
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime, pa = pulseAge(t);
+    pins.current?.children.forEach((c, i) => {
+      const k = pa < 6 ? 1 + Math.abs(Math.sin(t * 5 + i)) * 0.7 : 1;
+      c.scale.setScalar(k);
+    });
+    const ba = boxAge(t);
+    if (box.current) {
+      box.current.visible = ba < 14;
+      box.current.position.x = -1.4 + ((ba / 3.5) % 1) * 2.8;
+    }
+  });
+  const pinMat = toon(C.red, { emissive: '#7a1418' });
+  const boxGeo = useOwned(() => roundedBox(0.36, 0.32, 0.36, 0.03));
+  return (
+    <group>
+      <group position={[WALL.leftX + WALL.t / 2 + 0.06, 1.55, z.z - 0.2]} rotation-y={Math.PI / 2}>
+        <primitive object={board} />
+        <group ref={pins}>
+          {Object.values(CITIES).map((c, i) => (
+            <mesh key={i} position={at(c)} material={pinMat}>
+              <sphereGeometry args={[0.065, 12, 10]} />
+            </mesh>
+          ))}
+        </group>
+        {pulseId && <mesh geometry={arc} material={arcMat} />}
+      </group>
+      <group ref={box} position={[z.x - 0.9, 0.63, z.z + 0.9]} visible={false}>
+        <mesh position-y={0.17} material={toon('#d4a373')} geometry={boxGeo} castShadow />
+      </group>
+    </group>
+  );
+}
+
+/** Gallery wall: each saved banner pops onto the design studio's back wall; click to open it. */
+export function GalleryWall({ items }: { items: { url: string; title: string }[] }) {
+  const z = zoneById.design_studio;
+  return (
+    <group position={[z.x, 1.55, WALL_FACE]}>
+      {items.slice(-4).map((it, i, a) => (
+        <Frame key={it.url} {...it} i={i} x={(i - (a.length - 1) / 2) * 1.35} />
+      ))}
+    </group>
+  );
+}
+function Frame({ url, title, i, x }: { url: string; title: string; i: number; x: number }) {
+  const g = useRef<THREE.Group>(null);
+  const born = useRef<number | null>(null);
+  const obj = useMemo(() => {
+    const o = new THREE.Group();
+    o.add(mesh(roundedBox(1.08, 0.08, 1.32, 0.06).rotateX(Math.PI / 2), toon(PAL.wood)));
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(0.92, 1.15), new THREE.MeshBasicMaterial({ map: bannerTex(title, i), toneMapped: false }));
+    face.position.z = 0.05;
+    o.add(face);
+    noOutline(o);
+    return o;
+  }, [title, i]);
+  useEffect(() => () => disposeTree(obj), [obj]); // a loop reset unmounts the frames: free their banner + geometry
+  useFrame(({ clock }) => {
+    born.current ??= clock.elapsedTime;
+    g.current?.scale.setScalar(Math.max(0.001, popIn((clock.elapsedTime - born.current) / 0.5)));
+  });
+  return (
+    <group ref={g} position-x={x}>
+      <primitive
+        object={obj}
+        onClick={(e: { stopPropagation(): void }) => { e.stopPropagation(); window.open(url, '_blank', 'noopener'); }}
+        onPointerOver={() => (document.body.style.cursor = 'pointer')}
+        onPointerOut={() => (document.body.style.cursor = '')}
+      />
+    </group>
+  );
+}
+
+const N_CONFETTI = 180;
+const dummy = new THREE.Object3D();
 export function Confetti({ id }: { id?: string }) {
-  const mesh = useRef<InstancedMesh>(null);
+  const ref = useRef<THREE.InstancedMesh>(null);
   const age = useAge(id);
   const seeds = useMemo(
     () => Array.from({ length: N_CONFETTI }, () => ({ x: (Math.random() - 0.5) * 22, z: (Math.random() - 0.5) * 14, h: 6 + Math.random() * 6, s: 2 + Math.random() * 2, r: Math.random() * 6 })),
     [],
   );
+  const mat = useMemo(() => {
+    const m = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
+    m.userData.outlineParameters = { visible: false };
+    return m;
+  }, []);
   useLayoutEffect(() => {
-    const cols = ['#F4A300', '#3CCB8B', '#E5484D', '#7C3AED', '#2563EB', '#FFF6E5'];
-    seeds.forEach((_, i) => mesh.current?.setColorAt(i, new Color(cols[i % cols.length])));
+    const cols = ['#F4A300', '#3CCB8B', '#E5484D', '#7C3AED', '#5bc0eb', '#ffd166'];
+    seeds.forEach((_, i) => ref.current?.setColorAt(i, new THREE.Color(cols[i % cols.length])));
   }, [seeds]);
   useFrame(({ clock }) => {
-    const m = mesh.current;
+    const m = ref.current;
     if (!m) return;
     const a = age(clock.elapsedTime);
     m.visible = a < 6;
@@ -145,20 +199,66 @@ export function Confetti({ id }: { id?: string }) {
     m.instanceMatrix.needsUpdate = true;
   });
   return (
-    <instancedMesh ref={mesh} args={[undefined, undefined, N_CONFETTI]} visible={false} frustumCulled={false}>
-      <planeGeometry args={[0.14, 0.22]} />
-      <meshBasicMaterial side={2} />
+    <instancedMesh ref={ref} args={[undefined, undefined, N_CONFETTI]} material={mat} visible={false} frustumCulled={false}>
+      <planeGeometry args={[0.16, 0.24]} />
     </instancedMesh>
   );
 }
 
-export function ScenePropsLayer({ scene }: { scene: SceneState }) {
+/** The founder's phone on their desk, showing the War Room chat in Telegram. */
+function FounderPhone({ events }: { events: OfficeEvent[] }) {
+  const tex = useMemo(() => paint(300, 540, () => {}), []);
+  const war = events.filter((e) => e.room === 'war_room').slice(-4);
+  useEffect(
+    () =>
+      repaint(tex, (g, W, H) => {
+        const wall = g.createLinearGradient(0, 0, 0, H); wall.addColorStop(0, '#D5E6B5'); wall.addColorStop(1, '#8DBFA3');
+        g.fillStyle = wall; g.fillRect(0, 0, W, H);
+        g.fillStyle = '#3390EC'; g.fillRect(0, 0, W, 64);
+        g.fillStyle = '#fff'; g.font = `700 22px ${FONT}`; g.fillText('Kesar HQ · War Room', 16, 40);
+        let y = H - 14;
+        for (const e of [...war].reverse()) {
+          const mine = personById[e.speaker]?.kind === 'human';
+          const lines = clean(e.text).split('\n').slice(0, 3).map((l) => (l.length > 22 ? l.slice(0, 21) + '…' : l));
+          const h = 34 + lines.length * 24;
+          y -= h;
+          if (y < 72) break;
+          const x = mine ? 70 : 14, w = W - 84;
+          g.fillStyle = mine ? '#EEFFDE' : '#fff';
+          g.beginPath(); g.roundRect(x, y, w, h - 8, 14); g.fill();
+          g.fillStyle = mine ? '#4FAE4E' : personById[e.speaker]?.color ?? '#3390EC'; g.font = `800 18px ${FONT}`;
+          g.fillText(mine ? 'You' : personById[e.speaker]?.name ?? '', x + 12, y + 24);
+          g.fillStyle = '#000'; g.font = `600 18px ${FONT}`;
+          lines.forEach((l, i) => g.fillText(l, x + 12, y + 48 + i * 24));
+        }
+      }),
+    [war.map((e) => e.id).join()], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const caseGeo = useOwned(() => roundedBox(0.27, 0.46, 0.03, 0.04).rotateX(Math.PI / 2));
+  const fd = personById.founder;
+  const [x, z] = world(fd.zone, DESK[fd.zone]);
+  return (
+    <group position={[x + 0.55, DESK_SIZE.h, z + 0.05]} rotation-x={-0.25}>
+      <mesh position-y={0.22} material={toon(PAL.ink)} geometry={caseGeo} />
+      <mesh position={[0, 0.22, 0.017]}>
+        <planeGeometry args={[0.24, 0.43]} />
+        <meshBasicMaterial map={tex} toneMapped={false} />
+      </mesh>
+    </group>
+  );
+}
+
+export function ScenePropsLayer({ scene, gallery, events }: { scene: SceneState; gallery: { url: string; title: string }[]; events: OfficeEvent[] }) {
   return (
     <>
-      <EbitdaMeter ebitda={scene.ebitda} glow={scene.financeGlow} />
+      <FounderPhone events={events} />
+      <Screens scene={scene} />
+      <WarScreen scene={scene} />
+      <TelegramWall events={events} />
       <DispatchDock pulseId={scene.pinPulseId} boxId={scene.boxId} />
-      <GalleryWall urls={scene.gallery} />
+      <GalleryWall items={gallery} />
       <Confetti id={scene.confettiId} />
     </>
   );
 }
+
