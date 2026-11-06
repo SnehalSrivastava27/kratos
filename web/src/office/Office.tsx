@@ -16,15 +16,19 @@ import { KpiPanel } from './KpiPanel';
 import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { HelpDialog, Hint } from './Hud';
-import { Command, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
+import { Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
+import { useDemoDirector } from './demoDirector';
+import { DemoPrompt } from './ApprovalPrompt';
+import { SwitchChip, SwitchPanel } from './SwitchPanel';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
 import type { GalleryItem } from './engine/props';
 import { Logo } from '@/brand/Logo';
 import './office.css';
 
 const MAX_CHAT = 200;
+const NO_FEED: OfficeEvent[] = [];
 /** The poster's story moment: the team at their desks, mid-plan. */
 const POSTER_AT = 9;
 
@@ -75,10 +79,14 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const onUnauth = useCallback(() => unauth.current?.(), []);
   api.configureApi(!isDemo, workspace?.id, onUnauth);
   setGroup(isDemo ? DEMO_GROUP : workspace?.name ?? 'Your Telegram group');
-  const streamed = useEventFeed(isDemo, isDemo ? demoFeed : undefined, { ws: workspace?.id, onUnauthorized: onUnauth });
+  // /demo is playable: the viewer starts the story and makes the approval call (the landing hero keeps its loop).
+  const playable = isDemo && mode === 'live' && !poster;
+  const director = useDemoDirector(demoFeed, playable);
+  const streamed = useEventFeed(isDemo, isDemo ? (playable ? NO_FEED : demoFeed) : undefined, { ws: workspace?.id, onUnauthorized: onUnauth });
   const posterEvents = useMemo(() => (poster ? demoFeed.slice(0, POSTER_AT) : null), [poster, demoFeed]);
   // Internal rooms (QA Lab) never reach the UI: not the chat, the walls, nor the people.
-  const feedEvents = useMemo(() => (posterEvents ?? streamed).filter((e) => !INTERNAL_ROOMS.has(e.room)), [posterEvents, streamed]);
+  const rawFeed = posterEvents ?? (playable ? director.events : streamed);
+  const feedEvents = useMemo(() => rawFeed.filter((e) => !INTERNAL_ROOMS.has(e.room)), [rawFeed]);
   // Local echoes while the backend isn't there (mock command / hire / librarian): appended after the feed.
   const [extra, setExtra] = useState<OfficeEvent[]>([]);
   useEffect(() => { if (!feedEvents.length) setExtra([]); }, [feedEvents.length]);
@@ -129,7 +137,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const engine = useRef<OfficeEngine | null>(null);
   const [view, setView] = useState<'player' | 'spectator'>(() => (new URLSearchParams(location.search).has('spectator') ? 'spectator' : 'player'));
   const [target, setTarget] = useState<Target | null>(null);
-  const hooks = useRef({ onTarget: setTarget, onWorldClick: () => {} });
+  const [sw, setSw] = useState(false); // the Switch panel
+  const hooks = useRef<Hooks>({ onTarget: setTarget, onWorldClick: () => {}, onSwitch: () => setSw(true) });
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   const hero = mode === 'autoplay' ? framing ?? 'hero' : null;
@@ -220,6 +229,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     return ROOMS.find((r) => r.zone === z)?.id ?? room;
   };
   const sendCommand = async (to: RoomId, text: string) => {
+    if (playable && director.command(text)) return { data: { ok: true, via: 'demo' }, status: 202, mock: true };
     const r = await api.sendCommand(to, text);
     if (r.mock) echo({ room: to, speaker: 'founder', type: 'message', text });
     return r;
@@ -248,7 +258,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     void loadLibrary();
     return 'The Librarian is on it: watch her walk the shelves.';
   };
-  const modalOpen = help || !!cmd || !!hireAt || !!libAt;
+  const modalOpen = help || !!cmd || !!hireAt || !!libAt || sw;
   useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
   useEffect(() => engine.current?.setInsets(!narrow && drawer.open ? 332 : 0, !narrow && chat.open ? 402 : 0), [narrow, drawer.open, chat.open]);
 
@@ -283,6 +293,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     else if (t.kind === 'frame') window.open(t.url, '_blank', 'noopener');
     else if (t.kind === 'dog') engine.current?.pet();
     else if (t.kind === 'jukebox') setMusic(!!engine.current?.toggleMusic());
+    else if (t.kind === 'switch') setSw(true);
   }
   const hint = (t: Target | null): { title?: React.ReactNode; text: string } | null => {
     if (!t) return null;
@@ -290,6 +301,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     if (t.kind === 'library') return { text: `Open the library · ${shelfLabel(t.shelf)} shelf`, title: <HintIcon dept={DEPT[t.shelf] ?? DEPT.general} /> };
     if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: <HintIcon dept={personDept(personById[t.id])} /> };
     if (t.kind === 'dog') return { text: 'Pet the office dog', title: <HintIcon dept={{ ...DEPT.general, Icon: PawPrint }} /> };
+    if (t.kind === 'switch') return { text: 'Open Switch · see every message it routes', title: <HintIcon dept={{ ...DEPT.general, Icon: Network }} /> };
     if (t.kind === 'jukebox') return { text: music ? 'Stop the music' : 'Play some lo-fi', title: <HintIcon dept={{ ...DEPT.general, Icon: Music }} /> };
     return { text: 'Open this banner', title: <HintIcon dept={DEPT.design} /> };
   };
@@ -314,6 +326,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       if (cmd) return setCmd(null);
       if (hireAt) return setHireAt(null);
       if (libAt) return setLibAt(null);
+      if (sw) return setSw(false);
       if (narrow && (drawer.open || chat.open)) return (setDrawer((d) => ({ ...d, open: false })), setChat((c) => ({ ...c, open: false })));
       if (drawer.open && !drawer.pinned) return setDrawer((d) => ({ ...d, open: false }));
       if (chat.open && !chat.pinned) return setChat((c) => ({ ...c, open: false }));
@@ -370,6 +383,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
               <div className={`ao-meta ${cap.tone}`} title={cap.text}>{cap.text}</div>
             </div>
           </div>
+          <SwitchChip routed={events.length} onOpen={() => setSw(true)} />
           <div className="ao-panel ao-controls">
             <button type="button" className={`ao-btn${drawer.open ? ' on' : ''}`} onClick={() => setDrawer((d) => ({ ...d, open: !d.open }))} title="Telegram topics" aria-pressed={drawer.open}>
               <PanelLeft /><span className="hidden sm:inline">Topics</span>
@@ -413,10 +427,12 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       {view === 'player' && !modalOpen && (() => {
         const h = hint(target);
         if (h) return <Hint title={h.title} text={h.text} onClick={() => interact(target)} />;
-        if (waiting) return <Hint k="N" onClick={jumpToWaiting} text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
+        if (waiting && director.phase !== 'waiting') return <Hint k="N" onClick={jumpToWaiting} text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
         return null;
       })()}
       {wantKpi && !kpiShut && !modalOpen && <KpiPanel onClose={() => setKpiShut(true)} style={!narrow && drawer.open ? { left: 344 } : undefined} />}
+      {playable && !modalOpen && <DemoPrompt phase={director.phase} events={events} first={demoFeed[0]} onStart={director.start} onApprove={director.approve} onChanges={() => director.changes()} onRestart={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} />}
+      {sw && <SwitchPanel events={events} onClose={() => setSw(false)} />}
       {help && <HelpDialog onClose={() => setHelp(false)} />}
       {cmd && (
         <CommandBar room0={cmd.room} text0={cmd.text} onClose={() => setCmd(null)} onSend={sendCommand}
@@ -432,7 +448,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
  * The 3D office: one imperative engine (engine/Engine.ts) mounted once into a div. React only pushes the
  * reducer's latest scene and the focused zone into it; the scene itself is never re-rendered by React.
  */
-type Hooks = { onTarget: (t: Target | null) => void; onWorldClick: () => void };
+type Hooks = { onTarget: (t: Target | null) => void; onWorldClick: () => void; onSwitch: () => void };
 const Stage = memo(function Stage({ interactive, hero, scene, events, gallery, focus, onPick, engineRef, hooks, view, onReady }: {
   interactive: boolean; hero: 'wide' | 'hero' | null; scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[]; focus: string | null; onPick: (id: string | null) => void;
   engineRef: React.MutableRefObject<OfficeEngine | null>; hooks: React.MutableRefObject<Hooks>; view: 'player' | 'spectator'; onReady: () => void;
@@ -443,7 +459,7 @@ const Stage = memo(function Stage({ interactive, hero, scene, events, gallery, f
   onReadyRef.current = onReady;
   useEffect(() => {
     const e = (engine.current = new OfficeEngine(host.current!, {
-      interactive, onPick, onTarget: (t) => hooks.current.onTarget(t), onWorldClick: () => hooks.current.onWorldClick(), hero, onReady: () => onReadyRef.current(),
+      interactive, onPick, onTarget: (t) => hooks.current.onTarget(t), onWorldClick: () => hooks.current.onWorldClick(), onSwitch: () => hooks.current.onSwitch(), hero, onReady: () => onReadyRef.current(),
     }));
     return () => {
       e.dispose();

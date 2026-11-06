@@ -2,7 +2,7 @@
 // inside real Telegram message text.
 import {
   BarChart3, BookOpen, Camera, Clapperboard, ClipboardList, Code2, Coffee, Crown, Gem, Heart, Lightbulb, Megaphone, Package, Palette, PenLine, Rocket,
-  ScanSearch, Search, Shapes, ShoppingCart, Sparkles, Star, Target, TrendingUp, Truck, UserRound, Users, Wallet, Zap, type LucideIcon,
+  IndianRupee, ScanSearch, Search, Shapes, ShoppingCart, Sparkles, Star, Target, TrendingUp, Truck, UserRound, Users, Zap, type LucideIcon,
 } from 'lucide-react';
 import type { Person } from '../shared/types';
 import { readable } from './data';
@@ -13,7 +13,7 @@ const D = (Icon: LucideIcon, color: string, name: string): Dept => ({ Icon, colo
 /** By topic / shelf id. */
 export const DEPT: Record<string, Dept> = {
   war_room: D(Target, '#F4A300', 'Target'), analytics: D(BarChart3, '#2563EB', 'BarChart3'), ads: D(Megaphone, '#DB2777', 'Megaphone'),
-  creators: D(Star, '#F59E0B', 'Star'), ops: D(Package, '#059669', 'Package'), design: D(Palette, '#9333EA', 'Palette'), finance: D(Wallet, '#0F766E', 'Wallet'),
+  creators: D(Star, '#F59E0B', 'Star'), ops: D(Package, '#059669', 'Package'), design: D(Palette, '#9333EA', 'Palette'), finance: D(IndianRupee, '#0F766E', 'IndianRupee'),
   engineering: D(Code2, '#475569', 'Code2'), general: D(Shapes, '#64748B', 'Shapes'),
 };
 const BY_PERSON: Record<string, Dept> = {

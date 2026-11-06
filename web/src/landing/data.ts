@@ -1,6 +1,6 @@
 // Landing copy sources: docs/PLAN.md §1, §3, §7, §9 · demo/feeds/sale-demo.json · contracts/roster.json.
 import { useEffect, useState } from 'react';
-import { BarChart3, BookOpen, Crown, Megaphone, Package, Palette, Star, Target, Wallet, type LucideIcon } from 'lucide-react';
+import { BarChart3, BookOpen, Crown, Megaphone, Package, Palette, Star, Target, IndianRupee, type LucideIcon } from 'lucide-react';
 import type { OfficeEvent, Person } from '@/shared/types';
 import feed from '../../../demo/feeds/sale-demo.json';
 import roster from '../../../contracts/roster.json';
@@ -33,7 +33,7 @@ export const DEPT: Record<string, { short: string; Icon: LucideIcon; room: strin
   'd2c-influencers': { short: 'Creators', Icon: Star, room: 'Creator Studio' },
   'd2c-ops': { short: 'Ops', Icon: Package, room: 'Dispatch Dock' },
   'd2c-design': { short: 'Design', Icon: Palette, room: 'Design Studio' },
-  'd2c-finance': { short: 'Finance', Icon: Wallet, room: 'Finance Cabin' },
+  'd2c-finance': { short: 'Finance', Icon: IndianRupee, room: 'Finance Cabin' },
   librarian: { short: 'Librarian', Icon: BookOpen, room: 'Library' },
 };
 export { FEED };

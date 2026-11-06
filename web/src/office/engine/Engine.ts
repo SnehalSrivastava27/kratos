@@ -25,6 +25,7 @@ import { loadModels } from './models';
 import { NavGrid } from './nav';
 import { LiveProps, type GalleryItem } from './props';
 import { DOOR, FLOOR, buildWorld, loadFont } from './world';
+import { SwitchHub } from './switchHub';
 
 /** What pressing E would use: the nearest thing you face. */
 export type Target =
@@ -33,7 +34,8 @@ export type Target =
   | { kind: 'agent'; id: string }
   | { kind: 'frame'; url: string }
   | { kind: 'dog' }
-  | { kind: 'jukebox' };
+  | { kind: 'jukebox' }
+  | { kind: 'switch' };
 
 export interface EngineOpts {
   /** Live /office: drag to orbit, wheel/pinch to zoom, click a zone or a gallery frame. Off for the hero. */
@@ -47,6 +49,8 @@ export interface EngineOpts {
   hero?: 'wide' | 'hero' | null;
   /** The world is built and its first frame drawn. */
   onReady?: () => void;
+  /** The Switch hub's name tag was clicked (live office only). */
+  onSwitch?: () => void;
 }
 export const targetKey = (t: Target | null) => (t ? `${t.kind}:${'desk' in t ? t.desk : 'shelf' in t ? t.shelf : 'id' in t ? t.id : 'url' in t ? t.url : ''}` : '');
 export const shelfLabel = (s: ShelfId) => SHELF_LABEL[s];
@@ -175,6 +179,7 @@ export class OfficeEngine {
   private beat = 0;
   private nav = new NavGrid(FLOOR, [], 0.3);
   private props: LiveProps | null = null;
+  private hub: SwitchHub | null = null;
   private world: ReturnType<typeof buildWorld> | null = null;
   private confetti = new Confetti();
   private confettiId?: string;
@@ -262,10 +267,12 @@ export class OfficeEngine {
         if (this.disposed) return;
         this.world = buildWorld(models, !opts.hero);
         if (this.player) this.world.solids.push({ minX: JUKEBOX[0] - 0.45, maxX: JUKEBOX[0] + 0.45, minZ: JUKEBOX[1] - 0.4, maxZ: JUKEBOX[1] + 0.4 });
+        this.hub = new SwitchHub(this.overlay, opts.interactive ? opts.onSwitch : undefined);
+        this.world.solids.push(this.hub.solid);
         this.nav = new NavGrid(FLOOR, this.world.solids, 0.3);
         if (this.founder && this.view === 'player' && !this.nav.free(this.player!.x, this.player!.z)) this.placeNear(this.founder.pos.x, this.founder.pos.z + 0.6);
         this.props = new LiveProps();
-        this.scene.add(this.world.group, this.props.group);
+        this.scene.add(this.world.group, this.props.group, this.hub.group);
         if (this.latest) this.apply(this.latest.scene, this.latest.events, this.latest.gallery);
       })
       .catch((e) => console.warn('office: models failed to load', e));
@@ -379,6 +386,17 @@ export class OfficeEngine {
   /** Pixels covered by panels on each side (the follow camera centres you in the rest). */
   setInsets(left: number, right: number) {
     this.inset = { left, right };
+    this.home = this.homeFor();
+  }
+  /** The whole-office shot, fitted to the part of the canvas the side panels leave visible. */
+  private homeFor(): Pose {
+    const { w, h } = this.size, { left: L, right: R } = this.inset;
+    if (w < 760 || L + R === 0) return fitHome(this.camera.fov, w / h, w < 520);
+    const p = fitHome(this.camera.fov, (w - L - R) / h, false);
+    const s = ((R - L) / w) * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * p.dist * (w / h);
+    p.tx += Math.cos(p.yaw) * s;
+    p.tz -= Math.sin(p.yaw) * s;
+    return p;
   }
 
   /** E at the dog: a pat, a wag. */
@@ -416,6 +434,7 @@ export class OfficeEngine {
       }
     }
     this.props?.sync(scene, events, gallery);
+    this.hub?.sync(events);
   }
 
   /** Fly to a zone (eased), or back to the whole office. Either way, drag/zoom offsets are let go. */
@@ -485,6 +504,7 @@ export class OfficeEngine {
     this.confetti.update(dt);
     this.updateCamera(dt, t);
     this.scene.updateMatrixWorld();
+    this.hub?.update(dt, t, this.camera, this.size.w, this.size.h);
     for (const a of this.agents) a.project(this.camera, this.size.w, this.size.h);
     declutter(this.agents);
     if (this.opts.hero) this.unclutterBubble();
@@ -567,7 +587,7 @@ export class OfficeEngine {
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
-    this.home = fitHome(this.camera.fov, w / h, w < 520);
+    this.home = this.homeFor();
     this.heroShot = heroPose(this.camera.fov, w / h);
     if (this.opts.hero === 'hero') this.cur = null; // a resize re-frames at once, no swoop
   }
@@ -701,6 +721,7 @@ export class OfficeEngine {
     for (const a of this.agents) if (a !== this.founder) consider({ kind: 'agent', id: a.info.id }, a.pos.x, a.pos.z, 1.7);
     if (this.dog) consider({ kind: 'dog' }, this.dog.pos.x, this.dog.pos.z, 1.4);
     consider({ kind: 'jukebox' }, JUKEBOX[0], JUKEBOX[1] + 0.5, 1.5);
+    if (this.hub) consider({ kind: 'switch' }, ...this.hub.front, 1.8);
     for (const fr of this.props?.clickables ?? []) {
       const w = fr.getWorldPosition(new THREE.Vector3());
       consider({ kind: 'frame', url: fr.userData.url as string }, w.x, w.z + 0.4, 2.0);
@@ -766,6 +787,7 @@ export class OfficeEngine {
     this.juke.traverse((o) => (o as THREE.Mesh).isMesh && (o as THREE.Mesh).geometry.dispose());
     this.shelves.dispose();
     this.props?.dispose();
+    this.hub?.dispose();
     if (this.world) disposeTree(this.world.group);
     this.confetti.dispose();
     void this.audio?.close();

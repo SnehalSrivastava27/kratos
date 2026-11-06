@@ -1,7 +1,9 @@
 # Go live: what only you can do
 
-`scripts/switch-up.sh` does the rest. It connects the bot, registers the observer, joins the agents
-to "Kratos D2C", and starts the office server and the observer. It is safe to rerun, and it prints
+`scripts/switch-up.sh` does the rest. It connects the bot, creates any of the 16 team agents that don't exist
+yet, registers the observer, joins the agents to "Kratos D2C", and starts the office server and the observer.
+The team and the topics come from `contracts/roster.json`. `DRY_RUN=1 scripts/switch-up.sh` prints the plan
+without calling anything. It is safe to rerun, and it prints
 whatever is still left. The office is private now: you sign in, and you link your Telegram group to
 your account once (contracts/api.md "v3").
 
@@ -11,8 +13,13 @@ your account once (contracts/api.md "v3").
 2. **In a browser on the Mac:** open http://localhost:8787/signup and create your account. Then open
    **/connect** and click to get a 6-digit code. It is valid for 15 minutes.
 3. **Send the code as a message in the group.** The server links that group to your account. It checks the bot
-   is an admin, creates the topics War Room, Analytics, Ads, Creators, Ops and Design, and adds the 6 agents
-   and the observer. /connect then shows **ready**, and /office shows only your group.
+   is an admin, creates the topics War Room, Analytics, Ads, Creators, Ops and Design, and adds the agents
+   and the observer.
+   - **Finance** and **QA Lab** are topics too (the roster has 8). With task B3 merged, the server creates all 8
+     from `contracts/roster.json` when you link. Fallback (before B3, or one is missing): create it by hand
+     (Topics → New topic), then send `/list_agents` once in it. An agent whose topic has no thread id yet
+     replies in the thread that addressed it; it never guesses one. QA Lab is for test questions
+     (evals): every agent answers there directly, in 3 to 5 lines, without handing off. /connect then shows **ready**, and /office shows only your group.
    - **"needs admin"**: step 1 is not done. Fix it, then send any message in the group to retry.
    - Nothing happens after ~15 s? Send the code again. A new group needs a few seconds before the observer
      is in it.
@@ -37,15 +44,30 @@ topic's Switch thread. Today only the threads already recorded in `observer/topi
 adopted when you link "Kratos D2C". Otherwise the command goes to the group's General topic, tagged `#WarRoom` and
 so on, and the agents still answer it.
 
+## The team (16 agents)
+War Room: `d2c-captain`. Each department has a lead and 1 or 2 specialists, in its own topic:
+- Analytics: `d2c-analyst` + `d2c-forecaster`, `d2c-insights`
+- Ads: `d2c-ads` + `d2c-marketplaces`, `d2c-google`
+- Creators: `d2c-influencers` + `d2c-ugc`
+- Ops: `d2c-ops` + `d2c-procurement`, `d2c-logistics`
+- Design: `d2c-design` + `d2c-copywriter`
+- Finance: `d2c-finance` + `d2c-payroll`
+
+The Captain assigns only to leads in War Room. A lead hands work to its specialists in its topic and sends one
+report back to War Room. Finance is the gate: the Captain asks `@d2c-finance` to check the plan against
+`data/finance_policy.json` and `data/budget.json` before asking you to approve.
+
 ## On your Mac, once
-4. Create the 6 agents in Switch Console. Run
-   `open "switchdash://open/template/<id>"`, using the id the script prints, then click **Use → Create**.
-   Check that the directory is this repo. Console has to do this step because it runs the agents' Claude Code sessions.
-   Rerun the script afterwards, so it adds them to the group (and link the group as above).
+4. Nothing to click for the agents: `switch-up.sh` creates each missing one on Switch Console's own controller
+   (`POST /gateway/management/agents`, the same call as the office's Hire), with the team's provider settings
+   and this repo as its directory. Switch Console must be open. If it can't (no online controller), the script
+   prints the fallback: `open "switchdash://open/template/<id>"` → **Use → Create**. Rerun the script afterwards.
 
 **Changed an agent's rules** (`switch/agents/<id>.md`)? Run `scripts/switch-sync-agents.sh`. It updates the
 live agents and the stored template, and checks each agent took the change. Running sessions pick up the new
-instructions on their next message. Keep `switch/d2c-team.template.yaml` in step with the `.md` files.
+instructions on their next message. The template is generated: `node scripts/build-template.mjs` rebuilds
+`switch/d2c-team.template.yaml` from the roster and the `.md` files (the sync script runs it for you;
+`--check` fails if it's stale or an `.md` lost the Telegram rules).
 Preview how a reply will look in Telegram with `python3 scripts/tg-render.py - < reply.md`.
 
 ## Start the demo (phone)
