@@ -1,0 +1,4 @@
+{ "task": "SW2", "state": "working", "progress": 20,
+  "done": ["read switch-core 0.31.0 room documents / references source"],
+  "next": "observer + server documents, agent instructions, docs",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T14:00:00+05:30" }
