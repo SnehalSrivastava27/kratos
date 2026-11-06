@@ -3,7 +3,7 @@ import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdtempSync, rmSync, writeFileSync, statSync, readFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync, statSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -80,6 +80,7 @@ function start(env = {}) {
   });
 }
 const post = (s, path, body, headers = {}) => fetch(s.base + path, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
+const STYLE = readFileSync(new URL("../../switch/TELEGRAM_STYLE.md", import.meta.url), "utf8").trim();
 const hire = (o = {}) => ({ name: "Priya Shah", role: "Retention Lead", room: "ads", instructions: "Win back lapsed buyers.", skills: ["gstack:qa"], ...o });
 
 test("guard: office writes need loopback or ADMIN_TOKEN, never open; reads stay open", async () => {
@@ -165,7 +166,8 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
     assert.equal(create.json.desired_state, "running");
     assert.equal(create.json.definition.directory, "/repo");
     assert.equal(create.json.definition.provider, "claude");
-    assert.match(create.json.definition.instructions, /Win back lapsed buyers[\s\S]*gstack:qa[\s\S]*Telegram does not show tables[\s\S]*yours is Ads/);
+    assert.match(create.json.definition.instructions, /Win back lapsed buyers[\s\S]*gstack:qa[\s\S]*HOW YOU WRITE IN TELEGRAM[\s\S]*yours is Ads/);
+    assert.ok(create.json.definition.instructions.includes(STYLE), "exact team Telegram style block");
     assert.deepEqual(calls.find((c) => c.path === "/gateway/agents/sw-d2c-priya-shah/addressing-policy").json, { policy: null }, "addressing: anyone");
     assert.deepEqual(calls.find((c) => c.path === "/gateway/rooms/room-1/agents").json, { agent_ids: ["sw-d2c-priya-shah"] });
 
@@ -209,6 +211,11 @@ test("hiring fallback: no managed agents → one-agent template + 202 open_url",
     managementDown = false;
     await s.stop();
   }
+});
+
+test("switch/TELEGRAM_STYLE.md is the block every team agent uses (no drift)", () => {
+  const dir = new URL("../../switch/agents/", import.meta.url);
+  for (const f of readdirSync(dir).filter((n) => n.endsWith(".md"))) assert.ok(readFileSync(new URL(f, dir), "utf8").includes(STYLE), f);
 });
 
 test("switch down: 503, nothing hired", async () => {

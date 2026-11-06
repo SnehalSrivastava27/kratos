@@ -21,9 +21,8 @@ export type OfficeCtx = {
 const env = process.env;
 const COMMANDS_PER_MIN = 10;
 const PALETTE = ["#0EA5E9", "#14B8A6", "#F97316", "#E11D48", "#84CC16", "#6366F1", "#A855F7", "#EAB308"];
-const TELEGRAM_RULES = `You are posting in Telegram. Telegram does not show tables. Keep messages under
-12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
-emoji that matches your department. Mention teammates by name.`;
+/** The team's Telegram writing rules, shared with switch/agents/*.md (read per hire, so edits apply to the next hire). */
+const telegramStyle = (root: string) => readFileSync(join(root, "switch/TELEGRAM_STYLE.md"), "utf8").trim();
 
 const bad = (msg: string): never => {
   throw new SwitchError(400, msg);
@@ -81,13 +80,13 @@ export const employeePerson = (e: Employee, rooms: Room[]) => {
 };
 const publicEmployee = ({ instructions: _i, skills: _s, ...e }: Employee) => e;
 
-function instructionsFor(e: { name: string; role: string; instructions: string; skills: string[] }, room: Room, roster: OfficeCtx["roster"]) {
+function instructionsFor(e: { name: string; role: string; instructions: string; skills: string[] }, room: Room, roster: OfficeCtx["roster"], root: string) {
   const topic = room.topic ?? room.label;
   return [
     `You are ${e.name}, ${e.role} at Kesar & Co., a D2C skincare brand. You were just hired from the office screen.`,
     e.instructions,
     e.skills.length ? `Skills from the office library to use when relevant: ${e.skills.join(", ")}.` : "",
-    TELEGRAM_RULES,
+    telegramStyle(root),
     `The Telegram group "${roster.telegram?.group ?? "Kratos D2C"}" has one topic per department; yours is ${topic}. ` +
       `observer/topics.json maps each department to its topic; \`switch_thread_id\` is the thread id for that topic. ` +
       `Reply in the topic that addressed you (use that message's thread). Report to @d2c-captain.`,
@@ -156,7 +155,7 @@ export async function handleOffice(req: IncomingMessage, url: URL, ctx: OfficeCt
   const id = newId(ctx, name);
   reserved.add(id);
   try {
-    const spec: HireSpec = { id, displayName: name, description: role, instructions: instructionsFor({ name, role, instructions, skills }, room, ctx.roster), directory: agentDir(ctx.root) };
+    const spec: HireSpec = { id, displayName: name, description: role, instructions: instructionsFor({ name, role, instructions, skills }, room, ctx.roster, ctx.root), directory: agentDir(ctx.root) };
     const roomName = ctx.roster.telegram?.group ?? "Kratos D2C";
     const roomId = await teamRoomId(topics(ctx.root).chat_id, roomName);
     let switchAgentId: string | null = null;
