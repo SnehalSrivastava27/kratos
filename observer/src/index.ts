@@ -20,7 +20,7 @@ type Frame = { event: string; data: string; id?: string };
 
 export function loadConfig(): Config {
   const cfg: Config = readJson(HERE + "config.json");
-  if (process.env.OFFICE_URL) cfg.server = process.env.OFFICE_URL;
+  cfg.server = (process.env.SERVER_URL || process.env.OFFICE_URL || cfg.server).replace(/\/$/, "");
   return cfg;
 }
 
@@ -32,6 +32,12 @@ export function loadCreds(cfg: Config): Creds {
   if (!creds.agentId || !creds.apiEndpoint || !creds.token) throw new Error("missing SWITCH_AGENT_ID / SWITCH_API_ENDPOINT / SWITCH_API_TOKEN");
   return creds;
 }
+
+// Office server auth: OBSERVER_TOKEN must match the server's OBSERVER_TOKEN (unset = open dev server).
+export const officeHeaders = (): Record<string, string> => ({
+  "content-type": "application/json",
+  ...(process.env.OBSERVER_TOKEN ? { authorization: `Bearer ${process.env.OBSERVER_TOKEN}` } : {}),
+});
 
 // ---- mapping ----
 const norm = (s: string) => s.trim().replace(/^@/, "").toLowerCase();
@@ -144,7 +150,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const targets = map.targets(text).filter((t) => t !== speaker);
     const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, ...(targets.length ? { meta: { targets } } : {}) };
     try {
-      const res = await fetch(`${cfg.server}/api/events`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(office) });
+      const res = await fetch(`${cfg.server}/api/events`, { method: "POST", headers: officeHeaders(), body: JSON.stringify(office) });
       console.log(`[observer] ${res.status} ${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
     } catch (e) {
       console.warn("[observer] office server unreachable:", String(e));

@@ -31,3 +31,36 @@ export interface Zone {
 }
 
 export type AgentState = 'idle' | 'working' | 'walking' | 'waiting' | 'done';
+
+// --- Read APIs (B1, contracts/api.md) ---
+/** Server-derived person state (no 'walking': that is a client-side animation). */
+export type DerivedAgentState = Exclude<AgentState, 'walking'>;
+
+/** GET /api/rooms */
+export interface RoomSummary {
+  id: RoomId;
+  label: string;
+  group: string; // Telegram group name, e.g. "Kesar HQ · War Room"
+  members: string[]; // person ids
+  last: OfficeEvent | null;
+  count: number; // stored events in this room
+}
+
+/** GET /api/agents */
+export interface AgentSummary {
+  id: string;
+  name: string;
+  kind: 'human' | 'agent';
+  state: DerivedAgentState;
+  last: OfficeEvent | null; // last event this person sent
+  room: RoomId | null; // room of that event
+}
+
+/** GET /api/gallery */
+export interface GalleryItem { name: string; url: string; size: number; mtime: number }
+
+/** GET /api/health */
+export interface Health {
+  ok: boolean; version: string; uptime: number; clients: number; history: number;
+  db: 'ok' | 'memory' | 'error';
+}
