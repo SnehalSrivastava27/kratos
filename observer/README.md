@@ -5,10 +5,12 @@ each room message to the office server as an `OfficeEvent`. It never posts into 
 
 How it works: it opens the agent-protocol SSE stream with `scope=all&filter=all`, which delivers
 every message in every room the agent belongs to. It sends a heartbeat every 2 s and reconnects
-with `Last-Event-ID`. For each message it:
+with `Last-Event-ID`, backing off with jitter (1 s → 30 s) while the stream keeps failing; a stream silent for 45 s
+(`OBSERVER_IDLE_MS`) is reopened, and every HTTP call times out after 10 s (`OBSERVER_TIMEOUT_MS`). For each message it:
 
 - maps the speaker to a roster id, and tags the event with its Switch room (`meta.switch_room_id`, `room_name`,
-  `chat_id` when known, `switch_thread_id`). The office server decides which workspace the room belongs to and
+  `chat_id` when known, `switch_thread_id`, `switch_message_id`; the server dedupes on the last, so a retried
+  POST or a replayed frame is stored once). The office server decides which workspace the room belongs to and
   which topic (department) the thread is; `room` is only a placeholder (config `rooms`, else the speaker's home
   department, else `war_room`). Rooms with no workspace are forwarded too: that is how link codes arrive (v3).
 - infers `type` from keywords: `approval_needed`, `pushback`, `approved`, otherwise `message`

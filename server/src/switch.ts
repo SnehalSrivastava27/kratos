@@ -32,18 +32,69 @@ function coreEnv(): Record<string, string> {
 }
 const base = () => `http://127.0.0.1:${coreEnv().SERVER_PORT}`;
 
-async function call(url: string, init: RequestInit & { json?: unknown } = {}) {
+const TIMEOUT = Number(env.SWITCH_TIMEOUT_MS) || 15_000;
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+/** Backoff with full jitter: attempt 0 → up to `base` ms, doubling. */
+export const backoff = (attempt: number, base = 250) => sleep(Math.random() * base * 2 ** attempt);
+
+async function call1(url: string, init: RequestInit & { json?: unknown } = {}) {
   const res = await fetch(url, {
     ...init,
     headers: { accept: "application/json", ...(init.json !== undefined ? { "content-type": "application/json" } : {}), ...init.headers },
     body: init.json !== undefined ? JSON.stringify(init.json) : init.body,
-    signal: AbortSignal.timeout(15_000),
+    signal: AbortSignal.timeout(TIMEOUT),
   }).catch((e) => {
     throw new SwitchError(503, UNREACHABLE, e.cause?.code ?? e.message);
   });
-  const text = await res.text();
-  if (!res.ok) throw new SwitchError(res.status, "Switch refused the request", `${init.method ?? "GET"} ${new URL(url).pathname} → ${res.status}: ${text.slice(0, 200)}`);
-  return text ? JSON.parse(text) : null;
+  const text = await res.text().catch((e) => {
+    throw new SwitchError(503, UNREACHABLE, `body: ${e.cause?.code ?? e.message}`);
+  });
+  const where = `${init.method ?? "GET"} ${new URL(url).pathname}`;
+  if (!res.ok) throw new SwitchError(res.status, "Switch refused the request", `${where} → ${res.status}: ${text.slice(0, 200)}`);
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    throw new SwitchError(502, "Switch refused the request", `${where} → not JSON: ${text.slice(0, 80)}`);
+  }
+}
+/** One Switch HTTP call with a timeout. Reads (GET) are retried twice on unreachable / 429 / 5xx; writes never
+ *  are (a lost answer to a POST may still have posted). */
+async function call(url: string, init: RequestInit & { json?: unknown } = {}) {
+  const retries = (init.method ?? "GET") === "GET" ? 2 : 0;
+  for (let i = 0; ; i++) {
+    try {
+      return await call1(url, init);
+    } catch (e) {
+      const st = e instanceof SwitchError ? e.status : 0;
+      if (i >= retries || !(st === 429 || st >= 500)) throw e;
+      await backoff(i + 1);
+    }
+  }
+}
+
+/** GET {switch}/health, for /api/ready: "ok", "down", or "unconfigured" (no local Switch server). Cached 10 s. */
+type Health = "ok" | "down" | "unconfigured";
+let health: { at: number; v: Promise<Health>; last?: Health } | null = null;
+/** Stale-while-revalidate: after the first probe, readiness checks never wait on a slow Switch. */
+export function switchHealth(): Promise<Health> {
+  if (health && Date.now() - health.at < 10_000) return health.v;
+  const probe = async () => {
+    let url: string;
+    try {
+      url = `${base()}/health`;
+    } catch {
+      return "unconfigured" as const;
+    }
+    const res = await fetch(url, { signal: AbortSignal.timeout(3000) }).catch(() => null);
+    await res?.body?.cancel().catch(() => {});
+    return res?.ok ? ("ok" as const) : ("down" as const);
+  };
+  const prev = health;
+  const v = probe();
+  health = { at: Date.now(), v, last: prev?.last };
+  const h = health;
+  void v.then((x) => (h.last = x));
+  return prev?.last ? Promise.resolve(prev.last) : v;
 }
 
 // ---- admin gateway (cookie session, re-login once on 401) ----
@@ -52,10 +103,11 @@ async function login() {
   const e = coreEnv();
   const res = await fetch(`${base()}/gateway/auth/login`, {
     method: "POST", headers: { "content-type": "application/json" },
-    body: JSON.stringify({ email: e.GATEWAY_ADMIN_EMAIL, password: e.GATEWAY_ADMIN_PASSWORD }), signal: AbortSignal.timeout(15_000),
+    body: JSON.stringify({ email: e.GATEWAY_ADMIN_EMAIL, password: e.GATEWAY_ADMIN_PASSWORD }), signal: AbortSignal.timeout(TIMEOUT),
   }).catch((err) => {
     throw new SwitchError(503, UNREACHABLE, err.cause?.code ?? err.message);
   });
+  await res.body?.cancel().catch(() => {});
   if (!res.ok) throw new SwitchError(502, "Switch refused the request", `admin login → ${res.status}`);
   cookie = res.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ");
 }
@@ -117,20 +169,28 @@ export async function postAsOffice(o: { credsFile: string; roomId: string; body:
     if (!o.threadId) return call(`${agent}/message`, { method: "POST", json: { room_id: roomId, content: o.body }, headers: auth });
     const connection = randomUUID();
     const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), TIMEOUT); // a stream that never says connection_state must not hang the request
     try {
       const q = new URLSearchParams({ connection_id: connection, scope: "single", filter: "addressed", start_from: "head", client: OFFICE_AGENT });
-      const res = await fetch(`${agent}/events?${q}`, { headers: { ...auth, accept: "text/event-stream" }, signal: ac.signal });
+      const res = await fetch(`${agent}/events?${q}`, { headers: { ...auth, accept: "text/event-stream" }, signal: ac.signal }).catch((e) => {
+        throw new SwitchError(503, UNREACHABLE, ac.signal.aborted ? "stream open timed out" : e.cause?.code ?? e.message);
+      });
       if (!res.ok || !res.body) throw new SwitchError(res.status, "Switch refused the request", `stream open → ${res.status}`);
       const reader = res.body.getReader();
+      const dec = new TextDecoder();
       for (let buf = ""; !buf.includes("connection_state"); ) {
-        const { value, done } = await reader.read();
+        const { value, done } = await reader.read().catch(() => {
+          throw new SwitchError(503, UNREACHABLE, "stream timed out before connection_state");
+        });
         if (done) throw new SwitchError(502, "Switch refused the request", "stream closed before connection_state");
-        buf += new TextDecoder().decode(value);
+        buf += dec.decode(value, { stream: true });
       }
+      clearTimeout(timer);
       const op = (name: string, json: unknown) => call(`${agent}/ops/${name}`, { method: "POST", json, headers: { ...auth, "x-switch-connection-id": connection } });
       await op("connect_to_room", { room_id: roomId, include_general_instructions: false });
       return (await op("post_message", { body: o.body, thread_id: o.threadId }))?.result;
     } finally {
+      clearTimeout(timer);
       ac.abort();
     }
   };
