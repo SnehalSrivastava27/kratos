@@ -52,15 +52,27 @@ GalleryItem  { name, url /* /gallery/<name> */, size, mtime /* epoch ms */, titl
 
 ## Office actions (v2: full-screen office, commands, hiring, skills library)
 
-**Who may call them:** requests from loopback (127.0.0.1 / ::1, i.e. the office opened on the same Mac)
-OR with `Authorization: Bearer $ADMIN_TOKEN`. Everyone else gets 401. They are never open, even in dev.
+**Who may call the writes** (`POST /api/command`, `POST /api/employees`, `POST /api/library/categorize`): requests
+from loopback (127.0.0.1 / ::1, i.e. the office opened on the same Mac) OR with `Authorization: Bearer $ADMIN_TOKEN`.
+Everyone else gets 401. They are never open, even in dev. `TRUST_LOOPBACK=0` (default under `NODE_ENV=production`)
+stops trusting loopback, for a same-host reverse proxy. The GETs are open like the other read APIs (`path` is hidden
+from non-loopback library readers).
+Without the token, a write must also send `content-type: application/json` (else 415), with `Host` localhost /
+127.0.0.1 / [::1] and an `Origin` equal to the office's own (`http(s)://<that host>`), `http://localhost:5173`,
+`http://127.0.0.1:5173`, or one in `OFFICE_ORIGINS` (else 403/401). A foreign `Origin` is refused (403) even with the token.
+Proxied requests count as local only if every `X-Forwarded-For` hop is loopback (`Forwarded` never). Reads that reveal
+`path` follow the same Host/hop rule.
+Errors: 400 invalid body · 401 · 403 foreign Origin/Host · 404 unknown employee · 415 not JSON · 429 more than 10 valid
+commands/min, more than `HIRE_MAX` (12) employees, or more than 3 hires per 10 min · 502 Switch refused the call (details
+in the server log only) · 503 local Switch server not running or unreachable.
 
 | Method | Path | Body / query | Result |
 |---|---|---|---|
-| POST | `/api/command` | `{ room: RoomId, text: string (1–2000 chars) }` | Posts `text` into that Telegram topic through Switch, as the founder's office console. `202 { ok, via }`. It comes back into the office through the observer like any Telegram message. |
+| POST | `/api/command` | `{ room: RoomId, text: string (1–2000 chars) }` | Posts `text` into that Telegram topic through Switch, as the founder's office console (Switch agent `d2c-office`; if no agent is @named, the room's lead is addressed). `202 { ok, via: "switch:d2c-office", thread: "topic" \| "group" }` (`group` = the topic has no Switch thread yet, so it went to General tagged `#Topic`). It comes back into the office through the observer like any Telegram message. |
 | GET | `/api/people` | none | `Person[]`: contracts/roster.json people plus hired employees (with `desk` and `hiredAt`). The office uses this, not the static roster, in live mode. |
 | GET | `/api/employees` | none | `Employee[]` (hired only) |
 | POST | `/api/employees` | `{ name, role, room: RoomId, emoji?, color?, instructions, skills?: string[] /* library book ids */ }` | Creates the agent in Switch, joins it to "Kratos D2C", gives it a free desk. `201 Employee`, or `202 { employee, action: { kind: "open_url", url, label } }` if a human must click in Switch Console. Emits a `hired` event (speaker = new id, meta.employee_id). |
+| DELETE | `/api/employees/:id` | none | Fires the employee: removes the agent from Switch, frees the desk. `200 { ok, id }`, 404 if unknown. |
 | GET | `/api/library` | none | `Library` (shelves by department, books = installed skills) |
 | GET | `/api/library/book?id=` | none | `{ book: LibraryBook, markdown: string }` (the SKILL.md body, max 200 KB) |
 | POST | `/api/library/categorize` | none | Starts the Librarian (a Claude Code run) re-shelving every skill. `202 { ok, runId }`. Emits `working` / `done` events from speaker `librarian` in `war_room`. |
