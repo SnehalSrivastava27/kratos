@@ -1,14 +1,13 @@
-// The office shell and furniture, built once in the agent-office toon style and merged by colour into a
-// handful of draw calls. Toon builders (chair, desk, wall boards) adapted from AgentSystemLabs/agent-office
-// (MIT), Copyright (c) 2026 AgentSystemLabs: src/client/world/office/{seats,props,materials}.ts.
-import { memo, useEffect, useMemo } from 'react';
+// Adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs
+// src/client/world/office.ts (buildOffice, buildDesk, chair, wallBoard, glassPane, paintPlanks): the office shell and furniture, laid out on our zones (contracts/zones.json), built
+// once and merged by colour into a handful of draw calls. Every solid piece leaves a footprint
+// (office.ts Collider) that the people's paths go round.
 import * as THREE from 'three';
-import type { ThreeEvent } from '@react-three/fiber';
-import type { Zone } from '../shared/types';
-import { C, DESK, ZONE_EMOJI, roster, world, zoneById, zoneColor, zones } from './data';
-import { disposeTree, mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
-import { piece, plant, useModels, type Models } from './models';
-import { FONT, chartsTex, neonTex, paint, polaroidTex } from './tex';
+import { C, DESK, ZONE_EMOJI, roster, world, zoneById, zoneColor, zones } from '../data';
+import { mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
+import { piece, plant, type Models } from './models';
+import { FONT, chartsTex, neonTex, paint, polaroidTex } from '../tex';
+import type { Rect } from './nav';
 
 export const PAL = {
   wall: '#fff6ea', trim: '#e8a87c', floor: '#f2d7b0', floorAlt: '#e9c89a', seam: '#d9b88c',
@@ -79,9 +78,6 @@ function desk(m: Models, zoneId: string, i: number) {
   const deco = i % 3 === 0 ? piece(m.desk_props, 'mug', { Mug: PAL.chairs[i % 6] }) : i % 3 === 1 ? plant(m, 'succulent') : piece(m.desk_props, ['books_upright', 'books_leaning', 'books_stack'][i % 3]);
   deco.position.set(i % 3 === 1 ? -w / 2 + 0.25 : w / 2 - 0.26, h, -0.25);
   g.add(deco);
-  const ch = chair(PAL.chairs[i % PAL.chairs.length]);
-  ch.position.set(0, 0, 0.85);
-  g.add(ch);
   return g;
 }
 
@@ -132,14 +128,10 @@ function floorSign(text: string) {
 }
 
 let fontReady: Promise<void> | null = null;
-let fontOk = false;
-/** Suspends until Nunito is in (or 2s pass), so canvas-painted signs use it. */
-function useFont() {
-  if (fontOk) return;
-  fontReady ??= Promise.race([document.fonts.load(`900 44px Nunito`).then(() => {}), new Promise<void>((r) => setTimeout(r, 2000))]).then(() => {
-    fontOk = true;
-  });
-  throw fontReady;
+/** Resolves once Nunito is in (or 2s pass), so canvas-painted signs use it. */
+export function loadFont() {
+  fontReady ??= Promise.race([document.fonts.load(`900 44px Nunito`).then(() => {}), new Promise<void>((r) => setTimeout(r, 2000))]);
+  return fontReady;
 }
 
 function cardboard(s = 1) {
@@ -149,12 +141,19 @@ function cardboard(s = 1) {
   return g;
 }
 
-function buildOffice(m: Models) {
+function buildOffice(m: Models, solids: Rect[]) {
   const root = new THREE.Group();
-  const add = (o: THREE.Object3D, x: number, y: number, z: number, ry = 0) => {
+  const box3 = new THREE.Box3();
+  /** Places `o`; a solid one leaves its footprint (shrunk by `inset`) for the paths to go round. */
+  const add = (o: THREE.Object3D, x: number, y: number, z: number, ry = 0, solid = false, inset = 0) => {
     o.position.set(x, y, z);
     o.rotation.y = ry;
     root.add(o);
+    if (solid) {
+      o.updateMatrixWorld(true);
+      box3.setFromObject(o);
+      solids.push({ minX: box3.min.x + inset, maxX: box3.max.x - inset, minZ: box3.min.z + inset, maxZ: box3.max.z - inset });
+    }
     return o;
   };
 
@@ -190,7 +189,8 @@ function buildOffice(m: Models) {
   roster.forEach((p, i) => {
     if (!DESK[p.zone]) return;
     const [x, z] = world(p.zone, DESK[p.zone]);
-    add(desk(m, p.zone, i), x, 0, z);
+    add(desk(m, p.zone, i), x, 0, z, 0, true);
+    add(chair(PAL.chairs[i % PAL.chairs.length]), x, 0, z + 0.85); // the seat itself is walked into
   });
 
   // War room: glass cabin, wooden table, chairs either side, a stand for the big plan screen.
@@ -198,14 +198,14 @@ function buildOffice(m: Models) {
   const tbl = new THREE.Group();
   tbl.add(mesh(roundedBox(3.4, 0.1, 1.5, 0.35), toon(PAL.wood), 0, 0.76, 0));
   tbl.add(mesh(roundedBox(1.6, 0.7, 0.5, 0.2), toon(PAL.ink), 0, 0.36, 0));
-  add(tbl, war.x, 0, war.z - 0.1);
-  for (const sx of [-1, 1]) for (const dz of [-0.4, 0.4]) add(chair(PAL.chairs[(sx + 1 + (dz > 0 ? 1 : 0)) % 6]), war.x + sx * 2.15, 0, war.z - 0.1 + dz, sx * -Math.PI / 2 + Math.PI);
-  add(mesh(box(0.12, 1.0, 0.12), toon(PAL.ink)), war.x - 1.3, 0.5, war.z - 2.15);
-  add(mesh(box(0.12, 1.0, 0.12), toon(PAL.ink)), war.x + 1.3, 0.5, war.z - 2.15);
-  add(glassWall(4.6, 2.0), war.x - 3.4, 0, war.z, Math.PI / 2);
-  add(glassWall(4.6, 2.0), war.x + 3.4, 0, war.z, Math.PI / 2);
-  add(glassWall(2.4, 2.0), war.x - 2.2, 0, war.z + 2.35);
-  add(glassWall(2.4, 2.0), war.x + 2.2, 0, war.z + 2.35);
+  add(tbl, war.x, 0, war.z - 0.1, 0, true);
+  for (const sx of [-1, 1]) for (const dz of [-0.4, 0.4]) add(chair(PAL.chairs[(sx + 1 + (dz > 0 ? 1 : 0)) % 6]), war.x + sx * 2.15, 0, war.z - 0.1 + dz, sx * -Math.PI / 2 + Math.PI, true);
+  add(mesh(box(0.12, 1.0, 0.12), toon(PAL.ink)), war.x - 1.3, 0.5, war.z - 2.15, 0, true);
+  add(mesh(box(0.12, 1.0, 0.12), toon(PAL.ink)), war.x + 1.3, 0.5, war.z - 2.15, 0, true);
+  add(glassWall(4.6, 2.0), war.x - 3.4, 0, war.z, Math.PI / 2, true);
+  add(glassWall(4.6, 2.0), war.x + 3.4, 0, war.z, Math.PI / 2, true);
+  add(glassWall(2.4, 2.0), war.x - 2.2, 0, war.z + 2.35, 0, true);
+  add(glassWall(2.4, 2.0), war.x + 2.2, 0, war.z + 2.35, 0, true);
 
   // Data wall: three dashboards on the back wall.
   add(wallBoard(5.2, 1.3, PAL.ink, chartsTex()), zoneById.data_wall.x, 1.55, WALL.backZ + WALL.t / 2 + 0.06);
@@ -220,18 +220,18 @@ function buildOffice(m: Models) {
     legM.rotation.set(Math.cos((k * 2 * Math.PI) / 3) * 0.45, 0, -Math.sin((k * 2 * Math.PI) / 3) * 0.45);
     ring.add(legM);
   }
-  add(ring, cr.x + 1.4, 0, cr.z - 0.5, -0.5);
+  add(ring, cr.x + 1.4, 0, cr.z - 0.5, -0.5, true, 0.15);
   add(wallBoard(2.6, 1.5, PAL.wood, polaroidTex()), WALL.leftX + WALL.t / 2 + 0.06, 1.5, cr.z, Math.PI / 2);
   // Dispatch dock: stacked boxes and a roller conveyor.
   const dock = zoneById.dispatch_dock;
-  add(cardboard(1.1), dock.x - 2.3, 0, dock.z - 1.35);
-  add(cardboard(1.1), dock.x - 1.7, 0, dock.z - 1.3, 0.3);
+  add(cardboard(1.1), dock.x - 2.3, 0, dock.z - 1.35, 0, true);
+  add(cardboard(1.1), dock.x - 1.7, 0, dock.z - 1.3, 0.3, true);
   add(cardboard(1), dock.x - 2.05, 0.44, dock.z - 1.3, -0.2);
   const belt = new THREE.Group();
   belt.add(mesh(roundedBox(3.4, 0.12, 0.7, 0.06), toon('#495057'), 0, 0.55, 0));
   belt.add(mesh(box(3.3, 0.02, 0.56), toon('#2b2d42'), 0, 0.62, 0));
   for (const x of [-1.5, 1.5]) for (const z of [-0.28, 0.28]) belt.add(mesh(box(0.08, 0.5, 0.08), toon(PAL.deskLeg), x, 0.25, z));
-  add(belt, dock.x - 0.9, 0, dock.z + 0.9);
+  add(belt, dock.x - 0.9, 0, dock.z + 0.9, 0, true);
   // Dark store: a shelf rack of quick-commerce stock under a "10-min delivery" sign.
   const ds = zoneById.dark_store;
   const rack = new THREE.Group();
@@ -239,57 +239,59 @@ function buildOffice(m: Models) {
   for (const y of [0.15, 0.65, 1.15, 1.62]) rack.add(mesh(box(2.2, 0.05, 0.5), toon('#adb5bd'), 0, y, 0));
   const stock = ['#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#f4a261', '#9d4edd'];
   for (let s = 0; s < 3; s++) for (let k = 0; k < 6; k++) rack.add(mesh(roundedBox(0.26, 0.3, 0.3, 0.05), toon(stock[(k + s * 2) % 6]), -0.82 + k * 0.33, 0.33 + s * 0.5, 0));
-  add(rack, ds.x, 0, ds.z - 0.95);
+  add(rack, ds.x, 0, ds.z - 0.95, 0, true);
   add(wallBoard(2.3, 0.46, PAL.ink, neonTex('⚡ 10-MIN DELIVERY', C.saffron)), ds.x, 2.1, ds.z - 0.95);
   // Chai pantry: the kitchen counter + espresso machine + fridge, poufs to perch on.
   const chai = zoneById.chai_pantry;
   const kitchen = piece(m.kitchen);
   kitchen.scale.setScalar(0.62);
-  add(kitchen, chai.x + 0.4, 0, chai.z - 1.05);
-  add(piece(m.lounge, 'pouf', { Cloth: '#ef476f' }), chai.x - 1.55, 0, chai.z + 0.6).scale.setScalar(0.7);
-  add(piece(m.lounge, 'pouf', { Cloth: '#06d6a0' }), chai.x + 1.6, 0, chai.z + 0.6).scale.setScalar(0.7);
+  add(kitchen, chai.x + 0.4, 0, chai.z - 1.05, 0, true);
+  const pouf = (cloth: string) => {
+    const p = piece(m.lounge, 'pouf', { Cloth: cloth });
+    p.scale.setScalar(0.7);
+    return p;
+  };
+  add(pouf('#ef476f'), chai.x - 1.55, 0, chai.z + 0.6, 0, true);
+  add(pouf('#06d6a0'), chai.x + 1.6, 0, chai.z + 0.6, 0, true);
   // Founder's corner: a sofa and coffee table beside the desk.
   const fd = zoneById.founder_desk;
-  add(piece(m.lounge, 'sofa'), fd.x + 1.85, 0, fd.z + 0.2, -Math.PI / 2).scale.setScalar(0.62);
-  // Telegram Hub: a sofa facing the big Telegram wall (the wall itself is live, in SceneProps).
+  const sofa = (s: number) => {
+    const p = piece(m.lounge, 'sofa');
+    p.scale.setScalar(s);
+    return p;
+  };
+  add(sofa(0.62), fd.x + 1.85, 0, fd.z + 0.2, -Math.PI / 2, true);
+  // Telegram Hub: a sofa facing the big Telegram wall (the wall itself is live, in engine/props.ts).
   const hub = zoneById.telegram_hub;
-  add(piece(m.lounge, 'sofa'), hub.x, 0, hub.z + 0.75, Math.PI).scale.setScalar(0.6);
-  add(plant(m, 'monstera', 1.1), hub.x - 2.3, 0, hub.z + 0.9);
+  add(sofa(0.6), hub.x, 0, hub.z + 0.75, Math.PI, true);
+  add(plant(m, 'monstera', 1.1), hub.x - 2.3, 0, hub.z + 0.9, 0, true, 0.2);
 
   // Plants in the corners.
   const plants: [number, number, 'monstera' | 'snake_plant' | 'ficus'][] = [
     [-11.4, -7.4, 'monstera'], [-4.6, -7.5, 'snake_plant'], [4.4, -7.5, 'ficus'], [11.4, -7.4, 'monstera'],
     [-11.4, 2.3, 'snake_plant'], [11.3, 2.4, 'ficus'], [-11.4, 7.5, 'ficus'], [-0.3, 7.4, 'monstera'], [5.0, 7.4, 'snake_plant'], [11.4, 7.4, 'monstera'],
   ];
-  plants.forEach(([x, z, s]) => add(plant(m, s, 1.1), x, 0, z));
+  plants.forEach(([x, z, s]) => add(plant(m, s, 1.1), x, 0, z, 0, true, 0.2));
 
   noOutline(root);
   return root;
 }
 
-/** Built once per loaded model set; memo'd so feed updates never rebuild it. Pass a stable onPick. */
-export default memo(function Floor({ onPick }: { onPick: (z: Zone | null) => void }) {
-  useFont();
-  const models = useModels();
-  const { merged, floor } = useMemo(() => {
-    const merged = mergeByColor(buildOffice(models));
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(24.5, 16.5), toonUnique('#ffffff', { map: planks(24.5, 16.5) }));
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = 0.001;
-    floor.receiveShadow = true;
-    noOutline(floor);
-    return { merged, floor };
-  }, [models]);
-  useEffect(() => () => { disposeTree(merged); disposeTree(floor); }, [merged, floor]);
-  const pick = (e: ThreeEvent<MouseEvent>) => {
-    e.stopPropagation();
-    const { x, z } = e.point;
-    onPick(zones.find((zn) => Math.abs(x - zn.x) <= zn.w / 2 && Math.abs(z - zn.z) <= zn.d / 2) ?? null);
-  };
-  return (
-    <group>
-      <primitive object={floor} onClick={pick} />
-      <primitive object={merged} />
-    </group>
-  );
-});
+/** The walkable floor, inside the walls. */
+export const FLOOR: Rect = { minX: -12.0, maxX: 12.3, minZ: -8.0, maxZ: 8.3 };
+
+/** The whole static office: merged furniture, the textured plank floor, and every solid footprint. */
+export function buildWorld(models: Models) {
+  const solids: Rect[] = [];
+  const raw = buildOffice(models, solids);
+  const merged = mergeByColor(raw);
+  raw.traverse((o) => (o as THREE.Mesh).isMesh && (o as THREE.Mesh).geometry.dispose()); // merged copied them; textures stay (merged uses them)
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(24.5, 16.5), toonUnique('#ffffff', { map: planks(24.5, 16.5) }));
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = 0.001;
+  floor.receiveShadow = true;
+  noOutline(floor);
+  const group = new THREE.Group();
+  group.add(merged, floor);
+  return { group, floor, solids };
+}

@@ -4,4 +4,4 @@
 [AgentSystemLabs/agent-office](https://github.com/AgentSystemLabs/agent-office) (`src/client/models/`),
 MIT licensed, Copyright (c) 2026 AgentSystemLabs. Full licence text: `web/src/office/THIRD_PARTY_LICENSE.md`.
 
-Their materials are names only; `web/src/office/models.ts` paints each name with a toon colour.
+Their materials are names only; `web/src/office/engine/models.ts` paints each name with a toon colour.

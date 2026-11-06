@@ -2,23 +2,21 @@
 // src/client/world/models.ts + office/props.ts: the Blender-modelled props. Every material in the .glb
 // files is only a name; we paint each name with a toon colour.
 import * as THREE from 'three';
-import { useMemo } from 'react';
-import { useGLTF } from '@react-three/drei';
-import { toon } from './toon';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { toon } from '../toon';
 
-export const MODEL_URLS = ['/models/plants.glb', '/models/desk_props.glb', '/models/lounge.glb', '/models/kitchen.glb'] as const;
-MODEL_URLS.forEach((u) => useGLTF.preload(u));
+const MODEL_URLS = { plants: '/models/plants.glb', desk_props: '/models/desk_props.glb', lounge: '/models/lounge.glb', kitchen: '/models/kitchen.glb' };
+export type Models = Record<keyof typeof MODEL_URLS, THREE.Object3D>;
 
-export type Models = Record<'plants' | 'desk_props' | 'lounge' | 'kitchen', THREE.Object3D>;
-
-/** All four model scenes (suspends until loaded). */
-export function useModels(): Models {
-  const [plants, desk_props, lounge, kitchen] = useGLTF(MODEL_URLS as unknown as string[]) as unknown as { scene: THREE.Object3D }[];
-  // same object while the (cached) scenes are the same, so whoever memoises on it builds once
-  return useMemo(
-    () => ({ plants: plants.scene, desk_props: desk_props.scene, lounge: lounge.scene, kitchen: kitchen.scene }),
-    [plants.scene, desk_props.scene, lounge.scene, kitchen.scene],
+let loading: Promise<Models> | null = null;
+/** All four model scenes, loaded once per page (they are only ever cloned from). */
+export function loadModels(): Promise<Models> {
+  const loader = new GLTFLoader();
+  loading ??= Promise.all(Object.entries(MODEL_URLS).map(async ([k, url]) => [k, (await loader.loadAsync(url)).scene] as const)).then(
+    (kv) => Object.fromEntries(kv) as unknown as Models,
   );
+  loading.catch(() => (loading = null)); // a failed fetch can be retried by the next mount
+  return loading;
 }
 
 const PALETTE = { plant: '#5fb760', plantDark: '#3f8f45', pot: '#e76f51', wood: '#c98b5a', deskLeg: '#3d405b' };
