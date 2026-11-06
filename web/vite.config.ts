@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// The proxy matches contracts/api.md. SERVER_PORT / WEB_PORT override the defaults (8787 / 5173).
-const api = `localhost:${process.env.SERVER_PORT ?? 8787}`;
+// The proxy matches contracts/api.md. Server port resolves exactly like server/src/index.ts
+// (PORT ?? SERVER_PORT ?? 8787); WEB_PORT overrides 5173.
+const api = `localhost:${process.env.PORT ?? process.env.SERVER_PORT ?? 8787}`;
 
 export default defineConfig({
   plugins: [react()],

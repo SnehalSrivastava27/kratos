@@ -98,7 +98,7 @@ npm run demo         # server :8787 + web :5173, Ctrl+C stops both
     -d '{"feed":"sale-demo","loop":true,"speed":1}'
   curl -X POST localhost:8787/api/replay/stop
   ```
-- Other ports: `SERVER_PORT=8790 WEB_PORT=5176 npm run demo` (Vite proxies to `SERVER_PORT`).
+- Other ports: `SERVER_PORT=8790 WEB_PORT=5176 npm run demo` (Vite proxies to the server port: `PORT`, else `SERVER_PORT`).
 
 ### 4b. Full setup with Switch and Telegram
 
