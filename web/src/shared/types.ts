@@ -1,5 +1,5 @@
 // Generated from contracts/ by the orchestrator. Do not edit in worker branches.
-export type RoomId = 'war_room' | 'analytics' | 'ads' | 'creators' | 'ops' | 'design';
+export type RoomId = 'war_room' | 'analytics' | 'ads' | 'creators' | 'ops' | 'design' | 'finance' | 'qa_lab';
 export type EventType =
   | 'message' | 'assign' | 'working' | 'approval_needed'
   | 'pushback' | 'approved' | 'done' | 'artifact' | 'celebrate' | 'hired' | 'command';
