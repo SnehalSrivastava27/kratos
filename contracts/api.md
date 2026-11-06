@@ -176,19 +176,23 @@ OfficeEvent.ws?: string   // server-assigned workspace id
 Finance, QA Lab) and every roster Switch agent (16: all `kind: "agent"` except `librarian`) + `d2c-observer` joined
 (+ `d2c-office` on its first post). Workspaces set up under an older roster are upgraded on server start and on
 their next message (at most once a minute while it fails): only missing topics are created (stored topics that still
-exist are kept, legacy `topics.json` adoption unchanged), status stays `ready`.
+exist are kept; a topic is created again only when Telegram says it is gone, any other edit failure retries later;
+legacy `topics.json` adoption unchanged), status stays `ready`. Topics and agent joins are tracked apart: an agent
+not yet in Switch is retried with joins only.
 
 **Topic threads are learned.** Commands (and QA asks) land in a topic only once its Switch thread is known; until
 then they go to General tagged `#Topic` (as in v2). The server learns a topic's Switch thread from observed events
 and persists it per workspace:
-- explicit: a person sends just the topic's tag inside that topic, e.g. `#Analytics`, `#Finance`, `#QALab`;
+- explicit: a person sends just the topic's tag inside that topic, e.g. `#Analytics`, `#Finance`, `#QALab`; it
+  replaces only a voted guess (never a tagged or legacy thread, never the War Room's);
 - votes: department agents (and hires) posting 3+ times in one thread, more than twice as often as the captain →
-  that department; the captain plus 2+ departments in one thread → War Room (overrides a department guess);
-- a thread under a General message (a reply chain) is never learned.
+  that department; the captain plus 2+ departments in one thread → War Room (only if it has no thread yet);
+- a thread already learned never moves; a thread under a General message (a reply chain) is never learned.
 The observer now forwards `meta.switch_message_id` (Switch `payload.message_id`).
 
 **Idempotent ingest.** `POST /api/events` with `meta.switch_message_id` (+ `switch_room_id`) gets the stable id
-`sw-<24 hex>`; the same message again → `200` + the stored event, not stored or broadcast twice.
+`sw-<24 hex>`; the same message again → `200` + the stored event (`202 {ok, stored: false, duplicate: true}` while
+the first copy is still being ingested), never stored or broadcast twice.
 
 **Members** (`GET /api/rooms`): unchanged rules, which now include specialists (same zone as their lead) and
 Finance; `qa_lab` has the humans, the captain and whoever spoke there.
@@ -199,8 +203,8 @@ Finance; `qa_lab` has the humans, the captain and whoever spoke there.
 
 | Method | Path | Auth | Body / query → Result |
 |---|---|---|---|
-| POST | `/api/qa/ask` | `ADMIN_TOKEN` only (401 otherwise, also in dev); JSON | `{ agent: string /* roster agent or hire */, text: string /* 1–1000 */, workspace?: string }` → `202 { id, sentAt /* ms */, workspace, thread: "topic" \| "group" }`. Posts `@agent text` into the workspace's QA Lab topic as `d2c-office` (same path as `/api/command`; `group` = no QA Lab thread yet, so General tagged `#QALab`). Default workspace: the oldest ready one. 400 bad agent/text · 403 unknown workspace · 409 not ready · 429 over `QA_PER_MIN` (30) asks a minute per workspace · 502/503 Switch |
-| GET | `/api/qa/replies?after=<ms>&agent=<id>&workspace=<id>` | `ADMIN_TOKEN` only | `OfficeEvent[]` in the QA Lab topic with `t > after` (and `speaker = agent` if given), oldest first, newest last, max 500. While the QA Lab topic has no thread, every event of the workspace counts (filter by `agent`). |
+| POST | `/api/qa/ask` | `ADMIN_TOKEN` only (401 otherwise, also in dev); JSON | `{ agent: string /* roster agent or hire */, text: string /* 1–1000 */, workspace?: string }` → `202 { id, sentAt /* ms */, workspace, thread: "topic" \| "group" }`. Posts `@agent text` into the workspace's QA Lab topic as `d2c-office` (same path as `/api/command`; `group` = no QA Lab thread yet, so General tagged `#QALab`). Without `workspace`: the only ready one (400 if several are ready). 400 bad body/agent/text · 403 unknown workspace · 409 not ready · 429 over `QA_PER_MIN` (30) asks a minute per workspace · 502/503 Switch |
+| GET | `/api/qa/replies?after=<ms>&agent=<id>&workspace=<id>` | `ADMIN_TOKEN` only | (`workspace` as for ask) `OfficeEvent[]` in the QA Lab topic with `t > after` (and `speaker = agent` if given), oldest first, newest last, max 500. While the QA Lab topic has no thread, every event of the workspace counts (filter by `agent`). |
 | GET | `/api/kpis` | public (made-up demo data, never chats) | `Kpis` below, from `data/*.csv` (`KPI_DATA_DIR`), recomputed when a file's mtime changes |
 | GET | `/api/ready` | public | adds `switch: "ok" \| "down" \| "unconfigured"` (local Switch `/health`, cached 10 s, never blocks after the first probe) and `workspaces: { ready, linking, needs_admin }` counts; with `ADMIN_TOKEN` also `workspace_status: [{ id, status, detail }]`. Switch down does not make it 503. |
 

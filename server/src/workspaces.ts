@@ -26,11 +26,16 @@ export const TEAM = ROSTER.people.filter((p) => p.kind === "agent" && p.id !== "
 const PALETTE = [7322096, 16766590, 13338331, 9367192, 16749490, 16478047];
 /** [room id, topic name, icon color], one forum topic per roster room (contracts/roster.json). */
 export const TOPICS: [string, string, number][] = ROSTER.rooms.map((r, i) => [r.id, topicName(r), PALETTE[i % PALETTE.length]]);
-/** Changes when the roster's rooms or agents change: a ready workspace set up for an older roster is set up again. */
-const SETUP_SIG = sha(JSON.stringify([TOPICS, TEAM]));
-const setupKey = (id: string) => `setup:${id}`;
+// Change when the roster's rooms / agents change: a ready workspace set up for an older roster is set up again.
+// Kept apart so a roster agent missing in Switch only retries the joins, never the Telegram topic calls.
+const TOPICS_SIG = sha(JSON.stringify(TOPICS));
+const AGENTS_SIG = sha(JSON.stringify(TEAM));
+const topicsKey = (id: string) => `topics:${id}`;
+const agentsKey = (id: string) => `agents:${id}`;
+const UPGRADE_RETRY_MS = Number(env.UPGRADE_RETRY_MS) || 60_000; // env: tests only
 
-type Topic = { threadId: number | null; switchThreadId?: string | null };
+/** `learned`: how switchThreadId was found; "votes" is a guess an explicit tag may replace (none = legacy, firm). */
+type Topic = { threadId: number | null; switchThreadId?: string | null; learned?: "tag" | "votes" };
 export type Workspace = {
   id: string; name: string; switchRoomId: string; chatId: string | null; ownerId: string;
   topics: Record<string, Topic>; status: "linking" | "ready" | "needs_admin"; createdAt: number; detail: string | null;
@@ -57,11 +62,15 @@ const wsByRoom = (switchRoomId: string) => {
 export const allWorkspaces = () => (sql().prepare("SELECT * FROM workspaces ORDER BY created_at, rowid").all() as any[]).map(row2ws);
 export const userWorkspaces = (userId: string) => (sql().prepare("SELECT * FROM workspaces WHERE owner_id = ? ORDER BY created_at, rowid").all(userId) as any[]).map(row2ws);
 function save(w: Workspace) {
-  // setup() holds a copy across awaits: keep Switch thread ids learned meanwhile (same Telegram topic only).
+  // setup() holds a copy across awaits; learnThread writes the row directly. The row wins for thread ids
+  // (learned, moved or cleared meanwhile), unless setup recreated that Telegram topic (a new topic has no thread).
   const cur = getWs(w.id);
   for (const [k, t] of Object.entries(w.topics)) {
     const c = cur?.topics[k];
-    if (!t.switchThreadId && c?.switchThreadId && c.threadId === t.threadId) t.switchThreadId = c.switchThreadId;
+    if (!c || c.threadId !== t.threadId) continue;
+    t.switchThreadId = c.switchThreadId ?? null;
+    if (c.learned) t.learned = c.learned;
+    else delete t.learned;
   }
   sql().prepare("UPDATE workspaces SET name = ?, switch_room_id = ?, chat_id = ?, topics = ?, status = ?, detail = ? WHERE id = ?")
     .run(w.name, w.switchRoomId, w.chatId, JSON.stringify(w.topics), w.status, w.detail, w.id);
@@ -308,9 +317,8 @@ function homeRoom(speaker: string, ws: string): string | null {
  *  ponytail: json_extract scan of the workspace's stored events, only for threads not learned yet. */
 const isGeneralMessage = (ws: string, id: string) =>
   !!sql().prepare("SELECT 1 FROM events WHERE ws = ? AND json_extract(json, '$.meta.switch_message_id') = ? AND json_extract(json, '$.meta.switch_thread_id') IS NULL LIMIT 1").get(ws, id);
-function assignThread(w: Workspace, room: string, thread: string, how: string) {
-  for (const t of Object.values(w.topics)) if (t.switchThreadId === thread) t.switchThreadId = null;
-  w.topics[room] = { threadId: w.topics[room]?.threadId ?? null, switchThreadId: thread };
+function assignThread(w: Workspace, room: string, thread: string, how: "tag" | "votes") {
+  w.topics[room] = { threadId: w.topics[room]?.threadId ?? null, switchThreadId: thread, learned: how };
   sql().prepare("UPDATE workspaces SET topics = ? WHERE id = ?").run(JSON.stringify(w.topics), w.id);
   log.info("topic thread learned", { ws: w.id, room, how });
 }
@@ -322,10 +330,12 @@ export function learnThread(w: Workspace, ev: OfficeEvent, meta: Record<string, 
   const text = String(ev.text ?? "").trim();
   const tagged = /^#\w+$/.test(text) ? TAG.get(text.slice(1).toLowerCase()) : undefined;
   const human = ROSTER.people.find((p) => p.id === ev.speaker)?.kind === "human";
-  if (known === "war_room" && !tagged) return w; // nothing corrects the War Room but an explicit tag
-  if (!known && isGeneralMessage(w.id, thread)) return w; // a learned thread was checked when it was learned
+  if (known) return w; // a learned thread never moves (neither tags nor votes can poison it)
+  if (isGeneralMessage(w.id, thread)) return w;
   if (human && tagged) {
-    if (known !== tagged) assignThread(w, tagged, thread, "tag");
+    // A tag claims a new thread for its topic unless that topic already has a firm one (tagged, legacy, any War Room).
+    const cur = w.topics[tagged];
+    if (!cur?.switchThreadId || (cur.learned === "votes" && tagged !== "war_room")) assignThread(w, tagged, thread, "tag");
     return w;
   }
   const home = ev.speaker === CAPTAIN ? "war_room" : homeRoom(String(ev.speaker), w.id);
@@ -339,13 +349,15 @@ export function learnThread(w: Workspace, ev: OfficeEvent, meta: Record<string, 
   v.set(home, (v.get(home) ?? 0) + 1);
   const depts = [...v].filter(([r]) => r !== "war_room");
   const captain = v.get("war_room") ?? 0;
-  if (captain && depts.length >= 2) assignThread(w, "war_room", thread, "votes");
-  else if (!known && depts.length === 1 && depts[0][1] >= 3 && depts[0][1] > 2 * captain && !w.topics[depts[0][0]]?.switchThreadId)
+  if (captain && depts.length >= 2) {
+    if (!w.topics.war_room?.switchThreadId) assignThread(w, "war_room", thread, "votes");
+  } else if (depts.length === 1 && depts[0][1] >= 3 && depts[0][1] > 2 * captain && !w.topics[depts[0][0]]?.switchThreadId)
     assignThread(w, depts[0][0], thread, "votes");
   return w;
 }
 
-const needsUpgrade = (w: Workspace) => kvGet(setupKey(w.id)) !== SETUP_SIG && Date.now() - (lastUpgrade.get(w.id) ?? 0) > 60_000;
+const needsUpgrade = (w: Workspace) =>
+  (kvGet(topicsKey(w.id)) !== TOPICS_SIG || kvGet(agentsKey(w.id)) !== AGENTS_SIG) && Date.now() - (lastUpgrade.get(w.id) ?? 0) > UPGRADE_RETRY_MS;
 const lastUpgrade = new Map<string, number>(); // ready workspaces retry a newer roster's setup at most once a minute
 /** On start: ready workspaces set up for an older roster get the new topics and agents. */
 export async function upgradeAll() {
@@ -353,6 +365,18 @@ export async function upgradeAll() {
     const w = row2ws(r);
     if (needsUpgrade(w)) await setup(w.id, true);
   }
+}
+
+/** (c) the team, the observer and the office console into the Switch room; then the workspace is ready. */
+async function joinTeam(w: Workspace, upgrade: boolean) {
+  const joined = await joinAgents(w.switchRoomId, [...TEAM, "d2c-observer", OFFICE_AGENT]);
+  const missing = [...TEAM, "d2c-observer"].filter((n) => !joined.includes(n));
+  if (missing.length) log.warn("some agents don't exist in Switch yet; joined on a later setup", { ws: w.id, missing });
+  else kvSet(agentsKey(w.id), AGENTS_SIG);
+  w.status = "ready";
+  w.detail = null;
+  save(w);
+  log.info(upgrade ? "workspace upgraded" : "workspace ready", { ws: w.id });
 }
 
 const running = new Set<string>();
@@ -365,6 +389,7 @@ export async function setup(id: string, upgrade = false) {
   const w = getWs(id);
   if (!w) return void running.delete(id);
   try {
+    if (upgrade && kvGet(topicsKey(id)) === TOPICS_SIG) return await joinTeam(w, upgrade); // only agents were missing
     w.chatId ??= await roomChatId(w.switchRoomId);
     if (!w.chatId) throw new Error("Switch has no Telegram chat for this room yet");
     if (!GROUP_CHAT.test(w.chatId)) return reject(w);
@@ -397,21 +422,17 @@ export async function setup(id: string, upgrade = false) {
       if (t?.threadId) {
         const r = await tg("editForumTopic", { chat_id: w.chatId, message_thread_id: t.threadId, name });
         if (r.ok || /NOT_MODIFIED/.test(r.description ?? "")) continue;
+        // Only a topic that is gone is created again; any other failure (5xx, 429, rights) must not duplicate it.
+        if (!/TOPIC_ID_INVALID|TOPIC_DELETED|thread not found|topic not found/i.test(r.description ?? ""))
+          throw new Error(`editForumTopic ${name}: ${r.description ?? "failed"}`);
       }
       const r = await tg("createForumTopic", { chat_id: w.chatId, name, icon_color: color });
       if (!r.ok) throw new Error(`createForumTopic ${name}: ${r.description ?? "failed"}`);
       w.topics[room] = { threadId: r.result.message_thread_id, switchThreadId: null };
       save(w);
     }
-    // (c) the team, the observer and the office console into the Switch room
-    const joined = await joinAgents(w.switchRoomId, [...TEAM, "d2c-observer", OFFICE_AGENT]);
-    const missing = [...TEAM, "d2c-observer"].filter((n) => !joined.includes(n));
-    if (missing.length) log.warn("some agents don't exist in Switch yet; joined on a later setup", { ws: w.id, missing });
-    else kvSet(setupKey(w.id), SETUP_SIG); // every topic and agent is in: no more upgrades for this roster
-    w.status = "ready";
-    w.detail = null;
-    save(w);
-    log.info(upgrade ? "workspace upgraded" : "workspace ready", { ws: w.id });
+    kvSet(topicsKey(w.id), TOPICS_SIG);
+    await joinTeam(w, upgrade);
   } catch (e) {
     log.warn("workspace setup incomplete, retrying on the next message", { ws: id, error: (e as Error).message });
     w.detail = "Setup is not finished yet; it retries when the next message arrives in the group.";

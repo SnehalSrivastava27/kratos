@@ -1,7 +1,7 @@
 // QA Lab API for evals (contracts/api.md v4, ADMIN_TOKEN only; index.ts checks it): ask an agent a question in a
 // workspace's QA Lab topic through Switch, then read what came back.
 import { randomUUID } from "node:crypto";
-import { resolveWs } from "./workspaces.js";
+import { resolveWs, allWorkspaces } from "./workspaces.js";
 import { listEmployees, recent, roomEvents, RING_MAX } from "./store.js";
 import { postAsOffice, SwitchError } from "./switch.js";
 import { str, credsFile } from "./office.js";
@@ -18,10 +18,18 @@ const bad = (msg: string): never => {
 const isAgent = (ctx: Ctx, ws: string, id: unknown) =>
   typeof id === "string" && (ctx.roster.people.some((p) => p.id === id && p.kind === "agent" && p.id !== "librarian") || listEmployees(ws).some((e) => e.id === id));
 
+/** `workspace` if given; otherwise the only ready one (several ready → the caller must say which). */
+function qaWs(param: unknown) {
+  if (typeof param === "string" && param) return resolveWs(null, param);
+  if (allWorkspaces().filter((w) => w.status === "ready").length > 1) bad("workspace: required, more than one workspace is ready");
+  return resolveWs(null, null);
+}
+
 export async function handleQa(method: string, path: string, ctx: Ctx): Promise<boolean> {
   if (method === "POST" && path === "/api/qa/ask") {
     const b = await ctx.readJson();
-    const ws = resolveWs(null, typeof b.workspace === "string" ? b.workspace : null);
+    if (!b || typeof b !== "object" || Array.isArray(b)) bad("body: a JSON object");
+    const ws = qaWs(b.workspace);
     if (!isAgent(ctx, ws.id, b.agent)) bad("agent: a roster agent id, e.g. d2c-analyst");
     const text = str(b.text, "text", 1, 1000, true);
     if (ws.status !== "ready") throw new SwitchError(409, "this workspace is still being set up");
@@ -36,7 +44,7 @@ export async function handleQa(method: string, path: string, ctx: Ctx): Promise<
   }
   if (method === "GET" && path === "/api/qa/replies") {
     const q = ctx.url.searchParams;
-    const ws = resolveWs(null, q.get("workspace"));
+    const ws = qaWs(q.get("workspace"));
     const agent = q.get("agent");
     if (agent !== null && !isAgent(ctx, ws.id, agent)) bad("agent: a roster agent id");
     const after = Number(q.get("after") ?? 0) || 0;

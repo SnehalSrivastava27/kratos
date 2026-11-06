@@ -20,7 +20,8 @@ export function tmp() {
 export const calls = [];
 export const fake = {
   managementDown: false, roomsBroken: false /* every gateway call → 500 */,
-  agentsFlaky: 0 /* the next N GET /gateway/agents → 503 */, tg429: 0 /* the next N createForumTopic → 429 */, streamSilent: false /* office SSE never says connection_state */,
+  agentsFlaky: 0 /* the next N GET /gateway/agents → 503 */, agentsMissing: [] /* names left out of GET /gateway/agents */,
+  tgEditError: null /* editForumTopic answers { ok: false, description } with HTTP 500 */, tgDelay: 0 /* ms before each Bot API answer */, tg429: 0 /* the next N createForumTopic → 429 */, streamSilent: false /* office SSE never says connection_state */,
   chats: { "room-1": "-100", old: "-5" }, // Switch room → Telegram chat id
   tg: { ok: true, forum: true, admin: true, type: "supergroup", topics: new Set(), next: 100 },
 };
@@ -39,6 +40,8 @@ const sw = createServer(async (req, res) => {
   const tg = r.match(/^POST \/bot([^/]+)\/(\w+)$/);
   if (tg) {
     const t = fake.tg;
+    if (fake.tgDelay) await new Promise((r) => setTimeout(r, fake.tgDelay));
+    if (tg[2] === "editForumTopic" && fake.tgEditError) return ok({ ok: false, error_code: 500, description: fake.tgEditError }, 500);
     if (tg[1] !== "123:tg-secret") return ok({ ok: false, description: "Unauthorized" }, 401);
     if (tg[2] === "getChat") return ok(t.ok ? { ok: true, result: { id: json.chat_id, type: t.type, is_forum: t.forum } } : { ok: false, description: "Bad Request: chat not found" });
     if (tg[2] === "getChatMember") return ok({ ok: true, result: t.admin ? { status: "administrator", can_manage_topics: true } : { status: "member" } });
@@ -61,7 +64,7 @@ const sw = createServer(async (req, res) => {
   if (r === "GET /gateway/management/agents") return ok([{ name: "d2c-captain", controller_id: "c1", definition: {
     provider: "claude", model: "team-model", advanced_config: { effort: "high" }, auto_mode: true, auto_approve: false, isolation: "shared", directory: "/somewhere-else", instructions: "captain" } }]);
   if (r === "GET /gateway/agents" && fake.agentsFlaky > 0) return fake.agentsFlaky--, ok({ detail: "busy" }, 503);
-  if (r === "GET /gateway/agents") return ok([...TEAM.map((n, i) => ({ id: `x${i + 1}`, name: n })), { id: "xt", name: "d2c-taken" }, { id: "obs", name: "d2c-observer" }]);
+  if (r === "GET /gateway/agents") return ok([...TEAM.map((n, i) => ({ id: `x${i + 1}`, name: n })).filter((a) => !fake.agentsMissing.includes(a.name)), { id: "xt", name: "d2c-taken" }, { id: "obs", name: "d2c-observer" }]);
   if (/^DELETE \/gateway\/(management\/)?agents\/[\w-]+$/.test(r)) return ok({ ok: true });
   if (r === "POST /gateway/management/agents") return fake.managementDown ? ok({ detail: "Not Found" }, 404) : ok({ agent_id: `sw-${json.name}` }, 201);
   if (r === "POST /gateway/templates") return ok({ id: "tpl-1" }, 201);

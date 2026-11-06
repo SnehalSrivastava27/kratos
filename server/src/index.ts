@@ -49,6 +49,7 @@ if (!OBSERVER_TOKEN) log.warn("OBSERVER_TOKEN unset: POST /api/events is open to
 if (!ADMIN_TOKEN) log.warn("ADMIN_TOKEN unset: POST /api/replay and /api/replay/stop are open (fine for local dev only)");
 
 let seq = 0;
+const inflight = new Set<string>(); // Switch message ids being ingested right now (two copies POSTed at once)
 let shuttingDown = false;
 
 /** Server-made events (hired, librarian) in workspace `ws`: our id, schema-checked, then stored + broadcast. */
@@ -316,10 +317,16 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     if (!validate(ev)) return send(res, 400, { error: "invalid event", details: validate.errors });
     const dup = sid ? getEvent(id) : null;
     if (dup) return send(res, 200, dup);
-    const { event, linked } = await ingest(ev as OfficeEvent);
-    if (!event) return send(res, 202, { ok: true, stored: false, linked: !!linked }); // no workspace: a link attempt only
-    broadcast(event);
-    return send(res, 201, event);
+    if (sid && inflight.has(sid)) return send(res, 202, { ok: true, stored: false, duplicate: true }); // a copy is being ingested
+    if (sid) inflight.add(sid);
+    try {
+      const { event, linked } = await ingest(ev as OfficeEvent);
+      if (!event) return send(res, 202, { ok: true, stored: false, linked: !!linked }); // no workspace: a link attempt only
+      broadcast(event);
+      return send(res, 201, event);
+    } finally {
+      if (sid) inflight.delete(sid);
+    }
   }
   if (route === "POST /api/replay" || route === "POST /api/replay/stop") {
     if (!hasToken(req, ADMIN_TOKEN)) throw new HttpError(401, "unauthorized"); // admin only, even in dev
@@ -484,7 +491,7 @@ function shutdown(sig: string, code = 0) {
     done = true;
     for (const c of wss.clients) c.terminate(); // no close handshake in time
     closeStore(); // checkpoints the WAL
-    process.exit(code);
+    process.exit(Math.max(code, Number(process.exitCode ?? 0)));
   };
   server.close(exit);
   server.closeIdleConnections();
@@ -496,5 +503,6 @@ process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("unhandledRejection", (e) => log.error("unhandled rejection", e));
 process.on("uncaughtException", (e) => {
   log.error("uncaught exception", e);
+  process.exitCode = 1; // even if a shutdown is already under way
   shutdown("uncaughtException", 1);
 });

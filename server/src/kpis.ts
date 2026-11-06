@@ -40,7 +40,7 @@ const ratio = (a: number, b: number) => (b ? round(a / b, 2) : null);
 
 export function computeKpis(dir: string, mtimes: Record<string, number>) {
   const read = (f: string) => (mtimes[f] !== undefined ? parseCsv(readFileSync(join(dir, f), "utf8")) : null);
-  const updated = Math.max(0, ...Object.values(mtimes)) || null;
+  const updated = Math.round(Math.max(0, ...Object.values(mtimes))) || null;
   const meta = read("meta_ads_daily.csv") ?? read("meta_campaigns.csv"); // v1 fallback: same spend/revenue columns
   const out = {
     updated, window: { from: null as string | null, to: null as string | null }, net_revenue: null as number | null, orders: null as number | null,
@@ -71,7 +71,7 @@ export function computeKpis(dir: string, mtimes: Record<string, number>) {
 
   const group = (key: string) => {
     const m = new Map<string, Row[]>();
-    for (const o of orders) m.set(o[key], [...(m.get(o[key]) ?? []), o]);
+    for (const o of orders) m.get(o[key])?.push(o) ?? m.set(o[key], [o]);
     return m;
   };
   out.by_channel = [...group("channel")].map(([channel, rows]) => {

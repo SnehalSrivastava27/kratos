@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { join } from "node:path";
-import { writeFileSync, existsSync, statSync, utimesSync } from "node:fs";
+import { writeFileSync, existsSync, statSync, utimesSync, copyFileSync } from "node:fs";
 import { start, tmp, calls, fake, post, get, getJson, account, link, ev, sleep, TEAM } from "./helpers.mjs";
 
 const ADM = { authorization: "Bearer adm" };
@@ -39,7 +39,7 @@ test("roster topics: a workspace linked under the old 6-topic roster gets Financ
   delete topics.qa_lab;
   topics.ads.switchThreadId = "sw-ads-kept";
   db.prepare("UPDATE workspaces SET topics = ? WHERE id = ?").run(JSON.stringify(topics), w.id);
-  db.prepare("DELETE FROM kv WHERE k LIKE 'setup:%'").run();
+  db.prepare("DELETE FROM kv WHERE k LIKE 'topics:%' OR k LIKE 'agents:%'").run();
   db.close();
 
   calls.length = 0;
@@ -115,15 +115,31 @@ test("thread learning: an explicit #Topic tag, department votes, War Room correc
     await command(s, "ops", "stock?");
     assert.match(lastPost().json.content, /^#Ops /, "Ops still unthreaded");
 
-    // 5. War Room: the captain and two departments in one thread (corrects a wrong department guess)
-    for (const sp of ["d2c-ads", "d2c-ads", "d2c-ads"]) await evAt({ speaker: sp, text: "x", meta: { switch_thread_id: "T-war" } });
+    // 5. War Room: the captain and two departments in a new thread
+    await evAt({ speaker: "d2c-ads", text: "x", meta: { switch_thread_id: "T-war" } });
     await evAt({ speaker: "d2c-captain", text: "plan", meta: { switch_thread_id: "T-war" } });
     m = await (await evAt({ speaker: "d2c-ops", text: "ok", meta: { switch_thread_id: "T-war" } })).json();
     assert.equal(m.room, "war_room");
     await command(s, "war_room", "go");
     assert.equal(lastPost().json.thread_id, "T-war");
-    await command(s, "ads", "go");
-    assert.match(lastPost().json.content, /^#Ads /, "the wrong Ads guess was cleared");
+
+    // 6. a known department thread is never remapped by captain + 2 departments, nor by a tag (no poisoning)
+    for (const sp of ["d2c-captain", "d2c-ops", "d2c-ads"]) await evAt({ speaker: sp, text: "x", meta: { switch_thread_id: "T-an" } });
+    await evAt({ speaker: "founder", text: "#Ads", meta: { switch_thread_id: "T-an" } });
+    assert.equal((await (await evAt({ speaker: "d2c-ops", text: "y", meta: { switch_thread_id: "T-an" } })).json()).room, "analytics");
+    // ... and the real War Room isn't overwritten by a second captain + 2 departments thread, nor by a #WarRoom tag
+    for (const sp of ["d2c-captain", "d2c-ops", "d2c-ads"]) await evAt({ speaker: sp, text: "x", meta: { switch_thread_id: "T-war2" } });
+    await evAt({ speaker: "founder", text: "#WarRoom", meta: { switch_thread_id: "T-war3" } });
+    await command(s, "war_room", "go");
+    assert.equal(lastPost().json.thread_id, "T-war", "War Room thread kept");
+
+    // 7. a tag replaces a vote guess (Analytics was voted), not a tagged/legacy thread (Finance was tagged)
+    await evAt({ speaker: "founder", text: "#Analytics", meta: { switch_thread_id: "T-an2" } });
+    await command(s, "analytics", "numbers?");
+    assert.equal(lastPost().json.thread_id, "T-an2");
+    await evAt({ speaker: "founder", text: "#Finance", meta: { switch_thread_id: "T-fin2" } });
+    await command(s, "finance", "cash?");
+    assert.equal(lastPost().json.thread_id, "T-fin");
 
     // persisted: a restart keeps the learned threads (same DB)
     const ws = (await getJson(s, "/api/workspaces", s.cookie))[0];
@@ -214,9 +230,16 @@ test("QA Lab API: admin only, validation, posts to the QA Lab topic, replies aft
 
 test("KPIs: v1 fallback from data/, v2 files when present, cached until a file changes; public", async () => {
   const dir = tmp();
+  const v1dir = tmp();
+  copyFileSync(new URL("../../data/meta_campaigns.csv", import.meta.url), join(v1dir, "meta_campaigns.csv"));
   const s = await start({ KPI_DATA_DIR: dir });
-  const s1 = await start();
+  const s1 = await start({ KPI_DATA_DIR: v1dir });
+  const real = await start(); // the repo's data/ (R1's v2 files)
   try {
+    const full = await getJson(real, "/api/kpis");
+    assert.ok(full.net_revenue > 0 && full.orders > 0 && full.aov > 0 && full.blended_roas > 0 && full.ebitda_last_month !== null, JSON.stringify(full).slice(0, 200));
+    assert.equal(full.by_channel.length, 7);
+    assert.equal(full.top_skus.length, 5);
     const v1 = await getJson(s1, "/api/kpis");
     assert.equal(v1.meta_roas, 3.12, "data/meta_campaigns.csv: 14.02L / 4.5L");
     assert.equal(v1.net_revenue, null);
@@ -255,6 +278,7 @@ test("KPIs: v1 fallback from data/, v2 files when present, cached until a file c
   } finally {
     await s.stop();
     await s1.stop();
+    await real.stop();
   }
 });
 
@@ -338,6 +362,116 @@ test("numbers in a linked group's chat don't count as wrong link codes (no voidi
     fake.chats["room-num"] = "-4242";
     const r = await post(s, "/api/events", ev({ text: code }, "room-num"));
     assert.equal((await r.json()).linked, true, "the other user's code still works");
+  } finally {
+    await s.stop();
+  }
+});
+
+test("setup: a failing editForumTopic (5xx) never creates a duplicate topic; Switch thread ids are kept", async () => {
+  const DATA_DIR = tmp();
+  let s = await start({ DATA_DIR });
+  const cookie = await account(s);
+  const w = (await link(s, cookie)).workspace;
+  await s.stop();
+  const { DatabaseSync } = await import("node:sqlite");
+  const db = new DatabaseSync(join(DATA_DIR, "events.db"));
+  const topics = JSON.parse(db.prepare("SELECT topics FROM workspaces WHERE id = ?").get(w.id).topics);
+  topics.ads.switchThreadId = "sw-ads";
+  delete topics.qa_lab;
+  db.prepare("UPDATE workspaces SET topics = ? WHERE id = ?").run(JSON.stringify(topics), w.id);
+  db.prepare("DELETE FROM kv WHERE k LIKE 'topics:%'").run();
+  db.close();
+  fake.tgEditError = "Internal Server Error";
+  calls.length = 0;
+  s = await start({ DATA_DIR, ADMIN_TOKEN: "adm" });
+  try {
+    for (let i = 0; i < 40 && !calls.some((c) => c.path.endsWith("/editForumTopic")); i++) await sleep(50);
+    await sleep(200);
+    assert.equal(topicCalls().length, 0, "no createForumTopic while edit fails for another reason than a deleted topic");
+    const r = await (await adminGet(s, "/api/ready")).json();
+    assert.equal(r.workspace_status[0].status, "ready", "still ready");
+    s.cookie = cookie;
+    assert.equal((await command(s, "ads", "hi")).status, 202);
+    assert.equal(lastPost().json.thread_id, "sw-ads");
+  } finally {
+    fake.tgEditError = null;
+    await s.stop();
+  }
+});
+
+test("setup: a roster agent missing in Switch is retried with joins only (no Telegram calls)", async () => {
+  fake.agentsMissing = ["d2c-payroll"];
+  const s = await linked({ UPGRADE_RETRY_MS: "1" });
+  try {
+    await sleep(5);
+    await evAt({ text: "hello" });
+    await sleep(200);
+    assert.equal(calls.filter((c) => c.path.startsWith("/bot")).length, 0, "topics are done: no editForumTopic");
+    assert.equal(calls.filter((c) => c.method === "POST" && c.path === "/gateway/rooms/room-1/agents").length, 1, "joins retried");
+    fake.agentsMissing = [];
+    calls.length = 0;
+    await sleep(5);
+    await evAt({ text: "again" });
+    await sleep(200);
+    assert.equal(calls.findLast((c) => c.path === "/gateway/rooms/room-1/agents").json.agent_ids.length, TEAM.length + 1);
+    calls.length = 0;
+    await sleep(5);
+    await evAt({ text: "done now" });
+    await sleep(200);
+    assert.equal(calls.filter((c) => c.path === "/gateway/rooms/room-1/agents").length, 0, "all joined: no more upgrades");
+  } finally {
+    fake.agentsMissing = [];
+    await s.stop();
+  }
+});
+
+test("setup keeps thread ids learned (or moved) while it was waiting on Telegram", async () => {
+  const DATA_DIR = tmp();
+  let s = await start({ DATA_DIR });
+  const cookie = await account(s);
+  const w = (await link(s, cookie)).workspace;
+  await s.stop();
+  const { DatabaseSync } = await import("node:sqlite");
+  const db = new DatabaseSync(join(DATA_DIR, "events.db"));
+  const topics = JSON.parse(db.prepare("SELECT topics FROM workspaces WHERE id = ?").get(w.id).topics);
+  topics.analytics = { ...topics.analytics, switchThreadId: "T-old", learned: "votes" };
+  db.prepare("UPDATE workspaces SET topics = ? WHERE id = ?").run(JSON.stringify(topics), w.id);
+  db.prepare("DELETE FROM kv WHERE k LIKE 'topics:%'").run();
+  db.close();
+  fake.tgDelay = 100; // the upgrade's 8 editForumTopic calls take ~1 s
+  s = await start({ DATA_DIR });
+  evS = s;
+  try {
+    await sleep(150);
+    await evAt({ speaker: "founder", text: "#Analytics", meta: { switch_thread_id: "T-new" } });
+    await evAt({ speaker: "founder", text: "#Creators", meta: { switch_thread_id: "T-cr" } });
+    fake.tgDelay = 0;
+    for (let i = 0; i < 60 && !s.log().includes("workspace upgraded"); i++) await sleep(50);
+    assert.match(s.log(), /workspace upgraded/);
+    s.cookie = cookie;
+    calls.length = 0;
+    await command(s, "analytics", "a");
+    assert.equal(lastPost().json.thread_id, "T-new", "moved, not the stale T-old");
+    await command(s, "creators", "c");
+    assert.equal(lastPost().json.thread_id, "T-cr", "learned meanwhile");
+  } finally {
+    fake.tgDelay = 0;
+    await s.stop();
+  }
+});
+
+test("QA Lab: null body → 400; several ready workspaces → workspace required", async () => {
+  const s = await linked();
+  try {
+    assert.equal((await adminPost(s, "/api/qa/ask", "null")).status, 400);
+    const other = await account(s);
+    fake.chats["room-q2"] = "-902902";
+    const w2 = (await link(s, other, { room: "room-q2" })).workspace;
+    assert.equal((await adminPost(s, "/api/qa/ask", { agent: "d2c-analyst", text: "hi" })).status, 400);
+    assert.equal((await adminGet(s, "/api/qa/replies")).status, 400);
+    const r = await adminPost(s, "/api/qa/ask", { agent: "d2c-analyst", text: "hi", workspace: w2.id });
+    assert.equal(r.status, 202);
+    assert.equal((await r.json()).workspace, w2.id);
   } finally {
     await s.stop();
   }
