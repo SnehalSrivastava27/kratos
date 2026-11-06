@@ -323,7 +323,7 @@ export function learnThread(w: Workspace, ev: OfficeEvent, meta: Record<string, 
   const tagged = /^#\w+$/.test(text) ? TAG.get(text.slice(1).toLowerCase()) : undefined;
   const human = ROSTER.people.find((p) => p.id === ev.speaker)?.kind === "human";
   if (known === "war_room" && !tagged) return w; // nothing corrects the War Room but an explicit tag
-  if (isGeneralMessage(w.id, thread)) return w;
+  if (!known && isGeneralMessage(w.id, thread)) return w; // a learned thread was checked when it was learned
   if (human && tagged) {
     if (known !== tagged) assignThread(w, tagged, thread, "tag");
     return w;
