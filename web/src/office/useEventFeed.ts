@@ -11,6 +11,7 @@ const MAX_BACKOFF_MS = 5000;
 /** Replays a feed using each event's `t` offset. Loops (reset + restart) when `loop` is true. Demo only. */
 export function replaySource(feed: OfficeEvent[], loop: boolean): Source {
   return (push, reset) => {
+    if (!feed.length) return () => {}; // nothing to replay (the playable /demo drives its own story)
     let timers: number[] = [];
     const run = () => {
       reset();

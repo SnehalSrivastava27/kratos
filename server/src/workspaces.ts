@@ -1,13 +1,13 @@
 // Workspaces (contracts/api.md v3): one Telegram group = one Switch room = one user's private office.
 // Linking: the user gets a 6-digit code, sends it in the group; the observer forwards it here (ingest), the room is
-// linked to that user and set up: Bot API checks, the 6 forum topics, the team + observer + office agents joined.
+// linked to that user and set up: Bot API checks, one forum topic per roster room, the team + observer + office joined.
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomInt, randomUUID } from "node:crypto";
-import { sql, kvGet, kvSet, adoptLegacy, type OfficeEvent } from "./store.js";
+import { sql, kvGet, kvSet, adoptLegacy, listEmployees, type OfficeEvent } from "./store.js";
 import { sha, AuthError, type User } from "./auth.js";
-import { roomChatId, joinAgents, joinRoom, gw, switchAgents, OFFICE_AGENT } from "./switch.js";
+import { roomChatId, joinAgents, joinRoom, gw, switchAgents, backoff, sleep, OFFICE_AGENT } from "./switch.js";
 import { log } from "./log.js";
 
 const env = process.env;
@@ -16,14 +16,26 @@ export const BOT_USERNAME = env.BOT_USERNAME || "kratosd2c_bot";
 const TG_API = (env.TELEGRAM_API || "https://api.telegram.org").replace(/\/$/, "");
 const CODE_TTL = Number(env.LINK_CODE_TTL_MS) || 15 * 60_000; // env: tests only
 const CODES_PER_HOUR = 5;
-const TEAM = ["d2c-captain", "d2c-analyst", "d2c-ads", "d2c-influencers", "d2c-ops", "d2c-design"];
-// room id, topic name, icon color (Telegram's fixed palette), as in scripts/switch-up.sh
-const TOPICS: [string, string, number][] = [
-  ["war_room", "War Room", 7322096], ["analytics", "Analytics", 16766590], ["ads", "Ads", 13338331],
-  ["creators", "Creators", 9367192], ["ops", "Ops", 16749490], ["design", "Design", 16478047],
-];
+type RosterPerson = { id: string; kind: string; topic?: string };
+type RosterRoom = { id: string; label: string; topic?: string; internal?: boolean };
+const ROSTER: { people: RosterPerson[]; rooms: RosterRoom[] } = JSON.parse(readFileSync(join(ROOT, "contracts/roster.json"), "utf8"));
+const topicName = (r: RosterRoom) => r.topic ?? r.label;
+/** Switch agents joined to every workspace: the roster's agents (the Librarian is a local Claude Code run, not one). */
+export const TEAM = ROSTER.people.filter((p) => p.kind === "agent" && p.id !== "librarian").map((p) => p.id);
+// Telegram's fixed topic icon palette; the first six as in scripts/switch-up.sh, new rooms cycle through it.
+const PALETTE = [7322096, 16766590, 13338331, 9367192, 16749490, 16478047];
+/** [room id, topic name, icon color], one forum topic per roster room (contracts/roster.json). */
+export const TOPICS: [string, string, number][] = ROSTER.rooms.map((r, i) => [r.id, topicName(r), PALETTE[i % PALETTE.length]]);
+// Change when the roster's rooms / agents change: a ready workspace set up for an older roster is set up again.
+// Kept apart so a roster agent missing in Switch only retries the joins, never the Telegram topic calls.
+const TOPICS_SIG = sha(JSON.stringify(TOPICS));
+const AGENTS_SIG = sha(JSON.stringify(TEAM));
+const topicsKey = (id: string) => `topics:${id}`;
+const agentsKey = (id: string) => `agents:${id}`;
+const UPGRADE_RETRY_MS = Number(env.UPGRADE_RETRY_MS) || 60_000; // env: tests only
 
-type Topic = { threadId: number | null; switchThreadId?: string | null };
+/** `learned`: how switchThreadId was found; "votes" is a guess an explicit tag may replace (none = legacy, firm). */
+type Topic = { threadId: number | null; switchThreadId?: string | null; learned?: "tag" | "votes" };
 export type Workspace = {
   id: string; name: string; switchRoomId: string; chatId: string | null; ownerId: string;
   topics: Record<string, Topic>; status: "linking" | "ready" | "needs_admin"; createdAt: number; detail: string | null;
@@ -47,8 +59,19 @@ const wsByRoom = (switchRoomId: string) => {
   const r = sql().prepare("SELECT * FROM workspaces WHERE switch_room_id = ?").get(switchRoomId);
   return r ? row2ws(r) : null;
 };
+export const allWorkspaces = () => (sql().prepare("SELECT * FROM workspaces ORDER BY created_at, rowid").all() as any[]).map(row2ws);
 export const userWorkspaces = (userId: string) => (sql().prepare("SELECT * FROM workspaces WHERE owner_id = ? ORDER BY created_at, rowid").all(userId) as any[]).map(row2ws);
 function save(w: Workspace) {
+  // setup() holds a copy across awaits; learnThread writes the row directly. The row wins for thread ids
+  // (learned, moved or cleared meanwhile), unless setup recreated that Telegram topic (a new topic has no thread).
+  const cur = getWs(w.id);
+  for (const [k, t] of Object.entries(w.topics)) {
+    const c = cur?.topics[k];
+    if (!c || c.threadId !== t.threadId) continue;
+    t.switchThreadId = c.switchThreadId ?? null;
+    if (c.learned) t.learned = c.learned;
+    else delete t.learned;
+  }
   sql().prepare("UPDATE workspaces SET name = ?, switch_room_id = ?, chat_id = ?, topics = ?, status = ?, detail = ? WHERE id = ?")
     .run(w.name, w.switchRoomId, w.chatId, JSON.stringify(w.topics), w.status, w.detail, w.id);
 }
@@ -61,7 +84,7 @@ export function resolveWs(userId: string | null, param: string | null): Workspac
     if (!w || (userId && w.ownerId !== userId)) throw new AuthError(403, "not your workspace");
     return w;
   }
-  const all = userId ? userWorkspaces(userId) : (sql().prepare("SELECT * FROM workspaces ORDER BY created_at, rowid").all() as any[]).map(row2ws);
+  const all = userId ? userWorkspaces(userId) : allWorkspaces();
   const w = all.find((x) => x.status === "ready") ?? all[0];
   if (!w) throw new AuthError(404, "no workspace yet: connect a Telegram group at /connect");
   return w;
@@ -117,7 +140,9 @@ const CODE_MISS_BUDGET = 20;
 const misses = new Map<string, { n: number; reset: number }>(); // per room; entries only for rooms that guessed
 let minute = { n: 0, reset: 0 };
 /** The live code in `text` (6 digits on their own), if any. */
-function findCode(text: string, room: string) {
+/** `linked`: a message in an already linked group. Its numbers ("budget 500000") are checked against live codes
+ *  but never count as wrong guesses: a busy linked group must not void everyone's codes. */
+function findCode(text: string, room: string, linked = false) {
   const cands = text.length <= 64 ? [...text.matchAll(/(?<!\d)\d{6}(?!\d)/g)].map((m) => m[0]) : [];
   if (!cands.length) return null;
   const now = Date.now();
@@ -128,6 +153,7 @@ function findCode(text: string, room: string) {
     if (m.n >= ROOM_MISSES || minute.n >= MISSES_PER_MIN) return null;
     const c = liveCode(cand);
     if (c) return c;
+    if (linked) continue;
     m.n++;
     minute.n++;
     misses.set(room, m);
@@ -146,13 +172,15 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   const text = String(ev.text ?? "");
   const mapped = room ? wsByRoom(room) : null;
   if (mapped) {
-    const code = findCode(text, room);
+    const code = findCode(text, room, true);
     if (code && code.user_id === mapped.ownerId) take(code) && bind(code, mapped); // re-sent in their own group: confirms it
     else if (code) refuse(code, ALREADY_LINKED);
     if (mapped.status !== "ready") void setup(mapped.id);
+    else if (needsUpgrade(mapped)) void setup(mapped.id, true);
+    const w = learnThread(mapped, ev, meta);
     // Topic → department: the workspace's own map (by Switch thread id); otherwise keep the observer's guess.
-    const t = Object.entries(mapped.topics).find(([, v]) => v.switchThreadId && v.switchThreadId === meta.switch_thread_id);
-    const out = { ...ev, ws: mapped.id } as OfficeEvent;
+    const t = Object.entries(w.topics).find(([, v]) => v.switchThreadId && v.switchThreadId === meta.switch_thread_id);
+    const out = { ...ev, ws: w.id } as OfficeEvent;
     if (t) Object.assign(out, { room: t[0], meta: { ...meta, ...(t[1].threadId ? { thread_id: t[1].threadId } : {}) } });
     return { event: out };
   }
@@ -216,15 +244,35 @@ function botToken(): string {
   } catch {}
   throw new Error("TELEGRAM_BOT_TOKEN is not set on the server");
 }
-async function tg(method: string, params: Record<string, unknown>): Promise<{ ok: boolean; result?: any; description?: string; parameters?: any }> {
+type TgReply = { ok: boolean; result?: any; description?: string; error_code?: number; parameters?: any };
+async function tg1(method: string, params: Record<string, unknown>): Promise<TgReply> {
   try {
     const res = await fetch(`${TG_API}/bot${botToken()}/${method}`, {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(params), signal: AbortSignal.timeout(15_000),
     });
-    return await res.json();
+    const body = (await res.json()) as TgReply;
+    return res.status >= 500 ? { ...body, ok: false, error_code: res.status } : { error_code: res.ok ? undefined : res.status, ...body };
   } catch (e) {
     if (String((e as Error).message).startsWith("TELEGRAM_BOT_TOKEN")) throw e;
     throw new Error(`Telegram ${method} unreachable`); // never the URL: it holds the token
+  }
+}
+/** A Bot API call with a timeout. 429 is retried (Telegram did nothing; waits retry_after, max 10 s); reads are
+ *  also retried on network errors and 5xx. Up to 3 tries. */
+async function tg(method: string, params: Record<string, unknown>): Promise<TgReply> {
+  const read = method.startsWith("get");
+  for (let i = 0; ; i++) {
+    let r: TgReply;
+    try {
+      r = await tg1(method, params);
+    } catch (e) {
+      if (!read || i >= 2 || String((e as Error).message).startsWith("TELEGRAM_BOT_TOKEN")) throw e;
+      await backoff(i + 1);
+      continue;
+    }
+    if (i >= 2 || r.ok || !(r.error_code === 429 || (read && (r.error_code ?? 0) >= 500))) return r;
+    const wait = Number(r.parameters?.retry_after);
+    await (wait > 0 ? sleep(Math.min(wait, 10) * 1000) : backoff(i + 1));
   }
 }
 
@@ -246,14 +294,102 @@ function adoptLegacyIfMatch(w: Workspace) {
   log.info("legacy Kratos D2C data adopted", { ws: w.id, events: moved });
 }
 
+// ---- learning a topic's Switch thread (contracts/api.md v4) ----
+// A forum topic becomes a Switch thread once something is posted in it, but nothing tells us which topic a Switch
+// thread is (the observer only sees Switch's thread id). Learned from the events, then persisted per topic:
+//  - explicit: a person sends just the topic's tag (e.g. "#Analytics", "#QALab") inside that topic;
+//  - votes: department agents post in their own topic. A thread where one department's agents posted 3+ times and
+//    more than twice as often as the captain is that department's; a thread where the captain and 2+ departments
+//    talk is the War Room (this also corrects an earlier department guess).
+// A thread rooted at a General message (a reply chain, not a topic) is never learned.
+const TAG = new Map(ROSTER.rooms.map((r) => [topicName(r).replace(/\W+/g, "").toLowerCase(), r.id]));
+const ROOM_OF_TOPIC = new Map(ROSTER.rooms.filter((r) => !r.internal).map((r) => [topicName(r), r.id]));
+const CAPTAIN = "d2c-captain";
+const votes = new Map<string, Map<string, number>>(); // `${ws}|${thread}` → room → messages; ponytail: in memory, relearns after a restart
+function homeRoom(speaker: string, ws: string): string | null {
+  if (speaker === "librarian") return null;
+  const p = ROSTER.people.find((x) => x.id === speaker);
+  if (p) return p.kind === "agent" && p.topic ? ROOM_OF_TOPIC.get(p.topic) ?? null : null;
+  const e = listEmployees(ws).find((x) => x.id === speaker);
+  return e && ROSTER.rooms.some((r) => r.id === e.room && !r.internal) ? e.room : null;
+}
+/** A General message the observer forwarded with this Switch id: threads under it are reply chains, not topics.
+ *  ponytail: json_extract scan of the workspace's stored events, only for threads not learned yet. */
+const isGeneralMessage = (ws: string, id: string) =>
+  !!sql().prepare("SELECT 1 FROM events WHERE ws = ? AND json_extract(json, '$.meta.switch_message_id') = ? AND json_extract(json, '$.meta.switch_thread_id') IS NULL LIMIT 1").get(ws, id);
+function assignThread(w: Workspace, room: string, thread: string, how: "tag" | "votes") {
+  w.topics[room] = { threadId: w.topics[room]?.threadId ?? null, switchThreadId: thread, learned: how };
+  sql().prepare("UPDATE workspaces SET topics = ? WHERE id = ?").run(JSON.stringify(w.topics), w.id);
+  log.info("topic thread learned", { ws: w.id, room, how });
+}
+/** Learns (and persists) which topic the event's Switch thread is. Returns the workspace, updated if so. */
+export function learnThread(w: Workspace, ev: OfficeEvent, meta: Record<string, unknown>): Workspace {
+  const thread = typeof meta.switch_thread_id === "string" && meta.switch_thread_id ? meta.switch_thread_id : "";
+  if (!thread) return w;
+  const known = Object.entries(w.topics).find(([, t]) => t.switchThreadId === thread)?.[0];
+  const text = String(ev.text ?? "").trim();
+  const tagged = /^#\w+$/.test(text) ? TAG.get(text.slice(1).toLowerCase()) : undefined;
+  const human = ROSTER.people.find((p) => p.id === ev.speaker)?.kind === "human";
+  if (known) return w; // a learned thread never moves (neither tags nor votes can poison it)
+  if (isGeneralMessage(w.id, thread)) return w;
+  if (human && tagged) {
+    // A tag claims a new thread for its topic unless that topic already has a firm one (tagged, legacy, any War Room).
+    const cur = w.topics[tagged];
+    if (!cur?.switchThreadId || (cur.learned === "votes" && tagged !== "war_room")) assignThread(w, tagged, thread, "tag");
+    return w;
+  }
+  const home = ev.speaker === CAPTAIN ? "war_room" : homeRoom(String(ev.speaker), w.id);
+  if (!home) return w;
+  const key = `${w.id}|${thread}`;
+  const v = votes.get(key) ?? new Map<string, number>();
+  if (!votes.has(key)) {
+    if (votes.size >= 5000) votes.delete(votes.keys().next().value!);
+    votes.set(key, v);
+  }
+  v.set(home, (v.get(home) ?? 0) + 1);
+  const depts = [...v].filter(([r]) => r !== "war_room");
+  const captain = v.get("war_room") ?? 0;
+  if (captain && depts.length >= 2) {
+    if (!w.topics.war_room?.switchThreadId) assignThread(w, "war_room", thread, "votes");
+  } else if (depts.length === 1 && depts[0][1] >= 3 && depts[0][1] > 2 * captain && !w.topics[depts[0][0]]?.switchThreadId)
+    assignThread(w, depts[0][0], thread, "votes");
+  return w;
+}
+
+const needsUpgrade = (w: Workspace) =>
+  (kvGet(topicsKey(w.id)) !== TOPICS_SIG || kvGet(agentsKey(w.id)) !== AGENTS_SIG) && Date.now() - (lastUpgrade.get(w.id) ?? 0) > UPGRADE_RETRY_MS;
+const lastUpgrade = new Map<string, number>(); // ready workspaces retry a newer roster's setup at most once a minute
+/** On start: ready workspaces set up for an older roster get the new topics and agents. */
+export async function upgradeAll() {
+  for (const r of sql().prepare("SELECT * FROM workspaces WHERE status = 'ready'").all() as any[]) {
+    const w = row2ws(r);
+    if (needsUpgrade(w)) await setup(w.id, true);
+  }
+}
+
+/** (c) the team, the observer and the office console into the Switch room; then the workspace is ready. */
+async function joinTeam(w: Workspace, upgrade: boolean) {
+  const joined = await joinAgents(w.switchRoomId, [...TEAM, "d2c-observer", OFFICE_AGENT]);
+  const missing = [...TEAM, "d2c-observer"].filter((n) => !joined.includes(n));
+  if (missing.length) log.warn("some agents don't exist in Switch yet; joined on a later setup", { ws: w.id, missing });
+  else kvSet(agentsKey(w.id), AGENTS_SIG);
+  w.status = "ready";
+  w.detail = null;
+  save(w);
+  log.info(upgrade ? "workspace upgraded" : "workspace ready", { ws: w.id });
+}
+
 const running = new Set<string>();
-/** Brings a linked workspace to ready. Idempotent; re-run on each message from its room until ready. */
-export async function setup(id: string) {
+/** Brings a linked workspace to ready (or a ready one up to the current roster: `upgrade`, it stays ready).
+ *  Idempotent; re-run on each message from its room until done. */
+export async function setup(id: string, upgrade = false) {
   if (running.has(id)) return;
   running.add(id);
+  if (upgrade) lastUpgrade.set(id, Date.now());
   const w = getWs(id);
   if (!w) return void running.delete(id);
   try {
+    if (upgrade && kvGet(topicsKey(id)) === TOPICS_SIG) return await joinTeam(w, upgrade); // only agents were missing
     w.chatId ??= await roomChatId(w.switchRoomId);
     if (!w.chatId) throw new Error("Switch has no Telegram chat for this room yet");
     if (!GROUP_CHAT.test(w.chatId)) return reject(w);
@@ -270,7 +406,7 @@ export async function setup(id: string) {
     const m = member?.result ?? {};
     const admin = m.status === "creator" || (m.status === "administrator" && m.can_manage_topics);
     if (!chat.ok || !chat.result?.is_forum || !admin) {
-      w.status = "needs_admin";
+      if (w.status !== "ready") w.status = "needs_admin"; // a ready group keeps working; only the new topics wait
       w.detail = [
         !chat.ok && `@${BOT_USERNAME} can't see this group yet.`,
         chat.ok && !chat.result?.is_forum && "Turn Topics on (group → Edit → Topics).",
@@ -279,26 +415,24 @@ export async function setup(id: string) {
       ].filter(Boolean).join(" ");
       return save(w);
     }
-    if (w.status !== "linking" || w.detail) (w.status = "linking"), (w.detail = null), save(w);
-    // (b) the 6 topics, idempotently: a stored topic that still exists is kept (renaming to its own name is a no-op)
+    if (w.status === "needs_admin" || (w.status === "linking" && w.detail)) (w.status = "linking"), (w.detail = null), save(w);
+    // (b) one topic per roster room, idempotently: a stored topic that still exists is kept (renaming to its own name is a no-op)
     for (const [room, name, color] of TOPICS) {
       const t = w.topics[room];
       if (t?.threadId) {
         const r = await tg("editForumTopic", { chat_id: w.chatId, message_thread_id: t.threadId, name });
         if (r.ok || /NOT_MODIFIED/.test(r.description ?? "")) continue;
+        // Only a topic that is gone is created again; any other failure (5xx, 429, rights) must not duplicate it.
+        if (!/TOPIC_ID_INVALID|TOPIC_DELETED|thread not found|topic not found/i.test(r.description ?? ""))
+          throw new Error(`editForumTopic ${name}: ${r.description ?? "failed"}`);
       }
       const r = await tg("createForumTopic", { chat_id: w.chatId, name, icon_color: color });
       if (!r.ok) throw new Error(`createForumTopic ${name}: ${r.description ?? "failed"}`);
       w.topics[room] = { threadId: r.result.message_thread_id, switchThreadId: null };
       save(w);
     }
-    // (c) the team, the observer and the office console into the Switch room
-    const joined = await joinAgents(w.switchRoomId, [...TEAM, "d2c-observer", OFFICE_AGENT]);
-    if (joined.length < TEAM.length + 1) log.warn("some agents don't exist in Switch yet", { ws: w.id, joined });
-    w.status = "ready";
-    w.detail = null;
-    save(w);
-    log.info("workspace ready", { ws: w.id });
+    kvSet(topicsKey(w.id), TOPICS_SIG);
+    await joinTeam(w, upgrade);
   } catch (e) {
     log.warn("workspace setup incomplete, retrying on the next message", { ws: id, error: (e as Error).message });
     w.detail = "Setup is not finished yet; it retries when the next message arrives in the group.";

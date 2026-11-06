@@ -154,14 +154,16 @@ test("rooms and agents are derived from events", async () => {
     await post(s, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "message", text: "waiting" }));
 
     const rooms = await getJson(s, "/api/rooms", cookie);
-    assert.equal(rooms.length, 6);
+    assert.equal(rooms.length, 8);
     const fin = rooms.find((r) => r.id === "ops");
     assert.equal(fin.count, 2);
     assert.equal(fin.last.text, "waiting");
     assert.equal(fin.group, "Kratos D2C");
     assert.equal(fin.topic, "Ops");
-    assert.deepEqual(fin.members.sort(), ["d2c-captain", "d2c-ops", "founder"]);
-    assert.equal(rooms.find((r) => r.id === "war_room").members.length, 8); // founder + 6 department agents + librarian
+    assert.deepEqual(fin.members.sort(), ["d2c-captain", "d2c-logistics", "d2c-ops", "d2c-procurement", "founder"]);
+    assert.equal(rooms.find((r) => r.id === "war_room").members.length, 18); // founder + 16 agents + librarian
+    assert.deepEqual(rooms.find((r) => r.id === "finance").members.sort(), ["d2c-captain", "d2c-finance", "d2c-payroll", "founder"]);
+    assert.deepEqual(rooms.find((r) => r.id === "analytics").members.sort(), ["d2c-analyst", "d2c-captain", "d2c-forecaster", "d2c-insights", "founder"]);
     assert.equal(rooms.find((r) => r.id === "ads").last, null);
 
     const agents = Object.fromEntries((await getJson(s, "/api/agents", cookie)).map((a) => [a.id, a]));

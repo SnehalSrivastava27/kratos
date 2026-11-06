@@ -42,8 +42,18 @@ export const officeHeaders = (): Record<string, string> => ({
   ...(process.env.OBSERVER_TOKEN ? { authorization: `Bearer ${process.env.OBSERVER_TOKEN}` } : {}),
 });
 
+/** fetch with a timeout: no call to Switch or the office may hang the observer. */
+const TIMEOUT = Number(process.env.OBSERVER_TIMEOUT_MS) || 10_000;
+const fetchT = (url: string, init: RequestInit = {}) => fetch(url, { ...init, signal: init.signal ?? AbortSignal.timeout(TIMEOUT) });
+/** Exponential backoff with jitter (half fixed, half random), capped. */
+export const backoffMs = (attempt: number, base = 1000, cap = 30_000) => {
+  const d = Math.min(cap, base * 2 ** attempt);
+  return d / 2 + Math.random() * (d / 2);
+};
+
 // Office delivery: FIFO, one POST at a time, so order is kept. 429/5xx/network error → retry the head
-// with backoff (1 s → 30 s); other statuses (201, 400, 401) are final. Full outbox drops the oldest.
+// with backoff + jitter (1 s → 30 s); other statuses (200 duplicate, 201, 202, 400, 401) are final. Full outbox
+// drops the oldest. A retried POST that had in fact arrived is harmless: the server dedupes by switch_message_id.
 const OUTBOX_MAX = 500;
 const outbox: { url: string; body: string; label: string }[] = [];
 let draining = false;
@@ -54,23 +64,25 @@ export function sendToOffice(server: string, event: object, label: string) {
 }
 async function drainOutbox() {
   draining = true;
-  for (let backoff = 1000; outbox.length; ) {
+  for (let attempt = 0; outbox.length; ) {
     const job = outbox[0];
     let status = 0;
     try {
-      status = (await fetch(job.url, { method: "POST", headers: officeHeaders(), body: job.body })).status;
+      const res = await fetchT(job.url, { method: "POST", headers: officeHeaders(), body: job.body });
+      status = res.status;
+      await res.body?.cancel().catch(() => {});
     } catch (e) {
       console.warn("[observer] office server unreachable:", String(e));
     }
     if (status && status !== 429 && status < 500) {
       outbox.shift();
-      backoff = 1000;
+      attempt = 0;
       console.log(`[observer] ${status} ${job.label}`);
       continue;
     }
-    console.warn(`[observer] ${status || "no response"}, retry in ${backoff / 1000}s (${outbox.length} queued)`);
-    await new Promise((r) => setTimeout(r, backoff));
-    backoff = Math.min(backoff * 2, 30_000);
+    const wait = backoffMs(attempt++);
+    console.warn(`[observer] ${status || "no response"}, retry in ${(wait / 1000).toFixed(1)}s (${outbox.length} queued)`);
+    await new Promise((r) => setTimeout(r, wait));
   }
   draining = false;
 }
@@ -86,7 +98,7 @@ const roster = readJson(HERE + "../contracts/roster.json") as {
 const hired = new Set<string>();
 export async function refreshHired(server: string) {
   try {
-    const res = await fetch(`${server}/api/people`, { headers: officeHeaders() }); // needs OBSERVER_TOKEN (v3)
+    const res = await fetchT(`${server}/api/people`, { headers: officeHeaders() }); // needs OBSERVER_TOKEN (v3)
     if (!res.ok) return;
     const people = (await res.json()) as { id: string }[];
     for (const p of people) hired.add(p.id);
@@ -134,10 +146,12 @@ export function inferType(text: string): string {
 }
 
 // ---- SSE ----
-async function* sse(body: ReadableStream<Uint8Array>): AsyncGenerator<Frame> {
+/** SSE frames; `onData` is called for every chunk (keepalives too), for the idle watchdog. */
+async function* sse(body: ReadableStream<Uint8Array>, onData: () => void = () => {}): AsyncGenerator<Frame> {
   let buf = "";
   const dec = new TextDecoder();
   for await (const chunk of body) {
+    onData();
     buf += dec.decode(chunk, { stream: true }).replace(/\r/g, "");
     for (let i; (i = buf.indexOf("\n\n")) >= 0; ) {
       const f: Frame = { event: "message", data: "" };
@@ -167,7 +181,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
   let stream: AbortController | null = null;
 
   const call = (path: string, body: object) =>
-    fetch(`${base}/${path}`, {
+    fetchT(`${base}/${path}`, {
       method: "POST",
       headers: { ...auth, "content-type": "application/json", "X-Switch-Connection-Id": connectionId },
       body: JSON.stringify(body),
@@ -211,21 +225,34 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
       ...(info?.name ? { room_name: info.name } : {}),
       ...(info?.chatId ? { chat_id: info.chatId } : {}),
       ...(p.thread_id ? { switch_thread_id: String(p.thread_id) } : {}),
+      ...(p.message_id ? { switch_message_id: String(p.message_id) } : {}), // the server dedupes on it
     };
     const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, meta };
     sendToOffice(cfg.server, office, `${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
   }
 
-  for (;;) {
+  // Reconnects resume from the last SSE id (Last-Event-ID). Waits grow with jitter (1 s → 30 s) while the stream
+  // keeps failing, and reset once a stream has stayed up for a minute. A stream silent for longer than IDLE_MS
+  // (Switch sends a keepalive every 15 s) is presumed dead and reopened.
+  const IDLE_MS = Number(process.env.OBSERVER_IDLE_MS) || 45_000;
+  for (let attempt = 0; ; ) {
     const ac = (stream = new AbortController());
+    const opened = Date.now();
+    let idle: NodeJS.Timeout | undefined;
+    const touch = () => {
+      clearTimeout(idle);
+      idle = setTimeout(() => ac.abort(new Error("stream idle")), IDLE_MS);
+    };
     try {
       const q = new URLSearchParams({ connection_id: connectionId, scope: "all", filter: "all", start_from: "head", client: "d2c-observer", client_version: "0.1.0" });
+      touch();
       const res = await fetch(`${base}/events?${q}`, {
         headers: { ...auth, Accept: "text/event-stream", ...(cursor ? { "Last-Event-ID": String(cursor) } : {}) },
         signal: ac.signal,
       });
-      if (!res.ok || !res.body) throw new Error(`stream open ${res.status}: ${await res.text()}`);
-      for await (const f of sse(res.body)) {
+      if (res.status === 410) console.error("[observer] Switch answered 410 to the SSE stream: it moved to the WebSocket transport (contracts/switch-protocol-notes.md §3)");
+      if (!res.ok || !res.body) throw new Error(`stream open ${res.status}: ${(await res.text()).slice(0, 200)}`);
+      for await (const f of sse(res.body, touch)) {
         if (f.id) cursor = Number(f.id) || cursor;
         let data: any;
         try { data = JSON.parse(f.data); } catch { console.warn("[observer] bad frame", f.event, f.data.slice(0, 80)); continue; }
@@ -239,14 +266,20 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
       }
       throw new Error("stream ended");
     } catch (e) {
-      if (!ac.signal.aborted) console.warn("[observer]", String(e), "— reconnecting");
+      const why = ac.signal.aborted ? String(ac.signal.reason ?? "aborted") : String(e);
+      console.warn("[observer]", why, "— reconnecting");
+    } finally {
+      clearTimeout(idle);
     }
     stream = null;
-    await new Promise((r) => setTimeout(r, 1000));
+    if (Date.now() - opened > 60_000) attempt = 0;
+    await new Promise((r) => setTimeout(r, backoffMs(attempt++)));
   }
 }
 
 if (import.meta.main) {
+  // Nothing in here may kill the observer: log and keep going (the stream loop reconnects on its own).
+  process.on("unhandledRejection", (e) => console.error("[observer] unhandled rejection:", e));
   const cfg = loadConfig();
   run(loadCreds(cfg), cfg);
 }
