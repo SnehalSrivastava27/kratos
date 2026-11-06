@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 // QA Lab evals. Modes: --truth (no LLM), --offline (default, `claude -p` per question), --live (B3 admin API).
-// Filters: --agent a,b  --limit N  --per-agent N (first N of each agent)  --failed (rerun failures of the newest report). Options: --model sonnet
+// Filters: --agent a,b  --tier 1|2  --limit N  --per-agent N (first N of each agent)  --failed (rerun failures of the newest
+// report). Options: --model haiku
 // --concurrency 4  --timeout 180 (seconds). Live: SERVER_URL (default http://localhost:8787), ADMIN_TOKEN.
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { ROOT, openDb, score, styleCheck } from './lib.mjs';
+import { ROOT, openDb, score, styleCheck, badTool, pctile } from './lib.mjs';
 import { questions } from './questions.mjs';
 
 const REPORTS = join(ROOT, 'evals', 'reports');
@@ -15,12 +16,13 @@ const QA_LINE = '\n\nQA LAB: this message comes from the QA Lab topic. It is a q
   'Do not post to Telegram, do not tag or wait for teammates.';
 
 function args(argv) {
-  const o = { mode: 'offline', model: 'sonnet', concurrency: 4, timeout: 180, agents: null, limit: Infinity, failed: false };
+  const o = { mode: 'offline', model: 'haiku', concurrency: 4, timeout: 180, agents: null, limit: Infinity, failed: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i], v = () => argv[++i];
     if (a === '--truth' || a === '--offline' || a === '--live') o.mode = a.slice(2);
     else if (a === '--model') o.model = v();
     else if (a === '--agent') o.agents = v().split(',');
+    else if (a === '--tier') o.tier = Number(v());
     else if (a === '--limit') o.limit = Number(v());
     else if (a === '--per-agent') o.perAgent = Number(v());
     else if (a === '--concurrency') o.concurrency = Number(v());
@@ -48,8 +50,8 @@ function truthMode(items) {
   let bad = 0;
   for (const it of items) {
     if (it.skip) { console.log(`SKIP ${it.id}  ${it.skip}`); continue; }
-    if (it.error || (it.q.kind === 'number' && !Number.isFinite(it.truth))) {
-      bad++; console.error(`FAIL ${it.id}  ${it.error || `truth is not a finite number: ${it.truth}`}`); continue;
+    if (it.error || (it.q.kind === 'number' && !Number.isFinite(it.truth)) || (it.q.kind === 'oneof' && !it.truth?.length)) {
+      bad++; console.error(`FAIL ${it.id}  ${it.error || `bad truth: ${JSON.stringify(it.truth)}`}`); continue;
     }
     console.log(`ok   ${it.id.padEnd(22)} [${it.q.kind}] ${it.text}\n     => ${JSON.stringify(it.truth)}`);
   }
@@ -59,11 +61,14 @@ function truthMode(items) {
 }
 
 // ---------- offline: claude -p ----------
+// Locked down: only the kit, Read/Grep/Glob; dontAsk denies anything else (read-only shell commands still run);
+// project settings only (no user hooks). stream-json gives the tool calls (safety scoring, tool-call count) and cost.
 function askClaude(agent, text, o) {
   const md = readFileSync(join(ROOT, 'switch', 'agents', `${agent}.md`), 'utf8');
   const argv = ['-p', text, '--append-system-prompt', md + QA_LINE,
-    '--allowedTools', 'Bash(node kit/bin/kit.mjs:*)', 'Read', 'Grep', 'Glob',
-    '--output-format', 'json', '--model', o.model, '--no-session-persistence', '--strict-mcp-config'];
+    '--tools', 'Bash,Read,Grep,Glob', '--allowedTools', 'Bash(node kit/bin/kit.mjs:*)', 'Read', 'Grep', 'Glob',
+    '--permission-mode', 'dontAsk', '--setting-sources', 'project',
+    '--output-format', 'stream-json', '--verbose', '--model', o.model, '--no-session-persistence', '--strict-mcp-config'];
   return new Promise(res => {
     const t0 = Date.now();
     const p = spawn('claude', argv, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -72,13 +77,15 @@ function askClaude(agent, text, o) {
     const kill = setTimeout(() => p.kill('SIGKILL'), o.timeout * 1000);
     p.on('close', code => {
       clearTimeout(kill);
-      const ms = Date.now() - t0;
-      try {
-        const j = JSON.parse(out);
-        res({ reply: j.result ?? '', ms, cost: j.total_cost_usd ?? null, error: j.is_error ? String(j.result || j.subtype || 'is_error').slice(0, 200) : null });
-      } catch {
-        res({ reply: '', ms, cost: null, error: ms >= o.timeout * 1000 ? 'timeout' : `exit ${code}: ${(err || out).slice(0, 200)}` });
+      const ms = Date.now() - t0, tools = [];
+      let j = null;
+      for (const line of out.split('\n')) {
+        let m; try { m = JSON.parse(line); } catch { continue; }
+        if (m.type === 'assistant') for (const c of m.message?.content ?? []) if (c.type === 'tool_use') tools.push({ name: c.name, input: c.input });
+        if (m.type === 'result') j = m;
       }
+      if (!j) return res({ reply: '', ms, cost: null, tools, error: ms >= o.timeout * 1000 ? 'timeout' : `exit ${code}: ${(err || out).slice(0, 200)}` });
+      res({ reply: j.result ?? '', ms, cost: j.total_cost_usd ?? null, tools, error: j.is_error ? String(j.result || j.subtype || 'is_error').slice(0, 200) : null });
     });
   });
 }
@@ -119,24 +126,33 @@ function newestReport() {
   return JSON.parse(readFileSync(join(REPORTS, f), 'utf8'));
 }
 
+const sec = ms => `${(ms / 1000).toFixed(0)}s`;
+const frac = rs => `${rs.filter(r => r.pass).length}/${rs.length}`;
+const avgCalls = rs => { const c = rs.filter(r => r.tools); return c.length ? (c.reduce((s, r) => s + r.tools.length, 0) / c.length).toFixed(1) : '-'; };
 export function toMarkdown(rep) {
   const by = {};
   for (const r of rep.results) (by[r.agent] ??= []).push(r);
+  const all = rep.results, tier = n => all.filter(r => (r.tier ?? 1) === n);
   const L = [`# QA Lab evals — ${rep.mode} (${rep.model}) — ${rep.at}`, '',
-    `**Score: ${rep.results.filter(r => r.pass).length}/${rep.results.length}**` +
+    `**Score: ${frac(all)}** (tier 1 ${frac(tier(1))}, tier 2 ${frac(tier(2))})` +
+    ` · latency p50 ${sec(pctile(all.map(r => r.ms), 50))}, p90 ${sec(pctile(all.map(r => r.ms), 90))} · ${avgCalls(all)} tool calls/question` +
     (rep.cost ? ` · cost $${rep.cost.toFixed(2)}` : '') + (rep.skipped ? ` · ${rep.skipped} skipped` : ''), '',
-    '| Agent | Pass | Avg latency | Style ok (all replies) | Cost |', '|---|---|---|---|---|'];
+    '| Agent | Tier 1 | Tier 2 | p50 latency | Tool calls | Style ok (all replies) | Cost |', '|---|---|---|---|---|---|---|'];
   for (const [a, rs] of Object.entries(by)) {
-    const p = rs.filter(r => r.pass).length, withReply = rs.filter(r => r.reply);
-    const style = withReply.filter(r => styleCheck(r.reply).ok).length;
+    const withReply = rs.filter(r => r.reply), style = withReply.filter(r => styleCheck(r.reply).ok).length;
     const cost = rs.reduce((s, r) => s + (r.cost || 0), 0);
-    L.push(`| ${a} | ${p}/${rs.length} | ${(rs.reduce((s, r) => s + r.ms, 0) / rs.length / 1000).toFixed(0)}s | ${style}/${withReply.length} | $${cost.toFixed(2)} |`);
+    L.push(`| ${a} | ${frac(rs.filter(r => (r.tier ?? 1) === 1))} | ${frac(rs.filter(r => r.tier === 2))} | ${sec(pctile(rs.map(r => r.ms), 50))} | ` +
+      `${avgCalls(rs)} | ${style}/${withReply.length} | $${cost.toFixed(2)} |`);
   }
-  const fails = rep.results.filter(r => !r.pass);
+  const kinds = [...new Set(all.map(r => r.kind))];
+  L.push('', 'By kind: ' + kinds.map(k => `${k} ${frac(all.filter(r => r.kind === k))}`).join(' · '));
+  const offKit = all.filter(r => r.tools?.some(badTool));
+  if (offKit.length) L.push('', `Off-kit tool calls (any question): ${offKit.map(r => r.id).join(', ')}`);
+  const fails = all.filter(r => !r.pass);
   L.push('', `## Failures (${fails.length})`, '');
   for (const r of fails) {
     const excerpt = (r.reply || '').replace(/\s+/g, ' ').slice(0, 280);
-    L.push(`- **${r.id}** [${r.kind}] ${r.text}`, `  - expected: \`${JSON.stringify(r.truth)}\` · why: ${r.error || r.why}`,
+    L.push(`- **${r.id}** [T${r.tier ?? 1} ${r.kind}] ${r.text}`, `  - expected: \`${JSON.stringify(r.truth)}\` · why: ${r.error || r.why}`,
       `  - got: ${excerpt || '(no reply)'}`);
   }
   return L.join('\n') + '\n';
@@ -155,6 +171,7 @@ async function main() {
   if (noMd.size) { console.log(`no instructions yet (skipped): ${[...noMd].join(', ')}`); skipped += items.filter(i => noMd.has(i.q.agent)).length; }
   items = items.filter(i => !noMd.has(i.q.agent));
   if (o.agents) items = items.filter(i => o.agents.includes(i.q.agent));
+  if (o.tier) items = items.filter(i => i.q.tier === o.tier);
   // --failed: rerun the newest report's failures and merge the new results into it
   const prev = o.failed ? newestReport() : null;
   if (prev) { const f = new Set(prev.results.filter(r => !r.pass).map(r => r.id)); items = items.filter(i => f.has(i.id)); }
@@ -169,9 +186,9 @@ async function main() {
   await pool(units, o.concurrency, async group => {
     for (const it of group) {
       const a = await ask(it.q.agent, it.text, o);
-      const s = a.error ? { pass: false, why: a.error } : score(it.q, it.truth, a.reply);
-      results.push({ id: it.id, agent: it.q.agent, kind: it.q.kind, text: it.text, truth: it.truth, pass: s.pass, why: s.why, ...a });
-      console.log(`${s.pass ? 'PASS' : 'FAIL'} ${it.id.padEnd(22)} ${(a.ms / 1000).toFixed(0)}s ${s.pass ? '' : s.why}`);
+      const s = a.error ? { pass: false, why: a.error } : score(it.q, it.truth, a.reply, a.tools);
+      results.push({ id: it.id, agent: it.q.agent, tier: it.q.tier, kind: it.q.kind, text: it.text, truth: it.truth, pass: s.pass, why: s.why, ...a });
+      console.log(`${s.pass ? 'PASS' : 'FAIL'} ${it.id.padEnd(22)} ${(a.ms / 1000).toFixed(0)}s ${a.tools ? a.tools.length + ' calls ' : ''}${s.pass ? '' : s.why}`);
     }
   });
   if (prev) { const done = new Set(results.map(r => r.id)); results.push(...prev.results.filter(r => !done.has(r.id))); }

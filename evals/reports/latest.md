@@ -1,25 +1,29 @@
-# QA Lab evals — offline (sonnet) — 2026-11-06T19:52:56.269Z
+# QA Lab evals — offline (haiku) — 2026-11-06T20:47:40.203Z
 
-**Score: 84/84** · cost $6.78
+**Score: 149/149** (tier 1 84/84, tier 2 65/65) · latency p50 6s, p90 8s · 1.0 tool calls/question · cost $0.21
 
-| Agent | Pass | Avg latency | Style ok (all replies) | Cost |
-|---|---|---|---|---|
-| d2c-ads | 6/6 | 6s | 6/6 | $0.49 |
-| d2c-analyst | 6/6 | 7s | 6/6 | $0.51 |
-| d2c-captain | 6/6 | 8s | 6/6 | $0.54 |
-| d2c-copywriter | 5/5 | 6s | 5/5 | $0.39 |
-| d2c-design | 5/5 | 6s | 5/5 | $0.40 |
-| d2c-finance | 5/5 | 6s | 5/5 | $0.37 |
-| d2c-forecaster | 5/5 | 6s | 5/5 | $0.41 |
-| d2c-google | 5/5 | 7s | 5/5 | $0.41 |
-| d2c-influencers | 5/5 | 6s | 5/5 | $0.38 |
-| d2c-insights | 5/5 | 6s | 5/5 | $0.39 |
-| d2c-logistics | 5/5 | 7s | 5/5 | $0.43 |
-| d2c-marketplaces | 5/5 | 6s | 5/5 | $0.39 |
-| d2c-ops | 6/6 | 7s | 6/6 | $0.52 |
-| d2c-payroll | 5/5 | 6s | 5/5 | $0.39 |
-| d2c-procurement | 5/5 | 7s | 5/5 | $0.38 |
-| d2c-ugc | 5/5 | 6s | 5/5 | $0.38 |
+| Agent | Tier 1 | Tier 2 | p50 latency | Tool calls | Style ok (all replies) | Cost |
+|---|---|---|---|---|---|---|
+| d2c-ads | 6/6 | 4/4 | 6s | 0.9 | 9/10 | $0.01 |
+| d2c-analyst | 6/6 | 4/4 | 6s | 0.9 | 10/10 | $0.01 |
+| d2c-captain | 6/6 | 5/5 | 6s | 1.3 | 9/11 | $0.02 |
+| d2c-copywriter | 5/5 | 4/4 | 6s | 1.2 | 8/9 | $0.01 |
+| d2c-design | 5/5 | 4/4 | 6s | 1.1 | 9/9 | $0.01 |
+| d2c-finance | 5/5 | 4/4 | 6s | 1.0 | 9/9 | $0.01 |
+| d2c-forecaster | 5/5 | 4/4 | 7s | 1.0 | 9/9 | $0.01 |
+| d2c-google | 5/5 | 4/4 | 6s | 0.9 | 8/9 | $0.01 |
+| d2c-influencers | 5/5 | 4/4 | 6s | 0.9 | 9/9 | $0.01 |
+| d2c-insights | 5/5 | 4/4 | 6s | 1.1 | 9/9 | $0.01 |
+| d2c-logistics | 5/5 | 4/4 | 6s | 0.9 | 9/9 | $0.01 |
+| d2c-marketplaces | 5/5 | 4/4 | 6s | 0.9 | 9/9 | $0.01 |
+| d2c-ops | 6/6 | 4/4 | 7s | 0.9 | 10/10 | $0.02 |
+| d2c-payroll | 5/5 | 4/4 | 6s | 1.0 | 9/9 | $0.01 |
+| d2c-procurement | 5/5 | 4/4 | 6s | 1.0 | 9/9 | $0.01 |
+| d2c-ugc | 5/5 | 4/4 | 6s | 1.0 | 9/9 | $0.01 |
+
+By kind: oneof 32/32 · number 96/96 · style 5/5 · safety 4/4 · refusal 8/8 · text 4/4
+
+Off-kit tool calls (any question): d2c-finance#8
 
 ## Failures (0)
 
