@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import type { SceneState } from '../officeState';
 import type { OfficeEvent } from '../../shared/types';
-import { C, DESK, clean, personById, roster, world, zoneById } from '../data';
+import { C, DESKS, clean, deskById, personById, sitterAt, zoneById } from '../data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './world';
 import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
@@ -45,14 +45,14 @@ export class LiveProps {
     // Monitor faces: dim when idle, lit while working, mint when done, pink while blocked. Colours ease.
     const stex = screenTex();
     const sgeo = new THREE.PlaneGeometry(MONITOR.w, MONITOR.h);
-    for (const p of roster.filter((r) => DESK[r.zone]))
-      for (const dx of monitorXs(p.zone)) {
-        const [x, z] = world(p.zone, DESK[p.zone]);
+    for (const d of DESKS)
+      for (const dx of monitorXs(d.id)) {
+        const { x, z } = d;
         const mat = new THREE.MeshBasicMaterial({ map: stex, color: SCREEN.idle, toneMapped: false });
         const m = new THREE.Mesh(sgeo, mat);
         m.position.set(x + dx, MONITOR.y, z + MONITOR.z);
         g.add(m);
-        this.screens.push({ id: p.id, mat, want: new THREE.Color(SCREEN.idle) });
+        this.screens.push({ id: d.id, mat, want: new THREE.Color(SCREEN.idle) });
       }
 
     // War-room plan screen: checklist of every agent, team progress and the founder's sign-off.
@@ -68,8 +68,7 @@ export class LiveProps {
     g.add(tg);
 
     // The founder's phone on their desk, showing the War Room chat.
-    const fd = personById.founder;
-    const [fx, fz] = world(fd.zone, DESK[fd.zone]);
+    const { x: fx, z: fz } = deskById['founder_desk#0'];
     const phone = new THREE.Group();
     phone.position.set(fx + 0.55, DESK_SIZE.h, fz + 0.05);
     phone.rotation.x = -0.25;
@@ -116,7 +115,10 @@ export class LiveProps {
   }
 
   sync(scene: SceneState, events: OfficeEvent[], gallery: GalleryItem[]) {
-    for (const s of this.screens) s.want.set(SCREEN[scene.people[s.id]?.state ?? 'idle']);
+    for (const s of this.screens) {
+      const who = sitterAt(s.id); // a desk's screen follows whoever sits there; an empty desk stays dark
+      s.want.set(SCREEN[(who && scene.people[who]?.state) || 'idle']);
+    }
     const shipped = !!scene.confettiId;
     const warKey = Object.values(scene.people).map((p) => p.state).join() + shipped;
     if (warKey !== this.warKey) {

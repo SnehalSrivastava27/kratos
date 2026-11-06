@@ -4,13 +4,13 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { OfficeEvent, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { caption, ctx, firstLine, galleryUrl, roomZone, zoneById } from './data';
+import { caption, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
-import { HelpDialog } from './Hud';
-import { Expand, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, X } from 'lucide-react';
+import { HelpDialog, Hint } from './Hud';
+import { Expand, Eye, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
-import { OfficeEngine } from './engine/Engine';
+import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
 import type { GalleryItem } from './engine/props';
 import './office.css';
 
@@ -56,7 +56,12 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   pickRef.current = pickZone;
   const onPick = useCallback((id: string | null) => pickRef.current(id ? zoneById[id] ?? null : null), []);
 
-  const stage = <Stage interactive={mode === 'live'} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} />;
+  // You (the founder) walk the office, or watch it all (spectator). The landing hero is always a spectator.
+  const engine = useRef<OfficeEngine | null>(null);
+  const [view, setView] = useState<'player' | 'spectator'>(() => (new URLSearchParams(location.search).has('spectator') ? 'spectator' : 'player'));
+  const [target, setTarget] = useState<Target | null>(null);
+  const hooks = useRef({ onTarget: setTarget, onWorldClick: () => {} });
+  const stage = <Stage interactive={mode === 'live'} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks} view={mode === 'live' ? view : 'spectator'} />;
 
   // Telegram side: which topic is open, unread counts.
   const narrow = typeof window !== 'undefined' && window.innerWidth < 760;
@@ -89,6 +94,30 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     else setFocus(z);
   }
   const cap = caption(events, scene);
+  hooks.current.onWorldClick = () => {
+    if (!drawer.pinned) setDrawer((d) => ({ ...d, open: false }));
+    if (!chat.pinned && narrow) setChat((c) => ({ ...c, open: false }));
+  };
+  const waiting = Object.entries(scene.people).find(([, p]) => p.beacon)?.[0];
+  const modalOpen = help;
+  useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
+
+  /** E: use what you face. */
+  function interact(t: Target | null) {
+    if (!t) return;
+    if (t.kind === 'agent') {
+      const p = personById[t.id];
+      const r = ROOMS.find((rm) => rm.zone === p?.zone)?.id ?? (p as { room?: string })?.room ?? 'war_room';
+      openRoom(r);
+    } else if (t.kind === 'frame') window.open(t.url, '_blank', 'noopener');
+  }
+  const hint = (t: Target | null): { title?: string; text: string } | null => {
+    if (!t) return null;
+    if (t.kind === 'desk') return { text: `Hire at this desk`, title: zoneById[deskById[t.desk]?.zone]?.label };
+    if (t.kind === 'library') return { text: 'Open the library', title: shelfLabel(t.shelf) };
+    if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: personById[t.id]?.emoji };
+    return { text: 'Open this banner', title: '🖼️' };
+  };
 
   // Fullscreen API: the button, F, and the browser's own Esc all keep `full` in step.
   useEffect(() => {
@@ -113,7 +142,11 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
       return setFocus(null);
     }
     if (typing || help || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.code === 'KeyT') setChat((c) => ({ ...c, open: true }));
+    if (e.code === 'KeyE') interact(target);
+    else if (e.code === 'KeyN' && waiting) {
+      engine.current?.jumpTo(waiting);
+      openRoom(ROOMS.find((r) => r.zone === personById[waiting]?.zone)?.id ?? 'war_room');
+    } else if (e.code === 'KeyT') setChat((c) => ({ ...c, open: true }));
     else if (e.code === 'KeyF') toggleFull();
     else if (e.key === '?') setHelp(true);
   };
@@ -164,6 +197,10 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
               <MessageCircle /><span className="hidden sm:inline">Chat</span>
               {totalUnread > 0 && !chat.open && <span className="rounded-full bg-[#3390EC] px-1.5 text-[11px] text-white">{totalUnread}</span>}
             </button>
+            <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setView((v) => (v === 'player' ? 'spectator' : 'player')); }}
+              title={view === 'player' ? 'Spectator: watch the whole office' : 'Walk the office as the founder'} aria-label={view === 'player' ? 'Spectator view' : 'Walk as the founder'}>
+              {view === 'player' ? <Eye /> : <User />}
+            </button>
             <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setSeen({}); setReplay((r) => r + 1); }} title="Replay the story" aria-label="Replay the story"><RotateCcw /></button>
             <button type="button" className="ao-btn icon" onClick={toggleFull} title="Fullscreen (F)" aria-label="Fullscreen">{full ? <Shrink /> : <Expand />}</button>
             <button type="button" className="ao-btn icon" onClick={() => setHelp(true)} title="Controls (?)" aria-label="Controls"><HelpCircle /></button>
@@ -180,6 +217,12 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
           </div>
         )}
       </div>
+      {view === 'player' && !modalOpen && (() => {
+        const h = hint(target);
+        if (h) return <Hint title={h.title} text={h.text} />;
+        if (waiting) return <Hint k="N" title="🔴" text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
+        return null;
+      })()}
       {help && <HelpDialog onClose={() => setHelp(false)} />}
     </div>
   );
@@ -189,13 +232,17 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
  * The 3D office: one imperative engine (engine/Engine.ts) mounted once into a div. React only pushes the
  * reducer's latest scene and the focused zone into it; the scene itself is never re-rendered by React.
  */
-const Stage = memo(function Stage({ interactive, scene, events, gallery, focus, onPick }: {
+type Hooks = { onTarget: (t: Target | null) => void; onWorldClick: () => void };
+const Stage = memo(function Stage({ interactive, scene, events, gallery, focus, onPick, engineRef, hooks, view }: {
   interactive: boolean; scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[]; focus: string | null; onPick: (id: string | null) => void;
+  engineRef: React.MutableRefObject<OfficeEngine | null>; hooks: React.MutableRefObject<Hooks>; view: 'player' | 'spectator';
 }) {
   const host = useRef<HTMLDivElement>(null);
-  const engine = useRef<OfficeEngine | null>(null);
+  const engine = engineRef;
   useEffect(() => {
-    const e = (engine.current = new OfficeEngine(host.current!, { interactive, onPick }));
+    const e = (engine.current = new OfficeEngine(host.current!, {
+      interactive, onPick, onTarget: (t) => hooks.current.onTarget(t), onWorldClick: () => hooks.current.onWorldClick(),
+    }));
     return () => {
       e.dispose();
       engine.current = null;
@@ -203,5 +250,6 @@ const Stage = memo(function Stage({ interactive, scene, events, gallery, focus, 
   }, [interactive, onPick]);
   useEffect(() => engine.current?.apply(scene, events, gallery), [scene, events, gallery, interactive, onPick]);
   useEffect(() => engine.current?.focus(focus), [focus, interactive, onPick]);
+  useEffect(() => engine.current?.setView(view), [view, interactive, onPick]);
   return <div ref={host} className="hq-stage" />;
 });

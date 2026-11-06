@@ -3,7 +3,8 @@
 // once and merged by colour into a handful of draw calls. Every solid piece leaves a footprint
 // (office.ts Collider) that the people's paths go round.
 import * as THREE from 'three';
-import { C, DESK, ZONE_EMOJI, roster, world, zoneById, zoneColor, zones } from '../data';
+import { C, DESKS, ZONE_EMOJI, zoneById, zoneColor, zones } from '../data';
+import { BOOKCASE_SOLIDS } from './library';
 import { mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { piece, plant, type Models } from './models';
 import { FONT, chartsTex, neonTex, paint, polaroidTex } from '../tex';
@@ -15,7 +16,9 @@ export const PAL = {
   chairs: ['#ff8a5b', '#5bc0eb', '#9bc53d', '#b388eb', '#ffb400', '#f7aef8'],
 };
 export const DESK_SIZE = { w: 1.8, d: 0.9, h: 0.78 };
-export const WALL = { h: 2.6, t: 0.3, backZ: -8.15, leftX: -12.15 };
+/** leftX: the old west wall, now the inner wall with two doorways into the west wing (library, open desks); outerX: the new west wall. */
+export const WALL = { h: 2.6, t: 0.3, backZ: -8.15, leftX: -12.15, outerX: -18.15 };
+const DOORS: [number, number][] = [[-6.6, -5.0], [2.0, 3.6]]; // z spans of the inner wall's doorways
 const box = (w: number, h: number, d: number) => new THREE.BoxGeometry(w, h, d);
 
 /** Chunky planks (materials.ts paintPlanks). */
@@ -57,19 +60,19 @@ function chair(color: string) {
 }
 
 /** Monitor slots per desk (x offsets): the growth pod runs two screens. */
-export const MONITORS: Record<string, number[]> = { growth_pod: [-0.42, 0.42] };
-export const monitorXs = (zoneId: string) => MONITORS[zoneId] ?? [0];
+export const MONITORS: Record<string, number[]> = { 'growth_pod#0': [-0.42, 0.42] };
+export const monitorXs = (deskId: string) => MONITORS[deskId] ?? [0];
 export const MONITOR = { y: DESK_SIZE.h + 0.42, z: -0.2, w: 0.78, h: 0.46 };
 
 /** seats.ts buildDesk(): top, legs, a modesty panel in the team colour, a knick-knack, monitor frame(s) and a chair. */
-function desk(m: Models, zoneId: string, i: number) {
+function desk(m: Models, zoneId: string, i: number, deskId: string) {
   const g = new THREE.Group();
   const { w, d, h } = DESK_SIZE;
   g.add(mesh(roundedBox(w - 0.06, 0.08, d - 0.04, 0.08), toon(PAL.desk), 0, h - 0.04, 0));
   const leg = toon(PAL.deskLeg);
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) g.add(mesh(new THREE.CylinderGeometry(0.035, 0.035, h - 0.08, 8), leg, sx * (w / 2 - 0.14), (h - 0.08) / 2, sz * (d / 2 - 0.12)));
   g.add(mesh(box(w - 0.3, 0.32, 0.03), toon(zoneColor(zoneId)), 0, h - 0.26, -d / 2 + 0.06));
-  for (const x of monitorXs(zoneId)) {
+  for (const x of monitorXs(deskId)) {
     g.add(mesh(roundedBox(MONITOR.w + 0.08, MONITOR.h + 0.08, 0.06, 0.04).rotateX(Math.PI / 2), toon(PAL.ink), x, MONITOR.y, MONITOR.z - 0.04));
     g.add(mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.2, 8), toon(PAL.ink), x, h + 0.1, MONITOR.z - 0.06));
     g.add(mesh(roundedBox(0.3, 0.03, 0.18, 0.06), toon(PAL.ink), x, h + 0.015, MONITOR.z - 0.06));
@@ -158,13 +161,28 @@ function buildOffice(m: Models, solids: Rect[]) {
   };
 
   // Shell: a slab, two walls with windows and a trim line, the floor's planks on top (textured, kept apart).
-  add(mesh(roundedBox(24.8, 0.4, 16.8, 0.25), toon(PAL.trim)), 0, -0.21, 0);
-  add(mesh(box(24.6, WALL.h, WALL.t), toon(PAL.wall)), 0.15, WALL.h / 2, WALL.backZ);
-  add(mesh(box(WALL.t, WALL.h, 16.6), toon(PAL.wall)), WALL.leftX, WALL.h / 2, -0.15);
-  add(mesh(box(24.6, 0.18, WALL.t + 0.04), toon(PAL.trim)), 0.15, 0.09, WALL.backZ);
-  add(mesh(box(WALL.t + 0.04, 0.18, 16.6), toon(PAL.trim)), WALL.leftX, 0.09, -0.15);
-  add(mesh(box(24.6, 0.1, WALL.t + 0.06), toon(PAL.trim)), 0.15, WALL.h, WALL.backZ);
-  add(mesh(box(WALL.t + 0.06, 0.1, 16.6), toon(PAL.trim)), WALL.leftX, WALL.h, -0.15);
+  const BW = 12.45 - (WALL.outerX - WALL.t / 2), BX = (12.45 + WALL.outerX - WALL.t / 2) / 2; // back wall spans the whole width
+  add(mesh(roundedBox(BW + 0.2, 0.4, 16.8, 0.25), toon(PAL.trim)), BX, -0.21, 0);
+  add(mesh(box(BW, WALL.h, WALL.t), toon(PAL.wall)), BX, WALL.h / 2, WALL.backZ);
+  add(mesh(box(BW, 0.18, WALL.t + 0.04), toon(PAL.trim)), BX, 0.09, WALL.backZ);
+  add(mesh(box(BW, 0.1, WALL.t + 0.06), toon(PAL.trim)), BX, WALL.h, WALL.backZ);
+  /** A west-east wall from z0 to z1 at x (solid, so people go round it). */
+  const sideWall = (x: number, z0: number, z1: number) => {
+    const len = z1 - z0, mid = (z0 + z1) / 2;
+    add(mesh(box(WALL.t, WALL.h, len), toon(PAL.wall)), x, WALL.h / 2, mid, 0, true);
+    add(mesh(box(WALL.t + 0.04, 0.18, len), toon(PAL.trim)), x, 0.09, mid);
+    add(mesh(box(WALL.t + 0.06, 0.1, len), toon(PAL.trim)), x, WALL.h, mid);
+  };
+  sideWall(WALL.outerX, -8.3, 8.3);
+  // The inner wall: solid between its doorways, each doorway with a lintel over it.
+  let z0 = -8.0;
+  for (const [a, b] of DOORS) {
+    sideWall(WALL.leftX, z0, a);
+    add(mesh(box(WALL.t + 0.06, 0.5, b - a), toon(PAL.wall)), WALL.leftX, WALL.h - 0.25, (a + b) / 2);
+    add(mesh(box(WALL.t + 0.1, 0.1, b - a + 0.1), toon(PAL.trim)), WALL.leftX, WALL.h - 0.5, (a + b) / 2);
+    z0 = b;
+  }
+  sideWall(WALL.leftX, z0, 8.3);
   const sky = new THREE.MeshBasicMaterial({ color: '#cfeaff', toneMapped: false });
   const win = (w: number) => {
     const g = new THREE.Group();
@@ -175,6 +193,7 @@ function buildOffice(m: Models, solids: Rect[]) {
   };
   for (const x of [-4.5, 4]) add(win(2.6), x, 1.55, WALL.backZ + WALL.t / 2 + 0.01);
   for (const z of [-2.8]) add(win(2.0), WALL.leftX + WALL.t / 2 + 0.01, 1.55, z, Math.PI / 2);
+  for (const z of [1.6, 5.6]) add(win(2.0), WALL.outerX + WALL.t / 2 + 0.01, 1.55, z, Math.PI / 2);
 
   // Zone rugs: soft rounded mats in a pastel of the team colour.
   for (const z of zones) {
@@ -185,13 +204,19 @@ function buildOffice(m: Models, solids: Rect[]) {
     root.add(sign);
   }
 
-  // Desks for everyone with a home zone (the captain runs the war-room table).
-  roster.forEach((p, i) => {
-    if (!DESK[p.zone]) return;
-    const [x, z] = world(p.zone, DESK[p.zone]);
-    add(desk(m, p.zone, i), x, 0, z, 0, true);
-    add(chair(PAL.chairs[i % PAL.chairs.length]), x, 0, z + 0.85); // the seat itself is walked into
+  // Every desk slot (zones.json): owners' desks and the free ones hires can take (the captain runs the war-room table).
+  DESKS.forEach((d, i) => {
+    add(desk(m, d.zone, i, d.id), d.x, 0, d.z, 0, true);
+    add(chair(PAL.chairs[i % PAL.chairs.length]), d.x, 0, d.z + 0.85); // the seat itself is walked into
   });
+  // The library's bookcases are built live (engine/library.ts); their footprints are solid here.
+  solids.push(...BOOKCASE_SOLIDS);
+  const lib = zoneById.library;
+  add(piece(m.lounge, 'pouf', { Cloth: '#9d4edd' }), lib.x - 1.9, 0, lib.z + 3.0, 0, true); // a reading pouf by the librarian
+  // The front door: a mat at the open front edge, where new hires walk in.
+  const mat = floorSign('👋 WELCOME');
+  mat.position.set(DOOR[0], 0.05, DOOR[1] - 0.15);
+  root.add(mat);
 
   // War room: glass cabin, wooden table, chairs either side, a stand for the big plan screen.
   const war = zoneById.war_room;
@@ -269,7 +294,8 @@ function buildOffice(m: Models, solids: Rect[]) {
   // Plants in the corners.
   const plants: [number, number, 'monstera' | 'snake_plant' | 'ficus'][] = [
     [-11.4, -7.4, 'monstera'], [-4.6, -7.5, 'snake_plant'], [4.4, -7.5, 'ficus'], [11.4, -7.4, 'monstera'],
-    [-11.4, 2.3, 'snake_plant'], [11.3, 2.4, 'ficus'], [-11.4, 7.5, 'ficus'], [-0.3, 7.4, 'monstera'], [5.0, 7.4, 'snake_plant'], [11.4, 7.4, 'monstera'],
+    [-11.4, 1.3, 'snake_plant'], [11.3, 2.4, 'ficus'], [-11.4, 7.5, 'ficus'], [-0.3, 7.4, 'monstera'], [11.4, 7.4, 'monstera'],
+    [-17.4, 7.6, 'monstera'], [-12.8, 7.6, 'snake_plant'], [-17.5, -0.6, 'ficus'],
   ];
   plants.forEach(([x, z, s]) => add(plant(m, s, 1.1), x, 0, z, 0, true, 0.2));
 
@@ -278,7 +304,9 @@ function buildOffice(m: Models, solids: Rect[]) {
 }
 
 /** The walkable floor, inside the walls. */
-export const FLOOR: Rect = { minX: -12.0, maxX: 12.3, minZ: -8.0, maxZ: 8.3 };
+export const FLOOR: Rect = { minX: -18.0, maxX: 12.3, minZ: -8.0, maxZ: 8.3 };
+/** Where new hires walk in from: the open front edge between the pantry and the founder's corner. */
+export const DOOR: [number, number] = [5.0, 8.0];
 
 /** The whole static office: merged furniture, the textured plank floor, and every solid footprint. */
 export function buildWorld(models: Models) {
@@ -286,7 +314,9 @@ export function buildWorld(models: Models) {
   const raw = buildOffice(models, solids);
   const merged = mergeByColor(raw);
   raw.traverse((o) => (o as THREE.Mesh).isMesh && (o as THREE.Mesh).geometry.dispose()); // merged copied them; textures stay (merged uses them)
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(24.5, 16.5), toonUnique('#ffffff', { map: planks(24.5, 16.5) }));
+  const FW = FLOOR.maxX - FLOOR.minX + 0.2;
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(FW, 16.5), toonUnique('#ffffff', { map: planks(FW, 16.5) }));
+  floor.position.x = (FLOOR.maxX + FLOOR.minX) / 2;
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = 0.001;
   floor.receiveShadow = true;

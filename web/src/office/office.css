@@ -138,3 +138,5 @@
   @keyframes ao-sheet { from { transform: translateY(40px); opacity: 0 } }
 }
 @media (prefers-reduced-motion: reduce) { .ao-hint, .ao-drawer, .ao-chat, .ao-modal, .ao-backdrop { animation: none !important } }
+.hq-tip { position: absolute; left: 0; top: 0; pointer-events: none; background: var(--ink); color: var(--paper); font: 800 12.5px var(--font); padding: 4px 9px; border-radius: 9px; white-space: nowrap; z-index: 60 }
+.hq-tag-you { background: var(--ink); color: var(--paper) }

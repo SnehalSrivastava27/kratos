@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 import type { AgentState, Person as RosterPerson } from '../../shared/types';
 import type { PersonState } from '../officeState';
-import { C, DESK, clean, isSeat, readable, spot, zoneById } from '../data';
+import { C, clean, deskById, isSeat, readable, spot, zoneById } from '../data';
 import { clock } from '../Telegram';
 import { noOutline, toonUnique } from '../toon';
 import { Person, type Look } from './person';
@@ -31,6 +31,13 @@ const LOOKS: Record<string, Look> = {
   'd2c-influencers': { skin: 2, hair: 7, style: 1 },
   'd2c-ops': { skin: 6, hair: 5, style: 6 },
   'd2c-design': { skin: 0, hair: 8, style: 4 },
+  librarian: { skin: 5, hair: 9, style: 4 },
+};
+/** Anyone else (a hire) gets a look of their own, the same every load. */
+const lookFor = (id: string): Look => {
+  let h = 7;
+  for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return { skin: h % 8, hair: (h >> 3) % 10, style: (h >> 7) % 7 };
 };
 const STATE_LABEL: Record<AgentState, string> = { idle: 'Idle', working: 'Working', walking: 'On the move', waiting: 'Waiting', done: 'Done' };
 
@@ -64,10 +71,15 @@ export class Agent {
   /** Where the speaker of the moment stands, for listeners nearby to turn to. Set by the engine. */
   lookAt: { x: number; z: number; zone: string } | null = null;
   onDing: (() => void) | null = null;
+  /** Set while the founder walks this person (engine/player.ts): routes from the feed wait until it lets go. */
+  drive: { moving: boolean; speed: number; facing: number } | null = null;
+  /** Wanders between these spots while working (the librarian between her shelves). */
+  wander: [number, number][] | null = null;
+  private wanderT = 0;
 
   constructor(readonly info: RosterPerson, ps: PersonState) {
     this.ps = ps;
-    this.person = new Person(info.color, LOOKS[info.id] ?? { skin: 1, hair: 0, style: 0 });
+    this.person = new Person(info.color, LOOKS[info.id] ?? lookFor(info.id));
     const [x, z] = spot(ps.zone, info.id);
     this.person.root.position.set(x, 0, z);
     this.ring = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.05, 8, 32), toonUnique(C.red, { emissive: '#7a1418' }));
@@ -90,9 +102,11 @@ export class Agent {
   }
 
   /** Takes the reducer's view of this person and turns any change into motion. */
+  private navRef: NavGrid | null = null;
   sync(ps: PersonState, nav: NavGrid, t: number) {
+    this.navRef = nav;
     const first = this.routeId === null;
-    if (ps.routeId !== this.routeId) {
+    if (ps.routeId !== this.routeId && !this.drive) {
       this.routeId = ps.routeId;
       // A new walk (or a feed reset: stroll back to the start, never teleport, except on the very first sync).
       if (first && !ps.routeId) this.snap(ps.zone);
@@ -130,6 +144,31 @@ export class Agent {
     this.speed = 0;
   }
 
+  /** Let go by the player: walk back to where the feed says they belong. */
+  release(nav: NavGrid) {
+    this.drive = null;
+    this.plan([this.ps.zone], nav);
+  }
+
+  /** A new hire: appears at the door and walks to their desk. */
+  walkIn(door: [number, number], nav: NavGrid) {
+    this.pos.set(door[0], 0, door[1]);
+    this.facing = Math.PI;
+    this.routeId = undefined; // synced: the first apply() mustn't snap them to the desk
+    this.plan([this.ps.zone], nav);
+  }
+
+  /** Off to another shelf (or back to the desk) every few seconds, while working. */
+  roam(nav: NavGrid, t: number) {
+    if (!this.wander || this.drive || this.path.length || this.pause > 0) return;
+    if (this.ps.state !== 'working') return;
+    if (t < this.wanderT) return;
+    this.wanderT = t + 2.5 + Math.random() * 2;
+    const [x, z] = this.wander[Math.floor(Math.random() * this.wander.length)];
+    this.path = nav.path(this.pos.x, this.pos.z, x, z).map(([wx, wz], k, a) => ({ x: wx, z: wz, stop: k === a.length - 1, zone: this.ps.zone }));
+    this.maxSpeed = WALK;
+  }
+
   /** Waypoints through every zone of the route, each leg round the furniture. */
   private plan(route: string[], nav: NavGrid) {
     this.path = [];
@@ -153,9 +192,14 @@ export class Agent {
     const g = this.pos;
     const ps = this.ps;
     // Get up before setting off.
-    if (this.path.length && p.seated) p.sit(null);
+    if ((this.path.length || this.drive) && p.seated) p.sit(null);
     let moving = false;
-    if (this.path.length && !p.seated) {
+    if (this.drive) {
+      this.path = [];
+      this.speed = this.drive.speed;
+      moving = this.drive.moving;
+      this.facing = this.drive.facing;
+    } else if (this.path.length && !p.seated) {
       if (this.pause > 0) {
         this.pause -= dt;
       } else {
@@ -203,6 +247,11 @@ export class Agent {
       }
     } else this.speed = 0;
     moving = moving && this.speed > 0.05;
+    // Back at the desk after a wander: when the work is done, home again.
+    if (this.wander && !this.drive && !this.path.length && this.ps.state !== 'working' && !isSeat(this.info.id, g.x, g.z) && this.pause <= 0 && this.routeId !== null) {
+      const [sx, sz] = spot(this.ps.zone, this.info.id);
+      if (Math.hypot(sx - g.x, sz - g.z) > 0.2) this.plan([this.ps.zone], this.navRef!);
+    }
 
     // Hop on done (out of the chair and back), dance when the team celebrates.
     const dancing = t - this.danceT < DANCE_S;
@@ -211,12 +260,12 @@ export class Agent {
     const airborne = jp >= 0 && jp < 1 && !moving;
     g.y = airborne ? Math.sin(jp * Math.PI) * 0.6 : 0;
 
-    const atSeat = !moving && !this.path.length && isSeat(this.info.id, g.x, g.z) && !!DESK[this.info.zone];
+    const atSeat = !this.drive && !moving && !this.path.length && isSeat(this.info.id, g.x, g.z);
     p.sit(atSeat && !airborne && !dancing ? SEAT_HIPS : null);
     p.holdMug(!moving && ps.state === 'idle' && ps.zone === 'chai_pantry');
 
     // Facing: along the way while walking; at the desk the screen; else the speaker, the zone's owner or the room.
-    if (!moving && !this.path.length) {
+    if (!moving && !this.path.length && !this.drive) {
       let want = atSeat ? Math.PI : this.faceZone(ps.zone, 0);
       const s = this.lookAt;
       if (!atSeat && s && s.zone === ps.zone && (s.x !== g.x || s.z !== g.z)) want = Math.atan2(s.x - g.x, s.z - g.z);
@@ -250,7 +299,7 @@ export class Agent {
   /** A visitor faces the zone's owner when they're at their desk; otherwise the room (the camera). */
   private faceZone(zone: string, fallback: number) {
     const z = zoneById[zone];
-    if (!z || !DESK[zone] || zone === this.info.zone) return fallback;
+    if (!z || !deskById[`${zone}#0`] || zone === this.info.zone) return fallback;
     return Math.atan2(z.x - this.pos.x, z.z - this.pos.z);
   }
 
@@ -259,7 +308,7 @@ export class Agent {
     const shown: AgentState = walking ? 'walking' : ps.state;
     const talking = !!this.bubbleEl;
     const ding = t - this.dingT < 1.6;
-    const key = `${shown}|${!!ps.beacon}|${talking}|${ding}`;
+    const key = `${shown}|${!!ps.beacon}|${talking}|${ding}|${!!this.drive}`;
     if (key === this.tagKey) return;
     this.tagKey = key;
     const { emoji, name } = this.info;
@@ -272,7 +321,8 @@ export class Agent {
       this.tag.append(s);
     };
     if (ding) span('hq-ding', '✅');
-    if (!talking) span(shown === 'idle' ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', shown === 'idle' ? emoji : `${emoji} ${name}`);
+    const you = !!this.drive; // the founder you're walking
+    if (!talking) span(shown === 'idle' && !you ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name hq-tag-you'.slice(0, you ? 23 : 11), you ? `${emoji} You` : shown === 'idle' ? emoji : `${emoji} ${name}`);
     if (shown !== 'idle' && shown !== 'walking') span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
     this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
   }

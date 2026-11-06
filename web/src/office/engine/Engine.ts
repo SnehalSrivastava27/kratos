@@ -1,37 +1,54 @@
 // Adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs
 // src/client/main.ts (renderer setup, lights, the one frame loop with its clamped delta, OutlineEffect),
 // world/sky.ts (the cartoon sun: never so low its shadows fill the room, colour by elevation) and
-// player.ts (third-person orbit: drag to turn, wheel to zoom, eased camera). The server, net, voice and
-// first-person parts are gone: this office is single-player and driven by our event feed.
+// player.ts (third-person orbit: drag to turn, wheel to zoom, eased camera; you walk the founder and the
+// camera follows), and main.ts's interaction targeting (the nearest thing you face, and its hint). The
+// server, net, voice and first-person parts are gone: this office is single-player and driven by our feed.
 //
 // The engine owns the renderer, scene, camera and ONE requestAnimationFrame loop. React mounts it into a
 // div and pushes state in with apply()/focus(); nothing in React re-renders or rebuilds the scene.
 import * as THREE from 'three';
 import { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js';
-import type { OfficeEvent } from '../../shared/types';
-import type { SceneState } from '../officeState';
+import type { Library, OfficeEvent, ShelfId } from '../../shared/types';
+import type { PersonState, SceneState } from '../officeState';
 import { initialState } from '../officeState';
-import { ctx, roster, zoneById, zones } from '../data';
+import { ctx, deskById, freeDesks, roster, seatOf, zoneById, zones } from '../data';
+import { Bookcases, SECTIONS, SHELF_LABEL, browseSpot } from './library';
+import { Player } from './player';
 import { disposeTree } from '../toon';
 import { Agent } from './agent';
 import { Confetti } from './confetti';
 import { loadModels } from './models';
 import { NavGrid } from './nav';
 import { LiveProps, type GalleryItem } from './props';
-import { FLOOR, buildWorld, loadFont } from './world';
+import { DOOR, FLOOR, buildWorld, loadFont } from './world';
+
+/** What pressing E would use: the nearest thing you face. */
+export type Target =
+  | { kind: 'desk'; desk: string }
+  | { kind: 'library'; shelf: ShelfId }
+  | { kind: 'agent'; id: string }
+  | { kind: 'frame'; url: string };
 
 export interface EngineOpts {
   /** Live /office: drag to orbit, wheel/pinch to zoom, click a zone or a gallery frame. Off for the hero. */
   interactive: boolean;
   onPick?: (zoneId: string | null) => void;
+  /** Player mode: the thing you'd use changed (null: nothing in reach). */
+  onTarget?: (t: Target | null) => void;
+  /** A click on the world in player mode (panels that aren't pinned close). */
+  onWorldClick?: () => void;
 }
+export const targetKey = (t: Target | null) => (t ? `${t.kind}:${'desk' in t ? t.desk : 'shelf' in t ? t.shelf : 'id' in t ? t.id : t.url}` : '');
+export const shelfLabel = (s: ShelfId) => SHELF_LABEL[s];
 
 const DEG = Math.PI / 180;
+const FOLLOW_PITCH = 0.8;
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
 const AZ = 0.12;
 const elevation = (aspect: number) => THREE.MathUtils.clamp(1.25 - 0.3 * aspect, 0.86, 1.02); // portrait panes look down more
 const FIT_PTS = [
-  [-12.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-12.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-12.4, 2.6, 8.4],
+  [-18.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-18.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-18.4, 2.6, 8.4],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
 const ZOOM_OFF = new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1);
 
@@ -44,7 +61,7 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
   const c = new THREE.PerspectiveCamera(fov, aspect, 0.5, 200);
   const EL = elevation(aspect);
   const dir = new THREE.Vector3(Math.sin(AZ) * Math.cos(EL), Math.sin(EL), Math.cos(AZ) * Math.cos(EL));
-  const tgt = new THREE.Vector3(0, 0, 0.5);
+  const tgt = new THREE.Vector3(-3, 0, 0.5);
   const p = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3();
   let d = 40;
   for (let it = 0; it < 10; it++) {
@@ -97,7 +114,13 @@ export class OfficeEngine {
   private camera = new THREE.PerspectiveCamera(32, 1, 0.5, 200);
   private sun = new THREE.DirectionalLight('#fff1d6', 2.2);
   private overlay = document.createElement('div');
-  private agents: Agent[];
+  private agents: Agent[] = [];
+  private player: Player | null = null;
+  private founder: Agent | null = null;
+  private view: 'player' | 'spectator' = 'spectator';
+  private targetK = '';
+  private shelves = new Bookcases();
+  private tip = document.createElement('div');
   private nav = new NavGrid(FLOOR, [], 0.3);
   private props: LiveProps | null = null;
   private world: ReturnType<typeof buildWorld> | null = null;
@@ -153,14 +176,12 @@ export class OfficeEngine {
     this.scene.add(hemi, ambient, sun, sun.target, this.confetti.mesh);
 
     // ---- People ----
-    const start = initialState(ctx);
-    this.agents = roster.map((p) => {
-      const a = new Agent(p, start.people[p.id]);
-      a.onDing = () => this.ding();
-      this.scene.add(a.person.root);
-      this.overlay.append(a.el);
-      return a;
-    });
+    this.addPeople();
+    this.scene.add(this.shelves.group);
+    this.tip.className = 'hq-tip';
+    this.tip.hidden = true;
+    this.overlay.append(this.tip);
+    if (opts.interactive) this.player = new Player(() => this.world?.solids ?? [], FLOOR);
 
     // ---- The office, once the models and the sign font are in ----
     Promise.all([loadModels(), loadFont()])
@@ -168,6 +189,7 @@ export class OfficeEngine {
         if (this.disposed) return;
         this.world = buildWorld(models);
         this.nav = new NavGrid(FLOOR, this.world.solids, 0.3);
+        if (this.founder && this.view === 'player' && !this.nav.free(this.player!.x, this.player!.z)) this.placeNear(this.founder.pos.x, this.founder.pos.z + 0.6);
         this.props = new LiveProps();
         this.scene.add(this.world.group, this.props.group);
         if (this.latest) this.apply(this.latest.scene, this.latest.events, this.latest.gallery);
@@ -199,10 +221,79 @@ export class OfficeEngine {
         const i = this.renderer.info;
         return { frames: this.frames, meshes, calls: i.render.calls, geometries: i.memory.geometries, textures: i.memory.textures, programs: i.programs?.length, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1e6) : null };
       };
+      w.__hqPlayer = () => (this.player ? { x: +this.player.x.toFixed(2), z: +this.player.z.toFixed(2), view: this.view, target: this.targetK } : null);
       w.__hqAgents = () => Object.fromEntries(this.agents.map((a) => [a.info.id, [+a.pos.x.toFixed(3), +a.pos.z.toFixed(3)]]));
       w.__hqSolids = () => this.world?.solids ?? [];
-      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqAgents; delete w.__hqSolids; });
+      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqPlayer; delete w.__hqAgents; delete w.__hqSolids; });
     }
+  }
+
+  /** Agents for everyone in the roster without one yet; those in `arriving` walk in from the front door. */
+  addPeople(arriving: Set<string> = new Set()) {
+    const have = new Set(this.agents.map((a) => a.info.id));
+    const start = initialState(ctx);
+    for (const p of roster) {
+      if (have.has(p.id)) continue;
+      const ps: PersonState = this.latest?.scene.people[p.id] ?? start.people[p.id] ?? { state: 'idle', zone: p.zone, route: [] };
+      const a = new Agent(p, ps);
+      a.onDing = () => this.ding();
+      if (p.id === 'librarian') a.wander = [...SECTIONS.map(browseSpot), seatOf(deskById['library#0'])];
+      if (arriving.has(p.id)) a.walkIn(DOOR, this.nav);
+      this.scene.add(a.person.root);
+      this.overlay.append(a.el);
+      this.agents.push(a);
+      if (p.id === 'founder') this.founder = a;
+    }
+  }
+
+  /** You walk the founder (player) or watch the whole office (spectator: the old orbit camera). */
+  setView(view: 'player' | 'spectator') {
+    if (!this.player || !this.founder || view === this.view) return;
+    this.view = view;
+    this.user = { yaw: 0, pitch: 0, zoom: 1 };
+    if (view === 'player') {
+      this.focusZone = null;
+      const f = this.founder;
+      this.player.place(f.pos.x, f.pos.z, f.person.root.rotation.y);
+      if (!this.nav.free(f.pos.x, f.pos.z)) this.placeNear(f.pos.x, f.pos.z + 0.6);
+      f.drive = { moving: false, speed: 0, facing: this.player.facing };
+    } else {
+      this.player.stop();
+      this.founder.release(this.nav);
+      this.setTarget(null);
+    }
+  }
+
+  /** Keys walk only while no window is open. */
+  setEnabled(on: boolean) {
+    if (!this.player) return;
+    this.player.enabled = on;
+    if (!on) this.player.stop();
+  }
+
+  /** N: next to someone (the one waiting on you), facing them. Spectator: fly to their zone. */
+  jumpTo(id: string) {
+    const a = this.agents.find((g) => g.info.id === id);
+    if (!a) return;
+    if (this.view !== 'player' || !this.player) return this.focus(a.ps.zone);
+    this.placeNear(a.pos.x, a.pos.z, true);
+  }
+
+  private placeNear(x: number, z: number, face = false) {
+    const p = this.player!;
+    for (const r of [1.1, 1.6, 2.2]) for (let k = 0; k < 8; k++) {
+      const ang = Math.PI / 2 + (k * Math.PI) / 4; // in front of them first (toward the camera)
+      const px = x + Math.cos(ang) * r, pz = z + Math.sin(ang) * r;
+      if (!this.nav.free(px, pz)) continue;
+      p.place(px, pz, face ? Math.atan2(x - px, z - pz) : p.facing);
+      return;
+    }
+    p.place(x, z + 1);
+  }
+
+  /** The library's shelves follow /api/library. */
+  setLibrary(lib: Library | null) {
+    this.shelves.sync(lib);
   }
 
   /** The reducer's scene (and what the walls show) → motion. Cheap: only differences do anything. */
@@ -260,6 +351,14 @@ export class OfficeEngine {
     this.frames++;
     const t = this.t;
     this.updateSky(t);
+    const pl = this.player, f = this.founder;
+    if (pl && f && this.view === 'player') {
+      pl.update(dt, (this.cur?.yaw ?? AZ) + this.userShown.yaw);
+      f.pos.set(pl.x, f.pos.y, pl.z);
+      f.drive = { moving: pl.moving, speed: pl.speed, facing: pl.facing };
+      if (this.frames % 4 === 0) this.findTarget();
+    }
+    for (const a of this.agents) a.roam(this.nav, t);
     for (const a of this.agents) {
       a.lookAt = this.speaker && this.speaker !== a ? { x: this.speaker.pos.x, z: this.speaker.pos.z, zone: this.speaker.ps.zone } : null;
       a.update(dt, t);
@@ -291,7 +390,13 @@ export class OfficeEngine {
   private updateCamera(dt: number, t: number) {
     const z = this.focusZone && zoneById[this.focusZone];
     let goal: Pose;
-    if (z) {
+    let lag = 0.85;
+    if (this.view === 'player' && this.player) {
+      // Third person: behind and above you, the same heading as the overview so the office reads the same way.
+      const aspect = this.size.w / this.size.h;
+      goal = { tx: this.player.x, ty: 0.7, tz: this.player.z, yaw: AZ, pitch: FOLLOW_PITCH, dist: aspect < 1 ? 21 : 18 };
+      lag = this.cur && Math.hypot(this.cur.tx - goal.tx, this.cur.tz - goal.tz) > 6 ? 0.6 : 0.28; // long jumps glide, walking stays tight
+    } else if (z) {
       goal = { tx: z.x, ty: 0.8, tz: z.z, yaw: AZ, pitch: Math.atan2(ZOOM_OFF.y, Math.hypot(ZOOM_OFF.x, ZOOM_OFF.z)), dist: ZOOM_OFF.length() };
     } else {
       // Overview: a slow breathing orbit; the hero leans a little toward whoever is talking.
@@ -304,8 +409,8 @@ export class OfficeEngine {
         goal.tz += (s.pos.z - h.tz) * 0.08;
       }
     }
-    if (!this.cur) this.cur = { ...goal };
-    for (const k of KEYS) this.cur[k] = smoothDamp(this.cur[k], goal[k], this.vel[k], 0.85, dt);
+    if (!this.cur) this.cur = { ...this.home }; // start on the whole office; player mode then swoops down to you
+    for (const k of KEYS) this.cur[k] = smoothDamp(this.cur[k], goal[k], this.vel[k], lag, dt);
     const e = 1 - Math.exp(-dt * 10);
     const u = this.userShown;
     u.yaw += (this.user.yaw - u.yaw) * e;
@@ -356,6 +461,7 @@ export class OfficeEngine {
       }
       if (!drag || e.pointerId !== drag.id) {
         canvas.style.cursor = this.frameAt(e) ? 'pointer' : '';
+        this.hover(e);
         return;
       }
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -374,6 +480,7 @@ export class OfficeEngine {
       if (d.moved > 5) return;
       const url = this.frameAt(e);
       if (url) window.open(url, '_blank', 'noopener');
+      else if (this.view === 'player') this.clickWalk(e);
       else this.opts.onPick?.(this.zoneAt(e));
     };
     const wheel = (e: WheelEvent) => {
@@ -407,6 +514,59 @@ export class OfficeEngine {
     if (!this.props?.clickables.length) return null;
     return (this.ray(e).intersectObjects(this.props.clickables, false)[0]?.object.userData.url as string) ?? null;
   }
+  /** Click-to-walk: to the floor point, or up to the person you clicked near. */
+  private clickWalk(e: PointerEvent) {
+    this.opts.onWorldClick?.();
+    if (!this.world || !this.player) return;
+    const hit = this.ray(e).intersectObject(this.world.floor, false)[0];
+    if (!hit) return;
+    let { x, z } = hit.point;
+    const near = this.agents.find((a) => a !== this.founder && Math.hypot(a.pos.x - x, a.pos.z - z) < 0.8);
+    if (near) [x, z] = [near.pos.x, near.pos.z + 0.9];
+    this.player.walkTo(this.nav, x, z);
+  }
+
+  /** A book's title under the pointer, as a little tooltip. */
+  private hover(e: PointerEvent) {
+    const book = this.shelves.bookAt(this.ray(e));
+    this.tip.hidden = !book;
+    if (!book) return;
+    const r = this.renderer.domElement.getBoundingClientRect();
+    this.tip.textContent = `📕 ${book.name}`;
+    this.tip.style.transform = `translate(${e.clientX - r.left + 14}px, ${e.clientY - r.top + 12}px)`;
+    this.renderer.domElement.style.cursor = 'help';
+  }
+
+  /** What you'd use with E: the nearest thing in reach that you're more or less facing (main.ts targeting). */
+  private findTarget() {
+    const p = this.player!;
+    const fx = Math.sin(p.facing), fz = Math.cos(p.facing);
+    let best: Target | null = null, bestScore = Infinity;
+    const consider = (t: Target, x: number, z: number, reach: number) => {
+      const dx = x - p.x, dz = z - p.z, d = Math.hypot(dx, dz);
+      if (d > reach) return;
+      const facing = d < 0.05 ? 1 : (dx * fx + dz * fz) / d;
+      if (d > 0.7 && facing < 0.2) return;
+      const score = d - facing * 0.6;
+      if (score < bestScore) [best, bestScore] = [t, score];
+    };
+    for (const d of freeDesks()) consider({ kind: 'desk', desk: d.id }, d.x, d.z + 0.6, 1.5);
+    for (const s of SECTIONS) consider({ kind: 'library', shelf: s.id }, s.x, s.z + 0.3, 1.6);
+    for (const a of this.agents) if (a !== this.founder) consider({ kind: 'agent', id: a.info.id }, a.pos.x, a.pos.z, 1.7);
+    for (const fr of this.props?.clickables ?? []) {
+      const w = fr.getWorldPosition(new THREE.Vector3());
+      consider({ kind: 'frame', url: fr.userData.url as string }, w.x, w.z + 0.4, 2.0);
+    }
+    this.setTarget(best);
+  }
+
+  private setTarget(t: Target | null) {
+    const k = targetKey(t);
+    if (k === this.targetK) return;
+    this.targetK = k;
+    this.opts.onTarget?.(t);
+  }
+
   private zoneAt(e: PointerEvent): string | null {
     if (!this.world) return null;
     const hit = this.ray(e).intersectObject(this.world.floor, false)[0];
@@ -438,6 +598,8 @@ export class OfficeEngine {
     this.io.disconnect();
     for (const c of this.cleanup) c();
     for (const a of this.agents) a.dispose();
+    this.player?.dispose();
+    this.shelves.dispose();
     this.props?.dispose();
     if (this.world) disposeTree(this.world.group);
     this.confetti.dispose();

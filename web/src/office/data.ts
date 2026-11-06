@@ -15,38 +15,58 @@ export const ctx: Ctx = { roster, roomZone };
 export const C = { saffron: '#F4A300', cream: '#FFF6E5', plum: '#1E1328', mint: '#3CCB8B', red: '#E5484D', cyan: '#22D3EE', tg: '#3390EC' };
 export const ZONE_EMOJI: Record<string, string> = {
   design_studio: '🎨', data_wall: '📊', telegram_hub: '💬', creator_studio: '⭐', war_room: '🎯',
-  growth_pod: '📣', dispatch_dock: '📦', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑',
+  growth_pod: '📣', dispatch_dock: '📦', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑',
 };
 const owner = (zoneId: string) => roster.find((p) => p.zone === zoneId);
 export const zoneColor = (zoneId: string) =>
-  zoneId === 'dark_store' ? C.cyan : zoneId === 'telegram_hub' ? C.tg : zoneId === 'war_room' || zoneId === 'chai_pantry' ? C.saffron : owner(zoneId)?.color ?? C.saffron;
+  zoneId === 'dark_store' ? C.cyan : zoneId === 'open_desks' ? '#06d6a0' : zoneId === 'library' ? '#c98b5a' : zoneId === 'telegram_hub' ? C.tg : zoneId === 'war_room' || zoneId === 'chai_pantry' ? C.saffron : owner(zoneId)?.color ?? C.saffron;
 
-/** Zone-local desk centre for each zone owner (monitor faces +z, the owner sits on the camera side). */
-export const DESK: Record<string, [number, number]> = {
-  design_studio: [-1.5, -0.55], data_wall: [1.4, -0.15], creator_studio: [-1.5, -0.6],
-  growth_pod: [0, -0.6], dispatch_dock: [1.5, -0.9], founder_desk: [0.4, -0.5],
-};
+/** Every desk in the office (contracts/zones.json `desks`): id `<zone>#<i>`, world centre. Monitor faces +z, the sitter is on the camera side. */
+export interface Desk { id: string; zone: string; x: number; z: number }
+export const DESKS: Desk[] = (zonesJson.zones as (Zone & { desks?: [number, number][] })[]).flatMap((z) =>
+  (z.desks ?? []).map(([dx, dz], i) => ({ id: `${z.id}#${i}`, zone: z.id, x: z.x + dx, z: z.z + dz })),
+);
+export const deskById = Object.fromEntries(DESKS.map((d) => [d.id, d])) as Record<string, Desk>;
 const SEAT_OFF = 0.85;
+export const seatOf = (d: Desk): [number, number] => [d.x, d.z + SEAT_OFF];
 export const world = (zoneId: string, [dx, dz]: [number, number]): [number, number] => {
   const z = zoneById[zoneId];
   return [z.x + dx, z.z + dz];
 };
 
-/** Where a person stands in a zone: their desk seat if it's their home zone, otherwise a visitor slot at the zone front. */
+/** Who sits where: zone owners at desk #0, hires wherever they were given. Grows as people are hired. */
+export const deskOf: Record<string, string> = {};
+for (const p of roster) if (deskById[`${p.zone}#0`]) deskOf[p.id] = `${p.zone}#0`;
+export const sitterAt = (deskId: string) => Object.keys(deskOf).find((id) => deskOf[id] === deskId);
+export const freeDesks = () => DESKS.filter((d) => !sitterAt(d.id));
+
+export type HiredPerson = Person & { desk?: string; role?: string; room?: string; hiredAt?: number; status?: string };
+/** Adds (or updates) someone in the shared roster: hires and anyone /api/people knows that the static roster doesn't. */
+export function addPerson(p: HiredPerson): boolean {
+  const known = personById[p.id];
+  const desk = p.desk && deskById[p.desk] && !(sitterAt(p.desk) && sitterAt(p.desk) !== p.id) ? p.desk : deskOf[p.id] ?? freeDesks().find((d) => d.zone === roomZone[p.room ?? ''])?.id ?? freeDesks().find((d) => d.zone === 'open_desks')?.id;
+  if (desk) deskOf[p.id] = desk;
+  const zone = desk ? deskById[desk].zone : p.zone;
+  if (known) return false;
+  const person = { ...p, zone };
+  roster.push(person);
+  personById[p.id] = person;
+  return true;
+}
+
+/** Where a person stands in a zone: their desk seat if it's in that zone, otherwise a visitor slot at the zone front. */
 export function spot(zoneId: string, personId: string): [number, number] {
   const z = zoneById[zoneId] ?? zoneById.chai_pantry;
-  const i = roster.findIndex((p) => p.id === personId);
-  if (roster[i]?.zone === z.id) {
-    if (DESK[z.id]) return world(z.id, [DESK[z.id][0], DESK[z.id][1] + SEAT_OFF]);
-    if (z.id === 'war_room') return [z.x, z.z + 1.15]; // captain at the head of the war-room table
-  }
+  const d = deskById[deskOf[personId]];
+  if (d?.zone === z.id) return seatOf(d);
+  if (z.id === 'war_room' && personById[personId]?.zone === 'war_room') return [z.x, z.z + 1.15]; // captain at the head of the war-room table
+  const i = roster.findIndex((p) => p.id === personId) % 10;
   return [z.x + (i - 4.5) * 0.55, z.z + z.d / 2 - 0.75 - (i % 2) * 0.6];
 }
-const SEATS = Object.fromEntries(roster.map((p) => [p.id, spot(p.zone, p.id)]));
-/** Is (x, z) this person's own desk seat? (precomputed: called per character per frame) */
+/** Is (x, z) this person's own desk seat? (called per character per frame) */
 export const isSeat = (personId: string, x: number, z: number) => {
-  const s = SEATS[personId];
-  return !!s && Math.hypot(s[0] - x, s[1] - z) < 0.15;
+  const d = deskById[deskOf[personId]];
+  return !!d && Math.hypot(d.x - x, d.z + SEAT_OFF - z) < 0.15;
 };
 
 /** Only same-origin gallery pages may become links: `/gallery/<file>` and nothing else (no schemes, no `..`). */
