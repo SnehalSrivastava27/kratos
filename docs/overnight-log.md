@@ -20,7 +20,7 @@ findings list. It feeds the blog.
 | A | DM1: demo feed with pinned plan, private nudge, catch-up beats; demo/script.md; README for v2 | agent DM1 | merged |
 | B | Full live festive-sale demo in War Room (after LV1 + E2 fixes synced) | LV1 | |
 | B | BL1: blog pack: every feature documented, new Excalidraw diagrams, findings | agent BL1 | merged (11 TODO markers wait for E2 + live demo) |
-| C | Final CI, adversarial review of anything unreviewed, merge to main, push | orchestrator | |
+| C | Final CI, adversarial review of anything unreviewed, merge to main, push | orchestrator | done (PR #4) |
 
 ## Run log
 | Time (IST) | What |
@@ -39,6 +39,7 @@ findings list. It feeds the blog.
 | 04:40 | W2 merged: private Switch notes now a clear violet pulse with a lock (text only in the Switch panel; also stopped it leaking into the header caption and agent card), 🎭 role badges, morning-brief strip. |
 | 05:10 | LV2 merged: live agents locked down (per-agent tool list + repo `.claude/settings.json`: kit allowed, .env/.switch/~/.ssh reads denied, everything else needs a human); 16/16 synced; live SYSTEM OVERRIDE refused in 5 s. **Live War Room demo:** kickoff → approval ask in 5 min 1 s, 65 messages, 89 tool calls, deck + 3 banners, plan pinned; numbers match check_numbers.py (3,340 units, ₹20.42L, marketing ₹4.68L, EBITDA +₹1.61L). Fixes from the run (no ack messages, fresh numbers, default dates, Captain order) added to all 16 agents; re-running Haiku evals. |
 | 05:45 | BL1 final merged (live-run section, 57 findings, agent-lockdown diagram; 14 diagrams). Haiku eval run 7: 149/149 after the team-habit rules. All 16 live agents synced (revision current, Haiku, lockdown). Office server + observer restarted on the final code. Final CI green; secret scan of new history clean. PR #4 backend-v2 → main opened. |
+| 06:05 | GitHub CI failed on Node 22 (node:sqlite there has no setAuthorizer/enableDefensive): kit now fails closed without the authorizer, CI moved to Node 24. CI green → **PR #4 merged into main**; PR #3 closed as included. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
@@ -70,3 +71,4 @@ findings list. It feeds the blog.
 - Claude Code agent definitions' `tools`/`disallowedTools` match tool names only (`Bash(echo:*)` removes Bash entirely); path-level rules only work in settings `permissions`. (LV2)
 - Live, about a third of the 65 demo messages were acknowledgement loops ("confirmed", "on hold") — the cost of agents that all see each other. A one-line "post only when you add something new" rule targets it. (LV2)
 - Switch-run agents resume their old Claude sessions, so they can reuse numbers from a previous run ("same as before"); the fix is an explicit "every run starts fresh" rule. (LV2)
+- Node 22's `node:sqlite` has no `setAuthorizer`/`enableDefensive`; the toolkit's read-only guard needs Node 24+, so it now refuses to run rather than run unguarded. (CI)
