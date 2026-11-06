@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# render.sh <dir> <slug>... : .excalidraw → .svg + .png via the gstack diagram bundle
+# render.sh <dir> <slug>... : .excalidraw → .svg + .png (1950 px wide) via the gstack `diagram` render bundle.
+# Stage the bundle once as the gstack diagram skill's Step 2 does; this picks the newest staged copy.
 set -e
-STAGED=/var/folders/q6/btm7ywcd20q85gqp278vkxs40000gn/T//gstack-render/gstack-diagram-render-46ed274ca8b6bc76.html
+STAGED=$(ls -t "${TMPDIR:-/tmp}"/gstack-render/gstack-diagram-render-*.html 2>/dev/null | head -1)
+[ -n "$STAGED" ] || { echo "no staged gstack diagram bundle: run the diagram skill's Step 2 first"; exit 1; }
 cd "$1"; shift
 for slug in "$@"; do
   SCENE=$(base64 < "$slug.excalidraw" | tr -d '\n')

@@ -133,7 +133,7 @@ def sequence(s, actors, msgs, x0=40, y0=40, gap=230, bw=190, bh=70, step=58, fil
         xa, xb = xs[a], xs[b]
         y += lh - fs * 1.25  # room for multi-line labels above the arrow
         s.arrow([(xa + (4 if xb > xa else -4), y), (xb - (6 if xb > xa else -6), y)], dashed=dashed)
-        lx = min(xa, xb) + 14
+        lx = min(xa, xb) + (14 if xb > xa else 34)  # clear the arrowhead on leftward arrows
         s.text(lx, y - lh - 4, text, fs)
         y += step
     for k in xs:  # lifelines go to the back
