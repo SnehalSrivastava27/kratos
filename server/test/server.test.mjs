@@ -1,94 +1,91 @@
 // Integration tests: each server runs as a real process (tsx, src/) on a random port with its own DATA_DIR.
-import { test, after } from "node:test";
+import { test } from "node:test";
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
-import { mkdtempSync, rmSync, existsSync, readdirSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { existsSync, readdirSync } from "node:fs";
 import WebSocket from "ws";
+import { start, tmp, post, get, getJson, account, link, ev } from "./helpers.mjs";
 
-const CWD = new URL("..", import.meta.url);
-const dirs = [];
-const procs = new Set();
-after(() => {
-  for (const p of procs) p.kill("SIGKILL");
-  for (const d of dirs) rmSync(d, { recursive: true, force: true });
-});
-
-function tmp() {
-  const d = mkdtempSync(join(tmpdir(), "hq-test-"));
-  dirs.push(d);
-  return d;
+/** A user with a ready workspace on Switch room-1: { cookie, ws }. */
+async function owner(s) {
+  const cookie = await account(s);
+  const st = await link(s, cookie);
+  return { cookie, ws: st.workspace.id };
 }
-
-/** Starts the server; resolves with { base, port, stop } once it logs "listening". */
-function start(env = {}) {
-  const proc = spawn(process.execPath, ["--import", "tsx", "src/index.ts"], {
-    cwd: CWD,
-    env: { ...process.env, PORT: "0", OBSERVER_TOKEN: "", ADMIN_TOKEN: "", DATA_DIR: tmp(), FLY_APP_NAME: "", NODE_ENV: "", ALLOW_OPEN: "", ...env },
-    stdio: ["ignore", "pipe", "inherit"],
-  });
-  procs.add(proc);
-  return new Promise((resolve, reject) => {
-    let buf = "";
-    proc.on("exit", (c) => reject(new Error(`server exited ${c}\n${buf}`)));
-    proc.stdout.on("data", (d) => {
-      buf += d;
-      const m = buf.match(/"msg":"listening","port":(\d+)/);
-      if (!m) return;
-      const base = `http://127.0.0.1:${m[1]}`;
-      const stop = () => new Promise((r) => { proc.removeAllListeners("exit"); proc.on("exit", r); proc.kill("SIGTERM"); procs.delete(proc); });
-      resolve({ base, port: m[1], stop, log: () => buf });
-    });
-  });
-}
-
-const ev = (o = {}) => ({ t: Date.now(), room: "ops", speaker: "d2c-ops", type: "message", text: "hi", ...o });
-const post = (base, path, body, headers = {}) =>
-  fetch(base + path, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: typeof body === "string" ? body : JSON.stringify(body) });
+const wsOpen = (s, cookie, q = "") => new WebSocket(`ws://127.0.0.1:${s.port}/ws${q}`, { headers: cookie ? { cookie } : {} });
 
 test("validation: bad events → 400, bad JSON → 400, oversized → 413, ids replaced", async () => {
   const s = await start();
   try {
-    let r = await post(s.base, "/api/events", { ...ev(), room: "nope" });
+    let r = await post(s, "/api/events", { ...ev(), room: "nope" });
     assert.equal(r.status, 400);
     assert.ok((await r.json()).details.length);
-    assert.equal((await post(s.base, "/api/events", "{not json")).status, 400);
-    assert.equal((await post(s.base, "/api/events", { ...ev(), text: "x".repeat(70_000) })).status, 413);
-    r = await post(s.base, "/api/events", { ...ev(), id: "x@99999999999999" });
+    assert.equal((await post(s, "/api/events", "{not json")).status, 400);
+    assert.equal((await post(s, "/api/events", { ...ev(), text: "x".repeat(70_000) })).status, 413);
+    await owner(s);
+    r = await post(s, "/api/events", { ...ev(), id: "x@99999999999999", ws: "ws_forged" });
     assert.equal(r.status, 201);
-    assert.match((await r.json()).id, /^srv-/);
+    const stored = await r.json();
+    assert.match(stored.id, /^srv-/);
+    assert.notEqual(stored.ws, "ws_forged", "ws is the server's, never the caller's");
+    r = await post(s, "/api/events", ev({}, "room-unlinked"));
+    assert.equal(r.status, 202, "a room with no workspace: link attempt only");
+    assert.equal((await r.json()).stored, false);
   } finally {
     await s.stop();
   }
 });
 
-test("auth: OBSERVER_TOKEN guards /api/events, ADMIN_TOKEN guards replay", async () => {
+test("auth: OBSERVER_TOKEN guards /api/events, ADMIN_TOKEN guards replay, reads need a session", async () => {
   const s = await start({ OBSERVER_TOKEN: "obs-secret", ADMIN_TOKEN: "admin-secret" });
   try {
-    assert.equal((await post(s.base, "/api/events", ev())).status, 401);
-    assert.equal((await post(s.base, "/api/events", ev(), { authorization: "Bearer wrong" })).status, 401);
-    assert.equal((await post(s.base, "/api/events", ev(), { authorization: "Bearer obs-secret" })).status, 201);
-    assert.equal((await post(s.base, "/api/replay", {})).status, 401);
-    assert.equal((await post(s.base, "/api/replay/stop", {}, { authorization: "Bearer obs-secret" })).status, 401);
-    assert.equal((await post(s.base, "/api/replay/stop", {}, { authorization: "Bearer admin-secret" })).status, 200);
-    assert.equal((await fetch(s.base + "/api/history")).status, 200, "reads stay open");
+    assert.equal((await post(s, "/api/events", ev())).status, 401);
+    assert.equal((await post(s, "/api/events", ev(), { authorization: "Bearer wrong" })).status, 401);
+    assert.equal((await post(s, "/api/events", ev(), { authorization: "Bearer obs-secret" })).status, 202);
+    assert.equal((await post(s, "/api/replay", {})).status, 401);
+    assert.equal((await post(s, "/api/replay/stop", {}, { authorization: "Bearer obs-secret" })).status, 401);
+    assert.equal((await post(s, "/api/replay/stop", {}, { authorization: "Bearer admin-secret" })).status, 200);
+    for (const path of ["/api/history", "/api/rooms", "/api/rooms/ops/events", "/api/agents", "/api/people", "/api/employees", "/api/library"])
+      assert.equal((await fetch(s.base + path)).status, 401, `${path} needs a session`);
+    for (const path of ["/api/health", "/api/ready", "/api/roster", "/api/gallery", "/gallery/hero.html"]) assert.equal((await fetch(s.base + path)).status, 200, `${path} is public`);
+    assert.equal((await get(s, "/api/history", null, { authorization: "Bearer admin-secret" })).status, 404, "admin, but no workspace yet");
+  } finally {
+    await s.stop();
+  }
+  const open = await start(); // no ADMIN_TOKEN set: replay is still closed (never open, even in dev)
+  try {
+    assert.equal((await post(open, "/api/replay", {})).status, 401);
+  } finally {
+    await open.stop();
+  }
+});
+
+test("rate limit → 429", async () => {
+  const s = await start({ RATE_LIMIT_PER_MIN: "3" });
+  try {
+    const codes = [];
+    for (let i = 0; i < 4; i++) codes.push((await post(s, "/api/events", ev())).status);
+    assert.deepEqual(codes, [202, 202, 202, 429]);
   } finally {
     await s.stop();
   }
 });
 
-test("rate limit → 429 and WS client cap", async () => {
-  const s = await start({ RATE_LIMIT_PER_MIN: "3", MAX_WS_CLIENTS: "1" });
+test("WS: no cookie → rejected, foreign Origin → rejected, client cap", async () => {
+  const s = await start({ MAX_WS_CLIENTS: "1", ADMIN_TOKEN: "adm" });
   try {
-    const codes = [];
-    for (let i = 0; i < 4; i++) codes.push((await post(s.base, "/api/events", ev())).status);
-    assert.deepEqual(codes, [201, 201, 201, 429]);
+    const { cookie, ws } = await owner(s);
+    const refused = (sock) => new Promise((r) => { sock.on("unexpected-response", (_q, res) => r(res.statusCode)); sock.on("open", () => r("open")); });
+    assert.equal(await refused(wsOpen(s)), 401, "no session");
+    assert.equal(await refused(wsOpen(s, "hq_session=forged")), 401, "unknown session");
+    assert.equal(await refused(new WebSocket(`ws://127.0.0.1:${s.port}/ws`, { headers: { cookie, origin: "https://evil.example" } })), 403);
+    const admin = new WebSocket(`ws://127.0.0.1:${s.port}/ws?ws=${ws}`, { headers: { authorization: "Bearer adm" } });
+    assert.equal(await refused(admin), "open", "ADMIN_TOKEN");
+    admin.close();
+    await new Promise((r) => admin.on("close", r));
 
-    const url = `ws://127.0.0.1:${s.port}/ws`;
-    const a = new WebSocket(url);
+    const a = wsOpen(s, cookie);
     await new Promise((r) => a.on("open", r));
-    const b = new WebSocket(url);
+    const b = wsOpen(s, cookie);
     const code = await new Promise((r) => b.on("close", r));
     assert.equal(code, 1013);
     assert.equal(a.readyState, WebSocket.OPEN);
@@ -102,9 +99,9 @@ test("rate limit: bad tokens are limited, a valid token is not", async () => {
   const s = await start({ RATE_LIMIT_PER_MIN: "2", OBSERVER_TOKEN: "obs" });
   try {
     const bad = [];
-    for (let i = 0; i < 3; i++) bad.push((await post(s.base, "/api/events", ev(), { authorization: "Bearer nope" })).status);
+    for (let i = 0; i < 3; i++) bad.push((await post(s, "/api/events", ev(), { authorization: "Bearer nope" })).status);
     assert.deepEqual(bad, [401, 401, 429]);
-    for (let i = 0; i < 5; i++) assert.equal((await post(s.base, "/api/events", ev(), { authorization: "Bearer obs" })).status, 201);
+    for (let i = 0; i < 5; i++) assert.equal((await post(s, "/api/events", ev(), { authorization: "Bearer obs" })).status, 202);
   } finally {
     await s.stop();
   }
@@ -124,16 +121,18 @@ test("production refuses to start without tokens unless ALLOW_OPEN=1", async () 
   await f.stop();
 });
 
-test("persistence: history and room events survive a restart", async () => {
+test("persistence: history, room events and the session survive a restart", async () => {
   const DATA_DIR = tmp();
   let s = await start({ DATA_DIR });
-  const created = await (await post(s.base, "/api/events", ev({ room: "design", speaker: "d2c-design", text: "persist me", meta: { thread_id: 42 } }))).json();
+  const { cookie, ws } = await owner(s);
+  const created = await (await post(s, "/api/events", ev({ room: "design", speaker: "d2c-design", text: "persist me", meta: { thread_id: 42 } }))).json();
+  assert.equal(created.ws, ws);
   await s.stop();
   s = await start({ DATA_DIR });
   try {
-    const hist = await (await fetch(s.base + "/api/history")).json();
+    const hist = await getJson(s, "/api/history", cookie);
     assert.ok(hist.some((e) => e.id === created.id), "in /api/history after restart");
-    const room = await (await fetch(s.base + "/api/rooms/design/events?limit=10")).json();
+    const room = await getJson(s, "/api/rooms/design/events?limit=10", cookie);
     assert.deepEqual(room.map((e) => e.id), [created.id]);
     assert.equal(room[0].meta.thread_id, 42);
     const health = await (await fetch(s.base + "/api/health")).json();
@@ -147,11 +146,12 @@ test("persistence: history and room events survive a restart", async () => {
 test("rooms and agents are derived from events", async () => {
   const s = await start();
   try {
-    await post(s.base, "/api/events", ev({ room: "analytics", speaker: "d2c-captain", type: "assign", text: "forecast", meta: { targets: ["d2c-analyst"] } }));
-    await post(s.base, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "approval_needed", text: "please approve" }));
-    await post(s.base, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "message", text: "waiting" }));
+    const { cookie } = await owner(s);
+    await post(s, "/api/events", ev({ room: "analytics", speaker: "d2c-captain", type: "assign", text: "forecast", meta: { targets: ["d2c-analyst"] } }));
+    await post(s, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "approval_needed", text: "please approve" }));
+    await post(s, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "message", text: "waiting" }));
 
-    const rooms = await (await fetch(s.base + "/api/rooms")).json();
+    const rooms = await getJson(s, "/api/rooms", cookie);
     assert.equal(rooms.length, 6);
     const fin = rooms.find((r) => r.id === "ops");
     assert.equal(fin.count, 2);
@@ -162,7 +162,7 @@ test("rooms and agents are derived from events", async () => {
     assert.equal(rooms.find((r) => r.id === "war_room").members.length, 8); // founder + 6 department agents + librarian
     assert.equal(rooms.find((r) => r.id === "ads").last, null);
 
-    const agents = Object.fromEntries((await (await fetch(s.base + "/api/agents")).json()).map((a) => [a.id, a]));
+    const agents = Object.fromEntries((await getJson(s, "/api/agents", cookie)).map((a) => [a.id, a]));
     assert.equal(agents["d2c-captain"].state, "working");
     assert.equal(agents["d2c-captain"].room, "analytics");
     assert.equal(agents["d2c-analyst"].state, "working");
@@ -170,13 +170,12 @@ test("rooms and agents are derived from events", async () => {
     assert.equal(agents["d2c-ops"].last.text, "waiting");
     assert.equal(agents["d2c-ads"].state, "idle");
 
-    assert.equal((await fetch(s.base + "/api/rooms/nope/events")).status, 404);
+    assert.equal((await get(s, "/api/rooms/nope/events", cookie)).status, 404);
     for (const q of ["1.5", "-3", "abc", "1e9", "Infinity"]) {
-      const r = await fetch(`${s.base}/api/rooms/ops/events?limit=${q}`);
-      assert.equal(r.status, 200, `room limit=${q}`);
-      assert.equal((await fetch(`${s.base}/api/history?limit=${q}`)).status, 200, `history limit=${q}`);
+      assert.equal((await get(s, `/api/rooms/ops/events?limit=${q}`, cookie)).status, 200, `room limit=${q}`);
+      assert.equal((await get(s, `/api/history?limit=${q}`, cookie)).status, 200, `history limit=${q}`);
     }
-    assert.equal((await (await fetch(`${s.base}/api/rooms/ops/events?limit=1.5`)).json()).length, 1);
+    assert.equal((await getJson(s, "/api/rooms/ops/events?limit=1.5", cookie)).length, 1);
     const gal = await (await fetch(s.base + "/api/gallery")).json();
     assert.ok(gal.length >= 1 && !gal.some((g) => g.name === "index.json"));
     assert.equal(gal[0].name, "hero.html");
@@ -196,29 +195,30 @@ test("path traversal → 403", async () => {
 });
 
 test("malformed or oversized WS frames drop that client, not the server; replay streams over WS", async () => {
-  const s = await start();
+  const s = await start({ ADMIN_TOKEN: "adm" });
   try {
-    const url = `ws://127.0.0.1:${s.port}/ws`;
-    const bad = new WebSocket(url);
+    const { cookie, ws: wsId } = await owner(s);
+    const bad = wsOpen(s, cookie);
     await new Promise((r) => bad.on("open", r));
     bad._socket.write(Buffer.from([0xff, 0x80, 0, 0, 0, 0])); // RSV2/RSV3 + reserved opcode
     await new Promise((r) => bad.on("close", r));
-    const big = new WebSocket(url);
+    const big = wsOpen(s, cookie);
     big.on("error", () => {});
     await new Promise((r) => big.on("open", r));
     big.send("x".repeat(10_000)); // > maxPayload
     assert.equal(await new Promise((r) => big.on("close", r)), 1009);
     assert.ok((await fetch(s.base + "/api/health")).ok, "server alive");
 
-    const ws = new WebSocket(url);
+    const ws = wsOpen(s, cookie, `?ws=${wsId}`);
     await new Promise((r) => ws.on("open", r));
     const got = [];
     ws.on("message", (m) => got.push(JSON.parse(m)));
-    const r = await post(s.base, "/api/replay", { feed: "sale-demo", speed: 100 });
+    const r = await post(s, "/api/replay", { feed: "sale-demo", speed: 100, ws: wsId }, { authorization: "Bearer adm" });
     const { events } = await r.json();
     for (let i = 0; i < 50 && got.length < events; i++) await new Promise((r) => setTimeout(r, 100));
     assert.equal(got.length, events);
     assert.match(got[0].id, /^evt-\d+@\d+$/);
+    assert.equal(got[0].ws, wsId);
     ws.close();
   } finally {
     await s.stop();

@@ -14,7 +14,7 @@ const env = process.env;
 const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
 export const BOT_USERNAME = env.BOT_USERNAME || "kratosd2c_bot";
 const TG_API = (env.TELEGRAM_API || "https://api.telegram.org").replace(/\/$/, "");
-const CODE_TTL = 15 * 60_000;
+const CODE_TTL = Number(env.LINK_CODE_TTL_MS) || 15 * 60_000; // env: tests only
 const CODES_PER_HOUR = 5;
 const TEAM = ["d2c-captain", "d2c-analyst", "d2c-ads", "d2c-influencers", "d2c-ops", "d2c-design"];
 // room id, topic name, icon color (Telegram's fixed palette), as in scripts/switch-up.sh
