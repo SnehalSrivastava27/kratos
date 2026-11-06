@@ -40,8 +40,13 @@ export function FloorPlan({ lit, ms, className }: { lit?: string; ms?: number; c
 
 const LABEL = { idle: '', assigned: 'Assigned', working: 'Working…', done: 'Done', pushback: 'Pushed back' };
 function RoomStatus({ id, ms }: { id: string; ms: number }) {
-  const { status } = statusAt(id, ms);
-  return <span className={cn('mt-1 text-[10.5px]', status === 'working' ? 'text-saffron-ink' : status === 'done' ? 'text-emerald-700' : 'text-neutral-400')}>{LABEL[status]}</span>;
+  const { status, line } = statusAt(id, ms);
+  return (
+    <>
+      <span className={cn('mt-1 text-[10.5px]', status === 'working' ? 'text-saffron-ink' : status === 'done' ? 'text-emerald-700' : 'text-neutral-400')}>{LABEL[status]}</span>
+      {line && <span className="mt-1 line-clamp-2 hidden text-[11px] leading-snug text-neutral-500 sm:block">{line}</span>}
+    </>
+  );
 }
 
 const SAYS = FEED.filter((e) => e.type !== 'working');
