@@ -3,11 +3,15 @@
 
 export type Node = string | { t: 'code' | 'b' | 'i' | 's' | 'a'; kids: Node[]; href?: string };
 
-const INLINE = /`([^`\n]+)`|\[([^\]\n]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*|~~(.+?)~~|\*([^*\n]+?)\*|(?<![\w])_([^_\n]+?)_(?![\w])|(https?:\/\/[^\s<>()]+[^\s<>().,;:!?'"])/;
+const INLINE = /`([^`\n]+)`|\[([^[\]\n]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*|~~(.+?)~~|\*([^*\n]+?)\*|(?<![\w])_([^_\n]+?)_(?![\w])|(https?:\/\/[^\s<>()]+[^\s<>().,;:!?'"])/;
 export const safeHref = (u: string) => (/^https?:\/\//i.test(u) || (/^\/gallery\/[\w./-]+$/.test(u) && !u.includes('..')) ? u : null);
 
 /** One line of text → inline nodes. */
+/** Longest text one paragraph renders: the lazy patterns are O(n²) on unmatched markers, so bound n. */
+export const MAX_PARA = 8192;
+
 export function inline(s: string): Node[] {
+  if (s.length > MAX_PARA) s = s.slice(0, MAX_PARA) + '…';
   const out: Node[] = [];
   while (s) {
     const m = INLINE.exec(s);

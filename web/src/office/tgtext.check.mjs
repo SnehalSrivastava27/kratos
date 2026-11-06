@@ -13,4 +13,10 @@ assert.equal(safeHref('/gallery/../x'), null);
 assert.deepEqual(tgLine('- item'), ['• item']);
 assert.deepEqual(tgLine('# Title'), [{ t: 'b', kids: ['Title'] }]);
 assert.equal(tgPlain('**Plan**\n\n- 30% off\n- _5 days_'), 'Plan\n\n• 30% off\n• 5 days');
+// unmatched markers stay fast (the cap + no '[' in link labels)
+for (const bad of ['['.repeat(60000), '[a'.repeat(30000), '**a'.repeat(20000), '_x '.repeat(20000)]) {
+  const t0 = performance.now();
+  inline(bad);
+  assert.ok(performance.now() - t0 < 300, `slow on ${bad.slice(0, 6)}… (${Math.round(performance.now() - t0)} ms)`);
+}
 console.log('tgtext ok');
