@@ -258,6 +258,17 @@ export async function activate(agentId: string, roomId: string) {
   await joinRoom(roomId, agentId);
 }
 
+/** Waits until Switch reports the agent "live" in the room (Console's controller is watching it): a new connection
+ *  starts at the agent's newest event (switch:bridges/agent/api/handlers.py:766-829), so a message sent before
+ *  then never reaches it. Gives up after `ms` (false); errors count as "not yet". */
+export async function waitLive(agentId: string, roomId: string, ms: number, every = 2000): Promise<boolean> {
+  for (const end = Date.now() + ms; ; await sleep(every)) {
+    const a = await gw("GET", `/agents/${encodeURIComponent(agentId)}`).catch(() => null);
+    if (a?.rooms?.some((r: { room_id: string; status: string }) => r.room_id === roomId && r.status === "live")) return true;
+    if (Date.now() >= end) return false;
+  }
+}
+
 export async function findAgent(name: string): Promise<string | null> {
   return (await switchAgents()).find((a) => a.name === name)?.id ?? null;
 }
