@@ -1,97 +1,123 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import type { Group, Mesh } from 'three';
-import type { AgentState, Person } from '../shared/types';
+import * as THREE from 'three';
+import type { AgentState, Person as RosterPerson } from '../shared/types';
 import type { PersonState } from './officeState';
-import { spot } from './data';
+import { C, DESK, clean, isSeat, spot } from './data';
+import { Person, type Look } from './person';
+import { noOutline, toonUnique } from './toon';
 import { useAge } from './useAge';
 
-const SPEED = 5; // m/s
+const SPEED = 3.4; // m/s
 const JUMP_S = 0.7;
-const BUBBLE_MS = 5000;
-const xz = ([x, z]: [number, number]) => [x, 0, z] as const;
+const BUBBLE_MS = 5200;
+const SEAT_HIPS = 0.56;
 
-export default function Character({ person, ps }: { person: Person; ps: PersonState }) {
-  const root = useRef<Group>(null);
-  const body = useRef<Group>(null);
+/** Everyone gets their own face: skin tone, hair colour, hair style (indexes into person.ts tables). */
+const LOOKS: Record<string, Look> = {
+  founder: { skin: 3, hair: 0, style: 0 },
+  'd2c-captain': { skin: 2, hair: 1, style: 2 },
+  'd2c-analyst': { skin: 1, hair: 0, style: 5 },
+  'd2c-ads': { skin: 4, hair: 0, style: 3 },
+  'd2c-influencers': { skin: 2, hair: 7, style: 1 },
+  'd2c-ops': { skin: 5, hair: 2, style: 0 },
+  'd2c-design': { skin: 0, hair: 8, style: 4 },
+  'd2c-finance': { skin: 6, hair: 5, style: 6 },
+};
+const STATE_LABEL: Record<AgentState, string> = { idle: 'Idle', working: 'Working', walking: 'On the move', waiting: 'Waiting', done: 'Done' };
+
+export default function Character({ person, ps, celebrateId }: { person: RosterPerson; ps: PersonState; celebrateId?: string }) {
+  const p = useMemo(() => {
+    const q = new Person(person.color, LOOKS[person.id] ?? { skin: 1, hair: 0, style: 0 });
+    const [x, z] = spot(ps.zone, person.id);
+    q.root.position.set(x, 0, z);
+    return q;
+  }, [person.id, person.color]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ring = useMemo(() => {
+    const m = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.05, 8, 32), toonUnique(C.red, { emissive: '#7a1418' }));
+    m.rotation.x = -Math.PI / 2;
+    m.position.y = 0.06;
+    noOutline(m);
+    return m;
+  }, []);
   const waypoints = useRef<[number, number][]>([]);
   const jumpAge = useAge(ps.jumpId);
+  const partyAge = useAge(celebrateId);
   const [walking, setWalking] = useState(false);
-  const [start] = useState(() => spot(ps.zone, person.id));
-  const beacon = useRef<Mesh>(null);
-  const [bubble, setBubble] = useState<string>();
+  const [bubble, setBubble] = useState<{ id: string; text: string }>();
+
   useEffect(() => {
-    setBubble(ps.bubble?.text);
+    if (!ps.bubble) return;
+    setBubble(ps.bubble);
     const id = window.setTimeout(() => setBubble(undefined), BUBBLE_MS);
     return () => clearTimeout(id);
   }, [ps.bubble?.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
   useEffect(() => {
     waypoints.current = ps.route.map((z) => spot(z, person.id));
-    if (!ps.routeId && root.current) root.current.position.set(...xz(spot(ps.zone, person.id))); // feed reset: snap home
+    if (!ps.routeId) {
+      const [x, z] = spot(ps.zone, person.id); // feed reset: snap home
+      p.root.position.set(x, 0, z);
+    }
   }, [ps.routeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useFrame(({ clock }, dt) => {
-    const g = root.current, b = body.current;
-    if (!g || !b) return;
+    dt = Math.min(dt, 0.1);
+    const g = p.root;
     const t = clock.elapsedTime;
     const wp = waypoints.current[0];
     let moving = false;
+    let face: number | null = null;
     if (wp) {
       const dx = wp[0] - g.position.x, dz = wp[1] - g.position.z;
       const dist = Math.hypot(dx, dz);
-      const step = Math.min(dist, SPEED * dt);
-      if (dist < 0.02) waypoints.current.shift();
+      if (dist < 0.03) waypoints.current.shift();
       else {
+        const step = Math.min(dist, SPEED * dt);
         g.position.x += (dx / dist) * step;
         g.position.z += (dz / dist) * step;
-        g.rotation.y = Math.atan2(dx, dz);
+        face = Math.atan2(dx, dz);
         moving = true;
       }
     }
     if (moving !== walking) setWalking(moving);
-    const jp = jumpAge(t) / JUMP_S;
-
-    b.position.y = 0;
-    b.rotation.z = 0;
-    if (moving) b.position.y = Math.abs(Math.sin(t * 12)) * 0.12;
-    else if (jp < 1) b.position.y = Math.sin(jp * Math.PI) * 0.9;
-    else if (ps.state === 'working') b.position.y = Math.abs(Math.sin(t * 18)) * 0.03;
-    else if (ps.state === 'waiting') b.scale.setScalar(1 + Math.sin(t * 6) * 0.04);
-    else if (ps.state === 'idle') b.rotation.z = Math.sin(t * 1.5) * 0.06;
-    if (ps.state !== 'waiting') b.scale.setScalar(1);
-    if (beacon.current) beacon.current.scale.setScalar(1 + Math.sin(t * 8) * 0.25);
+    const seated = !moving && isSeat(person.id, g.position.x, g.position.z);
+    const party = partyAge(t);
+    let jp = jumpAge(t) / JUMP_S;
+    if (party < 4.5) jp = (party % 0.9) / JUMP_S; // celebrate: everyone bounces for a few seconds
+    const airborne = jp < 1;
+    g.position.y = airborne ? Math.sin(jp * Math.PI) * 0.75 : 0;
+    const chair = seated && !!DESK[person.zone];
+    p.sit(chair && !airborne ? SEAT_HIPS : null);
+    p.typing = seated && ps.state === 'working';
+    p.waiting = ps.state === 'waiting';
+    if (face === null) face = seated ? Math.PI : 0; // at the desk: face the screen; elsewhere: face the room
+    let d = face - g.rotation.y;
+    d = Math.atan2(Math.sin(d), Math.cos(d));
+    g.rotation.y += d * Math.min(1, dt * (moving ? 12 : 5));
+    p.update(dt, t, moving, airborne, 1.5);
+    ring.visible = !!ps.beacon;
+    if (ring.visible) ring.scale.setScalar(1 + Math.sin(t * 6) * 0.12);
   });
 
   const shown: AgentState = walking ? 'walking' : ps.state;
   return (
-    <group ref={root} position={[start[0], 0, start[1]]}>
-      <group ref={body}>
-        <mesh position-y={0.55} castShadow>
-          <capsuleGeometry args={[0.25, 0.5, 4, 12]} />
-          <meshStandardMaterial color={person.color} />
-        </mesh>
-        <mesh position-y={1.15} castShadow>
-          <sphereGeometry args={[0.2, 16, 12]} />
-          <meshStandardMaterial color="#E0AC69" roughness={0.6} />
-        </mesh>
-      </group>
-      {ps.beacon && (
-        <mesh ref={beacon} position-y={2.35}>
-          <sphereGeometry args={[0.14, 12, 8]} />
-          <meshBasicMaterial color="#E5484D" />
-        </mesh>
-      )}
-      <Html position={[0, 1.85, 0]} center zIndexRange={[10, 0]} style={{ pointerEvents: 'none', textAlign: 'center' }}>
-        <div style={{ fontSize: 18 }}>{person.emoji}{ps.state === 'done' && !walking ? '✅' : ''}</div>
-        <div className="hq-state">{shown}</div>
+    <primitive object={p.root}>
+      <primitive object={ring} />
+      <Html position={[0, 2.12, 0]} center zIndexRange={[10, 0]} style={{ pointerEvents: 'none' }}>
+        <div className={`hq-tag hq-tag-${shown}`}>
+          <span className="hq-tag-name">{person.emoji} {person.name}</span>
+          {shown !== 'idle' && <span className="hq-tag-state">{ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]}</span>}
+        </div>
       </Html>
       {bubble && (
-        <Html position={[0, 2.9, 0]} center zIndexRange={[20, 10]} style={{ pointerEvents: 'none' }}>
-          <div className="hq-bubble">{bubble}</div>
+        <Html position={[0, 2.62, 0]} zIndexRange={[30, 20]} style={{ pointerEvents: 'none' }}>
+          <div key={bubble.id} className="hq-bubble">
+            <div className="hq-bubble-who" style={{ background: person.color }}>{person.emoji} {person.name}</div>
+            <div className="hq-bubble-text">{clean(bubble.text)}</div>
+          </div>
         </Html>
       )}
-    </group>
+    </primitive>
   );
 }
