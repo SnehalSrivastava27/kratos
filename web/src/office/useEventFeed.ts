@@ -44,8 +44,7 @@ export function wsSource(fallback: OfficeEvent[]): Source {
       if (stopLocal || r > run) {
         stopLocal?.();
         stopLocal = null;
-        seen.clear();
-        reset();
+        reset(); // keep `seen`: clearing it would let a reconnect's history re-show old non-run events
       }
       if (r) run = r;
       seen.add(e.id);
