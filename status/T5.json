@@ -2,6 +2,6 @@
   "done": [
     "server/: node:http + ws + ajv(2020) implementing every row of contracts/api.md; history last 500",
     "replay of demo/feeds/<name>.json with loop/speed; sale-demo falls back to contracts/sample-feed.json",
-    "verified: WS got all 9 replayed events, bad POST -> 400 with ajv errors, /gallery traversal -> 403; npm run build passes"
+    "verified: server tests pass; office tests now reset shared topics/library fixtures per start to avoid cross-test state leakage after /api/library/categorize"
   ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T15:55:00+05:30" }
+  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T21:48:00+05:30" }

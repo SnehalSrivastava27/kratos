@@ -8,16 +8,20 @@ import { start as startServer, tmp, calls, fake, swDir, account, link } from "./
 
 // The pre-v3 topic map: linking the group with this chat id adopts it (ads already has a Switch thread).
 const topicsFile = join(swDir, "topics.json");
-writeFileSync(topicsFile, JSON.stringify({ chat_id: "-100", topics: { war_room: { name: "War Room", message_thread_id: 4, switch_thread_id: null }, ads: { name: "Ads", message_thread_id: 6, switch_thread_id: "sw_thread_ads" } } }));
+const TOPICS_FIXTURE = JSON.stringify({ chat_id: "-100", topics: { war_room: { name: "War Room", message_thread_id: 4, switch_thread_id: null }, ads: { name: "Ads", message_thread_id: 6, switch_thread_id: "sw_thread_ads" } } });
+writeFileSync(topicsFile, TOPICS_FIXTURE);
 fake.tg.topics.add(4).add(6); // those topics still exist in Telegram
 
 const libFile = join(swDir, "library.json");
-writeFileSync(libFile, JSON.stringify({ updatedAt: 1, librarian: "idle", shelves: [{ id: "general", label: "General", books: [
+const LIBRARY_FIXTURE = JSON.stringify({ updatedAt: 1, librarian: "idle", shelves: [{ id: "general", label: "General", books: [
   { id: "gstack:qa", name: "qa", description: "QA", source: "gstack", path: "/skills/qa/SKILL.md", department: "general", why: "" },
-] }] }));
+] }] });
+writeFileSync(libFile, LIBRARY_FIXTURE);
 
 /** A server whose owner (s.cookie) has linked "Kratos D2C" (Switch room-1, chat -100) and it is ready. */
 async function start(env = {}, { linked = true } = {}) {
+  writeFileSync(topicsFile, TOPICS_FIXTURE);
+  writeFileSync(libFile, LIBRARY_FIXTURE);
   const s = await startServer({ TOPICS_FILE: topicsFile, LIBRARY_FILE: libFile, ...env });
   if (!linked) return s;
   s.cookie = await account(s);
