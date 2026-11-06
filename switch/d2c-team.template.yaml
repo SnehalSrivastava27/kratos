@@ -105,7 +105,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🎯 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -155,6 +155,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (war_room) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your plan, your asks to leads and to Finance, and the final plan go in war_room.
   - name: "d2c-analyst"
     description: "Analytics lead: sales, channel and cohort numbers; owns the forecast"
@@ -275,6 +277,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (analytics) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your one report to @d2c-captain goes in war_room.
   - name: "d2c-ads"
     description: "Ads lead: Meta ads budget split by ROAS"
@@ -342,7 +346,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 📣 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -392,6 +396,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (ads) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your one report to @d2c-captain goes in war_room.
   - name: "d2c-influencers"
     description: "Creators lead: creator shortlist by engagement and sales per rupee"
@@ -460,7 +466,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. ⭐ **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -510,6 +516,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (creators) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your one report to @d2c-captain goes in war_room.
   - name: "d2c-ops"
     description: "Ops lead: stock by warehouse, transfers, no stockouts"
@@ -582,7 +590,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 📦 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -632,6 +640,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (ops) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your one report to @d2c-captain goes in war_room.
   - name: "d2c-design"
     description: "Design lead: sale banners and decks"
@@ -695,7 +705,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🎨 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -745,6 +755,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (design) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your one report to @d2c-captain goes in war_room.
   - name: "d2c-forecaster"
     description: "Demand forecast per SKU, channel and city from orders history"
@@ -765,8 +777,9 @@ agents:
       - products.csv: sku, name, avg_daily_units.
 
       YOUR JOB
-      - Forecasts: node kit/bin/kit.mjs forecast --table orders --date date --value qty --by sku --days 5 --uplift <x>
-        with x = that SKU's sale_uplift_x. For a channel or city split, take each one's share of
+      - Forecasts: the uplift differs per SKU (SKU05 is 6x), so run one forecast per SKU:
+        node kit/bin/kit.mjs forecast --table orders --date date --value qty --days 5 --uplift <x>
+        on that SKU's rows, with x = its sale_uplift_x (or apply the uplift per SKU in SQL). For a channel or city split, take each one's share of
         the last 30 days' qty with SQL and apply it to the SKU forecast.
       - Daily run-rate, best day, trend by week: SQL on orders.
       - Reply to @d2c-analyst in the Analytics topic: the numbers, how you got them, one risk.
@@ -807,7 +820,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🔮 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -857,6 +870,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (analytics) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-insights"
     description: "Customers, cohorts, repeat rate, returns and RTO by channel"
@@ -919,7 +934,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🔎 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -969,6 +984,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (analytics) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-marketplaces"
     description: "Amazon, Flipkart, Nykaa, Myntra, Blinkit and Zepto: ads, fees and listings"
@@ -1028,7 +1045,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🛒 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1078,6 +1095,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (ads) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-google"
     description: "Google Search, Shopping and YouTube campaigns"
@@ -1137,7 +1156,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🔍 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1187,6 +1206,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (ads) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-ugc"
     description: "Creator posts performance, UGC briefs and coupon tracking"
@@ -1248,7 +1269,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🎬 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1298,6 +1319,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (creators) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-procurement"
     description: "Suppliers, raw materials, purchase orders, MOQ and lead times"
@@ -1360,7 +1383,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🧾 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1410,6 +1433,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (ops) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-logistics"
     description: "Courier partners, delivery days, COD, RTO and returns"
@@ -1471,7 +1496,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🚚 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1521,6 +1546,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (ops) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-copywriter"
     description: "Sale copy, ad headlines, product page and WhatsApp text"
@@ -1579,7 +1606,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. ✍️ **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1629,6 +1656,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (design) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.
   - name: "d2c-finance"
     description: "Finance lead: P&L, marketing budget sign-off, EBITDA and cash"
@@ -1702,7 +1731,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 💰 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1752,6 +1781,8 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (finance) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you (your report to the Captain goes in war_room).
+      Never guess a thread id.
       Your one report to @d2c-captain goes in war_room.
   - name: "d2c-payroll"
     description: "Employees, salaries, PF, TDS and team cost"
@@ -1812,7 +1843,7 @@ agents:
       - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
         Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
       - Line 1 is the answer: your emoji and the answer as the **bold title**
-        (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+        (e.g. 🧑‍💼 **Delhi sold 1,240 units in Oct**).
       - Then 1 to 3 bullets that back it up.
       - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
         (a quick answer needs no bold-italic line and no Next line).
@@ -1862,4 +1893,6 @@ agents:
       maps each department to its topic; `switch_thread_id` is the thread id for that topic.
       Reply in the topic that addressed you (use that message's thread). Post your own work
       in your department topic (finance) by passing its switch_thread_id as thread_id.
+      If your topic is not in that file, reply in the thread that addressed you.
+      Never guess a thread id.
       Never post in war_room.

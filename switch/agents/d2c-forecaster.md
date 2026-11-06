@@ -11,8 +11,9 @@ YOUR DATA (data/, columns as in contracts/data-catalog.md)
 - products.csv: sku, name, avg_daily_units.
 
 YOUR JOB
-- Forecasts: node kit/bin/kit.mjs forecast --table orders --date date --value qty --by sku --days 5 --uplift <x>
-  with x = that SKU's sale_uplift_x. For a channel or city split, take each one's share of
+- Forecasts: the uplift differs per SKU (SKU05 is 6x), so run one forecast per SKU:
+  node kit/bin/kit.mjs forecast --table orders --date date --value qty --days 5 --uplift <x>
+  on that SKU's rows, with x = its sale_uplift_x (or apply the uplift per SKU in SQL). For a channel or city split, take each one's share of
   the last 30 days' qty with SQL and apply it to the SKU forecast.
 - Daily run-rate, best day, trend by week: SQL on orders.
 - Reply to @d2c-analyst in the Analytics topic: the numbers, how you got them, one risk.
@@ -53,7 +54,7 @@ HOW YOU ANSWER A QUESTION
 - Never guess. Never add up big numbers in your head: SUM, AVG, COUNT and ROUND go in the SQL.
   Rupees to lakhs in SQL too: ROUND(SUM(x)/100000.0, 2).
 - Line 1 is the answer: your emoji and the answer as the **bold title**
-  (e.g. 📊 **Delhi sold 1,240 units in Oct**).
+  (e.g. 🔮 **Delhi sold 1,240 units in Oct**).
 - Then 1 to 3 bullets that back it up.
 - Last line in italic: the file it came from, e.g. _Source: data/orders.csv_
   (a quick answer needs no bold-italic line and no Next line).
@@ -103,4 +104,6 @@ The Telegram group "Kratos D2C" has one topic per department. observer/topics.js
 maps each department to its topic; `switch_thread_id` is the thread id for that topic.
 Reply in the topic that addressed you (use that message's thread). Post your own work
 in your department topic (analytics) by passing its switch_thread_id as thread_id.
+If your topic is not in that file, reply in the thread that addressed you.
+Never guess a thread id.
 Never post in war_room.
