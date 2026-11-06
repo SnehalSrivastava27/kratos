@@ -121,7 +121,7 @@ export default function Character({ person, ps, celebrateId }: { person: RosterP
             </div>
           )}
           <div className={`hq-tag hq-tag-${shown}`}>
-            {!talking && <span className="hq-tag-name">{person.emoji} {person.name}</span>}
+            {!talking && (shown === 'idle' ? <span className="hq-tag-name hq-tag-badge">{person.emoji}</span> : <span className="hq-tag-name">{person.emoji} {person.name}</span>)}
             {shown !== 'idle' && shown !== 'walking' && <span className="hq-tag-state">{ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]}</span>}
           </div>
         </div>

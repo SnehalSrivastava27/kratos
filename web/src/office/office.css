@@ -19,6 +19,7 @@
 .hq-tag { display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap }
 .hq-tag-name { font: 800 12px var(--font); background: var(--paper); border: 2.5px solid var(--ink); border-radius: 999px; padding: 1px 9px 2px }
 .hq-tag-state { font: 900 10px var(--font); border: 2px solid var(--ink); border-radius: 999px; padding: 0 7px 1px; background: #e9ecef }
+.hq-tag-badge { padding: 1px 4px 2px; font-size: 13px; line-height: 1.1 }
 .hq-tag-working .hq-tag-state { background: var(--warn) }
 .hq-tag-walking .hq-tag-state { background: #e0f2fe }
 .hq-tag-waiting .hq-tag-state { background: var(--bad); color: #fff; animation: hq-pulse 1s infinite }
