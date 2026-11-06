@@ -42,10 +42,16 @@ try {
     assert(errors.length === 0, `page errors: ${errors.join(' | ')}`);
     await page.close();
   });
-  await check('/office renders canvas + an event within 15s', async () => {
+  await check('/app without a session redirects to /login (real chats are private)', async () => {
+    const page = await browser.newPage();
+    await page.goto(BASE + '/app', { waitUntil: 'load' });
+    await page.waitForURL(/\/login/, { timeout: 10_000 });
+    await page.close();
+  });
+  await check('/demo (public scripted office) renders canvas + an event within 15s', async () => {
     const page = await browser.newPage();
     page.on('pageerror', (e) => console.log(`     (office page error: ${e.message})`));
-    await page.goto(BASE + '/office', { waitUntil: 'load' });
+    await page.goto(BASE + '/demo', { waitUntil: 'load' });
     await page.locator('canvas').first().waitFor({ state: 'attached', timeout: 15_000 });
     // Poll via the locator API: waitForFunction evals a string, which the site's CSP (rightly) blocks.
     const until = Date.now() + 15_000;

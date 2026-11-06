@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 import type { OfficeEvent } from '../shared/types';
-import { connectLive } from '../shared/live';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
 
 type Push = (e: OfficeEvent) => void;
 type Source = (push: Push, reset: () => void) => () => void; // returns cleanup
 
 const LOOP_GAP_MS = 5000;
-const FALLBACK_MS = 3000; // live: no server events by then → replay the feed locally
-const LINK_DOWN_MS = 5000; // live: socket lost and not back by then → replay locally again
+const MAX_BACKOFF_MS = 5000;
 
-/** Replays a feed using each event's `t` offset. Loops (reset + restart) when `loop` is true. */
+/** Replays a feed using each event's `t` offset. Loops (reset + restart) when `loop` is true. Demo only. */
 export function replaySource(feed: OfficeEvent[], loop: boolean): Source {
   return (push, reset) => {
     let timers: number[] = [];
@@ -25,56 +23,84 @@ export function replaySource(feed: OfficeEvent[], loop: boolean): Source {
   };
 }
 
+export interface LiveOpts { ws?: string; onUnauthorized?: () => void }
+
 /**
- * Live: /api/history + /ws via connectLive. Until the first live event arrives (server down, or no
- * replay running) the feed loops locally so the office never blanks; the first live event takes over.
- * If the socket drops and stays down for LINK_DOWN_MS, it goes back to the local loop (and forgets
- * seen ids, so the next connection's history rebuilds the scene like a fresh page load).
- * Server replay ids are `<feed id>@<run>` (run increases per loop): a newer run resets the scene,
- * events from older runs are dropped, and everything is deduped by id (history is re-sent on reconnect).
+ * Live (contracts/api.md v3): the signed-in workspace's own events. WS /ws?ws=<id> (the session cookie
+ * rides along), buffered while GET /api/history?ws=<id> loads, then history and the buffer. Reconnects
+ * with backoff and re-sends history, so everything is deduped by id. Never falls back to the demo: a
+ * quiet workspace stays empty. A 401 from history, or the socket closed with 1008 / 4401 (session gone or
+ * refused), calls onUnauthorized and stops.
+ * Adapted from web/src/shared/live.ts (T8), scoped to a workspace.
  */
-export function wsSource(fallback: OfficeEvent[]): Source {
-  return (push, reset) => {
+export function liveSource({ ws: wsId, onUnauthorized }: LiveOpts): Source {
+  return (push) => {
+    const q = wsId ? `ws=${encodeURIComponent(wsId)}` : '';
     const seen = new Set<string>();
-    let run = 0;
-    let stopLocal: (() => void) | null = null;
-    let downTimer: number | undefined;
-    const goLocal = () => {
-      if (stopLocal) return;
-      seen.clear();
-      run = 0;
-      stopLocal = replaySource(fallback, true)(push, reset);
-    };
-    const timer = window.setTimeout(goLocal, FALLBACK_MS);
-    const onLink = (up: boolean) => {
-      clearTimeout(downTimer);
-      if (!up) downTimer = window.setTimeout(goLocal, LINK_DOWN_MS);
-    };
-    const close = connectLive((e) => {
-      const at = e.id.lastIndexOf('@');
-      const r = at < 0 ? 0 : Number(e.id.slice(at + 1)) || 0;
-      if (seen.has(e.id) || (r && r < run)) return;
-      clearTimeout(timer);
-      if (stopLocal || r > run) {
-        stopLocal?.();
-        stopLocal = null;
-        reset(); // keep `seen`: clearing it would let a reconnect's history re-show old non-run events
-      }
-      if (r) run = r;
+    const emit = (e: OfficeEvent) => {
+      if (seen.has(e.id)) return;
       seen.add(e.id);
       push(e);
-    }, onLink);
-    return () => { clearTimeout(timer); clearTimeout(downTimer); stopLocal?.(); close(); };
+    };
+    let sock: WebSocket | null = null;
+    let timer: number | undefined;
+    let backoff = 500;
+    let closed = false;
+    const connect = () => {
+      const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+      const s = (sock = new WebSocket(`${proto}://${location.host}/ws${q ? `?${q}` : ''}`));
+      let buffer: OfficeEvent[] | null = [];
+      s.onmessage = (m) => {
+        let e: OfficeEvent;
+        try { e = JSON.parse(m.data); } catch { return; }
+        if (buffer) buffer.push(e); else emit(e);
+      };
+      s.onopen = async () => {
+        backoff = 500;
+        try {
+          const r = await fetch(`/api/history?limit=200${q ? `&${q}` : ''}`, { credentials: 'include' });
+          if (r.status === 401) {
+            closed = true;
+            s.close();
+            onUnauthorized?.();
+            return;
+          }
+          if (r.ok) for (const e of (await r.json()) as OfficeEvent[]) if (!closed) emit(e);
+        } catch { /* no history: the stream still works */ }
+        const b = buffer ?? [];
+        buffer = null;
+        if (!closed) b.forEach(emit);
+      };
+      s.onclose = (ev) => {
+        sock = null;
+        if (closed) return;
+        // The server refused the session (policy violation / 4401): sign in again rather than retry forever.
+        if (ev.code === 1008 || ev.code === 4401) {
+          closed = true;
+          onUnauthorized?.();
+          return;
+        }
+        timer = window.setTimeout(connect, backoff);
+        backoff = Math.min(backoff * 2, MAX_BACKOFF_MS);
+      };
+    };
+    connect();
+    return () => {
+      closed = true;
+      clearTimeout(timer);
+      if (sock) { sock.onclose = null; sock.close(); }
+    };
   };
 }
 
-export function useEventFeed(mode: 'live' | 'autoplay', feed?: OfficeEvent[]): OfficeEvent[] {
+/** `demo`: the scripted story on a loop (landing hero, explicit demo). Otherwise the workspace's live events. */
+export function useEventFeed(demo: boolean, feed?: OfficeEvent[], live: LiveOpts = {}): OfficeEvent[] {
   const [events, setEvents] = useState<OfficeEvent[]>([]);
+  const { ws, onUnauthorized } = live;
   useEffect(() => {
-    // live: server feed with local fallback; autoplay: loop forever, no server.
-    const f = feed ?? (saleDemo as OfficeEvent[]);
-    const source = mode === 'live' ? wsSource(f) : replaySource(f, true);
+    const source = demo ? replaySource(feed ?? (saleDemo as OfficeEvent[]), true) : liveSource({ ws, onUnauthorized });
+    setEvents([]);
     return source((e) => setEvents((prev) => [...prev, e]), () => setEvents([]));
-  }, [mode, feed]);
+  }, [demo, feed, ws, onUnauthorized]);
   return events;
 }

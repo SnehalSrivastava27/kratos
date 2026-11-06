@@ -5,7 +5,7 @@ import { ArrowRight, Bot, Cable, Check, Github, Monitor, Send } from 'lucide-rea
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { PEOPLE, REPO_URL, SWITCH_URL } from './data';
-import { Band, Container, Logo, Reveal, TwoTone } from './ui';
+import { Band, Container, Logo, MateIcon, Reveal, TwoTone } from './ui';
 
 const HOW = [
   { Icon: Send, title: 'Telegram', text: 'The founder drops one message in the War Room topic.' },
@@ -79,7 +79,7 @@ function MiniCard({ who, title, line, className }: { who: string; title: string;
   const p = PEOPLE[who];
   return (
     <div aria-hidden="true" className={`w-[264px] rounded-2xl text-left border border-black/[0.07] bg-white p-4 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.25)] ${className ?? ''}`}>
-      <p className="flex items-center gap-1.5 text-[12px] text-neutral-500"><span className="size-1.5 rounded-full" style={{ background: p.color }} />{p.name}</p>
+      <p className="flex items-center gap-2 text-[12px] text-neutral-500"><MateIcon id={who} size="sm" />{p.name}</p>
       <p className="mt-2 text-[15px] font-medium tracking-tight">{title}</p>
       <p className="mt-1 flex items-center gap-1.5 text-[13px] text-emerald-700"><Check className="size-3.5" />{line}</p>
     </div>
@@ -98,7 +98,7 @@ export function FinalCta() {
           </h2>
         </Reveal>
         <Reveal delay={0.08} className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/office" />} nativeButton={false}>
+          <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/app" />} nativeButton={false}>
             Open the office <ArrowRight data-icon="inline-end" />
           </Button>
           <Button size="lg" variant="outline" className="h-11 rounded-full bg-white px-5 text-[15px]" render={<a href={REPO_URL} target="_blank" rel="noreferrer" />} nativeButton={false}>
@@ -112,7 +112,7 @@ export function FinalCta() {
 
 export function Footer() {
   const cols = [
-    ['Product', [['Live office', '/office'], ['Teammates', '#teammates'], ['Use cases', '#jobs'], ['How it works', '#how']]],
+    ['Product', [['Demo office', '/demo'], ['Teammates', '#teammates'], ['Use cases', '#jobs'], ['How it works', '#how']]],
     ['Resources', [['GitHub', REPO_URL], ['Switch', SWITCH_URL], ['FAQ', '#faq']]],
   ] as const;
   return (
@@ -138,6 +138,7 @@ export function Footer() {
           <span>Powered by <a href={SWITCH_URL} target="_blank" rel="noreferrer" className="text-neutral-600 hover:text-foreground">Switch</a> · Built for Flip the Switch 2026</span>
           <span>Demo brand: Kesar &amp; Co. (fictional)</span>
         </Container>
+        <Container className="-mt-3 pb-6 text-[12px] text-neutral-400">Brand names and logos are trademarks of their owners, used to identify sales channels.</Container>
       </div>
     </footer>
   );

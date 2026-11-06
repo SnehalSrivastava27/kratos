@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Hand, Zap } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DEPT, FEED, PEOPLE, TG_GROUP, body } from './data';
-import { FloorPlan } from './Office2D';
-import { Band, Container, Reveal } from './ui';
+import { DEPT, FEED, PEOPLE, TG_GROUP } from './data';
+import { TgText } from './Telegram';
+import { FloorPlan } from './FloorPlan';
+import { Band, Container, MateIcon, Reveal } from './ui';
 
 // PLAN §9.1 section D; the captain's row follows the hero workflow in §3.
 const TEAM = [
@@ -22,7 +23,7 @@ export default function Departments() {
   const [id, setId] = useState(TEAM[0].id);
   const t = TEAM.find((m) => m.id === id)!;
   const p = PEOPLE[id];
-  const { Icon, room } = DEPT[id];
+  const { room } = DEPT[id];
   const last = LAST[id];
 
   return (
@@ -35,7 +36,7 @@ export default function Departments() {
                 const D = DEPT[m.id];
                 return (
                   <TabsTrigger key={m.id} value={m.id} className="h-10 flex-none px-3 text-[14px] after:bottom-[-2px]!">
-                    <D.Icon strokeWidth={1.7} />{D.short}
+                    <D.Icon strokeWidth={1.6} style={{ color: PEOPLE[m.id].color }} />{D.short}
                   </TabsTrigger>
                 );
               })}
@@ -45,7 +46,7 @@ export default function Departments() {
             <AnimatePresence mode="wait" initial={false}>
               <motion.div key={id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.3, ease: 'easeOut' }} className="flex flex-col gap-7 p-6 md:p-10">
                 <div className="flex items-center gap-3">
-                  <span className="grid size-10 place-items-center rounded-xl" style={{ background: `${p.color}12`, color: p.color }}><Icon className="size-5" strokeWidth={1.7} /></span>
+                  <MateIcon id={id} size="lg" />
                   <div>
                     <h3 className="text-lg font-medium tracking-tight">{p.name}</h3>
                     <p className="text-[13px] text-neutral-500">{TG_GROUP} · {p.topic} topic · sits in the {room}</p>
@@ -64,7 +65,7 @@ export default function Departments() {
                 {last && (
                   <figure className="mt-auto rounded-xl border border-black/[0.06] bg-neutral-50 p-4">
                     <figcaption className="text-[12px] text-neutral-400">Last post in the festive sale demo</figcaption>
-                    <p className="mt-1.5 text-[14px] leading-snug whitespace-pre-line text-neutral-800">{body(last.text)}</p>
+                    <TgText text={last.text} className="mt-1.5 text-[14px] leading-snug text-neutral-800" />
                   </figure>
                 )}
               </motion.div>

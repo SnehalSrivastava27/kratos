@@ -1,18 +1,20 @@
 // Telegram-Desktop-style chrome around the office: the group chat list and the open group's chat.
 // Everything is derived client-side from the event feed.
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, CheckCheck, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
+import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import type { OfficeEvent } from '../shared/types';
+import type { OfficeEvent, RoomId } from '../shared/types';
 import type { SceneState } from './officeState';
-import { ROOMS, TG_GROUP, clean, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { Tg, tgPlain } from './md';
+import { PersonAvatar, RoomTile } from './icons';
 
 export { ROOMS };
-const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
-const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
+export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
+export const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
 export const TG = { blue: '#3390EC', green: '#4FAE4E', out: '#EEFFDE', bg: '#F1F1F1' };
 
 /** Story time → a clock: replay offsets count as minutes after 21:00 (live events carry epoch ms). */
@@ -31,14 +33,9 @@ export function typingIn(room: string, events: OfficeEvent[], scene: SceneState)
   return roster.filter((p) => p.kind === 'agent' && scene.people[p.id]?.state === 'working' && lastRoom[p.id] === room).map((p) => p.name);
 }
 
-/** A forum topic's icon: Telegram draws these as a tinted rounded bubble with the topic emoji. */
-function TopicIcon({ room, size = 40 }: { room: string; size?: number }) {
-  const c = ROOM_COLOR[room];
-  return (
-    <div className="grid shrink-0 place-items-center rounded-[38%]" style={{ width: size, height: size, fontSize: size * 0.5, background: `${c}22`, boxShadow: `inset 0 0 0 1.5px ${c}55` }}>
-      {ROOM_EMOJI[room]}
-    </div>
-  );
+/** A forum topic's icon: the department's Lucide icon on a tinted rounded square. */
+export function TopicIcon({ room, size = 40 }: { room: string; size?: number }) {
+  return <RoomTile room={room} size={size} />;
 }
 function GroupAvatar({ size = 42 }: { size?: number }) {
   return (
@@ -48,8 +45,8 @@ function GroupAvatar({ size = 42 }: { size?: number }) {
   );
 }
 
-export function ChatList({ events, scene, selected, unread, onSelect, className }: {
-  events: OfficeEvent[]; scene: SceneState; selected: string; unread: Record<string, number>; onSelect: (room: string) => void; className?: string;
+export function ChatList({ events, scene, selected, unread, onSelect, className, actions }: {
+  events: OfficeEvent[]; scene: SceneState; selected: string; unread: Record<string, number>; onSelect: (room: string) => void; className?: string; actions?: ReactNode;
 }) {
   const reduce = useReducedMotion();
   const rows = useMemo(() => {
@@ -63,6 +60,7 @@ export function ChatList({ events, scene, selected, unread, onSelect, className 
         <div className="flex h-9 flex-1 items-center gap-2 rounded-full bg-[#F1F1F4] px-3 text-sm text-[#707579]">
           <Search className="size-4" /> Search
         </div>
+        {actions}
       </div>
       <div className="mx-1.5 mb-1 flex items-center gap-3 rounded-xl px-2 py-2">
         <GroupAvatar />
@@ -104,7 +102,7 @@ export function ChatList({ events, scene, selected, unread, onSelect, className 
                     ) : r.last ? (
                       <>
                         <span className={active ? 'text-white' : 'text-[#222]'}>{who}: </span>
-                        {strip(r.last).replace(/\n/g, ' ')}
+                        {tgPlain(strip(r.last)).replace(/\n+/g, ' ')}
                       </>
                     ) : (
                       'No messages yet'
@@ -124,9 +122,11 @@ export function ChatList({ events, scene, selected, unread, onSelect, className 
 }
 
 const isMine = (e: OfficeEvent) => personById[e.speaker]?.kind === 'human';
-const bannerTitle = (e: OfficeEvent) => strip(e).split('\n')[0];
+const bannerTitle = (e: OfficeEvent) => firstLine(e.text);
 
-function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boolean }) {
+type Command = (room: RoomId, text: string) => Promise<unknown>;
+
+function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean; last: boolean; onCommand?: Command }) {
   const p = personById[e.speaker];
   const mine = p?.kind === 'human';
   const accent = e.type === 'pushback' ? '#E5484D' : e.type === 'approved' ? '#3CCB8B' : undefined;
@@ -135,17 +135,17 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
   return (
     <div className={cn('flex items-end gap-2', mine ? 'justify-end' : 'justify-start')}>
       {!mine && (last ? (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#5AB0F5] to-[#3390EC] text-[11px] font-bold text-white">SW</div>
+        <PersonAvatar person={p} size={34} />
       ) : (
-        <div className="w-8 shrink-0" />
+        <div className="w-[34px] shrink-0" />
       ))}
       <div className={cn('relative max-w-[82%] rounded-2xl px-3 pt-1.5 pb-1 text-[14.5px] leading-snug shadow-[0_1px_1px_rgba(0,0,0,0.12)]', mine ? 'rounded-br-md bg-[#EEFFDE]' : 'rounded-bl-md bg-white')}
         style={accent ? { boxShadow: `inset 3px 0 0 ${accent}, 0 1px 1px rgba(0,0,0,.12)` } : undefined}>
         {!mine && first && <div className="text-[13px] font-semibold text-[#1A6FB5]">Switch <span className="font-normal text-[#707579]">bot</span></div>}
-        <div className="whitespace-pre-line text-[#000]">
-          {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.emoji} {p?.name}</b>}
+        <div className="whitespace-pre-wrap text-[#000]">
+          {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.name}</b>}
           {!mine && <br />}
-          {body}
+          <Tg text={body} />
         </div>
         {e.type === 'artifact' && link && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
@@ -162,20 +162,51 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
           {mine && <CheckCheck className="size-3.5" />}
         </div>
         <div className="clear-both" />
-        {e.type === 'approval_needed' && (
-          <div className="-mx-1 mt-1 mb-0.5 grid grid-cols-2 gap-1">
-            {['✅ Approve', '✏️ Ask changes'].map((b) => (
-              <button key={b} onClick={() => toast(`Sent “${b.slice(2)}” to ${p?.name ?? 'the bot'}`)}
-                className="rounded-lg bg-[#3390EC]/10 py-1.5 text-[13px] font-semibold text-[#1A6FB5] hover:bg-[#3390EC]/20">{b}</button>
-            ))}
-          </div>
-        )}
+        {e.type === 'approval_needed' && onCommand && <ApprovalButtons room={e.room} who={p?.name ?? 'the bot'} onCommand={onCommand} />}
       </div>
     </div>
   );
 }
 
-export function ChatPane({ room, events, scene, onBack, className }: { room: string; events: OfficeEvent[]; scene: SceneState; onBack?: () => void; className?: string }) {
+/** Inline-keyboard buttons under an approval request: they post into the same topic (POST /api/command). */
+function ApprovalButtons({ room, who, onCommand }: { room: RoomId; who: string; onCommand: Command }) {
+  const [asking, setAsking] = useState(false);
+  const [text, setText] = useState('');
+  const [busy, setBusy] = useState(false);
+  const send = async (body: string) => {
+    setBusy(true);
+    try {
+      await onCommand(room, body);
+      toast(`Sent to ${who}: “${body}”`);
+      setAsking(false);
+      setText('');
+    } catch (err) {
+      toast.error(`Not sent: ${err instanceof Error ? err.message : 'error'}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const btn = 'flex items-center justify-center gap-1.5 rounded-lg bg-[#3390EC]/10 py-1.5 text-[13px] font-semibold text-[#1A6FB5] hover:bg-[#3390EC]/20 disabled:opacity-50';
+  return (
+    <div className="-mx-1 mt-1 mb-0.5">
+      <div className="grid grid-cols-2 gap-1">
+        <button type="button" className={btn} disabled={busy} onClick={() => void send('Approved ✅')}><Check className="size-3.5" strokeWidth={2} />Approve</button>
+        <button type="button" className={btn} disabled={busy} aria-expanded={asking} onClick={() => setAsking((a) => !a)}><Pencil className="size-3.5" strokeWidth={2} />Ask changes</button>
+      </div>
+      {asking && (
+        <form className="mt-1 flex gap-1" onSubmit={(ev) => (ev.preventDefault(), text.trim() && void send(`Please change: ${text.trim()}`))}>
+          <input autoFocus value={text} onChange={(ev) => setText(ev.target.value)} maxLength={1900} placeholder="What should change?" aria-label="What should change?"
+            className="min-w-0 flex-1 rounded-lg border border-black/15 px-2 py-1 text-[13px] outline-none focus:border-[#3390EC]" />
+          <button type="submit" disabled={busy || !text.trim()} className="rounded-lg bg-[#3390EC] px-2.5 text-[13px] font-semibold text-white disabled:opacity-50">Send</button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, className, actions }: {
+  room: string; events: OfficeEvent[]; scene: SceneState; onBack?: () => void; onCompose?: () => void; onCommand?: Command; className?: string; actions?: ReactNode;
+}) {
   const reduce = useReducedMotion();
   const info = topicOf(room);
   const msgs = useMemo(() => events.filter((e) => e.room === room), [events, room]);
@@ -194,7 +225,7 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
           </Button>
         )}
         <TopicIcon room={room} size={38} />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="truncate text-[15px] font-semibold">{info.topic} <span className="font-normal text-[#707579]">· {TG_GROUP}</span></div>
           <div className="truncate text-[13px]">
             {typing.length ? (
@@ -204,6 +235,7 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
             )}
           </div>
         </div>
+        {actions}
       </header>
       <div ref={scroller} className="hq-tg-wall min-h-0 flex-1 overflow-y-auto px-3 py-3">
         <div className="mx-auto mb-2 w-fit rounded-full bg-black/45 px-2.5 py-0.5 text-xs font-medium text-white">Today</div>
@@ -212,18 +244,18 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
           <AnimatePresence initial={false}>
             {msgs.map((e, i) => (
               <motion.div key={e.id} initial={reduce ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
-                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} />
+                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={onCommand} />
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
       </div>
-      <footer className="flex shrink-0 items-center gap-2 border-t border-black/[0.06] px-3 py-2 text-[#707579]">
+      <button type="button" onClick={onCompose} className="flex shrink-0 items-center gap-2 border-t border-black/[0.06] px-3 py-2 text-left text-[#707579] hover:bg-[#F7F7F8]">
         <Paperclip className="size-5 shrink-0" />
-        <div className="flex-1 truncate text-sm">Message in {info.topic}</div>
+        <div className="flex-1 truncate text-sm">Message in {info.topic}… <span className="ml-1 rounded border border-black/10 px-1 text-[11px]">/</span></div>
         <Smile className="size-5 shrink-0" />
         <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#3390EC] text-white"><Mic className="size-4.5" /></div>
-      </footer>
+      </button>
     </section>
   );
 }
