@@ -7,7 +7,7 @@
   {"id":"evt-006","t":7500,"room":"analytics","speaker":"d2c-analyst","type":"message","text":"📊 Summer Sale uplift: 4x\nGlow Kit: 6x"},
   {"id":"evt-007","t":9000,"room":"analytics","speaker":"d2c-analyst","type":"done","text":"📊 Forecast (5 days)\nSKU01 · 800 · SKU02 · 1,400\nSKU03 · 600 · SKU04 · 240\nSKU05 · 300\nRevenue ≈ ₹20.4L"},
   {"id":"evt-008","t":10000,"room":"ads","speaker":"d2c-captain","type":"assign","text":"🎯 @d2c-ads Meta plan, ₹3L guide","meta":{"targets":["d2c-ads"]}},
-  {"id":"evt-009","t":10500,"room":"creators","speaker":"d2c-captain","type":"assign","text":"🎯 @d2c-influencers creator shortlist, ₹1.5L guide","meta":{"targets":["d2c-influencers"]}},
+  {"id":"evt-009","t":10500,"room":"creators","speaker":"d2c-captain","type":"assign","text":"🎯 @d2c-influencers creators, ₹1.5L guide","meta":{"targets":["d2c-influencers"]}},
   {"id":"evt-010","t":11000,"room":"ops","speaker":"d2c-captain","type":"assign","text":"🎯 @d2c-ops no stockouts\n1–2 day delivery everywhere","meta":{"targets":["d2c-ops"]}},
   {"id":"evt-011","t":11500,"room":"design","speaker":"d2c-captain","type":"assign","text":"🎯 @d2c-design sale banners for the gallery","meta":{"targets":["d2c-design"]}},
   {"id":"evt-012","t":12000,"room":"ads","speaker":"d2c-ads","type":"working","text":"📣 Reading campaign ROAS…"},
