@@ -39,7 +39,7 @@ export const body = (text: string) =>
 /** "9:41 PM" style timestamps that advance with the feed. */
 export const clock = (t: number) => `9:${String(41 + Math.floor(t / 15000)).padStart(2, '0')} PM`;
 
-export const REPO_URL = 'https://github.com/'; // TODO(orchestrator): real repo URL
+export const REPO_URL = 'https://github.com/SnehalSrivastava27/kratos';
 export const SWITCH_URL = 'https://github.com/sandbox-quantum/switch';
 
 export type Status = 'idle' | 'assigned' | 'working' | 'done' | 'pushback';
