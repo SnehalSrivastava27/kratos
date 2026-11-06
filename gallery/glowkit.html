@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080, initial-scale=1">
+<title>Kesar &amp; Co. · The Glow Kit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; background: #d9761f; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #fbefd9; -webkit-font-smoothing: antialiased; }
+
+  .card { position: relative; width: 1080px; height: 1080px; overflow: hidden;
+    background: radial-gradient(620px 480px at 50% 70%, #fcd08f 0%, rgba(252,208,143,0) 70%),
+                radial-gradient(1100px 1000px at 50% 55%, #f2a240 0%, #df7f24 50%, #b4500f 100%); }
+  .frame { position: absolute; inset: 36px; border: 1.5px solid rgba(255,240,215,.45); border-radius: 6px; }
+  .frame::before { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(255,240,215,.22); border-radius: 3px; }
+
+  .top { position: absolute; top: 78px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 92px; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 22px; letter-spacing: .32em; font-weight: 600; color: #fff6e6; }
+  .brand .amp { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: 0; color: #3b1d10; font-size: 28px; margin: 0 -4px; }
+  .mark { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1d6, #f3d3a0 60%, #c99a5c); box-shadow: 0 2px 6px rgba(90,35,0,.3); position: relative; }
+  .mark::after { content: ""; position: absolute; left: 15px; top: 7px; width: 4px; height: 20px; border-radius: 3px; background: #d8731c; transform: rotate(18deg); }
+  .tag { font-size: 16px; letter-spacing: .28em; text-transform: uppercase; color: #3b1d10; font-weight: 700; }
+
+  .copy { position: absolute; top: 150px; left: 0; right: 0; text-align: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 18px; font-size: 17px; letter-spacing: .42em; text-transform: uppercase; color: #3b1d10; font-weight: 700; }
+  .eyebrow::before, .eyebrow::after { content: ""; width: 54px; height: 1.5px; background: rgba(59,29,16,.6); }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 400; font-size: 112px; line-height: 1; margin-top: 18px; color: #fff6e6; letter-spacing: -.02em; font-variation-settings: "opsz" 144;
+    text-shadow: 0 4px 24px rgba(120,45,0,.25); }
+  h1 em { font-style: italic; }
+  .price { display: flex; justify-content: center; align-items: baseline; gap: 26px; margin-top: 18px; }
+  .was { font-size: 36px; color: rgba(59,29,16,.62); text-decoration: line-through; text-decoration-color: #fff6e6; text-decoration-thickness: 3px; }
+  .now { font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: 92px; line-height: 1; color: #3b1d10; letter-spacing: -.02em; font-variation-settings: "opsz" 144; }
+  .now .r { font-weight: 400; font-size: 58px; margin-right: 4px; vertical-align: 20px; }
+
+  .shadow { position: absolute; border-radius: 50%; background: radial-gradient(ellipse, rgba(70,25,0,.5), rgba(70,25,0,0) 70%); filter: blur(6px); }
+
+  /* lid leaning behind the box */
+  .lid { position: absolute; left: 318px; top: 566px; width: 470px; height: 120px; transform: rotate(-5deg); border-radius: 6px;
+    background: linear-gradient(180deg, #fffaf0 0%, #f4e6cc 70%, #e2c9a0 100%); box-shadow: 0 10px 30px rgba(90,35,0,.25); }
+  .lid::before { content: ""; position: absolute; top: 0; bottom: 0; left: 78%; width: 48px; margin-left: -24px; background: linear-gradient(90deg, #a9500f, #e9963c 40%, #d9761f 70%, #9b4610); }
+  .lid .word { position: absolute; left: 30px; top: 46px; font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 26px; color: #8a4a1a; }
+
+  /* box */
+  .rim { position: absolute; left: 270px; top: 676px; width: 540px; height: 36px; border-radius: 4px;
+    background: linear-gradient(180deg, #c9a878 0%, #e7d2ad 100%); box-shadow: inset 0 8px 14px rgba(80,40,0,.35); }
+  .box { position: absolute; left: 270px; top: 700px; width: 540px; height: 220px; border-radius: 4px 4px 10px 10px;
+    background: linear-gradient(90deg, #e9d6b3 0%, #fbf3e3 25%, #fffaf0 45%, #f5e8d0 75%, #dcc39a 100%);
+    box-shadow: 0 30px 50px rgba(90,35,0,.35), inset 0 3px 0 rgba(255,255,255,.7); }
+  .box::before { content: ""; position: absolute; top: 0; bottom: 0; left: 76%; width: 54px; margin-left: -27px; background: linear-gradient(90deg, #a9500f, #e9963c 40%, #d9761f 70%, #9b4610); }
+  .box .lab { position: absolute; left: 34px; top: 58px; width: 200px; color: #4a2412; }
+  .box .lab .b { font-size: 12px; letter-spacing: .32em; font-weight: 700; }
+  .box .lab .n { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 40px; line-height: 1; margin-top: 12px; }
+  .box .lab .s { font-size: 11px; letter-spacing: .24em; margin-top: 16px; color: #a85a1a; font-weight: 700; line-height: 1.7; }
+  .box .lab.r { left: auto; right: 34px; text-align: right; }
+
+  /* products peeking out of the box */
+  .bottle { position: absolute; width: 130px; height: 230px; border-radius: 24px 24px 28px 28px;
+    background: linear-gradient(90deg, #5e2705 0%, #a54c10 12%, #d9761f 30%, #f3aa52 42%, #e48a2c 52%, #b65a14 74%, #6e2f08 100%);
+    box-shadow: inset 0 10px 12px rgba(255,220,170,.25), -6px 0 16px rgba(80,30,0,.25); }
+  .bottle::before { content: ""; position: absolute; left: 18px; top: 16px; width: 10px; height: 160px; border-radius: 8px; background: linear-gradient(180deg, rgba(255,245,225,.8), rgba(255,245,225,.05)); }
+  .bottle .label { position: absolute; left: 12px; right: 12px; top: 44px; height: 74px; border-radius: 3px; background: linear-gradient(90deg, #efe2c8, #fbf4e6 40%, #f3e7cf 80%, #e2d0ae);
+    text-align: center; padding-top: 10px; color: #4a2412; }
+  .label .b { font-size: 7px; letter-spacing: .3em; font-weight: 700; }
+  .label .n { font-family: "Fraunces", Georgia, serif; font-size: 20px; font-style: italic; line-height: 1.05; margin-top: 6px; }
+  .neck { position: absolute; width: 50px; height: 20px; border-radius: 4px 4px 0 0; background: linear-gradient(90deg, #7a5a1e, #e9cd84 30%, #fff1c2 45%, #c9a14b 65%, #6e4e16); }
+  .neck::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 2px, transparent 2px 5px); }
+  .bulb { position: absolute; width: 42px; height: 66px; border-radius: 21px 21px 6px 6px; background: linear-gradient(90deg, #1a0f0a, #4a3328 35%, #6a5044 45%, #2a1a12 70%, #120a06); }
+
+  .jar { position: absolute; width: 170px; height: 130px; }
+  .jar .body { position: absolute; left: 0; right: 0; top: 46px; height: 90px; border-radius: 0 0 22px 22px;
+    background: linear-gradient(90deg, #d8c3a0 0%, #f6ecd9 25%, #fffaf0 42%, #efe0c4 70%, #c9ad83 100%); }
+  .jar .lid2 { position: absolute; left: -6px; right: -6px; top: 0; height: 52px; border-radius: 12px 12px 6px 6px;
+    background: linear-gradient(90deg, #7a5a1e, #d9b867 22%, #fff1c2 40%, #e2c06a 55%, #a4802f 80%, #6e4e16); box-shadow: 0 4px 6px rgba(80,40,0,.25); }
+
+  .tube { position: absolute; width: 110px; height: 210px; clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+    background: linear-gradient(90deg, #e7d6b7 0%, #fbf4e6 30%, #ffffff 42%, #f2e6cf 70%, #d6bf98 100%); }
+  .tube .n { position: absolute; left: 0; right: 0; top: 46px; text-align: center; font-family: "Fraunces", Georgia, serif; font-size: 20px; font-style: italic; color: #4a2412; line-height: 1; }
+  .tube .s { position: absolute; left: 0; right: 0; top: 98px; text-align: center; font-size: 8px; letter-spacing: .24em; color: #a85a1a; font-weight: 700; }
+  .crimp { position: absolute; height: 14px; border-radius: 3px; background: repeating-linear-gradient(90deg, #e3d0ad 0 3px, #f7eedb 3px 6px); }
+
+  /* tissue */
+  .tissue { position: absolute; width: 140px; height: 70px; background: linear-gradient(160deg, #fff6e6, #f3dcb5); border-radius: 50% 50% 0 0 / 80% 80% 0 0; }
+
+  /* seal */
+  .seal { position: absolute; left: 744px; top: 612px; width: 168px; height: 168px; border-radius: 50%; transform: rotate(10deg);
+    background: radial-gradient(circle at 35% 30%, #5a2e1a, #3b1d10 70%); box-shadow: 0 16px 30px rgba(60,20,0,.4);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fbefd9; }
+  .seal::before { content: ""; position: absolute; inset: 9px; border-radius: 50%; border: 1.5px dashed rgba(240,162,63,.7); }
+  .seal .k { font-size: 13px; letter-spacing: .3em; font-weight: 700; color: #f0a23f; }
+  .seal .v { font-family: "Fraunces", Georgia, serif; font-size: 46px; font-weight: 700; line-height: 1; margin: 6px 0 4px; }
+  .seal .k2 { font-size: 11px; letter-spacing: .26em; font-weight: 600; opacity: .85; }
+
+  .foot { position: absolute; left: 0; right: 0; bottom: 78px; text-align: center; font-size: 17px; letter-spacing: .32em; text-transform: uppercase; color: #3b1d10; font-weight: 700; }
+  .foot span { color: #fff6e6; }
+  .strand { position: absolute; width: 6px; height: 48px; border-radius: 3px 3px 50% 50%; background: linear-gradient(180deg, #ffd08a, #c2410c 70%, #7a2205); box-shadow: 0 2px 4px rgba(90,30,0,.3); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="frame"></div>
+
+  <div class="top">
+    <div class="brand"><span class="mark"></span>KESAR <span class="amp">&amp;</span> CO.</div>
+    <div class="tag">Bundle &amp; save</div>
+  </div>
+
+  <div class="copy">
+    <div class="eyebrow">The festive ritual</div>
+    <h1>The <em>Glow Kit</em></h1>
+    <div class="price"><span class="was">₹1,999</span><span class="now"><span class="r">₹</span>1,399</span></div>
+  </div>
+
+  <div class="shadow" style="left:240px; top:890px; width:600px; height:60px"></div>
+  <div class="lid"><span class="word">Glow Kit</span></div>
+  <div class="rim"></div>
+
+  <div class="tissue" style="left:290px; top:650px; transform: rotate(-8deg)"></div>
+  <div class="tissue" style="left:640px; top:648px; transform: rotate(9deg)"></div>
+
+  <div class="jar" style="left:300px; top:580px"><div class="body"></div><div class="lid2"></div></div>
+  <div class="bulb" style="left:519px; top:430px"></div>
+  <div class="neck" style="left:515px; top:494px"></div>
+  <div class="bottle" style="left:475px; top:512px"><div class="label"><div class="b">KESAR &amp; CO.</div><div class="n">Vitamin C<br>Serum</div></div></div>
+  <div class="crimp" style="left:622px; top:524px; width:114px"></div>
+  <div class="tube" style="left:624px; top:534px"><div class="n">Sun<br>Veil</div><div class="s">SPF 50</div></div>
+
+  <div class="box">
+    <div class="lab"><div class="b">KESAR &amp; CO.</div><div class="n">Glow Kit</div><div class="s">SERUM · MOISTURISER<br>SUNSCREEN</div></div>
+  </div>
+
+  <div class="seal"><span class="k">SAVE</span><span class="v">₹600</span><span class="k2">30% OFF</span></div>
+
+  <div class="strand" style="left:200px; top:800px; transform: rotate(-50deg)"></div>
+  <div class="strand" style="left:228px; top:770px; transform: rotate(-15deg); height:36px"></div>
+  <div class="strand" style="left:880px; top:880px; transform: rotate(60deg)"></div>
+
+  <div class="foot">Festive Sale · <span>5 days only</span></div>
+</div>
+</body>
+</html>

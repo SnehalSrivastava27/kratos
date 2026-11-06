@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080, initial-scale=1">
+<title>Kesar &amp; Co. · Festive Sale</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1080px; overflow: hidden; background: #f7eedd; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #3b1d10; -webkit-font-smoothing: antialiased; }
+  .serif { font-family: "Fraunces", Georgia, "Times New Roman", serif; }
+
+  .card { position: relative; width: 1080px; height: 1080px; overflow: hidden;
+    background:
+      radial-gradient(900px 700px at 50% 108%, #f2b25c 0%, rgba(242,178,92,.55) 30%, rgba(247,238,221,0) 62%),
+      radial-gradient(600px 420px at 88% 6%, rgba(232,140,40,.18), rgba(247,238,221,0) 70%),
+      linear-gradient(180deg, #fbf5ea 0%, #f6ead4 100%); }
+  /* paper grain */
+  .card::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+    background-image: repeating-radial-gradient(circle at 17% 23%, rgba(120,70,20,.035) 0 1px, transparent 1px 3px); }
+
+  /* frame */
+  .frame { position: absolute; inset: 36px; border: 1.5px solid rgba(156,86,24,.35); border-radius: 6px; }
+  .frame::before { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(156,86,24,.18); border-radius: 3px; }
+
+  /* top bar */
+  .top { position: absolute; top: 78px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 92px; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 22px; letter-spacing: .32em; font-weight: 600; color: #4a2412; }
+  .brand .amp { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: 0; color: #c8691a; font-size: 28px; margin: 0 -4px; }
+  .mark { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #f7b956, #d8701a 60%, #9b4610); box-shadow: 0 2px 6px rgba(120,55,10,.3), inset 0 -2px 4px rgba(0,0,0,.15); position: relative; }
+  .mark::after { content: ""; position: absolute; left: 15px; top: 7px; width: 4px; height: 20px; border-radius: 3px; background: #fbefd9; transform: rotate(18deg); opacity: .9; }
+  .tag { font-size: 16px; letter-spacing: .28em; text-transform: uppercase; color: #9b5418; font-weight: 600; }
+
+  /* headline */
+  .copy { position: absolute; top: 140px; left: 0; right: 0; text-align: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 18px; font-size: 18px; letter-spacing: .42em; text-transform: uppercase; color: #a85a1a; font-weight: 600; }
+  .eyebrow::before, .eyebrow::after { content: ""; width: 54px; height: 1.5px; background: linear-gradient(90deg, transparent, #c8781f); }
+  .eyebrow::after { transform: scaleX(-1); }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 400; font-style: italic; font-size: 100px; line-height: 1; margin-top: 16px; color: #3b1d10; letter-spacing: -.01em; font-variation-settings: "opsz" 144; }
+  .big { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-top: 2px; }
+  .big .num { font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: 210px; line-height: .86; letter-spacing: -.04em; font-variation-settings: "opsz" 144;
+    background: linear-gradient(180deg, #f0a23f 0%, #d8731c 55%, #a9500f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .big .side { display: flex; flex-direction: column; align-items: flex-start; padding-top: 22px; }
+  .big .pct { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 96px; line-height: .9; color: #d8731c; }
+  .big .off { font-size: 30px; letter-spacing: .3em; font-weight: 700; color: #3b1d10; margin-top: 8px; padding-left: 6px; }
+
+  /* stage */
+  .stage { position: absolute; left: 0; right: 0; bottom: 92px; height: 470px; }
+  .sun { position: absolute; left: 50%; bottom: 40px; width: 640px; height: 640px; margin-left: -320px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 60%, rgba(255,214,150,.9) 0%, rgba(244,170,80,.55) 45%, rgba(244,170,80,0) 70%); }
+  .arch { position: absolute; left: 50%; bottom: 100px; width: 520px; height: 600px; margin-left: -260px; border-radius: 260px 260px 0 0;
+    border: 1.5px solid rgba(176,96,26,.38); border-bottom: 0; }
+  .arch.in { width: 488px; height: 584px; margin-left: -244px; border-radius: 244px 244px 0 0; border-color: rgba(176,96,26,.2); }
+
+  .podium { position: absolute; left: 50%; bottom: 70px; width: 600px; height: 92px; margin-left: -300px; }
+  .podium .side { position: absolute; left: 0; right: 0; top: 46px; height: 56px; border-radius: 0 0 50% 50% / 0 0 46px 46px;
+    background: linear-gradient(90deg, #d9b98a 0%, #f4e4c8 30%, #fbf1df 50%, #ead4b0 75%, #c9a272 100%); box-shadow: 0 24px 40px rgba(120,60,15,.28); }
+  .podium .top { position: absolute; left: 0; right: 0; top: 0; height: 92px; border-radius: 50%; padding: 0;
+    background: radial-gradient(ellipse at 50% 40%, #fffaf0 0%, #f5e6cc 60%, #e3c9a0 100%); box-shadow: inset 0 -3px 6px rgba(150,95,40,.25); display: block; }
+
+  .shadow { position: absolute; border-radius: 50%; background: radial-gradient(ellipse, rgba(70,30,5,.42), rgba(70,30,5,0) 70%); filter: blur(4px); }
+
+  /* serum bottle */
+  .bottle { position: absolute; width: 150px; height: 220px; border-radius: 26px 26px 30px 30px;
+    background: linear-gradient(90deg, #6a2c07 0%, #a54c10 12%, #d9761f 30%, #f3aa52 42%, #e48a2c 52%, #b65a14 74%, #7c3509 100%);
+    box-shadow: inset 0 -14px 18px rgba(60,20,0,.35), inset 0 10px 12px rgba(255,220,170,.25); }
+  .bottle::before { content: ""; position: absolute; left: 22px; top: 18px; width: 12px; height: 180px; border-radius: 8px; background: linear-gradient(180deg, rgba(255,245,225,.75), rgba(255,245,225,.05)); }
+  .bottle .label { position: absolute; left: 14px; right: 14px; top: 58px; height: 112px; border-radius: 4px; background: linear-gradient(90deg, #efe2c8, #fbf4e6 40%, #f3e7cf 80%, #e2d0ae);
+    text-align: center; padding-top: 14px; color: #4a2412; }
+  .label .b { font-size: 9px; letter-spacing: .3em; font-weight: 700; }
+  .label .n { font-family: "Fraunces", Georgia, serif; font-size: 24px; font-style: italic; line-height: 1.05; margin-top: 8px; }
+  .label .s { font-size: 8px; letter-spacing: .22em; margin-top: 8px; color: #a85a1a; font-weight: 700; }
+  .neck { position: absolute; width: 56px; height: 22px; border-radius: 4px 4px 0 0;
+    background: linear-gradient(90deg, #7a5a1e, #e9cd84 30%, #fff1c2 45%, #c9a14b 65%, #6e4e16); }
+  .neck::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 2px, transparent 2px 5px); }
+  .bulb { position: absolute; width: 46px; height: 74px; border-radius: 23px 23px 6px 6px;
+    background: linear-gradient(90deg, #1a0f0a, #4a3328 35%, #6a5044 45%, #2a1a12 70%, #120a06); }
+
+  /* jar */
+  .jar { position: absolute; width: 190px; height: 130px; }
+  .jar .body { position: absolute; left: 0; right: 0; top: 50px; height: 92px; border-radius: 0 0 26px 26px;
+    background: linear-gradient(90deg, #d8c3a0 0%, #f6ecd9 25%, #fffaf0 42%, #efe0c4 70%, #c9ad83 100%);
+    box-shadow: inset 0 -10px 14px rgba(120,80,30,.18); }
+  .jar .body::before { content: ""; position: absolute; left: 14px; right: 14px; top: 26px; height: 40px;
+    background: linear-gradient(90deg, #c8691a, #e9963c 40%, #d9761f 70%, #a9500f); border-radius: 2px; }
+  .jar .body::after { content: "MOISTURISER"; position: absolute; left: 0; right: 0; top: 40px; text-align: center; font-size: 9px; letter-spacing: .22em; color: #fbefd9; font-weight: 700; }
+  .jar .lid { position: absolute; left: -6px; right: -6px; top: 0; height: 58px; border-radius: 12px 12px 6px 6px;
+    background: linear-gradient(90deg, #7a5a1e, #d9b867 22%, #fff1c2 40%, #e2c06a 55%, #a4802f 80%, #6e4e16); box-shadow: 0 4px 6px rgba(80,40,0,.25); }
+  .jar .lid::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 14px; border-radius: 12px 12px 50% 50%; background: linear-gradient(180deg, rgba(255,250,225,.55), rgba(255,250,225,0)); }
+
+  /* tube */
+  .tube { position: absolute; width: 120px; height: 250px; }
+  .tube .t { position: absolute; left: 0; right: 0; top: 0; bottom: 46px;
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 14% 100%);
+    background: linear-gradient(90deg, #e7d6b7 0%, #fbf4e6 30%, #ffffff 42%, #f2e6cf 70%, #d6bf98 100%); }
+  .tube .crimp { position: absolute; left: -2px; right: -2px; top: -8px; height: 14px; border-radius: 3px;
+    background: repeating-linear-gradient(90deg, #e3d0ad 0 3px, #f7eedb 3px 6px); }
+  .tube .stripe { position: absolute; left: 14px; right: 14px; top: 70px; text-align: center; }
+  .tube .stripe .n { font-family: "Fraunces", Georgia, serif; font-size: 22px; font-style: italic; color: #4a2412; line-height: 1; }
+  .tube .stripe .s { font-size: 8px; letter-spacing: .24em; color: #a85a1a; margin-top: 8px; font-weight: 700; }
+  .tube .stripe .bar { height: 3px; width: 44px; margin: 10px auto 0; background: #d8731c; border-radius: 2px; }
+  .tube .cap { position: absolute; left: 22px; right: 22px; bottom: 0; height: 50px; border-radius: 4px 4px 10px 10px;
+    background: linear-gradient(90deg, #8a3d0c, #d9761f 30%, #f3aa52 45%, #c8691a 70%, #7c3509); }
+
+  /* saffron strands */
+  .strand { position: absolute; width: 5px; height: 46px; border-radius: 3px 3px 50% 50%; background: linear-gradient(180deg, #f2a23a, #c2410c 70%, #8f2a07); box-shadow: 0 2px 4px rgba(120,40,0,.25); }
+
+  /* footer */
+  .foot { position: absolute; left: 0; right: 0; bottom: 70px; display: flex; justify-content: center; }
+  .pill { display: inline-flex; align-items: center; gap: 22px; padding: 18px 34px; border-radius: 999px; background: #3b1d10; color: #fbefd9;
+    font-size: 20px; letter-spacing: .26em; text-transform: uppercase; font-weight: 600; box-shadow: 0 14px 30px rgba(59,29,16,.3); }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: #f0a23f; }
+  .pill b { color: #f0a23f; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="frame"></div>
+
+  <div class="top">
+    <div class="brand"><span class="mark"></span>KESAR <span class="amp">&amp;</span> CO.</div>
+    <div class="tag">Festive Edit 2026</div>
+  </div>
+
+  <div class="copy">
+    <div class="eyebrow">Limited time</div>
+    <h1>Festive Sale</h1>
+    <div class="big">
+      <span class="num">30</span>
+      <span class="side"><span class="pct">%</span><span class="off">OFF</span></span>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="arch"></div><div class="arch in"></div>
+    <div class="sun"></div>
+    <div class="podium"><div class="side"></div><div class="top"></div></div>
+
+    <!-- jar (left) -->
+    <div class="shadow" style="left:300px; bottom:118px; width:230px; height:34px"></div>
+    <div class="jar" style="left:320px; bottom:132px"><div class="body"></div><div class="lid"></div></div>
+
+    <!-- tube (right) -->
+    <div class="shadow" style="left:612px; bottom:118px; width:170px; height:30px"></div>
+    <div class="tube" style="left:640px; bottom:132px"><div class="t"><div class="stripe"><div class="n">Sun<br>Veil</div><div class="s">SPF 50</div><div class="bar"></div></div></div><div class="crimp"></div><div class="cap"></div></div>
+
+    <!-- serum (centre front) -->
+    <div class="shadow" style="left:440px; bottom:104px; width:200px; height:36px"></div>
+    <div class="bulb" style="left:517px; bottom:396px"></div>
+    <div class="neck" style="left:512px; bottom:374px"></div>
+    <div class="bottle" style="left:465px; bottom:116px; height:260px; width:150px"><div class="label" style="top:70px"><div class="b">KESAR &amp; CO.</div><div class="n">Vitamin C<br>Serum</div><div class="s">15% · KESAR</div></div></div>
+
+    <div class="strand" style="left:236px; bottom:150px; transform: rotate(-58deg)"></div>
+    <div class="strand" style="left:262px; bottom:128px; transform: rotate(-24deg); height:38px"></div>
+    <div class="strand" style="left:812px; bottom:140px; transform: rotate(52deg)"></div>
+    <div class="strand" style="left:842px; bottom:162px; transform: rotate(80deg); height:34px"></div>
+  </div>
+
+  <div class="foot"><div class="pill">5 days only <span class="dot"></span> <b>Shop the sale</b></div></div>
+</div>
+</body>
+</html>
