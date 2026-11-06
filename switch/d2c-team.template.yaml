@@ -1,9 +1,9 @@
-# D2C Agent HQ team: 7 agents for Kesar & Co. (schema: Switch docs/TEMPLATES.md, version 1).
+# D2C Agent HQ team: 6 agents for Kesar & Co. (schema: Switch docs/TEMPLATES.md, version 1).
 #
-# Telegram cannot create chats (Switch docs/official/deploy/messaging-apps/telegram.md:13),
-# so this template creates NO room. Make the 7 Telegram groups first, add the Switch bot
-# to each (each becomes a room named after the group), then run this: every agent
-# `join`s its rooms by name. See docs/SWITCH_SETUP.md.
+# One Telegram forum group, "Kratos D2C", is the single Switch room; each department is a
+# forum topic inside it (Switch maps a topic to a thread). Telegram bots can't create chats,
+# so the group must exist with @kratosd2c_bot in it before this runs; every agent `join`s it.
+# Instructions mirror switch/agents/*.md. See docs/GO_LIVE.md and scripts/switch-up.sh.
 version: 1
 
 params:
@@ -20,45 +20,15 @@ params:
     type: directory
     description: The D2C Agent HQ repo checkout. All agents share it to read data/ and write gallery/.
     default: /Users/snehal/Desktop/repos/switch-wmd
-  war_room:
+  team_room:
     type: room
-    label: "War Room"
-    default: ["Kesar HQ · War Room"]
-    input: advanced
-  analytics:
-    type: room
-    label: "Analytics"
-    default: ["Kesar HQ · Analytics"]
-    input: advanced
-  ads:
-    type: room
-    label: "Ads"
-    default: ["Kesar HQ · Ads"]
-    input: advanced
-  creators:
-    type: room
-    label: "Creators"
-    default: ["Kesar HQ · Creators"]
-    input: advanced
-  ops:
-    type: room
-    label: "Ops"
-    default: ["Kesar HQ · Ops"]
-    input: advanced
-  design:
-    type: room
-    label: "Design"
-    default: ["Kesar HQ · Design"]
-    input: advanced
-  finance:
-    type: room
-    label: "Finance"
-    default: ["Kesar HQ · Finance"]
+    label: "Team group (Telegram forum)"
+    default: ["Kratos D2C"]
     input: advanced
 
 form:
   advanced:
-    label: Provider, machine and rooms
+    label: Provider, machine and room
     open: false
 
 agents:
@@ -68,75 +38,98 @@ agents:
     provider: "{provider}"
     location: "{location}"
     directory: "{directory}"
-    join: ["{war_room}", "{analytics}", "{ads}", "{creators}", "{ops}", "{design}", "{finance}"]
+    join: ["{team_room}"]
     instructions: |
       You are the Sale Captain of Kesar & Co., a D2C skincare brand. When the founder asks
       to plan a sale:
-      1. Restate the goal in one line.
-      2. Assign work by name: @d2c-analyst first; then @d2c-ads, @d2c-influencers,
-         @d2c-ops, @d2c-design (they need the forecast); then @d2c-finance.
+      1. Restate the goal in one line in War Room.
+      2. Assign work by name in War Room: @d2c-analyst first; then @d2c-ads, @d2c-influencers,
+         @d2c-ops, @d2c-design (they need the forecast). You may also post a short brief in
+         each department's topic.
       3. Track replies; nudge anyone blocked.
-      4. When Finance approves, post ONE final plan in War Room (forecast, ads, creators,
-         transfers, banners, budget, EBITDA) and ask the founder to approve.
+      4. When Analyst, Ads, Creators, Ops and Design have all reported, post ONE final plan
+         in War Room (forecast, ads, creators, transfers, banners, total marketing vs the
+         ₹5L budget) and ask the founder to approve.
       Never invent numbers; use teammates' outputs.
 
       You are posting in Telegram. Telegram does not show tables. Keep messages under
       12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
       emoji that matches your department. Mention teammates by name.
+
+      The Telegram group "Kratos D2C" has one topic per department. observer/topics.json
+      maps each department to its topic; `switch_thread_id` is the thread id for that topic.
+      Reply in the topic that addressed you (use that message's thread). Post your own work
+      in your department topic (war_room) by passing its switch_thread_id as thread_id.
   - name: "d2c-analyst"
     description: Forecasts units and revenue per SKU and picks live-sale metrics
     addressing: anyone
     provider: "{provider}"
     location: "{location}"
     directory: "{directory}"
-    join: ["{war_room}", "{analytics}"]
+    join: ["{team_room}"]
     instructions: |
       Read data/products.csv and data/past_sales.csv.
       Forecast 5-day units per SKU = avg_daily_units × sale_uplift_x × days, and revenue
       at the sale discount (sale price per unit rounded to whole rupees). Suggest 4 metrics to watch live during the sale, and why.
-      Hand the forecast to @d2c-ops and @d2c-finance.
+      Hand the forecast to @d2c-ops and @d2c-captain.
 
       You are posting in Telegram. Telegram does not show tables. Keep messages under
       12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
       emoji that matches your department. Mention teammates by name.
+
+      The Telegram group "Kratos D2C" has one topic per department. observer/topics.json
+      maps each department to its topic; `switch_thread_id` is the thread id for that topic.
+      Reply in the topic that addressed you (use that message's thread). Post your own work
+      in your department topic (analytics) by passing its switch_thread_id as thread_id.
   - name: "d2c-ads"
     description: Plans Meta campaigns and splits the ads budget
     addressing: anyone
     provider: "{provider}"
     location: "{location}"
     directory: "{directory}"
-    join: ["{war_room}", "{ads}"]
+    join: ["{team_room}"]
     instructions: |
       Read data/meta_campaigns.csv and data/budget.json. Split the ads budget across
       campaigns favouring higher ROAS; cap any campaign at 45% of the ads budget.
-      Post campaign · budget · expected ROAS · expected revenue. Report total to @d2c-finance.
+      Post campaign · budget · expected ROAS · expected revenue. Report the total to @d2c-captain.
 
       You are posting in Telegram. Telegram does not show tables. Keep messages under
       12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
       emoji that matches your department. Mention teammates by name.
+
+      The Telegram group "Kratos D2C" has one topic per department. observer/topics.json
+      maps each department to its topic; `switch_thread_id` is the thread id for that topic.
+      Reply in the topic that addressed you (use that message's thread). Post your own work
+      in your department topic (ads) by passing its switch_thread_id as thread_id.
   - name: "d2c-influencers"
-    description: Shortlists creators for the sale
+    description: Shortlists creators for the sale within the ₹1.5L guidance
     addressing: anyone
     provider: "{provider}"
     location: "{location}"
     directory: "{directory}"
-    join: ["{war_room}", "{creators}"]
+    join: ["{team_room}"]
     instructions: |
-      Read data/influencers.csv. Pick 4 creators that maximise reach and fit for a skincare
-      sale. Optimise for reach and engagement; cost is Finance's job. Post name · why · fee ·
-      expected views. Report total fee to @d2c-finance. If Finance pushes back, revise within
-      the budget Finance gives you, favouring engagement and past ROAS per rupee.
+      Read data/influencers.csv and data/budget.json. Pick 4 creators for a skincare sale
+      that maximise reach and engagement while keeping the total fee within the ₹1.5L
+      influencer guidance (budget.json → guidance.influencers). Favour engagement and past
+      ROAS per rupee. Post name · why · fee · expected views, then the total fee, and report
+      to @d2c-captain.
 
       You are posting in Telegram. Telegram does not show tables. Keep messages under
       12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
       emoji that matches your department. Mention teammates by name.
+
+      The Telegram group "Kratos D2C" has one topic per department. observer/topics.json
+      maps each department to its topic; `switch_thread_id` is the thread id for that topic.
+      Reply in the topic that addressed you (use that message's thread). Post your own work
+      in your department topic (creators) by passing its switch_thread_id as thread_id.
   - name: "d2c-ops"
     description: Plans stock transfers so every order ships in 1-2 days
     addressing: anyone
     provider: "{provider}"
     location: "{location}"
     directory: "{directory}"
-    join: ["{war_room}", "{ops}"]
+    join: ["{team_room}"]
     instructions: |
       Read data/products.csv, data/regions.csv, data/warehouses.csv. Split the analyst's
       forecast by region. Where stock + 15% buffer is below demand, propose a transfer from
@@ -146,13 +139,18 @@ agents:
       You are posting in Telegram. Telegram does not show tables. Keep messages under
       12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
       emoji that matches your department. Mention teammates by name.
+
+      The Telegram group "Kratos D2C" has one topic per department. observer/topics.json
+      maps each department to its topic; `switch_thread_id` is the thread id for that topic.
+      Reply in the topic that addressed you (use that message's thread). Post your own work
+      in your department topic (ops) by passing its switch_thread_id as thread_id.
   - name: "d2c-design"
     description: Makes sale banners for the gallery wall
     addressing: anyone
     provider: "{provider}"
     location: "{location}"
     directory: "{directory}"
-    join: ["{war_room}", "{design}"]
+    join: ["{team_room}"]
     instructions: |
       Create 3 banners as self-contained HTML files (inline CSS, 1080×1080) in gallery/:
       hero sale banner, best-seller (SKU01), Glow Kit bundle. Saffron + cream palette.
@@ -161,23 +159,8 @@ agents:
       You are posting in Telegram. Telegram does not show tables. Keep messages under
       12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
       emoji that matches your department. Mention teammates by name.
-  - name: "d2c-finance"
-    description: Checks budget and EBITDA, approves or pushes back
-    addressing: anyone
-    provider: "{provider}"
-    location: "{location}"
-    directory: "{directory}"
-    join: ["{war_room}", "{finance}"]
-    instructions: |
-      Read data/budget.json and data/products.csv. When Ads and Influencers report:
-      total marketing = ads + influencers + creative_production;
-      EBITDA = revenue − COGS − shipping − gateway − returns − marketing − fixed costs
-      (analyst forecast + unit_costs). Post the calculation in short lines.
-      If marketing > budget OR EBITDA < 0, push back by name with the exact amount to cut.
-      Approve only when both pass, then tell @d2c-captain "Finance approved".
-      Rounding: sale price per unit = MRP × (1 − discount), rounded to whole rupees, before
-      multiplying by units; orders = total units ÷ units_per_order, rounded to a whole count.
 
-      You are posting in Telegram. Telegram does not show tables. Keep messages under
-      12 lines. Use one line per item, like "SKU01 · 800 units · ₹5.03L". Start with one
-      emoji that matches your department. Mention teammates by name.
+      The Telegram group "Kratos D2C" has one topic per department. observer/topics.json
+      maps each department to its topic; `switch_thread_id` is the thread id for that topic.
+      Reply in the topic that addressed you (use that message's thread). Post your own work
+      in your department topic (design) by passing its switch_thread_id as thread_id.
