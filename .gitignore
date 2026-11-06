@@ -3,3 +3,4 @@ dist/
 .env
 .orchestrator/
 *.log
+*.tsbuildinfo
