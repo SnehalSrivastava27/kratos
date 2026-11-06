@@ -195,7 +195,7 @@ test('cache: read-only, rebuilt when a CSV changes, symlinked cache refused', ()
   for (const f of hashed) { fs.rmSync(path.join(cacheDir, f)); fs.symlinkSync(target, path.join(cacheDir, f)); }
   assert.equal(ok('sql', 'SELECT COUNT(*) n FROM products', '--data', d).rows[0].n, 3);
   assert.equal(fs.readFileSync(target, 'utf8'), 'keep');
-  for (const f of hashed) { const p = path.join(cacheDir, f); assert.ok(!fs.lstatSync(p).isSymbolicLink(), 'symlink replaced by a real file'); }
+  for (const f of hashed) { const p = path.join(cacheDir, f); assert.ok(!fs.lstatSync(p).isSymbolicLink(), 'symlink replaced by a real file'); fs.rmSync(p); }
 });
 
 test('cached DB handle refuses writes (authorizer + read-only file)', async () => {
