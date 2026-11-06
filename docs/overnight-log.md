@@ -40,6 +40,7 @@ findings list. It feeds the blog.
 | 05:10 | LV2 merged: live agents locked down (per-agent tool list + repo `.claude/settings.json`: kit allowed, .env/.switch/~/.ssh reads denied, everything else needs a human); 16/16 synced; live SYSTEM OVERRIDE refused in 5 s. **Live War Room demo:** kickoff → approval ask in 5 min 1 s, 65 messages, 89 tool calls, deck + 3 banners, plan pinned; numbers match check_numbers.py (3,340 units, ₹20.42L, marketing ₹4.68L, EBITDA +₹1.61L). Fixes from the run (no ack messages, fresh numbers, default dates, Captain order) added to all 16 agents; re-running Haiku evals. |
 | 05:45 | BL1 final merged (live-run section, 57 findings, agent-lockdown diagram; 14 diagrams). Haiku eval run 7: 149/149 after the team-habit rules. All 16 live agents synced (revision current, Haiku, lockdown). Office server + observer restarted on the final code. Final CI green; secret scan of new history clean. PR #4 backend-v2 → main opened. |
 | 06:05 | GitHub CI failed on Node 22 (node:sqlite there has no setAuthorizer/enableDefensive): kit now fails closed without the authorizer, CI moved to Node 24. CI green → **PR #4 merged into main**; PR #3 closed as included. |
+| 06:50 | E3 merged: agent instructions −30% (219 KB → 153 KB), tier 3 (17 vague / two-part / follow-up / made-up-name questions); Haiku 166/166 at $0.21, p50 6 s. Synced to the 16 live agents. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
@@ -72,3 +73,6 @@ findings list. It feeds the blog.
 - Live, about a third of the 65 demo messages were acknowledgement loops ("confirmed", "on hold") — the cost of agents that all see each other. A one-line "post only when you add something new" rule targets it. (LV2)
 - Switch-run agents resume their old Claude sessions, so they can reuse numbers from a previous run ("same as before"); the fix is an explicit "every run starts fresh" rule. (LV2)
 - Node 22's `node:sqlite` has no `setAuthorizer`/`enableDefensive`; the toolkit's read-only guard needs Node 24+, so it now refuses to run rather than run unguarded. (CI)
+- Trimming instructions by 30% cut eval cost only ~7% and latency not at all: prompt caching already discounts repeated text, and the one kit call dominates wall time. (E3)
+- Compress lists, not rules: squeezing rule text broke three answers (a recomputed courier RTO, COD counted as delivered-only, a template sentence copied into a reply). (E3)
+- Haiku handles vague asks, two-part asks, quoted follow-ups and made-up names well; what it still slips on is format (exact rupees instead of lakhs, stray asterisks). (E3)

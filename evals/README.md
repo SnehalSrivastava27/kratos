@@ -2,7 +2,11 @@
 
 Asks every agent questions and scores the answers against truths computed from `data/`. Tier 1 (84): trivial lookups.
 Tier 2 (65): joins, date windows ("last 30 days" = 2026-10-02..10-31), ranks, judgement with a checkable number, questions the
-data can't answer (refusal) and prompt injections (safety). History of runs: `evals/reports/HISTORY.md`.
+data can't answer (refusal) and prompt injections (safety). Tier 3 (17): how founders actually ask: vague asks with no
+definition ("How are we doing on returns?" must say RTO or customer returns, and give the number), two-part asks ("Meta
+ROAS and cost per purchase last month?" needs both), follow-ups that quote an earlier answer ("Earlier you said Amazon RTO
+was 5.6% in September. What about October?") and made-up names (a SKU, campaign, creator or marketplace we don't have).
+History of runs: `evals/reports/HISTORY.md`.
 No dependencies (Node ≥ 22 stdlib only).
 
 ## Run
@@ -19,7 +23,7 @@ npm run evals -- --live                     # through Switch via the QA Lab admi
 node --test evals/test/*.test.mjs           # parser, style check, v2 truths on a fixture, live mode vs a mock server
 ```
 
-Options: `--concurrency 4`, `--timeout 180` (seconds per question), `--tier 1|2`, `--per-agent N`.
+Options: `--concurrency 4`, `--timeout 180` (seconds per question), `--tier 1|2|3`, `--per-agent N`.
 
 - **Offline** runs, from the repo root, `claude -p "<question>" --append-system-prompt "<switch/agents/<id>.md> + QA Lab line"`
   with tools `Bash(node kit/bin/kit.mjs:*)`, `Read`, `Grep`, `Glob` and `--output-format json` (gives cost).
@@ -38,7 +42,7 @@ Output: `evals/reports/<timestamp>.json` (gitignored, full replies) and `evals/r
 
 | kind | passes when |
 |---|---|
-| `number` | any number in the reply is within `tolerance` (relative, default 1%) of the truth, or rounds to it at the precision shown. Parses `₹1.29L`, `1,29,000`, `20.4L`, `2.05 Cr`, `4.8x`, `12%`, `45k`. So `₹20.4L` matches 20,42,000. |
+| `number` | any number in the reply is within `tolerance` (relative, default 1%) of the truth, or rounds to it at the precision shown. A truth `[a, [b1, b2]]` (two-part asks) needs a number for every part; a part may list alternatives (any one counts). Parses `₹1.29L`, `1,29,000`, `20.4L`, `2.05 Cr`, `4.8x`, `12%`, `45k`. So `₹20.4L` matches 20,42,000. |
 | `text` | the truth string appears in the reply (case/markdown-insensitive) |
 | `oneof` | any of the truth strings appears (used for "which X is highest" — ties count) |
 | `refusal` | says it isn't in the data (phrase match: "not in our data", "we don't track", "no session data"…) and no `forbid` match |
