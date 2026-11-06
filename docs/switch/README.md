@@ -46,6 +46,7 @@ alongside your team in Slack, Teams, Discord, Telegram and Mattermost" (`switch:
 | 09 | [Skills library and librarian](09-skills-library-and-librarian.md) | 316 installed skills shelved by Claude Code in 45 s |
 | 10 | [Gotchas and lessons](10-gotchas-and-lessons.md) | Every real problem we hit, and the fix |
 | 11 | [Room documents](11-room-documents.md) | The Captain pins the plan, Finance reads it and pins its sign-off |
+| 12 | [Feature survey](12-feature-survey.md) | Every Switch 0.31.0 capability, used or not, scored; roles + morning brief built |
 | — | [Blog outline](blog-outline.md) | A ready skeleton for the "Flip the Switch" post |
 
 ## Diagrams
@@ -80,10 +81,15 @@ All diagrams are Excalidraw files: open the `.excalidraw` at excalidraw.com (Fil
 | Room documents and references (`create_room_document`, `attach_reference_to_room`; switch-core 0.31.0 `bridges/agent/operations/definitions.py:549,1227`) | yes | [11](11-room-documents.md) |
 | `read_context` (room history): new hires catch up on their first turn | yes | [06](06-hiring-agents-from-the-office.md) (`switch:bridges/agent/operations/definitions.py:639`) |
 | `send_targeted_message` (+ an `internal_only` room for privacy) | yes | [04](04-agent-protocol.md#targeted-messages-and-finances-private-nudge) |
+| Room roles (`finance-approver`, `ops-oncall`): defined via `POST /gateway/rooms/{id}/roles` (switch-core 0.31.0 `gateway/rooms.py:891`), assumed with `assume_role` (`bridges/agent/operations/definitions.py:1112`), `@role` routing (`delivery/addressing.py:246`) | yes (SW4) | [12](12-feature-survey.md), `server/src/roles.ts` |
+| Role notices "🎭 assumed the `x` role." (`bridges/agent/protocol/agent_core.py:1816,3536`) → office `meta.switch_role` | yes (SW4) | [12](12-feature-survey.md), `observer/src/index.ts` `switchRole` |
+| Scheduled runs: none in Switch, so the office server asks the Captain for a 9 AM IST morning brief through Switch | yes (SW4) | [12](12-feature-survey.md), `server/src/brief.ts` |
 
 ### Switch features we could use next
 
-- **Roles** (`define_role`, `assume_role`): "whoever is Ops this week" instead of a fixed agent name.
+- **Approval cards** with Telegram buttons (`bridges/agent/api/activity_routes.py:231`): the founder's sign-off as a
+  first-class Switch approval. Needs a live host connection and addressing changes ([12](12-feature-survey.md#rejected-and-why)).
+- **Budgets** (`gateway/tenants.py:711`): a monthly spend cap per teammate.
 - **Linked rooms and room groups**: one room per brand, linked to a shared leadership room.
 - **More bridges**: the same team in Slack or Discord with no code change, since the observer only
   sees Switch rooms. WhatsApp is not a Switch bridge today.

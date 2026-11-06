@@ -22,7 +22,7 @@ export const fake = {
   managementDown: false, roomsBroken: false /* every gateway call → 500 */,
   agentsFlaky: 0 /* the next N GET /gateway/agents → 503 */, agentsMissing: [] /* names left out of GET /gateway/agents */,
   tgEditError: null /* editForumTopic answers { ok: false, description } with HTTP 500 */, tgDelay: 0 /* ms before each Bot API answer */, tg429: 0 /* the next N createForumTopic → 429 */, streamSilent: false /* office SSE never says connection_state */,
-  notLive: false /* GET /gateway/agents/{id} never shows the agent live in a room */,
+  roles: {} /* room id → defined roles */, rolesDown: false /* role routes → 404 (an older Switch) */, notLive: false /* GET /gateway/agents/{id} never shows the agent live in a room */,
   chats: { "room-1": "-100", old: "-5" }, // Switch room → Telegram chat id
   obsRooms: [] /* the observer's list_rooms result */, obsFrames: [] /* message payloads its stream sends after connection_state */,
   tg: { ok: true, forum: true, admin: true, type: "supergroup", topics: new Set(), next: 100 },
@@ -60,6 +60,17 @@ const sw = createServer(async (req, res) => {
   const room = r.match(/^GET \/gateway\/rooms\/([\w-]+)$/);
   if (room) return ok({ id: room[1], name: "Kratos D2C", external_channel_id: fake.chats[room[1]] ?? null });
   if (/^POST \/gateway\/rooms\/[\w-]+\/agents$/.test(r)) return ok({});
+  // room roles (SW4): fake.roles[roomId] = [{ name, instructions, exclusive }]
+  const roles = r.match(/^(GET|POST) \/gateway\/rooms\/([\w-]+)\/roles$/);
+  if (roles && fake.rolesDown) return ok({ detail: "Not Found" }, 404);
+  if (roles) {
+    const list = (fake.roles[roles[2]] ??= []);
+    if (roles[1] === "POST") {
+      if (list.some((x) => x.name === json.name)) return ok({ detail: "Role already exists" }, 400);
+      list.push(json);
+    }
+    return ok(list.map((x) => ({ ...x, held_by: [] })), roles[1] === "POST" ? 201 : 200);
+  }
   if (r === "POST /gateway/agents/register") return ok({ id: "office-1", api_key: "secret-key" });
   if (/^PUT \/gateway\/agents\/[\w-]+\/addressing-policy$/.test(r)) return ok({});
   if (r === "GET /gateway/management/controllers") return ok([{ id: "c0", kind: "console", state: "online" }, { id: "c1", kind: "console", state: "online" }]);
