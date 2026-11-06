@@ -1,0 +1,11 @@
+[
+  { "id": "evt-001", "t": 0,     "room": "war_room",  "speaker": "founder",         "type": "message",  "text": "Plan our festive sale: 30% off, 5 days, ₹5L marketing budget" },
+  { "id": "evt-002", "t": 2500,  "room": "war_room",  "speaker": "d2c-captain",     "type": "assign",   "text": "🎯 Festive sale · 30% off · 5 days · ₹5L\n@d2c-analyst forecast first, then Ads, Creators, Ops, Design. Finance checks last.", "meta": { "targets": ["d2c-analyst","d2c-ads","d2c-influencers","d2c-ops","d2c-design","d2c-finance"] } },
+  { "id": "evt-003", "t": 6000,  "room": "analytics", "speaker": "d2c-analyst",     "type": "done",     "text": "📊 Forecast (5 days)\nSKU01 · 800 · SKU02 · 1,400 · SKU03 · 600\nSKU04 · 240 · SKU05 · 300\nRevenue ≈ ₹20.4L" },
+  { "id": "evt-004", "t": 10000, "room": "creators",  "speaker": "d2c-influencers", "type": "done",     "text": "⭐ Shortlist: Riya Glows, SkinBySana, The Derm Diaries, Meera Minimal\nTotal fee ₹3.55L" },
+  { "id": "evt-005", "t": 13000, "room": "finance",   "speaker": "d2c-finance",     "type": "pushback", "text": "💰 Marketing ₹7.05L vs ₹5L budget\nEBITDA −₹0.76L ❌\n@d2c-influencers cut ₹2.05L", "meta": { "targets": ["d2c-influencers"], "ebitda": -76086 } },
+  { "id": "evt-006", "t": 17000, "room": "creators",  "speaker": "d2c-influencers", "type": "done",     "text": "⭐ Revised: GlowWithAnu, Desi Skin Desk, Kavya Care, Tanvi Tries\nTotal ₹1.18L" },
+  { "id": "evt-007", "t": 20000, "room": "finance",   "speaker": "d2c-finance",     "type": "approved", "text": "💰 Marketing ₹4.68L · EBITDA +₹1.61L ✅ Finance approved", "meta": { "ebitda": 160914 } },
+  { "id": "evt-008", "t": 23000, "room": "war_room",  "speaker": "d2c-captain",     "type": "approval_needed", "text": "🎯 Final plan ready. @founder approve?", "meta": { "targets": ["founder"] } },
+  { "id": "evt-009", "t": 26000, "room": "war_room",  "speaker": "founder",         "type": "celebrate","text": "Approved 🚀" }
+]

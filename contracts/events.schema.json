@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OfficeEvent",
+  "type": "object",
+  "required": ["id", "t", "room", "speaker", "type", "text"],
+  "properties": {
+    "id":      { "type": "string", "description": "unique, e.g. evt-001" },
+    "t":       { "type": "number", "description": "ms since start of run (mock feed) or epoch ms (live)" },
+    "room":    { "type": "string", "enum": ["war_room","analytics","ads","creators","ops","design","finance"] },
+    "speaker": { "type": "string", "description": "person id from roster.json" },
+    "type":    { "type": "string", "enum": ["message","assign","working","approval_needed","pushback","approved","done","artifact","celebrate"] },
+    "text":    { "type": "string", "description": "message as shown in Telegram (short lines)" },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "targets":      { "type": "array", "items": { "type": "string" }, "description": "person ids addressed" },
+        "artifact_url": { "type": "string", "description": "e.g. /gallery/hero.html" },
+        "ebitda":       { "type": "number", "description": "rupees, for the EBITDA meter" },
+        "transfers":    { "type": "array", "items": { "type": "object", "properties": { "sku": {"type":"string"}, "from": {"type":"string"}, "to": {"type":"string"}, "units": {"type":"number"} } } }
+      }
+    }
+  }
+}
