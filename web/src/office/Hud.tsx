@@ -5,19 +5,32 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { Gamepad2, X } from 'lucide-react';
 import { TG_GROUP } from './data';
 
+const FOCUSABLE = 'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
+
 /** A cartoon window over the office. Esc is handled by the Office (it closes the top-most thing). */
 export function Modal({ title, onClose, children, footer, className = '', top = false, label }: {
   title: ReactNode; onClose: () => void; children: ReactNode; footer?: ReactNode; className?: string; top?: boolean; label?: string;
 }) {
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    // Focus the first field (or the window itself) so typing goes here, not to the walk keys.
+    // Focus the first field (or the window itself) so typing goes here, not to the walk keys; give focus back on close.
+    const before = document.activeElement as HTMLElement | null;
     const q = (sel: string) => box.current?.querySelector<HTMLElement>(sel);
     const el = q('textarea, input:not([type=hidden])') ?? q('button:not(.ao-x)') ?? box.current;
     el?.focus();
+    return () => before?.focus?.();
   }, []);
+  /** Tab and Shift+Tab cycle inside the window (a focus trap). */
+  const trap = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !box.current) return;
+    const items = [...box.current.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((n) => !n.hasAttribute('disabled') && n.offsetParent !== null);
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1], at = document.activeElement;
+    if (e.shiftKey && (at === first || at === box.current)) (e.preventDefault(), last.focus());
+    else if (!e.shiftKey && at === last) (e.preventDefault(), first.focus());
+  };
   return (
-    <div className={`ao-backdrop${top ? ' top' : ''}`} onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+    <div className={`ao-backdrop${top ? ' top' : ''}`} onKeyDown={trap} onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={box} tabIndex={-1} role="dialog" aria-modal="true" aria-label={label ?? (typeof title === 'string' ? title : undefined)} className={`ao-modal ${className}`}>
         <header>
           <h2>{title}</h2>
