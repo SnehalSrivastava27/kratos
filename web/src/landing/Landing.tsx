@@ -24,15 +24,15 @@ export default function Landing() {
         <Nav />
         <main className="relative">
           <Hero />
-          <SectionRow id="teammates" a="Every department" b="has a teammate." cta={{ href: '/office', Icon: Users, label: 'Meet the team' }}>
+          <SectionRow id="teammates" a="Every department" b="has a teammate." cta={{ href: '/demo', Icon: Users, label: 'Meet the team' }}>
             <b>Five department teammates</b> plus a <b>Sale Captain</b> who splits the work and brings back one plan. Each knows what to take off your plate and <b>when to act on its own</b>.
           </SectionRow>
           <Departments />
-          <SectionRow id="threads" a="A dedicated thread" b="for every teammate." cta={{ href: '/office', Icon: MessagesSquare, label: 'Read a thread' }}>
+          <SectionRow id="threads" a="A dedicated thread" b="for every teammate." cta={{ href: '/demo', Icon: MessagesSquare, label: 'Read a thread' }}>
             Every teammate keeps <b>one thread that never closes</b>: what it was asked, what it did, and how long it took. <b>Step in any time</b> in plain language.
           </SectionRow>
           <Threads />
-          <SectionRow id="jobs" a="Give teammates a job." b="Watch them work it out." cta={{ href: '/office', Icon: ListChecks, label: 'See it live' }}>
+          <SectionRow id="jobs" a="Give teammates a job." b="Watch them work it out." cta={{ href: '/demo', Icon: ListChecks, label: 'See it live' }}>
             Ask in plain language. Each teammate <b>works through it step by step</b>, then hands back <b>something you can ship</b>: a forecast, a media plan, a transfer.
           </SectionRow>
           <Jobs />
@@ -71,8 +71,11 @@ function Nav() {
           <Button variant="ghost" className="hidden h-9 rounded-full px-3 text-[14px] sm:inline-flex" render={<a href={REPO_URL} target="_blank" rel="noreferrer" />} nativeButton={false}>
             <Github data-icon="inline-start" />GitHub
           </Button>
-          <Button className="h-9 rounded-full px-4 text-[14px]" render={<Link to="/office" />} nativeButton={false}>
-            Open the office
+          <Button variant="ghost" className="hidden h-9 rounded-full px-3 text-[14px] sm:inline-flex" render={<Link to="/login" />} nativeButton={false}>
+            Sign in
+          </Button>
+          <Button className="h-9 rounded-full px-4 text-[14px]" render={<Link to="/signup" />} nativeButton={false}>
+            Get started
           </Button>
           <Sheet>
             <SheetTrigger render={<Button variant="ghost" size="icon" className="size-9 rounded-full lg:hidden" aria-label="Menu" />}>
@@ -84,6 +87,8 @@ function Nav() {
                 {LINKS.map(([label, href]) => (
                   <SheetClose key={href} render={<a href={href} className="border-b border-black/[0.06] py-3.5 text-foreground" />}>{label}</SheetClose>
                 ))}
+                <SheetClose render={<Link to="/login" className="border-b border-black/[0.06] py-3.5 text-foreground" />}>Sign in</SheetClose>
+                <SheetClose render={<Link to="/app" className="border-b border-black/[0.06] py-3.5 text-foreground" />}>Open the office</SheetClose>
                 <a href={REPO_URL} target="_blank" rel="noreferrer" className="flex items-center gap-2 py-3.5 text-neutral-500"><Github className="size-4" />GitHub</a>
               </nav>
             </SheetContent>

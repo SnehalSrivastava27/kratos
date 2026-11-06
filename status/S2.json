@@ -1,0 +1,8 @@
+{ "task": "S2", "state": "done", "progress": 100,
+  "done": [
+    "live: 6 team agents' instructions + stored template 'Kesar HQ D2C team' synced via PATCH /gateway/management/agents/<id>; read back: all have HOW YOU WRITE IN TELEGRAM, revision 2 applied; Console stopped old-definition sessions so they resume with the new rules. Rerun: scripts/switch-sync-agents.sh (idempotent, in GO_LIVE.md)",
+    "scripts/tg-render.py: dry render = Switch 0.31.0 _render_outbound (cross-checked identical vs the installed adapter); example renders clean; found **bold** inside the **_bold italic_** line crosses tags -> added a rule line to agents/*.md + template",
+    "demo/feeds/sale-demo.json + contracts/sample-feed.json texts restyled (only text changed); demo/validate.mjs: emoji + **title**, blank lines ok, numbers checked on rendered text; green"
+  ],
+  "next": "merge note: P2's switch/TELEGRAM_STYLE.md drift test needs the same 2 new rule lines; office UI shows raw ** until P1's renderer lands",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-06T21:50:00+05:30" }

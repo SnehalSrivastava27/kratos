@@ -13,10 +13,12 @@ export default defineConfig({
   server: {
     port: Number(process.env.WEB_PORT ?? 5173),
     fs: { allow: ['..'] }, // lets web import ../contracts and ../demo JSON
+    // xfwd: the server sees the real client in X-Forwarded-For, so `vite --host` can't make a phone or
+    // another laptop look like this Mac (office actions trust only local hops; reads stay open).
     proxy: {
-      '/api': `http://${api}`,
-      '/gallery': `http://${api}`,
-      '/ws': { target: `ws://${api}`, ws: true },
+      '/api': { target: `http://${api}`, xfwd: true },
+      '/gallery': { target: `http://${api}`, xfwd: true },
+      '/ws': { target: `ws://${api}`, ws: true, xfwd: true },
     },
   },
 });

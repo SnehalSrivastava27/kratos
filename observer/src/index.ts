@@ -85,6 +85,16 @@ const roster = readJson(HERE + "../contracts/roster.json") as {
   rooms: { id: string; label: string }[];
 };
 
+// People hired from the office (GET /api/people beyond roster.json), refreshed by run().
+const hired = new Set<string>();
+export async function refreshHired(server: string) {
+  try {
+    const people = (await (await fetch(`${server}/api/people`)).json()) as { id: string }[];
+    for (const p of people) hired.add(p.id);
+  } catch {}
+}
+export const isHired = (name: string) => hired.has(name.trim().replace(/^@/, "").toLowerCase());
+
 export function makeMapper(cfg: Config) {
   const speakers = new Map<string, string>();
   for (const p of roster.people) speakers.set(norm(p.id), p.id).set(norm(p.name), p.id);
@@ -101,9 +111,11 @@ export function makeMapper(cfg: Config) {
   };
 
   return {
+    /** Whether `name` maps without falling back to unknownSpeaker. */
+    knows: (name: string) => ignored.has(norm(name)) || speakers.has(norm(name)) || hired.has(norm(name)),
     speaker(name: string): string | null | "ignore" {
       if (ignored.has(norm(name))) return "ignore";
-      const hit = speakers.get(norm(name));
+      const hit = speakers.get(norm(name)) ?? (hired.has(norm(name)) ? norm(name) : undefined);
       if (hit) return hit;
       console.warn(`[observer] unknown speaker "${name}"` + (cfg.unknownSpeaker ? ` → ${cfg.unknownSpeaker} (add it to config.speakers)` : ", skipped"));
       return cfg.unknownSpeaker;
@@ -122,7 +134,7 @@ export function makeMapper(cfg: Config) {
       if (!hit) console.warn(`[observer] unknown room ${id} "${name ?? "?"}", skipped (add it to config.rooms or forumRooms)`);
       return hit ? { room: hit } : null;
     },
-    targets: (text: string) => ids.filter((id) => text.toLowerCase().includes("@" + id)),
+    targets: (text: string) => [...new Set([...ids, ...hired])].filter((id) => text.toLowerCase().includes("@" + id)),
   };
 }
 
@@ -198,7 +210,10 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const text = String(p.body ?? "").trim();
     if (!text) return;
     if (!roomNames.has(ev.room_id)) await refreshRooms();
-    const speaker = map.speaker(String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? ""));
+    const name = String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? "");
+    // Someone we don't know yet may have just been hired: ask the office now, so their first words aren't "founder".
+    if (!map.knows(name)) await refreshHired(cfg.server);
+    const speaker = map.speaker(name);
     if (!speaker || speaker === "ignore") return;
     const where = map.room(ev.room_id, roomNames.get(ev.room_id), p.thread_id ?? null, speaker);
     if (!where) return;

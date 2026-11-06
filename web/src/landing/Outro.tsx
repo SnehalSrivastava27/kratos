@@ -98,7 +98,7 @@ export function FinalCta() {
           </h2>
         </Reveal>
         <Reveal delay={0.08} className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/office" />} nativeButton={false}>
+          <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/app" />} nativeButton={false}>
             Open the office <ArrowRight data-icon="inline-end" />
           </Button>
           <Button size="lg" variant="outline" className="h-11 rounded-full bg-white px-5 text-[15px]" render={<a href={REPO_URL} target="_blank" rel="noreferrer" />} nativeButton={false}>
@@ -112,7 +112,7 @@ export function FinalCta() {
 
 export function Footer() {
   const cols = [
-    ['Product', [['Live office', '/office'], ['Teammates', '#teammates'], ['Use cases', '#jobs'], ['How it works', '#how']]],
+    ['Product', [['Demo office', '/demo'], ['Teammates', '#teammates'], ['Use cases', '#jobs'], ['How it works', '#how']]],
     ['Resources', [['GitHub', REPO_URL], ['Switch', SWITCH_URL], ['FAQ', '#faq']]],
   ] as const;
   return (
