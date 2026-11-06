@@ -87,10 +87,7 @@ const roster = readJson(HERE + "../contracts/roster.json") as {
 
 // People hired from the office (GET /api/people beyond roster.json), refreshed by run().
 const hired = new Set<string>();
-let hiredAt = 0;
-export async function refreshHired(server: string, force = false) {
-  if (!force && Date.now() - hiredAt < 5000) return;
-  hiredAt = Date.now();
+export async function refreshHired(server: string) {
   try {
     const people = (await (await fetch(`${server}/api/people`)).json()) as { id: string }[];
     for (const p of people) hired.add(p.id);
@@ -114,6 +111,8 @@ export function makeMapper(cfg: Config) {
   };
 
   return {
+    /** Whether `name` maps without falling back to unknownSpeaker. */
+    knows: (name: string) => ignored.has(norm(name)) || speakers.has(norm(name)) || hired.has(norm(name)),
     speaker(name: string): string | null | "ignore" {
       if (ignored.has(norm(name))) return "ignore";
       const hit = speakers.get(norm(name)) ?? (hired.has(norm(name)) ? norm(name) : undefined);
@@ -211,8 +210,10 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const text = String(p.body ?? "").trim();
     if (!text) return;
     if (!roomNames.has(ev.room_id)) await refreshRooms();
-    await refreshHired(cfg.server); // a just-hired agent's first words must not land as "founder"
-    const speaker = map.speaker(String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? ""));
+    const name = String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? "");
+    // Someone we don't know yet may have just been hired: ask the office now, so their first words aren't "founder".
+    if (!map.knows(name)) await refreshHired(cfg.server);
+    const speaker = map.speaker(name);
     if (!speaker || speaker === "ignore") return;
     const where = map.room(ev.room_id, roomNames.get(ev.room_id), p.thread_id ?? null, speaker);
     if (!where) return;
