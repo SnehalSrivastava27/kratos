@@ -22,7 +22,7 @@ export function EbitdaMeter({ ebitda, glow }: { ebitda: number | null; glow: boo
   });
   return (
     <group>
-      <group position={[z.x + 1.5, 1.2, z.z - z.d / 2 + 0.25]}>
+      <group position={[z.x - 1.6, 1.2, z.z - z.d / 2 + 0.25]}>
         <mesh>
           <circleGeometry args={[0.8, 24, 0, Math.PI]} />
           <meshStandardMaterial ref={face} color="#cfc6b8" />
@@ -33,7 +33,7 @@ export function EbitdaMeter({ ebitda, glow }: { ebitda: number | null; glow: boo
             <meshStandardMaterial color="#1E1328" />
           </mesh>
         </group>
-        <Html position={[0, -0.25, 0]} center style={{ pointerEvents: 'none' }}>
+        <Html position={[0, -0.25, 0]} center zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
           <div className="hq-chip" style={{ background: col }}>EBITDA {ebitda == null ? '—' : lakh(ebitda)}</div>
         </Html>
       </group>
