@@ -81,31 +81,24 @@ You need: Node 20+, Docker, a Telegram account, and Python 3 (only for the numbe
 
 ### 4a. Just see the office (no Switch, no Telegram)
 
-1. Clone and install:
-   ```bash
-   git clone <this-repo-url> d2c-agent-hq
-   cd d2c-agent-hq
-   cp .env.example .env
-   ```
-2. Start the event server (port 8787):
-   ```bash
-   cd server && npm install && npm run dev
-   ```
-3. In a second terminal, start the web app (port 5173):
-   ```bash
-   cd web && npm install && npm run dev
-   ```
-4. Open <http://localhost:5173/> for the landing page (hero loops the sale on its own), and
-   <http://localhost:5173/office> for the office.
-5. Replay the recorded sale into the office:
-   ```bash
-   curl -X POST localhost:8787/api/replay \
-     -H 'content-type: application/json' \
-     -d '{"feed":"sale-demo","loop":false,"speed":1}'
-   ```
+```bash
+git clone <this-repo-url> d2c-agent-hq && cd d2c-agent-hq
+cp .env.example .env
+npm install          # also installs server/ and web/ (same as `npm run setup`)
+npm run demo         # server :8787 + web :5173, Ctrl+C stops both
+```
 
-Shortcut: `npm run demo` from the repo root starts server and web together.
-<!-- TODO(T8): confirm `npm run demo` once merged -->
+- <http://localhost:5173/>: landing page; the hero loops the sale on its own.
+- <http://localhost:5173/office>: the live office. It reads `/api/history` + `/ws`; if the
+  server is down or idle for 3s it loops the recorded sale locally, and switches to live
+  events as soon as they arrive (reconnects every ≤5s).
+- Stream the recorded sale through the server into the office:
+  ```bash
+  curl -X POST localhost:8787/api/replay -H 'content-type: application/json' \
+    -d '{"feed":"sale-demo","loop":true,"speed":1}'
+  curl -X POST localhost:8787/api/replay/stop
+  ```
+- Other ports: `SERVER_PORT=8790 WEB_PORT=5176 npm run demo` (Vite proxies to the server port: `PORT`, else `SERVER_PORT`).
 
 ### 4b. Full setup with Switch and Telegram
 
@@ -127,13 +120,33 @@ Shortcut: `npm run demo` from the repo root starts server and web together.
 6. **Create the department rooms** (Analytics, Ads, Creators, Ops, Design, Finance) and bridge
    each to its Telegram group. The template creates the War Room.
    <!-- TODO(HUMAN): via Console or switch-buddy? -->
-7. **Start the office server and web app** (steps 2–3 of 4a).
+7. **Start the office server and web app:** `npm run demo` (see 4a).
 8. **Run the observer** so live messages reach the office. Fill `SWITCH_URL` and
    `OBSERVER_TOKEN` in `.env`, register the observer in Switch, add it to all seven rooms, then
    follow [`observer/README.md`](observer/README.md).
    <!-- TODO(HUMAN/T6): protocol endpoints + auth, see contracts/switch-protocol-notes.md -->
 9. **Check:** post "hello" in the Telegram War Room. A speech bubble should appear in the
    office within 2 seconds.
+
+### 4c. Production / deploy
+
+One Node process serves the built site (with SPA fallback, so `/office` works), `/api`, `/ws`
+and `/gallery`. Health check: `GET /api/health`. Stops cleanly on SIGTERM.
+
+```bash
+npm run build                 # vite build → web/dist, tsc → server/dist
+PORT=8787 npm start           # http://localhost:8787 and /office
+```
+
+Docker (multi-stage, `node:22-alpine`, listens on `$PORT`, default 8787):
+
+```bash
+docker build -t d2c-agent-hq .
+docker run --rm -p 8787:8787 d2c-agent-hq
+```
+
+On a PaaS (Render, Railway, Fly), point it at the Dockerfile; it reads the platform's `PORT`.
+History is in memory, so run a single instance.
 
 ## 5. Run the demo
 

@@ -1,1 +1,14 @@
-{ "task": "T8", "state": "queued", "progress": 0, "done": [], "next": "", "blockers": [], "contract_requests": [] }
+{
+  "task": "T8",
+  "state": "done",
+  "progress": 100,
+  "done": [
+    "Office live mode: WS-first + buffered /api/history (web/src/shared/live.ts), backoff ≤5s, id dedupe, run-based reset; local sale-demo loop if no events in 3s or socket down 5s",
+    "Server: unique replay ids `<id>@<run>`, server-assigned /api/events ids, ws error handling (server/check.mjs regression), web/dist + SPA fallback (not for /api,/ws,/gallery), HEAD, /api/health, SIGTERM",
+    "Root package.json (postinstall/setup, demo via concurrently, build, start), Dockerfile + .dockerignore, favicon, README run/deploy sections"
+  ],
+  "next": "Orchestrator: HeroOffice.tsx still a placeholder (landing agent owns it). docker build untested (daemon down).",
+  "blockers": [],
+  "contract_requests": [],
+  "updated": "2026-11-06T16:45:00+05:30"
+}
