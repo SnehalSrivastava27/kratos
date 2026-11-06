@@ -5,9 +5,9 @@ import { animate, useInView, useReducedMotion } from 'framer-motion';
 const PLAN = 1.29;
 const OVER = -0.76;
 const STEPS = [
-  { text: 'Plan at ₹5L marketing: EBITDA +₹1.29L', cls: '' },
-  { text: 'Creators pick top 4 by reach (₹3.55L). Marketing ₹7.05L. Finance pushes back: EBITDA −₹0.76L', cls: 'bad' },
-  { text: 'Creators send a cheaper shortlist. Finance approves: EBITDA +₹1.29L', cls: 'good' },
+  { text: 'Plan at ₹5L marketing: EBITDA\u00A0+₹1.29L', cls: '' },
+  { text: 'Creators pick top 4 by reach (₹3.55L). Marketing ₹7.05L. Finance pushes back: EBITDA\u00A0−₹0.76L', cls: 'bad' },
+  { text: 'Creators send a cheaper shortlist. Finance approves: EBITDA\u00A0+₹1.29L', cls: 'good' },
 ];
 
 const fmt = (v: number) => `${v < 0 ? '−' : '+'}₹${Math.abs(v).toFixed(2)}L`;
