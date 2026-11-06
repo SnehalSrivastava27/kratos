@@ -5,7 +5,7 @@ import { request } from "node:http";
 import { join } from "node:path";
 import { writeFileSync } from "node:fs";
 import WebSocket from "ws";
-import { start, tmp, calls, fake, post, get, getJson, account, link, waitState, ev, sleep } from "./helpers.mjs";
+import { start, tmp, calls, fake, post, get, getJson, account, link, waitState, ev, sleep, TEAM } from "./helpers.mjs";
 
 const PW = "correct horse battery";
 const cookieOf = (r) => r.headers.get("set-cookie")?.split(";")[0];
@@ -138,7 +138,7 @@ test("codes: 6 digits, status, a new code voids the old one, expiry, single use,
   }
 });
 
-test("linking via the observer: Bot API checks, 6 topics, agents joined, ready; idempotent; scoped history", async () => {
+test("linking via the observer: Bot API checks, roster topics, all roster agents joined, ready; idempotent; scoped history", async () => {
   const s = await start();
   try {
     const cookie = await account(s);
@@ -151,15 +151,16 @@ test("linking via the observer: Bot API checks, 6 topics, agents joined, ready; 
     const st = await waitState(s, cookie, "ready");
     const w = st.workspace;
     assert.deepEqual([w.name, w.switchRoomId, w.chatId, w.status], ["Shop", "room-k", "-300", "ready"]);
-    assert.deepEqual(Object.keys(w.topics), ["war_room", "analytics", "ads", "creators", "ops", "design"]);
+    assert.deepEqual(Object.keys(w.topics), ["war_room", "analytics", "ads", "creators", "ops", "design", "finance", "qa_lab"]);
     assert.ok(Object.values(w.topics).every((t) => Number.isInteger(t.threadId) && Object.keys(t).length === 1));
     const tg = calls.filter((c) => c.path.startsWith("/bot"));
     assert.ok(tg.every((c) => !c.path.includes("getUpdates")), "never polls");
-    assert.deepEqual(tg.filter((c) => c.path.endsWith("/createForumTopic")).map((c) => c.json.name), ["War Room", "Analytics", "Ads", "Creators", "Ops", "Design"]);
+    assert.deepEqual(tg.filter((c) => c.path.endsWith("/createForumTopic")).map((c) => c.json.name), ["War Room", "Analytics", "Ads", "Creators", "Ops", "Design", "Finance", "QA Lab"]);
     assert.deepEqual(tg.find((c) => c.path.endsWith("/getChatMember")).json, { chat_id: "-300", user_id: 123 });
     assert.deepEqual(calls.find((c) => c.method === "POST" && c.path === "/gateway/rooms/room-k/agents").json, { agent_ids: ["obs"] }, "the room watcher let the observer in first");
     const join = calls.findLast((c) => c.method === "POST" && c.path === "/gateway/rooms/room-k/agents");
-    assert.deepEqual(join.json.agent_ids.sort(), ["obs", "x1", "x2", "x3", "x4", "x5", "x6"], "6 team agents + observer (d2c-office joins on its first command)");
+    assert.deepEqual(join.json.agent_ids.sort(), ["obs", ...TEAM.map((_, i) => `x${i + 1}`)].sort(), "16 roster agents + observer (d2c-office joins on its first command)");
+    assert.equal(TEAM.length, 16);
     assert.ok(!s.log().includes("tg-secret"), "bot token never logged");
 
     const me = await getJson(s, "/api/auth/me", cookie);
