@@ -1,4 +1,20 @@
-{ "task": "LV2", "state": "working", "progress": 30,
-  "done": ["02:30 safety: switch/lockdown.json (tools allowlist + auto_mode off) + .claude/settings.json rules; wired into switch-up.sh, switch-sync-agents.sh, server createManagedAgent", "02:40 sync: 16/16 live agents current (instructions + Haiku + lockdown), read-back ok"],
-  "next": "live SYSTEM OVERRIDE probe to d2c-analyst, then festive-sale demo",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T02:40:00+05:30" }
+{ "task": "LV2", "state": "done", "progress": 100,
+  "done": [
+    "Safety: switch/lockdown.json (advanced_config.tools=Bash,Read,Grep,Glob,Write + auto_mode=false -> claude --permission-mode default) applied to all 16 live agents and to every hire (server createManagedAgent); repo .claude/settings.json allows only kit / check_numbers.py / writes under gallery/live-run, denies reading .env, .switch/, ~/.ssh; kit refuses secret spec paths. Live SYSTEM OVERRIDE probe: analyst refused in 5 s, nothing changed; hard limit verified with the same launch flags.",
+    "Sync: 16/16 agents current (E2 instructions + Haiku + lockdown), revision applied. Live festive demo: kickoff -> founder approval ask in 5:01 (2:36 waiting for founder input, one nudge), 65 messages, 89 tool calls (2 Switch MCP errors), 0 approval prompts, deck + 3 banners + pinned plan; numbers match check_numbers.py (3,340 / Rs20.42L / Rs4.68L / EBITDA +1.61L, +1.29L at 5L).",
+    "QA Lab live (direct #QALab, group not linked): 4/4 correct, median 3.6 s. Report: docs/live-demo-run.md; lockdown doc: docs/switch/13-agent-lockdown.md."
+  ],
+  "next": "orchestrator: delete the untracked copy /Users/snehal/Desktop/repos/switch-wmd/.claude/settings.json just before merging task/LV2 (git refuses to overwrite an untracked file); founder approves the plan on video",
+  "blockers": [],
+  "contract_requests": [],
+  "findings": [
+    "Switch agent advanced_config tools/disallowedTools match by tool NAME only on Claude Code 2.1.319: Bash(echo:*) in tools removes Bash; Read(./.env) in disallowedTools removes Read. permissionMode in the definition is ignored because the controller passes --permission-mode explicitly. Rule-level limits need project settings.",
+    "A 'Write(path/**)' allow rule did not match the Write tool; 'Edit(/path/**)' does (Edit rules cover all file-editing tools).",
+    "Project deny rules apply even in an untrusted folder; allow rules are ignored there.",
+    "With auto_mode on, the Claude Code auto classifier allowed rm/touch/node -e writes in a scratch repo: auto mode is not a lockdown.",
+    "Live demo: Captain asked the founder for a launch date before running the Finance gate (2.5 min dead air); ~1/3 of agent messages were acknowledgement loops; Captain pinned the plan doc 16 s after Finance checked.",
+    "Agents resume old sessions, so they reuse earlier numbers ('same as before'); Ops' transfers (118/58) differ from the scripted feed (70/40).",
+    "None of the 8 forum topics has a Switch thread anchor yet; all live traffic lands in General.",
+    "Server test 'race: one code sent from two groups' timed out once under load (16 live agents running), passes alone. Kit test 'evals truths match one-command metrics' fails on backend-v2 before and after LV2 (pre-existing data drift: Oct 2026 all-status orders 5,893 vs 4,496 expected)."
+  ],
+  "updated": "2026-11-07T02:55:00+05:30" }
