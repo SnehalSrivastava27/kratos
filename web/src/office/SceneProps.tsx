@@ -41,7 +41,7 @@ function Screens({ scene }: { scene: SceneState }) {
   );
 }
 
-/** War-room plan screen: checklist of every agent, EBITDA and the founder's sign-off, redrawn as the story moves. */
+/** War-room plan screen: checklist of every agent, team progress and the founder's sign-off, redrawn as the story moves. */
 function WarScreen({ scene }: { scene: SceneState }) {
   const war = zoneById.war_room;
   const tex = useMemo(() => paint(1024, 512, () => {}), []);

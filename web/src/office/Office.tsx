@@ -17,12 +17,19 @@ import { ScenePropsLayer } from './SceneProps';
 import { useEventFeed } from './useEventFeed';
 import './office.css';
 
+const MAX_CHAT = 200;
+
 export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed?: OfficeEvent[] }) {
   // Replay (live): run the story again locally from the top, as a fresh array so the feed hook restarts.
   const [replay, setReplay] = useState(() => (mode === 'live' && new URLSearchParams(location.search).has('demo') ? 1 : 0)); // /office?demo = local story, no server
   const replayFeed = useMemo(() => (replay ? [...(feed ?? (saleDemo as OfficeEvent[]))] : undefined), [replay, feed]);
   const events = useEventFeed(replay ? 'autoplay' : mode, replayFeed ?? feed);
   const scene = useMemo(() => reduce(events, ctx), [events]);
+  // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
+  const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
+  // local replay (button, ?demo, or the feed hook's fallback when the server is down) vs server events (`id@run` or epoch t)
+  const last = events[events.length - 1];
+  const local = replay > 0 || (!!last && !last.id.includes('@') && last.t < 1e12);
   const gallery = useMemo(
     () => events.flatMap((e) => {
       const url = e.type === 'artifact' ? galleryUrl(e.meta?.artifact_url) : null;
@@ -50,7 +57,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
       <Suspense fallback={null}>
         <Floor onPick={onPick} />
       </Suspense>
-      <ScenePropsLayer scene={scene} gallery={gallery} events={events} />
+      <ScenePropsLayer scene={scene} gallery={gallery} events={recent} />
       {roster.map((p) => <Character key={p.id} person={p} ps={scene.people[p.id]} celebrateId={scene.confettiId} />)}
       <CameraRig focus={focus} />
       <Outlines />
@@ -63,9 +70,9 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   const [seen, setSeen] = useState<Record<string, number>>({});
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
-    for (const e of events) c[e.room] = (c[e.room] ?? 0) + 1;
+    for (const e of recent) c[e.room] = (c[e.room] ?? 0) + 1;
     return c;
-  }, [events]);
+  }, [recent]);
   useEffect(() => setSeen((s) => (events.length === 0 ? {} : { ...s, [room]: counts[room] ?? 0 })), [room, counts, events.length]);
   const unread = Object.fromEntries(ROOMS.map((r) => [r.id, Math.max(0, (counts[r.id] ?? 0) - (seen[r.id] ?? 0))]));
   const openRoom = (id: string) => {
@@ -95,9 +102,9 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
       <header className="z-10 flex h-12 shrink-0 items-center gap-3 border-b border-black/[0.06] bg-white px-3 md:px-4">
         <div className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-[#F4A300] to-[#E07A00] text-sm font-bold text-white">K</div>
         <div className="text-[15px] font-semibold">Kesar HQ</div>
-        <span className={cn('flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold', replay ? 'bg-[#3390EC]/10 text-[#1A6FB5]' : 'bg-[#3CCB8B]/15 text-[#0F7A4F]')}>
-          <span className={cn('size-1.5 rounded-full', replay ? 'bg-[#3390EC]' : 'animate-pulse bg-[#3CCB8B]')} />
-          {replay ? 'Replay' : 'Live'}
+        <span className={cn('flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold', local ? 'bg-[#3390EC]/10 text-[#1A6FB5]' : 'bg-[#3CCB8B]/15 text-[#0F7A4F]')}>
+          <span className={cn('size-1.5 rounded-full', local ? 'bg-[#3390EC]' : 'animate-pulse bg-[#3CCB8B]')} />
+          {local ? 'Replay' : 'Live'}
         </span>
         <div className={cn('hidden min-w-0 flex-1 truncate text-sm md:block', cap.tone === 'red' ? 'text-[#C8303A]' : cap.tone === 'mint' ? 'text-[#0F7A4F]' : 'text-[#707579]')}>
           {cap.text}
@@ -107,7 +114,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
         </Button>
       </header>
       <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <ChatList events={events} scene={scene} selected={room} unread={unread} onSelect={openRoom}
+        <ChatList events={recent} scene={scene} selected={room} unread={unread} onSelect={openRoom}
           className={cn('md:flex md:w-[300px] lg:w-[330px]', mView === 'list' ? 'flex flex-1 md:flex-none' : 'hidden')} />
         <div className="hq-root order-first h-[34svh] shrink-0 md:order-none md:h-auto md:min-w-0 md:flex-1">
           <div className="hq-stage">{stage}</div>
@@ -117,7 +124,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
             </Button>
           )}
         </div>
-        <ChatPane room={room} events={events} scene={scene} onBack={() => setMView('list')}
+        <ChatPane room={room} events={recent} scene={scene} onBack={() => setMView('list')}
           className={cn('md:flex md:w-[360px] lg:w-[400px]', mView === 'chat' ? 'flex flex-1 md:flex-none' : 'hidden')} />
       </div>
     </div>
