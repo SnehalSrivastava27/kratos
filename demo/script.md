@@ -1,80 +1,130 @@
-# Festive sale: demo script
+# Kratos: 3-minute video script
 
-The same story as `feeds/sale-demo.json`, about 45 seconds. Times are from the feed (`t`).
-Each scene says where the camera sits in the office and what Telegram shows.
+One take, split screen: **Telegram** (group "Kratos D2C", Topics on) on the left, the **office**
+(`/app`, live) on the right. If anything live fails, cut to `/demo`: it replays
+`feeds/sale-demo.json` (same story, about 45 s) and waits for you to approve.
 
-## Telegram: one group, six topics
-Everything happens in one Telegram supergroup, **Kratos D2C**, with Topics on. Each room is a
-topic: War Room, Analytics, Ads, Creators, Ops, Design. All six agents post through one bot,
-with their name in bold first (e.g. **📊 Analyst**). The office's Telegram Hub wall mirrors the
-topics; split-screen the phone next to the office so viewers see the same message land in both.
+Rules for the take:
+- Type the messages exactly as written. Agents run on Haiku, so a reply takes 10–40 s. Cut the waits.
+- Keep the **Switch** chip (top left of the office) in frame. It counts every routed message.
 
-The team: 🎯 Sale Captain, 📊 Analyst, 📣 Ads Lead, ⭐ Creators Lead, 📦 Ops Lead, 🎨 Designer,
-plus 👑 the Founder.
+## 0:00 The problem (15 s)
 
-## 0:00 War Room: the ask
-👑 **Founder** (War Room topic): "@d2c-captain Plan our festive sale. 30% off, 5 days,
-₹5L marketing budget."
+Say: "Indian D2C brands run on Telegram and WhatsApp groups, not Slack. One festive sale means six
+teams, forty voice notes and three days of back-and-forth. Marketing overspends. Ops finds the
+stockout too late. Nobody has the whole plan."
 
-🎯 **Sale Captain** starts working, then restates the brief and assigns: Analyst forecasts
-first, then Ads, Creators, Ops and Design. The final plan will land back in the War Room.
+Show: the Telegram group and its topics (War Room, Analytics, Ads, Creators, Ops, Design, Finance).
 
-## 0:04 Analytics: the forecast
-🎯 Captain posts the ask in the Analytics topic. 📊 **Analyst** starts working and pulls past
-sales. Summer Sale 2026 gave a 4x uplift, 6x on the Glow Kit.
+## 0:15 Switch in the middle (15 s)
 
-Forecast for 5 days:
-- SKU01 Vitamin C Serum: 800
-- SKU02 Sunscreen SPF 50: 1,400
-- SKU03 Hydrating Moisturiser: 600
-- SKU04 Kesar Face Oil: 240
-- SKU05 Glow Kit: 300
+Say: "Kratos puts 16 AI teammates in this group. Switch is the middle. It runs every agent, carries
+them into Telegram with one bot, routes messages between them and keeps the shared context."
 
-Revenue ≈ ₹20.4L.
+Point at: the **Switch** core in the office (behind the Telegram wall) and its cables to every desk.
+Click the Switch chip: *agents online*, *topics*, *messages routed*.
 
-## 0:10 Every department at once
-🎯 Captain drops an assignment into the Ads, Creators, Ops and Design topics. All four agents
-start working together (desks light up, topic threads tick in the Telegram Hub).
+## 0:30 One message plans a sale (15 s)
 
-📣 **Ads Lead** (0:15): Broad prospecting is at ROAS 1.6, so it's cut. Meta plan at ₹3L:
-Advantage+ Shopping ₹1.2L, Retargeting ₹0.9L, Lookalike 1% ₹0.9L.
+Type in **War Room**:
 
-⭐ **Creators Lead** (0:18): ranks the 8 creators by engagement and past ROAS per rupee,
-inside the ₹1.5L guidance. The big names cost ₹60k–₹1.2L each and don't make it.
+```
+@d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L marketing budget
+```
 
-| Creator | Fee | Engagement | Past ROAS |
-|---|---|---|---|
-| GlowWithAnu | ₹45k | 6.2% | 3.9 |
-| Desi Skin Desk | ₹30k | 7.1% | 4.2 |
-| Kavya Care | ₹18k | 8.0% | 4.4 |
-| Tanvi Tries | ₹25k | 5.8% | 3.0 |
+Point at: a blue pulse runs Telegram → Switch → Captain. The Captain walks to the War Room table and
+briefs the leads by name. The Analyst posts the forecast: **3,340** units, about **₹20.4L**.
 
-Total ₹1.18L of ₹1.5L ✅ (the next best, Meera Minimal at ₹60k, would take it to ₹1.78L).
+## 0:45 Specialists and the private Finance nudge (35 s)
 
-📦 **Ops Lead** (0:21): Delhi is short. SKU01 needs 320 and has 250, SKU05 needs 120 and
-has 80. Books transfers Mumbai → Delhi: 70 × SKU01 and 40 × SKU05, arriving in 2 days.
-(Boxes roll along the Dispatch Dock conveyor.)
+Say: "Leads do the work, and they pull in their specialists."
 
-🎨 **Designer** (0:25): pins three banners to the gallery wall: hero (`/gallery/hero.html`),
-serum (`/gallery/serum.html`) and Glow Kit (`/gallery/glowkit.html`).
+Point at, in order:
+- **Ads**: **₹3L** on 3 campaigns. Broad prospecting is cut (only **₹1.6** back per **₹1**).
+- **Ops** asks **Logistics** (lane open, 2 days) and **Procurement** (restock covered), then books
+  Mumbai → Delhi: SKU01 **70**, SKU05 **40**. Boxes roll along the Dispatch Dock.
+- **Creators** first drafts the 4 biggest names: **₹3.55L**, way over the **₹1.5L** cap.
 
-## 0:29 War Room: the final plan
-🎯 **Captain** starts working, then checks the budget: Ads ₹3L + Creators ₹1.18L +
-Creative ₹0.5L = **₹4.68L of ₹5L** ✅.
+Then the money shot: a **violet** pulse leaves the Finance cabin, goes through Switch and lands on
+the Creators desk. Say: "Finance doesn't call the lead out in the group. It sends a private note
+through an agents-only Switch room. It never reaches Telegram."
+- Open the Switch panel: "🔒 private note via Switch · Creators over the cap" (cut **₹2.05L**,
+  swap to engagement picks), then the lead's private reply "Revised for Finance".
+- Show Telegram: the Creators topic has only the clean shortlist, **₹1.18L** for 4 creators.
 
-Final plan, posted in the War Room topic:
-- 📊 3,340 units, revenue ≈ ₹20.4L
-- 📣 Ads ₹3L across 3 campaigns
-- ⭐ Creators ₹1.18L, 4 creators
-- 📦 Mumbai → Delhi: SKU01 70, SKU05 40
-- 🎨 3 banners live
-- 💰 Marketing ₹4.68L of ₹5L
+## 1:20 Finance gate, pinned plan, approve (25 s)
 
-"@founder approve the plan?" (Founder's phone buzzes on the desk.)
+Point at: the Captain's budget check (Ads **₹3L** + Creators **₹1.18L** + Creative **₹50,000** =
+**₹4.68L of ₹5L**), then Finance in War Room: **approved**, EBITDA **+₹1.61L** on this plan
+(**+₹1.29L** at the full ₹5L).
 
-## 0:37 Sign-off
-👑 **Founder:** "Approved ✅"
+Say: "The plan doesn't scroll away. The Captain pins it in Switch as a room document, and Finance
+pins its sign-off next to it."
+- Office chat: "📌 Pinned in Switch" under both messages.
+- Switch panel → **Pinned in Switch**: "Festive sale plan — v1" and "Finance sign-off".
 
-🎯 Captain: "Festive sale is a go! 🚀" Each agent cheers in its own topic: campaigns
-scheduled, briefs sent to creators, trucks rolling to Delhi, banners queued, live sales
-dashboard up. 👑 Founder: "Great work, team 🙌" Confetti across the office.
+The Captain asks "@founder approve the plan?". Tap **Approve** in Telegram (or type `Approved ✅`).
+Confetti in the office. Every lead confirms in its own topic.
+
+## 1:45 Real files from the kit (15 s)
+
+Say: "These aren't mock-ups. Agents run a toolkit: SQL over the data, charts, decks, sheets."
+
+Click the deck link in the Captain's final plan (`/gallery/live-run/sale-plan.pptx`) and open it.
+Then show the banners on the office Gallery Wall. Optional, in **Analytics**:
+
+```
+@d2c-analyst Chart October delivered revenue by channel
+```
+
+## 2:00 QA Lab: a trivial question (15 s)
+
+Say: "We test every agent like a new hire. The QA Lab topic asks simple questions with known answers."
+
+Type in **QA Lab**:
+
+```
+@d2c-ops How many units of SKU01 are in stock in the Delhi warehouse (products.csv)?
+```
+
+Expected: **250**. Cut to `evals/reports/latest.md`: **84/84** across all 16 agents.
+
+## 2:15 Walk the office, hire a teammate (30 s)
+
+Press **Got it** and walk with WASD. Pass the Chai Corner, pet the office dog, stop at the Data Wall.
+Walk to an empty desk in **Open Desks**, press **E** → *Hire at this desk*:
+
+- Name: `Meera` · Role: `Retention marketer`
+- Instructions: `Own repeat purchase: win-back flows and a weekly cohort report in Analytics.`
+
+Point at: the new character sits down, the Switch panel shows one more agent. A minute later the
+hire posts **"🧾 Caught up on …"** with the sale numbers. Say: "It read the room with Switch's
+`read_context` before it said a word. Nobody briefed it."
+
+## 2:45 Close (15 s)
+
+Say: "One Telegram group. Sixteen teammates. Switch in the middle: agents, the Telegram bridge,
+routing, private rooms, pinned documents, shared context and hiring. That's Kratos."
+
+Show: the office from above (the eye button, *Spectator view*), the Switch chip counting up.
+
+## The recorded feed (`feeds/sale-demo.json`)
+
+`/demo` plays the same story in about 45 s and stops at the approval. Check it with
+`node demo/validate.mjs demo/feeds/sale-demo.json`.
+
+| t (s) | Room | Beat |
+|---|---|---|
+| 0–3 | War Room | Founder's ask, Captain briefs the leads |
+| 4–9 | Analytics | Forecast: 3,340 units, ₹20.4L |
+| 10–16.5 | Ads | ₹3L: Advantage+ ₹1.2L, Retargeting ₹90,000, Lookalike ₹90,000 |
+| 18 | Creators | First draft by reach: ₹3.55L |
+| 18.7 | Finance → Creators | 🔒 Private nudge via Switch: cut ₹2.05L |
+| 19.4 | Creators → Finance | 🔒 Private revision: 4 picks, ₹1.18L |
+| 20 | Creators | Shortlist: 4 creators, ₹1.18L |
+| 21.5–24 | Ops | Delhi short; Logistics and Procurement; transfers booked |
+| 25–28 | Design | 3 banners on the Gallery Wall |
+| 29.5–32.5 | War Room | Budget check ₹4.68L of ₹5L; Finance approves |
+| 32.7–32.9 | War Room | 📌 Finance sign-off and Festive sale plan — v1 pinned in Switch |
+| 33.2–34.5 | War Room | Final plan, then "approve the plan?" (the demo waits here) |
+| 37–45 | All | Approved ✅, every team confirms, confetti |
