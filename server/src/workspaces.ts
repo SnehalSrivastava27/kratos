@@ -166,6 +166,7 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   if (!code || !take(code)) return { event: null };
 
   chatId ??= await roomChatId(room).catch(() => null);
+  if (chatId && !GROUP_CHAT.test(chatId)) return refuse(code, NOT_GROUP), { event: null }; // a private chat
   if (wsByRoom(room)) return refuse(code, ALREADY_LINKED), { event: null }; // linked meanwhile
   const sameChat = chatId ? (sql().prepare("SELECT * FROM workspaces WHERE chat_id = ?").get(chatId) as any) : null;
   if (sameChat) {
@@ -190,6 +191,14 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
 }
 
 const ALREADY_LINKED = "That Telegram group is already linked to another account.";
+const NOT_GROUP = "Only Telegram groups can be linked.";
+const GROUP_CHAT = /^-\d+$/; // Telegram: groups and supergroups have negative ids, private chats positive
+/** Not a group after all (Bot API): drop the workspace and give the code back. */
+function reject(w: Workspace) {
+  sql().prepare("UPDATE link_codes SET used_at = NULL, workspace_id = NULL, detail = ? WHERE workspace_id = ?").run(NOT_GROUP, w.id);
+  sql().prepare("DELETE FROM workspaces WHERE id = ?").run(w.id);
+  log.warn("link refused: not a Telegram group", { ws: w.id });
+}
 /** Marks the code used, atomically: true only for the one caller that got it. */
 const take = (code: { id: number }) =>
   Number(sql().prepare("UPDATE link_codes SET used_at = ? WHERE id = ? AND used_at IS NULL").run(Date.now(), code.id).changes) === 1;
@@ -247,14 +256,16 @@ export async function setup(id: string) {
   try {
     w.chatId ??= await roomChatId(w.switchRoomId);
     if (!w.chatId) throw new Error("Switch has no Telegram chat for this room yet");
-    adoptLegacyIfMatch(w);
-    // (a) the group must be a forum and the bot an admin that may manage topics
+    if (!GROUP_CHAT.test(w.chatId)) return reject(w);
+    // (a) a group (not a private chat or channel), a forum, and the bot an admin that may manage topics
     let chat = await tg("getChat", { chat_id: w.chatId });
     const moved = chat.parameters?.migrate_to_chat_id ?? chat.result?.migrate_to_chat_id;
     if (moved) {
       w.chatId = String(moved);
       chat = await tg("getChat", { chat_id: w.chatId });
     }
+    if (chat.ok && chat.result?.type !== "group" && chat.result?.type !== "supergroup") return reject(w);
+    adoptLegacyIfMatch(w);
     const member = chat.ok ? await tg("getChatMember", { chat_id: w.chatId, user_id: Number(botToken().split(":")[0]) }) : null;
     const m = member?.result ?? {};
     const admin = m.status === "creator" || (m.status === "administrator" && m.can_manage_topics);

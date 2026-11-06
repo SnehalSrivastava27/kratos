@@ -16,7 +16,12 @@ your account once (contracts/api.md "v3").
    - **"needs admin"**: step 1 is not done. Fix it, then send any message in the group to retry.
    - Nothing happens after ~15 s? Send the code again. A new group needs a few seconds before the observer
      is in it.
-   - A code works once, and a group can belong to only one account.
+   - A code works once, and a group can belong to only one account. Only groups can be linked: a private
+     chat with the bot, or a channel, is refused and the code stays usable.
+   - **Limitation:** the server can't check that the person who sends the code is a group admin. Switch passes
+     on only the sender's display name, not their Telegram user id. Two things make up for it. The code is
+     private to your account. And setup only finishes once a group admin has made @kratosd2c_bot an admin with
+     "Manage topics" (otherwise the group stays "needs admin"). So send the code in a group you run.
 
 **Your existing "Kratos D2C" group:** do steps 2 and 3 in that group. It is matched by its chat id in
 `observer/topics.json`, so it keeps its 6 existing topics (no duplicates) and all office history and hires from

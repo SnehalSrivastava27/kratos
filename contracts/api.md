@@ -155,6 +155,16 @@ OfficeEvent.ws?: string   // server-assigned workspace id
 - **`GET /api/people` with the observer's `OBSERVER_TOKEN`** (no session) → roster + every workspace's hires (the
   observer maps hired agents' names). **`POST /api/replay`** needs `ADMIN_TOKEN` even in dev; body adds
   `ws` (default: the first ready workspace); replayed events are tagged with it.
+- **Code safety:** a code is claimed atomically (one group per code). Only messages of at most 64 chars are checked.
+  Wrong codes: 10 per Switch room per 10 min, 30 per minute on the host (then no codes are checked until the minute
+  is over), and any live code is voided after 20 wrong codes anywhere (status `expired`, detail says to get a new
+  one). Only groups link: a positive (private) chat id, or a Bot API `getChat` type other than group/supergroup, is
+  refused (`detail: "Only Telegram groups can be linked."`, the code stays usable). The sender can't be checked
+  to be a group admin: Switch doesn't pass their Telegram user id.
+- **Sessions:** logout closes that session's open sockets (close code 4401); sockets of expired sessions close on the
+  next ping (30 s). Login: also 10 tries per email per 15 min from any IP; IPv6 clients are counted per /64.
+- **Host-wide:** `POST /api/library/categorize` needs `ADMIN_TOKEN`, or the host owner (`OWNER_EMAIL`, else the
+  first registered user) in a browser on this Mac (loopback, own Origin); else 403.
 - **Legacy data:** events and hires stored before v3 have no `ws` and stay hidden until the group whose Telegram
   chat id is the one in `observer/topics.json` (or `LEGACY_CHAT_ID`) is linked; then they, and its topics, join that
   workspace (once).

@@ -21,7 +21,7 @@ export const calls = [];
 export const fake = {
   managementDown: false, roomsBroken: false /* every gateway call → 500 */,
   chats: { "room-1": "-100", old: "-5" }, // Switch room → Telegram chat id
-  tg: { ok: true, forum: true, admin: true, topics: new Set(), next: 100 },
+  tg: { ok: true, forum: true, admin: true, type: "supergroup", topics: new Set(), next: 100 },
 };
 const TEAM = ["d2c-captain", "d2c-analyst", "d2c-ads", "d2c-influencers", "d2c-ops", "d2c-design"];
 const sw = createServer(async (req, res) => {
@@ -36,7 +36,7 @@ const sw = createServer(async (req, res) => {
   if (tg) {
     const t = fake.tg;
     if (tg[1] !== "123:tg-secret") return ok({ ok: false, description: "Unauthorized" }, 401);
-    if (tg[2] === "getChat") return ok(t.ok ? { ok: true, result: { id: json.chat_id, is_forum: t.forum } } : { ok: false, description: "Bad Request: chat not found" });
+    if (tg[2] === "getChat") return ok(t.ok ? { ok: true, result: { id: json.chat_id, type: t.type, is_forum: t.forum } } : { ok: false, description: "Bad Request: chat not found" });
     if (tg[2] === "getChatMember") return ok({ ok: true, result: t.admin ? { status: "administrator", can_manage_topics: true } : { status: "member" } });
     if (tg[2] === "createForumTopic") return t.topics.add(++t.next), ok({ ok: true, result: { message_thread_id: t.next, name: json.name } });
     if (tg[2] === "editForumTopic") return ok(t.topics.has(json.message_thread_id) ? { ok: false, description: "Bad Request: TOPIC_NOT_MODIFIED" } : { ok: false, description: "Bad Request: TOPIC_ID_INVALID" });

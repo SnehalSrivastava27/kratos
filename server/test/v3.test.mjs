@@ -360,3 +360,29 @@ test("login limits: 10 per email per 15 min across IPs; IPv6 counted per /64", a
   for (let i = 1; i <= 5; i++) limitLogin(`2001:db8:5:5::${i}`, "v6@example.com");
   tooMany(() => limitLogin("2001:db8:5:5:dead:beef::6", "v6@example.com"));
 });
+
+test("only Telegram groups can be linked: a positive chat id or a non-group chat is refused, the code stays usable", async () => {
+  const s = await start();
+  try {
+    const cookie = await account(s);
+    const { code } = await connect(s, cookie);
+    assert.equal((await (await sendCode(s, code, "dm-room", { chat_id: "424242" })).json()).linked, false, "a private chat (positive id)");
+    let st = await getJson(s, "/api/workspaces/connect/status", cookie);
+    assert.deepEqual([st.state, st.detail], ["waiting", "Only Telegram groups can be linked."]);
+
+    fake.tg.type = "channel";
+    fake.chats["chan-room"] = "-100777";
+    assert.equal((await (await sendCode(s, code, "chan-room")).json()).linked, true, "looks like a group until the Bot API says otherwise");
+    for (let i = 0; i < 50 && (await getJson(s, "/api/workspaces", cookie)).length; i++) await sleep(50);
+    assert.deepEqual(await getJson(s, "/api/workspaces", cookie), [], "workspace removed");
+    st = await getJson(s, "/api/workspaces/connect/status", cookie);
+    assert.deepEqual([st.state, st.detail], ["waiting", "Only Telegram groups can be linked."]);
+    fake.tg.type = "supergroup";
+    fake.chats["grp-room"] = "-100778";
+    assert.equal((await (await sendCode(s, code, "grp-room")).json()).linked, true, "the same code still links a real group");
+    await waitState(s, cookie, "ready");
+  } finally {
+    fake.tg.type = "supergroup";
+    await s.stop();
+  }
+});
