@@ -1,1 +1,1 @@
-{ "task": "T3", "state": "working", "progress": 5, "done": [], "next": "grey-box floor", "blockers": [], "contract_requests": [], "updated": "2026-11-06T18:30:00+05:30" }
+{ "task": "T3", "state": "working", "progress": 65, "done": ["grey-box floor", "useEventFeed replay", "state machine", "bubbles/beacon", "scene events"], "next": "make it pretty, side panel", "blockers": [], "contract_requests": [], "updated": "2026-11-06T19:10:00+05:30" }
