@@ -345,3 +345,18 @@ test("logout closes that session's open sockets (4401), not the user's other ses
     await s.stop();
   }
 });
+
+test("login limits: 10 per email per 15 min across IPs; IPv6 counted per /64", async () => {
+  const { tsImport } = await import("tsx/esm/api");
+  const { limitLogin, ipKey } = await tsImport("../src/auth.ts", import.meta.url);
+  const tooMany = (fn) => assert.throws(fn, (e) => e.status === 429);
+  for (let i = 1; i <= 10; i++) limitLogin(`10.0.0.${i}`, "victim@example.com"); // 10 different IPs: fine
+  tooMany(() => limitLogin("10.0.1.1", "victim@example.com"));
+  limitLogin("10.0.1.1", "someone-else@example.com");
+
+  assert.equal(ipKey("::ffff:127.0.0.1"), "127.0.0.1");
+  assert.equal(ipKey("2001:db8:1:2:aaaa::1"), ipKey("2001:0db8:0001:0002:ffff:ffff:ffff:ffff"));
+  assert.notEqual(ipKey("2001:db8:1:2::1"), ipKey("2001:db8:1:3::1"));
+  for (let i = 1; i <= 5; i++) limitLogin(`2001:db8:5:5::${i}`, "v6@example.com");
+  tooMany(() => limitLogin("2001:db8:5:5:dead:beef::6", "v6@example.com"));
+});

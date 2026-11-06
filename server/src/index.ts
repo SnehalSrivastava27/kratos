@@ -7,7 +7,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
 import { openStore, closeStore, addEvent, recent, roomEvents, roomStats, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
-import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, sha as shaHex, type User } from "./auth.js";
+import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, ipKey, sha as shaHex, type User } from "./auth.js";
 import { resolveWs, userWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
 import { handleOffice, syncPending, employeePerson } from "./office.js";
@@ -239,7 +239,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
   const route = `${method} ${url.pathname}`;
 
   // Valid tokens skip the limit: an observer burst must not drop events. Bad/missing tokens are limited (brute force).
-  if ((method === "POST" || method === "DELETE") && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(clientIp(req));
+  if ((method === "POST" || method === "DELETE") && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(ipKey(clientIp(req)));
   if ((method === "POST" || method === "DELETE") && WRITE_ROUTE.test(url.pathname)) checkWrite(req);
 
   if (route === "GET /api/health")
@@ -264,7 +264,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     try {
       email = normEmail(body.email);
     } catch {}
-    limitLogin(`${clientIp(req)}|${signingUp ? "signup" : email}`);
+    limitLogin(clientIp(req), signingUp ? "" : email);
     const user = signingUp ? await signup(body) : await login(body);
     return send(res, signingUp ? 201 : 200, { user }, { "set-cookie": sessionCookie(createSession(user.id), isHttps(req)) });
   }

@@ -120,13 +120,30 @@ export function sessionCookie(id: string | null, secure: boolean) {
   return attrs.join("; ");
 }
 
-// ponytail: fixed 1-min window per IP+email, in memory (single instance)
-const attempts = new Map<string, { n: number; reset: number }>();
-/** Login (and signup) tries: 5 a minute per IP + email, then 429. */
-export function limitLogin(key: string) {
+/** Rate-limit key for a client address: IPv4 as is (also when IPv4-mapped), IPv6 by its /64 (one host's range). */
+export function ipKey(ip: string) {
+  const v4 = ip.match(/^(?:::ffff:)?(\d+\.\d+\.\d+\.\d+)$/i);
+  if (v4) return v4[1];
+  if (!ip.includes(":")) return ip;
+  const [head, tail] = ip.split("%")[0].split("::");
+  const h = head ? head.split(":") : [];
+  const t = tail ? tail.split(":") : [];
+  const full = tail === undefined ? h : [...h, ...Array(Math.max(0, 8 - h.length - t.length)).fill("0"), ...t];
+  return `${full.slice(0, 4).map((x) => parseInt(x || "0", 16).toString(16)).join(":")}::/64`;
+}
+
+// ponytail: fixed windows in memory (single instance)
+const windows = new Map<string, { n: number; reset: number }>();
+function hit(key: string, max: number, ms: number) {
   const now = Date.now();
-  if (attempts.size > 10_000) for (const [k, v] of attempts) if (now >= v.reset) attempts.delete(k);
-  let a = attempts.get(key);
-  if (!a || now >= a.reset) attempts.set(key, (a = { n: 0, reset: now + 60_000 }));
-  if (++a.n > 5) throw new AuthError(429, "too many attempts, try again in a minute");
+  if (windows.size > 10_000) for (const [k, v] of windows) if (now >= v.reset) windows.delete(k);
+  let a = windows.get(key);
+  if (!a || now >= a.reset) windows.set(key, (a = { n: 0, reset: now + ms }));
+  if (++a.n > max) throw new AuthError(429, "too many attempts, try again later");
+}
+/** Login tries: 5 a minute per IP (IPv6: /64) + email, and 10 per 15 minutes per email from anywhere.
+ *  Signup (email ""): 5 a minute per IP. Then 429. */
+export function limitLogin(ip: string, email: string) {
+  hit(`ip|${ipKey(ip)}|${email || "signup"}`, 5, 60_000);
+  if (email) hit(`email|${email}`, 10, 15 * 60_000);
 }
