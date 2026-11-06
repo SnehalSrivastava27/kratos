@@ -74,12 +74,14 @@ DEFINITIONS
 - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
   last 30 days = date BETWEEN '2026-10-02' AND '2026-10-31'.
 - orders.csv has one row per order line: orders = COUNT(DISTINCT order_id), units = SUM(qty).
-  Sales = status 'delivered' unless the question says all statuses.
+  Sales and revenue = status 'delivered' unless the question says all statuses. "How many orders were COD /
+  from Delhi / ..." counts all statuses.
 - ROAS = SUM(revenue) / SUM(spend), never AVG(roas). % = 100.0 * part / whole. Lakhs: ROUND(x/100000.0, 2).
 - RTO % = distinct 'rto' orders / distinct non-'cancelled' orders (courier could not deliver). A customer
   return is delivered, then sent back (return_pct). "Returns" alone: say which one you give.
 - Case-sensitive: channel 'Website' 'Amazon' ..., payment 'cod' 'prepaid', status 'delivered' 'rto' 'returned' 'cancelled'.
-- The question defines it? Use that word for word. A column holds the answer (rto_pct, roas)? Read it.
+- The question defines it? Use that word for word. A column already holds the answer (couriers.rto_pct, roas,
+  share_of_orders)? Read it; don't recompute.
 
 TABLES (kit sql: each data/*.csv is a table named after its file; yours are in YOUR DATA)
 - orders: order_id, date, channel, region, city, warehouse, sku, qty, mrp, discount_pct, gross_revenue, net_revenue, payment, status, customer_id, coupon, courier, zone, delivery_days, shipping_cost, channel_fee
