@@ -19,6 +19,7 @@ const tmp = () => {
 // ---- fake Switch ----
 const calls = [];
 let managementDown = false;
+let roomsBroken = false;
 const sw = createServer(async (req, res) => {
   let body = "";
   for await (const c of req) body += c;
@@ -28,13 +29,18 @@ const sw = createServer(async (req, res) => {
   const r = `${req.method} ${req.url.split("?")[0]}`;
   if (r === "POST /gateway/auth/login") return ok({ email: "a", role: "admin" }, 200, { "set-cookie": "sid=s1; Path=/" });
   if (req.url.startsWith("/gateway") && req.headers.cookie !== "sid=s1") return ok({ detail: "no session" }, 401);
+  if (r === "GET /gateway/rooms" && roomsBroken) return ok({ detail: "db password=hunter2 exploded" }, 500);
   if (r === "GET /gateway/rooms") return ok([{ id: "old", name: "Kratos D2C" }, { id: "room-1", name: "Kratos D2C" }]);
   if (r === "GET /gateway/rooms/old") return ok({ id: "old", name: "Kratos D2C", external_channel_id: "-5" });
   if (r === "GET /gateway/rooms/room-1") return ok({ id: "room-1", name: "Kratos D2C", external_channel_id: "-100" });
   if (r === "POST /gateway/agents/register") return ok({ id: "office-1", api_key: "secret-key" });
   if (/^PUT \/gateway\/agents\/[\w-]+\/addressing-policy$/.test(r)) return ok({});
   if (r === "POST /gateway/rooms/room-1/agents") return ok({});
-  if (r === "GET /gateway/management/controllers") return ok([{ id: "c1", kind: "console", state: "online" }]);
+  if (r === "GET /gateway/management/controllers") return ok([{ id: "c0", kind: "console", state: "online" }, { id: "c1", kind: "console", state: "online" }]);
+  if (r === "GET /gateway/management/agents") return ok([{ name: "d2c-captain", controller_id: "c1", definition: {
+    provider: "claude", model: "team-model", advanced_config: { effort: "high" }, auto_mode: true, auto_approve: false, isolation: "shared", directory: "/somewhere-else", instructions: "captain" } }]);
+  if (r === "GET /gateway/agents") return ok([{ id: "x1", name: "d2c-captain" }, { id: "x2", name: "d2c-taken" }]);
+  if (/^DELETE \/gateway\/(management\/)?agents\/[\w-]+$/.test(r)) return ok({ ok: true });
   if (r === "POST /gateway/management/agents") return managementDown ? ok({ detail: "Not Found" }, 404) : ok({ agent_id: `sw-${json.name}` }, 201);
   if (r === "POST /gateway/templates") return ok({ id: "tpl-1" }, 201);
   if (r === "POST /agents/office-1/message") return ok({ ok: true, event_id: "e1" });
@@ -176,9 +182,11 @@ test("validation: command and hire bodies", async () => {
   try {
     for (const b of [{ room: "nope", text: "hi" }, { room: "war_room", text: "" }, { room: "war_room", text: "   " }, { room: "war_room", text: "x".repeat(2001) }, { room: "war_room" }])
       assert.equal((await post(s, "/api/command", b)).status, 400, JSON.stringify(b).slice(0, 60));
-    for (const b of [hire({ name: "" }), hire({ name: "!!!" }), hire({ role: undefined }), hire({ room: "x" }), hire({ instructions: "" }), hire({ color: "red" }), hire({ skills: "qa" }), hire({ skills: [1] })])
+    for (const b of [hire({ name: "" }), hire({ name: "!!!" }), hire({ role: undefined }), hire({ room: "x" }), hire({ instructions: "" }), hire({ color: "red" }), hire({ skills: "qa" }), hire({ skills: [1] }), hire({ skills: ["not-in-library"] }), hire({ name: "\u202e\u0000" }), hire({ name: "x".repeat(41) })])
       assert.equal((await post(s, "/api/employees", b)).status, 400, JSON.stringify(b).slice(0, 80));
     assert.equal((await fetch(s.base + "/api/employees").then((r) => r.json())).length, 0);
+    for (let i = 0; i < 12; i++) await post(s, "/api/command", { room: "nope", text: "x" });
+    assert.equal((await post(s, "/api/command", { room: "war_room", text: "hi" })).status, 202, "invalid commands don't use up the rate limit");
   } finally {
     await s.stop();
   }
@@ -227,11 +235,12 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
     assert.equal(a.status, "active");
     assert.equal(a.switchAgentId, "sw-d2c-priya-shah");
     assert.equal(a.instructions, undefined);
-    const create = calls.find((c) => c.path === "/gateway/management/agents");
-    assert.equal(create.json.controller_id, "c1");
+    const create = calls.find((c) => c.method === "POST" && c.path === "/gateway/management/agents");
+    assert.equal(create.json.controller_id, "c1", "the team lead's controller");
     assert.equal(create.json.desired_state, "running");
-    assert.equal(create.json.definition.directory, "/repo");
-    assert.equal(create.json.definition.provider, "claude");
+    const { instructions: _, ...def } = create.json.definition;
+    assert.deepEqual(def, { provider: "claude", model: "team-model", advanced_config: { effort: "high" }, auto_mode: true, auto_approve: false, isolation: "shared", directory: "/repo" },
+      "the team's provider settings; directory is the repo, not the lead's or the request's");
     assert.match(create.json.definition.instructions, /Win back lapsed buyers[\s\S]*gstack:qa[\s\S]*HOW YOU WRITE IN TELEGRAM[\s\S]*yours is Ads/);
     assert.ok(create.json.definition.instructions.includes(STYLE), "exact team Telegram style block");
     assert.deepEqual(calls.find((c) => c.path === "/gateway/agents/sw-d2c-priya-shah/addressing-policy").json, { policy: null }, "addressing: anyone");
@@ -282,6 +291,51 @@ test("hiring fallback: no managed agents → one-agent template + 202 open_url",
 test("switch/TELEGRAM_STYLE.md is the block every team agent uses (no drift)", () => {
   const dir = new URL("../../switch/agents/", import.meta.url);
   for (const f of readdirSync(dir).filter((n) => n.endsWith(".md"))) assert.ok(readFileSync(new URL(f, dir), "utf8").includes(STYLE), f);
+});
+
+test("hiring limits, Switch-side name clashes, sanitising, firing", async () => {
+  calls.length = 0;
+  let s = await start({ HIRE_MAX: "2" });
+  try {
+    let r = await post(s, "/api/employees", hire({ name: "Taken\u0007", role: "Ops\nHelper\u202e", instructions: "Line 1\r\nLine 2\u0000" }));
+    assert.equal(r.status, 201);
+    const a = await r.json();
+    assert.equal(a.id, "d2c-taken-2", "d2c-taken already exists in Switch");
+    assert.equal(a.name, "Taken");
+    assert.equal(a.role, "Ops Helper");
+    assert.match(calls.find((c) => c.method === "POST" && c.path === "/gateway/management/agents").json.definition.instructions, /Line 1\nLine 2\n/);
+    assert.equal((await post(s, "/api/employees", hire({ name: "B" }))).status, 201);
+    r = await post(s, "/api/employees", hire({ name: "C" }));
+    assert.equal(r.status, 429);
+    assert.match((await r.json()).error, /office is full: 2/);
+
+    // fire: removed from Switch, desk freed
+    const del = (id, headers = {}) => fetch(`${s.base}/api/employees/${id}`, { method: "DELETE", headers: { "content-type": "application/json", origin: s.base, ...headers } });
+    assert.equal((await del(a.id, { origin: "https://evil.example" })).status, 403);
+    assert.equal((await del("d2c-nobody")).status, 404);
+    assert.equal((await del(a.id)).status, 200);
+    assert.ok(calls.some((c) => c.method === "DELETE" && c.path === "/gateway/management/agents/sw-d2c-taken-2"));
+    assert.ok(calls.some((c) => c.method === "DELETE" && c.path === "/gateway/agents/sw-d2c-taken-2"));
+    assert.deepEqual((await (await fetch(s.base + "/api/employees")).json()).map((e) => e.id), ["d2c-b"]);
+    r = await post(s, "/api/employees", hire({ name: "C" }));
+    assert.equal(r.status, 201, "room again after firing");
+    assert.equal((await r.json()).desk, "growth_pod#1", "the fired one's desk is free again");
+    r = await post(s, "/api/employees", hire({ name: "D" }));
+    assert.equal(r.status, 429, "3 hires in 10 minutes already");
+  } finally {
+    await s.stop();
+  }
+  s = await start(); // raw Switch errors stay in the server log
+  roomsBroken = true;
+  try {
+    const r = await post(s, "/api/command", { room: "war_room", text: "hi" });
+    assert.equal(r.status, 502);
+    assert.deepEqual(await r.json(), { error: "Switch refused the request" });
+    assert.match(s.log(), /hunter2/);
+  } finally {
+    roomsBroken = false;
+    await s.stop();
+  }
 });
 
 test("switch down: 503, nothing hired", async () => {

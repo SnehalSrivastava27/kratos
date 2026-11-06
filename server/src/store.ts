@@ -101,6 +101,11 @@ export function saveEmployee(e: Employee) {
   employees.set(e.id, e);
 }
 
+export function deleteEmployee(id: string) {
+  db?.prepare("DELETE FROM employees WHERE id = ?").run(id);
+  employees.delete(id);
+}
+
 export function closeStore() {
   try {
     db?.close();

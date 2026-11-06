@@ -305,9 +305,9 @@ const server = createServer(async (req, res) => {
     }
     if (e instanceof URIError) return send(res, 400, { error: "bad path" });
     if (e instanceof SwitchError) {
-      // Our own 4xx pass through; anything Switch answered is a bad gateway (503 = Switch not running).
-      const status = [400, 401, 429].includes(e.status) && !e.message.startsWith("Switch ") ? e.status : e.status === 503 ? 503 : 502;
-      if (status >= 500) log.warn("switch call failed", { path: url.pathname, error: e.message });
+      // Our own 4xx pass through; whatever Switch answered (detail) is logged here and shown as a generic 502/503.
+      const status = e.detail === undefined && e.status < 500 ? e.status : e.status === 503 ? 503 : 502;
+      if (status >= 500) log.warn("switch call failed", { path: url.pathname, error: e.message, detail: e.detail });
       return send(res, status, { error: e.message }, status === 401 ? { "www-authenticate": "Bearer" } : status === 429 ? { "retry-after": "60" } : {});
     }
     log.error("request failed", e, { method: req.method, path: url.pathname });

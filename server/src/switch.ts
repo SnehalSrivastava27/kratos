@@ -13,11 +13,13 @@ const env = process.env;
 const CORE_ENV = env.SWITCH_CORE_ENV || join(homedir(), "Library/Application Support/switchdash/local-switch-server/native/run/switch-core.env");
 export const OFFICE_AGENT = "d2c-office";
 
+/** `message` is safe to show the caller; `detail` (what Switch actually answered) is for the server log only. */
 export class SwitchError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(public status: number, message: string, public detail?: string) {
     super(message);
   }
 }
+const UNREACHABLE = "Switch is not running or unreachable";
 
 function coreEnv(): Record<string, string> {
   if (!existsSync(CORE_ENV)) throw new SwitchError(503, "no local Switch server (start it in Switch Console)");
@@ -37,10 +39,10 @@ async function call(url: string, init: RequestInit & { json?: unknown } = {}) {
     body: init.json !== undefined ? JSON.stringify(init.json) : init.body,
     signal: AbortSignal.timeout(15_000),
   }).catch((e) => {
-    throw new SwitchError(503, `Switch unreachable: ${e.cause?.code ?? e.message}`);
+    throw new SwitchError(503, UNREACHABLE, e.cause?.code ?? e.message);
   });
   const text = await res.text();
-  if (!res.ok) throw new SwitchError(res.status, `Switch ${init.method ?? "GET"} ${new URL(url).pathname} → ${res.status}: ${text.slice(0, 200)}`);
+  if (!res.ok) throw new SwitchError(res.status, "Switch refused the request", `${init.method ?? "GET"} ${new URL(url).pathname} → ${res.status}: ${text.slice(0, 200)}`);
   return text ? JSON.parse(text) : null;
 }
 
@@ -52,9 +54,9 @@ async function login() {
     method: "POST", headers: { "content-type": "application/json" },
     body: JSON.stringify({ email: e.GATEWAY_ADMIN_EMAIL, password: e.GATEWAY_ADMIN_PASSWORD }), signal: AbortSignal.timeout(15_000),
   }).catch((err) => {
-    throw new SwitchError(503, `Switch unreachable: ${err.cause?.code ?? err.message}`);
+    throw new SwitchError(503, UNREACHABLE, err.cause?.code ?? err.message);
   });
-  if (!res.ok) throw new SwitchError(502, `Switch admin login failed (${res.status})`);
+  if (!res.ok) throw new SwitchError(502, "Switch refused the request", `admin login → ${res.status}`);
   cookie = res.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ");
 }
 export async function gw(method: string, path: string, json?: unknown): Promise<any> {
@@ -115,11 +117,11 @@ export async function postAsOffice(o: { credsFile: string; chatId?: string; room
     try {
       const q = new URLSearchParams({ connection_id: connection, scope: "single", filter: "addressed", start_from: "head", client: OFFICE_AGENT });
       const res = await fetch(`${agent}/events?${q}`, { headers: { ...auth, accept: "text/event-stream" }, signal: ac.signal });
-      if (!res.ok || !res.body) throw new SwitchError(res.status, `Switch stream open → ${res.status}`);
+      if (!res.ok || !res.body) throw new SwitchError(res.status, "Switch refused the request", `stream open → ${res.status}`);
       const reader = res.body.getReader();
       for (let buf = ""; !buf.includes("connection_state"); ) {
         const { value, done } = await reader.read();
-        if (done) throw new SwitchError(502, "Switch stream closed before connection_state");
+        if (done) throw new SwitchError(502, "Switch refused the request", "stream closed before connection_state");
         buf += new TextDecoder().decode(value);
       }
       const op = (name: string, json: unknown) => call(`${agent}/ops/${name}`, { method: "POST", json, headers: { ...auth, "x-switch-connection-id": connection } });
@@ -140,18 +142,39 @@ export async function postAsOffice(o: { credsFile: string; chatId?: string; room
 
 // ---- hiring ----
 export type HireSpec = { id: string; displayName: string; description: string; instructions: string; directory: string };
+type Definition = { provider: string; model: string | null; advanced_config: Record<string, unknown>; auto_mode: boolean; auto_approve: boolean; isolation: string; directory: string | null; instructions: string };
+const TEAM_LEAD = "d2c-captain";
 
 /** Creates the agent on Console's own controller (Switch "managed agents"), so Console runs its Claude Code
- *  session like the rest of the team: no click needed. Returns its Switch id. */
+ *  session like the rest of the team: no click needed. Provider settings (provider, model, advanced config,
+ *  auto mode, approvals, isolation) are copied from the team lead the Console template created; only the
+ *  instructions differ, and the working directory is always the repo (`h.directory`), never the request's. */
 export async function createManagedAgent(h: HireSpec): Promise<string> {
+  const managed: { name: string; controller_id: string | null; definition: Definition }[] = await gw("GET", "/management/agents");
+  const lead = managed.find((a) => a.name === TEAM_LEAD);
   const controllers: { id: string; kind: string; state: string }[] = await gw("GET", "/management/controllers");
-  const ctl = controllers.find((c) => c.kind === "console" && c.state === "online") ?? controllers.find((c) => c.state === "online");
-  if (!ctl) throw new SwitchError(503, "no online Switch Console controller on this Mac");
+  const online = controllers.filter((c) => c.state === "online");
+  const ctl = online.find((c) => c.id === lead?.controller_id) ?? online.find((c) => c.kind === "console");
+  if (!ctl) throw new SwitchError(503, "Switch Console is not running on this Mac");
+  const base: Definition = lead?.definition ?? { provider: "claude", model: null, advanced_config: {}, auto_mode: true, auto_approve: false, isolation: "shared", directory: null, instructions: "" };
   const res = await gw("POST", "/management/agents", {
     name: h.id, description: h.description, display_name: h.displayName, icon_url: null, controller_id: ctl.id, desired_state: "running",
-    definition: { provider: "claude", model: null, advanced_config: {}, instructions: h.instructions, auto_mode: true, auto_approve: false, directory: h.directory, isolation: "shared" },
+    definition: {
+      provider: base.provider, model: base.model, advanced_config: base.advanced_config, auto_mode: base.auto_mode,
+      auto_approve: base.auto_approve, isolation: base.isolation, directory: h.directory, instructions: h.instructions,
+    },
   });
   return res.agent_id;
+}
+
+/** Fires a hire: stop managing it (Console stops its session), then delete the Switch agent. */
+export async function removeAgent(agentId: string) {
+  await gw("DELETE", `/management/agents/${agentId}`).catch((e) => {
+    if (!(e instanceof SwitchError) || e.status !== 404) throw e; // not managed (template fallback)
+  });
+  await gw("DELETE", `/agents/${agentId}`).catch((e) => {
+    if (!(e instanceof SwitchError) || e.status !== 404) throw e;
+  });
 }
 
 /** Fallback when managed agents are unavailable: a one-agent template a human opens in Console. Returns its id. */
@@ -173,6 +196,6 @@ export async function activate(agentId: string, roomId: string) {
 }
 
 export async function findAgent(name: string): Promise<string | null> {
-  const agents: { id: string; name: string }[] = await gw("GET", "/agents");
-  return agents.find((a) => a.name === name)?.id ?? null;
+  return (await switchAgents()).find((a) => a.name === name)?.id ?? null;
 }
+export const switchAgents = (): Promise<{ id: string; name: string }[]> => gw("GET", "/agents");
