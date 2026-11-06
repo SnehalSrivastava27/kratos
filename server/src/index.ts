@@ -6,8 +6,11 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { WebSocketServer, WebSocket } from "ws";
 import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
-import { openStore, closeStore, addEvent, recent, roomEvents, roomStats, dbStatus, RING_MAX, type OfficeEvent } from "./store.js";
+import { openStore, closeStore, addEvent, recent, roomEvents, roomStats, dbStatus, listEmployees, RING_MAX, type OfficeEvent } from "./store.js";
 import { rooms, agents, type Roster } from "./derive.js";
+import { handleOffice, syncPending, employeePerson } from "./office.js";
+import { SwitchError } from "./switch.js";
+import { handleLibrary } from "./library/index.js";
 
 const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
 const env = process.env;
@@ -29,6 +32,9 @@ const roster: Roster = JSON.parse(ROSTER_RAW.toString());
 const ROOM_IDS = new Set(roster.rooms.map((r) => r.id));
 
 const PROD = env.NODE_ENV === "production";
+// Office actions trust loopback callers (the office opened on this Mac). Behind a same-host reverse proxy every
+// request looks local, so set TRUST_LOOPBACK=0 there; production defaults to off.
+const TRUST_LOOPBACK = env.TRUST_LOOPBACK ? env.TRUST_LOOPBACK !== "0" : !PROD;
 if (PROD && (!OBSERVER_TOKEN || !ADMIN_TOKEN) && env.ALLOW_OPEN !== "1") {
   log.error("refusing to start: NODE_ENV=production needs OBSERVER_TOKEN and ADMIN_TOKEN (set ALLOW_OPEN=1 to run open anyway)");
   process.exit(1);
@@ -39,6 +45,15 @@ if (!ADMIN_TOKEN) log.warn("ADMIN_TOKEN unset: POST /api/replay and /api/replay/
 
 let seq = 0;
 let shuttingDown = false;
+
+/** Server-made events (hired, librarian): our id, schema-checked, then stored + broadcast. */
+function emit(e: Omit<OfficeEvent, "id">) {
+  const ev = { ...e, id: `srv-${Date.now()}-${++seq}` };
+  if (validate(ev)) broadcast(ev as OfficeEvent);
+  else log.error("dropped invalid server event", undefined, { type: e.type, errors: JSON.stringify(validate.errors) });
+}
+/** roster.json plus hired employees, for the read models. */
+const liveRoster = (): Roster => ({ ...roster, people: [...roster.people, ...listEmployees().map((e) => employeePerson(e, roster.rooms))] });
 
 function broadcast(ev: OfficeEvent) {
   addEvent(ev);
@@ -81,6 +96,9 @@ function requireToken(req: IncomingMessage, token: string) {
 }
 // Client IP for rate limiting (no proxy header is trusted; put a proxy in front only with care).
 const clientIp = (req: IncomingMessage) => req.socket.remoteAddress || "?";
+const isLoopback = (req: IncomingMessage) => /^(127\.\d+\.\d+\.\d+|::1|::ffff:127\.\d+\.\d+\.\d+)$/.test(req.socket.remoteAddress ?? "");
+/** Office actions: loopback (unless TRUST_LOOPBACK=0) or ADMIN_TOKEN. Never open, even without ADMIN_TOKEN set. */
+const isTrusted = (req: IncomingMessage) => (TRUST_LOOPBACK && isLoopback(req)) || hasToken(req, ADMIN_TOKEN);
 const HITS_MAX = 10_000;
 const hits = new Map<string, { n: number; reset: number }>(); // ponytail: fixed 1-min window per IP, in memory (single instance)
 function rateLimit(ip: string) {
@@ -184,14 +202,18 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return res.end(ROSTER_RAW);
   }
   if (route === "GET /api/history") return send(res, 200, recent(limitParam(url, 200)));
-  if (route === "GET /api/rooms") return send(res, 200, rooms(roster, roomStats(), recent(RING_MAX)));
+  if (route === "GET /api/rooms") return send(res, 200, rooms(liveRoster(), roomStats(), recent(RING_MAX)));
   const roomMatch = method === "GET" && url.pathname.match(/^\/api\/rooms\/([\w-]+)\/events$/);
   if (roomMatch) {
     if (!ROOM_IDS.has(roomMatch[1])) return send(res, 404, { error: `unknown room: ${roomMatch[1]}` });
     return send(res, 200, roomEvents(roomMatch[1], limitParam(url, 50)));
   }
-  if (route === "GET /api/agents") return send(res, 200, agents(roster, recent(RING_MAX)));
+  if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(), recent(RING_MAX)));
   if (route === "GET /api/gallery") return send(res, 200, gallery());
+
+  const trusted = isTrusted(req);
+  if (await handleOffice(req, url, { root: ROOT, roster, isTrusted: trusted, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit })) return;
+  if (url.pathname.startsWith("/api/library") && (await handleLibrary(req, res, url, { isTrusted: trusted, emit }))) return;
 
   if (route === "POST /api/events") {
     requireToken(req, OBSERVER_TOKEN);
@@ -251,6 +273,12 @@ const server = createServer(async (req, res) => {
       return send(res, e.status, { error: e.message }, extra);
     }
     if (e instanceof URIError) return send(res, 400, { error: "bad path" });
+    if (e instanceof SwitchError) {
+      // Our own 4xx pass through; anything Switch answered is a bad gateway (503 = Switch not running).
+      const status = [400, 401, 429].includes(e.status) && !e.message.startsWith("Switch ") ? e.status : e.status === 503 ? 503 : 502;
+      if (status >= 500) log.warn("switch call failed", { path: url.pathname, error: e.message });
+      return send(res, status, { error: e.message }, status === 401 ? { "www-authenticate": "Bearer" } : status === 429 ? { "retry-after": "60" } : {});
+    }
     log.error("request failed", e, { method: req.method, path: url.pathname });
     if (!res.headersSent) send(res, 500, { error: "internal error" });
     else res.destroy();
@@ -279,6 +307,10 @@ const heartbeat = setInterval(() => {
     ws.ping();
   }
 }, Number(env.WS_PING_MS) || 30_000);
+
+// Template-fallback hires go active once someone finishes them in Switch Console.
+const pendingSync = setInterval(() => syncPending({ root: ROOT, roster }).catch((e) => log.warn("pending hire sync failed", { error: String(e.message ?? e) })), 30_000);
+pendingSync.unref();
 
 server.listen(PORT, () => {
   const port = (server.address() as { port: number }).port;

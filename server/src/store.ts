@@ -8,9 +8,14 @@ import { log } from "./log.js";
 export type OfficeEvent = { id: string; t: number; room: string; speaker: string; [k: string]: unknown };
 
 export const RING_MAX = 500;
+export type Employee = {
+  id: string; name: string; role: string; room: string; emoji: string; color: string; desk: string;
+  hiredAt: number; switchAgentId: string | null; status: "active" | "pending_console"; instructions: string; skills: string[];
+};
 const RETAIN = 10_000; // ponytail: rows kept on disk; prune is a single DELETE every 100 inserts
 
 const ring: OfficeEvent[] = [];
+const employees = new Map<string, Employee>(); // mirror of the employees table (tiny), so reads never hit disk
 let db: DatabaseSync | null = null;
 let inserts = 0;
 
@@ -24,7 +29,12 @@ export function openStore(dataDir: string) {
       CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE,
         room TEXT NOT NULL, speaker TEXT NOT NULL, json TEXT NOT NULL);
       CREATE INDEX IF NOT EXISTS events_room ON events(room, seq);
-      CREATE TABLE IF NOT EXISTS probe (k TEXT PRIMARY KEY, v INTEGER NOT NULL);`);
+      CREATE TABLE IF NOT EXISTS probe (k TEXT PRIMARY KEY, v INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS employees (id TEXT PRIMARY KEY, json TEXT NOT NULL);`);
+    for (const r of db.prepare("SELECT json FROM employees ORDER BY rowid").all() as { json: string }[]) {
+      const e = JSON.parse(r.json);
+      employees.set(e.id, e);
+    }
     const rows = db.prepare("SELECT json FROM events ORDER BY seq DESC LIMIT ?").all(RING_MAX) as { json: string }[];
     ring.push(...rows.reverse().map((r) => JSON.parse(r.json)));
     log.info("store open", { kind: "sqlite", file, loaded: ring.length });
@@ -80,6 +90,15 @@ export function roomStats(): Map<string, { count: number; last: OfficeEvent }> {
     (SELECT room, COUNT(*) n, MAX(seq) s FROM events GROUP BY room) c ON e.seq = c.s`).all() as { room: string; n: number; json: string }[];
   for (const r of rows) out.set(r.room, { count: Number(r.n), last: JSON.parse(r.json) });
   return out;
+}
+
+/** Hired employees, oldest first. */
+export const listEmployees = () => [...employees.values()];
+
+/** Insert or replace. Throws if the DB write fails, so a hire is never reported but lost. */
+export function saveEmployee(e: Employee) {
+  db?.prepare("INSERT INTO employees (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json").run(e.id, JSON.stringify(e));
+  employees.set(e.id, e);
 }
 
 export function closeStore() {
