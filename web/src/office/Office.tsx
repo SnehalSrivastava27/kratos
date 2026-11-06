@@ -385,7 +385,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
         )}
         {chat.open && (
           <div className="ao-panel ao-chat">
-            <ChatPane room={room} events={recent} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} actions={panelBtns(chat, setChat, 'chat')} />
+            <ChatPane room={room} events={recent} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} onCommand={sendCommand} actions={panelBtns(chat, setChat, 'chat')} />
           </div>
         )}
       </div>

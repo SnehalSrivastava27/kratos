@@ -1,12 +1,12 @@
 // Telegram-Desktop-style chrome around the office: the group chat list and the open group's chat.
 // Everything is derived client-side from the event feed.
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import type { OfficeEvent } from '../shared/types';
+import type { OfficeEvent, RoomId } from '../shared/types';
 import type { SceneState } from './officeState';
 import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
 import { Tg, tgPlain } from './md';
@@ -124,7 +124,9 @@ export function ChatList({ events, scene, selected, unread, onSelect, className,
 const isMine = (e: OfficeEvent) => personById[e.speaker]?.kind === 'human';
 const bannerTitle = (e: OfficeEvent) => firstLine(e.text);
 
-function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boolean }) {
+type Command = (room: RoomId, text: string) => Promise<unknown>;
+
+function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean; last: boolean; onCommand?: Command }) {
   const p = personById[e.speaker];
   const mine = p?.kind === 'human';
   const accent = e.type === 'pushback' ? '#E5484D' : e.type === 'approved' ? '#3CCB8B' : undefined;
@@ -160,21 +162,50 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
           {mine && <CheckCheck className="size-3.5" />}
         </div>
         <div className="clear-both" />
-        {e.type === 'approval_needed' && (
-          <div className="-mx-1 mt-1 mb-0.5 grid grid-cols-2 gap-1">
-            {([[Check, 'Approve'], [Pencil, 'Ask changes']] as const).map(([Icon, b]) => (
-              <button key={b} onClick={() => toast(`Sent “${b}” to ${p?.name ?? 'the bot'}`)}
-                className="flex items-center justify-center gap-1.5 rounded-lg bg-[#3390EC]/10 py-1.5 text-[13px] font-semibold text-[#1A6FB5] hover:bg-[#3390EC]/20"><Icon className="size-3.5" strokeWidth={2} />{b}</button>
-            ))}
-          </div>
-        )}
+        {e.type === 'approval_needed' && onCommand && <ApprovalButtons room={e.room} who={p?.name ?? 'the bot'} onCommand={onCommand} />}
       </div>
     </div>
   );
 }
 
-export function ChatPane({ room, events, scene, onBack, onCompose, className, actions }: {
-  room: string; events: OfficeEvent[]; scene: SceneState; onBack?: () => void; onCompose?: () => void; className?: string; actions?: ReactNode;
+/** Inline-keyboard buttons under an approval request: they post into the same topic (POST /api/command). */
+function ApprovalButtons({ room, who, onCommand }: { room: RoomId; who: string; onCommand: Command }) {
+  const [asking, setAsking] = useState(false);
+  const [text, setText] = useState('');
+  const [busy, setBusy] = useState(false);
+  const send = async (body: string) => {
+    setBusy(true);
+    try {
+      await onCommand(room, body);
+      toast(`Sent to ${who}: “${body}”`);
+      setAsking(false);
+      setText('');
+    } catch (err) {
+      toast.error(`Not sent: ${err instanceof Error ? err.message : 'error'}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const btn = 'flex items-center justify-center gap-1.5 rounded-lg bg-[#3390EC]/10 py-1.5 text-[13px] font-semibold text-[#1A6FB5] hover:bg-[#3390EC]/20 disabled:opacity-50';
+  return (
+    <div className="-mx-1 mt-1 mb-0.5">
+      <div className="grid grid-cols-2 gap-1">
+        <button type="button" className={btn} disabled={busy} onClick={() => void send('Approved ✅')}><Check className="size-3.5" strokeWidth={2} />Approve</button>
+        <button type="button" className={btn} disabled={busy} aria-expanded={asking} onClick={() => setAsking((a) => !a)}><Pencil className="size-3.5" strokeWidth={2} />Ask changes</button>
+      </div>
+      {asking && (
+        <form className="mt-1 flex gap-1" onSubmit={(ev) => (ev.preventDefault(), text.trim() && void send(`Please change: ${text.trim()}`))}>
+          <input autoFocus value={text} onChange={(ev) => setText(ev.target.value)} maxLength={1900} placeholder="What should change?" aria-label="What should change?"
+            className="min-w-0 flex-1 rounded-lg border border-black/15 px-2 py-1 text-[13px] outline-none focus:border-[#3390EC]" />
+          <button type="submit" disabled={busy || !text.trim()} className="rounded-lg bg-[#3390EC] px-2.5 text-[13px] font-semibold text-white disabled:opacity-50">Send</button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, className, actions }: {
+  room: string; events: OfficeEvent[]; scene: SceneState; onBack?: () => void; onCompose?: () => void; onCommand?: Command; className?: string; actions?: ReactNode;
 }) {
   const reduce = useReducedMotion();
   const info = topicOf(room);
@@ -213,7 +244,7 @@ export function ChatPane({ room, events, scene, onBack, onCompose, className, ac
           <AnimatePresence initial={false}>
             {msgs.map((e, i) => (
               <motion.div key={e.id} initial={reduce ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
-                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} />
+                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={onCommand} />
               </motion.div>
             ))}
           </AnimatePresence>
