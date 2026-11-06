@@ -577,6 +577,8 @@ export class OfficeEngine {
     let drag: { x: number; y: number; moved: number; id: number } | null = null;
     const pointers = new Map<number, { x: number; y: number }>();
     let pinch = 0;
+    let hoverEv: PointerEvent | null = null, hoverRaf = 0;
+    this.cleanup.push(() => cancelAnimationFrame(hoverRaf));
     const down = (e: PointerEvent) => {
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (pointers.size === 2) {
@@ -598,8 +600,14 @@ export class OfficeEngine {
         return;
       }
       if (!drag || e.pointerId !== drag.id) {
-        canvas.style.cursor = this.frameAt(e) ? 'pointer' : '';
-        this.hover(e);
+        // Hover picking (frames, book spines) at most once a frame, however fast the mouse reports.
+        hoverEv = e;
+        hoverRaf ||= requestAnimationFrame(() => {
+          hoverRaf = 0;
+          if (!hoverEv || this.disposed) return;
+          canvas.style.cursor = this.frameAt(hoverEv) ? 'pointer' : '';
+          this.hover(hoverEv);
+        });
         return;
       }
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
