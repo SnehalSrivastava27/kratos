@@ -1,0 +1,3 @@
+{ "task": "O5", "state": "working", "progress": 10,
+  "done": ["read brief + office code"], "next": "switch hub in 3D (engine/switchHub.ts)",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
