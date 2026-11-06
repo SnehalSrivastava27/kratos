@@ -1,0 +1,9 @@
+supplier_id,name,city,category,payment_terms_days,rating
+S01,Ankur Formulations Pvt Ltd,Baddi,Contract manufacturer,45,4.3
+S02,Vasant Chemicals,Mumbai,Actives and chemicals,30,4.1
+S03,Nilgiri Botanicals,Coimbatore,Oils and botanicals,30,4.4
+S04,Pampore Kesar Traders,Srinagar,Saffron,0,3.6
+S05,Glassline Packaging,Vapi,Glass bottles and droppers,30,4
+S06,Polytube India,Daman,Tubes and jars,30,3.9
+S07,PrintCraft Cartons,Bhiwandi,"Cartons, labels, gift boxes",15,4.2
+S08,Sunshield Ingredients,Ahmedabad,UV filters and minerals,45,4
