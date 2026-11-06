@@ -134,7 +134,8 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   const mapped = room ? wsByRoom(room) : null;
   if (mapped) {
     const code = findCode(text, room);
-    if (code) claim(code, mapped, code.user_id === mapped.ownerId);
+    if (code && code.user_id === mapped.ownerId) take(code) && bind(code, mapped); // re-sent in their own group: confirms it
+    else if (code) refuse(code, ALREADY_LINKED);
     if (mapped.status !== "ready") void setup(mapped.id);
     // Topic → department: the workspace's own map (by Switch thread id); otherwise keep the observer's guess.
     const t = Object.entries(mapped.topics).find(([, v]) => v.switchThreadId && v.switchThreadId === meta.switch_thread_id);
@@ -148,16 +149,18 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   const code = findCode(text, room);
   sql().prepare("INSERT INTO link_attempts (switch_room_id, room_name, chat_id, at, matched) VALUES (?, ?, ?, ?, ?)").run(room, name, chatId, Date.now(), code ? 1 : 0);
   sql().prepare("DELETE FROM link_attempts WHERE seq <= (SELECT MAX(seq) FROM link_attempts) - 1000").run();
-  if (!code) return { event: null };
+  // Claim the code before any await: two groups sending it at once can't both link.
+  if (!code || !take(code)) return { event: null };
 
   chatId ??= await roomChatId(room).catch(() => null);
+  if (wsByRoom(room)) return refuse(code, ALREADY_LINKED), { event: null }; // linked meanwhile
   const sameChat = chatId ? (sql().prepare("SELECT * FROM workspaces WHERE chat_id = ?").get(chatId) as any) : null;
   if (sameChat) {
     const w = row2ws(sameChat);
-    if (w.ownerId !== code.user_id) return claim(code, w, false), { event: null };
+    if (w.ownerId !== code.user_id) return refuse(code, ALREADY_LINKED), { event: null };
     w.switchRoomId = room; // Switch re-created the room for the same group: follow it
     save(w);
-    claim(code, w, true);
+    bind(code, w);
     void setup(w.id);
     return { event: null, linked: w.id };
   }
@@ -167,17 +170,20 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   };
   sql().prepare("INSERT INTO workspaces (id, name, switch_room_id, chat_id, owner_id, topics, status, created_at) VALUES (?, ?, ?, ?, ?, '{}', ?, ?)")
     .run(w.id, w.name, room, chatId, w.ownerId, w.status, w.createdAt);
-  claim(code, w, true);
+  bind(code, w);
   log.info("workspace linked", { ws: w.id, owner: w.ownerId });
   void setup(w.id);
   return { event: null, linked: w.id };
 }
 
-/** Uses the code for `w` (single use), or records why it can't be. */
-function claim(code: { id: number }, w: Workspace, ok: boolean) {
-  if (ok) sql().prepare("UPDATE link_codes SET used_at = ?, workspace_id = ? WHERE id = ?").run(Date.now(), w.id, code.id);
-  else sql().prepare("UPDATE link_codes SET detail = ? WHERE id = ?").run("That Telegram group is already linked to another account.", code.id);
-}
+const ALREADY_LINKED = "That Telegram group is already linked to another account.";
+/** Marks the code used, atomically: true only for the one caller that got it. */
+const take = (code: { id: number }) =>
+  Number(sql().prepare("UPDATE link_codes SET used_at = ? WHERE id = ? AND used_at IS NULL").run(Date.now(), code.id).changes) === 1;
+const bind = (code: { id: number }, w: Workspace) => sql().prepare("UPDATE link_codes SET workspace_id = ? WHERE id = ?").run(w.id, code.id);
+/** The code can't link this group: give it back (still usable elsewhere) with the reason for /connect/status. */
+const refuse = (code: { id: number }, detail: string) =>
+  sql().prepare("UPDATE link_codes SET used_at = NULL, detail = ? WHERE id = ? AND workspace_id IS NULL").run(detail, code.id);
 
 // ---- Telegram Bot API (read-only checks + forum topics; never getUpdates: Switch polls the bot) ----
 function botToken(): string {

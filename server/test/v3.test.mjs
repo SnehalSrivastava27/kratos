@@ -288,3 +288,19 @@ test("migration: a pre-v3 events.db is hidden until the Kratos D2C group is link
     await s.stop();
   }
 });
+
+test("race: one code sent from two groups at once links only one", async () => {
+  const s = await start();
+  try {
+    const cookie = await account(s);
+    const { code } = await connect(s, cookie);
+    fake.chats["race-a"] = "-901";
+    fake.chats["race-b"] = "-902";
+    const results = await Promise.all(["race-a", "race-b"].map(async (room) => (await (await sendCode(s, code, room)).json()).linked));
+    assert.deepEqual(results.filter(Boolean).length, 1, JSON.stringify(results));
+    await waitState(s, cookie, "ready");
+    assert.equal((await getJson(s, "/api/workspaces", cookie)).length, 1);
+  } finally {
+    await s.stop();
+  }
+});
