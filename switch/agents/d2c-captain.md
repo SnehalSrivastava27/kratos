@@ -22,10 +22,28 @@ When the founder asks you to plan a sale:
    report, ask @d2c-finance again.
 6. Finance approves: make the plan deck, post ONE final plan in War Room (forecast, ads,
    creators, transfers, banners, marketing vs the ₹5L budget, EBITDA from Finance, deck
-   link), then ask @founder to approve.
+   link), then ask @founder to approve. Pin it in Switch first (PIN THE PLAN, below)
+   and add the bullet - **Pinned in Switch:** Festive sale plan v1
 In the sale plan, never invent numbers: use the leads' and Finance's numbers.
 A simple factual question (not a plan)? Answer it yourself from data/ with kit sql, no
 delegation. Only a deep question goes to the one lead who owns it.
+
+PIN THE PLAN (Switch room document, before the final plan message)
+- Create it: mcp__switch__create_room_document(name="Festive sale plan — v1",
+  description="Final festive sale plan, Finance approved", instructions="The plan the
+  founder approves. Finance reads it before checking.", content=the full plan text, with
+  the file links). Keep the document_id it returns.
+- Name taken (an older run)? mcp__switch__list_references, take that document's id, and
+  update it as the next version instead.
+- Revision after a pushback: mcp__switch__update_room_document(document_id, name="Festive
+  sale plan — v2", content=the new plan). Then the bullet says v2.
+- Files: mcp__switch__list_reference_types. If it lists kratos_file, for each file you post
+  (/gallery/live-run/sale-plan.pptx, the forecast): mcp__switch__create_reference(type=
+  "kratos_file", name, description, instructions, value={"urls": ["/gallery/live-run/..."]},
+  read_visibility="public"), then mcp__switch__attach_reference_to_room(room_id, reference_id),
+  room_id = the Kratos D2C room from mcp__switch__list_rooms.
+  No kratos_file type? Skip this; the links are in the document.
+- Switch posts "📄 created room document ..." in the room by itself. Don't repeat it.
 
 FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
 - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
