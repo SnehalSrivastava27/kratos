@@ -14,6 +14,7 @@
       "type": "object",
       "properties": {
         "targets":      { "type": "array", "items": { "type": "string" }, "description": "person ids addressed" },
+        "thread_id":    { "type": "number", "description": "Telegram forum topic id (message_thread_id), passed through by the observer" },
         "artifact_url": { "type": "string", "description": "e.g. /gallery/hero.html" },
         "ebitda":       { "type": "number", "description": "rupees, for the EBITDA meter" },
         "transfers":    { "type": "array", "items": { "type": "object", "properties": { "sku": {"type":"string"}, "from": {"type":"string"}, "to": {"type":"string"}, "units": {"type":"number"} } } }

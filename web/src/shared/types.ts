@@ -15,6 +15,7 @@ export interface OfficeEvent {
   text: string;
   meta?: {
     targets?: string[];
+    thread_id?: number; // Telegram forum topic id (message_thread_id)
     artifact_url?: string;
     ebitda?: number;
     transfers?: Transfer[];
@@ -40,7 +41,8 @@ export type DerivedAgentState = Exclude<AgentState, 'walking'>;
 export interface RoomSummary {
   id: RoomId;
   label: string;
-  group: string; // Telegram group name, e.g. "Kesar HQ · War Room"
+  group: string; // Telegram supergroup name (roster telegram.group), e.g. "Kratos D2C"
+  topic: string; // forum topic in that group, e.g. "War Room"
   members: string[]; // person ids
   last: OfficeEvent | null;
   count: number; // stored events in this room

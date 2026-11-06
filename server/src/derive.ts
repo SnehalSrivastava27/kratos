@@ -1,9 +1,9 @@
 // Read models for the Telegram-style office UI: rooms and per-person state, derived from events.
 import type { OfficeEvent } from "./store.js";
 
-type Person = { id: string; name: string; kind: string; zone: string; group?: string };
-type Room = { id: string; label: string; zone: string };
-export type Roster = { people: Person[]; rooms: Room[] };
+type Person = { id: string; name: string; kind: string; zone: string };
+type Room = { id: string; label: string; zone: string; topic?: string };
+export type Roster = { people: Person[]; rooms: Room[]; telegram?: { group?: string } };
 type State = "idle" | "working" | "waiting" | "done";
 
 const runOf = (id: string) => {
@@ -19,9 +19,8 @@ export function rooms(roster: Roster, stats: Map<string, { count: number; last: 
       roster.people.filter((p) => p.kind === "human" || p.id === "d2c-captain" || r.id === "war_room" || p.zone === r.zone).map((p) => p.id),
     );
     for (const e of events) if (e.room === r.id) members.add(e.speaker);
-    const group = roster.people.find((p) => p.group?.endsWith(`· ${r.label}`))?.group ?? `Kesar HQ · ${r.label}`;
     const s = stats.get(r.id);
-    return { id: r.id, label: r.label, group, members: [...members], last: s?.last ?? null, count: s?.count ?? 0 };
+    return { id: r.id, label: r.label, group: roster.telegram?.group ?? "", topic: r.topic ?? r.label, members: [...members], last: s?.last ?? null, count: s?.count ?? 0 };
   });
 }
 

@@ -36,12 +36,13 @@ All errors are `{ "error": string }` JSON (400 adds `details` = ajv errors).
 
 ## Read models (types in web/src/shared/types.ts)
 ```ts
-RoomSummary  { id, label, group /* "Kesar HQ · War Room" */, members: string[], last: OfficeEvent | null, count }
+RoomSummary  { id, label, group /* Telegram supergroup, "Kratos D2C" */, topic /* forum topic, "War Room" */, members: string[], last: OfficeEvent | null, count }
 AgentSummary { id, name, kind, state: "idle"|"working"|"waiting"|"done", last: OfficeEvent | null, room: RoomId | null }
 GalleryItem  { name, url /* /gallery/<name> */, size, mtime /* epoch ms */ }
 ```
 - `members`: humans and `d2c-captain` are in every room, every agent is in `war_room` and its
   home room (same zone), as in switch/d2c-team.template.yaml; anyone who spoke there is added.
+- Events may carry `meta.thread_id` (Telegram topic id); the observer passes it through.
 - `count` / `last` come from stored events (newest 10,000 kept on disk).
 - `state` folds the newest 500 events with the office's rules (web/src/office/officeState.ts):
   `assign` → speaker + targets working; `working` → working; `done`/`artifact`/`approved` → done;

@@ -101,14 +101,15 @@ test("rate limit → 429 and WS client cap", async () => {
 test("persistence: history and room events survive a restart", async () => {
   const DATA_DIR = tmp();
   let s = await start({ DATA_DIR });
-  const created = await (await post(s.base, "/api/events", ev({ room: "finance", speaker: "d2c-finance", text: "persist me" }))).json();
+  const created = await (await post(s.base, "/api/events", ev({ room: "design", speaker: "d2c-design", text: "persist me", meta: { thread_id: 42 } }))).json();
   await s.stop();
   s = await start({ DATA_DIR });
   try {
     const hist = await (await fetch(s.base + "/api/history")).json();
     assert.ok(hist.some((e) => e.id === created.id), "in /api/history after restart");
-    const room = await (await fetch(s.base + "/api/rooms/finance/events?limit=10")).json();
+    const room = await (await fetch(s.base + "/api/rooms/design/events?limit=10")).json();
     assert.deepEqual(room.map((e) => e.id), [created.id]);
+    assert.equal(room[0].meta.thread_id, 42);
     const health = await (await fetch(s.base + "/api/health")).json();
     assert.equal(health.db, "ok");
     assert.match(health.version, /^\d+\.\d+\.\d+/);
@@ -121,25 +122,26 @@ test("rooms and agents are derived from events", async () => {
   const s = await start();
   try {
     await post(s.base, "/api/events", ev({ room: "analytics", speaker: "d2c-captain", type: "assign", text: "forecast", meta: { targets: ["d2c-analyst"] } }));
-    await post(s.base, "/api/events", ev({ room: "finance", speaker: "d2c-finance", type: "approval_needed", text: "please approve" }));
-    await post(s.base, "/api/events", ev({ room: "finance", speaker: "d2c-finance", type: "message", text: "waiting" }));
+    await post(s.base, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "approval_needed", text: "please approve" }));
+    await post(s.base, "/api/events", ev({ room: "ops", speaker: "d2c-ops", type: "message", text: "waiting" }));
 
     const rooms = await (await fetch(s.base + "/api/rooms")).json();
-    assert.equal(rooms.length, 7);
-    const fin = rooms.find((r) => r.id === "finance");
+    assert.equal(rooms.length, 6);
+    const fin = rooms.find((r) => r.id === "ops");
     assert.equal(fin.count, 2);
     assert.equal(fin.last.text, "waiting");
-    assert.equal(fin.group, "Kesar HQ · Finance");
-    assert.deepEqual(fin.members.sort(), ["d2c-captain", "d2c-finance", "founder"]);
-    assert.equal(rooms.find((r) => r.id === "war_room").members.length, 8);
+    assert.equal(fin.group, "Kratos D2C");
+    assert.equal(fin.topic, "Ops");
+    assert.deepEqual(fin.members.sort(), ["d2c-captain", "d2c-ops", "founder"]);
+    assert.equal(rooms.find((r) => r.id === "war_room").members.length, 7);
     assert.equal(rooms.find((r) => r.id === "ads").last, null);
 
     const agents = Object.fromEntries((await (await fetch(s.base + "/api/agents")).json()).map((a) => [a.id, a]));
     assert.equal(agents["d2c-captain"].state, "working");
     assert.equal(agents["d2c-captain"].room, "analytics");
     assert.equal(agents["d2c-analyst"].state, "working");
-    assert.equal(agents["d2c-finance"].state, "waiting");
-    assert.equal(agents["d2c-finance"].last.text, "waiting");
+    assert.equal(agents["d2c-ops"].state, "waiting");
+    assert.equal(agents["d2c-ops"].last.text, "waiting");
     assert.equal(agents["d2c-ads"].state, "idle");
 
     assert.equal((await fetch(s.base + "/api/rooms/nope/events")).status, 404);
