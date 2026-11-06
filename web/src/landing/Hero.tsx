@@ -99,7 +99,7 @@ function Stage() {
         <Window
           className="relative z-10 mx-auto h-[440px] w-full max-w-[720px] md:h-[560px] xl:h-[560px]"
           title={<span className="hidden sm:inline">Kesar HQ · live office</span>}
-          right={<span className="inline-flex items-center gap-1.5 rounded-full bg-saffron/10 px-2 py-0.5 text-[11px] font-medium text-saffron-ink"><LiveDot />Replaying<span className="-ml-1 hidden sm:inline">&nbsp;the festive sale</span></span>}
+          right={<span className="inline-flex items-center gap-1.5 rounded-full bg-saffron/10 px-2 py-0.5 text-[11px] font-medium text-saffron-ink"><LiveDot /><span className="sm:hidden">Replaying</span><span className="hidden sm:inline">Replaying the festive sale</span></span>}
         >
           {small ? <Office2D run={inView && !reduce} /> : (
             <Fallback to={<Office2D run={inView && !reduce} />}>
