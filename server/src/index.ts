@@ -6,13 +6,16 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { WebSocketServer, WebSocket } from "ws";
 import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
-import { openStore, closeStore, addEvent, recent, roomEvents, roomStats, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
+import { openStore, closeStore, addEvent, getEvent, recent, roomEvents, roomStats, documents, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
 import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, ipKey, sha as shaHex, type User } from "./auth.js";
-import { resolveWs, userWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, type Workspace } from "./workspaces.js";
+import { resolveWs, userWorkspaces, allWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, upgradeAll, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
-import { handleOffice, syncPending, employeePerson } from "./office.js";
-import { SwitchError } from "./switch.js";
+import { handleOffice, syncPending, employeePerson, tagCatchUp } from "./office.js";
+import { startBriefs, briefNow } from "./brief.js";
+import { SwitchError, switchHealth } from "./switch.js";
 import { handleLibrary } from "./library/index.js";
+import { handleQa } from "./qa.js";
+import { kpis } from "./kpis.js";
 
 const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
 const env = process.env;
@@ -32,6 +35,7 @@ const validate = new Ajv2020.default({ allErrors: true, strict: false }).compile
 const ROSTER_RAW = readFileSync(join(ROOT, "contracts/roster.json"));
 const roster: Roster = JSON.parse(ROSTER_RAW.toString());
 const ROOM_IDS = new Set(roster.rooms.map((r) => r.id));
+const KPI_DIR = env.KPI_DATA_DIR || join(ROOT, "data");
 
 const PROD = env.NODE_ENV === "production";
 // Office actions trust loopback callers (the office opened on this Mac). Behind a same-host reverse proxy every
@@ -46,6 +50,7 @@ if (!OBSERVER_TOKEN) log.warn("OBSERVER_TOKEN unset: POST /api/events is open to
 if (!ADMIN_TOKEN) log.warn("ADMIN_TOKEN unset: POST /api/replay and /api/replay/stop are open (fine for local dev only)");
 
 let seq = 0;
+const inflight = new Set<string>(); // Switch message ids being ingested right now (two copies POSTed at once)
 let shuttingDown = false;
 
 /** Server-made events (hired, librarian) in workspace `ws`: our id, schema-checked, then stored + broadcast. */
@@ -59,9 +64,9 @@ const liveRoster = (ws: Workspace): Roster => ({
   ...roster, telegram: { ...roster.telegram, group: ws.name }, people: [...roster.people, ...listEmployees(ws.id).map((e) => employeePerson(e, roster.rooms))],
 });
 
-/** Stores the event and sends it to that workspace's sockets only. */
+/** Stores the event and sends it to that workspace's sockets only (once: a stored id is not sent again). */
 function broadcast(ev: OfficeEvent) {
-  addEvent(ev);
+  if (!addEvent(ev)) return;
   const msg = JSON.stringify(ev);
   for (const c of wss.clients) if (c.readyState === WebSocket.OPEN && socketWs.get(c) === ev.ws) c.send(msg);
 }
@@ -127,7 +132,7 @@ const localHops = (req: IncomingMessage) =>
 const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHops(req) && localHost(req);
 /** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
 const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
-const WRITE_ROUTE = /^\/api\/(command|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|auth\/(signup|login|logout)|workspaces\/connect)$/;
+const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
 /** Every state-changing office/admin/auth route: JSON only (a cross-site "simple" POST can't send it without a preflight
  *  we never answer), a foreign Origin is refused, and without the token the Host must be local or configured. */
 function checkWrite(req: IncomingMessage) {
@@ -248,7 +253,18 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     const db = dbStatus();
     // DATA_DIR in production means "persist": a memory fallback there is a broken deploy, not a degraded one.
     const ready = !shuttingDown && db !== "error" && !(PROD && env.DATA_DIR && db === "memory");
-    return send(res, ready ? 200 : 503, { ready, db });
+    // Switch being down doesn't make this instance unready (it still serves the office); it is reported.
+    const all = db === "error" ? [] : allWorkspaces();
+    const counts = { ready: 0, linking: 0, needs_admin: 0 };
+    for (const w of all) counts[w.status]++;
+    const body: Record<string, unknown> = { ready, db, switch: await switchHealth(), workspaces: counts };
+    if (hasToken(req, ADMIN_TOKEN)) body.workspace_status = all.map((w) => ({ id: w.id, status: w.status, detail: w.detail })); // ids: admin only
+    return send(res, ready ? 200 : 503, body);
+  }
+  if (route === "GET /api/kpis") return send(res, 200, kpis(KPI_DIR)); // public: made-up demo data only
+  if (url.pathname.startsWith("/api/qa/")) {
+    if (!hasToken(req, ADMIN_TOKEN)) throw new HttpError(401, "unauthorized"); // admin only, even in dev
+    if (await handleQa(method!, url.pathname, { root: ROOT, roster, url, readJson: () => readJson(req), send: (st, b) => send(res, st, b) })) return;
   }
   if (route === "GET /api/roster") {
     if (!hasToken(req, ADMIN_TOKEN)) needUser(req); // not public (v3): the demo imports its own copy
@@ -293,12 +309,26 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     requireToken(req, OBSERVER_TOKEN);
     const body = await readJson(req);
     const { ws: _ignored, ...rest } = body ?? {}; // the server assigns ws, never the caller
-    const ev = { ...rest, id: `srv-${Date.now()}-${++seq}` }; // always our id: client ids could break run ordering
+    // Always our id (client ids could break run ordering). A Switch message keeps one id however often the observer
+    // delivers it (a retried POST, a resumed stream): the second copy is not stored or broadcast again.
+    const m = rest?.meta ?? {};
+    const sid = typeof m.switch_message_id === "string" && m.switch_message_id && typeof m.switch_room_id === "string" ? shaHex(`${m.switch_room_id}|${m.switch_message_id}`).slice(0, 24) : "";
+    const id = sid ? `sw-${sid}` : `srv-${Date.now()}-${++seq}`;
+    const ev = { ...rest, id };
     if (!validate(ev)) return send(res, 400, { error: "invalid event", details: validate.errors });
-    const { event, linked } = await ingest(ev as OfficeEvent);
-    if (!event) return send(res, 202, { ok: true, stored: false, linked: !!linked }); // no workspace: a link attempt only
-    broadcast(event);
-    return send(res, 201, event);
+    const dup = sid ? getEvent(id) : null;
+    if (dup) return send(res, 200, dup);
+    if (sid && inflight.has(sid)) return send(res, 202, { ok: true, stored: false, duplicate: true }); // a copy is being ingested
+    if (sid) inflight.add(sid);
+    tagCatchUp(ev as OfficeEvent); // a fresh hire's first message: meta.kind "catch_up"
+    try {
+      const { event, linked } = await ingest(ev as OfficeEvent);
+      if (!event) return send(res, 202, { ok: true, stored: false, linked: !!linked }); // no workspace: a link attempt only
+      broadcast(event);
+      return send(res, 201, event);
+    } finally {
+      if (sid) inflight.delete(sid);
+    }
   }
   if (route === "POST /api/replay" || route === "POST /api/replay/stop") {
     if (!hasToken(req, ADMIN_TOKEN)) throw new HttpError(401, "unauthorized"); // admin only, even in dev
@@ -316,7 +346,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, 200, [...roster.people, ...listEmployees().map((e) => employeePerson(e, roster.rooms))]);
 
   // ---- scoped to one workspace (v3): session (or ADMIN_TOKEN) + ?ws= ----
-  if (/^\/api\/(history|rooms|agents|people|employees|command|library)(\/|$)/.test(url.pathname)) {
+  if (/^\/api\/(history|rooms|agents|people|employees|command|brief|library|documents)(\/|$)/.test(url.pathname)) {
     const { user, ws } = scope(req, url);
     if (route === "GET /api/history") return send(res, 200, recent(ws.id, limitParam(url, 200)));
     if (route === "GET /api/rooms") return send(res, 200, rooms(liveRoster(ws), roomStats(ws.id), recent(ws.id, RING_MAX)));
@@ -325,6 +355,8 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
       if (!ROOM_IDS.has(roomMatch[1])) return send(res, 404, { error: `unknown room: ${roomMatch[1]}` });
       return send(res, 200, roomEvents(ws.id, roomMatch[1], limitParam(url, 50)));
     }
+    if (route === "POST /api/brief") return send(res, 202, await briefNow(ROOT, ws)); // SW4: the Captain's morning brief, now
+    if (route === "GET /api/documents") return send(res, 200, documents(ws.id)); // SW2: room documents pinned in Switch
     if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(ws), recent(ws.id, RING_MAX)));
     if (await handleOffice(req, url, { root: ROOT, roster, ws, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit: emitTo(ws.id) })) return;
     // Library paths are shown only to the office on this Mac (or ADMIN_TOKEN). Re-shelving is host-wide (rewrites
@@ -439,22 +471,34 @@ pendingSync.unref();
 // While a link code is live, new Telegram rooms get the observer so the code is seen (workspaces.ts watchRooms).
 const roomWatch = setInterval(() => watchRooms().catch((e) => log.warn("room watch failed", { error: String(e.message ?? e) })), Number(env.ROOM_WATCH_MS) || 10_000);
 roomWatch.unref();
+// SW4: the Captain's 9 AM IST morning brief, asked through Switch (brief.ts). MORNING_BRIEF=off disables it.
+const briefs = startBriefs(ROOT);
 
 server.listen(PORT, () => {
   const port = (server.address() as { port: number }).port;
   log.info("listening", { port, version: VERSION, root: ROOT, web: SERVE_WEB, observerAuth: !!OBSERVER_TOKEN, adminAuth: !!ADMIN_TOKEN });
+  // Workspaces linked under an older roster get its new topics and agents (also retried on their next message).
+  upgradeAll().catch((e) => log.warn("workspace upgrade failed", { error: String(e?.message ?? e) }));
 });
 
-function shutdown(sig: string) {
+function shutdown(sig: string, code = 0) {
   if (shuttingDown) return;
   shuttingDown = true;
   log.info("shutting down", { signal: sig });
   stopReplay();
   clearInterval(heartbeat);
+  clearInterval(pendingSync);
+  clearInterval(roomWatch);
+  if (briefs) clearInterval(briefs);
   for (const c of wss.clients) c.close(1001, "server shutting down");
+  wss.close();
+  let done = false;
   const exit = () => {
-    closeStore();
-    process.exit(0);
+    if (done) return;
+    done = true;
+    for (const c of wss.clients) c.terminate(); // no close handshake in time
+    closeStore(); // checkpoints the WAL
+    process.exit(Math.max(code, Number(process.exitCode ?? 0)));
   };
   server.close(exit);
   server.closeIdleConnections();
@@ -462,3 +506,10 @@ function shutdown(sig: string) {
 }
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
+// A stray rejection is logged, never fatal; an uncaught exception leaves unknown state: flush and exit (supervisor restarts).
+process.on("unhandledRejection", (e) => log.error("unhandled rejection", e));
+process.on("uncaughtException", (e) => {
+  log.error("uncaught exception", e);
+  process.exitCode = 1; // even if a shutdown is already under way
+  shutdown("uncaughtException", 1);
+});

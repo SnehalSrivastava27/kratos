@@ -7,7 +7,7 @@ import { TgText } from './Telegram';
 import { Band, Container, LiveDot, MateIcon, Reveal } from './ui';
 
 const STEPS = [
-  { title: 'In your sidebar', text: 'Six teammates, one per department, right next to the Telegram topics they work in.', agent: 'd2c-analyst' },
+  { title: 'In your sidebar', text: 'Seven teammates, one lead per department plus the Captain, right next to the Telegram topics they work in.', agent: 'd2c-analyst' },
   { title: 'One persistent thread', text: 'Each teammate keeps a single thread that never closes: what it was asked, what it did, and how long it took.', agent: 'd2c-influencers' },
   { title: 'Like a colleague', text: 'Push back, approve or change the plan in plain language. They pick it up from there.', agent: 'd2c-captain' },
 ];

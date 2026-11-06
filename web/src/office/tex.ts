@@ -40,6 +40,22 @@ const rng = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) / 2147
 
 
 
+/** The finance cabin's ledger screen: a month's P&L with an EBITDA line (made-up numbers, ₹ lakh). */
+export function ledgerTex() {
+  return paint(640, 400, (g, W, H) => {
+    g.fillStyle = '#0B1F1D'; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#5EEAD4'; g.font = `800 34px ${FONT}`; g.fillText('P&L · last month', 30, 54);
+    const rows: [string, string, string][] = [['Net revenue', '₹48.2L', '#fff'], ['COGS', '−₹17.9L', 'rgba(255,255,255,.7)'], ['Marketing', '−₹14.6L', 'rgba(255,255,255,.7)'], ['Fulfilment', '−₹6.1L', 'rgba(255,255,255,.7)'], ['EBITDA', '₹4.3L', C.mint]];
+    rows.forEach(([k, v, col], i) => {
+      const y = 112 + i * 54;
+      if (i === rows.length - 1) { g.fillStyle = 'rgba(94,234,212,.35)'; g.fillRect(30, y - 38, W - 60, 2); }
+      g.fillStyle = col; g.font = `${i === rows.length - 1 ? 900 : 700} 30px ${FONT}`; g.fillText(k, 30, y);
+      g.textAlign = 'right'; g.fillText(v, W - 30, y); g.textAlign = 'left';
+    });
+    g.fillStyle = 'rgba(255,255,255,.45)'; g.font = `600 20px ${FONT}`; g.fillText('EBITDA 8.9% · cash runway 14 mo', 30, H - 22);
+  });
+}
+
 /** Three dashboard panels for the data wall. */
 export function chartsTex() {
   return paint(1536, 384, (g, W, H) => {
@@ -172,7 +188,7 @@ export function drawWarScreen(g: G, W: number, H: number, people: Record<string,
   g.fillStyle = bg; g.fillRect(0, 0, W, H);
   g.fillStyle = C.saffron; g.font = `800 44px ${FONT}`; g.fillText('Festive Sale', 40, 70);
   g.fillStyle = 'rgba(255,255,255,.6)'; g.font = `600 24px ${FONT}`; g.fillText('30% off · 5 days · ₹5L marketing', 40, 108);
-  const agents = roster.filter((p) => p.kind === 'agent' && p.id !== 'd2c-captain');
+  const agents = roster.filter((p) => p.kind === 'agent' && p.lead && p.id !== 'd2c-captain').slice(0, 6); // the department leads (their teams sit behind them)
   agents.forEach((p, i) => {
     const y = 170 + i * 58, s = people[p.id];
     const [label, col] = ST[s?.state ?? 'idle'];
@@ -192,7 +208,7 @@ export function drawWarScreen(g: G, W: number, H: number, people: Record<string,
   g.fillText(shipped ? 'Approved 🚀' : 'Pending', ex, 380);
 }
 
-const TOPIC_ICON: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
+const TOPIC_ICON: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨', finance: '💰' };
 const wrapText = (g: G, text: string, maxW: number, maxLines: number) => {
   const out: string[] = [];
   for (const para of text.split('\n')) {
@@ -219,19 +235,20 @@ export function drawTelegramWall(g: G, W: number, H: number, events: OfficeEvent
   const last: Record<string, OfficeEvent> = {}, count: Record<string, number> = {};
   for (const e of events) { last[e.room] = e; count[e.room] = (count[e.room] ?? 0) + 1; }
   const active = events[events.length - 1]?.room ?? 'war_room';
+  const RH = Math.min(68, Math.floor((H - 92) / ROOMS.length)); // 7 topics still fit the wall
   ROOMS.forEach((r, i) => {
-    const y = 88 + i * 68;
-    if (r.id === active) { g.fillStyle = C.tg; rr(g, 8, y, LW - 16, 64, 12); g.fill(); }
+    const y = 88 + i * RH, m = RH / 2;
+    if (r.id === active) { g.fillStyle = C.tg; rr(g, 8, y, LW - 16, RH - 4, 12); g.fill(); }
     const on = r.id === active;
-    g.font = `400 30px ${FONT}`; g.fillText(TOPIC_ICON[r.id] ?? '#', 22, y + 43);
-    g.fillStyle = on ? '#fff' : '#000'; g.font = `800 22px ${FONT}`; g.fillText(r.topic, 72, y + 27);
+    g.font = `400 30px ${FONT}`; g.fillText(TOPIC_ICON[r.id] ?? '#', 22, y + m + 9);
+    g.fillStyle = on ? '#fff' : '#000'; g.font = `800 22px ${FONT}`; g.fillText(r.topic, 72, y + m - 6);
     const e = last[r.id];
     g.fillStyle = on ? 'rgba(255,255,255,.85)' : '#707579'; g.font = `600 17px ${FONT}`;
     const prev = e ? `${personById[e.speaker]?.name ?? ''}: ${plain(e.text).replace(/\n+/g, ' ')}` : 'No messages yet';
-    g.fillText(prev.length > 34 ? prev.slice(0, 33) + '…' : prev, 72, y + 52);
+    g.fillText(prev.length > 34 ? prev.slice(0, 33) + '…' : prev, 72, y + m + 18);
     if (count[r.id] && !on) {
-      g.fillStyle = C.tg; rr(g, LW - 62, y + 20, 40, 26, 13); g.fill();
-      g.fillStyle = '#fff'; g.font = `800 16px ${FONT}`; g.textAlign = 'center'; g.fillText(String(count[r.id]), LW - 42, y + 39); g.textAlign = 'left';
+      g.fillStyle = C.tg; rr(g, LW - 62, y + m - 15, 40, 26, 13); g.fill();
+      g.fillStyle = '#fff'; g.font = `800 16px ${FONT}`; g.textAlign = 'center'; g.fillText(String(count[r.id]), LW - 42, y + m + 4); g.textAlign = 'left';
     }
   });
   // thread

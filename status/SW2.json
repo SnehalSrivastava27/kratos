@@ -1,0 +1,13 @@
+{ "task": "SW2", "state": "done", "progress": 100,
+  "done": [
+    "Captain pins the final plan as a Switch room document (mcp__switch__create_room_document 'Festive sale plan — v1', update to v2 on revision) + kratos_file references to the deck/forecast via create_reference + attach_reference_to_room; message bullet 'Pinned in Switch: Festive sale plan v1'. Finance reads it (list_references + load_internal_documents) and pins 'Finance sign-off'. Template rebuilt, --check ok",
+    "Observer: Switch's own room notice '📄 created|updated room document “X”.' → type artifact, meta.switch_document {id, title, version?, action}; server GET /api/documents (workspace-scoped, latest per id, deleted dropped)",
+    "Tests: server/test/documents.test.mjs, observer/src/docs.test.ts; server build/test/check + observer tsc pass; docs/switch/11-room-documents.md, README row flipped"
+  ],
+  "next": "",
+  "blockers": [],
+  "contract_requests": [
+    "contracts/api.md: add GET /api/documents (session or ADMIN_TOKEN + ?ws=) → [{ id, title, version?, action, by, room, t, event_id }]",
+    "contracts/events.schema.json (optional, no validation change needed): document meta.switch_document { id, title, version?, action }"
+  ],
+  "updated": "2026-11-07T14:45:00+05:30" }

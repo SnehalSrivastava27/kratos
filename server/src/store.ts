@@ -12,6 +12,7 @@ export type Employee = {
   id: string; name: string; role: string; room: string; emoji: string; color: string; desk: string;
   hiredAt: number; switchAgentId: string | null; status: "active" | "pending_console"; instructions: string; skills: string[];
   ws?: string; // owning workspace (v3); legacy hires get one in the Kratos D2C migration
+  reports_to?: string | null; // v4: a lead of the same department
 };
 const RETAIN = 10_000; // ponytail: rows kept per workspace; prune is a single DELETE every 100 inserts
 
@@ -19,7 +20,7 @@ let db: DatabaseSync;
 let memory = false;
 let inserts = 0;
 
-const SCHEMA = `PRAGMA busy_timeout=2000; PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA foreign_keys=ON;
+const SCHEMA = `PRAGMA busy_timeout=5000; PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA foreign_keys=ON;
   CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE,
     room TEXT NOT NULL, speaker TEXT NOT NULL, json TEXT NOT NULL);
   CREATE TABLE IF NOT EXISTS probe (k TEXT PRIMARY KEY, v INTEGER NOT NULL);
@@ -72,13 +73,23 @@ export function dbStatus(): "ok" | "memory" | "error" {
 }
 
 export const kvGet = (k: string) => (db.prepare("SELECT v FROM kv WHERE k = ?").get(k) as { v: string } | undefined)?.v;
+/** Inserts k only if absent; true if this call inserted it (an atomic once-only marker). */
+export const kvClaim = (k: string, v: string) => Number(db.prepare("INSERT OR IGNORE INTO kv (k, v) VALUES (?, ?)").run(k, v).changes) === 1;
 export const kvSet = (k: string, v: string) => db.prepare("INSERT INTO kv (k, v) VALUES (?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").run(k, v);
 
-export function addEvent(ev: OfficeEvent) {
-  db.prepare("INSERT OR IGNORE INTO events (id, room, speaker, ws, json) VALUES (?, ?, ?, ?, ?)").run(ev.id, ev.room, ev.speaker, ev.ws ?? null, JSON.stringify(ev));
+/** Stores the event; false if one with that id is already stored (idempotent ingest). */
+export function addEvent(ev: OfficeEvent): boolean {
+  const added = Number(db.prepare("INSERT OR IGNORE INTO events (id, room, speaker, ws, json) VALUES (?, ?, ?, ?, ?)").run(ev.id, ev.room, ev.speaker, ev.ws ?? null, JSON.stringify(ev)).changes) === 1;
+  if (!added) return false;
   if (++inserts % 100 === 0)
     db.prepare("DELETE FROM events WHERE ws IS ? AND seq <= (SELECT seq FROM events WHERE ws IS ? ORDER BY seq DESC LIMIT 1 OFFSET ?)").run(ev.ws ?? null, ev.ws ?? null, RETAIN);
+  return true;
 }
+
+export const getEvent = (id: string) => {
+  const r = db.prepare("SELECT json FROM events WHERE id = ?").get(id) as { json: string } | undefined;
+  return r ? (JSON.parse(r.json) as OfficeEvent) : null;
+};
 
 const parse = (rows: unknown[]) => (rows as { json: string }[]).reverse().map((r) => JSON.parse(r.json) as OfficeEvent);
 
@@ -89,6 +100,20 @@ export const recent = (ws: string, limit: number) =>
 /** Newest `limit` events in a room of a workspace, oldest first. */
 export const roomEvents = (ws: string, room: string, limit: number) =>
   parse(db.prepare("SELECT json FROM events WHERE ws = ? AND room = ? ORDER BY seq DESC LIMIT ?").all(ws, room, limit));
+
+/** Room documents pinned in Switch (observer `artifact` events with meta.switch_document): the latest state of each,
+ *  oldest first; deleted ones left out. */
+export function documents(ws: string) {
+  const rows = db.prepare("SELECT json FROM events WHERE ws = ? AND json_extract(json, '$.meta.switch_document.id') IS NOT NULL ORDER BY seq").all(ws) as { json: string }[];
+  const docs = new Map<string, Record<string, unknown>>();
+  for (const { json } of rows) {
+    const ev = JSON.parse(json) as OfficeEvent & { meta: { switch_document: { id: string; action?: string } & Record<string, unknown> } };
+    const d = ev.meta.switch_document;
+    docs.delete(d.id); // re-insert: the most recently touched last
+    if (d.action !== "deleted") docs.set(d.id, { ...d, by: ev.speaker, room: ev.room, t: ev.t, event_id: ev.id });
+  }
+  return [...docs.values()];
+}
 
 export const eventCount = () => Number((db.prepare("SELECT COUNT(*) n FROM events").get() as { n: number }).n);
 
@@ -121,7 +146,11 @@ export function adoptLegacy(ws: string) {
   return n;
 }
 
+/** Checkpoints the WAL into events.db and closes it (graceful shutdown). */
 export function closeStore() {
+  try {
+    if (!memory) db?.exec("PRAGMA wal_checkpoint(TRUNCATE)");
+  } catch {}
   try {
     db?.close();
   } catch {}

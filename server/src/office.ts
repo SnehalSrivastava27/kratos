@@ -5,12 +5,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getWs, type Workspace } from "./workspaces.js";
 import { listEmployees, saveEmployee, deleteEmployee, type Employee, type OfficeEvent } from "./store.js";
-import { postAsOffice, createManagedAgent, storeHireTemplate, activate, findAgent, switchAgents, removeAgent, SwitchError, OFFICE_AGENT, type HireSpec } from "./switch.js";
+import { postAsOffice, createManagedAgent, storeHireTemplate, activate, waitLive, findAgent, switchAgents, removeAgent, SwitchError, OFFICE_AGENT, type HireSpec } from "./switch.js";
 import { loadLibrary } from "./library/index.js";
 import { log } from "./log.js";
 
-type Person = { id: string; name: string; kind: string; zone: string; emoji?: string; color?: string; topic?: string; role?: string };
-type Room = { id: string; label: string; zone: string; topic?: string };
+type Person = { id: string; name: string; kind: string; zone: string; emoji?: string; color?: string; topic?: string; role?: string; lead?: boolean; reports_to?: string };
+type Room = { id: string; label: string; zone: string; topic?: string; internal?: boolean };
 export type OfficeCtx = {
   root: string;
   roster: { people: Person[]; rooms: Room[]; telegram?: { group?: string } };
@@ -22,7 +22,7 @@ export type OfficeCtx = {
 
 const env = process.env;
 const COMMANDS_PER_MIN = 10;
-const HIRE_MAX = Number(env.HIRE_MAX) || 12; // employees on the floor at once
+const HIRE_MAX = Number(env.HIRE_MAX) || 24; // employees on the floor at once
 const HIRES_PER_10_MIN = 3;
 const PALETTE = ["#0EA5E9", "#14B8A6", "#F97316", "#E11D48", "#84CC16", "#6366F1", "#A855F7", "#EAB308"];
 /** The team's Telegram writing rules, shared with switch/agents/*.md (read per hire, so edits apply to the next hire). */
@@ -34,7 +34,7 @@ const bad = (msg: string): never => {
 // Control chars and invisible/bidi overrides out (they'd smuggle text into an agent's prompt or spoof a name).
 // Multiline fields keep \n and \t; ZWJ stays so emoji sequences survive.
 const INVISIBLE = /[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u200B\u200C\u200E\u200F\u202A-\u202E\u2060-\u2069\uFEFF]/g;
-const str = (v: unknown, field: string, min: number, max: number, multiline = false) => {
+export const str = (v: unknown, field: string, min: number, max: number, multiline = false) => {
   if (typeof v !== "string") return bad(`${field}: string of ${min}–${max} chars`);
   let clean = v.replace(INVISIBLE, "");
   clean = (multiline ? clean.replace(/\r\n?/g, "\n") : clean.replace(/\s+/g, " ")).trim();
@@ -49,7 +49,8 @@ const cmdWindows = new Map<string, { reset: number; n: number }>(); // per works
 export function commandBody(ctx: Pick<OfficeCtx, "roster">, room: Room, text: string, threaded: boolean, extra: Person[] = []) {
   const agents = [...ctx.roster.people, ...extra].filter((p) => p.kind === "agent");
   const named = agents.some((p) => new RegExp(`@${p.id}\\b`, "i").test(text));
-  const lead = agents.find((p) => p.topic === (room.topic ?? room.label) && p.id !== "librarian");
+  const inRoom = agents.filter((p) => p.topic === (room.topic ?? room.label) && p.id !== "librarian");
+  const lead = inRoom.find((p) => p.lead) ?? inRoom[0];
   const tag = threaded ? "" : `#${(room.topic ?? room.label).replace(/\W+/g, "")} `;
   return `${tag}${!named && lead ? `@${lead.id} ` : ""}${text}`;
 }
@@ -77,11 +78,28 @@ export function desk(ctx: Pick<OfficeCtx, "roster" | "ws">, zone: string) {
 
 export const employeePerson = (e: Employee, rooms: Room[]) => {
   const room = rooms.find((r) => r.id === e.room);
-  return { id: e.id, name: e.name, emoji: e.emoji, kind: "agent", zone: e.desk.split("#")[0], color: e.color, topic: room?.topic ?? room?.label, role: e.role, desk: e.desk, hiredAt: e.hiredAt, status: e.status };
+  return {
+    id: e.id, name: e.name, emoji: e.emoji, kind: "agent", zone: e.desk.split("#")[0], color: e.color, topic: room?.topic ?? room?.label, role: e.role,
+    ...(e.reports_to ? { reports_to: e.reports_to } : {}), desk: e.desk, hiredAt: e.hiredAt, status: e.status,
+  };
 };
 const publicEmployee = ({ instructions: _i, skills: _s, ws: _w, ...e }: Employee) => e;
 
-function instructionsFor(e: { name: string; role: string; instructions: string; skills: string[] }, room: Room, group: string, root: string) {
+/** The hire's first turn: catch up with Switch's read_context, then one hello. Tool names as Claude Code shows
+ *  Switch's MCP server (docs/switch/06-hiring-agents-from-the-office.md "Joining already briefed"). */
+export const catchUpBlock = (topic: string, lead: string) => `FIRST THING YOU DO (your first message in the group, before anything else):
+1. Catch up. Call the Switch tool mcp__switch__read_context with {"limit": 100}. Leave room_id out: it reads the team room you are in. If it says you are not connected, call mcp__switch__connect_to_room with that room's id first.
+   It returns {"threads": [{"root", "replies"}], "truncated", "oldest_timestamp"}, freshest thread last. Read the War Room (top-level threads) and the ${topic} topic (the thread whose root id is the thread_id of the message that addressed you).
+2. Post ONE catch-up with mcp__switch__post_message, thread_id = the thread of the message that addressed you (your ${topic} topic; no thread means the War Room). Follow the Telegram rules above: a bold title like "🧾 **Caught up on the sale plan**", then 2-4 bullets of what you learned (plans, numbers, who owns what), then the italic Next line to @${lead}. Example:
+🧾 **Caught up on the sale plan**
+
+- **Sale:** starts **9 Nov**, target **₹20.4L**
+- **Open ask:** Delhi stock short by **70** serums
+
+_Next: @${lead} tell me where to start._
+3. Never post a second catch-up. If that first message also asked for work, do it after.`;
+
+function instructionsFor(e: { name: string; role: string; instructions: string; skills: string[]; lead: string }, room: Room, group: string, root: string) {
   const topic = room.topic ?? room.label;
   return [
     `You are ${e.name}, ${e.role} at Kesar & Co., a D2C skincare brand. You were just hired from the office screen.`,
@@ -89,11 +107,31 @@ function instructionsFor(e: { name: string; role: string; instructions: string; 
     e.skills.length ? `Skills from the office library to use when relevant: ${e.skills.join(", ")}.` : "",
     telegramStyle(root),
     `The Telegram group "${group}" has one topic per department; yours is ${topic}. ` +
-      `Reply in the topic that addressed you (use that message's thread). Report to @d2c-captain.`,
+      `Reply in the topic that addressed you (use that message's thread). Report to @${e.lead}.`,
+    catchUpBlock(topic, e.lead),
   ].filter(Boolean).join("\n\n");
 }
 
-const credsFile = (root: string) => env.SWITCH_OFFICE_CREDS || join(root, ".switch/agents/d2c-office.json");
+const KICKOFF_WAIT_MS = Number(env.KICKOFF_WAIT_MS) || 120_000;
+/** Fresh hires whose next message is their catch-up (id → workspace). ponytail: in memory, a restart forgets the tag. */
+const awaitingCatchUp = new Map<string, string>();
+/** Tags a fresh hire's first message from the observer as meta.kind "catch_up". */
+export function tagCatchUp(ev: { speaker?: unknown; type?: unknown; meta?: unknown }) {
+  if (ev.type !== "message" || typeof ev.speaker !== "string" || !awaitingCatchUp.delete(ev.speaker)) return;
+  ev.meta = { ...(ev.meta as object), kind: "catch_up" };
+}
+/** A fresh hire's first turn: once Console's session is live, d2c-office addresses it in its topic. Never on sync. */
+async function kickoff(ctx: OfficeCtx, e: Employee, agentId: string, room: Room) {
+  if (!(await waitLive(agentId, ctx.ws.switchRoomId, KICKOFF_WAIT_MS))) log.warn("hire not live yet; sending the kickoff anyway", { id: e.id });
+  awaitingCatchUp.set(e.id, ctx.ws.id);
+  await postAsOffice({
+    credsFile: credsFile(ctx.root), roomId: ctx.ws.switchRoomId, threadId: ctx.ws.topics[room.id]?.switchThreadId ?? null,
+    body: `@${e.id} you just joined — catch up and say hello`,
+  });
+  log.info("hire kicked off", { id: e.id });
+}
+
+export const credsFile = (root: string) => env.SWITCH_OFFICE_CREDS || join(root, ".switch/agents/d2c-office.json");
 const agentDir = (root: string) => env.AGENT_DIR || root; // the repo; operator-set only, never from a request
 const hireTimes = new Map<string, number[]>(); // per workspace
 
@@ -157,8 +195,14 @@ export async function handleOffice(req: IncomingMessage, url: URL, ctx: OfficeCt
   const name = str(b.name, "name", 1, 40);
   if (!/[\p{L}\p{N}]/u.test(name)) bad("name: needs a letter or digit");
   const role = str(b.role, "role", 1, 80);
-  const room = rooms.find((r) => r.id === b.room) ?? bad(`room: one of ${rooms.map((r) => r.id).join(", ")}`);
+  const depts = rooms.filter((r) => !r.internal); // nobody is hired into the QA Lab
+  const room = depts.find((r) => r.id === b.room) ?? bad(`room: one of ${depts.map((r) => r.id).join(", ")}`);
   const instructions = str(b.instructions, "instructions", 1, 4000, true);
+  const leads = ctx.roster.people.filter((p) => p.kind === "agent" && p.lead && p.topic === (room.topic ?? room.label));
+  if (b.reports_to !== undefined && b.reports_to !== null && !leads.some((p) => p.id === b.reports_to))
+    bad(`reports_to: a lead of ${room.label}${leads.length ? ` (${leads.map((p) => p.id).join(", ")})` : ""}`);
+  const reportsTo: string | null = b.reports_to ?? null;
+  const lead = reportsTo ?? leads[0]?.id ?? "d2c-captain";
   const emoji = b.emoji === undefined ? "🧑‍💼" : str(b.emoji, "emoji", 1, 16);
   if (b.color !== undefined && !/^#[0-9a-f]{6}$/i.test(String(b.color))) bad("color: #rrggbb");
   if (b.skills !== undefined && (!Array.isArray(b.skills) || b.skills.length > 20 || b.skills.some((s: unknown) => typeof s !== "string" || !s || s.length > 200)))
@@ -178,7 +222,7 @@ export async function handleOffice(req: IncomingMessage, url: URL, ctx: OfficeCt
   const id = newId(ctx, name, (await switchAgents()).map((a) => a.name));
   reserved.add(id);
   try {
-    const spec: HireSpec = { id, displayName: name, description: role, instructions: instructionsFor({ name, role, instructions, skills }, room, ws.name, ctx.root), directory: agentDir(ctx.root) };
+    const spec: HireSpec = { id, displayName: name, description: role, instructions: instructionsFor({ name, role, instructions, skills, lead }, room, ws.name, ctx.root), directory: agentDir(ctx.root) };
     const roomName = ws.name;
     const roomId = ws.switchRoomId;
     let switchAgentId: string | null = null;
@@ -198,10 +242,14 @@ export async function handleOffice(req: IncomingMessage, url: URL, ctx: OfficeCt
     }
     const employee: Employee = {
       id, name, role, room: room.id, emoji, color: b.color ?? PALETTE[listEmployees(ws.id).length % PALETTE.length],
-      desk: desk(ctx, room.zone), hiredAt: Date.now(), switchAgentId, status: active ? "active" : "pending_console", instructions, skills, ws: ws.id,
+      desk: desk(ctx, room.zone), hiredAt: Date.now(), switchAgentId, status: active ? "active" : "pending_console", instructions, skills, ws: ws.id, reports_to: reportsTo,
     };
     saveEmployee(employee);
     ctx.emit({ t: employee.hiredAt, room: room.id, speaker: id, type: "hired", text: `${emoji} ${name} joined as ${role}`, meta: { employee_id: id } });
+    if (active && switchAgentId) {
+      const agentId = switchAgentId;
+      void kickoff(ctx, employee, agentId, room).catch((err) => log.warn("hire kickoff failed", { id, error: String(err.message ?? err) }));
+    }
     if (!templateId) ctx.send(201, publicEmployee(employee));
     else ctx.send(202, { employee: publicEmployee(employee), action: { kind: "open_url", url: `switchdash://open/template/${templateId}`, label: "Finish in Switch Console" } });
   } finally {

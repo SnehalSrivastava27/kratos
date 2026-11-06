@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import type { SceneState } from '../officeState';
 import type { OfficeEvent } from '../../shared/types';
-import { C, DESKS, deskById, plain, personById, sitterAt, zoneById } from '../data';
+import { C, DESKS, deskById, isPrivate, plain, personById, sitterAt, zoneById } from '../data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './world';
 import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
@@ -58,7 +58,7 @@ export class LiveProps {
     // War-room plan screen: checklist of every agent, team progress and the founder's sign-off.
     const war = zoneById.war_room;
     const wb = wallBoard(3.2, 1.6, PAL.ink, this.warTex);
-    wb.position.set(war.x, 1.55, war.z - 2.15);
+    wb.position.set(war.x, 1.55, war.z - 2.6);
     g.add(wb);
 
     // Telegram Hub showpiece: the supergroup live on the back wall.
@@ -129,9 +129,9 @@ export class LiveProps {
     if (events.length !== this.tgKey || lastId !== this.tgLast) {
       this.tgKey = events.length;
       this.tgLast = lastId;
-      repaint(this.tgTex, (g, W, H) => drawTelegramWall(g, W, H, events));
+      repaint(this.tgTex, (g, W, H) => drawTelegramWall(g, W, H, events.filter((e) => !isPrivate(e))));
     }
-    const war = events.filter((e) => e.room === 'war_room').slice(-4);
+    const war = events.filter((e) => e.room === 'war_room' && !isPrivate(e)).slice(-4);
     const phoneKey = war.map((e) => e.id).join();
     if (phoneKey !== this.phoneKey) {
       this.phoneKey = phoneKey;

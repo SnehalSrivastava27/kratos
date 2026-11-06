@@ -1,0 +1,20 @@
+{
+  "brand": "Kesar & Co.",
+  "as_of": "2026-10-31",
+  "max_marketing_pct_of_net_revenue": 25,
+  "max_marketing_pct_of_net_revenue_sale_period": 30,
+  "min_monthly_ebitda": -300000,
+  "min_ebitda_sale_period": 0,
+  "max_blended_cac": 450,
+  "max_creator_fee_without_founder_ok": 50000,
+  "cash_balance": 11800000,
+  "cash_floor": 4000000,
+  "approval_needed_above": 100000,
+  "payment_terms_note": "Marketplaces settle 7-30 days after delivery (channel_fees.csv settlement_days); suppliers are paid on payment_terms_days.",
+  "rules": [
+    "Total marketing (Meta + Google + marketplace ads + creator fees) must stay under max_marketing_pct_of_net_revenue of the month's net revenue.",
+    "Any sale plan must be EBITDA positive over the sale period (budget.json rule).",
+    "Blended CAC = marketing / new customers in the month; flag if above max_blended_cac.",
+    "Never let cash fall below cash_floor; anything above approval_needed_above needs founder approval in the War Room."
+  ]
+}

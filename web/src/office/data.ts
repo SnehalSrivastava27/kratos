@@ -1,6 +1,6 @@
 import rosterJson from '../../../contracts/roster.json';
 import zonesJson from '../../../contracts/zones.json';
-import type { OfficeEvent, Person, Zone } from '../shared/types';
+import type { OfficeEvent, Person, Room, Zone } from '../shared/types';
 import type { Ctx, SceneState } from './officeState';
 import { tgPlain } from './tgtext';
 
@@ -21,14 +21,16 @@ export let TG_GROUP = (rosterJson as { telegram?: { group: string } }).telegram?
 export const DEMO_GROUP = 'Kesar HQ';
 TG_GROUP = DEMO_GROUP;
 export const setGroup = (name: string) => void (TG_GROUP = name);
-export const ROOMS = (rosterJson.rooms as { id: string; label: string; zone: string; topic?: string }[]).map((r) => ({ ...r, topic: r.topic ?? r.label }));
+/** The Telegram topics the UI shows: `internal` rooms (QA Lab) stay hidden everywhere. */
+export const ROOMS = (rosterJson.rooms as Room[]).filter((r) => !r.internal).map((r) => ({ ...r, topic: r.topic ?? r.label }));
+export const INTERNAL_ROOMS = new Set<string>((rosterJson.rooms as Room[]).filter((r) => r.internal).map((r) => r.id));
 export const roomZone = Object.fromEntries(rosterJson.rooms.map((r) => [r.id, r.zone])) as Record<string, string>;
 export const ctx: Ctx = { roster, roomZone };
 
 export const C = { saffron: '#F4A300', cream: '#FFF6E5', plum: '#1E1328', mint: '#3CCB8B', red: '#E5484D', cyan: '#22D3EE', tg: '#3390EC' };
 export const ZONE_EMOJI: Record<string, string> = {
   design_studio: '🎨', data_wall: '📊', telegram_hub: '💬', creator_studio: '⭐', war_room: '🎯',
-  growth_pod: '📣', dispatch_dock: '📦', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑',
+  growth_pod: '📣', dispatch_dock: '📦', finance_cabin: '💰', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑', meeting_room: '🗣️', reception: '🛎️',
 };
 const owner = (zoneId: string) => roster.find((p) => p.zone === zoneId);
 export const zoneColor = (zoneId: string) =>
@@ -47,7 +49,7 @@ export const world = (zoneId: string, [dx, dz]: [number, number]): [number, numb
   return [z.x + dx, z.z + dz];
 };
 
-/** Who sits where: zone owners at desk #0, hires wherever they were given. Grows as people are hired. */
+/** Who sits where: the k-th roster person in a zone at desk #k (lead first, then specialists; server office.ts desk() agrees), hires wherever they were given. */
 export const deskOf: Record<string, string> = {};
 let session: string | null = null;
 export const peopleSession = () => session;
@@ -56,9 +58,11 @@ export function resetPeople(key: string) {
   roster.splice(0, roster.length, ...STATIC_ROSTER);
   for (const k of Object.keys(personById)) delete personById[k];
   for (const k of Object.keys(deskOf)) delete deskOf[k];
+  const taken: Record<string, number> = {};
   for (const p of roster) {
     personById[p.id] = p;
-    if (deskById[`${p.zone}#0`]) deskOf[p.id] = `${p.zone}#0`;
+    const k = (taken[p.zone] = (taken[p.zone] ?? -1) + 1);
+    if (deskById[`${p.zone}#${k}`]) deskOf[p.id] = `${p.zone}#${k}`;
   }
 }
 resetPeople('');
@@ -94,6 +98,20 @@ export const isSeat = (personId: string, x: number, z: number) => {
   return !!d && Math.hypot(d.x - x, d.z + SEAT_OFF - z) < 0.15;
 };
 
+/**
+ * Switch extras on an event's meta (not in the generated types yet; read tolerantly, all optional):
+ * `private` + `to`: a private note one agent sent another through Switch (never in the Telegram chat);
+ * `switch_document`: a room document pinned in Switch; `kind: 'catch_up'`: a new hire caught up from Switch context;
+ * `kind: 'morning_brief'`: the Captain's daily brief; `switch_role`: an agent assumed / released a Switch room role.
+ */
+export interface SwitchMeta {
+  private?: boolean; to?: string; kind?: string;
+  switch_document?: { id?: string; title?: string; version?: string | number };
+  switch_role?: { role?: string; action?: string };
+}
+export const swMeta = (e: OfficeEvent): SwitchMeta => (e.meta ?? {}) as SwitchMeta;
+export const isPrivate = (e: OfficeEvent) => swMeta(e).private === true;
+
 /** Only same-origin gallery pages may become links: `/gallery/<file>` and nothing else (no schemes, no `..`). */
 export const galleryUrl = (u?: string): string | null => (u && /^\/gallery\/[\w.\/-]+$/.test(u) && !u.includes('..') ? u : null);
 
@@ -126,6 +144,7 @@ export function caption(events: OfficeEvent[], scene: SceneState): { text: strin
   if (!e) return { text: 'Waiting for the founder’s brief…', tone: 'idle' };
   const n = personById[e.speaker]?.name ?? e.speaker;
   const targets = (e.meta?.targets ?? []).map((t) => personById[t]?.name).filter(Boolean);
+  if (isPrivate(e)) return { text: `${n} · 🔒 private note via Switch${swMeta(e).to && personById[swMeta(e).to!] ? ` to ${personById[swMeta(e).to!].name}` : ''}`, tone: 'live' }; // never the text
   switch (e.type) {
     case 'assign':
       return { text: `${n} briefed ${targets.length > 2 ? 'the whole team' : targets.join(' & ')}`, tone: 'live' };

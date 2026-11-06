@@ -6,7 +6,10 @@ export interface PersonState {
   zone: string; // where they end up
   route: string[]; // zones to walk through, last = zone
   routeId?: string; // changes whenever a new walk starts
-  bubble?: { id: string; text: string; t: number };
+  /** priv: a private note through Switch; the bubble shows a lock, never the text. */
+  bubble?: { id: string; text: string; t: number; priv?: boolean };
+  /** A Switch room role this agent holds (meta.switch_role), e.g. "finance-approver". */
+  role?: string;
   jumpId?: string; // changes → jump once
   beacon?: string; // banner text while waiting
 }
@@ -58,7 +61,18 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
     if (e.type === 'hired') sp.state = 'idle'; // they walk in to their own desk (engine), not to the room
     else if (!STAYS.has(e.speaker)) walk(e.speaker, [roomZone], e.id);
     for (const p of Object.values(s.people)) p.bubble = undefined; // one bubble on screen at a time
-    sp.bubble = { id: e.id, t: e.t, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
+    const meta = (e.meta ?? {}) as { private?: unknown; switch_role?: { role?: unknown; action?: unknown } };
+    sp.bubble = meta.private === true
+      ? { id: e.id, t: e.t, text: '', priv: true }
+      : { id: e.id, t: e.t, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
+    // Switch room roles: only an agent's own notice counts; a role is held by one agent at a time.
+    const sr = meta.switch_role;
+    if (sr && typeof sr.role === 'string' && sr.role && ctx.roster.find((p) => p.id === e.speaker)?.kind === 'agent') {
+      if (sr.action === 'assumed') {
+        for (const p of Object.values(s.people)) if (p.role === sr.role) p.role = undefined;
+        sp.role = sr.role;
+      } else if (sr.action === 'released' && sp.role === sr.role) sp.role = undefined;
+    }
 
     switch (e.type) {
       case 'assign':
@@ -67,6 +81,11 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         for (const t of targets) {
           s.people[t].state = 'working';
           walk(t, [home[t]], e.id);
+          // the lead's specialists gather at their department desks and get to work too
+          for (const sp of ctx.roster) if (sp.reports_to === t && s.people[sp.id]) {
+            s.people[sp.id].state = 'working';
+            walk(sp.id, [home[sp.id]], e.id);
+          }
         }
         break;
       case 'working':
@@ -79,6 +98,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         sp.jumpId = e.id;
         sp.beacon = undefined;
         if (e.type === 'artifact' && e.meta?.artifact_url) s.gallery.push(e.meta.artifact_url);
+        if (e.type === 'done') for (const sp of ctx.roster) if (sp.reports_to === e.speaker && s.people[sp.id]?.state === 'working') s.people[sp.id].state = 'done'; // the team ships with its lead
         break;
       case 'pushback':
         sp.state = 'working';

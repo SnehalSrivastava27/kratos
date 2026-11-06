@@ -2,18 +2,19 @@
 // Everything is derived client-side from the event feed.
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
+import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile, Sunrise } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { OfficeEvent, RoomId } from '../shared/types';
 import type { SceneState } from './officeState';
-import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster, swMeta } from './data';
 import { Tg, tgPlain } from './md';
 import { PersonAvatar, RoomTile } from './icons';
+import { FileChip, isFile } from './FileChip';
 
 export { ROOMS };
-export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
+export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨', finance: '💰' };
 export const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
 export const TG = { blue: '#3390EC', green: '#4FAE4E', out: '#EEFFDE', bg: '#F1F1F1' };
 
@@ -142,12 +143,20 @@ function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean
       <div className={cn('relative max-w-[82%] rounded-2xl px-3 pt-1.5 pb-1 text-[14.5px] leading-snug shadow-[0_1px_1px_rgba(0,0,0,0.12)]', mine ? 'rounded-br-md bg-[#EEFFDE]' : 'rounded-bl-md bg-white')}
         style={accent ? { boxShadow: `inset 3px 0 0 ${accent}, 0 1px 1px rgba(0,0,0,.12)` } : undefined}>
         {!mine && first && <div className="text-[13px] font-semibold text-[#1A6FB5]">Switch <span className="font-normal text-[#707579]">bot</span></div>}
+        {swMeta(e).kind === 'morning_brief' && (
+          <div className="-mx-1 mt-1 mb-1 flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#FFE3A3] via-[#FFC58A] to-[#FF9E7A] px-2 py-1 text-[12px] font-semibold text-[#7a3a00]">
+            <Sunrise className="size-3.5" strokeWidth={2.5} /> Morning brief <span className="font-normal text-[#7a3a00]/80">· via Switch</span>
+          </div>
+        )}
         <div className="whitespace-pre-wrap text-[#000]">
           {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.name}</b>}
           {!mine && <br />}
           <Tg text={body} />
         </div>
-        {e.type === 'artifact' && link && (
+        {swMeta(e).kind === 'catch_up' && <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-[#3390EC]/10 px-2 py-0.5 text-[11.5px] font-semibold text-[#1A6FB5]">↻ caught up via Switch</div>}
+        {swMeta(e).switch_document?.title && <div className="mt-1 ml-1 inline-flex items-center gap-1 rounded-full bg-[#F4A300]/15 px-2 py-0.5 text-[11.5px] font-semibold text-[#8a5a00]">📌 Pinned in Switch</div>}
+        {e.type === 'artifact' && link && isFile(link) && <FileChip url={link} />}
+        {e.type === 'artifact' && link && !isFile(link) && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
             <div className="size-11 shrink-0 rounded bg-gradient-to-br from-[#F4A300] to-[#DB2777]" />
             <div className="min-w-0">
@@ -210,6 +219,14 @@ export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, cl
   const reduce = useReducedMotion();
   const info = topicOf(room);
   const msgs = useMemo(() => events.filter((e) => e.room === room), [events, room]);
+  // Only the latest gate still waiting on a decision keeps its buttons (an old one, or one already answered, doesn't).
+  const openGate = useMemo(() => {
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].type === 'approved') return null;
+      if (msgs[i].type === 'approval_needed') return msgs[i].id;
+    }
+    return null;
+  }, [msgs]);
   const typing = typingIn(room, events, scene);
   const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -244,7 +261,7 @@ export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, cl
           <AnimatePresence initial={false}>
             {msgs.map((e, i) => (
               <motion.div key={e.id} initial={reduce ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
-                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={onCommand} />
+                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={e.id === openGate ? onCommand : undefined} />
               </motion.div>
             ))}
           </AnimatePresence>

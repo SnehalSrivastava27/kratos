@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node kit/bin/kit.mjs:*)",
+      "Bash(npm run -s kit:*)",
+      "Bash(python3 switch/check_numbers.py:*)",
+      "Edit(/gallery/live-run/**)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./.switch/**)",
+      "Read(./**/.switch/**)",
+      "Read(~/.ssh/**)"
+    ]
+  }
+}

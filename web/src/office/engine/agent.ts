@@ -81,6 +81,8 @@ export class Agent {
   /** The landing hero: a small icon badge over the head and nothing else; bubbles come and go quicker. */
   hero = false;
   private wanderT = 0;
+  /** Holding a cup of chai until this time (the founder at the chai corner). */
+  chaiUntil = -1;
 
   constructor(readonly info: RosterPerson, ps: PersonState) {
     this.ps = ps;
@@ -131,7 +133,7 @@ export class Agent {
       this.bubbleEl = null;
       if (ps.bubble) {
         this.bubbleT = t;
-        this.bubbleEl = this.makeBubble(ps.bubble.text, ps.bubble.t);
+        this.bubbleEl = this.makeBubble(ps.bubble.text, ps.bubble.t, ps.bubble.priv);
         this.over.prepend(this.bubbleEl);
       }
     }
@@ -153,6 +155,15 @@ export class Agent {
   release(nav: NavGrid) {
     this.drive = null;
     this.plan([this.ps.zone], nav);
+  }
+
+  /** Walk to (x, z) and settle there (sits if it's their own seat). */
+  goTo(x: number, z: number, nav: NavGrid) {
+    this.drive = null;
+    const legs = nav.path(this.pos.x, this.pos.z, x, z);
+    this.path = legs.map(([wx, wz], k) => ({ x: wx, z: wz, stop: k === legs.length - 1, zone: this.ps.zone }));
+    this.maxSpeed = WALK;
+    this.pause = 0;
   }
 
   /** A new hire: appears at the door and walks to their desk. */
@@ -267,7 +278,7 @@ export class Agent {
 
     const atSeat = !this.drive && !moving && !this.path.length && isSeat(this.info.id, g.x, g.z);
     p.sit(atSeat && !airborne && !dancing ? SEAT_HIPS : null);
-    p.holdMug(!moving && ps.state === 'idle' && ps.zone === 'chai_pantry');
+    p.holdMug((!moving && ps.state === 'idle' && ps.zone === 'chai_pantry') || t < this.chaiUntil);
 
     // Facing: along the way while walking; at the desk the screen; else the speaker, the zone's owner or the room.
     if (!moving && !this.path.length && !this.drive) {
@@ -309,12 +320,13 @@ export class Agent {
     return Math.atan2(z.x - this.pos.x, z.z - this.pos.z);
   }
 
+  private get crew() { return !!this.info.reports_to; }
   private drawTag(walking: boolean, t: number) {
     const ps = this.ps;
     const shown: AgentState = walking ? 'walking' : ps.state;
     const talking = !!this.bubbleEl;
     const ding = t - this.dingT < 1.6;
-    const key = `${shown}|${!!ps.beacon}|${talking}|${ding}|${!!this.drive}`;
+    const key = `${shown}|${!!ps.beacon}|${talking}|${ding}|${!!this.drive}|${ps.role ?? ''}`;
     if (key === this.tagKey) return;
     this.tagKey = key;
     const { name } = this.info;
@@ -327,6 +339,8 @@ export class Agent {
       if (text) s.append(text);
       this.tag.append(s);
     };
+    // A Switch room role this agent holds: a small seat badge on top of the tag.
+    if (ps.role && !this.hero && !talking) span('hq-tag-role', `🎭 ${ps.role}`);
     if (this.hero) {
       if (!talking) span('hq-tag-name hq-tag-badge', '', true); // the hero: just the badge
       this.el.style.zIndex = talking ? '40' : '10';
@@ -334,21 +348,38 @@ export class Agent {
     }
     if (ding) span('hq-ding', '✓');
     const you = !!this.drive; // the founder you're walking
-    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : shown === 'idle' ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : shown === 'idle' ? '' : name, true);
-    if (shown !== 'idle' && shown !== 'walking') span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
-    this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
+    // Specialists (roster `reports_to`) wear just their badge so a full office of 17 stays readable: their lead carries the name and state (hover for theirs).
+    const quiet = shown === 'idle' || (this.crew && !ps.beacon);
+    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : quiet ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : quiet ? '' : name, true);
+    if (shown !== 'idle' && shown !== 'walking' && !(this.crew && !ps.beacon)) span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
+    this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : ps.role ? '15' : '10';
   }
 
-  private makeBubble(text: string, at: number) {
+  /** A local one-liner (a hello at the chai corner): a bubble that never touches the feed; the next feed bubble replaces it. */
+  say(text: string, t: number) {
+    this.bubbleEl?.remove();
+    this.bubbleT = t - (this.hero ? HERO_BUBBLE_S : BUBBLE_S) + 2.6; // a short one: 2.6 s
+    this.box.id = '';
+    this.bubbleEl = this.makeBubble(text, Date.now());
+    this.over.prepend(this.bubbleEl);
+  }
+
+  private makeBubble(text: string, at: number, priv = false) {
     const b = document.createElement('div');
-    b.className = 'hq-bubble';
+    b.className = priv ? 'hq-bubble hq-bubble-priv' : 'hq-bubble';
     const who = document.createElement('div');
     who.className = 'hq-bubble-who';
     who.style.color = readable(this.info.color);
     who.append(iconSvg(personDept(this.info), 13), ` ${this.info.name}`);
     const body = document.createElement('div');
     body.className = 'hq-bubble-text';
-    body.append(tgDom(clean(text), 2)); // the bold title and the first fact
+    if (priv) {
+      // A private note: the office never shows its text (that stays in the Switch panel).
+      const lock = document.createElement('span');
+      lock.className = 'hq-priv-lock';
+      lock.textContent = '🔒';
+      body.append(lock, 'private note via Switch');
+    } else body.append(tgDom(clean(text), 2)); // the bold title and the first fact
     const time = document.createElement('span');
     time.className = 'hq-bubble-time';
     time.textContent = clock(at);
@@ -387,8 +418,9 @@ export class Agent {
     this.sx = Math.min(Math.max(rx, pad), w - pad);
     this.sy = Math.max(ry, this.bubbleEl ? pad * 0.9 : 0);
     const walking = this.moving || this.path.length > 0;
-    this.wide = this.bubbleEl ? 0 : this.hero || (this.ps.state === 'idle' && !walking) ? 30 : 112;
-    this.tall = walking || this.ps.state === 'idle' ? 24 : 44; // name pill, plus the state chip under it
+    const badge = this.hero || (this.ps.state === 'idle' && !walking) || (this.crew && !this.ps.beacon);
+    this.wide = this.bubbleEl ? 0 : badge ? 30 : 112;
+    this.tall = badge || walking ? 24 : 44; // name pill, plus the state chip under it
     this.lift = 0;
   }
 

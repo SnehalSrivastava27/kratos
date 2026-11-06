@@ -1,0 +1,14 @@
+{
+ "task": "BL1",
+ "state": "done",
+ "progress": 100,
+ "done": [
+  "docs/blog/: post.md (~3.5k words, Switch features with real snippets + what broke, evals Haiku vs Sonnet runs 0-3, K3 metrics, swarm + overnight loop), features.md (26 features: what/how/files/Switch), findings.md (47 findings with path:line evidence), social.md (5 #HowISwitch posts <280 chars)",
+  "6 new Excalidraw diagrams (.excalidraw/.svg/.png, D1 style): org-chart, finance-gate, switch-features-map, eval-loop, toolkit, overnight-swarm; generator docs/diagrams/gen/bl1.py (+ D1's exc.py, render.sh via the gstack diagram bundle, overflow check); every PNG viewed",
+  "docs/switch/README.md diagram table (7 new rows) + README 'Docs' line; merged backend-v2 twice (SW4, K3, then E2, LV2, W2); post has 'What the live run taught us' + lockdown section, findings 57 (live run, lockdown), eval numbers final (Haiku 149/149 $0.21 vs Sonnet 148/149 $3.07); agent-lockdown diagram added"
+ ],
+ "next": "user-only TODO(user) markers: hero GIF, video link, office screenshot, role notice / 9 AM brief seen live, Switch handle",
+ "blockers": [],
+ "contract_requests": [],
+ "updated": "2026-11-07T05:15:00+05:30"
+}

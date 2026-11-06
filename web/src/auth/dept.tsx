@@ -1,4 +1,4 @@
-import { BarChart3, Megaphone, Package, Palette, Star, Target, type LucideIcon } from 'lucide-react';
+import { BarChart3, FlaskConical, IndianRupee, Megaphone, Package, Palette, Star, Target, type LucideIcon } from 'lucide-react';
 import type { RoomId } from '@/shared/types';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +10,8 @@ export const DEPT_ICON: Record<RoomId, { Icon: LucideIcon; color: string }> = {
   creators: { Icon: Star, color: '#F59E0B' },
   ops: { Icon: Package, color: '#059669' },
   design: { Icon: Palette, color: '#9333EA' },
+  finance: { Icon: IndianRupee, color: '#0F766E' },
+  qa_lab: { Icon: FlaskConical, color: '#64748B' },
 };
 
 export function DeptIcon({ room, className }: { room: string; className?: string }) {

@@ -120,6 +120,25 @@ templates and agents (`agent-protocol.md:312-325`). We use three:
 | `connect_to_room` | d2c-office | claim the room for this connection |
 | `post_message {body, thread_id}` | d2c-office | post into a forum topic |
 
+## Targeted messages and Finance's private nudge
+
+`send_targeted_message {body, target_names, target_roles?, thread_id?}` is **not** private. It
+prepends `@name` for each target and calls the same `send_message` as `post_message`, so the
+targets get an *addressed* event, everyone else gets it as context, and the bridge delivers it to
+Telegram like any post (`switch-core 0.31.0 bridges/agent/operations/definitions.py:795-869`,
+`protocol/agent_core.py:2037,2180-2181`). The observer (`scope=all&filter=all`) sees it like any message.
+Agents call it as the MCP tool `mcp__switch__send_targeted_message` (every op is an MCP tool on the
+`Switch` server, `mcp/server.py:161-169`).
+
+Real privacy needs a room with no bridge: `create_room(..., internal_only=True)`
+(`definitions.py:931`). So Finance keeps an agents-only **Finance desk** room per team room
+(description `team_room:<id>`, observer included). When a lead's numbers break a rule, Finance
+sends the exact gap there, the lead answers there, and only then does Finance post its verdict in
+War Room (`switch/agents/d2c-finance.md:79`). The observer files desk messages under the team room
+as `type: "message"` with `meta.private: true, meta.to: <agent id>`, no thread
+(`observer/src/index.ts:150,231`), and the server never uses them to link a group
+(`server/src/workspaces.ts:176,190`). Nothing in our code posts events to Telegram.
+
 ## How `d2c-office` posts
 
 Top-level posts need no connection: `POST /agents/{id}/message {room_id, content}`. Posting **into
