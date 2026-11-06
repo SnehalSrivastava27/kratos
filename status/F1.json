@@ -1,0 +1,14 @@
+{
+  "task": "F1",
+  "state": "done",
+  "progress": 100,
+  "done": [
+    "demo/feeds/sale-demo.json: 38 events / 45s, no Finance; Founder → Captain → Analyst → Ads → Creators (₹1.18L of ₹1.5L) → Ops transfers → Design artifacts → final plan (₹4.68L of ₹5L) → approval → celebrate",
+    "demo/validate.mjs: new beat order; creator fees summed from data/influencers.csv (≤ ₹1.5L), marketing from data/budget.json (≤ ₹5L); EBITDA checks removed",
+    "demo/script.md: new story + single Kratos D2C group with topics"
+  ],
+  "next": "web/src/office/officeState.ts:91 still compares RoomId to 'finance' (tsc error, not F1's file). docs/PLAN.md still describes Finance.",
+  "blockers": [],
+  "contract_requests": [],
+  "updated": "2026-11-06T17:30:00+05:30"
+}

@@ -1,0 +1,16 @@
+{
+ "task": "B2",
+ "state": "done",
+ "progress": 100,
+ "done": [
+  "gallery/hero.html, serum.html, glowkit.html: 1080x1080 CSS-drawn Kesar & Co. banners (Fraunces only external request) + gallery/index.json",
+  "e2e/smoke.mjs + e2e/run.mjs (playwright-core 1.49.1, own package): health, gallery 200, bad POST 400, / h1 no page errors, /office canvas + feed event <15s; npm run e2e passes locally",
+  ".github/workflows/ci.yml: node 22, npm ci, playwright chromium, then `npm run ci` (build, server check, feed validate, check_numbers, e2e)"
+ ],
+ "next": "",
+ "blockers": [
+  "main@3f259c6 (not B2 code): web build fails (web/src/office/officeState.ts:91 compares RoomId to 'finance'); demo/validate.mjs fails (feed still has d2c-finance, being rewritten). CI will be red until both land; e2e itself reads feed lines at runtime, no finance text asserted."
+ ],
+ "contract_requests": [],
+ "updated": "2026-11-06T21:15:00+05:30"
+}
