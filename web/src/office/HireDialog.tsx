@@ -6,7 +6,7 @@ import { ExternalLink, UserPlus } from 'lucide-react';
 import { HIRE_ICONS } from './icons';
 import type { Library, RoomId } from '../shared/types';
 import type { HireBody, HireResult } from './api';
-import { deskById, zoneById } from './data';
+import { TG_GROUP, deskById, zoneById } from './data';
 import { Modal } from './Hud';
 import { ROOMS } from './Telegram';
 import { SHELF_LABEL } from './engine/library';
@@ -14,6 +14,8 @@ import { SHELF_LABEL } from './engine/library';
 
 const COLORS = ['#ef476f', '#ff8a5b', '#f4a300', '#06d6a0', '#118ab2', '#5bc0eb', '#9d4edd', '#2b2d42'];
 /** Links we'll open for the console step: the web, or the Switch desktop app (switchdash://open/template/<id>). Nothing else. */
+/** The server takes at most this many skills per hire. */
+const MAX_SKILLS = 20;
 const safeUrl = (u: string) => /^(https?|switchdash):\/\//i.test(u);
 
 export function HireDialog({ desk, room0, library, libError, onRetry, onClose, onHire }: {
@@ -68,7 +70,7 @@ export function HireDialog({ desk, room0, library, libError, onRetry, onClose, o
   return (
     <Modal title={<span className="inline-flex items-center gap-2"><UserPlus className="size-5" strokeWidth={2.5} /> Hire a teammate{where && <span className="ml-2 text-[13px] font-bold text-[var(--muted)]">{where}</span>}</span>} label="Hire a teammate" onClose={onClose} className="w-[min(720px,100%)]"
       footer={<>
-        <span className="grow">{err ? <span className="text-[#C8303A]">{err}</span> : 'They join Kratos D2C on Telegram and walk in to their desk.'}</span>
+        <span className="grow">{err ? <span className="text-[#C8303A]">{err}</span> : `They join ${TG_GROUP} on Telegram and walk in to their desk.`}</span>
         <button type="button" className="ao-btn" onClick={onClose}>Cancel</button>
         <button type="button" className="ao-btn primary" disabled={busy} onClick={() => void submit()}>{busy ? 'Hiring…' : 'Hire'}</button>
       </>}>
@@ -101,15 +103,15 @@ export function HireDialog({ desk, room0, library, libError, onRetry, onClose, o
             placeholder="What they own and how they work, e.g. “Own repeat purchase: win-back flows, WhatsApp nudges, and a weekly cohort report in Analytics.”" />
         </label>
         <div className="ao-field sm:col-span-2 !mb-0">
-          <span>Skills from the library <span className="font-bold text-[var(--muted)]">({skills.length} picked{library ? '' : libError ? '' : ' · loading…'})</span></span>
+          <span>Skills from the library <span className="font-bold text-[var(--muted)]">({skills.length}/{MAX_SKILLS} picked{library ? '' : libError ? '' : ' · loading…'})</span></span>
           <input className="ao-input !py-1.5 !text-[14px]" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search skills…" aria-label="Search skills" />
           <div className="mt-2 flex max-h-36 flex-wrap gap-1.5 overflow-y-auto">
             {books.map((b) => {
               const on = skills.includes(b.id);
               return (
                 <button key={b.id} type="button" title={`${SHELF_LABEL[b.shelf]} · ${b.description}`} aria-pressed={on}
-                  onClick={() => setSkills((s) => (on ? s.filter((x) => x !== b.id) : [...s, b.id]))}
-                  className={`rounded-full border-2 px-2.5 py-0.5 text-[12.5px] font-extrabold ${on ? 'border-[var(--ink)] bg-[var(--good)] text-white' : 'border-[var(--ink)]/20 bg-white hover:border-[var(--ink)]/50'}`}>
+                  disabled={!on && skills.length >= MAX_SKILLS} onClick={() => setSkills((s) => (on ? s.filter((x) => x !== b.id) : s.length < MAX_SKILLS ? [...s, b.id] : s))}
+                  className={`rounded-full border-2 px-2.5 py-0.5 text-[12.5px] font-extrabold ${on ? 'border-[var(--ink)] bg-[var(--good)] text-white' : 'border-[var(--ink)]/20 bg-white hover:border-[var(--ink)]/50'} disabled:opacity-40`}>
                   /{b.name}
                 </button>
               );
