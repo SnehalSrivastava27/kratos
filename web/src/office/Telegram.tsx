@@ -13,7 +13,7 @@ import { Tg, tgPlain } from './md';
 import { PersonAvatar, RoomTile } from './icons';
 
 export { ROOMS };
-export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
+export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨', finance: '💰' };
 export const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
 export const TG = { blue: '#3390EC', green: '#4FAE4E', out: '#EEFFDE', bg: '#F1F1F1' };
 

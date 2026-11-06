@@ -1,19 +1,21 @@
 // Landing copy sources: docs/PLAN.md §1, §3, §7, §9 · demo/feeds/sale-demo.json · contracts/roster.json.
 import { useEffect, useState } from 'react';
-import { BarChart3, BookOpen, Crown, Megaphone, Package, Palette, Star, Target, type LucideIcon } from 'lucide-react';
+import { BarChart3, BookOpen, Crown, Megaphone, Package, Palette, Star, Target, Wallet, type LucideIcon } from 'lucide-react';
 import type { OfficeEvent, Person } from '@/shared/types';
 import feed from '../../../demo/feeds/sale-demo.json';
 import roster from '../../../contracts/roster.json';
 
 type Mate = Person & { topic?: string };
 export const PEOPLE = Object.fromEntries((roster.people as Mate[]).map((p) => [p.id, p])) as Record<string, Mate>;
-/** The six department teammates the landing shows (the librarian works behind the scenes). */
-export const AGENT_IDS = (roster.people as Mate[]).filter((p) => p.kind === 'agent' && roster.rooms.some((r) => r.zone === p.zone)).map((p) => p.id);
+type RoomRow = { id: string; label: string; zone: string; topic: string; internal?: boolean };
+const ROOMS = (roster.rooms as RoomRow[]).filter((r) => !r.internal); // QA Lab is internal: never on the landing
+/** The teammates the landing shows: the Captain and the department leads (specialists and the librarian work behind them). */
+export const AGENT_IDS = (roster.people as Mate[]).filter((p) => p.kind === 'agent' && p.lead && ROOMS.some((r) => r.zone === p.zone)).map((p) => p.id);
 /** The demo brand and its Telegram group. roster.telegram.group is the real private group, never shown here. */
 export const BRAND = roster.brand;
 export const TG_GROUP = 'Kesar HQ';
-/** One Telegram group with forum topics; each room is a topic, owned by the teammate who sits in its zone. */
-export const TOPICS = roster.rooms.map((r) => ({ id: r.id, label: r.topic, owner: (roster.people as Mate[]).find((p) => p.zone === r.zone)!.id }));
+/** One Telegram group with forum topics; each room is a topic, owned by the lead who sits in its zone. */
+export const TOPICS = ROOMS.map((r) => ({ id: r.id, label: r.topic, owner: AGENT_IDS.find((id) => PEOPLE[id].zone === r.zone) ?? 'd2c-captain' }));
 
 /** Stable module-level ref so <Office> doesn't restart its replay on every render. */
 export const saleDemo = feed as OfficeEvent[];
@@ -31,6 +33,7 @@ export const DEPT: Record<string, { short: string; Icon: LucideIcon; room: strin
   'd2c-influencers': { short: 'Creators', Icon: Star, room: 'Creator Studio' },
   'd2c-ops': { short: 'Ops', Icon: Package, room: 'Dispatch Dock' },
   'd2c-design': { short: 'Design', Icon: Palette, room: 'Design Studio' },
+  'd2c-finance': { short: 'Finance', Icon: Wallet, room: 'Finance Cabin' },
   librarian: { short: 'Librarian', Icon: BookOpen, room: 'Library' },
 };
 export { FEED };

@@ -1,5 +1,5 @@
 // Generated from contracts/ by the orchestrator. Do not edit in worker branches.
-export type RoomId = 'war_room' | 'analytics' | 'ads' | 'creators' | 'ops' | 'design';
+export type RoomId = 'war_room' | 'analytics' | 'ads' | 'creators' | 'ops' | 'design' | 'finance' | 'qa_lab';
 export type EventType =
   | 'message' | 'assign' | 'working' | 'approval_needed'
   | 'pushback' | 'approved' | 'done' | 'artifact' | 'celebrate' | 'hired' | 'command';
@@ -28,10 +28,27 @@ export interface OfficeEvent {
 export interface Person {
   id: string; name: string; emoji: string;
   kind: 'human' | 'agent'; zone: string; color: string; group?: string;
+  topic?: string; // roster v4: the forum topic this person posts in
+  role?: string; // one-line job description
+  lead?: boolean; // department lead (and the captain)
+  reports_to?: string; // specialist → their department lead's id
 }
+
+/** contracts/roster.json `rooms[]`. `internal` rooms (QA Lab) never show in the UI. */
+export interface Room { id: RoomId; label: string; zone: string; topic: string; internal?: boolean }
 
 export interface Zone {
   id: string; label: string; x: number; z: number; w: number; d: number; props: string[];
+  desks?: [number, number][]; // zone-local desk centres; desk id '<zone>#<i>'
+}
+
+/** GET /api/kpis (B3). Money in rupees; percentages as 0–100. */
+export interface Kpis {
+  updated: string; window: { from: string; to: string };
+  net_revenue: number; orders: number; aov: number; rto_pct: number; return_pct: number;
+  meta_roas: number; blended_roas: number; ebitda_last_month: number;
+  by_channel: { channel: string; orders: number; net_revenue: number; rto_pct: number }[];
+  top_skus: { sku: string; name: string; units: number; net_revenue: number }[];
 }
 
 export type AgentState = 'idle' | 'working' | 'walking' | 'waiting' | 'done';

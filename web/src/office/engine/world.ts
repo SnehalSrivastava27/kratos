@@ -7,7 +7,7 @@ import { C, DESKS, zoneById, zoneColor, zones } from '../data';
 import { BOOKCASE_SOLIDS } from './library';
 import { mergeByColor, mergeByMaterial, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { piece, plant, type Models } from './models';
-import { FONT, chartsTex, neonTex, paint, polaroidTex } from '../tex';
+import { FONT, chartsTex, ledgerTex, neonTex, paint, polaroidTex } from '../tex';
 import type { Rect } from './nav';
 
 export const PAL = {
@@ -16,7 +16,7 @@ export const PAL = {
   chairs: ['#ff8a5b', '#5bc0eb', '#9bc53d', '#b388eb', '#ffb400', '#f7aef8'],
 };
 export const DESK_SIZE = { w: 1.8, d: 0.9, h: 0.78 };
-/** leftX: the old west wall, now the inner wall with two doorways into the west wing (library, open desks); outerX: the new west wall. */
+/** leftX: the old west wall, now the inner wall with two doorways into the west wing (library, finance cabin, open desks); outerX: the new west wall. */
 export const WALL = { h: 2.6, t: 0.3, backZ: -8.15, leftX: -12.15, outerX: -18.15 };
 const DOORS: [number, number][] = [[-6.6, -5.0], [2.0, 3.6]]; // z spans of the inner wall's doorways
 const box = (w: number, h: number, d: number) => new THREE.BoxGeometry(w, h, d);
@@ -60,7 +60,7 @@ function chair(color: string) {
 }
 
 /** Monitor slots per desk (x offsets): the growth pod runs two screens. */
-export const MONITORS: Record<string, number[]> = { 'growth_pod#0': [-0.42, 0.42] };
+export const MONITORS: Record<string, number[]> = { 'growth_pod#0': [-0.42, 0.42], 'finance_cabin#0': [-0.42, 0.42] };
 export const monitorXs = (deskId: string) => MONITORS[deskId] ?? [0];
 export const MONITOR = { y: DESK_SIZE.h + 0.42, z: -0.2, w: 0.78, h: 0.46 };
 
@@ -246,7 +246,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
     legM.rotation.set(Math.cos((k * 2 * Math.PI) / 3) * 0.45, 0, -Math.sin((k * 2 * Math.PI) / 3) * 0.45);
     ring.add(legM);
   }
-  add(ring, cr.x + 1.4, 0, cr.z - 0.5, -0.5, true, 0.15);
+  add(ring, cr.x + 2.3, 0, cr.z - 0.5, -0.5, true, 0.15); // right of the second desk
   add(wallBoard(2.6, 1.5, PAL.wood, polaroidTex()), WALL.leftX + WALL.t / 2 + 0.06, 1.5, cr.z, Math.PI / 2);
   // Dispatch dock: stacked boxes and a roller conveyor.
   const dock = zoneById.dispatch_dock;
@@ -287,6 +287,35 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
     return p;
   };
   add(sofa(0.62), fd.x + 1.85, 0, fd.z + 0.2, -Math.PI / 2, true);
+  // Finance cabin: a filing cabinet and a safe against the west wall, the P&L ledger screen above, a calculator on the lead's desk.
+  const fin = zoneById.finance_cabin;
+  if (fin) {
+    const wallX = WALL.outerX + WALL.t / 2;
+    const cab = new THREE.Group();
+    cab.add(mesh(roundedBox(0.55, 1.3, 0.62, 0.05), toon('#8d99ae'), 0, 0.65, 0));
+    for (const y of [0.3, 0.72, 1.12]) {
+      cab.add(mesh(box(0.02, 0.34, 0.5), toon('#adb5bd'), 0.28, y, 0));
+      cab.add(mesh(box(0.04, 0.04, 0.2), toon(PAL.ink), 0.3, y + 0.08, 0));
+    }
+    add(cab, wallX + 0.32, 0, fin.z - 1.0, 0, true);
+    const safe = new THREE.Group();
+    safe.add(mesh(roundedBox(0.62, 0.8, 0.7, 0.08), toon('#2f4858'), 0, 0.4, 0));
+    safe.add(mesh(box(0.02, 0.62, 0.52), toon('#3d5a6c'), 0.32, 0.42, 0));
+    const dial = mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.05, 20), toon('#ffd166'), 0.35, 0.5, -0.08);
+    dial.rotation.z = Math.PI / 2;
+    safe.add(dial);
+    safe.add(mesh(box(0.05, 0.05, 0.18), toon('#ffd166'), 0.35, 0.3, 0.12));
+    add(safe, wallX + 0.36, 0, fin.z + 1.0, 0, true);
+    add(wallBoard(1.5, 0.94, PAL.ink, ledgerTex()), wallX + 0.06, 1.62, fin.z - 0.25, Math.PI / 2);
+    const fd0 = DESKS.find((d) => d.id === 'finance_cabin#0');
+    if (fd0) {
+      const calc = new THREE.Group();
+      calc.add(mesh(roundedBox(0.2, 0.035, 0.26, 0.03), toon('#2b2d42'), 0, 0.018, 0));
+      calc.add(mesh(box(0.15, 0.01, 0.06), toon('#95f2c3'), 0, 0.04, -0.08));
+      calc.add(mesh(box(0.15, 0.01, 0.13), toon('#e9ecef'), 0, 0.04, 0.04));
+      add(calc, fd0.x - 0.6, DESK_SIZE.h, fd0.z + 0.12, 0.2);
+    }
+  }
   // Telegram Hub: a sofa facing the big Telegram wall (the wall itself is live, in engine/props.ts).
   const hub = zoneById.telegram_hub;
   add(sofa(0.6), hub.x, 0, hub.z + 0.75, Math.PI, true);
@@ -296,7 +325,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   const plants: [number, number, 'monstera' | 'snake_plant' | 'ficus'][] = [
     [-11.4, -7.4, 'monstera'], [-4.6, -7.5, 'snake_plant'], [4.4, -7.5, 'ficus'], [11.4, -7.4, 'monstera'],
     [-11.4, 1.3, 'snake_plant'], [11.3, 2.4, 'ficus'], [-11.4, 7.5, 'ficus'], [-0.3, 7.4, 'monstera'], [11.4, 7.4, 'monstera'],
-    [-17.4, 7.6, 'monstera'], [-12.8, 7.6, 'snake_plant'], [-17.5, -0.6, 'ficus'],
+    [-17.6, 7.8, 'monstera'], [-12.8, 7.6, 'snake_plant'],
   ];
   plants.forEach(([x, z, s]) => add(plant(m, s, 1.1), x, 0, z, 0, true, 0.2));
 
