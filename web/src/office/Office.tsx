@@ -4,7 +4,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { DEMO_GROUP, addPerson, caption, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import { DEMO_GROUP, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
 import { DEPT, personDept, type Dept } from './icons';
@@ -83,12 +83,25 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const echo = (e: Omit<OfficeEvent, 'id' | 't'>) =>
     setExtra((x) => [...x, { ...e, id: `local-${Date.now()}-${x.length}`, t: Math.max(feedEvents[feedEvents.length - 1]?.t ?? 0, x[x.length - 1]?.t ?? 0) + 1000 }]);
   const [peopleVer, setPeopleVer] = useState(0); // bumps when someone joins the roster
+  // This mount's people: a fresh copy of the static roster per mode + workspace, dropped on unmount.
+  const peopleKey = `${mode}:${isDemo ? 'demo' : workspace?.id ?? ''}`;
+  if (peopleSession() !== peopleKey) {
+    resetPeople(peopleKey);
+    api.resetMock();
+  }
+  useEffect(() => {
+    if (peopleSession() !== peopleKey) resetPeople(peopleKey);
+    return () => {
+      resetPeople('');
+      api.resetMock();
+    };
+  }, [peopleKey]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scene = useMemo(() => {
     const s = reduce(events, ctx);
     if (poster) for (const p of Object.values(s.people)) p.bubble = undefined;
     return s;
-  }, [events, peopleVer, poster]);
+  }, [events, peopleVer, poster, peopleKey]);
   // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
   const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
   const [walls, setWalls] = useState<{ url: string; title: string }[]>([]); // /api/gallery banners (live)
@@ -117,7 +130,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   const hero = mode === 'autoplay' ? framing ?? 'hero' : null;
-  const stage = <Stage interactive={mode === 'live'} hero={hero} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks}
+  const stage = <Stage key={peopleKey} interactive={mode === 'live'} hero={hero} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks}
     view={mode === 'live' ? view : 'spectator'} onReady={() => readyRef.current?.()} />;
 
   // Telegram side: which topic is open, unread counts.
@@ -163,7 +176,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [library, setLibrary] = useState<Library | null>(null);
   const [music, setMusic] = useState(false); // muted until asked
   const loadLibrary = useCallback(() => api.getLibrary().then((r) => setLibrary(r.data), () => {}), []);
-  useEffect(() => { if (mode === 'live') void loadLibrary(); }, [mode, loadLibrary]);
+  useEffect(() => { if (mode === 'live') void loadLibrary(); }, [mode, loadLibrary, peopleKey]);
   useEffect(() => engine.current?.setLibrary(library), [library]);
   // While the Librarian works, look again every few seconds (the real one moves books around).
   useEffect(() => {
@@ -179,16 +192,18 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     setPeopleVer((v) => v + 1);
   }, []);
   useEffect(() => {
-    if (mode === 'live') api.getPeople().then((r) => joinPeople(r.data, false), () => {});
-  }, [mode, joinPeople]);
+    const k = peopleKey; // a late answer for another workspace is dropped
+    if (mode === 'live') api.getPeople().then((r) => peopleSession() === k && joinPeople(r.data, false), () => {});
+  }, [mode, joinPeople, peopleKey]);
   const hiredSeen = useRef(new Set<string>());
   useEffect(() => {
     // A `hired` event for someone we don't know yet: ask /api/people who they are, and walk them in.
     const unknown = events.filter((e) => e.type === 'hired' && !personById[e.speaker] && !hiredSeen.current.has(e.id));
     if (!unknown.length) return;
     unknown.forEach((e) => hiredSeen.current.add(e.id));
-    api.getPeople().then((r) => joinPeople(r.data, true), () => {});
-  }, [events, joinPeople]);
+    const k = peopleKey;
+    api.getPeople().then((r) => peopleSession() === k && joinPeople(r.data, true), () => {});
+  }, [events, joinPeople, peopleKey]);
   // The Librarian's run finishing: re-read the shelves.
   const lastLib = [...events].reverse().find((e) => e.speaker === 'librarian');
   useEffect(() => { if (lastLib?.type === 'done') void loadLibrary(); }, [lastLib?.id, lastLib?.type, loadLibrary]);

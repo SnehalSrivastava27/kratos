@@ -4,10 +4,17 @@ import type { OfficeEvent, Person, Zone } from '../shared/types';
 import type { Ctx, SceneState } from './officeState';
 import { tgPlain } from './tgtext';
 
-export const roster = rosterJson.people as Person[];
+/** contracts/roster.json, never changed. */
+export const STATIC_ROSTER: readonly Person[] = Object.freeze((rosterJson.people as Person[]).map((p) => Object.freeze({ ...p })));
+/**
+ * The mounted office's people: the static roster plus hires. One office is mounted at a time; Office calls
+ * resetPeople(<mode:workspace>) when it mounts or switches workspace and resetPeople('') when it unmounts,
+ * so one workspace's (or the demo's) hires never show up in another. Mutated in place: everything holds these refs.
+ */
+export const roster: Person[] = [...STATIC_ROSTER];
 export const zones = zonesJson.zones as Zone[];
 export const zoneById = Object.fromEntries(zones.map((z) => [z.id, z])) as Record<string, Zone>;
-export const personById = Object.fromEntries(roster.map((p) => [p.id, p])) as Record<string, Person>;
+export const personById: Record<string, Person> = {};
 /** The Telegram group's title: the demo's made-up one, or the signed-in workspace's (setGroup, from Office). A live binding: importers see the change. */
 export let TG_GROUP = (rosterJson as { telegram?: { group: string } }).telegram?.group ?? 'Telegram';
 /** The demo's group is the made-up brand's office: always "Kesar HQ" (live uses the workspace name). */
@@ -42,7 +49,19 @@ export const world = (zoneId: string, [dx, dz]: [number, number]): [number, numb
 
 /** Who sits where: zone owners at desk #0, hires wherever they were given. Grows as people are hired. */
 export const deskOf: Record<string, string> = {};
-for (const p of roster) if (deskById[`${p.zone}#0`]) deskOf[p.id] = `${p.zone}#0`;
+let session: string | null = null;
+export const peopleSession = () => session;
+export function resetPeople(key: string) {
+  session = key;
+  roster.splice(0, roster.length, ...STATIC_ROSTER);
+  for (const k of Object.keys(personById)) delete personById[k];
+  for (const k of Object.keys(deskOf)) delete deskOf[k];
+  for (const p of roster) {
+    personById[p.id] = p;
+    if (deskById[`${p.zone}#0`]) deskOf[p.id] = `${p.zone}#0`;
+  }
+}
+resetPeople('');
 export const sitterAt = (deskId: string) => Object.keys(deskOf).find((id) => deskOf[id] === deskId);
 export const freeDesks = () => DESKS.filter((d) => !sitterAt(d.id));
 

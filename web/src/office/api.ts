@@ -40,6 +40,8 @@ async function call<T>(path: string, init: RequestInit | undefined, mock: () => 
 // ---- mock state (this tab only) ----
 const mockHires: (Person & { desk: string; hiredAt: number })[] = [];
 const mockLib: Library = { ...(exampleLib as Library), librarian: 'idle' };
+/** A fresh demo: no hires from a previous mount. */
+export const resetMock = () => void mockHires.splice(0);
 
 export const getPeople = () => call<(Person & { desk?: string; hiredAt?: number })[]>('/api/people', undefined, () => ({ data: [...mockHires] })); // the static roster is already in; the mock adds hires
 
