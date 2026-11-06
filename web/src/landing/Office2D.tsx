@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Coffee, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DEPT, FEED, PEOPLE, body, statusAt, useFeedClock } from './data';
+import { DEPT, FEED, PEOPLE, body, ink, statusAt, useFeedClock } from './data';
 
 // Floor plan from contracts/zones.json, row by row. Person ids for desks, plus two shared rooms.
 const ROOMS = ['d2c-design', 'd2c-analyst', 'hub', 'd2c-influencers', 'd2c-captain', 'd2c-ads', 'd2c-ops', 'pantry', 'founder'];
@@ -26,7 +26,7 @@ export function FloorPlan({ lit, ms, className }: { lit?: string; ms?: number; c
             style={on ? { boxShadow: `0 0 0 1.5px ${color}, 0 8px 24px -10px ${color}80` } : undefined}
           >
             <span className={cn('text-[11px] font-medium leading-tight', on ? 'text-foreground' : 'text-neutral-400')}>{d.room}</span>
-            {ms !== undefined && PEOPLE[id]?.kind === 'agent' && <RoomStatus id={id} ms={ms} />}
+            {PEOPLE[id] && (ms !== undefined && PEOPLE[id].kind === 'agent' ? <RoomStatus id={id} ms={ms} /> : <span className="mt-1 text-[10.5px] text-neutral-400">{PEOPLE[id].name}</span>)}
             <Icon className="mt-auto size-4 self-end transition-colors duration-500" strokeWidth={1.6} style={{ color: on ? color : '#c4c4c2' }} />
             {on && (
               <motion.span layoutId="floor-pin" className="absolute top-2.5 right-2.5 size-2 rounded-full" style={{ background: color }} transition={{ type: 'spring', stiffness: 260, damping: 26 }} />
@@ -55,7 +55,7 @@ export default function Office2D({ run = true }: { run?: boolean }) {
     <div className="flex h-full flex-col gap-3 bg-[#FFF8EC] p-3">
       <FloorPlan lit={e.speaker} ms={ms} className="flex-1" />
       <div className="rounded-lg border border-black/[0.06] bg-white p-3 shadow-sm" aria-live="polite">
-        <p className="text-xs font-medium" style={{ color: who.color }}>{who.name}</p>
+        <p className="text-xs font-medium" style={{ color: ink(e.speaker) }}>{who.name}</p>
         <p className="mt-0.5 line-clamp-2 text-[13px] leading-snug whitespace-pre-line text-neutral-700">{body(e.text)}</p>
       </div>
     </div>

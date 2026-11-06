@@ -30,6 +30,8 @@ export const DEPT: Record<string, { short: string; Icon: LucideIcon; room: strin
   'd2c-design': { short: 'Design', Icon: Palette, room: 'Design Studio' },
 };
 export { FEED };
+/** Roster colour, darkened where it is too light for text on white (the captain's saffron). */
+export const ink = (id: string) => (PEOPLE[id]?.color === '#F4A300' ? '#9A5B00' : PEOPLE[id]?.color);
 export const WAR_ROOM = FEED.filter((e) => e.room === 'war_room');
 
 /** Drop the leading department emoji; the UI already shows who is speaking. */

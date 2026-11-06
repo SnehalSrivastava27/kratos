@@ -89,9 +89,9 @@ function MiniCard({ who, title, line, className }: { who: string; title: string;
 export function FinalCta() {
   return (
     <Band className="overflow-hidden">
-      <Container className="relative py-24 text-center md:py-36">
-        <MiniCard who="d2c-ops" title="Mumbai → Delhi · 110 units" line="Arrives in 2 days" className="absolute top-16 left-12 hidden xl:block" />
-        <MiniCard who="d2c-captain" title="Final plan · ₹4.68L of ₹5L" line="Founder approved" className="absolute right-12 bottom-16 hidden xl:block" />
+      <Container className="relative py-24 text-center md:py-44">
+        <MiniCard who="d2c-ops" title="Mumbai → Delhi · 110 units" line="Arrives in 2 days" className="absolute top-10 left-12 hidden xl:block" />
+        <MiniCard who="d2c-captain" title="Final plan · ₹4.68L of ₹5L" line="Founder approved" className="absolute right-12 bottom-10 hidden xl:block" />
         <Reveal>
           <h2 className="mx-auto text-[40px] leading-[1.04] font-medium tracking-[-0.035em] text-balance md:text-[64px]">
             Meet your new teammates.<br className="hidden md:block" /> <span className="text-dim">They’re already at work.</span>
