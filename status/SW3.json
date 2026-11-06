@@ -1,4 +1,9 @@
-{ "task": "SW3", "state": "working", "progress": 20,
-  "done": ["verified send_targeted_message in switch-core 0.31.0: it is a normal room post with @mentions prepended, so it reaches Telegram; privacy needs an internal_only room"],
-  "next": "Finance desk instructions, lead sections, observer/server private events, tests, docs",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
+{ "task": "SW3", "state": "done", "progress": 100,
+  "done": [
+    "Verified (switch-core 0.31.0): send_targeted_message = post with @mentions, reaches Telegram; privacy via an internal_only 'Finance desk' room (team_room:<id> in description)",
+    "Finance nudges the lead in the desk, waits one turn, then posts its War Room verdict; 6 leads reply in the desk, then post revised numbers in their topic; template rebuilt",
+    "Observer forwards desk messages as private message events (meta.private/to/desk_room_id, filed under the team room, no thread); server never links on them; 2 tests with fake Switch + real observer; docs 04 + README"
+  ],
+  "next": "", "blockers": [],
+  "contract_requests": ["events.schema.json: document meta.private (bool), meta.to (person id), meta.desk_room_id (string); they pass today since meta has no additionalProperties: false"],
+  "updated": "2026-11-07T11:00:00+05:30" }
