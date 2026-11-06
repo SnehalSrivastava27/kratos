@@ -1,3 +1,7 @@
-{ "task": "R1", "state": "working", "progress": 15,
-  "done": ["read catalog, v1 data, check_numbers.py", "web research: fees, COD/RTO, Meta benchmarks, creator rates, payroll/tax"],
-  "next": "data/gen/generate.mjs", "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:30:00+05:30" }
+{ "task": "R1", "state": "done", "progress": 100,
+  "done": ["data/gen/generate.mjs (seeded mulberry32, stdlib only) writes all 20 v2 catalog files + data/README.md with computed story numbers; npm run data",
+           "data/gen/check.mjs: 191 checks (catalog headers, every tie incl. P&L recompute, meta last-30, inventory end stock, payroll statutory math, byte-identical regen); npm run data:check passes, switch/check_numbers.py unchanged and passing",
+           "docs/d2c-primer.md: researched primer on Indian D2C (channels, fees, COD/RTO, ads, creators, procurement, couriers, payroll/TDS) with sources"],
+  "next": "", "blockers": [],
+  "contract_requests": ["None required. Added trailing columns only (e.g. orders: coupon, courier, zone, delivery_days, shipping_cost, channel_fee; creators: name, tier, past_brand_roas; pnl_monthly: orders, units, marketing split, ebitda_pct). Agents may want to know these exist."],
+  "updated": "2026-11-07T12:30:00+05:30" }
