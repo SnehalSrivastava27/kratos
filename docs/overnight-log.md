@@ -36,6 +36,7 @@ findings list. It feeds the blog.
 | 03:35 | BL1 merged: docs/blog/ (post ~3.5k words, features, 47 findings with evidence, 5 social posts) + 6 new Excalidraw diagrams (org chart, Finance gate, Switch features map, eval loop, toolkit, overnight swarm). |
 | 04:00 | E2 merged: tier 2 (65 questions: joins, date windows, ranks, judgement, 8 unanswerables, 4 prompt injections); Haiku 142/148 → 149/149 over 5 runs, p50 6 s, ~1 tool call/question, $0.21/run; Sonnet 148/149 at $3.07. LV2 started: hard tool allowlist for live agents, sync instructions, live War Room demo. |
 | 04:20 | Full CI on backend-v2 caught one cross-task break (a K3 kit test still expected order lines after E2 fixed the truth to distinct orders); fixed, CI green. |
+| 04:40 | W2 merged: private Switch notes now a clear violet pulse with a lock (text only in the Switch panel; also stopped it leaking into the header caption and agent card), 🎭 role badges, morning-brief strip. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
@@ -62,3 +63,4 @@ findings list. It feeds the blog.
 - Haiku's misses were about definitions, not reasoning: a full column list + a 6-line definitions block took it from 142/148 to 149/149, and tool calls per question from 1.5 to 1.0. (E2)
 - On this eval Haiku matched Sonnet (149 vs 148 of 149) at ~1/15 of the cost. (E2)
 - The Captain answering "team status" from the chat it already sees, instead of querying data, cut 37 tool calls to 0. (E2)
+- Headless Chrome's software GPU (SwiftShader) silently drops the office's instanced pulse beads; screenshots of the Switch hub need the real GPU (`--use-angle=metal`). (W2)
