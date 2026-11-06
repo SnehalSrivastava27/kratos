@@ -5,8 +5,11 @@ Node + TypeScript event server for D2C Agent HQ. Implements `contracts/api.md`.
 ```sh
 cd server && npm install
 npm run dev     # http://localhost:8787  (override with PORT or SERVER_PORT)
-npm run build   # type-check
+npm run build   # tsc → dist/
+npm start       # node dist/index.js; also serves ../web/dist (SPA fallback) if it was built
 ```
+
+`GET /api/health` → `{ ok, uptime, clients, history }`. SIGTERM/SIGINT close sockets and exit.
 
 Paths resolve from the repo root (`server/..`): `contracts/`, `demo/feeds/`, `gallery/`.
 History keeps the last 500 events in memory (lost on restart).
@@ -39,4 +42,6 @@ curl -X POST localhost:8787/api/replay/stop
 curl localhost:8787/gallery/hero.html
 ```
 
-Replayed events are broadcast with their feed ids and also go into history. Starting a new replay cancels the current one. With `loop: true` the feed restarts 3s (scaled by speed) after its last event.
+Replayed events are broadcast as `<feed id>@<run>` (run = epoch ms of that loop iteration, so ids
+stay unique across loops and restarts) and also go into history. The office resets its scene when
+a newer run starts. Starting a new replay cancels the current one. With `loop: true` the feed restarts 3s (scaled by speed) after its last event.
