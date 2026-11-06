@@ -26,31 +26,49 @@ feed.forEach((e, i) => {
   if (e.text.includes('|')) fail(`${e.id}: no tables`);
   for (const line of e.text.split('\n')) if ([...line].length > 45) fail(`${e.id}: line too long: "${line}"`);
 });
-if (feed.length < 35 || feed.length > 50) fail(`expected 35–50 events, got ${feed.length}`);
+if (feed.length < 35 || feed.length > 45) fail(`expected 35–45 events, got ${feed.length}`);
 const end = feed.at(-1)?.t ?? 0;
-if (end < 35000 || end > 55000) fail(`expected ~45s run, last t = ${end}`);
+if (end < 40000 || end > 50000) fail(`expected ~45s run, last t = ${end}`);
 if (!feed.some((e) => e.type === 'working')) fail('no working events');
 
 // 3. Story beats in order, with PLAN §7 numbers
 const has = (s) => (e) => e.text.includes(s);
+const by = (speaker, type) => (e) => e.speaker === speaker && e.type === type;
 const transfer = (sku, units) => (e) =>
-  e.meta?.transfers?.some((x) => x.sku === sku && x.to === 'Delhi' && x.units === units);
+  e.meta?.transfers?.some((x) => x.sku === sku && x.from === 'Mumbai' && x.to === 'Delhi' && x.units === units);
+const lakh = (rupees) => `₹${+(rupees / 1e5).toFixed(2)}L`;
+
+// Creators: fees of the named creators come from data/influencers.csv; must fit the ₹1.5L guidance.
+const budget = read(new URL('../data/budget.json', import.meta.url));
+const creators = readFileSync(new URL('../data/influencers.csv', import.meta.url), 'utf8')
+  .trim().split('\n').slice(1).map((l) => l.split(',')).map((c) => ({ name: c[0], fee: +c[5] }));
+const pick = feed.find(by('d2c-influencers', 'done'));
+const picked = creators.filter((c) => pick?.text.includes(c.name));
+const creatorFee = picked.reduce((a, c) => a + c.fee, 0);
+if (picked.length !== 4) fail(`creators: expected 4 named creators, got ${picked.length}`);
+if (creatorFee > budget.guidance.influencers) fail(`creators: ${lakh(creatorFee)} over ${lakh(budget.guidance.influencers)} guidance`);
+const marketing = budget.guidance.ads + creatorFee + budget.guidance.creative_production;
+if (marketing > budget.total_marketing_budget) fail(`marketing ${lakh(marketing)} over ${lakh(budget.total_marketing_budget)}`);
+
 const beats = [
-  ['founder prompt', (e) => e.speaker === 'founder' && has('₹5L')(e)],
-  ['captain assigns', (e) => e.speaker === 'd2c-captain' && e.type === 'assign'],
-  ['analyst forecast', (e) => e.speaker === 'd2c-analyst' && e.type === 'done' &&
+  ['founder prompt to captain', (e) => e.speaker === 'founder' && has('@d2c-captain')(e) && has('₹5L')(e)],
+  ['captain working', by('d2c-captain', 'working')],
+  ['captain assigns analyst first', (e) => by('d2c-captain', 'assign')(e) && e.meta?.targets?.[0] === 'd2c-analyst'],
+  ['analyst working', by('d2c-analyst', 'working')],
+  ['analyst forecast', (e) => by('d2c-analyst', 'done')(e) &&
     ['SKU01 · 800', 'SKU02 · 1,400', 'SKU03 · 600', 'SKU04 · 240', 'SKU05 · 300', '₹20.4L'].every((s) => has(s)(e))],
-  ['ads plan', (e) => e.speaker === 'd2c-ads' && e.type === 'done'],
-  ['creators top-4 ₹3.55L', (e) => e.speaker === 'd2c-influencers' && e.type === 'done' && has('₹3.55L')(e)],
-  ['ops transfers (Delhi SKU01 70 + SKU05 40)', (e) => transfer('SKU01', 70)(e) && transfer('SKU05', 40)(e)],
+  ['ads working', by('d2c-ads', 'working')],
+  ['ads plan ₹3L', (e) => by('d2c-ads', 'done')(e) && ['₹3L', '₹1.2L', '₹0.9L', 'Broad prospecting cut'].every((s) => has(s)(e))],
+  [`creators shortlist ${lakh(creatorFee)}`, (e) => e === pick && has(lakh(creatorFee))(e)],
+  ['ops transfers (Mumbai→Delhi SKU01 70 + SKU05 40)', (e) => e.speaker === 'd2c-ops' && transfer('SKU01', 70)(e) && transfer('SKU05', 40)(e)],
   ['hero artifact', (e) => e.type === 'artifact' && e.meta?.artifact_url === '/gallery/hero.html'],
   ['serum artifact', (e) => e.type === 'artifact' && e.meta?.artifact_url === '/gallery/serum.html'],
   ['glowkit artifact', (e) => e.type === 'artifact' && e.meta?.artifact_url === '/gallery/glowkit.html'],
-  ['finance pushback', (e) => e.type === 'pushback' && e.meta?.ebitda === -76086],
-  ['revised creators ₹1.18L', (e) => e.speaker === 'd2c-influencers' && e.type === 'done' && has('₹1.18L')(e)],
-  ['finance approved', (e) => e.type === 'approved' && e.meta?.ebitda === 160914],
-  ['captain asks founder', (e) => e.speaker === 'd2c-captain' && e.type === 'approval_needed' && e.meta?.targets?.includes('founder')],
-  ['founder celebrates', (e) => e.speaker === 'founder' && e.type === 'celebrate'],
+  [`captain final plan (marketing ${lakh(marketing)} of ₹5L)`, (e) => e.speaker === 'd2c-captain' && e.room === 'war_room' &&
+    ['₹20.4L', '₹3L', lakh(creatorFee), 'SKU01 70', 'SKU05 40', 'banners', `${lakh(marketing)} of ₹5L`].every((s) => has(s)(e))],
+  ['captain asks founder', (e) => by('d2c-captain', 'approval_needed')(e) && e.meta?.targets?.includes('founder')],
+  ['founder approves', (e) => by('founder', 'approved')(e) && has('Approved ✅')(e)],
+  ['celebrate', (e) => e.type === 'celebrate'],
 ];
 let at = 0;
 for (const [name, ok] of beats) {
@@ -58,9 +76,6 @@ for (const [name, ok] of beats) {
   if (i < 0) fail(`missing or out of order: ${name}`);
   else at = i + 1;
 }
-// Any EBITDA shown must be one of the PLAN §7 numbers
-for (const e of feed) if ('ebitda' in (e.meta ?? {}) && ![128914, -76086, 160914].includes(e.meta.ebitda))
-  fail(`${e.id}: unexpected ebitda ${e.meta.ebitda}`);
 
 if (errors.length) { console.error(`❌ ${errors.length} problem(s)\n` + errors.join('\n')); process.exit(1); }
-console.log(`✅ ${feed.length} events, ${end / 1000}s, schema + story order + numbers OK`);
+console.log(`✅ ${feed.length} events, ${end / 1000}s, schema + story order + numbers OK\n   creators ${picked.map((c) => c.name).join(', ')} = ${lakh(creatorFee)}; marketing ${lakh(marketing)} of ${lakh(budget.total_marketing_budget)}`);
