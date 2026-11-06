@@ -29,7 +29,8 @@ export interface LiveOpts { ws?: string; onUnauthorized?: () => void }
  * Live (contracts/api.md v3): the signed-in workspace's own events. WS /ws?ws=<id> (the session cookie
  * rides along), buffered while GET /api/history?ws=<id> loads, then history and the buffer. Reconnects
  * with backoff and re-sends history, so everything is deduped by id. Never falls back to the demo: a
- * quiet workspace stays empty. A 401 (session gone) calls onUnauthorized and stops.
+ * quiet workspace stays empty. A 401 from history, or the socket closed with 1008 / 4401 (session gone or
+ * refused), calls onUnauthorized and stops.
  * Adapted from web/src/shared/live.ts (T8), scoped to a workspace.
  */
 export function liveSource({ ws: wsId, onUnauthorized }: LiveOpts): Source {
@@ -70,9 +71,15 @@ export function liveSource({ ws: wsId, onUnauthorized }: LiveOpts): Source {
         buffer = null;
         if (!closed) b.forEach(emit);
       };
-      s.onclose = () => {
+      s.onclose = (ev) => {
         sock = null;
         if (closed) return;
+        // The server refused the session (policy violation / 4401): sign in again rather than retry forever.
+        if (ev.code === 1008 || ev.code === 4401) {
+          closed = true;
+          onUnauthorized?.();
+          return;
+        }
         timer = window.setTimeout(connect, backoff);
         backoff = Math.min(backoff * 2, MAX_BACKOFF_MS);
       };
