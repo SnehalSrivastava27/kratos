@@ -34,7 +34,7 @@ const SCHEMA = `PRAGMA busy_timeout=2000; PRAGMA journal_mode=WAL; PRAGMA synchr
     detail TEXT, created_at INTEGER NOT NULL);
   CREATE TABLE IF NOT EXISTS link_codes (id INTEGER PRIMARY KEY AUTOINCREMENT, code_hash TEXT NOT NULL,
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL,
-    used_at INTEGER, workspace_id TEXT, detail TEXT);
+    used_at INTEGER, workspace_id TEXT, detail TEXT, misses INTEGER NOT NULL DEFAULT 0);
   CREATE INDEX IF NOT EXISTS link_codes_hash ON link_codes(code_hash);
   CREATE TABLE IF NOT EXISTS link_attempts (seq INTEGER PRIMARY KEY AUTOINCREMENT, switch_room_id TEXT NOT NULL,
     room_name TEXT, chat_id TEXT, at INTEGER NOT NULL, matched INTEGER NOT NULL);`;

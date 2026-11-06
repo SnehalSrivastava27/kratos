@@ -108,19 +108,32 @@ export async function watchRooms() {
   }
 }
 
-// ponytail: in-memory guess limit per Switch room; 1e6 codes × 15 min makes guessing hopeless at 10 misses / 10 min
-const misses = new Map<string, { n: number; reset: number }>();
-/** The live code in `text` (6 digits on their own), if any. Misses count against the room. */
+// Guessing a code (1e6 of them): at most 10 wrong per Switch room per 10 min, 30 wrong per minute on the whole host
+// (then codes are ignored until the minute is over), and every live code is voided once 20 wrong codes were tried
+// anywhere during its life. Only short messages are checked: a code is sent on its own.
+const ROOM_MISSES = 10;
+const MISSES_PER_MIN = 30;
+const CODE_MISS_BUDGET = 20;
+const misses = new Map<string, { n: number; reset: number }>(); // per room; entries only for rooms that guessed
+let minute = { n: 0, reset: 0 };
+/** The live code in `text` (6 digits on their own), if any. */
 function findCode(text: string, room: string) {
+  const cands = text.length <= 64 ? [...text.matchAll(/(?<!\d)\d{6}(?!\d)/g)].map((m) => m[0]) : [];
+  if (!cands.length) return null;
   const now = Date.now();
-  if (misses.size > 10_000) misses.clear();
-  let m = misses.get(room);
-  if (!m || now >= m.reset) misses.set(room, (m = { n: 0, reset: now + 600_000 }));
-  for (const [cand] of text.matchAll(/(?<!\d)\d{6}(?!\d)/g)) {
-    if (m.n >= 10) return null;
+  if (now >= minute.reset) minute = { n: 0, reset: now + 60_000 };
+  for (const [k, v] of misses) if (now >= v.reset) misses.delete(k);
+  for (const cand of cands) {
+    const m = misses.get(room) ?? { n: 0, reset: now + 600_000 };
+    if (m.n >= ROOM_MISSES || minute.n >= MISSES_PER_MIN) return null;
     const c = liveCode(cand);
     if (c) return c;
     m.n++;
+    minute.n++;
+    misses.set(room, m);
+    sql().prepare("UPDATE link_codes SET misses = misses + 1 WHERE used_at IS NULL AND expires_at > ?").run(now);
+    sql().prepare("UPDATE link_codes SET expires_at = ?, detail = ? WHERE used_at IS NULL AND expires_at > ? AND misses >= ?")
+      .run(now, "Too many wrong codes were tried in Telegram; get a new code.", now, CODE_MISS_BUDGET);
   }
   return null;
 }

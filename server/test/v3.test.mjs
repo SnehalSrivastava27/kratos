@@ -304,3 +304,24 @@ test("race: one code sent from two groups at once links only one", async () => {
     await s.stop();
   }
 });
+
+test("brute force: 20 wrong codes anywhere void every live code; over 30 wrong a minute, codes are ignored", async () => {
+  const s = await start();
+  try {
+    const cookie = await account(s);
+    let { code } = await connect(s, cookie);
+    const wrong = (i) => String((Number(code) + 1 + i) % 1_000_000).padStart(6, "0");
+    for (let i = 0; i < 20; i++) await sendCode(s, wrong(i), `bf-${i % 3}`); // ≤ 10 per room: the per-room cap alone wouldn't stop this
+    let st = await getJson(s, "/api/workspaces/connect/status", cookie);
+    assert.equal(st.state, "expired");
+    assert.match(st.detail, /wrong codes/);
+    assert.equal((await (await sendCode(s, code, "bf-9")).json()).linked, false, "voided");
+
+    ({ code } = await connect(s, cookie)); // a fresh code, but 20 misses already this minute
+    for (let i = 0; i < 11; i++) await sendCode(s, wrong(100 + i), `bf-${3 + (i % 2)}`);
+    assert.equal((await (await sendCode(s, code, "bf-8")).json()).linked, false, "global cap: no code checks for the rest of the minute");
+    assert.equal((await getJson(s, "/api/workspaces/connect/status", cookie)).state, "waiting");
+  } finally {
+    await s.stop();
+  }
+});
