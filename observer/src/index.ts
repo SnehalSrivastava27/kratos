@@ -26,7 +26,7 @@ type Frame = { event: string; data: string; id?: string };
 
 export function loadConfig(): Config {
   const cfg: Config = readJson(HERE + "config.json");
-  if (process.env.OFFICE_URL) cfg.server = process.env.OFFICE_URL;
+  cfg.server = (process.env.SERVER_URL || process.env.OFFICE_URL || cfg.server).replace(/\/$/, "");
   return cfg;
 }
 
@@ -37,6 +37,45 @@ export function loadCreds(cfg: Config): Creds {
   const creds = { agentId: env.SWITCH_AGENT_ID, apiEndpoint: env.SWITCH_API_ENDPOINT, token: env.SWITCH_API_TOKEN };
   if (!creds.agentId || !creds.apiEndpoint || !creds.token) throw new Error("missing SWITCH_AGENT_ID / SWITCH_API_ENDPOINT / SWITCH_API_TOKEN");
   return creds;
+}
+
+// Office server auth: OBSERVER_TOKEN must match the server's OBSERVER_TOKEN (unset = open dev server).
+export const officeHeaders = (): Record<string, string> => ({
+  "content-type": "application/json",
+  ...(process.env.OBSERVER_TOKEN ? { authorization: `Bearer ${process.env.OBSERVER_TOKEN}` } : {}),
+});
+
+// Office delivery: FIFO, one POST at a time, so order is kept. 429/5xx/network error → retry the head
+// with backoff (1 s → 30 s); other statuses (201, 400, 401) are final. Full outbox drops the oldest.
+const OUTBOX_MAX = 500;
+const outbox: { url: string; body: string; label: string }[] = [];
+let draining = false;
+export function sendToOffice(server: string, event: object, label: string) {
+  if (outbox.length >= OUTBOX_MAX) console.warn("[observer] outbox full, dropped:", outbox.shift()!.label);
+  outbox.push({ url: `${server}/api/events`, body: JSON.stringify(event), label });
+  if (!draining) void drainOutbox();
+}
+async function drainOutbox() {
+  draining = true;
+  for (let backoff = 1000; outbox.length; ) {
+    const job = outbox[0];
+    let status = 0;
+    try {
+      status = (await fetch(job.url, { method: "POST", headers: officeHeaders(), body: job.body })).status;
+    } catch (e) {
+      console.warn("[observer] office server unreachable:", String(e));
+    }
+    if (status && status !== 429 && status < 500) {
+      outbox.shift();
+      backoff = 1000;
+      console.log(`[observer] ${status} ${job.label}`);
+      continue;
+    }
+    console.warn(`[observer] ${status || "no response"}, retry in ${backoff / 1000}s (${outbox.length} queued)`);
+    await new Promise((r) => setTimeout(r, backoff));
+    backoff = Math.min(backoff * 2, 30_000);
+  }
+  draining = false;
 }
 
 // ---- mapping ----
@@ -166,12 +205,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const targets = map.targets(text).filter((t) => t !== speaker);
     const meta = { ...(targets.length ? { targets } : {}), ...(where.thread_id ? { thread_id: where.thread_id } : {}) };
     const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, ...(Object.keys(meta).length ? { meta } : {}) };
-    try {
-      const res = await fetch(`${cfg.server}/api/events`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(office) });
-      console.log(`[observer] ${res.status} ${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
-    } catch (e) {
-      console.warn("[observer] office server unreachable:", String(e));
-    }
+    sendToOffice(cfg.server, office, `${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
   }
 
   for (;;) {

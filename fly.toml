@@ -1,0 +1,36 @@
+# Fly.io: one machine + one volume (SQLite lives on it) + websockets. See docs/DEPLOY.md.
+app = "d2c-agent-hq"          # must be globally unique: change it, or pass --name to `fly launch`
+primary_region = "bom"        # Mumbai
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8787"
+  DATA_DIR = "/data"
+
+[[mounts]]
+  source = "hq_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8787
+  force_https = true
+  auto_stop_machines = "off"   # stopping would drop every office websocket
+  auto_start_machines = true
+  min_machines_running = 1
+  [http_service.concurrency]
+    type = "connections"
+    soft_limit = 600
+    hard_limit = 1000   # above MAX_WS_CLIENTS (400) so the app, not Fly, turns sockets away with 1013
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "15s"
+    timeout = "3s"
+    method = "GET"
+    path = "/api/ready"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
