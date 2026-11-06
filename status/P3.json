@@ -1,0 +1,7 @@
+{ "task": "P3", "state": "done", "progress": 100,
+  "done": [
+    "server/src/library: scanner (5 roots, realpath, dedupe newest), Claude Code librarian (batches of 40, validate, re-ask, keyword fallback), handleLibrary for GET /api/library, /book, POST /categorize",
+    "librarian/: npm run librarian [--dry-run] CLI, prompt.md, README with P2's one-line mount; data/library.json gitignored, example committed",
+    "real run: 316 skills via claude in 45.5s; server/test/library.test.mjs 7/7, server build + full npm test pass"
+  ],
+  "next": "P2 mounts handleLibrary (see librarian/README.md)", "blockers": [], "contract_requests": [], "updated": "2026-11-06T21:30:00+05:30" }

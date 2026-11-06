@@ -1,0 +1,11 @@
+{
+  "name": "hq-librarian",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "librarian": "tsx categorize.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
+}
