@@ -12,7 +12,7 @@ Contents: [Team](#1-the-16-agent-team) · [Finance gate](#2-the-finance-gate) ·
 [Accounts](#15-accounts-and-linked-groups) · [3D office](#16-the-3d-office) · [Switch hub](#17-the-switch-hub-in-the-office) ·
 [Demo replay](#18-the-demo-replay) · [Skills library](#19-the-skills-library-and-librarian) · [Toolkit](#20-the-toolkit-kit) ·
 [Data](#21-the-data) · [Evals](#22-qa-lab-evals) · [KPIs](#23-the-data-wall-kpis) · [Landing](#24-the-landing-page) ·
-[Security](#25-server-and-security) · [Build swarm](#26-the-build-swarm)
+[Security](#25-server-and-security) · [Build swarm](#26-the-build-swarm) · [Lockdown](#27-the-agent-lockdown)
 
 ---
 
@@ -44,7 +44,7 @@ creator spend breaks the cap (the demo's first creator draft is ₹3.55L against
 **Files.** `switch/agents/d2c-finance.md` (YOUR JOB, the gate) · `switch/agents/d2c-captain.md` ·
 `data/budget.json`, `data/finance_policy.json` · `switch/check_numbers.py` (prints EBITDA +₹1.29L at the full ₹5L).
 
-**Switch.** Addressing by `@name`; room roles (`@finance-approver`) once SW4's rules are applied.
+**Switch.** Addressing by `@name`; room roles (`@finance-approver`).
 
 ![Finance gate](../diagrams/finance-gate.png)
 
@@ -191,7 +191,6 @@ Switch reports the hire `live`, because a message sent earlier would never reach
 
 **Switch.** `define_role`, `assume_role`, `list_roles`; role-mention delivery. `docs/switch/12-feature-survey.md`
 
-<!-- TODO(orchestrator): the agents' assume_role / @finance-approver rules land with E2's instruction patches; confirm they are in switch/agents/*.md after E2 merges -->
 
 ## 14. The morning brief
 
@@ -206,7 +205,6 @@ for the founder. Once per workspace per day.
 
 **Switch.** None for the clock: Switch 0.31.0 has no scheduler. The brief itself is `post_message` + addressing.
 
-<!-- TODO(orchestrator): the Captain's MORNING BRIEF rules land with E2; confirm after E2 merges -->
 
 ## 15. Accounts and linked groups
 
@@ -351,3 +349,21 @@ first, status files, an adversarial review before every merge, and an overnight 
 **Switch.** None.
 
 ![Overnight loop](../diagrams/overnight-swarm.png)
+
+## 27. The agent lockdown
+
+**What it does.** Hard limits the model can't talk its way past. Every team agent and hire gets a tool
+list (`Bash, Read, Grep, Glob, Write` + Switch tools) and `auto_mode: false`, so Switch launches it with
+`--permission-mode default`. Repo rules allow the kit, `check_numbers.py` and writes under
+`gallery/live-run/`, and deny reading `.env`, `.switch/` and `~/.ssh`. Anything else waits for a human
+approval in Switch.
+
+**How to use it.** Automatic: `switch-up.sh`, `switch-sync-agents.sh` and the Hire button all merge it in.
+Change the tool list in `switch/lockdown.json`, the rules in `.claude/settings.json`.
+
+**Files.** `switch/lockdown.json` · `.claude/settings.json` · `server/src/switch.ts` (`createManagedAgent`) ·
+`kit/lib/util.mjs` (`readablePath` refuses `.env*` and `.switch/`) · `docs/switch/13-agent-lockdown.md`.
+
+**Switch.** Managed agent definition: `advanced_config.tools`, `auto_mode`, `auto_approve`; approval requests.
+
+![Agent lockdown](../diagrams/agent-lockdown.png)
