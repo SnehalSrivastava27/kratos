@@ -94,14 +94,14 @@ Every agent that must hear the group is joined through the same gateway call,
 
 Hiring spawns a real coding agent with repo access, so it is the most dangerous button in the app.
 An adversarial review of the first version led to these fixes (commits `4371981`, `d47a9ce`,
-`91484d0`; v3 in `task/A1`):
+`91484d0`; v3):
 
 | Risk | Fix | Where |
 |---|---|---|
 | A web page on another site POSTs `/api/employees` (CSRF) | Writes need `content-type: application/json`, the office's own `Origin`, and a local `Host` | `server/src/index.ts:107-126` |
 | DNS rebinding (an attacker domain that resolves to 127.0.0.1) | `Host` must be `localhost`, `127.0.0.1`, `[::1]` or listed in `OFFICE_ORIGINS` | same |
 | A proxy makes a remote request look local | Trusted only if every `X-Forwarded-For` hop is loopback; `TRUST_LOOPBACK=0` behind a reverse proxy | `server/src/index.ts:36-37,118-123` |
-| Someone else's office hires into your group | v3: writes need the session that owns the workspace (or `ADMIN_TOKEN`); 409 until the workspace is ready | `contracts/api.md` v3 (task/A1) |
+| Someone else's office hires into your group | v3: writes need the session that owns the workspace (or `ADMIN_TOKEN`); 409 until the workspace is ready | `contracts/api.md` v3 |
 | Hire spam fills the Mac with sessions | Max **12** employees (`HIRE_MAX`), max **3 hires per 10 min**, 10 commands a minute | `server/src/office.ts:23-25,180-185` |
 | Prompt smuggling through the form | Control chars, zero-width and bidi overrides stripped; length limits on every field | `server/src/office.ts:33-42` |
 | The request picks the working directory | `directory` is always the repo, set by the operator only | `server/src/office.ts:106` |

@@ -41,7 +41,7 @@ group, that would show one founder's sales numbers to another. The rule now
 | 9 | Server → Switch gateway | Join the 6 team agents, the observer and `d2c-office` to the room |
 | 10 | You | `/connect` shows **ready**; `/app` shows only your group |
 
-(`docs/GO_LIVE.md` on task/A1; code in `server/src/workspaces.ts`)
+(`docs/GO_LIVE.md`; code in `server/src/workspaces.ts`)
 
 ### Step 3 is the clever part
 
