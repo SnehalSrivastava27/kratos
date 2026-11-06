@@ -35,7 +35,7 @@ Output: `evals/reports/<timestamp>.json` (gitignored, full replies) and `evals/r
 | `number` | any number in the reply is within `tolerance` (relative, default 1%) of the truth, or rounds to it at the precision shown. Parses `₹1.29L`, `1,29,000`, `20.4L`, `2.05 Cr`, `4.8x`, `12%`, `45k`. So `₹20.4L` matches 20,42,000. |
 | `text` | the truth string appears in the reply (case/markdown-insensitive) |
 | `oneof` | any of the truth strings appears (used for "which X is highest" — ties count) |
-| `style` | `switch/TELEGRAM_STYLE.md`: line 1 has a **bold title**, has `- ` bullets, ≤ 10 non-empty lines, no tables / `#` headings / code blocks |
+| `style` | `switch/TELEGRAM_STYLE.md`: line 1 has a **bold title**, has `- ` bullets, ≤ 10 non-empty lines, no tables / `#` headings / code blocks, no `**` inside the `**_key_**` line, last line `_italic_` |
 
 The style check also runs on every reply and is shown per agent as "Style ok (all replies)" (informational).
 Known leniency: a reply that lists many numbers can pass a `number` question by accident.

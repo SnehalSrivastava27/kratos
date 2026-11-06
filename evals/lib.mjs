@@ -113,5 +113,8 @@ export function styleCheck(reply) {
   if (body.some(l => /^\s*\|.*\|\s*$/.test(l))) issues.push('has a table');
   if (body.some(l => /^\s*#{1,6}\s/.test(l))) issues.push('has a # heading');
   if (/```/.test(reply)) issues.push('has a code block');
+  const key = body.find(l => /^\*\*_.*_\*\*$/.test(l.trim()));
+  if (key && /\*\*/.test(key.trim().slice(3, -3))) issues.push('extra ** inside the **_key_** line');
+  if (!/^_[^_].*_$/.test((body.at(-1) || '').trim())) issues.push('last line is not _italic next step_');
   return { ok: !issues.length, issues };
 }

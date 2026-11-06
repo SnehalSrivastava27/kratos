@@ -178,4 +178,4 @@ async function main() {
   console.log(`\n${results.filter(r => r.pass).length}/${results.length} passed · $${rep.cost.toFixed(2)} · ${file} · evals/reports/latest.md`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) main().catch(e => { console.error(e.message); process.exit(1); });
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch(e => { console.error(e.message); process.exit(1); });

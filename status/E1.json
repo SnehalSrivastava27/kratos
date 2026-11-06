@@ -1,4 +1,6 @@
-{ "task": "E1", "state": "working", "progress": 60,
-  "done": ["evals/ harness: 84 questions (32 v1, 52 v2), truth/offline/live modes, node:test checks incl. mock live API", "npm run evals / evals:truth"],
-  "next": "offline smoke run on 6 existing agents; then full suite after backend-v2 merge",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T00:50:00+05:30" }
+{ "task": "E1", "state": "working", "progress": 70,
+  "done": ["evals/ harness: 84 questions (32 v1, 52 v2), truth/offline/live modes, node:test checks incl. mock live API",
+    "npm run evals / evals:truth (32/32 truths on v1, v2 skipped until data lands)",
+    "smoke offline (sonnet) on 6 agents: 27/27 data answers right, 7/27 replies break TELEGRAM_STYLE ($2.25)"],
+  "next": "merge backend-v2 when R1/K2/S3/B3 land, run the full suite, rerun failures",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T00:58:00+05:30" }
