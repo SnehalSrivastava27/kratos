@@ -12,3 +12,4 @@ gallery/live-run/
 data/library.json
 data/*.tmp
 evals/reports/*.json
+data/.cache/
