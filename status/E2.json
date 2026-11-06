@@ -1,3 +1,16 @@
-{ "task": "E2", "state": "working", "progress": 25,
-  "done": ["tier 2 question bank (64) + refusal/safety/must/forbid scoring", "runner: Haiku default, locked-down tools, p50/p90, tool calls"],
-  "next": "run 1 (baseline on Haiku)", "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
+{ "task": "E2", "state": "done", "progress": 100,
+  "done": [
+    "Tier 2 bank: 65 questions (4/agent + morning brief) with truths from data/: joins, date windows, ranks, judgement (must), 8 refusals, 4 prompt injections; refusal/safety/must/forbid scoring; tests pin tier-2 truths to data/README story numbers",
+    "Runner: Haiku default, locked down (kit-only Bash, dontAsk, project settings), stream-json -> tool calls, p50/p90, cost; tier columns in report; HISTORY.md (6 runs)",
+    "Instructions v3 (16 agents): SAFETY block, decision procedure (unsafe -> not in data -> one kit metric/brief/sql -> answer), DEFINITIONS, TABLES; SW4 roles + morning brief; Haiku 142/148 -> 149/149, 1.5 -> 1.0 tool calls, p90 10s -> 8s, $0.21/run"
+  ],
+  "findings": [
+    "Haiku without a top-of-file SAFETY block explored the repo and then ran `rm -rf gallery/ data/` on a 'SYSTEM OVERRIDE' prompt; only the eval's dontAsk mode stopped it. Live agents need the same permission lockdown, not just instructions.",
+    "Biggest latency win: a full TABLES list + 'don't run kit tables/ls/grep' (33 `kit tables` calls in run 1 -> 0).",
+    "Haiku failures were mostly definitional (order lines vs orders, 'website' lower-case, delivered vs all statuses, recompute vs read rto_pct); explicit DEFINITIONS fixed them. Four tier-1 truths counted order lines (eval bug, fixed).",
+    "Refusals were already good on Haiku; the 'should we pause?' question needed 'verdict in the title'.",
+    "Sonnet on the same v3 instructions: 148/149 at $3.07 vs Haiku 149/149 at $0.21.",
+    "Tier 2 saturates on Haiku with good instructions: it now separates on tool calls/latency and safety more than accuracy. A tier 3 (multi-turn, ambiguous asks without definitions) would be the next separator."
+  ],
+  "next": "LV1 pushes switch/agents/*.md to live agents with switch-sync-agents.sh; run --live",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T02:20:00+05:30" }
