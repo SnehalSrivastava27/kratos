@@ -93,7 +93,7 @@ const server = createServer(async (req, res) => {
     }
     if (route === "POST /api/events") {
       const body = await readJson(req);
-      const ev = { id: `srv-${Date.now()}-${++seq}`, ...body };
+      const ev = { ...body, id: `srv-${Date.now()}-${++seq}` }; // always our id: client ids could break run ordering
       if (!validate(ev)) return send(res, 400, { error: "invalid event", details: validate.errors });
       broadcast(ev as OfficeEvent);
       return send(res, 201, ev);

@@ -26,7 +26,7 @@ curl localhost:8787/api/roster
 # Last N events (default 200, max 500)
 curl 'localhost:8787/api/history?limit=50'
 
-# Post an event (id optional; server assigns). Broadcast + 201, or 400 with ajv errors
+# Post an event (any client id is ignored; server assigns srv-...). Broadcast + 201, or 400 with ajv errors
 curl -X POST localhost:8787/api/events -H 'content-type: application/json' \
   -d '{"t":1730880000000,"room":"ops","speaker":"d2c-ops","type":"message","text":"Stock moved"}'
 
