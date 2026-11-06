@@ -9,6 +9,7 @@ import type { PersonState } from '../officeState';
 import { C, clean, deskById, isSeat, readable, spot, zoneById } from '../data';
 import { clock } from '../Telegram';
 import { noOutline, toonUnique } from '../toon';
+import { tgDom } from '../md';
 import { Person, type Look } from './person';
 import type { NavGrid } from './nav';
 
@@ -322,7 +323,7 @@ export class Agent {
     };
     if (ding) span('hq-ding', '✅');
     const you = !!this.drive; // the founder you're walking
-    if (!talking) span(shown === 'idle' && !you ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name hq-tag-you'.slice(0, you ? 23 : 11), you ? `${emoji} You` : shown === 'idle' ? emoji : `${emoji} ${name}`);
+    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : shown === 'idle' ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? `${emoji} You` : shown === 'idle' ? emoji : `${emoji} ${name}`);
     if (shown !== 'idle' && shown !== 'walking') span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
     this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
   }
@@ -336,7 +337,7 @@ export class Agent {
     who.textContent = `${this.info.emoji} ${this.info.name}`;
     const body = document.createElement('div');
     body.className = 'hq-bubble-text';
-    body.textContent = clean(text);
+    body.append(tgDom(clean(text), 2)); // the bold title and the first fact
     const time = document.createElement('span');
     time.className = 'hq-bubble-time';
     time.textContent = clock(at);

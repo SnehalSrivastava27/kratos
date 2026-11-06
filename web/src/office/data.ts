@@ -2,6 +2,7 @@ import rosterJson from '../../../contracts/roster.json';
 import zonesJson from '../../../contracts/zones.json';
 import type { OfficeEvent, Person, Zone } from '../shared/types';
 import type { Ctx, SceneState } from './officeState';
+import { tgPlain } from './tgtext';
 
 export const roster = rosterJson.people as Person[];
 export const zones = zonesJson.zones as Zone[];
@@ -88,7 +89,9 @@ const LEAD_EMOJI = /^\p{Extended_Pictographic}️?\s*/u;
 /** Feed text → display text: drop the leading speaker emoji, turn @ids into @Names. */
 export const clean = (text: string) =>
   text.replace(LEAD_EMOJI, '').replace(/@([\w-]+)/g, (m, id) => (personById[id] ? '@' + personById[id].name : m));
-export const firstLine = (text: string) => clean(text).split('\n')[0];
+/** Display text with Telegram's Markdown markers taken out (canvas walls, previews, captions). */
+export const plain = (text: string) => tgPlain(clean(text));
+export const firstLine = (text: string) => plain(text).split('\n').find((l) => l.trim()) ?? '';
 
 export type Tone = 'idle' | 'live' | 'red' | 'mint';
 /** One-line caption for "what's happening right now". */

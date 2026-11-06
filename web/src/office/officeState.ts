@@ -21,7 +21,7 @@ export interface SceneState {
 
 export interface Ctx { roster: Person[]; roomZone: Record<string, string> }
 
-const BUBBLE_CHARS = 80;
+const BUBBLE_CHARS = 600; // bubbles show the first two lines; this only bounds memory
 const IDLE_ZONE = 'chai_pantry';
 const STORY_TEAM = new Set(['d2c-analyst', 'd2c-ads', 'd2c-influencers', 'd2c-ops', 'd2c-design']);
 /** Speak from where they are: the librarian works in the library whatever topic she reports to. */

@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import type { SceneState } from '../officeState';
 import type { OfficeEvent } from '../../shared/types';
-import { C, DESKS, clean, deskById, personById, sitterAt, zoneById } from '../data';
+import { C, DESKS, deskById, plain, personById, sitterAt, zoneById } from '../data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './world';
 import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
@@ -211,7 +211,7 @@ function drawPhone(g: CanvasRenderingContext2D, W: number, H: number, war: Offic
   let y = H - 14;
   for (const e of [...war].reverse()) {
     const mine = personById[e.speaker]?.kind === 'human';
-    const lines = clean(e.text).split('\n').slice(0, 3).map((l) => (l.length > 22 ? l.slice(0, 21) + '…' : l));
+    const lines = plain(e.text).split('\n').filter((l) => l.trim()).slice(0, 3).map((l) => (l.length > 22 ? l.slice(0, 21) + '…' : l));
     const h = 34 + lines.length * 24;
     y -= h;
     if (y < 72) break;

@@ -8,11 +8,12 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { OfficeEvent } from '../shared/types';
 import type { SceneState } from './officeState';
-import { ROOMS, TG_GROUP, clean, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { Tg, tgPlain } from './md';
 
 export { ROOMS };
-const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
-const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
+export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
+export const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
 export const TG = { blue: '#3390EC', green: '#4FAE4E', out: '#EEFFDE', bg: '#F1F1F1' };
 
 /** Story time → a clock: replay offsets count as minutes after 21:00 (live events carry epoch ms). */
@@ -32,7 +33,7 @@ export function typingIn(room: string, events: OfficeEvent[], scene: SceneState)
 }
 
 /** A forum topic's icon: Telegram draws these as a tinted rounded bubble with the topic emoji. */
-function TopicIcon({ room, size = 40 }: { room: string; size?: number }) {
+export function TopicIcon({ room, size = 40 }: { room: string; size?: number }) {
   const c = ROOM_COLOR[room];
   return (
     <div className="grid shrink-0 place-items-center rounded-[38%]" style={{ width: size, height: size, fontSize: size * 0.5, background: `${c}22`, boxShadow: `inset 0 0 0 1.5px ${c}55` }}>
@@ -105,7 +106,7 @@ export function ChatList({ events, scene, selected, unread, onSelect, className,
                     ) : r.last ? (
                       <>
                         <span className={active ? 'text-white' : 'text-[#222]'}>{who}: </span>
-                        {strip(r.last).replace(/\n/g, ' ')}
+                        {tgPlain(strip(r.last)).replace(/\n+/g, ' ')}
                       </>
                     ) : (
                       'No messages yet'
@@ -125,7 +126,7 @@ export function ChatList({ events, scene, selected, unread, onSelect, className,
 }
 
 const isMine = (e: OfficeEvent) => personById[e.speaker]?.kind === 'human';
-const bannerTitle = (e: OfficeEvent) => strip(e).split('\n')[0];
+const bannerTitle = (e: OfficeEvent) => firstLine(e.text);
 
 function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boolean }) {
   const p = personById[e.speaker];
@@ -143,10 +144,10 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
       <div className={cn('relative max-w-[82%] rounded-2xl px-3 pt-1.5 pb-1 text-[14.5px] leading-snug shadow-[0_1px_1px_rgba(0,0,0,0.12)]', mine ? 'rounded-br-md bg-[#EEFFDE]' : 'rounded-bl-md bg-white')}
         style={accent ? { boxShadow: `inset 3px 0 0 ${accent}, 0 1px 1px rgba(0,0,0,.12)` } : undefined}>
         {!mine && first && <div className="text-[13px] font-semibold text-[#1A6FB5]">Switch <span className="font-normal text-[#707579]">bot</span></div>}
-        <div className="whitespace-pre-line text-[#000]">
+        <div className="whitespace-pre-wrap text-[#000]">
           {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.emoji} {p?.name}</b>}
           {!mine && <br />}
-          {body}
+          <Tg text={body} />
         </div>
         {e.type === 'artifact' && link && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
