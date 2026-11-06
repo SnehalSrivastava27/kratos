@@ -3,13 +3,16 @@
 # Idempotent: rerun it any time (e.g. after each phone step in docs/GO_LIVE.md).
 #
 #   scripts/switch-up.sh            # needs TELEGRAM_BOT_TOKEN in <main checkout>/.env
+#   DRY_RUN=1 scripts/switch-up.sh  # print the plan (team, topics, create requests); no API calls, no .env read
 #
+# The team and topics come from contracts/roster.json: every kind=agent person except the librarian, and every room.
 # What it does, as the Console's own admin (credentials read from Console's run dir, never printed):
 #   1. signs in to the local gateway        5. joins every team agent + d2c-observer to "Kratos D2C" if it exists
 #   2. connects the Telegram bot             6. (v3) nothing: the office server creates the topics when a signed-in
 #   3. checks Claude Code is available          user links a group at /connect (docs/GO_LIVE.md)
-#   4. stores the team template, registers   7. starts the office server (:8787) and the observer
-#      d2c-observer (passive, owner-only)    8. prints the steps only a human can do
+#   4. stores the team template, creates     7. starts the office server (:8787) and the observer
+#      missing team agents (managed agents,  8. prints the steps only a human can do
+#      like the office's Hire), registers d2c-observer (passive, owner-only)
 # Never calls getUpdates/setWebhook: Switch itself polls the bot.
 set -euo pipefail
 
@@ -23,15 +26,52 @@ TEMPLATE_NAME="Kesar HQ D2C team"
 SWITCHDASH=${SWITCHDASH:-"$HOME/Library/Application Support/switchdash"}
 CORE_ENV="$SWITCHDASH/local-switch-server/native/run/switch-core.env"
 LOG_DIR=${LOG_DIR:-/tmp/switch-up}
-TEAM=(d2c-captain d2c-analyst d2c-ads d2c-influencers d2c-ops d2c-design)
-TOPICS=("war_room:War Room:7322096" "analytics:Analytics:16766590" "ads:Ads:13338331"
-        "creators:Creators:9367192" "ops:Ops:16749490" "design:Design:16478047")
+ROSTER="$ROOT/contracts/roster.json"
+# shellcheck disable=SC2207 # ids have no spaces
+TEAM=($(python3 -c 'import json,sys; print(" ".join(p["id"] for p in json.load(open(sys.argv[1]))["people"] if p["kind"]=="agent" and p["id"]!="librarian"))' "$ROSTER"))
+TOPICS=$(python3 -c 'import json,sys; print(", ".join(r["topic"] for r in json.load(open(sys.argv[1]))["rooms"]))' "$ROSTER")
 
 TODO=()
 say() { printf '• %s\n' "$*"; }
 todo() { TODO+=("$*"); }
 envval() { grep -E "^$2=" "$1" | head -1 | cut -d= -f2- | sed -e 's/^["'\'']//' -e 's/["'\'']$//'; }
 json() { local code=$1; shift; python3 -c "import json,sys; d=json.load(sys.stdin); $code" "$@"; }
+# create_body ID [MANAGED_JSON CONTROLLERS_JSON] → POST /gateway/management/agents body, the same shape as
+# server/src/switch.ts createManagedAgent: provider settings copied from d2c-captain's definition (defaults if it
+# doesn't exist yet), directory = AGENT_DIR, instructions = switch/agents/<id>.md minus its heading.
+# Exits 4 when given the controllers list and none is online (Switch Console not running).
+create_body() {
+  python3 - "$1" "$ROSTER" "$ROOT/switch/agents/$1.md" "$AGENT_DIR" "${2:-}" "${3:-}" <<'PY'
+import json, sys
+aid, roster, md, adir, mf, cf = sys.argv[1:7]
+p = next(x for x in json.load(open(roster))["people"] if x["id"] == aid)
+managed = json.load(open(mf)) if mf else []
+ctls = [c for c in (json.load(open(cf)) if cf else []) if c.get("state") == "online"]
+lead = next((a for a in managed if a["name"] == "d2c-captain"), None)
+ctl = next((c for c in ctls if lead and c["id"] == lead.get("controller_id")), None) or next((c for c in ctls if c.get("kind") == "console"), None)
+if cf and not ctl: sys.exit(4)
+base = (lead or {}).get("definition") or {"provider": "claude", "model": None, "advanced_config": {}, "auto_mode": True, "auto_approve": False, "isolation": "shared"}
+keys = ("provider", "model", "advanced_config", "auto_mode", "auto_approve", "isolation")
+print(json.dumps({"name": aid, "description": p["role"], "display_name": p["name"], "icon_url": None,
+  "controller_id": ctl["id"] if ctl else "<online console controller>", "desired_state": "running",
+  "definition": {**{k: base.get(k) for k in keys}, "directory": adir, "instructions": open(md).read().split("\n", 1)[1].strip()}}))
+PY
+}
+
+if [ "${DRY_RUN:-0}" = 1 ]; then
+  echo "DRY RUN: no API calls, no .env read."
+  say "roster: ${#TEAM[@]} team agents: ${TEAM[*]}"
+  say "topics (roster rooms): $TOPICS"
+  node "$ROOT/scripts/build-template.mjs" --check | sed 's/^/• /'
+  say "would sign in to the local gateway, connect @$BOT_USERNAME, check Claude Code"
+  say "would store template \"$TEMPLATE_NAME\" from switch/d2c-team.template.yaml"
+  say "each team agent missing on the server: POST /gateway/management/agents, then PUT /agents/<id>/addressing-policy {policy:null}"
+  for a in "${TEAM[@]}"; do
+    create_body "$a" | json 'print("•   %-17s display=%r, instructions %d chars, directory %s" % (d["name"], d["display_name"], len(d["definition"]["instructions"]), d["definition"]["directory"]))'
+  done
+  say "would join ${#TEAM[@]} agents + d2c-observer to \"$ROOM_NAME\", then start the office server (:8787) and the observer"
+  exit 0
+fi
 
 [ -f "$CORE_ENV" ] || { echo "No local Switch server found ($CORE_ENV). Open Switch Console and start it."; exit 1; }
 [ -f "$ENV_FILE" ] || { echo "Missing $ENV_FILE (needs TELEGRAM_BOT_TOKEN)"; exit 1; }
@@ -74,8 +114,8 @@ sys.exit(0 if s["installed"] and s.get("auth")=="ok" else 1)
 PY
 
 # ---- 4. template + agents --------------------------------------------------------------------
-TPL_BODY=$(python3 -c 'import json,sys; print(json.dumps({"name":sys.argv[1],"description":"6 D2C agents in the Kratos D2C Telegram forum","kind":"group","content":open(sys.argv[2]).read()}))' \
-  "$TEMPLATE_NAME" "$ROOT/switch/d2c-team.template.yaml")
+TPL_BODY=$(python3 -c 'import json,sys; print(json.dumps({"name":sys.argv[1],"description":sys.argv[3],"kind":"group","content":open(sys.argv[2]).read()}))' \
+  "$TEMPLATE_NAME" "$ROOT/switch/d2c-team.template.yaml" "${#TEAM[@]} D2C agents in the $ROOM_NAME Telegram forum")
 TPL_ID=$(gw GET "/templates?q=$(python3 -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))' "$TEMPLATE_NAME")" \
   | json 'print(next((t["id"] for t in d if t["name"]==sys.argv[1]), ""))' "$TEMPLATE_NAME" 2>/dev/null || true)
 if [ -n "$TPL_ID" ]; then gw PATCH "/templates/$TPL_ID" "$(echo "$TPL_BODY" | json 'print(json.dumps({"content":d["content"]}))')" >/dev/null
@@ -86,10 +126,21 @@ gw GET /agents > "$TMP/agents"
 agent_id() { json 'print(next((a["id"] for a in d if a["name"]==sys.argv[1]), ""))' "$1" < "$TMP/agents"; }
 MISSING=()
 for a in "${TEAM[@]}"; do [ -n "$(agent_id "$a")" ] || MISSING+=("$a"); done
-if [ ${#MISSING[@]} -eq 0 ]; then say "all 6 team agents exist"
+if [ ${#MISSING[@]} -eq 0 ]; then say "all ${#TEAM[@]} team agents exist"
 else
   say "team agents missing: ${MISSING[*]}"
-  todo "Mac, Switch Console (once): run \`open 'switchdash://open/template/$TPL_ID'\` → Use → check directory = $AGENT_DIR → Create. (Console must create these: it runs their Claude Code sessions.)"
+  gw GET /management/agents > "$TMP/managed"; gw GET /management/controllers > "$TMP/controllers"
+  for a in "${MISSING[@]}"; do
+    if ! create_body "$a" "$TMP/managed" "$TMP/controllers" > "$TMP/create"; then
+      todo "Open Switch Console (its controller must be online), then rerun. Or by hand: \`open 'switchdash://open/template/$TPL_ID'\` → Use → directory = $AGENT_DIR → Create."
+      break
+    fi
+    if NEW_ID=$(gw POST /management/agents "$(cat "$TMP/create")" | json 'print(d["agent_id"])'); then
+      gw PUT "/agents/$NEW_ID/addressing-policy" '{"policy":null}' >/dev/null || say "$a: addressing not set yet (rerun)"
+      say "created $a ($NEW_ID) on Console's controller"
+    else todo "Creating $a failed (POST /gateway/management/agents). Rerun, or create it from the template in Console."; fi
+  done
+  gw GET /agents > "$TMP/agents"
 fi
 
 OBS_CREDS="$MAIN/observer/.switch/agents/d2c-observer.json"
@@ -124,6 +175,7 @@ fi
 # (sign up at /signup, then /connect). The old observer/topics.json is read once, to keep the existing
 # "Kratos D2C" topics and history for whoever links that group.
 todo "Browser: open http://localhost:8787/signup, sign up, then /connect, and send the 6-digit code in the Telegram group (docs/GO_LIVE.md)."
+say "topics the team uses (roster): $TOPICS. One missing in the group? Create it by hand, then send /list_agents in it once."
 
 # ---- 7. office server + observer -------------------------------------------------------------
 grep -q '^OBSERVER_TOKEN=' "$ENV_FILE" || echo "OBSERVER_TOKEN=$(openssl rand -hex 24)" >> "$ENV_FILE"

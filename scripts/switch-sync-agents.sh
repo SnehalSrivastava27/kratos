@@ -4,6 +4,10 @@
 # Idempotent: rerun after editing switch/agents/*.md. Unchanged agents are left alone.
 #
 #   scripts/switch-sync-agents.sh
+#   DRY_RUN=1 scripts/switch-sync-agents.sh   # list what would be pushed; no API calls
+#
+# The team comes from contracts/roster.json (kind=agent, minus the librarian). The template is rebuilt from the
+# .md files first (scripts/build-template.mjs), so the stored template always matches them.
 #
 # How it works: an agent's instructions live in its managed-agent definition
 # (PATCH /gateway/management/agents/<id>, what Console's agent editor sends). The new revision goes
@@ -15,12 +19,24 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 TEMPLATE_NAME="Kesar HQ D2C team"
 CORE_ENV="${SWITCHDASH:-$HOME/Library/Application Support/switchdash}/local-switch-server/native/run/switch-core.env"
-TEAM=(d2c-captain d2c-analyst d2c-ads d2c-influencers d2c-ops d2c-design)
+# shellcheck disable=SC2207 # ids have no spaces
+TEAM=($(python3 -c 'import json,sys; print(" ".join(p["id"] for p in json.load(open(sys.argv[1]))["people"] if p["kind"]=="agent" and p["id"]!="librarian"))' "$ROOT/contracts/roster.json"))
 MARK="HOW YOU WRITE IN TELEGRAM"
 
 envval() { grep -E "^$2=" "$1" | head -1 | cut -d= -f2- | sed -e 's/^["'\'']//' -e 's/["'\'']$//'; }
 json() { local code=$1; shift; python3 -c "import json,sys; d=json.load(sys.stdin); $code" "$@"; }
 say() { printf '• %s\n' "$*"; }
+
+node "$ROOT/scripts/build-template.mjs" | sed 's/^/• /'
+if [ "${DRY_RUN:-0}" = 1 ]; then
+  echo "DRY RUN: no API calls."
+  for a in "${TEAM[@]}"; do
+    [ -f "$ROOT/switch/agents/$a.md" ] && say "$a: would PATCH /gateway/management/agents/<id> from switch/agents/$a.md ($(wc -c < "$ROOT/switch/agents/$a.md" | tr -d ' ') bytes)" \
+      || say "$a: switch/agents/$a.md MISSING"
+  done
+  say "would PATCH the stored \"$TEMPLATE_NAME\" template"
+  exit 0
+fi
 
 [ -f "$CORE_ENV" ] || { echo "No local Switch server found ($CORE_ENV). Open Switch Console and start it."; exit 1; }
 API="http://127.0.0.1:$(envval "$CORE_ENV" SERVER_PORT)"
@@ -49,7 +65,7 @@ gw GET /management/agents > "$TMP/managed"
 FAIL=0
 for name in "${TEAM[@]}"; do
   id=$(json 'print(next((a["agent_id"] for a in d if a["name"]==sys.argv[1]), ""))' "$name" < "$TMP/managed")
-  if [ -z "$id" ]; then say "$name: not on this server (create the team from the template first)"; FAIL=1; continue; fi
+  if [ -z "$id" ]; then say "$name: not on this server (run scripts/switch-up.sh: it creates missing agents)"; FAIL=1; continue; fi
   # The .md body (minus its "# <id>" heading) is the agent's instructions, same as the template inlines.
   gw GET "/management/agents/$id" | python3 -c '
 import json, sys
