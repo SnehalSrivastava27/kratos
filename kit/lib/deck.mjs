@@ -23,7 +23,7 @@ export async function buildDeck(spec, dir) {
   const p = new pptxgen();
   p.layout = 'LAYOUT_WIDE';
   p.title = str(spec.title || slides[0].title || 'Kesar & Co.', 200);
-  p.company = 'Kesar & Co.';
+  p.company = 'Kesar &amp; Co.'; // pptxgenjs does not escape company
   const brand = str(spec.brand || 'Kesar & Co.', 60);
   p.defineSlideMaster({
     title: 'KESAR',
@@ -76,8 +76,10 @@ export async function buildDeck(spec, dir) {
         { x: M + 0.25, y: top + 0.1, w: w - 0.25, h: bodyH, fontFace: FONT, fontSize: bullets.length > 6 ? 16 : 20, color: C.ink, valign: 'top', margin: 0, fit: 'shrink' });
       if (sl.callout) {
         const cx = M + w + 0.4, cw = W - M - cx;
-        s.addShape('rect', { x: cx, y: top + 0.1, w: cw, h: 3.2, fill: { color: C.ink }, line: { color: C.ink } });
-        s.addText(str(sl.callout, 300), { x: cx + 0.3, y: top + 0.4, w: cw - 0.6, h: 2.6, fontFace: FONT, fontSize: 18, bold: true, color: C.cream, valign: 'top', margin: 0, fit: 'shrink' });
+        const ch = Math.min(4.2, 0.8 + Math.ceil(str(sl.callout, 300).length / 24) * 0.36);
+        s.addShape('rect', { x: cx, y: top + 0.1, w: cw, h: ch, fill: { color: C.ink }, line: { color: C.ink } });
+        s.addShape('rect', { x: cx, y: top + 0.1, w: 0.08, h: ch, fill: { color: C.saffron }, line: { color: C.saffron } });
+        s.addText(str(sl.callout, 300), { x: cx + 0.35, y: top + 0.4, w: cw - 0.65, h: ch - 0.6, fontFace: FONT, fontSize: 18, bold: true, color: C.cream, valign: 'top', margin: 0, fit: 'shrink' });
       }
     } else if (type === 'table') {
       const t = tableOf(sl.table || sl, dir, 200);
@@ -89,7 +91,7 @@ export async function buildDeck(spec, dir) {
     } else if (type === 'chart') {
       if (!sl.chart) fail(`slide ${i + 1}: chart needs "chart": {vega-lite spec} or "path/to/chart.json"`);
       const spec = chartOf(sl.chart);
-      const r = await renderChart({ width: 900, height: 380, ...spec, config: { background: '#FFFFFF', ...(spec.config || {}) } }, dir);
+      const r = await renderChart({ width: 720, height: 300, ...spec, config: { background: '#FFFFFF', ...(spec.config || {}) } }, dir);
       const maxW = W - 2 * M, maxH = bodyH - (sl.caption ? 0.5 : 0);
       const scale = Math.min(maxW / r.width, maxH / r.height);
       const w = r.width * scale, h = r.height * scale;

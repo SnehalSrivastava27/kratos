@@ -17,7 +17,7 @@ const config = {
   padding: 16,
   view: { stroke: null },
   title: { fontSize: 18, fontWeight: 600, color: THEME.ink, anchor: 'start', offset: 12 },
-  axis: { labelColor: THEME.muted, titleColor: THEME.muted, domainColor: '#CFC4B0', tickColor: '#CFC4B0', gridColor: '#E8DFCC', labelFontSize: 12, titleFontSize: 12, titleFontWeight: 500 },
+  axis: { labelColor: THEME.muted, titleColor: THEME.muted, domainColor: '#CFC4B0', tickColor: '#CFC4B0', gridColor: '#E8DFCC', labelFontSize: 12, titleFontSize: 12, titleFontWeight: 500, labelLimit: 220 },
   axisX: { labelAngle: 0 },
   legend: { labelColor: THEME.ink, titleColor: THEME.muted, labelFontSize: 12 },
   range: { category: THEME.palette },
