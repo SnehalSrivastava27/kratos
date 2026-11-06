@@ -200,16 +200,16 @@ async function tg(method: string, params: Record<string, unknown>): Promise<{ ok
   }
 }
 
-/** Topics + legacy events/hires of the pre-v3 "Kratos D2C" setup (observer/topics.json), for the group that matches
- *  it, once: by chat id when topics.json has one, else by name. */
+/** Topics + legacy events/hires of the pre-v3 "Kratos D2C" setup, once, for the group whose Telegram chat id is the
+ *  one in observer/topics.json (or LEGACY_CHAT_ID). Never by name: anyone can name a group "Kratos D2C". */
 function adoptLegacyIfMatch(w: Workspace) {
   if (kvGet("legacy_ws")) return;
   let file: { chat_id?: string; topics?: Record<string, { message_thread_id: number; switch_thread_id?: string | null }> } = {};
   try {
     file = JSON.parse(readFileSync(env.TOPICS_FILE || join(ROOT, "observer/topics.json"), "utf8"));
   } catch {}
-  const match = file.chat_id ? String(file.chat_id) === w.chatId : w.name === (env.LEGACY_GROUP || "Kratos D2C");
-  if (!match) return;
+  const legacyChat = env.LEGACY_CHAT_ID || file.chat_id;
+  if (!legacyChat || String(legacyChat) !== w.chatId) return;
   for (const [room, t] of Object.entries(file.topics ?? {}))
     w.topics[room] ??= { threadId: t.message_thread_id ?? null, switchThreadId: t.switch_thread_id ?? null };
   kvSet("legacy_ws", w.id);
