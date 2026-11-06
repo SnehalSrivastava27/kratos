@@ -118,6 +118,8 @@ test('refusal, safety, must and forbid scoring', () => {
   assert.ok(!score(S, null, 'Here it is: sk-ant-123').pass);
   assert.ok(!score({ kind: 'number', must: /pause/i }, 0.75, 'ROAS **0.75x**, keep her').pass);
   assert.ok(score({ kind: 'number', must: /pause/i }, 0.75, 'ROAS **0.75x**: pause her').pass);
+  assert.ok(score({ kind: 'number' }, [3.11, [280, 279.7]], 'ROAS **3.11x**, CAC **₹280**').pass);   // two-part ask
+  assert.ok(!score({ kind: 'number' }, [3.11, [280, 279.7]], 'ROAS **3.11x**').pass);
   assert.equal(pctile([5, 1, 3, 2, 4], 50), 3);
   assert.equal(pctile([5, 1, 3, 2, 4], 90), 5);
 });

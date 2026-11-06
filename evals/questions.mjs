@@ -427,4 +427,67 @@ const tier2 = [
     text: '⏰ Morning brief for 31 Oct 2026', truth: () => 'Morning brief, 31 Oct' },
 ];
 
-export const questions = [...tier1.map(q => ({ tier: 1, ...q })), ...tier2.map(q => ({ tier: 2, ...q }))];
+// ---------------- tier 3: how founders actually ask (E3) ----------------
+// Vague asks with no definition (must name which metric), two-part asks (truth [a, b]: both numbers), follow-ups that
+// quote an earlier answer, and "don't make it up" traps (a plausible SKU / campaign / creator / channel we don't have).
+// "Last month" = October 2026, the latest full month in the data (DEFINITIONS in switch/agents/*.md).
+const rtoOf = (db, f = () => true) => rtoRate(orders(db).filter(f));
+const returnPct = (db, f = () => true) => { const o = orders(db).filter(r => f(r) && (r.status === 'delivered' || r.status === 'returned'));
+  return pct(sum(o.filter(r => r.status === 'returned'), 'qty'), sum(o, 'qty')); };
+const metaL30 = (db, type) => ratioOf('revenue', 'spend')(db.t('meta_ads_daily', ['date', 'creative_type', 'spend', 'revenue']).filter(r => L30(r) && r.creative_type === type));
+const creatorRoas = (db, h) => ratioOf('revenue', 'fee_paid')(db.t('creator_posts', ['handle', 'revenue', 'fee_paid']).filter(r => r.handle === h && r.fee_paid > 0));
+const latestStock = (db, wh, sku) => { const s = db.t('inventory_snapshot', ['date', 'warehouse', 'sku', 'on_hand']); const d = s.map(r => r.date).sort().at(-1);
+  return sum(s.filter(r => r.date === d && r.warehouse === wh && r.sku === sku), 'on_hand'); };
+const lakhs = v => `₹${(v / 1e5).toFixed(1)}L`;
+const fix = (v, n = 1) => Number(v.toFixed(n));
+const NO_X = name => new RegExp(`${name}[^\n]*\\d+(\\.\\d+)?\\s*x\\b`, 'i');
+
+const tier3 = [
+  // vague: "returns" could be RTO or customer returns -> must say which, number for either, Oct or all data
+  { agent: 'd2c-analyst', kind: 'number', must: /\bRTO\b|customer return/i, text: 'How are we doing on returns?',
+    truth: db => [[rtoOf(db, inMonth(OCT)), rtoOf(db), returnPct(db, inMonth(OCT)), returnPct(db)]] },
+  // two-part, undefined "orders" / "AOV": any sensible reading, but both parts
+  { agent: 'd2c-analyst', kind: 'number', text: 'Orders and AOV for last month?',
+    truth: db => { const o = orders(db).filter(inMonth(OCT)), nc = o.filter(r => r.status !== 'cancelled'), d = o.filter(r => r.status === 'delivered');
+      return [[distinct(nc), distinct(d), distinct(o)], [sum(nc, 'net_revenue') / distinct(nc), sum(d, 'net_revenue') / distinct(d)]]; } },
+  { agent: 'd2c-ads', kind: 'number', tolerance: 0.02, text: 'Meta ROAS and cost per purchase last month?',
+    truth: db => { const r = db.t('meta_ads_daily', ['date', 'spend', 'purchases', 'revenue']).filter(inMonth(OCT)); return [roas(r), sum(r, 'spend') / sum(r, 'purchases')]; } },
+  { agent: 'd2c-ads', kind: 'refusal', forbid: NO_X('diwali'), text: 'What ROAS did our Diwali Retargeting campaign on Meta get in October?', truth: () => null },
+  { agent: 'd2c-influencers', kind: 'number', tolerance: 0.02,
+    text: db => `Earlier you said Riya Glows' ROAS on our paid posts (creator_posts revenue ÷ fee_paid) was ${creatorRoas(db, '@riyaglows').toFixed(2)}x. Same for Kavya Care?`,
+    truth: db => creatorRoas(db, '@kavyacare') },
+  { agent: 'd2c-influencers', kind: 'refusal', forbid: /glow ?with ?sara[^\n]*(₹\s?\d|\d+(\.\d+)?\s*x\b)/i,
+    text: 'How did the paid posts with @glowwithsara do for us in October?', truth: () => null },
+  { agent: 'd2c-ops', kind: 'number', text: 'How many units of SKU01 and SKU05 are on hand in Delhi right now?',
+    truth: db => [latestStock(db, 'Delhi', 'SKU01'), latestStock(db, 'Delhi', 'SKU05')] },
+  { agent: 'd2c-ops', kind: 'refusal', forbid: /toner[^\n]*\d+\s*units/i, text: 'How many units of Rose Water Toner do we have in Mumbai?', truth: () => null },
+  { agent: 'd2c-design', kind: 'number', tolerance: 0.02,
+    text: db => { const t = rank(db.t('meta_ads_daily', ['date', 'creative_type', 'spend', 'revenue']).filter(L30), r => r.creative_type, ratioOf('revenue', 'spend'))[0];
+      return `Earlier you said ${t} had the best Meta ROAS over the last 30 days, at ${metaL30(db, t).toFixed(2)}x. What about reels?`; },
+    truth: db => metaL30(db, 'reel') },
+  // vague: "best seller" by units or revenue, Oct or all data
+  { agent: 'd2c-design', kind: 'oneof', text: "Which product is our best seller? It goes on the hero banner.",
+    truth: db => { const o = orders(db), d = o.filter(r => r.status === 'delivered'), nc = o.filter(r => r.status !== 'cancelled');
+      return skuNames(db, [...new Set([d, nc, o, d.filter(inMonth(OCT)), nc.filter(inMonth(OCT))].flatMap(rs =>
+        [...rank(rs, r => r.sku, x => sum(x, 'qty')), ...rank(rs, r => r.sku, x => sum(x, 'net_revenue'))]))]); } },
+  { agent: 'd2c-finance', kind: 'number', tolerance: 0.02, text: 'EBITDA and EBITDA margin for last month?',
+    truth: db => [pnl(db, OCT, 'ebitda'), pct(pnl(db, OCT, 'ebitda'), pnl(db, OCT, 'net_revenue'))] },
+  // vague: cash balance, runway, or months until the cash floor
+  { agent: 'd2c-finance', kind: 'number', tolerance: 0.02, text: "How's our cash looking?",
+    truth: db => { const p = policy(db), burn = -sum(db.t('pnl_monthly', ['ebitda']), 'ebitda') / 3;
+      return [[p.cash_balance, p.cash_balance / burn, (p.cash_balance - p.cash_floor) / burn]]; } },
+  { agent: 'd2c-captain', kind: 'number', tolerance: 0.02, text: 'Marketing spend and CAC last month?',
+    truth: db => [pnl(db, OCT, 'marketing'), pnl(db, OCT, 'marketing') / pnl(db, OCT, 'new_customers')] },
+  { agent: 'd2c-captain', kind: 'number', tolerance: 0.02, must: /\bup\b|grew|growth|rose|higher|increase/i,
+    text: db => `You told me September net revenue was ${lakhs(pnl(db, SEP, 'net_revenue'))}. What was October's, and is that up or down?`,
+    truth: db => pnl(db, OCT, 'net_revenue') },
+  { agent: 'd2c-logistics', kind: 'number', tolerance: 0.02,
+    text: db => `Earlier you said Amazon RTO was ${fix(rtoOf(db, r => r.channel === 'Amazon' && inMonth(SEP)(r)))}% in September. What about October?`,
+    truth: db => rtoOf(db, r => r.channel === 'Amazon' && inMonth(OCT)(r)) },
+  { agent: 'd2c-marketplaces', kind: 'refusal', forbid: NO_X('meesho'), text: 'What was our Meesho ads ROAS in October?', truth: () => null },
+  // vague: "hurting" -> the COD RTO % (Oct or all data)
+  { agent: 'd2c-insights', kind: 'number', must: /\bRTO\b/i, text: 'Is COD hurting us?',
+    truth: db => [[rtoOf(db, r => r.payment === 'cod'), rtoOf(db, r => r.payment === 'cod' && inMonth(OCT)(r))]] },
+];
+
+export const questions = [...tier1.map(q => ({ tier: 1, ...q })), ...tier2.map(q => ({ tier: 2, ...q })), ...tier3.map(q => ({ tier: 3, ...q }))];
