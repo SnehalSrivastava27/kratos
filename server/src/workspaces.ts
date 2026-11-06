@@ -309,7 +309,6 @@ function assignThread(w: Workspace, room: string, thread: string, how: string) {
   for (const t of Object.values(w.topics)) if (t.switchThreadId === thread) t.switchThreadId = null;
   w.topics[room] = { threadId: w.topics[room]?.threadId ?? null, switchThreadId: thread };
   sql().prepare("UPDATE workspaces SET topics = ? WHERE id = ?").run(JSON.stringify(w.topics), w.id);
-  votes.delete(`${w.id}|${thread}`);
   log.info("topic thread learned", { ws: w.id, room, how });
 }
 /** Learns (and persists) which topic the event's Switch thread is. Returns the workspace, updated if so. */

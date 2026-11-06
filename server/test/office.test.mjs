@@ -200,7 +200,7 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
     assert.equal(r.status, 201);
     const a = await r.json();
     assert.equal(a.id, "d2c-priya-shah");
-    assert.equal(a.desk, "growth_pod#1", "d2c-ads sits at growth_pod#0");
+    assert.equal(a.desk, "growth_pod#3", "d2c-ads, d2c-marketplaces, d2c-google sit at growth_pod#0-2");
     assert.equal(a.status, "active");
     assert.equal(a.switchAgentId, "sw-d2c-priya-shah");
     assert.equal(a.instructions, undefined);
@@ -217,7 +217,7 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
 
     const b = await (await post(s, "/api/employees", hire())).json();
     assert.equal(b.id, "d2c-priya-shah-2");
-    assert.equal(b.desk, "growth_pod#2");
+    assert.equal(b.desk, "growth_pod#4");
     const hired = (await getJ(s, "/api/history")).filter((e) => e.type === "hired");
     assert.deepEqual(hired.map((e) => [e.speaker, e.room, e.meta.employee_id]), [["d2c-priya-shah", "ads", "d2c-priya-shah"], ["d2c-priya-shah-2", "ads", "d2c-priya-shah-2"]]);
     assert.match(hired[0].id, /^srv-/);
@@ -231,7 +231,7 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
     assert.deepEqual((await getJ(s, "/api/employees")).map((e) => e.id), ["d2c-priya-shah", "d2c-priya-shah-2"]);
     const people = await getJ(s, "/api/people");
     const p = people.find((x) => x.id === "d2c-priya-shah");
-    assert.deepEqual([p.kind, p.zone, p.desk, p.emoji, p.color], ["agent", "growth_pod", "growth_pod#1", "💌", "#112233"]);
+    assert.deepEqual([p.kind, p.zone, p.desk, p.emoji, p.color], ["agent", "growth_pod", "growth_pod#3", "💌", "#112233"]);
     assert.ok(people.some((x) => x.id === "d2c-captain"), "roster people included");
     assert.ok((await getJ(s, "/api/agents")).some((x) => x.id === "d2c-priya-shah"));
     assert.ok((await getJ(s, "/api/rooms")).find((x) => x.id === "ads").members.includes("d2c-priya-shah"));
@@ -289,7 +289,7 @@ test("hiring limits, Switch-side name clashes, sanitising, firing", async () => 
     assert.deepEqual((await getJ(s, "/api/employees")).map((e) => e.id), ["d2c-b"]);
     r = await post(s, "/api/employees", hire({ name: "C" }));
     assert.equal(r.status, 201, "room again after firing");
-    assert.equal((await r.json()).desk, "growth_pod#1", "the fired one's desk is free again");
+    assert.equal((await r.json()).desk, "growth_pod#3", "the fired one's desk is free again");
     r = await post(s, "/api/employees", hire({ name: "D" }));
     assert.equal(r.status, 429, "3 hires in 10 minutes already");
   } finally {

@@ -20,10 +20,14 @@ export function tmp() {
 export const calls = [];
 export const fake = {
   managementDown: false, roomsBroken: false /* every gateway call → 500 */,
+  agentsFlaky: 0 /* the next N GET /gateway/agents → 503 */, tg429: 0 /* the next N createForumTopic → 429 */, streamSilent: false /* office SSE never says connection_state */,
   chats: { "room-1": "-100", old: "-5" }, // Switch room → Telegram chat id
   tg: { ok: true, forum: true, admin: true, type: "supergroup", topics: new Set(), next: 100 },
 };
-const TEAM = ["d2c-captain", "d2c-analyst", "d2c-ads", "d2c-influencers", "d2c-ops", "d2c-design"];
+import { readFileSync } from "node:fs";
+const ROSTER = JSON.parse(readFileSync(new URL("../../contracts/roster.json", import.meta.url), "utf8"));
+/** Every roster Switch agent (16: not the Librarian), as the fake Switch registers them: x1, x2, … in roster order. */
+export const TEAM = ROSTER.people.filter((p) => p.kind === "agent" && p.id !== "librarian").map((p) => p.id);
 const sw = createServer(async (req, res) => {
   let body = "";
   for await (const c of req) body += c;
@@ -38,10 +42,12 @@ const sw = createServer(async (req, res) => {
     if (tg[1] !== "123:tg-secret") return ok({ ok: false, description: "Unauthorized" }, 401);
     if (tg[2] === "getChat") return ok(t.ok ? { ok: true, result: { id: json.chat_id, type: t.type, is_forum: t.forum } } : { ok: false, description: "Bad Request: chat not found" });
     if (tg[2] === "getChatMember") return ok({ ok: true, result: t.admin ? { status: "administrator", can_manage_topics: true } : { status: "member" } });
+    if (tg[2] === "createForumTopic" && fake.tg429 > 0) return fake.tg429--, ok({ ok: false, error_code: 429, description: "Too Many Requests: retry after 1", parameters: { retry_after: 1 } }, 429);
     if (tg[2] === "createForumTopic") return t.topics.add(++t.next), ok({ ok: true, result: { message_thread_id: t.next, name: json.name } });
     if (tg[2] === "editForumTopic") return ok(t.topics.has(json.message_thread_id) ? { ok: false, description: "Bad Request: TOPIC_NOT_MODIFIED" } : { ok: false, description: "Bad Request: TOPIC_ID_INVALID" });
     return ok({ ok: false, description: "unexpected " + tg[2] }, 418);
   }
+  if (r === "GET /health") return ok({ status: "ok" });
   if (r === "POST /gateway/auth/login") return ok({ email: "a", role: "admin" }, 200, { "set-cookie": "sid=s1; Path=/" });
   if (req.url.startsWith("/gateway") && req.headers.cookie !== "sid=s1") return ok({ detail: "no session" }, 401);
   if (fake.roomsBroken) return ok({ detail: "db password=hunter2 exploded" }, 500);
@@ -54,14 +60,15 @@ const sw = createServer(async (req, res) => {
   if (r === "GET /gateway/management/controllers") return ok([{ id: "c0", kind: "console", state: "online" }, { id: "c1", kind: "console", state: "online" }]);
   if (r === "GET /gateway/management/agents") return ok([{ name: "d2c-captain", controller_id: "c1", definition: {
     provider: "claude", model: "team-model", advanced_config: { effort: "high" }, auto_mode: true, auto_approve: false, isolation: "shared", directory: "/somewhere-else", instructions: "captain" } }]);
-  if (r === "GET /gateway/agents") return ok([...TEAM.map((n, i) => ({ id: `x${i + 1}`, name: n })), { id: "x9", name: "d2c-taken" }, { id: "obs", name: "d2c-observer" }]);
+  if (r === "GET /gateway/agents" && fake.agentsFlaky > 0) return fake.agentsFlaky--, ok({ detail: "busy" }, 503);
+  if (r === "GET /gateway/agents") return ok([...TEAM.map((n, i) => ({ id: `x${i + 1}`, name: n })), { id: "xt", name: "d2c-taken" }, { id: "obs", name: "d2c-observer" }]);
   if (/^DELETE \/gateway\/(management\/)?agents\/[\w-]+$/.test(r)) return ok({ ok: true });
   if (r === "POST /gateway/management/agents") return fake.managementDown ? ok({ detail: "Not Found" }, 404) : ok({ agent_id: `sw-${json.name}` }, 201);
   if (r === "POST /gateway/templates") return ok({ id: "tpl-1" }, 201);
   if (r === "POST /agents/office-1/message") return ok({ ok: true, event_id: "e1" });
   if (r === "GET /agents/office-1/events") {
     res.writeHead(200, { "content-type": "text/event-stream" });
-    return res.write("event: connection_state\ndata: {}\n\n"); // stays open until the client aborts
+    return res.write(fake.streamSilent ? ": keepalive\n\n" : "event: connection_state\ndata: {}\n\n"); // stays open until the client aborts
   }
   if (r === "POST /agents/office-1/ops/connect_to_room") return ok({ result: {} });
   if (r === "POST /agents/office-1/ops/post_message") return ok({ result: { event_id: "e2" } });
