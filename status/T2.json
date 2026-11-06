@@ -1,1 +1,1 @@
-{ "task": "T2", "state": "working", "progress": 5, "done": [], "next": "write demo/feeds/sale-demo.json", "blockers": [], "contract_requests": [], "updated": "2026-11-06T12:00:00+05:30" }
+{ "task": "T2", "state": "working", "progress": 70, "done": ["demo/feeds/sale-demo.json (36 events, 44s)", "demo/validate.mjs passes"], "next": "demo/script.md", "blockers": [], "contract_requests": [], "updated": "2026-11-06T12:30:00+05:30" }
