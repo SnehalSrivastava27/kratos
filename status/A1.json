@@ -1,9 +1,16 @@
-{ "task": "A1", "state": "done", "progress": 100,
+{
+  "task": "A1",
+  "state": "done",
+  "progress": 100,
   "done": [
     "v3 server: scrypt accounts + hashed sessions (hq_session cookie), login/signup limits, write guard on auth POSTs; workspaces + 6-digit link codes; every real-data read, /ws and office write scoped to the owner's workspace; replay admin-only",
     "Linking: observer forwards every room with meta.switch_room_id/room_name/chat_id/switch_thread_id; server links on a live code, checks forum + bot admin (needs_admin retries), creates 6 topics idempotently, joins team + observer; room watcher lets the observer into new groups; pre-v3 Kratos D2C data + topics adopted by chat id",
-    "Tests: 36 (35 pass, 1 skip: web/dist not built) incl. new v3.test.mjs; build, check, observer build + mock pass; manual run on :8851 with mocked Switch/Bot API against a copy of the live DB: linked ready, 39 legacy events adopted, B gets 403"
+    "Tests: 42 (41 pass, 1 skip: web/dist not built), incl. review fixes (host-owner gate on re-shelving, atomic code claim, code-guess budgets, logout closes sockets, per-email + IPv6 /64 login limits, groups-only linking, roster needs a session); merged main; build, check, observer mock pass"
   ],
-  "next": "", "blockers": [],
-  "contract_requests": ["events.schema.json: document meta.chat_id and meta.switch_thread_id (observer → server, v3); schema already allows them"],
-  "updated": "2026-11-06T21:25:00+05:30" }
+  "next": "",
+  "blockers": [],
+  "contract_requests": [
+    "events.schema.json: document meta.chat_id and meta.switch_thread_id (observer \u2192 server, v3); schema already allows them"
+  ],
+  "updated": "2026-11-06T21:50:00+05:30"
+}
