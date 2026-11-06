@@ -41,7 +41,7 @@ const hash = (s: string) => {
 };
 
 /** An ink-outlined paper sign (textPlane in agent-office's toon.ts). */
-function sign(text: string, size: number, scale: number) {
+function sign(text: string, size: number, scale: number, maxW = Infinity) {
   const c = document.createElement('canvas').getContext('2d')!;
   c.font = `900 ${size}px ${FONT}`;
   const w = Math.ceil(c.measureText(text).width) + size * 1.1, h = Math.ceil(size * 1.6);
@@ -52,6 +52,7 @@ function sign(text: string, size: number, scale: number) {
     g.fillStyle = '#2b2d42'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.fillText(text, w / 2, h / 2 + 2);
   });
+  scale = Math.min(scale, maxW / w); // never wider than its section
   return new THREE.Mesh(new THREE.PlaneGeometry(w * scale, h * scale), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false }));
 }
 
@@ -61,6 +62,9 @@ export class Bookcases {
   private books: LibraryBook[] = []; // by instance id
   private extras = new THREE.Group(); // "+N more" plaques, rebuilt with the books
   private key = '';
+  get shown() {
+    return this.spines.count;
+  }
 
   constructor() {
     const wood = toon('#8b5e3c');
@@ -73,7 +77,7 @@ export class Bookcases {
       const gap = (s.h - T) / s.levels;
       for (let i = 0; i <= s.levels; i++) g.add(mesh(new THREE.BoxGeometry(s.w, T, D), wood, 0, i * gap + T / 2, 0, false));
       frame.add(g);
-      const label = sign(SHELF_LABEL[s.id], 44, 0.0058);
+      const label = sign(SHELF_LABEL[s.id], 44, 0.0058, s.w - 0.06);
       label.position.set(s.x, s.h + 0.2, s.z + 0.05);
       this.group.add(label);
     }

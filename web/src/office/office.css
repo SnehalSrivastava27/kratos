@@ -12,7 +12,7 @@
   background: linear-gradient(180deg, #a9d8ff 0%, #cdebff 55%, #ffe9cf 100%);
 }
 .hq-root * { box-sizing: border-box; }
-.hq-stage { position: absolute; inset: 0 }
+.hq-stage { position: absolute; inset: 0; z-index: 0 } /* its own stacking context: name tags never float over the HUD */
 
 /* Name tags and status, over each head (person.ts setLabel / setDoing). The engine moves each .hq-anchor to
    its person's head every frame (transform only: no layout); .hq-over grows upward from that point. */
@@ -140,3 +140,38 @@
 @media (prefers-reduced-motion: reduce) { .ao-hint, .ao-drawer, .ao-chat, .ao-modal, .ao-backdrop { animation: none !important } }
 .hq-tip { position: absolute; left: 0; top: 0; pointer-events: none; background: var(--ink); color: var(--paper); font: 800 12.5px var(--font); padding: 4px 9px; border-radius: 9px; white-space: nowrap; z-index: 60 }
 .hq-tag-you { background: var(--ink); color: var(--paper) }
+
+/* The library window (agent-office .modal.lib, .lib-*) */
+.ao-modal.ao-lib { width: min(1100px, 100%); height: min(820px, calc(100svh - 32px)) }
+.ao-lib-body { flex: 1; min-height: 0; display: flex }
+.ao-lib-list { flex: none; width: 260px; overflow: auto; border-right: 3px solid var(--ink); background: var(--paper-2); padding: 6px; display: flex; flex-direction: column; gap: 2px }
+.ao-lib-shelf { width: 100%; display: flex; justify-content: space-between; align-items: center; text-align: left; font: 900 14px var(--font); padding: 7px 10px; border-radius: 10px; color: var(--ink) }
+.ao-lib-shelf:hover { background: rgba(43,45,66,.08) }
+.ao-lib-n { font-size: 12px; background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 0 7px }
+.ao-lib-book { width: 100%; text-align: left; font: inherit; border-radius: 10px; padding: 5px 10px 5px 22px; display: flex; flex-direction: column; min-width: 0; color: var(--ink) }
+.ao-lib-book:hover { background: rgba(43,45,66,.08) }
+.ao-lib-book.on { background: var(--ink); color: var(--paper) }
+.ao-lib-name { font-weight: 800; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.ao-lib-dir { font-size: 11px; font-weight: 700; opacity: .65; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.ao-lib-page { flex: 1; min-width: 0; overflow: auto; background: #fff }
+.ao-lib-head { padding: 14px 18px 12px; border-bottom: 2px dashed #ddd0bf; background: var(--paper) }
+.ao-lib-quiet { padding: 16px; color: var(--muted); font-weight: 700 }
+@media (max-width: 760px) {
+  .ao-lib-body { flex-direction: column } .ao-lib-list { width: auto; max-height: 38%; border-right: 0; border-bottom: 3px solid var(--ink) }
+}
+.md { padding: 12px 18px 20px; font-size: 14.5px; line-height: 1.6; font-weight: 500; color: var(--ink); overflow-wrap: anywhere }
+.md > :first-child { margin-top: 0 }
+.md p, .md ul, .md ol, .md blockquote, .md pre { margin: 0 0 12px }
+.md h1, .md h2, .md h3, .md h4, .md h5, .md h6 { margin: 20px 0 8px; font-weight: 900; line-height: 1.25 }
+.md h1 { font-size: 22px; padding-bottom: 5px; border-bottom: 2px solid rgba(43,45,66,.12) }
+.md h2 { font-size: 19px; padding-bottom: 4px; border-bottom: 2px solid rgba(43,45,66,.12) }
+.md h3 { font-size: 16.5px } .md h4 { font-size: 15px } .md h5, .md h6 { font-size: 14px; color: var(--muted) }
+.md strong { font-weight: 900 }
+.md a { color: #1d6fd6; font-weight: 700 }
+.md code { font: 12.5px ui-monospace, 'SF Mono', Menlo, Consolas, monospace; background: #f3ebe0; border-radius: 6px; padding: 1px 5px }
+.md pre { background: #1e1f2e; color: #e9ecef; border: 2px solid var(--ink); border-radius: 10px; padding: 12px 14px; overflow: auto }
+.md pre code { background: none; padding: 0; color: inherit; line-height: 1.5 }
+.md blockquote { padding: 2px 14px; border-left: 4px solid #d9cbb8; color: var(--muted) }
+.md ul { padding-left: 24px; list-style: disc } .md ol { padding-left: 24px; list-style: decimal }
+.md li + li { margin-top: 3px }
+.md hr { border: 0; border-top: 2px dashed #ddd0bf; margin: 18px 0 }

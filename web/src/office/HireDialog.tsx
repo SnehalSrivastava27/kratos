@@ -1,0 +1,115 @@
+// "Hire a teammate": E at an empty desk, or from the command bar. The form follows agent-office's
+// ui/employees.ts (a name, a role and skill set, installed skills as chips to attach) and ui/prompt.ts
+// (the window), adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs.
+import { useMemo, useState } from 'react';
+import { ExternalLink } from 'lucide-react';
+import type { Library, RoomId } from '../shared/types';
+import type { HireBody, HireResult } from './api';
+import { deskById, zoneById } from './data';
+import { Modal } from './Hud';
+import { ROOMS } from './Telegram';
+import { SHELF_LABEL } from './engine/library';
+
+const EMOJI = ['🧑‍💻', '🧑‍🎨', '🧾', '📈', '🛒', '🎬', '🧪', '🤝', '🦊', '🚀'];
+const COLORS = ['#ef476f', '#ff8a5b', '#f4a300', '#06d6a0', '#118ab2', '#5bc0eb', '#9d4edd', '#2b2d42'];
+const safeUrl = (u: string) => /^https?:\/\//i.test(u);
+
+export function HireDialog({ desk, room0, library, onClose, onHire }: {
+  desk?: string; room0: string; library: Library | null; onClose: () => void;
+  onHire: (b: HireBody) => Promise<{ data: HireResult; status: number }>;
+}) {
+  const [f, setF] = useState({ name: '', role: '', room: room0 as RoomId, emoji: EMOJI[0], color: COLORS[4], instructions: '' });
+  const [skills, setSkills] = useState<string[]>([]);
+  const [q, setQ] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  const [pending, setPending] = useState<{ url: string; label: string; name: string } | null>(null);
+  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF((s) => ({ ...s, [k]: e.target.value }));
+  const books = useMemo(() => {
+    const all = library?.shelves.flatMap((s) => s.books.map((b) => ({ ...b, shelf: s.id }))) ?? [];
+    const t = q.trim().toLowerCase();
+    return (t ? all.filter((b) => (b.name + ' ' + b.description).toLowerCase().includes(t)) : all).slice(0, 60);
+  }, [library, q]);
+  const where = desk ? `${zoneById[deskById[desk]?.zone]?.label ?? 'desk'} · desk ${desk.split('#')[1]}` : null;
+
+  const submit = async () => {
+    if (!f.name.trim() || !f.role.trim() || !f.instructions.trim()) return setErr('Name, role and instructions are needed.');
+    setBusy(true);
+    setErr('');
+    try {
+      const r = await onHire({ ...f, name: f.name.trim(), role: f.role.trim(), instructions: f.instructions.trim(), skills });
+      const d = r.data;
+      if ('action' in d && d.action.kind === 'open_url' && safeUrl(d.action.url)) setPending({ url: d.action.url, label: d.action.label || 'Finish in Switch Console', name: d.employee.name });
+      else onClose();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Could not hire');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (pending)
+    return (
+      <Modal title="🧑‍💼 One more step" onClose={onClose}>
+        <div className="ao-body text-[15px] font-bold">
+          <p className="mb-4">{pending.name} has a desk, but Switch needs a human to finish creating the agent. Open the Switch Console, confirm, and they start work.</p>
+          <a href={pending.url} target="_blank" rel="noopener noreferrer" className="ao-btn primary !h-11 !text-[15px]"><ExternalLink /> {pending.label}</a>
+        </div>
+      </Modal>
+    );
+
+  return (
+    <Modal title={<>🧑‍💼 Hire a teammate{where && <span className="ml-2 text-[13px] font-bold text-[var(--muted)]">{where}</span>}</>} label="Hire a teammate" onClose={onClose} className="w-[min(720px,100%)]"
+      footer={<>
+        <span className="grow">{err ? <span className="text-[#C8303A]">{err}</span> : 'They join Kratos D2C on Telegram and walk in to their desk.'}</span>
+        <button type="button" className="ao-btn" onClick={onClose}>Cancel</button>
+        <button type="button" className="ao-btn primary" disabled={busy} onClick={() => void submit()}>{busy ? 'Hiring…' : '✨ Hire'}</button>
+      </>}>
+      <form className="ao-body grid gap-x-4 sm:grid-cols-2" onSubmit={(e) => (e.preventDefault(), void submit())}>
+        <label className="ao-field"><span>Name</span><input className="ao-input" maxLength={24} value={f.name} onChange={set('name')} placeholder="e.g. Meera" autoFocus /></label>
+        <label className="ao-field"><span>Role</span><input className="ao-input" maxLength={60} value={f.role} onChange={set('role')} placeholder="e.g. Retention marketer" /></label>
+        <label className="ao-field"><span>Topic / department</span>
+          <select className="ao-input" value={f.room} onChange={set('room')}>
+            {ROOMS.map((r) => <option key={r.id} value={r.id}>{r.topic}</option>)}
+          </select>
+        </label>
+        <div className="ao-field"><span>Look</span>
+          <div className="flex flex-wrap items-center gap-1">
+            {EMOJI.map((e) => (
+              <button key={e} type="button" aria-label={`Emoji ${e}`} aria-pressed={f.emoji === e} onClick={() => setF((s) => ({ ...s, emoji: e }))}
+                className={`grid size-8 place-items-center rounded-lg text-lg ${f.emoji === e ? 'bg-white shadow-[0_2px_0_var(--ink)] ring-[3px] ring-[var(--ink)]' : 'hover:bg-black/5'}`}>{e}</button>
+            ))}
+          </div>
+          <div className="mt-1.5 flex gap-1.5">
+            {COLORS.map((c) => (
+              <button key={c} type="button" aria-label={`Colour ${c}`} aria-pressed={f.color === c} onClick={() => setF((s) => ({ ...s, color: c }))}
+                className="size-6 rounded-full border-[3px]" style={{ background: c, borderColor: f.color === c ? 'var(--ink)' : 'transparent', boxShadow: f.color === c ? '0 2px 0 var(--ink)' : undefined }} />
+            ))}
+          </div>
+        </div>
+        <label className="ao-field sm:col-span-2"><span>Instructions</span>
+          <textarea className="ao-input" rows={3} maxLength={4000} value={f.instructions} onChange={set('instructions')}
+            placeholder="What they own and how they work, e.g. “Own repeat purchase: win-back flows, WhatsApp nudges, and a weekly cohort report in Analytics.”" />
+        </label>
+        <div className="ao-field sm:col-span-2 !mb-0">
+          <span>Skills from the library <span className="font-bold text-[var(--muted)]">({skills.length} picked{library ? '' : ' · loading…'})</span></span>
+          <input className="ao-input !py-1.5 !text-[14px]" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search skills…" aria-label="Search skills" />
+          <div className="mt-2 flex max-h-36 flex-wrap gap-1.5 overflow-y-auto">
+            {books.map((b) => {
+              const on = skills.includes(b.id);
+              return (
+                <button key={b.id} type="button" title={`${SHELF_LABEL[b.shelf]} · ${b.description}`} aria-pressed={on}
+                  onClick={() => setSkills((s) => (on ? s.filter((x) => x !== b.id) : [...s, b.id]))}
+                  className={`rounded-full border-2 px-2.5 py-0.5 text-[12.5px] font-extrabold ${on ? 'border-[var(--ink)] bg-[var(--good)] text-white' : 'border-[var(--ink)]/20 bg-white hover:border-[var(--ink)]/50'}`}>
+                  /{b.name}
+                </button>
+              );
+            })}
+            {library && !books.length && <span className="text-[13px] text-[var(--muted)]">No skill matches “{q}”.</span>}
+          </div>
+        </div>
+        <button type="submit" hidden />
+      </form>
+    </Modal>
+  );
+}

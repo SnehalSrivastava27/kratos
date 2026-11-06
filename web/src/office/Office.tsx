@@ -2,12 +2,17 @@
 // Full-screen office, laid out like AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs
 // (src/client/index.html + style.css: the world edge to edge, a top bar, panels floating over it).
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { OfficeEvent, Zone } from '../shared/types';
+import type { Library, OfficeEvent, RoomId, ShelfId, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { caption, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import { addPerson, caption, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import * as api from './api';
+import { CommandBar } from './CommandBar';
+import { HireDialog } from './HireDialog';
+import { LibraryWindow } from './LibraryWindow';
+import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { HelpDialog, Hint } from './Hud';
-import { Expand, Eye, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
+import { Command, Expand, Eye, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
@@ -36,8 +41,16 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   // Replay (live): run the story again locally from the top, as a fresh array so the feed hook restarts.
   const [replay, setReplay] = useState(() => (mode === 'live' && new URLSearchParams(location.search).has('demo') ? 1 : 0)); // /office?demo = local story, no server
   const replayFeed = useMemo(() => (replay ? [...(feed ?? (saleDemo as OfficeEvent[]))] : undefined), [replay, feed]);
-  const events = useEventFeed(replay ? 'autoplay' : mode, replayFeed ?? feed);
-  const scene = useMemo(() => reduce(events, ctx), [events]);
+  const feedEvents = useEventFeed(replay ? 'autoplay' : mode, replayFeed ?? feed);
+  // Local echoes while the backend isn't there (mock command / hire / librarian): appended after the feed.
+  const [extra, setExtra] = useState<OfficeEvent[]>([]);
+  useEffect(() => { if (!feedEvents.length) setExtra([]); }, [feedEvents.length]);
+  const events = useMemo(() => (extra.length ? [...feedEvents, ...extra] : feedEvents), [feedEvents, extra]);
+  const echo = (e: Omit<OfficeEvent, 'id' | 't'>) =>
+    setExtra((x) => [...x, { ...e, id: `local-${Date.now()}-${x.length}`, t: Math.max(feedEvents[feedEvents.length - 1]?.t ?? 0, x[x.length - 1]?.t ?? 0) + 1000 }]);
+  const [peopleVer, setPeopleVer] = useState(0); // bumps when someone joins the roster
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const scene = useMemo(() => reduce(events, ctx), [events, peopleVer]);
   // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
   const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
   // local replay (button, ?demo, or the feed hook's fallback when the server is down) vs server events (`id@run` or epoch t)
@@ -99,7 +112,76 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     if (!chat.pinned && narrow) setChat((c) => ({ ...c, open: false }));
   };
   const waiting = Object.entries(scene.people).find(([, p]) => p.beacon)?.[0];
-  const modalOpen = help;
+  // ---- Office actions: command bar, hiring, the library ----
+  const [cmd, setCmd] = useState<{ room: string; text?: string } | null>(null);
+  const [hireAt, setHireAt] = useState<{ desk?: string; room: string } | null>(null);
+  const [libAt, setLibAt] = useState<{ shelf?: ShelfId } | null>(null);
+  const [library, setLibrary] = useState<Library | null>(null);
+  const loadLibrary = useCallback(() => api.getLibrary().then((r) => setLibrary(r.data), () => {}), []);
+  useEffect(() => { if (mode === 'live') void loadLibrary(); }, [mode, loadLibrary]);
+  useEffect(() => engine.current?.setLibrary(library), [library]);
+  // While the Librarian works, look again every few seconds (the real one moves books around).
+  useEffect(() => {
+    if (library?.librarian !== 'working' || library.updatedAt === -1) return; // -1: the demo run acted out locally, nothing to poll
+    const id = setInterval(() => void loadLibrary(), 5000);
+    return () => clearInterval(id);
+  }, [library, loadLibrary]);
+  /** People from /api/people (live) and anyone the feed says was hired: added to the office, the new ones walking in. */
+  const joinPeople = useCallback((list: HiredPerson[], arrive: boolean) => {
+    const fresh = new Set(list.filter((p) => addPerson(p)).map((p) => p.id));
+    if (!fresh.size) return;
+    engine.current?.addPeople(arrive ? fresh : new Set());
+    setPeopleVer((v) => v + 1);
+  }, []);
+  useEffect(() => {
+    if (mode === 'live') api.getPeople().then((r) => joinPeople(r.data, false), () => {});
+  }, [mode, joinPeople]);
+  const hiredSeen = useRef(new Set<string>());
+  useEffect(() => {
+    // A `hired` event for someone we don't know yet: ask /api/people who they are, and walk them in.
+    const unknown = events.filter((e) => e.type === 'hired' && !personById[e.speaker] && !hiredSeen.current.has(e.id));
+    if (!unknown.length) return;
+    unknown.forEach((e) => hiredSeen.current.add(e.id));
+    api.getPeople().then((r) => joinPeople(r.data, true), () => {});
+  }, [events, joinPeople]);
+  // The Librarian's run finishing: re-read the shelves.
+  const lastLib = [...events].reverse().find((e) => e.speaker === 'librarian');
+  useEffect(() => { if (lastLib?.type === 'done') void loadLibrary(); }, [lastLib?.id, lastLib?.type, loadLibrary]);
+
+  const hereRoom = () => {
+    const z = engine.current?.playerZone();
+    return ROOMS.find((r) => r.zone === z)?.id ?? room;
+  };
+  const sendCommand = async (to: RoomId, text: string) => {
+    const r = await api.sendCommand(to, text);
+    if (r.mock) echo({ room: to, speaker: 'founder', type: 'message', text });
+    return r;
+  };
+  const doHire = async (body: api.HireBody) => {
+    const r = await api.hire(body, hireAt?.desk);
+    const e = 'action' in r.data ? r.data.employee : r.data;
+    joinPeople([{ id: e.id, name: e.name, emoji: e.emoji, kind: 'agent', zone: deskById[e.desk]?.zone ?? roomZone[e.room], color: e.color, desk: e.desk, room: e.room, role: e.role }], true);
+    toast(`${e.emoji} ${e.name} is on the way to their desk`);
+    if (r.mock) echo({ room: e.room, speaker: e.id, type: 'hired', text: `👋 **${e.name}** joined as ${e.role}` });
+    return r;
+  };
+  const recategorize = async () => {
+    const r = await api.categorize();
+    if (r.mock) {
+      // Act it out: the Librarian walks the shelves, then reports back.
+      const n = library?.shelves.reduce((a, s) => a + s.books.length, 0) ?? 0;
+      echo({ room: 'war_room', speaker: 'librarian', type: 'working', text: `📚 **Re-shelving the library**\nReading ${n} skills and sorting them by department…` });
+      setLibrary((l) => (l ? { ...l, librarian: 'working', updatedAt: -1 } : l));
+      setTimeout(() => {
+        echo({ room: 'war_room', speaker: 'librarian', type: 'done', text: `📚 **Library re-shelved**\n${n} skills on 8 shelves` });
+        setLibrary((l) => (l ? { ...l, librarian: 'idle', updatedAt: Date.now() } : l));
+      }, 12000);
+      return 'The Librarian is on it (demo: no server, acted out locally).';
+    }
+    void loadLibrary();
+    return 'The Librarian is on it: watch her walk the shelves.';
+  };
+  const modalOpen = help || !!cmd || !!hireAt || !!libAt;
   useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
 
   /** E: use what you face. */
@@ -107,14 +189,19 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     if (!t) return;
     if (t.kind === 'agent') {
       const p = personById[t.id];
-      const r = ROOMS.find((rm) => rm.zone === p?.zone)?.id ?? (p as { room?: string })?.room ?? 'war_room';
-      openRoom(r);
-    } else if (t.kind === 'frame') window.open(t.url, '_blank', 'noopener');
+      const r = (p as { room?: string })?.room ?? ROOMS.find((rm) => rm.zone === p?.zone)?.id ?? 'war_room';
+      setRoom(r);
+      setCmd({ room: r, text: `@${p?.name ?? t.id} ` });
+    } else if (t.kind === 'desk') {
+      const z = deskById[t.desk]?.zone;
+      setHireAt({ desk: t.desk, room: ROOMS.find((r) => r.zone === z)?.id ?? 'war_room' });
+    } else if (t.kind === 'library') setLibAt({ shelf: t.shelf });
+    else if (t.kind === 'frame') window.open(t.url, '_blank', 'noopener');
   }
   const hint = (t: Target | null): { title?: string; text: string } | null => {
     if (!t) return null;
     if (t.kind === 'desk') return { text: `Hire at this desk`, title: zoneById[deskById[t.desk]?.zone]?.label };
-    if (t.kind === 'library') return { text: 'Open the library', title: shelfLabel(t.shelf) };
+    if (t.kind === 'library') return { text: `Open the library · ${shelfLabel(t.shelf)} shelf`, title: '📚' };
     if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: personById[t.id]?.emoji };
     return { text: 'Open this banner', title: '🖼️' };
   };
@@ -136,12 +223,20 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     const typing = (e.target as HTMLElement)?.closest?.('input, textarea, select, [contenteditable]');
     if (e.key === 'Escape') {
       if (help) return setHelp(false);
+      if (cmd) return setCmd(null);
+      if (hireAt) return setHireAt(null);
+      if (libAt) return setLibAt(null);
       if (narrow && (drawer.open || chat.open)) return (setDrawer((d) => ({ ...d, open: false })), setChat((c) => ({ ...c, open: false })));
       if (drawer.open && !drawer.pinned) return setDrawer((d) => ({ ...d, open: false }));
       if (chat.open && !chat.pinned) return setChat((c) => ({ ...c, open: false }));
       return setFocus(null);
     }
-    if (typing || help || e.metaKey || e.ctrlKey || e.altKey) return;
+    if ((e.code === 'KeyK' && (e.metaKey || e.ctrlKey)) || (e.key === '/' && !typing && !modalOpen)) {
+      e.preventDefault();
+      return setCmd((c) => c ?? { room: hereRoom() });
+    }
+    if (typing || modalOpen || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (['KeyE', 'KeyN', 'KeyT', 'KeyF'].includes(e.code)) e.preventDefault(); // the key mustn't also type into the window it opens
     if (e.code === 'KeyE') interact(target);
     else if (e.code === 'KeyN' && waiting) {
       engine.current?.jumpTo(waiting);
@@ -197,6 +292,9 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
               <MessageCircle /><span className="hidden sm:inline">Chat</span>
               {totalUnread > 0 && !chat.open && <span className="rounded-full bg-[#3390EC] px-1.5 text-[11px] text-white">{totalUnread}</span>}
             </button>
+            <button type="button" className="ao-btn tg" onClick={() => setCmd({ room: hereRoom() })} title="Command bar (/ or Ctrl K)">
+              <Command /><span className="hidden sm:inline">Message</span>
+            </button>
             <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setView((v) => (v === 'player' ? 'spectator' : 'player')); }}
               title={view === 'player' ? 'Spectator: watch the whole office' : 'Walk the office as the founder'} aria-label={view === 'player' ? 'Spectator view' : 'Walk as the founder'}>
               {view === 'player' ? <Eye /> : <User />}
@@ -213,7 +311,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
         )}
         {chat.open && (
           <div className="ao-panel ao-chat">
-            <ChatPane room={room} events={recent} scene={scene} className="border-l-0" actions={panelBtns(chat, setChat, 'chat')} />
+            <ChatPane room={room} events={recent} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} actions={panelBtns(chat, setChat, 'chat')} />
           </div>
         )}
       </div>
@@ -224,6 +322,12 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
         return null;
       })()}
       {help && <HelpDialog onClose={() => setHelp(false)} />}
+      {cmd && (
+        <CommandBar room0={cmd.room} text0={cmd.text} onClose={() => setCmd(null)} onSend={sendCommand}
+          onHire={() => (setCmd(null), setHireAt({ room: cmd.room }))} onLibrary={() => (setCmd(null), setLibAt({}))} />
+      )}
+      {hireAt && <HireDialog desk={hireAt.desk} room0={hireAt.room} library={library} onClose={() => setHireAt(null)} onHire={doHire} />}
+      {libAt && <LibraryWindow library={library} shelf0={libAt.shelf} onClose={() => setLibAt(null)} onRecategorize={recategorize} />}
     </div>
   );
 }

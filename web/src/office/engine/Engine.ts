@@ -221,10 +221,12 @@ export class OfficeEngine {
         const i = this.renderer.info;
         return { frames: this.frames, meshes, calls: i.render.calls, geometries: i.memory.geometries, textures: i.memory.textures, programs: i.programs?.length, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1e6) : null };
       };
+      w.__hqBooks = () => this.shelves.shown;
+      w.__hqGo = (x: number, z: number, facing = Math.PI) => this.player?.place(x, z, facing); // QA: stand somewhere
       w.__hqPlayer = () => (this.player ? { x: +this.player.x.toFixed(2), z: +this.player.z.toFixed(2), view: this.view, target: this.targetK } : null);
       w.__hqAgents = () => Object.fromEntries(this.agents.map((a) => [a.info.id, [+a.pos.x.toFixed(3), +a.pos.z.toFixed(3)]]));
       w.__hqSolids = () => this.world?.solids ?? [];
-      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqPlayer; delete w.__hqAgents; delete w.__hqSolids; });
+      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqBooks; delete w.__hqGo; delete w.__hqPlayer; delete w.__hqAgents; delete w.__hqSolids; });
     }
   }
 
@@ -289,6 +291,13 @@ export class OfficeEngine {
       return;
     }
     p.place(x, z + 1);
+  }
+
+  /** The zone you're standing in (player mode), for the command bar's default topic. */
+  playerZone(): string | null {
+    const p = this.player;
+    if (!p || this.view !== 'player') return null;
+    return zones.find((zn) => Math.abs(p.x - zn.x) <= zn.w / 2 && Math.abs(p.z - zn.z) <= zn.d / 2)?.id ?? null;
   }
 
   /** The library's shelves follow /api/library. */
