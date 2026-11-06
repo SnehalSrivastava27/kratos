@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { AGENT_IDS, PEOPLE, TG_GROUP, TOPICS, body, clock, saleDemo } from './data';
 import { Container, EASE, MateIcon } from './ui';
-import { BrandMarquee, Mark } from './Brands';
+import { BrandMarquee, ChatAppRotator, Mark } from './Brands';
 
 const HeroOffice = lazy(() => import('./HeroOffice'));
 
@@ -27,7 +27,7 @@ export default function Hero() {
         </div>
         <div>
           <motion.p {...enter(0.08)} className="max-w-[46ch] text-[17px] leading-[1.55] text-neutral-500 md:text-lg [&_b]:font-normal [&_b]:text-foreground">
-            <b>An AI teammate for every department</b> of your D2C brand. They plan together in the <b>Telegram</b> you already use, one topic per department, and a live office shows who’s doing what.
+            <b>An AI teammate for every department</b> of your D2C brand. They plan together in the <ChatAppRotator /> you already use, one topic per department, and a live office shows who’s doing what.
           </motion.p>
           <motion.div {...enter(0.16)} className="mt-8 flex flex-wrap gap-3">
             <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/demo" />} nativeButton={false}>

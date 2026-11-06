@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import channels from '../../../data/channels.csv?raw';
 
@@ -16,24 +17,15 @@ export function Mark({ name, color, className }: { name: string; color: string; 
 const Img = ({ src, h, alt }: { src: string; h: string; alt: string }) => <img src={`/brands/${src}`} alt={alt} className={cn('w-auto', h)} draggable={false} />;
 const Word = ({ children, style }: { children: ReactNode; style?: CSSProperties }) => <span className="text-[19px] font-semibold tracking-tight text-foreground md:text-[22px]" style={style}>{children}</span>;
 
-/** Flipkart's file has a lot of padding round the logo: crop to it. */
-function Flipkart() {
-  return (
-    <span className="relative block h-[22px] w-[99px] overflow-hidden md:h-[26px] md:w-[117px]" role="img" aria-label="Flipkart">
-      <img src="/brands/flipkart.svg" alt="" className="absolute top-[-138%] left-[-63%] h-[375%] max-w-none" draggable={false} />
-    </span>
-  );
-}
-
 // Equal optical height: ~28px desktop, ~22px mobile.
 const LOGOS: { key: string; tip: string; logo: ReactNode }[] = [
   { key: 'shopify', tip: tip('Brand website (Shopify)', 'Brand website'), logo: <><Mark name="shopify" color="#7AB55C" className="size-[22px] md:size-[26px]" /><Word>Shopify</Word></> },
   { key: 'amazon', tip: tip('Marketplaces'), logo: <Img src="amazon.svg" h="h-[22px] md:h-[28px] translate-y-[3px]" alt="Amazon" /> },
-  { key: 'flipkart', tip: tip('Marketplaces'), logo: <Flipkart /> },
+  { key: 'flipkart', tip: tip('Marketplaces'), logo: <Img src="flipkart.svg" h="h-[27px] md:h-[32px]" alt="Flipkart" /> },
   { key: 'myntra', tip: tip('Marketplaces'), logo: <><Img src="myntra.png" h="h-[20px] md:h-[24px]" alt="" /><Word>Myntra</Word></> },
   { key: 'nykaa', tip: tip('Beauty marketplaces'), logo: <Img src="nykaa.svg" h="h-[20px] md:h-[25px]" alt="Nykaa" /> },
   { key: 'purplle', tip: tip('Beauty marketplaces'), logo: <Word style={{ color: '#7A2C8F', fontWeight: 700, letterSpacing: '-0.02em' }}>purplle</Word> },
-  { key: 'blinkit', tip: tip('Quick commerce'), logo: <Img src="blinkit.svg" h="h-[24px] md:h-[28px]" alt="Blinkit" /> },
+  { key: 'blinkit', tip: tip('Quick commerce'), logo: <Img src="blinkit.svg" h="h-[30px] md:h-[36px] rounded-[7px]" alt="Blinkit" /> },
   { key: 'zepto', tip: tip('Quick commerce'), logo: <Img src="zepto.svg" h="h-[20px] md:h-[25px]" alt="Zepto" /> },
   { key: 'instamart', tip: tip('Quick commerce'), logo: <><Mark name="swiggy" color="#FC8019" className="size-[22px] md:size-[26px]" /><Word>Instamart</Word></> },
   { key: 'meta', tip: 'Meta Ads · where the Ads Lead runs campaigns', logo: <><Mark name="meta" color="#0467DF" className="size-[22px] md:size-[26px]" /><Word>Meta</Word></> },
@@ -60,5 +52,49 @@ export function BrandMarquee() {
     <div className="relative -mt-10 overflow-hidden pt-10 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
       <div className="flex w-max animate-marquee items-center hover:[animation-play-state:paused]">{row(false)}{row(true)}</div>
     </div>
+  );
+}
+
+
+const CHAT_APPS = [
+  { key: 'whatsapp', name: 'WhatsApp', w: '5.95em', logo: <Mark name="whatsapp" color="#25D366" className="size-[0.95em]" /> },
+  { key: 'telegram', name: 'Telegram', w: '5.5em', logo: <Mark name="telegram" color="#26A5E4" className="size-[0.95em]" /> },
+  { key: 'slack', name: 'Slack', w: '3.95em', logo: <img src="/brands/slack.svg" alt="" className="size-[0.9em]" draggable={false} /> },
+];
+
+/** Inline "the [chat app] you already use": rotates WhatsApp → Telegram → Slack, logo + name. */
+export function ChatAppRotator({ every = 2200 }: { every?: number }) {
+  const reduce = useReducedMotion();
+  const [i, setI] = useState(1); // start on Telegram, the one that's live today
+  useEffect(() => {
+    if (reduce) return;
+    const t = setInterval(() => setI((n) => (n + 1) % CHAT_APPS.length), every);
+    return () => clearInterval(t);
+  }, [reduce, every]);
+  const app = CHAT_APPS[reduce ? 1 : i];
+  return (
+    // the box eases to each name's width, so nothing is clipped and no gap is left behind
+    <motion.span
+      className="relative inline-flex h-[1.3em] translate-y-[0.22em] overflow-hidden align-baseline"
+      aria-label="WhatsApp, Telegram or Slack"
+      initial={false}
+      animate={{ width: app.w }}
+      transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <AnimatePresence initial={false} mode="popLayout">
+        <motion.span
+          key={app.key}
+          initial={{ y: '100%', opacity: 0 }}
+          animate={{ y: '0%', opacity: 1 }}
+          exit={{ y: '-100%', opacity: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-y-0 left-0 inline-flex items-center gap-[0.3em] font-normal whitespace-nowrap text-foreground"
+          aria-hidden="true"
+        >
+          {app.logo}
+          {app.name}
+        </motion.span>
+      </AnimatePresence>
+    </motion.span>
   );
 }

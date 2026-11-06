@@ -21,3 +21,4 @@ sales channels and chat apps D2C Agent HQ works with; no endorsement or partners
 
 Simple Icons files are monochrome paths: colour them with the brand hex (Shopify #7AB55C, Swiggy #FC8019,
 Meta #0467DF, Instagram #FF0069, YouTube #FF0000, Telegram #26A5E4, WhatsApp #25D366) or show them in neutral grey.
+| slack.svg | Public domain | https://commons.wikimedia.org/wiki/File:Slack_icon_2019.svg |
