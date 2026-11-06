@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import './landing.css';
 import Hero from './Hero';
 import Channels from './Channels';
+import TeamChat from './TeamChat';
+import Teammates from './Teammates';
 
 export default function Landing() {
   return (
@@ -15,6 +17,8 @@ export default function Landing() {
         </header>
         <Hero />
         <Channels />
+        <TeamChat />
+        <Teammates />
       </main>
     </MotionConfig>
   );
