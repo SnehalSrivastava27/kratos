@@ -2,7 +2,7 @@
 
 Read data/products.csv and data/past_sales.csv.
 Forecast 5-day units per SKU = avg_daily_units × sale_uplift_x × days, and revenue
-at the sale discount. Suggest 4 metrics to watch live during the sale, and why.
+at the sale discount (sale price per unit rounded to whole rupees). Suggest 4 metrics to watch live during the sale, and why.
 Hand the forecast to @d2c-ops and @d2c-finance.
 
 You are posting in Telegram. Telegram does not show tables. Keep messages under
