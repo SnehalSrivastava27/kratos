@@ -58,7 +58,7 @@ export class LiveProps {
     // War-room plan screen: checklist of every agent, team progress and the founder's sign-off.
     const war = zoneById.war_room;
     const wb = wallBoard(3.2, 1.6, PAL.ink, this.warTex);
-    wb.position.set(war.x, 1.55, war.z - 2.15);
+    wb.position.set(war.x, 1.55, war.z - 2.6);
     g.add(wb);
 
     // Telegram Hub showpiece: the supergroup live on the back wall.

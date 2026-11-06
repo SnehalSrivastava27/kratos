@@ -26,6 +26,7 @@ import { NavGrid } from './nav';
 import { LiveProps, type GalleryItem } from './props';
 import { DOOR, FLOOR, buildWorld, loadFont } from './world';
 import { SwitchHub } from './switchHub';
+import { stations, type StationId } from './layout';
 
 /** What pressing E would use: the nearest thing you face. */
 export type Target =
@@ -35,7 +36,9 @@ export type Target =
   | { kind: 'frame'; url: string }
   | { kind: 'dog' }
   | { kind: 'jukebox' }
-  | { kind: 'switch' };
+  | { kind: 'switch' }
+  | { kind: 'station'; id: Exclude<StationId, 'switch'> }
+  | { kind: 'seat' };
 
 export interface EngineOpts {
   /** Live /office: drag to orbit, wheel/pinch to zoom, click a zone or a gallery frame. Off for the hero. */
@@ -53,16 +56,19 @@ export interface EngineOpts {
   onSwitch?: () => void;
 }
 export const targetKey = (t: Target | null) => (t ? `${t.kind}:${'desk' in t ? t.desk : 'shelf' in t ? t.shelf : 'id' in t ? t.id : 'url' in t ? t.url : ''}` : '');
+const HELLOS = ['Chai break? Save me a cup ☕', 'Morning, boss! 👋', 'Adrak wali, please 🙏', 'Two sugars for me 😄', 'Perfect timing ☕', 'Hi! Numbers look good today 📈'];
 export const shelfLabel = (s: ShelfId) => SHELF_LABEL[s];
 
 const DEG = Math.PI / 180;
-const JUKEBOX: [number, number] = [10.5, -4.3];
+const JUKEBOX: [number, number] = [zoneById.telegram_hub.x + 4.2, zoneById.telegram_hub.z + 1.2];
+const STATIONS = stations(zoneById);
 const FOLLOW_PITCH = 0.8;
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
 const AZ = 0.12;
 const elevation = (aspect: number) => THREE.MathUtils.clamp(1.25 - 0.3 * aspect, 0.86, 1.02); // portrait panes look down more
+const [X0, X1, Z0, Z1] = [FLOOR.minX - 0.4, FLOOR.maxX + 0.2, FLOOR.minZ - 0.2, FLOOR.maxZ + 0.3];
 const FIT_PTS = [
-  [-18.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-18.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-18.4, 2.6, 8.4],
+  [X0, 0, Z1], [X1, 0, Z1], [X1, 0, Z0], [X0, 2.6, Z0], [X1, 2.6, Z0], [X0, 2.6, Z1],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
 const ZOOM_OFF = new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1);
 
@@ -76,7 +82,7 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
   const c = new THREE.PerspectiveCamera(fov, aspect, 0.5, 200);
   const EL = elevation(aspect);
   const dir = new THREE.Vector3(Math.sin(AZ) * Math.cos(EL), Math.sin(EL), Math.cos(AZ) * Math.cos(EL));
-  const tgt = new THREE.Vector3(-3, 0, 0.5);
+  const tgt = new THREE.Vector3((FLOOR.minX + FLOOR.maxX) / 2, 0, 0.5);
   const p = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3();
   let d = 40;
   for (let it = 0; it < 10; it++) {
@@ -103,7 +109,7 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
  * (no sky band, no wall cut off at its top). The farthest camera whose four frame corners, at either end of
  * the slow orbit, still land on the floor (or on the back wall below its top).
  */
-const HERO = { tx: 0, tz: 0.6, pitch: 0.98, sway: 0.09 };
+const HERO = { tx: zoneById.war_room.x, tz: zoneById.war_room.z + 0.6, pitch: 0.98, sway: 0.09 };
 function heroPose(fov: number, aspect: number): Pose {
   const c = new THREE.PerspectiveCamera(fov, aspect, 0.5, 200);
   const ray = new THREE.Raycaster(), v = new THREE.Vector2();
@@ -116,9 +122,9 @@ function heroPose(fov: number, aspect: number): Pose {
       const { origin: o, direction: dir } = ray.ray;
       if (dir.y >= 0) return false;
       const t = -o.y / dir.y, gx = o.x + dir.x * t, gz = o.z + dir.z * t;
-      if (gx < -17.8 || gx > 12.1 || gz > 8.2) return false;
-      if (gz >= -7.95) return true;
-      const tw = (-8.0 - o.z) / dir.z; // past the back wall: fine if it hits the wall below its top
+      if (gx < FLOOR.minX + 0.2 || gx > FLOOR.maxX - 0.2 || gz > FLOOR.maxZ - 0.1) return false;
+      if (gz >= FLOOR.minZ + 0.05) return true;
+      const tw = (FLOOR.minZ - o.z) / dir.z; // past the back wall: fine if it hits the wall below its top
       return o.y + dir.y * tw < WALL_TOP;
     });
   });
@@ -185,7 +191,7 @@ export class OfficeEngine {
   private confettiId?: string;
   private burstAt = Infinity;
   private speaker: Agent | null = null;
-  private latest: { scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[] } | null = null;
+  private latest: { scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[]; total: number } | null = null;
   private home: Pose = fitHome(32, 1.6, false);
   private heroShot: Pose = heroPose(32, 1.6);
   private ready = false;
@@ -228,8 +234,8 @@ export class OfficeEngine {
     const ambient = new THREE.AmbientLight('#ffffff', 0.5);
     const sun = this.sun;
     sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
-    Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 15, bottom: -15, near: 1, far: 100 });
+    sun.shadow.mapSize.set(3072, 3072);
+    Object.assign(sun.shadow.camera, { left: -27, right: 27, top: 22, bottom: -22, near: 1, far: 110 });
     sun.shadow.bias = -0.0008;
     sun.shadow.normalBias = 0.03;
     this.scene.add(hemi, ambient, sun, sun.target, this.confetti.mesh);
@@ -243,7 +249,7 @@ export class OfficeEngine {
     if (opts.interactive) {
       this.player = new Player(() => this.world?.solids ?? [], FLOOR);
       // The office dog wanders the main floor; the jukebox stands in the Telegram Hub lounge (both live office only).
-      this.dog = new Dog(-1.5, 3.2, { minX: -10.5, maxX: 11, minZ: -6.8, maxZ: 7.6 });
+      this.dog = new Dog(-2.5, 3.6, { minX: FLOOR.minX + 8.5, maxX: FLOOR.maxX - 1, minZ: FLOOR.minZ + 1.2, maxZ: FLOOR.maxZ - 0.6 });
       this.dog.onBark = () => (this.woofT = this.t);
       this.woof.className = 'hq-anchor';
       this.woof.innerHTML = '<div class="hq-over"><span class="hq-tag-name hq-woof">Woof!</span></div>'; // static markup, no data
@@ -273,7 +279,7 @@ export class OfficeEngine {
         if (this.founder && this.view === 'player' && !this.nav.free(this.player!.x, this.player!.z)) this.placeNear(this.founder.pos.x, this.founder.pos.z + 0.6);
         this.props = new LiveProps();
         this.scene.add(this.world.group, this.props.group, this.hub.group);
-        if (this.latest) this.apply(this.latest.scene, this.latest.events, this.latest.gallery);
+        if (this.latest) this.apply(this.latest.scene, this.latest.events, this.latest.gallery, this.latest.total);
       })
       .catch((e) => console.warn('office: models failed to load', e));
 
@@ -307,7 +313,25 @@ export class OfficeEngine {
       w.__hqPlayer = () => (this.player ? { x: +this.player.x.toFixed(2), z: +this.player.z.toFixed(2), view: this.view, target: this.targetK } : null);
       w.__hqAgents = () => Object.fromEntries(this.agents.map((a) => [a.info.id, [+a.pos.x.toFixed(3), +a.pos.z.toFixed(3)]]));
       w.__hqSolids = () => this.world?.solids ?? [];
-      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqBooks; delete w.__hqGo; delete w.__hqPlayer; delete w.__hqAgents; delete w.__hqSolids; });
+      // QA: every desk seat and station reachable from the front door on the real nav grid (all furniture), else the misses.
+      w.__hqReach = () => {
+        const miss: string[] = [];
+        const reach = (id: string, x: number, z: number, r: number) => {
+          const legs = this.nav.path(DOOR[0], DOOR[1], x, z);
+          let [px, pz] = DOOR;
+          for (const [k, [nx, nz]] of legs.entries()) {
+            if (k < legs.length - 1 && !this.nav.clear(px, pz, nx, nz)) return miss.push(`${id}: leg ${k}`);
+            [px, pz] = [nx, nz];
+          }
+          const prev = legs.length > 1 ? legs[legs.length - 2] : DOOR;
+          if (!this.nav.clear(prev[0], prev[1], x, z) && Math.hypot(prev[0] - x, prev[1] - z) > r) miss.push(id);
+        };
+        for (const d of Object.values(deskById)) reach(d.id, d.x, d.z + 0.85, 1.2);
+        for (const [id, st] of Object.entries(STATIONS)) reach(id, ...st.stand, 0.3);
+        for (const sec of SECTIONS) reach(`shelf:${sec.id}`, ...browseSpot(sec), 0.3);
+        return miss;
+      };
+      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqBooks; delete w.__hqGo; delete w.__hqPlayer; delete w.__hqAgents; delete w.__hqSolids; delete w.__hqReach; });
     }
   }
 
@@ -416,8 +440,8 @@ export class OfficeEngine {
   }
 
   /** The reducer's scene (and what the walls show) → motion. Cheap: only differences do anything. */
-  apply(scene: SceneState, events: OfficeEvent[], gallery: GalleryItem[]) {
-    this.latest = { scene, events, gallery };
+  apply(scene: SceneState, events: OfficeEvent[], gallery: GalleryItem[], total = events.length) {
+    this.latest = { scene, events, gallery, total };
     for (const a of this.agents) {
       const ps = scene.people[a.info.id];
       if (!ps) continue;
@@ -434,7 +458,19 @@ export class OfficeEngine {
       }
     }
     this.props?.sync(scene, events, gallery);
-    this.hub?.sync(events);
+    this.hub?.sync(events, total);
+  }
+
+  /** The chai corner: the founder has a cup, and whoever is nearby says hello (local bubbles, never in the chat). */
+  chai() {
+    const f = this.founder;
+    if (!f) return;
+    f.chaiUntil = this.t + 7;
+    const near = this.agents
+      .filter((a) => a !== f && a.pos.distanceTo(f.pos) < 5.5 && !a.talking)
+      .sort((a, b) => a.pos.distanceTo(f.pos) - b.pos.distanceTo(f.pos))
+      .slice(0, 3);
+    near.forEach((a, i) => setTimeout(() => !this.disposed && a.say(HELLOS[(Math.floor(this.t) + i) % HELLOS.length], this.t), 500 + i * 900));
   }
 
   /** Fly to a zone (eased), or back to the whole office. Either way, drag/zoom offsets are let go. */
@@ -722,6 +758,10 @@ export class OfficeEngine {
     if (this.dog) consider({ kind: 'dog' }, this.dog.pos.x, this.dog.pos.z, 1.4);
     consider({ kind: 'jukebox' }, JUKEBOX[0], JUKEBOX[1] + 0.5, 1.5);
     if (this.hub) consider({ kind: 'switch' }, ...this.hub.front, 1.8);
+    for (const [id, st] of Object.entries(STATIONS) as [StationId, (typeof STATIONS)[StationId]][])
+      if (id !== 'switch' && (id !== 'ledger' || zoneById.finance_cabin) && (id !== 'hire' || zoneById.reception)) consider({ kind: 'station', id }, ...st.at, st.reach);
+    const own = deskById['founder_desk#0'];
+    if (own) consider({ kind: 'seat' }, own.x, own.z + 0.85, 1.3);
     for (const fr of this.props?.clickables ?? []) {
       const w = fr.getWorldPosition(new THREE.Vector3());
       consider({ kind: 'frame', url: fr.userData.url as string }, w.x, w.z + 0.4, 2.0);

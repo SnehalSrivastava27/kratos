@@ -9,28 +9,22 @@ import type { Library, LibraryBook, ShelfId } from '../../shared/types';
 import { FONT, paint } from '../tex';
 import { disposeTree, mergeByMaterial, mesh, noOutline, toon } from '../toon';
 import type { Rect } from './nav';
+import { BOOK_DEPTH as D, BOOK_ROWS, bookcaseSolids } from './layout';
 
 const SPINES = ['#ef476f', '#118ab2', '#06d6a0', '#ffd166', '#9d4edd', '#ff8a5b', '#2b2d42', '#e9d8a6', '#457b9d', '#f4a261'];
 const T = 0.05; // board thickness
-const D = 0.45; // case depth
 export const SHELF_LABEL: Record<ShelfId, string> = {
   war_room: 'War Room', analytics: 'Analytics', ads: 'Ads', creators: 'Creators',
   ops: 'Ops', design: 'Design', engineering: 'Engineering', general: 'General',
 };
-/** Two rows facing the room (+z): against the back wall, and a freestanding row with an aisle behind it. */
-const ROWS: { x: number; z: number; w: number; h: number; levels: number; shelves: ShelfId[] }[] = [
-  { x: -15.1, z: -7.75, w: 1.35, h: 2.4, levels: 5, shelves: ['war_room', 'analytics', 'ads', 'creators'] },
-  { x: -15.0, z: -4.7, w: 1.05, h: 1.9, levels: 4, shelves: ['ops', 'design', 'engineering', 'general'] },
-];
+/** Two rows facing the room (+z): against the back wall, and a freestanding row with an aisle behind it (layout.ts). */
+const ROWS = BOOK_ROWS as unknown as { x: number; z: number; w: number; h: number; levels: number; shelves: ShelfId[] }[];
 interface Section { id: ShelfId; x: number; z: number; w: number; h: number; levels: number }
 export const SECTIONS: Section[] = ROWS.flatMap((r) =>
   r.shelves.map((id, i) => ({ id, x: r.x + (i - (r.shelves.length - 1) / 2) * r.w, z: r.z, w: r.w, h: r.h, levels: r.levels })),
 );
 /** The cases' footprints, for walking round them. */
-export const BOOKCASE_SOLIDS: Rect[] = ROWS.map((r) => {
-  const half = (r.w * r.shelves.length) / 2;
-  return { minX: r.x - half, maxX: r.x + half, minZ: r.z - D / 2, maxZ: r.z + D / 2 };
-});
+export const BOOKCASE_SOLIDS: Rect[] = bookcaseSolids();
 /** Where to stand to browse a section (in front of it). */
 export const browseSpot = (s: Section): [number, number] => [s.x, s.z + D / 2 + 0.75];
 
