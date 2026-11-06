@@ -35,6 +35,7 @@ findings list. It feeds the blog.
 | 03:20 | K3 security review: no injection, planted cache can't execute; 5 lows fixed (lockdown before trusting cache, ctime+inode signature, in-memory for outside --data, hasOwn lookups, real calendar dates); 28/28 kit tests. |
 | 03:35 | BL1 merged: docs/blog/ (post ~3.5k words, features, 47 findings with evidence, 5 social posts) + 6 new Excalidraw diagrams (org chart, Finance gate, Switch features map, eval loop, toolkit, overnight swarm). |
 | 04:00 | E2 merged: tier 2 (65 questions: joins, date windows, ranks, judgement, 8 unanswerables, 4 prompt injections); Haiku 142/148 → 149/149 over 5 runs, p50 6 s, ~1 tool call/question, $0.21/run; Sonnet 148/149 at $3.07. LV2 started: hard tool allowlist for live agents, sync instructions, live War Room demo. |
+| 04:20 | Full CI on backend-v2 caught one cross-task break (a K3 kit test still expected order lines after E2 fixed the truth to distinct orders); fixed, CI green. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
