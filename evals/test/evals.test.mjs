@@ -66,12 +66,14 @@ test('live mode against a mock QA API', async () => {
     assert.equal(req.headers.authorization, 'Bearer t0k');
     if (req.method === 'POST' && req.url === '/api/qa/ask') {
       let b = ''; req.on('data', d => b += d); req.on('end', () => {
-        asked = JSON.parse(b); res.end(JSON.stringify({ ok: true, sentAt: '2026-11-07T00:00:00Z' }));
+        asked = JSON.parse(b); res.statusCode = 202; res.end(JSON.stringify({ id: 'q1', sentAt: 1762473600000, workspace: 'w1', thread: 'topic' }));
       });
     } else if (req.url.startsWith('/api/qa/replies?')) {
       const u = new URL(req.url, 'http://x');
-      assert.equal(u.searchParams.get('after'), '2026-11-07T00:00:00Z');
-      res.end(JSON.stringify({ replies: [{ agent: u.searchParams.get('agent'), text: '📦 **Delhi**\n\n- **SKU01:** **250**' }] }));
+      assert.equal(u.searchParams.get('after'), '1762473600000');
+      assert.equal(u.searchParams.get('workspace'), 'w1');
+      res.end(JSON.stringify([{ id: 'e0', t: 1, room: 'qa_lab', speaker: 'd2c-ops', type: 'working', text: 'on it 999' },
+        { id: 'e1', t: 2, room: 'qa_lab', speaker: 'd2c-ops', type: 'message', text: '📦 **Delhi**\n\n- **SKU01:** **250**' }]));
     } else { res.statusCode = 404; res.end(); }
   });
   await new Promise(r => srv.listen(0, r));
@@ -79,6 +81,7 @@ test('live mode against a mock QA API', async () => {
   const a = await askLive('d2c-ops', 'How many?', { timeout: 5, pollMs: 20 }, `http://localhost:${srv.address().port}`);
   srv.close();
   assert.deepEqual(asked, { agent: 'd2c-ops', text: 'How many?' });
+  assert.ok(!a.reply.includes('999'));
   assert.equal(a.error, null);
   assert.ok(score({ kind: 'number' }, 250, a.reply).pass);
 });

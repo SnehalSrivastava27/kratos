@@ -25,6 +25,7 @@ function args(argv) {
     else if (a === '--concurrency') o.concurrency = Number(v());
     else if (a === '--timeout') o.timeout = Number(v());
     else if (a === '--failed') o.failed = true;
+    else if (a === '--workspace') o.workspace = v();
     else throw new Error(`unknown arg ${a}`);
   }
   return o;
@@ -85,19 +86,21 @@ function askClaude(agent, text, o) {
 export async function askLive(agent, text, o, base = process.env.SERVER_URL || 'http://localhost:8787') {
   const h = { authorization: `Bearer ${process.env.ADMIN_TOKEN || ''}`, 'content-type': 'application/json' };
   const t0 = Date.now();
-  const r = await fetch(`${base}/api/qa/ask`, { method: 'POST', headers: h, body: JSON.stringify({ agent, text }) });
-  if (!r.ok) return { reply: '', ms: 0, cost: null, error: `ask HTTP ${r.status}` };
-  const sentAt = (await r.json().catch(() => ({}))).sentAt ?? new Date(t0).toISOString();
+  const ws = o.workspace || process.env.EVALS_WORKSPACE;   // required by the API when >1 workspace is ready
+  const r = await fetch(`${base}/api/qa/ask`, { method: 'POST', headers: h, body: JSON.stringify({ agent, text, ...(ws && { workspace: ws }) }) });
+  if (!r.ok) return { reply: '', ms: 0, cost: null, error: `ask HTTP ${r.status}: ${(await r.text()).slice(0, 120)}` };
+  const a = await r.json().catch(() => ({}));
+  const qs = new URLSearchParams({ after: String(a.sentAt ?? t0), agent, ...((a.workspace || ws) && { workspace: a.workspace || ws }) });
   const poll = o.pollMs ?? 3000;
-  let got = [];
+  let got = [], quiet = 0;
   while (Date.now() - t0 < o.timeout * 1000) {
     await new Promise(s => setTimeout(s, poll));
-    const q = await fetch(`${base}/api/qa/replies?after=${encodeURIComponent(sentAt)}&agent=${encodeURIComponent(agent)}`, { headers: h });
+    const q = await fetch(`${base}/api/qa/replies?${qs}`, { headers: h });
     if (!q.ok) return { reply: '', ms: Date.now() - t0, cost: null, error: `replies HTTP ${q.status}` };
-    const j = await q.json();
-    const list = (Array.isArray(j) ? j : j.replies || []).filter(x => !x.agent || x.agent === agent);
-    // ponytail: done once a poll brings nothing new after the first reply; agents that post in many slow parts get cut.
-    if (list.length && list.length === got.length) break;
+    // OfficeEvent[]; keep the agent's own words, drop "working" pings and the command echo
+    const list = (await q.json()).filter(e => e.speaker === agent && e.type !== 'working' && e.type !== 'command');
+    // ponytail: done after 2 polls with nothing new; an agent that pauses longer between parts gets cut.
+    if (list.length && list.length === got.length) { if (++quiet >= 2) break; } else quiet = 0;
     got = list;
   }
   if (!got.length) return { reply: '', ms: Date.now() - t0, cost: null, error: 'timeout' };

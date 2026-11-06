@@ -21,7 +21,9 @@ Options: `--concurrency 4`, `--timeout 180` (seconds per question).
   with tools `Bash(node kit/bin/kit.mjs:*)`, `Read`, `Grep`, `Glob` and `--output-format json` (gives cost).
   Agents without an instructions file yet are skipped.
 - **Live** sends `POST /api/qa/ask {agent,text}` then polls `GET /api/qa/replies?after=<sentAt>&agent=<id>` on
-  `SERVER_URL` (default `http://localhost:8787`) with `Authorization: Bearer $ADMIN_TOKEN`. One question at a time per agent.
+  `SERVER_URL` (default `http://localhost:8787`) with `Authorization: Bearer $ADMIN_TOKEN`, `--workspace <id>` (or
+  `EVALS_WORKSPACE`) when several workspaces are ready. Keeps the agent's own events (not `working`), done after two
+  quiet polls. One question at a time per agent.
 - Questions tagged `v2` are skipped until `data/orders.csv` exists. `--truth` exits 1 if any truth fails
   (missing file, missing column, no matching row, non-numeric number truth).
 
