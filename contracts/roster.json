@@ -1,22 +1,110 @@
 {
   "brand": "Kesar & Co.",
   "people": [
-    { "id": "founder",         "name": "Founder",      "emoji": "👑", "kind": "human", "zone": "founder_desk", "color": "#7C3AED" },
-    { "id": "d2c-captain",     "name": "Sale Captain", "emoji": "🎯", "kind": "agent", "zone": "war_room",     "color": "#F4A300", "group": "Kesar HQ · War Room" },
-    { "id": "d2c-analyst",     "name": "Analyst",      "emoji": "📊", "kind": "agent", "zone": "data_wall",    "color": "#2563EB", "group": "Kesar HQ · Analytics" },
-    { "id": "d2c-ads",         "name": "Ads Lead",     "emoji": "📣", "kind": "agent", "zone": "growth_pod",   "color": "#DB2777", "group": "Kesar HQ · Ads" },
-    { "id": "d2c-influencers", "name": "Creators Lead","emoji": "⭐", "kind": "agent", "zone": "creator_studio","color": "#F59E0B", "group": "Kesar HQ · Creators" },
-    { "id": "d2c-ops",         "name": "Ops Lead",     "emoji": "📦", "kind": "agent", "zone": "dispatch_dock","color": "#059669", "group": "Kesar HQ · Ops" },
-    { "id": "d2c-design",      "name": "Designer",     "emoji": "🎨", "kind": "agent", "zone": "design_studio","color": "#9333EA", "group": "Kesar HQ · Design" },
-    { "id": "d2c-finance",     "name": "Finance Lead", "emoji": "💰", "kind": "agent", "zone": "finance_cabin","color": "#0F766E", "group": "Kesar HQ · Finance" }
+    {
+      "id": "founder",
+      "name": "Founder",
+      "emoji": "👑",
+      "kind": "human",
+      "zone": "founder_desk",
+      "color": "#7C3AED"
+    },
+    {
+      "id": "d2c-captain",
+      "name": "Sale Captain",
+      "emoji": "🎯",
+      "kind": "agent",
+      "zone": "war_room",
+      "color": "#F4A300",
+      "topic": "War Room"
+    },
+    {
+      "id": "d2c-analyst",
+      "name": "Analyst",
+      "emoji": "📊",
+      "kind": "agent",
+      "zone": "data_wall",
+      "color": "#2563EB",
+      "topic": "Analytics"
+    },
+    {
+      "id": "d2c-ads",
+      "name": "Ads Lead",
+      "emoji": "📣",
+      "kind": "agent",
+      "zone": "growth_pod",
+      "color": "#DB2777",
+      "topic": "Ads"
+    },
+    {
+      "id": "d2c-influencers",
+      "name": "Creators Lead",
+      "emoji": "⭐",
+      "kind": "agent",
+      "zone": "creator_studio",
+      "color": "#F59E0B",
+      "topic": "Creators"
+    },
+    {
+      "id": "d2c-ops",
+      "name": "Ops Lead",
+      "emoji": "📦",
+      "kind": "agent",
+      "zone": "dispatch_dock",
+      "color": "#059669",
+      "topic": "Ops"
+    },
+    {
+      "id": "d2c-design",
+      "name": "Designer",
+      "emoji": "🎨",
+      "kind": "agent",
+      "zone": "design_studio",
+      "color": "#9333EA",
+      "topic": "Design"
+    }
   ],
   "rooms": [
-    { "id": "war_room",    "label": "War Room",  "zone": "war_room" },
-    { "id": "analytics",   "label": "Analytics", "zone": "data_wall" },
-    { "id": "ads",         "label": "Ads",       "zone": "growth_pod" },
-    { "id": "creators",    "label": "Creators",  "zone": "creator_studio" },
-    { "id": "ops",         "label": "Ops",       "zone": "dispatch_dock" },
-    { "id": "design",      "label": "Design",    "zone": "design_studio" },
-    { "id": "finance",     "label": "Finance",   "zone": "finance_cabin" }
-  ]
+    {
+      "id": "war_room",
+      "label": "War Room",
+      "zone": "war_room",
+      "topic": "War Room"
+    },
+    {
+      "id": "analytics",
+      "label": "Analytics",
+      "zone": "data_wall",
+      "topic": "Analytics"
+    },
+    {
+      "id": "ads",
+      "label": "Ads",
+      "zone": "growth_pod",
+      "topic": "Ads"
+    },
+    {
+      "id": "creators",
+      "label": "Creators",
+      "zone": "creator_studio",
+      "topic": "Creators"
+    },
+    {
+      "id": "ops",
+      "label": "Ops",
+      "zone": "dispatch_dock",
+      "topic": "Ops"
+    },
+    {
+      "id": "design",
+      "label": "Design",
+      "zone": "design_studio",
+      "topic": "Design"
+    }
+  ],
+  "telegram": {
+    "group": "Kratos D2C",
+    "mode": "forum_topics",
+    "note": "One Telegram supergroup with Topics on; each room below is a topic. Switch sees one room; topics are threads (message_thread_id)."
+  }
 }

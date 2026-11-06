@@ -6,7 +6,7 @@
   "properties": {
     "id":      { "type": "string", "description": "unique, e.g. evt-001" },
     "t":       { "type": "number", "description": "ms since start of run (mock feed) or epoch ms (live)" },
-    "room":    { "type": "string", "enum": ["war_room","analytics","ads","creators","ops","design","finance"] },
+    "room":    { "type": "string", "enum": ["war_room","analytics","ads","creators","ops","design"] },
     "speaker": { "type": "string", "description": "person id from roster.json" },
     "type":    { "type": "string", "enum": ["message","assign","working","approval_needed","pushback","approved","done","artifact","celebrate"] },
     "text":    { "type": "string", "description": "message as shown in Telegram (short lines)" },
