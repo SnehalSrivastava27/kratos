@@ -1,1 +1,11 @@
-{ "task": "T3", "state": "working", "progress": 65, "done": ["grey-box floor", "useEventFeed replay", "state machine", "bubbles/beacon", "scene events"], "next": "make it pretty, side panel", "blockers": [], "contract_requests": [], "updated": "2026-11-06T19:10:00+05:30" }
+{ "task": "T3", "state": "done", "progress": 100,
+  "done": [
+    "3D office (R3F) from zones/roster: cream/saffron floor, rounded furniture, capsule people with per-person state machine (idle/working/walking/waiting/done), bubbles, red beacon + banner, jump + ✅",
+    "Scene events: captain desk-to-desk tour, EBITDA meter red/green + mint glow, India map pins + conveyor box (transfers), gallery frames (artifact), confetti on celebrate; ~70 meshes, 1 directional light, dpr [1,2]",
+    "<Office mode='live'|'autoplay' feed?> — autoplay loops sample feed with no server; live replays once + side panel (team list → thread); useEventFeed ready for a wsSource (T8)"
+  ],
+  "next": "",
+  "blockers": [],
+  "contract_requests": [],
+  "notes": "Check: node web/src/office/officeState.check.mjs. package-lock.json/tsconfig.tsbuildinfo left uncommitted (outside T3 lane).",
+  "updated": "2026-11-06T20:00:00+05:30" }
