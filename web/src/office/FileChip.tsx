@@ -1,5 +1,6 @@
 // An artifact the team pinned to /gallery/: images as a thumbnail, documents (.pptx/.xlsx/.docx/.pdf) as a file chip.
-import { Download, ExternalLink, File, FileSpreadsheet, FileText, Presentation, type LucideIcon } from 'lucide-react';
+import { useState } from 'react';
+import { Download, ExternalLink, File, FileImage, FileSpreadsheet, FileText, Presentation, type LucideIcon } from 'lucide-react';
 
 const KIND: Record<string, { Icon: LucideIcon; label: string; color: string }> = {
   pptx: { Icon: Presentation, label: 'PowerPoint', color: '#C2410C' },
@@ -7,6 +8,8 @@ const KIND: Record<string, { Icon: LucideIcon; label: string; color: string }> =
   csv: { Icon: FileSpreadsheet, label: 'CSV', color: '#15803D' },
   docx: { Icon: FileText, label: 'Word', color: '#1D4ED8' },
   pdf: { Icon: FileText, label: 'PDF', color: '#B91C1C' },
+  png: { Icon: FileImage, label: 'Image', color: '#7C3AED' },
+  svg: { Icon: FileImage, label: 'Image', color: '#7C3AED' },
 };
 const IMAGE = /\.(png|svg|jpe?g|webp|gif)$/i;
 export const extOf = (url: string) => url.split('?')[0].split('.').pop()?.toLowerCase() ?? '';
@@ -16,10 +19,11 @@ export const isFile = (url: string) => !/\.html?$/i.test(url.split('?')[0]);
 
 export function FileChip({ url, title }: { url: string; title?: string }) {
   const name = decodeURIComponent(url.split('/').pop() ?? url);
-  if (isImage(url))
+  const [broken, setBroken] = useState(false); // an image that won't load still gets a file chip
+  if (isImage(url) && !broken)
     return (
       <a href={url} target="_blank" rel="noopener noreferrer" className="mt-1.5 block overflow-hidden rounded-lg border border-black/[0.08] bg-[#F4F4F5]" title={title ?? name}>
-        <img src={url} alt={title ?? name} loading="lazy" className="block max-h-56 w-full object-contain" />
+        <img src={url} alt={title ?? name} loading="lazy" onError={() => setBroken(true)} className="block max-h-56 w-full object-contain" />
         <div className="flex items-center gap-1 truncate px-2 py-1 text-xs text-[#707579]">{name} <ExternalLink className="size-3 shrink-0" /></div>
       </a>
     );

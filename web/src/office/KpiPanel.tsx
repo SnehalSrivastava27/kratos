@@ -27,7 +27,7 @@ export function KpiPanel({ onClose, style }: { onClose: () => void; style?: Reac
         ['Net revenue', inr(d.net_revenue)],
         ['Orders', count(d.orders), `AOV ${inr(d.aov)}`],
         ['RTO', pct(d.rto_pct), `Returns ${pct(d.return_pct)}`],
-        ['Blended ROAS', roas(d.blended_roas), `Meta ${roas(d.meta_roas)}`],
+        ['ROAS', roas(d.blended_roas), `Meta ${roas(d.meta_roas)}`], // blended: all ad spend
         ['EBITDA', inr(d.ebitda_last_month), 'last month'],
       ]
     : [];
@@ -46,9 +46,9 @@ export function KpiPanel({ onClose, style }: { onClose: () => void; style?: Reac
       </header>
       {d && (
         <div className="grid gap-3 p-3">
-          <div className="grid grid-cols-3 gap-1.5 max-[760px]:grid-cols-5">
+          <div className="grid grid-cols-3 gap-1.5">
             {tiles.map(([label, value, sub], i) => (
-              <div key={label} className={`rounded-xl border-2 border-[var(--ink)]/15 bg-white px-2 py-1.5 ${i === 0 ? 'col-span-2 max-[760px]:col-span-1' : ''}`}>
+              <div key={label} className={`rounded-xl border-2 border-[var(--ink)]/15 bg-white px-2 py-1.5 ${i === 0 ? 'col-span-2' : ''}`}>
                 <div className="truncate text-[10.5px] font-extrabold tracking-wide text-[var(--muted)] uppercase">{label}</div>
                 <div className="text-[18px] leading-tight font-black tabular-nums max-[760px]:text-[14px]">{value}</div>
                 {sub && <div className="truncate text-[10.5px] font-bold text-[var(--muted)] max-[760px]:hidden">{sub}</div>}

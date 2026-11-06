@@ -309,6 +309,7 @@ export class Agent {
     return Math.atan2(z.x - this.pos.x, z.z - this.pos.z);
   }
 
+  private get crew() { return !!this.info.reports_to; }
   private drawTag(walking: boolean, t: number) {
     const ps = this.ps;
     const shown: AgentState = walking ? 'walking' : ps.state;
@@ -334,8 +335,10 @@ export class Agent {
     }
     if (ding) span('hq-ding', '✓');
     const you = !!this.drive; // the founder you're walking
-    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : shown === 'idle' ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : shown === 'idle' ? '' : name, true);
-    if (shown !== 'idle' && shown !== 'walking') span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
+    // Specialists (roster `reports_to`) wear just their badge so a full office of 17 stays readable: their lead carries the name and state (hover for theirs).
+    const quiet = shown === 'idle' || (this.crew && !ps.beacon);
+    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : quiet ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : quiet ? '' : name, true);
+    if (shown !== 'idle' && shown !== 'walking' && !(this.crew && !ps.beacon)) span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
     this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
   }
 
@@ -387,8 +390,9 @@ export class Agent {
     this.sx = Math.min(Math.max(rx, pad), w - pad);
     this.sy = Math.max(ry, this.bubbleEl ? pad * 0.9 : 0);
     const walking = this.moving || this.path.length > 0;
-    this.wide = this.bubbleEl ? 0 : this.hero || (this.ps.state === 'idle' && !walking) ? 30 : 112;
-    this.tall = walking || this.ps.state === 'idle' ? 24 : 44; // name pill, plus the state chip under it
+    const badge = this.hero || (this.ps.state === 'idle' && !walking) || (this.crew && !this.ps.beacon);
+    this.wide = this.bubbleEl ? 0 : badge ? 30 : 112;
+    this.tall = badge || walking ? 24 : 44; // name pill, plus the state chip under it
     this.lift = 0;
   }
 
