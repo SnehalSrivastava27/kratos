@@ -25,6 +25,7 @@ Landing hero uses `?mode=autoplay` on the office component: it replays `sale-dem
 ## Auth
 Send `Authorization: Bearer <token>`. When the env var (`OBSERVER_TOKEN` / `ADMIN_TOKEN`) is unset
 on the server, that route is open (local dev; the server logs a warning). Wrong/missing token → 401.
+With `NODE_ENV=production` the server won't start without both tokens unless `ALLOW_OPEN=1`.
 
 ## Limits and errors
 All errors are `{ "error": string }` JSON (400 adds `details` = ajv errors).

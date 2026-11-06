@@ -28,6 +28,11 @@ const ROSTER_RAW = readFileSync(join(ROOT, "contracts/roster.json"));
 const roster: Roster = JSON.parse(ROSTER_RAW.toString());
 const ROOM_IDS = new Set(roster.rooms.map((r) => r.id));
 
+const PROD = env.NODE_ENV === "production";
+if (PROD && (!OBSERVER_TOKEN || !ADMIN_TOKEN) && env.ALLOW_OPEN !== "1") {
+  log.error("refusing to start: NODE_ENV=production needs OBSERVER_TOKEN and ADMIN_TOKEN (set ALLOW_OPEN=1 to run open anyway)");
+  process.exit(1);
+}
 openStore(env.DATA_DIR || ".data");
 if (!OBSERVER_TOKEN) log.warn("OBSERVER_TOKEN unset: POST /api/events is open to anyone (fine for local dev only)");
 if (!ADMIN_TOKEN) log.warn("ADMIN_TOKEN unset: POST /api/replay and /api/replay/stop are open (fine for local dev only)");

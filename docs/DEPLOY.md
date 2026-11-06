@@ -17,8 +17,9 @@ disk plan is needed (Render needs both).
 | `PORT` | `fly.toml` (`8787`) | Must match `internal_port`. |
 | `RATE_LIMIT_PER_MIN`, `MAX_WS_CLIENTS` | optional | Default 120 POSTs/IP/min, 400 sockets (keep below fly.toml hard_limit). |
 
-If a token is unset, its routes are open and the server logs a warning at startup. Always set
-both tokens in production.
+With `NODE_ENV=production` (set in the Docker image) the server refuses to start unless both
+tokens are set. `ALLOW_OPEN=1` overrides that, for a throwaway demo only. In dev, an unset token
+leaves its routes open and the server logs a warning.
 
 ## First deploy
 

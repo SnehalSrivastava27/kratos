@@ -25,7 +25,7 @@ function tmp() {
 function start(env = {}) {
   const proc = spawn(process.execPath, ["--import", "tsx", "src/index.ts"], {
     cwd: CWD,
-    env: { ...process.env, PORT: "0", OBSERVER_TOKEN: "", ADMIN_TOKEN: "", DATA_DIR: tmp(), FLY_APP_NAME: "", ...env },
+    env: { ...process.env, PORT: "0", OBSERVER_TOKEN: "", ADMIN_TOKEN: "", DATA_DIR: tmp(), FLY_APP_NAME: "", NODE_ENV: "", ALLOW_OPEN: "", ...env },
     stdio: ["ignore", "pipe", "inherit"],
   });
   procs.add(proc);
@@ -108,6 +108,14 @@ test("rate limit: bad tokens are limited, a valid token is not", async () => {
   } finally {
     await s.stop();
   }
+});
+
+test("production refuses to start without tokens unless ALLOW_OPEN=1", async () => {
+  await assert.rejects(start({ NODE_ENV: "production", OBSERVER_TOKEN: "x" }), /exited 1/);
+  const s = await start({ NODE_ENV: "production", ALLOW_OPEN: "1" });
+  await s.stop();
+  const t = await start({ NODE_ENV: "production", OBSERVER_TOKEN: "a", ADMIN_TOKEN: "b" });
+  await t.stop();
 });
 
 test("persistence: history and room events survive a restart", async () => {
