@@ -1,4 +1,6 @@
-# D2C Agent HQ
+# Kratos
+
+AI teammates for every department of a D2C brand, in Telegram, powered by Switch.
 
 > Every department of your D2C brand gets an AI teammate. They work together in your team's
 > **Telegram** groups through **Switch**, and a live 3D office shows them planning your next sale.
@@ -16,7 +18,7 @@ Indian D2C teams don't run on Slack. They run on Telegram and WhatsApp groups. P
 festive sale means 6 teams, 40 voice notes and 3 days of back-and-forth: marketing overspends,
 ops finds a stockout too late, finance says no after everything is booked.
 
-**D2C Agent HQ** puts an AI teammate in each department's Telegram group. The founder types one
+**Kratos** puts an AI teammate in each department's Telegram group. The founder types one
 message in the War Room, and the team plans the whole sale, including Finance pushing back when
 the numbers don't work. Nobody on the team learns a new tool.
 
@@ -57,6 +59,13 @@ Full diagram and data flow: [`docs/architecture.md`](docs/architecture.md).
 
 The only part that runs without Switch is the **demo replay**: the office and landing page can
 replay a recorded feed (`demo/feeds/sale-demo.json`) so you can see the UI offline.
+
+### How Kratos uses Switch
+
+Every Switch feature this project uses, with sources, snippets and Excalidraw diagrams:
+**[docs/switch/](docs/switch/README.md)**. Console and the local server, the Telegram bridge,
+templates, the agent protocol, topics and threads, hiring from the office, the live office feed,
+workspaces, the skills library, gotchas, and a blog outline.
 
 ## 3. Agents and groups
 
@@ -143,7 +152,7 @@ cd server && npm test         # node:test suite
 Set `OBSERVER_TOKEN` (observer → `POST /api/events`) and `ADMIN_TOKEN` (replay) in production.
 The observer sends its token from `OBSERVER_TOKEN` and finds the server with `SERVER_URL`.
 
-Deploy to Fly.io (volume + websockets, single instance): see [`docs/DEPLOY.md`](docs/DEPLOY.md).
+Self-hosting and Docker: see [`docs/DEPLOY.md`](docs/DEPLOY.md).
 Docker (`node:24-alpine`, data in `/data`):
 
 ```bash

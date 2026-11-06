@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, animate, motion, useInView, useReducedMotion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, PartyPopper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DEPT, PEOPLE, TG_GROUP } from './data';
 import { BANNERS, Banner } from './Banners';
-import { Band, Container, EASE, Reveal } from './ui';
+import { Band, Container, EASE, MateIcon, Reveal } from './ui';
 
 // demo/feeds/sale-demo.json evt-028 → 031. ₹ lakh; budget.json total ₹5L.
 const LINES = [
@@ -60,7 +60,7 @@ export default function Approve() {
             className="w-full rounded-2xl border border-black/[0.07] bg-white p-5 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.22)] md:p-7"
           >
             <p className="flex items-center gap-2 text-[12px] text-neutral-500">
-              <span className="grid size-6 place-items-center rounded-md text-[13px]" style={{ background: `${captain.color}1a` }}>{captain.emoji}</span>
+              <MateIcon id="d2c-captain" size="sm" />
               <b className="font-medium text-foreground">{captain.name}</b> · {TG_GROUP} › War Room
             </p>
             <h3 className="mt-4 text-[22px] font-medium tracking-tight">Final plan · Festive sale</h3>
@@ -75,7 +75,7 @@ export default function Approve() {
                     transition={{ duration: 0.4, ease: 'easeOut', delay: 0.2 + i * 0.12 }}
                     className="flex items-center gap-3 border-b border-black/[0.05] py-2.5 text-[14px] text-neutral-700"
                   >
-                    <D.Icon className="size-4 shrink-0" style={{ color: PEOPLE[l.id].color }} strokeWidth={1.8} />
+                    <D.Icon className="size-[18px] shrink-0" style={{ color: PEOPLE[l.id].color }} strokeWidth={1.5} />
                     <span className="w-[4.5rem] shrink-0 text-[12px] text-neutral-400">{D.short}</span>
                     {l.text}
                   </motion.li>
@@ -111,8 +111,8 @@ export default function Approve() {
               </motion.span>
               <AnimatePresence>
                 {phase === 'done' && (
-                  <motion.span initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }} className="text-[13.5px] text-neutral-600">
-                    🎉 Festive sale is a go!
+                  <motion.span initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, ease: 'easeOut' }} className="inline-flex items-center gap-1.5 text-[13.5px] text-neutral-600">
+                    <PartyPopper className="size-4 text-saffron" strokeWidth={1.6} />Festive sale is a go!
                   </motion.span>
                 )}
               </AnimatePresence>

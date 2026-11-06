@@ -1,4 +1,6 @@
-// D2C Agent HQ observer: a silent Switch agent that forwards every room message to the office.
+// D2C Agent HQ observer: a silent Switch agent that forwards every room message to the office server, tagged with
+// its Switch room (meta.switch_room_id / room_name / chat_id / switch_thread_id). The server decides which workspace
+// (if any) the room belongs to and which topic → department it is (contracts/api.md v3).
 // Protocol: Switch docs/official/internals/agent-protocol.md (SSE down, HTTP up). Read-only:
 // it never calls post_message. See ../README.md and contracts/switch-protocol-notes.md.
 import { readFileSync } from "node:fs";
@@ -14,14 +16,9 @@ export type Config = {
   unknownSpeaker: string | null;
   ignoreSpeakers: string[];
   speakers: Record<string, string>;
+  /** Optional fixed room → department map (room name or id → RoomId); otherwise the server maps by topic. */
   rooms: Record<string, string>;
-  /** Switch rooms that are one Telegram forum group: departments are topics inside them. */
-  forumRooms?: string[];
-  /** Path (relative to observer/) of the topic map scripts/switch-up.sh writes, or the map itself. */
-  topics?: string | Topics;
 };
-/** observer/topics.json: department room id → its forum topic, by Telegram id and by Switch thread id. */
-export type Topics = { chat_id?: string; topics: Record<string, { name: string; message_thread_id: number; switch_thread_id?: string | null }> };
 type Frame = { event: string; data: string; id?: string };
 
 export function loadConfig(): Config {
@@ -85,44 +82,46 @@ const roster = readJson(HERE + "../contracts/roster.json") as {
   rooms: { id: string; label: string }[];
 };
 
+// People hired from the office (GET /api/people beyond roster.json), refreshed by run().
+const hired = new Set<string>();
+export async function refreshHired(server: string) {
+  try {
+    const res = await fetch(`${server}/api/people`, { headers: officeHeaders() }); // needs OBSERVER_TOKEN (v3)
+    if (!res.ok) return;
+    const people = (await res.json()) as { id: string }[];
+    for (const p of people) hired.add(p.id);
+  } catch {}
+}
+export const isHired = (name: string) => hired.has(name.trim().replace(/^@/, "").toLowerCase());
+
 export function makeMapper(cfg: Config) {
   const speakers = new Map<string, string>();
   for (const p of roster.people) speakers.set(norm(p.id), p.id).set(norm(p.name), p.id);
   for (const [k, v] of Object.entries(cfg.speakers)) speakers.set(norm(k), v);
   const ignored = new Set(cfg.ignoreSpeakers.map(norm));
-  const rooms = new Map(Object.entries(cfg.rooms).map(([k, v]) => [norm(k), v]));
+  const rooms = new Map(Object.entries(cfg.rooms ?? {}).map(([k, v]) => [norm(k), v]));
   const ids = roster.people.map((p) => p.id);
-  const forum = new Set((cfg.forumRooms ?? []).map(norm));
   const byLabel = (label: string) => roster.rooms.find((r) => norm(r.label) === norm(label))?.id;
-  // Re-read each time: switch-up.sh writes topics.json after the topics exist. Missing file = no topics yet.
-  const topics = (): Topics["topics"] => {
-    if (typeof cfg.topics === "object") return cfg.topics.topics;
-    try { return readJson(HERE + (cfg.topics ?? "topics.json")).topics ?? {}; } catch { return {}; }
-  };
 
   return {
+    /** Whether `name` maps without falling back to unknownSpeaker. */
+    knows: (name: string) => ignored.has(norm(name)) || speakers.has(norm(name)) || hired.has(norm(name)),
     speaker(name: string): string | null | "ignore" {
       if (ignored.has(norm(name))) return "ignore";
-      const hit = speakers.get(norm(name));
+      const hit = speakers.get(norm(name)) ?? (hired.has(norm(name)) ? norm(name) : undefined);
       if (hit) return hit;
       console.warn(`[observer] unknown speaker "${name}"` + (cfg.unknownSpeaker ? ` → ${cfg.unknownSpeaker} (add it to config.speakers)` : ", skipped"));
       return cfg.unknownSpeaker;
     },
-    /** Forum group: topic (by Switch thread id) → speaker's home department → war_room. Else one group per room. */
-    room(id: string, name: string | undefined, threadId: string | null, speaker: string): { room: string; thread_id?: number } | null {
-      const n = norm(name ?? "");
-      // Switch prefixes bridge rooms ("Telegram: Kratos D2C"), so match the forum name as a suffix too.
-      if (forum.has(n) || forum.has(norm(id)) || [...forum].some((f) => n.endsWith(": " + f))) {
-        const t = Object.entries(topics()).find(([, v]) => threadId && v.switch_thread_id === threadId);
-        if (t) return { room: t[0], thread_id: t[1].message_thread_id };
-        const home = roster.people.find((p) => p.id === speaker)?.topic;
-        return { room: (home && byLabel(home)) || "war_room" };
-      }
-      const hit = rooms.get(norm(id)) ?? rooms.get(n) ?? roster.rooms.find((r) => n.includes(r.label.toLowerCase()))?.id;
-      if (!hit) console.warn(`[observer] unknown room ${id} "${name ?? "?"}", skipped (add it to config.rooms or forumRooms)`);
-      return hit ? { room: hit } : null;
+    /** A placeholder department: config.rooms, else the speaker's home department, else war_room. The server
+     *  replaces it with the workspace's topic when the Switch thread is a known topic. */
+    room(id: string, name: string | undefined, speaker: string): string {
+      const hit = rooms.get(norm(id)) ?? rooms.get(norm(name ?? ""));
+      if (hit) return hit;
+      const home = roster.people.find((p) => p.id === speaker)?.topic;
+      return (home && byLabel(home)) || "war_room";
     },
-    targets: (text: string) => ids.filter((id) => text.toLowerCase().includes("@" + id)),
+    targets: (text: string) => [...new Set([...ids, ...hired])].filter((id) => text.toLowerCase().includes("@" + id)),
   };
 }
 
@@ -163,7 +162,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
   const auth = { Authorization: `Bearer ${creds.token}` };
   const connectionId = randomUUID(); // reused across reconnects (protocol: connection outlives socket)
   const map = makeMapper(cfg);
-  const roomNames = new Map<string, string>();
+  const roomNames = new Map<string, { name: string; chatId?: string }>();
   let cursor = 0;
   let stream: AbortController | null = null;
 
@@ -177,8 +176,8 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
   async function refreshRooms() {
     try {
       const res = await call("ops/list_rooms", {});
-      const { result } = (await res.json()) as { result: { room_id: string; name: string }[] };
-      for (const r of result) roomNames.set(r.room_id, r.name);
+      const { result } = (await res.json()) as { result: { room_id: string; name: string; external_channel_id?: string | number | null }[] };
+      for (const r of result) roomNames.set(r.room_id, { name: r.name, ...(r.external_channel_id ? { chatId: String(r.external_channel_id) } : {}) });
     } catch (e) {
       console.warn("[observer] list_rooms failed:", String(e));
     }
@@ -198,14 +197,22 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const text = String(p.body ?? "").trim();
     if (!text) return;
     if (!roomNames.has(ev.room_id)) await refreshRooms();
-    const speaker = map.speaker(String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? ""));
+    const name = String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? "");
+    // Someone we don't know yet may have just been hired: ask the office now, so their first words aren't "founder".
+    if (!map.knows(name)) await refreshHired(cfg.server);
+    const speaker = map.speaker(name);
     if (!speaker || speaker === "ignore") return;
-    const where = map.room(ev.room_id, roomNames.get(ev.room_id), p.thread_id ?? null, speaker);
-    if (!where) return;
-    const { room } = where;
+    const info = roomNames.get(ev.room_id);
+    const room = map.room(ev.room_id, info?.name, speaker);
     const targets = map.targets(text).filter((t) => t !== speaker);
-    const meta = { ...(targets.length ? { targets } : {}), ...(where.thread_id ? { thread_id: where.thread_id } : {}) };
-    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, ...(Object.keys(meta).length ? { meta } : {}) };
+    const meta = {
+      ...(targets.length ? { targets } : {}),
+      switch_room_id: String(ev.room_id),
+      ...(info?.name ? { room_name: info.name } : {}),
+      ...(info?.chatId ? { chat_id: info.chatId } : {}),
+      ...(p.thread_id ? { switch_thread_id: String(p.thread_id) } : {}),
+    };
+    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, meta };
     sendToOffice(cfg.server, office, `${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
   }
 

@@ -6,10 +6,8 @@
     "Switch",
     "d2c-observer"
   ],
-  "speakers": {},
-  "rooms": {},
-  "forumRooms": [
-    "Kratos D2C"
-  ],
-  "topics": "topics.json"
+  "speakers": {
+    "d2c-office": "founder"
+  },
+  "rooms": {}
 }

@@ -1,0 +1,14 @@
+{
+  "task": "P2",
+  "state": "done",
+  "progress": 100,
+  "done": [
+    "POST /api/command posts as Switch agent d2c-office (verified live: d2c-captain replied 'ok'); hiring is fully automatic via Switch managed agents on Console's controller (verified live, test hire answered and was removed); DELETE /api/employees/:id fires",
+    "Security: writes need JSON + local Host + office Origin (CSRF/DNS rebinding), proxied requests trusted only if every hop is loopback, vite proxy xfwd; hire cap 12 + 3/10 min, sanitised fields, library-only skills, team provider settings, generic Switch errors",
+    "Hires get switch/TELEGRAM_STYLE.md verbatim (drift-tested vs switch/agents/*.md); server npm test 26 pass + 1 skip, build + check + observer mock pass"
+  ],
+  "next": "",
+  "blockers": [],
+  "contract_requests": [],
+  "updated": "2026-11-06T21:35:00+05:30"
+}

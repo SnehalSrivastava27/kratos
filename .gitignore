@@ -9,3 +9,5 @@ dist/
 .data/
 observer/topics.json
 gallery/live-run/
+data/library.json
+data/*.tmp

@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { FEED, SWITCH_URL, TG_GROUP, TOPICS } from './data';
 import { TG_WALL, TgAvatar, TgMessages, TopicTabs, tgSubtitle, topicCounts } from './Telegram';
 import { Band, Container, EASE, Reveal, TwoTone } from './ui';
+import { Mark } from './Brands';
 
 const START = 3; // never show an empty chat
 
@@ -38,8 +39,8 @@ export default function TeamChat() {
           </p>
           <Tabs value={tab} onValueChange={(v) => setTab(v as 'tg' | 'wa')} className="mt-8">
             <TabsList className="h-10 rounded-full bg-black/[0.04] p-1">
-              <TabsTrigger value="tg" className="h-8 rounded-full px-4 text-[13.5px] data-active:shadow-sm"><span className="size-1.5 rounded-full bg-tg" />Telegram</TabsTrigger>
-              <TabsTrigger value="wa" className="h-8 rounded-full px-4 text-[13.5px] data-active:shadow-sm">WhatsApp <span className="rounded-full bg-neutral-200/70 px-1.5 text-[10.5px] font-medium text-neutral-500">Soon</span></TabsTrigger>
+              <TabsTrigger value="tg" className="h-8 rounded-full px-4 text-[13.5px] data-active:shadow-sm"><Mark name="telegram" color="#26A5E4" className="size-4" />Telegram</TabsTrigger>
+              <TabsTrigger value="wa" className="h-8 rounded-full px-4 text-[13.5px] data-active:shadow-sm"><Mark name="whatsapp" color="#25D366" className="size-4" />WhatsApp <span className="rounded-full bg-neutral-200/70 px-1.5 text-[10.5px] font-medium text-neutral-500">Soon</span></TabsTrigger>
             </TabsList>
           </Tabs>
           <ul className="mt-8 flex flex-col gap-3 text-[15px] text-neutral-600">

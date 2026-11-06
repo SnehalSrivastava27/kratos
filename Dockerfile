@@ -21,5 +21,5 @@ COPY --from=build /app/server/dist server/dist
 COPY --from=build /app/web/dist web/dist
 EXPOSE 8787
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- "http://127.0.0.1:${PORT}/api/ready" || exit 1
-# Mounted volumes (Fly, docker -v) come up root-owned: fix ownership, then run as `node`.
+# Mounted volumes (docker -v) come up root-owned: fix ownership, then run as `node`.
 CMD ["sh", "-c", "mkdir -p \"$DATA_DIR\" && chown node:node \"$DATA_DIR\" && exec su-exec node node server/dist/index.js"]

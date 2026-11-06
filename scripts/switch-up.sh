@@ -5,9 +5,9 @@
 #   scripts/switch-up.sh            # needs TELEGRAM_BOT_TOKEN in <main checkout>/.env
 #
 # What it does, as the Console's own admin (credentials read from Console's run dir, never printed):
-#   1. signs in to the local gateway        5. joins every team agent + d2c-observer to "Kratos D2C"
-#   2. connects the Telegram bot             6. creates the 6 forum topics (once the group is a forum and
-#   3. checks Claude Code is available          the bot an admin) and writes observer/topics.json
+#   1. signs in to the local gateway        5. joins every team agent + d2c-observer to "Kratos D2C" if it exists
+#   2. connects the Telegram bot             6. (v3) nothing: the office server creates the topics when a signed-in
+#   3. checks Claude Code is available          user links a group at /connect (docs/GO_LIVE.md)
 #   4. stores the team template, registers   7. starts the office server (:8787) and the observer
 #      d2c-observer (passive, owner-only)    8. prints the steps only a human can do
 # Never calls getUpdates/setWebhook: Switch itself polls the bot.
@@ -119,74 +119,21 @@ else
   json 'print("• room", repr(d["name"]), "telegram chat", d["external_channel_id"], "members:", d["agent_count"], "agents")' < "$TMP/room"
 fi
 
-# ---- 6. forum topics (read-only checks + createForumTopic; never polls) -----------------------
-TOPICS_JSON="$ROOT/observer/topics.json"
-if [ -n "$CHAT_ID" ]; then
-  tg() { curl -s "https://api.telegram.org/bot$BOT_TOKEN/$1" "${@:2}"; }
-  CHAT=$(tg getChat --data-urlencode "chat_id=$CHAT_ID")
-  NEW_ID=$(echo "$CHAT" | json 'print((d.get("parameters") or {}).get("migrate_to_chat_id") or (d.get("result") or {}).get("migrate_to_chat_id") or "")')
-  if [ -n "$NEW_ID" ]; then CHAT_ID=$NEW_ID; CHAT=$(tg getChat --data-urlencode "chat_id=$CHAT_ID"); fi
-  IS_FORUM=$(echo "$CHAT" | json 'print("yes" if (d.get("result") or {}).get("is_forum") else "no")')
-  BOT_ID=${BOT_TOKEN%%:*}
-  ADMIN=$(tg getChatMember --data-urlencode "chat_id=$CHAT_ID" -d "user_id=$BOT_ID" \
-    | json 'r=d.get("result") or {}; print("yes" if r.get("status")=="creator" or (r.get("status")=="administrator" and r.get("can_manage_topics")) else "no")')
-  say "Telegram group: forum=$IS_FORUM, bot admin with Manage topics=$ADMIN"
-  [ "$IS_FORUM" = yes ] || todo "Phone: \"$ROOM_NAME\" → Edit → Topics ON."
-  [ "$ADMIN" = yes ] || todo "Phone: \"$ROOM_NAME\" → Edit → Administrators → Add Admin → @$BOT_USERNAME, with \"Manage topics\" on."
-  if [ "$IS_FORUM" = yes ] && [ "$ADMIN" = yes ]; then
-    for spec in "${TOPICS[@]}"; do
-      IFS=: read -r key name color <<<"$spec"
-      tid=$(python3 -c 'import json,sys
-try: t=json.load(open(sys.argv[1])); print(t["topics"][sys.argv[2]]["message_thread_id"] if str(t.get("chat_id"))==sys.argv[3] else "")
-except Exception: print("")' "$TOPICS_JSON" "$key" "$CHAT_ID")
-      if [ -n "$tid" ]; then # still there? editing to the same name is a no-op, a deleted topic errors
-        tg editForumTopic --data-urlencode "chat_id=$CHAT_ID" -d "message_thread_id=$tid" --data-urlencode "name=$name" \
-          | json 'sys.exit(0 if d.get("ok") or "NOT_MODIFIED" in d.get("description","") else 1)' || tid=""
-      fi
-      if [ -z "$tid" ]; then
-        tid=$(tg createForumTopic --data-urlencode "chat_id=$CHAT_ID" --data-urlencode "name=$name" -d "icon_color=$color" \
-          | json 'print(d["result"]["message_thread_id"]) if d.get("ok") else sys.exit("createForumTopic: "+d.get("description",""))')
-        say "created topic \"$name\" (#$tid)"
-      fi
-      echo "$key:$name:$tid" >> "$TMP/topics"
-    done
-    # Switch threads a topic once someone sends a command in it (the command post is mapped to the
-    # bare topic id). Read that mapping, read-only, so agents and the observer can address topics.
-    export PGPASSWORD; PGPASSWORD=$(envval "$CORE_ENV" DB_PASSWORD)
-    BRIDGE_ID=$(gw GET /collaborations | json 'print(next(b["bridge_id"] for b in d if b["bridge_type"]=="telegram"))')
-    python3 - "$TMP/topics" "$TOPICS_JSON" "$CHAT_ID" "$BRIDGE_ID" "$(envval "$CORE_ENV" DB_PORT)" "$(envval "$CORE_ENV" DB_USER)" "$(envval "$CORE_ENV" DB_NAME)" <<'PY' > "$TMP/unanchored"
-import json, subprocess, sys
-spec, out, chat, bridge, port, user, db = sys.argv[1:]
-topics = {}
-for line in open(spec):
-    key, name, tid = line.strip().split(":")
-    sql = ("set default_transaction_read_only=on; set app.tenant_id='00000000-0000-0000-0000-000000000000'; "
-           f"select transport_event_id from bridge_message_map where bridge_id='{bridge}' and external_post_id='{int(tid)}';")
-    try:
-        ev = subprocess.run(["psql", "-h", "127.0.0.1", "-p", port, "-U", user, "-d", db, "-Atqc", sql],
-                            capture_output=True, text=True, timeout=10).stdout.split()
-    except Exception:
-        ev = []
-    topics[key] = {"name": name, "message_thread_id": int(tid), "switch_thread_id": ev[-1] if ev else None}
-    if not ev: print(name)
-json.dump({"chat_id": chat, "topics": topics}, open(out, "w"), indent=2)
-open(out, "a").write("\n")
-PY
-    say "wrote observer/topics.json"
-    [ "$AGENT_DIR" != "$ROOT" ] && cp "$TOPICS_JSON" "$AGENT_DIR/observer/topics.json" 2>/dev/null || true
-    if [ -s "$TMP/unanchored" ]; then
-      todo "Phone: in each of these topics send /list_agents once (Switch then treats the topic as one thread; rerun this script after): $(paste -sd, "$TMP/unanchored" | sed 's/,/, /g')."
-    fi
-  fi
-fi
+# ---- 6. workspaces (v3) -------------------------------------------------------------------------
+# Topics are no longer made here: the office server creates them when a user links the group with a code
+# (sign up at /signup, then /connect). The old observer/topics.json is read once, to keep the existing
+# "Kratos D2C" topics and history for whoever links that group.
+todo "Browser: open http://localhost:8787/signup, sign up, then /connect, and send the 6-digit code in the Telegram group (docs/GO_LIVE.md)."
 
 # ---- 7. office server + observer -------------------------------------------------------------
 grep -q '^OBSERVER_TOKEN=' "$ENV_FILE" || echo "OBSERVER_TOKEN=$(openssl rand -hex 24)" >> "$ENV_FILE"
 export OBSERVER_TOKEN; OBSERVER_TOKEN=$(envval "$ENV_FILE" OBSERVER_TOKEN)
-if curl -sf -o /dev/null "http://localhost:8787/api/history?limit=1"; then say "office server already on :8787"
+if curl -sf -o /dev/null "http://localhost:8787/api/health"; then say "office server already on :8787"
 else
   (cd "$ROOT/server" && { [ -d node_modules ] || npm install --silent; } && npm run build --silent >/dev/null)
-  (cd "$ROOT/server" && PORT=8787 exec nohup node dist/index.js > "$LOG_DIR/office-server.log" 2>&1 < /dev/null) & echo $! > "$LOG_DIR/office-server.pid"
+  # ENV_FILE: the server reads TELEGRAM_BOT_TOKEN from it (linking checks + forum topics); TOPICS_FILE: the pre-v3 map
+  (cd "$ROOT/server" && PORT=8787 ENV_FILE="$ENV_FILE" TOPICS_FILE="${TOPICS_FILE:-$MAIN/observer/topics.json}" BOT_USERNAME="$BOT_USERNAME" \
+    exec nohup node dist/index.js > "$LOG_DIR/office-server.log" 2>&1 < /dev/null) & echo $! > "$LOG_DIR/office-server.pid"
   sleep 2; say "office server started (pid $(cat "$LOG_DIR/office-server.pid"), log $LOG_DIR/office-server.log)"
 fi
 if [ -f "$LOG_DIR/observer.pid" ] && kill -0 "$(cat "$LOG_DIR/observer.pid")" 2>/dev/null; then say "observer already running (pid $(cat "$LOG_DIR/observer.pid"))"
