@@ -70,8 +70,9 @@ class HttpError extends Error {
   }
 }
 const sha = (s: string) => createHash("sha256").update(s).digest();
+const hasToken = (req: IncomingMessage, token: string) => !!token && timingSafeEqual(sha(req.headers.authorization ?? ""), sha(`Bearer ${token}`));
 function requireToken(req: IncomingMessage, token: string) {
-  if (token && !timingSafeEqual(sha(req.headers.authorization ?? ""), sha(`Bearer ${token}`))) throw new HttpError(401, "unauthorized");
+  if (token && !hasToken(req, token)) throw new HttpError(401, "unauthorized");
 }
 // Behind Fly's proxy every request comes from the proxy; Fly sets Fly-Client-IP (clients can't spoof it there).
 const clientIp = (req: IncomingMessage) => (env.FLY_APP_NAME && String(req.headers["fly-client-ip"] ?? "")) || req.socket.remoteAddress || "?";
@@ -148,7 +149,8 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
   const method = req.method === "HEAD" ? "GET" : req.method; // node drops the body for HEAD
   const route = `${method} ${url.pathname}`;
 
-  if (method === "POST") rateLimit(clientIp(req));
+  // Valid tokens skip the limit: an observer burst must not drop events. Bad/missing tokens are limited (brute force).
+  if (method === "POST" && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(clientIp(req));
 
   if (route === "GET /api/health")
     return send(res, 200, { ok: true, version: VERSION, uptime: process.uptime(), clients: wss.clients.size, history: recent(RING_MAX).length, db: dbStatus() });
@@ -224,7 +226,8 @@ const server = createServer(async (req, res) => {
   } catch (e) {
     if (e instanceof HttpError) {
       if (e.status === 413) res.setHeader("connection", "close"); // don't read the rest of a huge body
-      return send(res, e.status, { error: e.message }, e.status === 401 ? { "www-authenticate": "Bearer" } : {});
+      const extra: Record<string, string> = e.status === 401 ? { "www-authenticate": "Bearer" } : e.status === 429 ? { "retry-after": "60" } : {};
+      return send(res, e.status, { error: e.message }, extra);
     }
     if (e instanceof URIError) return send(res, 400, { error: "bad path" });
     log.error("request failed", e, { method: req.method, path: url.pathname });

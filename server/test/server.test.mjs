@@ -98,6 +98,18 @@ test("rate limit → 429 and WS client cap", async () => {
   }
 });
 
+test("rate limit: bad tokens are limited, a valid token is not", async () => {
+  const s = await start({ RATE_LIMIT_PER_MIN: "2", OBSERVER_TOKEN: "obs" });
+  try {
+    const bad = [];
+    for (let i = 0; i < 3; i++) bad.push((await post(s.base, "/api/events", ev(), { authorization: "Bearer nope" })).status);
+    assert.deepEqual(bad, [401, 401, 429]);
+    for (let i = 0; i < 5; i++) assert.equal((await post(s.base, "/api/events", ev(), { authorization: "Bearer obs" })).status, 201);
+  } finally {
+    await s.stop();
+  }
+});
+
 test("persistence: history and room events survive a restart", async () => {
   const DATA_DIR = tmp();
   let s = await start({ DATA_DIR });
