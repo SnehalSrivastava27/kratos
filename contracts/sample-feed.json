@@ -1,8 +1,8 @@
 [  {"id": "evt-001", "t": 0, "room": "war_room", "speaker": "founder", "type": "message", "text": "Plan our festive sale: 30% off, 5 days, ₹5L marketing budget"},
-  {"id": "evt-002", "t": 2500, "room": "war_room", "speaker": "d2c-captain", "type": "assign", "text": "🎯 Festive sale · 30% off · 5 days · ₹5L\n@d2c-analyst forecast first, then Ads, Creators, Ops, Design.", "meta": {"targets": ["d2c-analyst", "d2c-ads", "d2c-influencers", "d2c-ops", "d2c-design"]}},
-  {"id": "evt-003", "t": 6000, "room": "analytics", "speaker": "d2c-analyst", "type": "done", "text": "📊 Forecast (5 days)\nSKU01 · 800 · SKU02 · 1,400 · SKU03 · 600\nSKU04 · 240 · SKU05 · 300\nRevenue ≈ ₹20.4L"},
-  {"id": "evt-004", "t": 10000, "room": "creators", "speaker": "d2c-influencers", "type": "done", "text": "⭐ Shortlist: Riya Glows, SkinBySana, The Derm Diaries, Meera Minimal\nTotal fee ₹3.55L"},
-  {"id": "evt-006", "t": 17000, "room": "creators", "speaker": "d2c-influencers", "type": "done", "text": "⭐ Revised: GlowWithAnu, Desi Skin Desk, Kavya Care, Tanvi Tries\nTotal ₹1.18L"},
-  {"id": "evt-008", "t": 23000, "room": "war_room", "speaker": "d2c-captain", "type": "approval_needed", "text": "🎯 Final plan ready. @founder approve?", "meta": {"targets": ["founder"]}},
+  {"id": "evt-002", "t": 2500, "room": "war_room", "speaker": "d2c-captain", "type": "assign", "text": "🎯 **Festive sale plan**\n\n- **Offer:** **30%** off, **5** days, **₹5L**\n- **First:** @d2c-analyst forecast\n- **Then:** Ads, Creators, Ops, Design\n\n_Next: @d2c-analyst starts now._", "meta": {"targets": ["d2c-analyst", "d2c-ads", "d2c-influencers", "d2c-ops", "d2c-design"]}},
+  {"id": "evt-003", "t": 6000, "room": "analytics", "speaker": "d2c-analyst", "type": "done", "text": "📊 **Forecast for 5 days**\n\n- **SKU01:** **800** units\n- **SKU02:** **1,400** units\n- **SKU03:** **600** units\n- **SKU04:** **240** units\n- **SKU05:** **300** units\n\n**_Revenue about ₹20.4L._**"},
+  {"id": "evt-004", "t": 10000, "room": "creators", "speaker": "d2c-influencers", "type": "done", "text": "⭐ **Creator shortlist**\n\n- **Picks:** Riya Glows, SkinBySana\n- **Plus:** The Derm Diaries, Meera Minimal\n\n**_Total fee ₹3.55L._**"},
+  {"id": "evt-006", "t": 17000, "room": "creators", "speaker": "d2c-influencers", "type": "done", "text": "⭐ **Revised shortlist**\n\n- **Picks:** GlowWithAnu, Desi Skin Desk\n- **Plus:** Kavya Care, Tanvi Tries\n\n**_Total ₹1.18L._**"},
+  {"id": "evt-008", "t": 23000, "room": "war_room", "speaker": "d2c-captain", "type": "approval_needed", "text": "🎯 **Final plan ready**\n\n**_@founder approve?_**", "meta": {"targets": ["founder"]}},
   {"id": "evt-009", "t": 26000, "room": "war_room", "speaker": "founder", "type": "celebrate", "text": "Approved 🚀"}
 ]
