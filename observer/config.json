@@ -1,0 +1,8 @@
+{
+  "server": "http://localhost:8787",
+  "credentials": ".switch/agents/d2c-observer.json",
+  "unknownSpeaker": "founder",
+  "ignoreSpeakers": ["Switch", "d2c-observer"],
+  "speakers": {},
+  "rooms": {}
+}
