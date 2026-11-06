@@ -136,7 +136,7 @@ export function Footer() {
       <div className="border-t border-black/[0.07]">
         <Container className="flex flex-col gap-2 py-6 text-[13px] text-neutral-400 sm:flex-row sm:justify-between">
           <span>Powered by <a href={SWITCH_URL} target="_blank" rel="noreferrer" className="text-neutral-600 hover:text-foreground">Switch</a> · Built for Flip the Switch 2026</span>
-          <span>Demo brand: Kesar &amp; Co. (fictional)</span>
+          <span>Demo brand: Kesar &amp; Co. (fictional) · Brand names and logos are trademarks of their owners, used to identify sales channels.</span>
         </Container>
       </div>
     </footer>
