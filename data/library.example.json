@@ -1,0 +1,134 @@
+{
+ "updatedAt": 1793977639859,
+ "librarian": "idle",
+ "shelves": [
+  {
+   "id": "war_room",
+   "label": "War Room",
+   "books": [
+    {
+     "id": "gstack:autoplan",
+     "name": "autoplan",
+     "description": "Auto-review pipeline — reads the full CEO, design, eng, and DX review skills from disk and runs them sequentially with auto-decisions using 6 decision principles. (gstack)",
+     "source": "gstack",
+     "department": "war_room",
+     "why": "Runs the CEO, design and eng plan reviews automatically"
+    },
+    {
+     "id": "gstack:office-hours",
+     "name": "office-hours",
+     "description": "YC Office Hours — two modes. (gstack)",
+     "source": "gstack",
+     "department": "war_room",
+     "why": "YC-style founder strategy sessions."
+    }
+   ]
+  },
+  {
+   "id": "analytics",
+   "label": "Analytics",
+   "books": [
+    {
+     "id": "plugin:posthog:analyzing-expensive-users",
+     "name": "analyzing-expensive-users",
+     "description": "Analyze the most expensive users in AI observability and explain why they cost so much. Use when the user asks about top spenders, expensive users, per-user LLM cost, user-level cost drivers, or patterns behind high AI observability spend.",
+     "source": "plugin:posthog",
+     "department": "analytics",
+     "why": "Analyses per-user AI cost metrics"
+    }
+   ]
+  },
+  {
+   "id": "ads",
+   "label": "Ads",
+   "books": [
+    {
+     "id": "plugin:posthog:signals-scout-web-analytics",
+     "name": "signals-scout-web-analytics",
+     "description": "Signals scout for PostHog web traffic. Watches per-channel session volume, attribution breakage, and landing-page health (bounce and 404 steps) against the site's own baseline. Per- page web vitals belong to `signals-scout-web-vitals`.",
+     "source": "plugin:posthog",
+     "department": "ads",
+     "why": "Watches channel traffic, attribution and landing-page health."
+    }
+   ]
+  },
+  {
+   "id": "creators",
+   "label": "Creators",
+   "books": [
+    {
+     "id": "~/.agents/skills:hyperframes",
+     "name": "hyperframes",
+     "description": "Read first to make, edit, animate or render any video with HyperFrames (HTML rendered to video), including launch films, explainers, music videos, charts, maps, vertical clips, title cards, captions and overlays. Holds the render contract, ",
+     "source": "~/.agents/skills",
+     "department": "creators",
+     "why": "Makes launch films, explainers, and social video clips."
+    }
+   ]
+  },
+  {
+   "id": "ops",
+   "label": "Ops",
+   "books": [
+    {
+     "id": "gstack:canary",
+     "name": "canary",
+     "description": "Post-deploy canary monitoring. (gstack)",
+     "source": "gstack",
+     "department": "ops",
+     "why": "Watches production after a deploy"
+    }
+   ]
+  },
+  {
+   "id": "design",
+   "label": "Design",
+   "books": [
+    {
+     "id": "gstack:design-review",
+     "name": "design-review",
+     "description": "Designer's eye QA: finds visual inconsistency, spacing issues, hierarchy problems, AI slop patterns, and slow interactions — then fixes them. (gstack)",
+     "source": "gstack",
+     "department": "design",
+     "why": "Visual QA for spacing, hierarchy and polish"
+    }
+   ]
+  },
+  {
+   "id": "engineering",
+   "label": "Engineering",
+   "books": [
+    {
+     "id": "gstack:investigate",
+     "name": "investigate",
+     "description": "Systematic debugging with root cause investigation. (gstack)",
+     "source": "gstack",
+     "department": "engineering",
+     "why": "Debugs systematically to find the root cause"
+    },
+    {
+     "id": "gstack:review",
+     "name": "review",
+     "description": "Pre-landing PR review. (gstack)",
+     "source": "gstack",
+     "department": "engineering",
+     "why": "Pre-landing pull request code review."
+    }
+   ]
+  },
+  {
+   "id": "general",
+   "label": "General",
+   "books": [
+    {
+     "id": "gstack:context-save",
+     "name": "context-save",
+     "description": "Save working context. (gstack)",
+     "source": "gstack",
+     "department": "general",
+     "why": "Saves session context, works for any department"
+    }
+   ]
+  }
+ ]
+}
