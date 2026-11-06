@@ -80,7 +80,8 @@ function serveFile(res: ServerResponse, base: string, rel: string, headers: Reco
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", "http://x");
-  const route = `${req.method} ${url.pathname}`;
+  const method = req.method === "HEAD" ? "GET" : req.method; // node drops the body for HEAD
+  const route = `${method} ${url.pathname}`;
   try {
     if (route === "GET /api/health") return send(res, 200, { ok: true, uptime: process.uptime(), clients: wss.clients.size, history: history.length });
     if (route === "GET /api/roster") {
@@ -110,13 +111,13 @@ const server = createServer(async (req, res) => {
       stopReplay();
       return send(res, 200, { ok: true });
     }
-    if (req.method === "GET" && url.pathname.startsWith("/gallery/")) {
+    if (method === "GET" && url.pathname.startsWith("/gallery/")) {
       const r = serveFile(res, GALLERY, decodeURIComponent(url.pathname.slice("/gallery".length)));
       if (r === "forbidden") return send(res, 403, { error: "forbidden" });
       if (!r) return send(res, 404, { error: "not found" });
       return;
     }
-    if (SERVE_WEB && req.method === "GET" && !url.pathname.startsWith("/api/")) {
+    if (SERVE_WEB && method === "GET" && !url.pathname.startsWith("/api/")) {
       const path = decodeURIComponent(url.pathname);
       const cache: Record<string, string> = path.startsWith("/assets/") ? { "cache-control": "public, max-age=31536000, immutable" } : {};
       const r = path === "/" ? false : serveFile(res, DIST, path, cache);
