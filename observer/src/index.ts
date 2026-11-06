@@ -15,7 +15,13 @@ export type Config = {
   ignoreSpeakers: string[];
   speakers: Record<string, string>;
   rooms: Record<string, string>;
+  /** Switch rooms that are one Telegram forum group: departments are topics inside them. */
+  forumRooms?: string[];
+  /** Path (relative to observer/) of the topic map scripts/switch-up.sh writes, or the map itself. */
+  topics?: string | Topics;
 };
+/** observer/topics.json: department room id → its forum topic, by Telegram id and by Switch thread id. */
+export type Topics = { chat_id?: string; topics: Record<string, { name: string; message_thread_id: number; switch_thread_id?: string | null }> };
 type Frame = { event: string; data: string; id?: string };
 
 export function loadConfig(): Config {
@@ -36,7 +42,7 @@ export function loadCreds(cfg: Config): Creds {
 // ---- mapping ----
 const norm = (s: string) => s.trim().replace(/^@/, "").toLowerCase();
 const roster = readJson(HERE + "../contracts/roster.json") as {
-  people: { id: string; name: string }[];
+  people: { id: string; name: string; topic?: string }[];
   rooms: { id: string; label: string }[];
 };
 
@@ -47,6 +53,13 @@ export function makeMapper(cfg: Config) {
   const ignored = new Set(cfg.ignoreSpeakers.map(norm));
   const rooms = new Map(Object.entries(cfg.rooms).map(([k, v]) => [norm(k), v]));
   const ids = roster.people.map((p) => p.id);
+  const forum = new Set((cfg.forumRooms ?? []).map(norm));
+  const byLabel = (label: string) => roster.rooms.find((r) => norm(r.label) === norm(label))?.id;
+  // Re-read each time: switch-up.sh writes topics.json after the topics exist. Missing file = no topics yet.
+  const topics = (): Topics["topics"] => {
+    if (typeof cfg.topics === "object") return cfg.topics.topics;
+    try { return readJson(HERE + (cfg.topics ?? "topics.json")).topics ?? {}; } catch { return {}; }
+  };
 
   return {
     speaker(name: string): string | null | "ignore" {
@@ -56,11 +69,18 @@ export function makeMapper(cfg: Config) {
       console.warn(`[observer] unknown speaker "${name}"` + (cfg.unknownSpeaker ? ` → ${cfg.unknownSpeaker} (add it to config.speakers)` : ", skipped"));
       return cfg.unknownSpeaker;
     },
-    room(id: string, name: string | undefined): string | null {
+    /** Forum group: topic (by Switch thread id) → speaker's home department → war_room. Else one group per room. */
+    room(id: string, name: string | undefined, threadId: string | null, speaker: string): { room: string; thread_id?: number } | null {
       const n = norm(name ?? "");
+      if (forum.has(n) || forum.has(norm(id))) {
+        const t = Object.entries(topics()).find(([, v]) => threadId && v.switch_thread_id === threadId);
+        if (t) return { room: t[0], thread_id: t[1].message_thread_id };
+        const home = roster.people.find((p) => p.id === speaker)?.topic;
+        return { room: (home && byLabel(home)) || "war_room" };
+      }
       const hit = rooms.get(norm(id)) ?? rooms.get(n) ?? roster.rooms.find((r) => n.includes(r.label.toLowerCase()))?.id;
-      if (!hit) console.warn(`[observer] unknown room ${id} "${name ?? "?"}", skipped (add it to config.rooms)`);
-      return hit ?? null;
+      if (!hit) console.warn(`[observer] unknown room ${id} "${name ?? "?"}", skipped (add it to config.rooms or forumRooms)`);
+      return hit ? { room: hit } : null;
     },
     targets: (text: string) => ids.filter((id) => text.toLowerCase().includes("@" + id)),
   };
@@ -138,11 +158,14 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const text = String(p.body ?? "").trim();
     if (!text) return;
     if (!roomNames.has(ev.room_id)) await refreshRooms();
-    const room = map.room(ev.room_id, roomNames.get(ev.room_id));
     const speaker = map.speaker(String(p.on_behalf_of ?? p.sender_name ?? p.sender ?? ""));
-    if (!room || !speaker || speaker === "ignore") return;
+    if (!speaker || speaker === "ignore") return;
+    const where = map.room(ev.room_id, roomNames.get(ev.room_id), p.thread_id ?? null, speaker);
+    if (!where) return;
+    const { room } = where;
     const targets = map.targets(text).filter((t) => t !== speaker);
-    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, ...(targets.length ? { meta: { targets } } : {}) };
+    const meta = { ...(targets.length ? { targets } : {}), ...(where.thread_id ? { thread_id: where.thread_id } : {}) };
+    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, ...(Object.keys(meta).length ? { meta } : {}) };
     try {
       const res = await fetch(`${cfg.server}/api/events`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(office) });
       console.log(`[observer] ${res.status} ${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
