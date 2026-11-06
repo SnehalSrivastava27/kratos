@@ -39,7 +39,7 @@ tg getChatMember ... -d "user_id=$BOT_ID"                        # admin + can_m
 tg createForumTopic --data-urlencode "chat_id=$CHAT_ID" --data-urlencode "name=War Room" -d "icon_color=7322096"
 ```
 (`scripts/switch-up.sh:122-152`). In v3 the office server does the same per linked workspace
-(`task/A1:server/src/workspaces.ts:232-264`, see [08](08-accounts-and-workspaces.md)).
+(`server/src/workspaces.ts:232-264`, see [08](08-accounts-and-workspaces.md)).
 
 ## The `/list_agents` trick: anchoring a topic as a thread
 
@@ -98,7 +98,7 @@ room.id, f"{bridge.display_name}: {channel_name}", channel_name
 if (forum.has(n) || forum.has(norm(id)) || [...forum].some((f) => n.endsWith(": " + f))) {
 ```
 (`observer/src/index.ts:126-127`, commit `5ec8d2f`; also `server/src/switch.ts:77`; v3 strips it:
-`meta.room_name.replace(/^Telegram:\s*/i, "")`, `task/A1:server/src/workspaces.ts:146`).
+`meta.room_name.replace(/^Telegram:\s*/i, "")`, `server/src/workspaces.ts:146`).
 Better still, match by Telegram chat id when you have it (`server/src/switch.ts:73-80`).
 
 ## Adding agents to the room
@@ -119,4 +119,4 @@ Bot API calls follow Telegram's `migrate_to_chat_id` hint:
 NEW_ID=$(echo "$CHAT" | json 'print((d.get("parameters") or {}).get("migrate_to_chat_id") or ...)')
 if [ -n "$NEW_ID" ]; then CHAT_ID=$NEW_ID; CHAT=$(tg getChat --data-urlencode "chat_id=$CHAT_ID"); fi
 ```
-(`scripts/switch-up.sh:126-128`; same in `task/A1:server/src/workspaces.ts:233-238`)
+(`scripts/switch-up.sh:126-128`; same in `server/src/workspaces.ts:233-238`)

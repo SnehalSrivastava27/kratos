@@ -88,7 +88,7 @@ Switch agent, and frees the desk (`server/src/switch.ts:170-178`, `server/src/of
 Every agent that must hear the group is joined through the same gateway call,
 `POST /gateway/rooms/{room}/agents {"agent_ids": [...]}`: the six team agents and the observer
 (`scripts/switch-up.sh:115-116`), `d2c-office` on first use (`server/src/switch.ts:96`), each hire
-(`activate`), and in v3 every agent of a newly linked workspace (`task/A1:server/src/workspaces.ts:266`).
+(`activate`), and in v3 every agent of a newly linked workspace (`server/src/workspaces.ts:266`).
 
 ## Caps and the security fixes
 

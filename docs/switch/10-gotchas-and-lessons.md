@@ -24,7 +24,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
 - **Symptom:** Bot API calls on the stored chat id fail after turning Topics on.
 - **Cause:** converting to a forum makes a **supergroup with a new chat id**.
 - **Fix:** Switch re-points its room by itself. Our own code follows `migrate_to_chat_id` from
-  `getChat` (`scripts/switch-up.sh:126-128`, `task/A1:server/src/workspaces.ts:233-238`).
+  `getChat` (`scripts/switch-up.sh:126-128`, `server/src/workspaces.ts:233-238`).
 
 ### 4. The room is called "Telegram: Kratos D2C"
 - **Symptom:** the observer skipped every message: "unknown room".
@@ -110,7 +110,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
   and the per-install `observer/topics.json` (commit `e5a83ad`).
 - Production refuses to start without `OBSERVER_TOKEN` and `ADMIN_TOKEN` (commit `0e0da41`).
 - Bot API errors never include the URL, because it contains the token
-  (`task/A1:server/src/workspaces.ts:199`).
+  (`server/src/workspaces.ts:199`).
 
 ## The office
 

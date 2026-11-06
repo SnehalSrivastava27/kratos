@@ -96,5 +96,5 @@ All diagrams are Excalidraw files: open the `.excalidraw` at excalidraw.com (Fil
 - `path:line` = a file in this repo.
 - `switch:path:line` = the Switch source, [`sandbox-quantum/switch`](https://github.com/sandbox-quantum/switch)
   at commit `93c132c`. `switch:docs/official/*` is the synced copy of docs.switchagents.ai.
-- `task/A1:path` = the accounts branch, being merged now.
+- `path` = the accounts branch, being merged now.
 - The research notes behind all of this: [`contracts/switch-protocol-notes.md`](../../contracts/switch-protocol-notes.md).

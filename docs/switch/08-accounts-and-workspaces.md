@@ -4,8 +4,7 @@
 You prove a group is yours by sending a 6-digit code in it. Switch carries the code to us like
 any other message.
 
-> Status: built on branch `task/A1` (contract v3), being merged now. Sources are cited as
-> `task/A1:<path>`; `git show task/A1:contracts/api.md` has the full contract.
+> Status: merged to main (contract v3). Full contract: `contracts/api.md` "v3".
 
 ![Workspace linking](../diagrams/workspace-linking.png)
 
@@ -21,7 +20,7 @@ group, that would show one founder's sales numbers to another. The rule now
 ## Accounts
 
 - Email + password, hashed with **scrypt** (`N = 2^15`, r = 8), min 10 characters
-  (`task/A1:server/src/auth.ts:1-17`). Unknown emails still pay one scrypt, so login time doesn't
+  (`server/src/auth.ts:1-17`). Unknown emails still pay one scrypt, so login time doesn't
   reveal which emails exist (`auth.ts:25`).
 - Session = random 32-byte id in cookie `hq_session` (HttpOnly, SameSite=Lax, Secure over https,
   30 days), stored **hashed** in SQLite.
@@ -42,7 +41,7 @@ group, that would show one founder's sales numbers to another. The rule now
 | 9 | Server → Switch gateway | Join the 6 team agents, the observer and `d2c-office` to the room |
 | 10 | You | `/connect` shows **ready**; `/app` shows only your group |
 
-(`docs/GO_LIVE.md` on task/A1; code in `task/A1:server/src/workspaces.ts`)
+(`docs/GO_LIVE.md` on task/A1; code in `server/src/workspaces.ts`)
 
 ### Step 3 is the clever part
 
@@ -55,7 +54,7 @@ const rooms = await gw("GET", "/rooms");
 const fresh = rooms.filter((r) => r.bridge_type === "telegram" && !observerIn.has(r.id) && !wsByRoom(r.id));
 for (const r of fresh) await joinRoom(r.id, obs.id);
 ```
-(`task/A1:server/src/workspaces.ts:96-109`). If you sent the code before the observer got in,
+(`server/src/workspaces.ts:96-109`). If you sent the code before the observer got in,
 sending it again works.
 
 ### The code
@@ -66,7 +65,7 @@ while (liveCode(code)); // unique among live codes
 sql().prepare("INSERT INTO link_codes (code_hash, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)")
   .run(sha(code), user.id, now, expiresAt);
 ```
-(`task/A1:server/src/workspaces.ts:71-82`)
+(`server/src/workspaces.ts:71-82`)
 
 - 6 digits, **15 minutes**, **single use**; a new code voids your older ones.
 - Stored as a **hash**, never in clear.
@@ -78,7 +77,7 @@ sql().prepare("INSERT INTO link_codes (code_hash, user_id, created_at, expires_a
 
 - **Unlinked rooms are never stored or broadcast.** A message from a room with no workspace is
   only recorded as a *link attempt*: room id, name, chat id, time, never the text
-  (`task/A1:contracts/api.md`, "v3 details"; `workspaces.ts:145-151`).
+  (`contracts/api.md`, "v3 details"; `workspaces.ts:145-151`).
 - Every stored event gets a server-assigned `ws`. Any `ws` the observer sends is ignored.
 - `/api/history`, `/ws`, `/api/rooms`, `/api/people`, `/api/command`, `/api/employees` and the
   library need a session and act on `?ws=<id>`. Someone else's `ws` → 403. Each WebSocket only
