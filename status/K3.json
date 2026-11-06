@@ -5,7 +5,8 @@
  "done": [
   "kit metric: 50 named D2C metrics in kit/lib/metrics.mjs (sales, RTO/returns, CM1-3, ROAS/MER/CAC, creators, cohorts/LTV, cover/stockout, POs, payroll, EBITDA, runway); validated filters/--by, suggestions, returns definition + filters + source_tables + the exact SQL; kit brief <dept> for 7 departments with month-vs-previous and policy checks",
   "Speed: CSVs + 17 marts cached in read-only data/.cache/kratos.db keyed by CSV mtimes/size + mart version (atomic temp+rename, symlink-safe, memory fallback, authorizer/query_only/defensive kept). Cold p50: kit sql 199 -> 59-76 ms, kit metric 61 ms, kit brief 86 ms (node kit/bench.mjs)",
-  "kit/test/metrics.test.mjs (9 tests): every metric runs, P&L ties and CM3 bridge to EBITDA, ~35 README story numbers, 20 evals truths, brief, cache rebuild/symlink/read-only; 27/27 kit tests pass. Docs: switch/METRICS.md + TOOLKIT 'Ask in one command'"
+  "kit/test/metrics.test.mjs (9 tests): every metric runs, P&L ties and CM3 bridge to EBITDA, ~35 README story numbers, 20 evals truths, brief, cache rebuild/symlink/read-only; 27/27 kit tests pass. Docs: switch/METRICS.md + TOOLKIT 'Ask in one command'",
+  "Security review lows fixed: authorizer set before reading the cache, only plain tables trusted (planted view/trigger -> rebuild), sig includes ctime+ino, cache only for repo data/ (other --data in memory, stray kratos-*.db pruned), cache chmod 0444, Object.hasOwn for metric/dim/filter/dept names, impossible dates rejected; 28/28 kit tests"
  ],
  "next": "",
  "blockers": [],
@@ -23,5 +24,5 @@
   "Cash is not the problem: ₹1.18 Cr cash / ₹2.03L average monthly EBITDA loss = ~58 months runway (38 above the ₹40L cash floor).",
   "Speed: the 26-CSV parse costs ~110 ms of every kit call; caching to one SQLite file cut a cold kit sql from 199 to ~60 ms p50, of which ~50 ms is two Node process starts (the timeout watchdog child)."
  ],
- "updated": "2026-11-07T11:30:00+05:30"
+ "updated": "2026-11-07T12:30:00+05:30"
 }

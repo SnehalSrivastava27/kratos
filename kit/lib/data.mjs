@@ -2,7 +2,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync, constants as C } from 'node:sqlite';
-import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { MART_VERSION, MARTS } from './marts.mjs';
 import * as ss from 'simple-statistics';
@@ -28,23 +27,35 @@ function csvFiles(realDir) {
     const p = path.join(realDir, f);
     const st = fs.lstatSync(p);
     if (!st.isFile() || path.dirname(fs.realpathSync(p)) !== realDir) continue;
-    out.push({ f, p, size: st.size, mtime: st.mtimeMs });
+    out.push({ f, p, size: st.size, mtime: st.mtimeMs, ctime: st.ctimeMs, ino: st.ino });
   }
   return out;
 }
 
-// Cache file in data/.cache/: kratos.db for the repo data, kratos-<hash>.db for any other --data dir.
-// null (= build in memory) when caching is off or data/.cache is not a real directory inside data/.
+// Cache file data/.cache/kratos.db, for the repo's own data/ only (any other --data dir is built in memory).
+// null when caching is off or data/.cache is not a real directory inside data/.
 function cacheFile(realDir) {
   if (process.env.KIT_CACHE === '0') return null;
   try {
     const dataReal = fs.realpathSync(path.join(REPO, 'data'));
+    if (realDir !== dataReal) return null;
     const base = path.join(dataReal, '.cache');
     fs.mkdirSync(base, { recursive: true });
     if (!fs.lstatSync(base).isDirectory() || fs.realpathSync(base) !== base) return null;
-    const name = realDir === dataReal ? 'kratos.db' : `kratos-${createHash('sha1').update(realDir).digest('hex').slice(0, 12)}.db`;
-    return path.join(base, name);
+    return path.join(base, 'kratos.db');
   } catch { return null; }
+}
+
+// Read-only from here on: query_only, defensive, and an authorizer that allows only reads and plain functions.
+function harden(db) {
+  db.exec('PRAGMA query_only = ON');
+  db.enableDefensive(true);
+  db.setAuthorizer((code, a1, a2) => {
+    if (code === C.SQLITE_SELECT || code === C.SQLITE_READ || code === C.SQLITE_RECURSIVE) return C.SQLITE_OK;
+    if (code === C.SQLITE_FUNCTION) return DENY_FN.has(String(a2).toLowerCase()) ? C.SQLITE_DENY : C.SQLITE_OK;
+    return C.SQLITE_DENY;
+  });
+  return db;
 }
 
 // Open the cache read-only if it is a regular file (not a symlink) built from exactly these CSVs.
@@ -52,8 +63,10 @@ function openCached(file, sig) {
   let db;
   try {
     if (!fs.lstatSync(file).isFile()) return null;
-    db = new DatabaseSync(file, { ...DB_OPTS, readOnly: true });
-    if (db.prepare("SELECT v FROM _kit_meta WHERE k = 'sig'").get()?.v === sig) return db;
+    db = harden(new DatabaseSync(file, { ...DB_OPTS, readOnly: true }));
+    // Only plain tables (+ indexes) are trusted: a view or trigger planted in the file means rebuild.
+    const odd = db.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE type NOT IN ('table', 'index') OR (name = '_kit_meta' AND type <> 'table')").get().n;
+    if (!odd && db.prepare("SELECT v FROM _kit_meta WHERE k = 'sig'").get()?.v === sig) return db;
   } catch { /* missing or corrupt: rebuild */ }
   try { db?.close(); } catch { /* ignore */ }
   return null;
@@ -102,6 +115,9 @@ function build(files, file, sig) {
       const db = new DatabaseSync(tmp, DB_OPTS);
       try { load(db, files, sig); } finally { db.close(); }
       fs.renameSync(tmp, file);
+      try { fs.chmodSync(file, 0o444); } catch { /* best effort */ }
+      // Drop per-dir caches left by older kit versions.
+      for (const f of fs.readdirSync(path.dirname(file))) if (/^kratos-[0-9a-f]+\.db$/.test(f)) fs.rmSync(path.join(path.dirname(file), f), { force: true });
       const ro = openCached(file, sig);
       if (ro) return ro;
     } catch { /* fall through to memory */ }
@@ -109,26 +125,17 @@ function build(files, file, sig) {
   }
   const db = new DatabaseSync(':memory:', DB_OPTS);
   load(db, files, sig);
-  return db;
+  return harden(db);
 }
 
 export function openDb(dir) {
   if (cache) return cache;
   const realDir = fs.realpathSync(dir);
   const files = csvFiles(realDir);
-  const sig = JSON.stringify([MART_VERSION, realDir, files.map((x) => [x.f, x.size, x.mtime])]);
+  const sig = JSON.stringify([MART_VERSION, realDir, files.map((x) => [x.f, x.size, x.mtime, x.ctime, x.ino])]);
   const file = cacheFile(realDir);
   const db = (file && openCached(file, sig)) || build(files, file, sig);
   const meta = Object.fromEntries(db.prepare("SELECT k, v FROM _kit_meta WHERE k IN ('tables', 'marts')").all().map((r) => [r.k, JSON.parse(r.v)]));
-  // Value size capped (strings/blobs), so a query cannot build huge values in memory.
-  db.exec('PRAGMA query_only = ON');
-  db.enableDefensive(true);
-  // Only reads, selects and plain functions are authorized from here on.
-  db.setAuthorizer((code, a1, a2) => {
-    if (code === C.SQLITE_SELECT || code === C.SQLITE_READ || code === C.SQLITE_RECURSIVE) return C.SQLITE_OK;
-    if (code === C.SQLITE_FUNCTION) return DENY_FN.has(String(a2).toLowerCase()) ? C.SQLITE_DENY : C.SQLITE_OK;
-    return C.SQLITE_DENY;
-  });
   cache = { db, tables: meta.tables, marts: meta.marts, dir: realDir };
   return cache;
 }

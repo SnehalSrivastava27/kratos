@@ -162,7 +162,7 @@ function windowOf(db, o, m) {
     return { from: o.month + '-01', to, label: o.month };
   }
   if (o.from || o.to) {
-    for (const d of [o.from, o.to]) if (d && !DATE.test(d)) fail('--from/--to must be YYYY-MM-DD');
+    for (const d of [o.from, o.to]) if (d && !(DATE.test(d) && new Date(d + 'T00:00:00Z').toISOString().startsWith(d))) fail('--from/--to must be a real date, YYYY-MM-DD');
     const w = { from: o.from || '2000-01-01', to: o.to || maxDate };
     if (w.from > w.to) fail('--from is after --to');
     return w;
@@ -189,7 +189,7 @@ function canon(db, src, col, val, what) {
 
 // ---------- run one metric ----------
 export function metric(dir, name, o = {}) {
-  const m = METRICS[name];
+  const m = Object.hasOwn(METRICS, name) ? METRICS[name] : null;
   if (!m) fail(`unknown metric "${name}". Did you mean: ${suggest(name).join(', ')}? (kit metric list)`);
   const { db } = openDb(dir);
   let w;
@@ -199,12 +199,12 @@ export function metric(dir, name, o = {}) {
   const src = typeof m.src === 'function' ? m.src(ctx) : SRC[m.src];
   const by = o.by ? String(o.by).split(',').map((s) => s.trim()).filter(Boolean) : m.defaultBy || [];
   if (by.length > 2) fail('--by takes at most 2 dimensions, e.g. --by channel,month');
-  for (const b of by) if (!src.dims[b] || m.deny?.includes(b)) fail(`--by ${b} not available for ${name}. Use: ${Object.keys(src.dims).filter((k) => src.dims[k] && !m.deny?.includes(k)).join(', ')}`);
+  for (const b of by) if (!Object.hasOwn(src.dims, b) || !src.dims[b] || m.deny?.includes(b)) fail(`--by ${b} not available for ${name}. Use: ${Object.keys(src.dims).filter((k) => src.dims[k] && !m.deny?.includes(k)).join(', ')}`);
   const where = m.where ? [`(${m.where})`] : [];
   const filters = {};
   for (const k of ['channel', 'sku']) {
     if (o[k] == null) continue;
-    const col = src.filters[k];
+    const col = Object.hasOwn(src.filters, k) ? src.filters[k] : null;
     if (!col || m.deny?.includes(k)) fail(`--${k} not available for ${name}${Object.keys(src.filters).length ? ` (filters: ${Object.keys(src.filters).map((f) => '--' + f).join(', ')})` : ''}`);
     filters[k] = canon(db, src, col, o[k], k);
     where.push(`${col} = ${lit(filters[k])}`);
@@ -281,8 +281,9 @@ const cmdOf = (name, o) => ['kit metric', name, ...Object.entries(o).map(([k, v]
 const short = (rows, unit) => rows.map((r) => `${Object.entries(r).filter(([k, v]) => k !== 'display' && typeof v === 'string').map(([, v]) => v).join(' ')}: ${display(r.value, unit)}`);
 
 export function brief(dir, dept, o = {}) {
-  const d = ALIAS[String(dept).toLowerCase()] || String(dept).toLowerCase();
-  if (!BRIEFS[d]) fail(`unknown dept "${dept}". Use: ${Object.keys(BRIEFS).join(', ')}`);
+  const low = String(dept).toLowerCase();
+  const d = Object.hasOwn(ALIAS, low) ? ALIAS[low] : low;
+  if (!Object.hasOwn(BRIEFS, d)) fail(`unknown dept "${dept}". Use: ${Object.keys(BRIEFS).join(', ')}`);
   const { db } = openDb(dir);
   let month = o.month;
   try { month ??= db.prepare('SELECT MAX(month) m FROM m_lines').get().m; } catch { fail('brief needs the full data/ (orders, products, customers, ...)'); }
