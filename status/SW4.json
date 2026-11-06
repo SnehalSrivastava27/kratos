@@ -1,4 +1,19 @@
-{ "task": "SW4", "state": "working", "progress": 20,
-  "done": ["worktree", "surveyed switch-core 0.31.0 ops, gateway, commands, approvals, roles, budgets"],
-  "next": "roles + morning brief in server, observer role notices, tests, survey doc",
-  "blockers": [], "contract_requests": [], "findings": [], "updated": "2026-11-07T02:30:00+05:30" }
+{ "task": "SW4", "state": "done", "progress": 100,
+  "done": [
+    "Survey: docs/switch/12-feature-survey.md, every switch-core 0.31.0 capability scored (V/E), rejected list, instruction patches, live checks",
+    "Built: Switch room roles finance-approver + ops-oncall defined idempotently via the gateway on team join/start (server/src/roles.ts); observer tags '🎭 assumed the `x` role.' as meta.switch_role",
+    "Built: 9 AM IST morning brief asked through Switch as d2c-office (server/src/brief.ts, POST /api/brief); observer tags the Captain's reply meta.kind morning_brief; 4 server tests + observer parser test; README table updated"
+  ],
+  "next": "orchestrator: apply 'Instruction patches' in docs/switch/12-feature-survey.md to switch/agents/*.md (E2 owns them), then live checks listed there",
+  "blockers": [],
+  "contract_requests": ["events.schema.json: document meta.switch_role {role, action: assumed|released} and meta.kind 'morning_brief' (pass today: meta has no additionalProperties: false)"],
+  "findings": [
+    "Switch 0.31.0 has no scheduler, cron or trigger: grep finds only internal timers, and the docs' incident-response use case does 'approval' as a plain chat reply. Anything time-based must be driven from outside (we post through Switch from the office server).",
+    "Switch has real approval cards with Telegram inline buttons (POST /agent-sessions/{sid}/approvals), but they belong to the session host: the opening agent must hold a live connection or the card says 'Host offline', and only someone allowed to address that agent may answer.",
+    "Room roles are addressable: '@finance-approver' in any message reaches whoever live-holds the role, so the Captain can address a seat, not a name. Exclusive roles are leases that auto-release shortly after the holder's session disconnects.",
+    "Switch announces role changes like room documents: a plain message from the agent, '🎭 assumed the `x` role.', not a stream event of its own.",
+    "There is no agent op for reactions or polls; the only reaction is Switch's own 👀 'working' mark, and on Telegram it's one per bot, not per agent (one bot carries every agent).",
+    "Per-room aliases (!set-alias @d2c-finance @finance) exist only as a chat command, with no gateway route.",
+    "Switch has per-agent spend budgets (gateway /tenants/{id}/budgets) that refuse addressed messages once a cap is hit."
+  ],
+  "updated": "2026-11-07T03:30:00+05:30" }
