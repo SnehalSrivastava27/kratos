@@ -50,12 +50,9 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     </Canvas>
   );
 
-  // Telegram side: which group is open (following the story until you pick one), unread counts, phone navigation.
-  const [follow, setFollow] = useState(true);
-  const [picked, setPicked] = useState('war_room');
+  // Telegram side: which group is open, unread counts, phone list → chat navigation.
+  const [room, setRoom] = useState('war_room'); // the founder's main group is open to start, like their Telegram
   const [mView, setMView] = useState<'list' | 'chat'>('list');
-  const latestRoom = events[events.length - 1]?.room ?? 'war_room';
-  const room = follow ? latestRoom : picked;
   const [seen, setSeen] = useState<Record<string, number>>({});
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -65,8 +62,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   useEffect(() => setSeen((s) => (events.length === 0 ? {} : { ...s, [room]: counts[room] ?? 0 })), [room, counts, events.length]);
   const unread = Object.fromEntries(ROOMS.map((r) => [r.id, Math.max(0, (counts[r.id] ?? 0) - (seen[r.id] ?? 0))]));
   const openRoom = (id: string) => {
-    setFollow(false);
-    setPicked(id);
+    setRoom(id);
     setMView('chat');
     setFocus(zoneById[roomZone[id]] ?? null);
   };
@@ -76,10 +72,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     if (r) openRoom(r.id);
     else setFocus(z);
   }
-  const overview = () => {
-    setFocus(null);
-    setFollow(true);
-  };
+  const overview = () => setFocus(null);
   const cap = caption(events, scene);
 
   if (mode === 'autoplay') {
@@ -141,7 +134,7 @@ function Outlines() {
 }
 
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
-const AZ = 0.2, EL = 0.86;
+const AZ = 0.12, EL = 0.86;
 const FIT_PTS = [
   [-12.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-12.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-12.4, 2.6, 8.4],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
@@ -168,7 +161,7 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number, narrow: boolean) 
     right.setFromMatrixColumn(c.matrixWorld, 0);
     up.setFromMatrixColumn(c.matrixWorld, 1);
     tgt.addScaledVector(right, ((x0 + x1) / 2) * half * aspect).addScaledVector(up, ((y0 + y1) / 2) * half);
-    const crop = narrow ? 0.66 : THREE.MathUtils.clamp(0.45 + 0.35 * aspect, 0.6, 0.9); // phones: zoom in, let the sides run off // portrait: let the sides run off rather than shrink everything
+    const crop = narrow ? 0.66 : THREE.MathUtils.clamp(0.5 + 0.35 * aspect, 0.7, 0.9); // phones: zoom in, let the sides run off // portrait: let the sides run off rather than shrink everything
     d *= Math.max((y1 - y0) / 2, ((x1 - x0) / 2) * crop) / 0.96;
   }
   return { pos: c.position.clone(), tgt };

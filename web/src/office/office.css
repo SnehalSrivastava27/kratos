@@ -48,6 +48,7 @@
 
 
 @media (max-width: 760px) {
+  .hq-tag-done .hq-tag-state, .hq-tag-idle .hq-tag-state { display: none }
   .hq-tag-name { font-size: 10px; padding: 0 6px 1px; border-width: 2px } .hq-tag-state { font-size: 9px }
   .hq-bubble { max-width: 200px; padding: 12px 10px 7px } .hq-bubble-text { font-size: 11.5px }
 }

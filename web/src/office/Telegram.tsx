@@ -113,16 +113,17 @@ export function ChatList({ events, scene, selected, unread, onSelect, className 
   );
 }
 
+const isMine = (e: OfficeEvent) => personById[e.speaker]?.kind === 'human';
 const bannerTitle = (e: OfficeEvent) => strip(e).split('\n')[0];
 
-function Message({ e, first }: { e: OfficeEvent; first: boolean }) {
+function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boolean }) {
   const p = personById[e.speaker];
   const mine = p?.kind === 'human';
   const accent = e.type === 'pushback' ? '#E5484D' : e.type === 'approved' ? '#3CCB8B' : undefined;
   const body = strip(e);
   return (
     <div className={cn('flex items-end gap-2', mine ? 'justify-end' : 'justify-start')}>
-      {!mine && (first ? (
+      {!mine && (last ? (
         <div className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#5AB0F5] to-[#3390EC] text-[11px] font-bold text-white">SW</div>
       ) : (
         <div className="w-8 shrink-0" />
@@ -201,7 +202,7 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
           <AnimatePresence initial={false}>
             {msgs.map((e, i) => (
               <motion.div key={e.id} initial={reduce ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
-                <Message e={e} first={i === 0 || msgs[i - 1].speaker !== e.speaker || personById[e.speaker]?.kind !== personById[msgs[i - 1].speaker]?.kind} />
+                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} />
               </motion.div>
             ))}
           </AnimatePresence>

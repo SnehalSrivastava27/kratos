@@ -26,6 +26,13 @@ const LOOKS: Record<string, Look> = {
   'd2c-design': { skin: 0, hair: 8, style: 4 },
   'd2c-finance': { skin: 6, hair: 5, style: 6 },
 };
+const v = new THREE.Vector3();
+/** Project like drei's Html, but keep the overlay `pad` px inside the canvas so bubbles near an edge aren't cut off. */
+const clampTo = (pad: number) => (el: THREE.Object3D, camera: THREE.Camera, size: { width: number; height: number }) => {
+  v.setFromMatrixPosition(el.matrixWorld).project(camera);
+  const x = (v.x * 0.5 + 0.5) * size.width, y = (-v.y * 0.5 + 0.5) * size.height;
+  return [Math.min(Math.max(x, pad), size.width - pad), Math.max(y, pad * 0.9)];
+};
 const STATE_LABEL: Record<AgentState, string> = { idle: 'Idle', working: 'Working', walking: 'On the move', waiting: 'Waiting', done: 'Done' };
 
 export default function Character({ person, ps, celebrateId }: { person: RosterPerson; ps: PersonState; celebrateId?: string }) {
@@ -106,7 +113,7 @@ export default function Character({ person, ps, celebrateId }: { person: RosterP
   return (
     <primitive object={p.root}>
       <primitive object={ring} />
-      <Html position={[0, 1.95, 0]} zIndexRange={talking ? [40, 30] : [10, 0]} style={{ pointerEvents: 'none' }}>
+      <Html position={[0, 1.95, 0]} zIndexRange={talking ? [40, 30] : [10, 0]} style={{ pointerEvents: 'none' }} calculatePosition={clampTo(talking ? 132 : 64)}>
         <div className="hq-over">
           {talking && (
             <div key={bubble.id} className="hq-bubble">
