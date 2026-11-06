@@ -1,1 +1,8 @@
-{ "task": "T7", "state": "queued", "progress": 0, "done": [], "next": "", "blockers": [], "contract_requests": [] }
+{ "task": "T7", "state": "done", "progress": 100,
+  "done": [
+    "README.md per PLAN §11: numbered copy-paste setup (offline 4a + Switch/Telegram 4b), 'Without Switch, nothing works' table",
+    "docs/architecture.md (cleaned PLAN §4 diagram + data flow), docs/blog-draft.md (PLAN §12)",
+    "docs/build-notes.md template; unverified Switch details left as TODO(HUMAN) comments"
+  ],
+  "next": "Fill TODOs once contracts/switch-protocol-notes.md lands and T8 confirms npm run demo",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-06T20:30:00+05:30" }
