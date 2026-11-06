@@ -329,7 +329,7 @@ How the build was split: [`docs/ORCHESTRATION.md`](docs/ORCHESTRATION.md) and
 
 ## Docs
 
-Blog pack: [post](docs/blog/post.md) · [every feature](docs/blog/features.md) · [findings](docs/blog/findings.md) · [#HowISwitch posts](docs/blog/social.md) · Switch pages and 13 Excalidraw diagrams: [docs/switch/](docs/switch/README.md).
+Blog pack: [post](docs/blog/post.md) · [every feature](docs/blog/features.md) · [findings](docs/blog/findings.md) · [#HowISwitch posts](docs/blog/social.md) · Switch pages and 14 Excalidraw diagrams: [docs/switch/](docs/switch/README.md).
 
 ## Credits
 

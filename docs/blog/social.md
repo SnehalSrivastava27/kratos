@@ -37,9 +37,9 @@ reaches the group. Read what a feature does. #HowISwitch <link>
 
 **4. Haiku vs Sonnet**
 
-Evals for 16 AI teammates, answers computed from the data. Sonnet: 84/84 for $6.78. Haiku: 146/149
-on harder questions for $0.20. The agents even caught 4 bad answer keys that counted order lines,
-not orders. #HowISwitch <link>
+Evals for 16 AI teammates, answers computed from the data. On 149 questions Haiku scored 149/149
+for $0.21; Sonnet 148/149 for $3.07. The agents even caught 4 bad answer keys that counted order
+lines, not orders. #HowISwitch <link>
 
 *Image: `docs/diagrams/eval-loop.png`*
 
@@ -53,4 +53,4 @@ Then I slept; it ran the night shift. #HowISwitch <link>
 
 *Image: `docs/diagrams/overnight-swarm.png`*
 
-<!-- TODO(orchestrator): check the Switch handle to tag on X/LinkedIn, and refresh post 4 with E2's final run -->
+<!-- TODO(user): the Switch account handle to tag on X/LinkedIn -->
