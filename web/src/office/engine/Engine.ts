@@ -115,6 +115,7 @@ export class OfficeEngine {
   private userShown = { yaw: 0, pitch: 0, zoom: 1 };
   private size = { w: 1, h: 1 };
   private t = 0;
+  private frames = 0;
   private last = 0;
   private raf = 0;
   private onScreen = true;
@@ -195,10 +196,11 @@ export class OfficeEngine {
         this.scene.traverse((o) => { if ((o as THREE.Mesh).isMesh && o.visible) meshes++; });
         const mem = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory;
         const i = this.renderer.info;
-        return { meshes, calls: i.render.calls, geometries: i.memory.geometries, textures: i.memory.textures, programs: i.programs?.length, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1e6) : null };
+        return { frames: this.frames, meshes, calls: i.render.calls, geometries: i.memory.geometries, textures: i.memory.textures, programs: i.programs?.length, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1e6) : null };
       };
       w.__hqAgents = () => Object.fromEntries(this.agents.map((a) => [a.info.id, [+a.pos.x.toFixed(3), +a.pos.z.toFixed(3)]]));
-      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqAgents; });
+      w.__hqSolids = () => this.world?.solids ?? [];
+      this.cleanup.push(() => { delete w.__hqInfo; delete w.__hqAgents; delete w.__hqSolids; });
     }
   }
 
@@ -254,6 +256,7 @@ export class OfficeEngine {
     const dt = Math.min(Math.max(0, now - this.last) / 1000, 0.1);
     this.last = now;
     this.t += dt;
+    this.frames++;
     const t = this.t;
     this.updateSky(t);
     for (const a of this.agents) {

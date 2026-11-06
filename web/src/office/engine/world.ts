@@ -251,7 +251,7 @@ function buildOffice(m: Models, solids: Rect[]) {
     p.scale.setScalar(0.7);
     return p;
   };
-  add(pouf('#ef476f'), chai.x - 1.55, 0, chai.z + 0.6, 0, true);
+  add(pouf('#ef476f'), chai.x + 1.6, 0, chai.z - 0.35, 0, true); // both on the right, clear of the idle slots along the front
   add(pouf('#06d6a0'), chai.x + 1.6, 0, chai.z + 0.6, 0, true);
   // Founder's corner: a sofa and coffee table beside the desk.
   const fd = zoneById.founder_desk;

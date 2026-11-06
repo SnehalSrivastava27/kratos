@@ -174,9 +174,12 @@ export class Agent {
           const w = this.path[0];
           const dx = w.x - g.x, dz = w.z - g.z;
           const d = Math.hypot(dx, dz);
-          // Round the corners: a bend is taken a little early, like people do.
-          const cut = !w.stop && this.path.length > 1 ? 0.3 : 0;
-          if (d <= step + cut) {
+          // Round the corners: within a step of a bend, head for the next point already (no snapping).
+          if (!w.stop && this.path.length > 1 && d < 0.3) {
+            this.path.shift();
+            continue;
+          }
+          if (d <= step) {
             g.x = w.x;
             g.z = w.z;
             step -= d;
