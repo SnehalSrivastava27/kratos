@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { AGENT_IDS, DEPT, FEED, PEOPLE, TG_GROUP, TOPICS, statusAt, useFeedClock, type Status } from './data';
-import { TG_WALL, TgMessages, TopicIcon, TopicRail, tgSubtitle } from './Telegram';
+import { TG_WALL, TgMessages, TopicIcon, TopicRail, tgSubtitle, topicCounts } from './Telegram';
 import Office2D from './Office2D';
 import { Container, EASE, LiveDot, Window } from './ui';
 
@@ -207,7 +207,7 @@ function TgDesktop({ ms, className }: { ms: number; className?: string }) {
         </div>
       </div>
       <div className="flex min-h-0 flex-1">
-        <TopicRail active={room} />
+        <TopicRail active={room} counts={topicCounts(seen)} />
         <div className="flex min-w-0 flex-1 flex-col">
           <div className={cn('flex flex-1 flex-col justify-end overflow-hidden p-2.5', TG_WALL)}>
             <TgMessages events={shown.slice(-5)} compact />

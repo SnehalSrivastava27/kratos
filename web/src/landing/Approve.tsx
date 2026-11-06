@@ -41,7 +41,7 @@ export default function Approve() {
   return (
     <Band id="approve" className="scroll-mt-16">
       <Container className="grid md:grid-cols-2">
-        <Reveal className="flex flex-col justify-center py-16 md:py-28 md:pr-16">
+        <Reveal className="flex flex-col justify-start py-16 md:py-24 md:pr-16 md:pt-28">
           <p className="mb-6 flex items-center gap-2 text-[13px] text-neutral-500"><span className="size-1.5 rounded-full" style={{ background: captain.color }} />The approve moment</p>
           <blockquote className="text-[32px] leading-[1.08] font-medium tracking-[-0.03em] text-balance md:text-[44px]">
             The whole sale lands in one message. <span className="text-dim">You just tap Approve.</span>

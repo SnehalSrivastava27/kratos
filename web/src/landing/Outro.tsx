@@ -60,7 +60,7 @@ export function Faq() {
         <Reveal>
           <TwoTone stack a="Questions," b="answered." className="text-[28px] leading-[1.12] md:text-[36px]" />
         </Reveal>
-        <Reveal delay={0.06}>
+        <Reveal delay={0.06} className="md:pl-8">
           <Accordion className="border-t border-black/[0.07]">
             {FAQ.map((f) => (
               <AccordionItem key={f.q} value={f.q} className="border-black/[0.07] not-last:border-b">
@@ -78,7 +78,7 @@ export function Faq() {
 function MiniCard({ who, title, line, className }: { who: string; title: string; line: string; className?: string }) {
   const p = PEOPLE[who];
   return (
-    <div aria-hidden="true" className={`w-[264px] rounded-2xl border border-black/[0.07] bg-white p-4 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.25)] ${className ?? ''}`}>
+    <div aria-hidden="true" className={`w-[264px] rounded-2xl text-left border border-black/[0.07] bg-white p-4 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.25)] ${className ?? ''}`}>
       <p className="flex items-center gap-1.5 text-[12px] text-neutral-500"><span className="size-1.5 rounded-full" style={{ background: p.color }} />{p.name}</p>
       <p className="mt-2 text-[15px] font-medium tracking-tight">{title}</p>
       <p className="mt-1 flex items-center gap-1.5 text-[13px] text-emerald-700"><Check className="size-3.5" />{line}</p>
@@ -93,8 +93,8 @@ export function FinalCta() {
         <MiniCard who="d2c-ops" title="Mumbai → Delhi · 110 units" line="Arrives in 2 days" className="absolute top-16 left-12 hidden xl:block" />
         <MiniCard who="d2c-captain" title="Final plan · ₹4.68L of ₹5L" line="Founder approved" className="absolute right-12 bottom-16 hidden xl:block" />
         <Reveal>
-          <h2 className="mx-auto max-w-[14ch] text-[40px] leading-[1.04] font-medium tracking-[-0.035em] text-balance md:text-[64px]">
-            Meet your new teammates. <span className="text-dim">They’re already at work.</span>
+          <h2 className="mx-auto text-[40px] leading-[1.04] font-medium tracking-[-0.035em] text-balance md:text-[64px]">
+            Meet your new teammates.<br className="hidden md:block" /> <span className="text-dim">They’re already at work.</span>
           </h2>
         </Reveal>
         <Reveal delay={0.08} className="mt-10 flex flex-wrap justify-center gap-3">

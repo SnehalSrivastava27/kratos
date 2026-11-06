@@ -4,10 +4,10 @@ import { ArrowLeft, Check, Mic, MoreVertical, Paperclip, Send, Smile } from 'luc
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { FEED, SWITCH_URL, TG_GROUP, TOPICS } from './data';
-import { TG_WALL, TgAvatar, TgMessages, TopicTabs, tgSubtitle } from './Telegram';
+import { TG_WALL, TgAvatar, TgMessages, TopicTabs, tgSubtitle, topicCounts } from './Telegram';
 import { Band, Container, EASE, Reveal, TwoTone } from './ui';
 
-const START = 2; // never show an empty chat
+const START = 3; // never show an empty chat
 
 export default function TeamChat() {
   const [tab, setTab] = useState<'tg' | 'wa'>('tg');
@@ -18,12 +18,13 @@ export default function TeamChat() {
 
   useEffect(() => {
     if (!inView || reduce) return;
-    const id = setTimeout(() => setShown((s) => (s >= FEED.length ? START : s + 1)), shown >= FEED.length ? 4500 : 1400);
+    const id = setTimeout(() => setShown((s) => (s >= FEED.length ? START : s + 1)), shown >= FEED.length ? 4500 : 900);
     return () => clearTimeout(id);
   }, [inView, reduce, shown]);
 
   const seen = FEED.slice(0, reduce ? FEED.length : shown);
-  const room = seen[seen.length - 1]?.room ?? 'war_room';
+  // The phone stays in the War Room topic; the other topics tick up like unread badges.
+  const room = 'war_room';
   const visible = seen.filter((e) => e.room === room);
   const sub = tgSubtitle(visible);
 
@@ -61,7 +62,7 @@ export default function TeamChat() {
           className="relative mx-auto w-full max-w-[340px]"
         >
           <div aria-hidden="true" className="absolute -inset-x-24 -inset-y-10 -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(244,163,0,0.12),transparent)]" />
-          <div className="relative flex h-[640px] flex-col overflow-hidden rounded-[44px] border-[7px] border-neutral-900 bg-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.35)]" role="img" aria-label={`Telegram group ${TG_GROUP} with forum topics: the Sale Captain splits the festive sale into department topics, then brings back the final plan for approval.`}>
+          <div className="relative flex h-[600px] flex-col overflow-hidden rounded-[44px] border-[7px] border-neutral-900 bg-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.35)]" role="img" aria-label={`Telegram group ${TG_GROUP} with forum topics: the Sale Captain splits the festive sale into department topics, then brings back the final plan for approval.`}>
             <div className="absolute top-2 left-1/2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-neutral-900" />
             <div className="flex items-center gap-2.5 border-b border-black/[0.06] bg-white/95 px-3.5 pt-11 pb-2.5">
               <ArrowLeft className="size-5 text-tg" />
@@ -72,7 +73,7 @@ export default function TeamChat() {
               </div>
               <MoreVertical className="size-5 text-neutral-400" />
             </div>
-            {tab === 'tg' && <TopicTabs active={room} />}
+            {tab === 'tg' && <TopicTabs active={room} counts={topicCounts(seen)} />}
             <div className={cn('flex flex-1 flex-col justify-end overflow-hidden px-2.5 py-3', TG_WALL)}>
               {tab === 'wa' ? (
                 <div className="m-auto max-w-[240px] rounded-2xl bg-white/90 p-5 text-center shadow-sm">

@@ -25,14 +25,24 @@ export function TopicIcon({ emoji, on, className }: { emoji: string; on?: boolea
   );
 }
 
+/** Unread-style badge: messages posted in a topic so far. */
+export function topicCounts(events: OfficeEvent[]) {
+  const n: Record<string, number> = {};
+  for (const e of events) if (e.type !== 'working') n[e.room] = (n[e.room] ?? 0) + 1;
+  return n;
+}
+function Badge({ n }: { n?: number }) {
+  return n ? <span className="absolute -top-1 -right-1 grid h-4 min-w-4 place-items-center rounded-full bg-tg px-1 text-[9.5px] font-semibold text-white tabular-nums">{n}</span> : null;
+}
+
 /** Forum topics as a vertical rail (Telegram Desktop with a topic open). */
-export function TopicRail({ active }: { active: string }) {
+export function TopicRail({ active, counts = {} }: { active: string; counts?: Record<string, number> }) {
   return (
     <div className="flex w-14 shrink-0 flex-col items-center gap-1.5 border-r border-black/[0.06] bg-white py-2.5">
       {TOPICS.map((t) => (
         <span key={t.id} className="relative flex flex-col items-center gap-0.5" title={t.label}>
           {t.id === active && <motion.span layoutId="tg-rail" className="absolute -left-[9px] top-1.5 h-6 w-[3px] rounded-r bg-tg" />}
-          <TopicIcon emoji={t.emoji} on={t.id === active} className="size-8" />
+          <span className="relative"><TopicIcon emoji={t.emoji} on={t.id === active} className="size-8" />{t.id !== active && <Badge n={counts[t.id]} />}</span>
           <span className={cn('max-w-12 truncate text-[9px]', t.id === active ? 'font-medium text-tg' : 'text-neutral-400')}>{t.label}</span>
         </span>
       ))}
@@ -41,13 +51,14 @@ export function TopicRail({ active }: { active: string }) {
 }
 
 /** Forum topics as horizontal tabs (Telegram mobile). */
-export function TopicTabs({ active }: { active: string }) {
+export function TopicTabs({ active, counts = {} }: { active: string; counts?: Record<string, number> }) {
   return (
     <div className="flex gap-1 overflow-hidden border-b border-black/[0.06] bg-white px-2 pb-1.5 [mask-image:linear-gradient(to_right,black_85%,transparent)]">
       {TOPICS.map((t) => (
         <span key={t.id} className={cn('relative inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[12px] transition-colors', t.id === active ? 'font-medium text-tg' : 'text-neutral-500')}>
           {t.id === active && <motion.span layoutId="tg-tab" className="absolute inset-0 -z-0 rounded-full bg-tg/10" />}
           <span className="relative">{t.emoji}</span><span className="relative">{t.label}</span>
+          {t.id !== active && !!counts[t.id] && <span className="relative grid h-4 min-w-4 place-items-center rounded-full bg-tg px-1 text-[9.5px] font-semibold text-white tabular-nums">{counts[t.id]}</span>}
         </span>
       ))}
     </div>
