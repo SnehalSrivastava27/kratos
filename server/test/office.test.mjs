@@ -2,7 +2,7 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { createServer } from "node:http";
+import { createServer, request } from "node:http";
 import { mkdtempSync, rmSync, writeFileSync, statSync, readFileSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -52,6 +52,11 @@ writeFileSync(join(swDir, "core.env"), `SERVER_PORT=${sw.address().port}\nGATEWA
 const topicsFile = join(swDir, "topics.json");
 writeFileSync(topicsFile, JSON.stringify({ chat_id: "-100", topics: { war_room: { name: "War Room", message_thread_id: 4, switch_thread_id: null }, ads: { name: "Ads", message_thread_id: 6, switch_thread_id: "sw_thread_ads" } } }));
 
+const libFile = join(swDir, "library.json");
+writeFileSync(libFile, JSON.stringify({ updatedAt: 1, librarian: "idle", shelves: [{ id: "general", label: "General", books: [
+  { id: "gstack:qa", name: "qa", description: "QA", source: "gstack", path: "/skills/qa/SKILL.md", department: "general", why: "" },
+] }] }));
+
 after(() => {
   for (const p of procs) p.kill("SIGKILL");
   sw.closeAllConnections();
@@ -64,7 +69,8 @@ function start(env = {}) {
     cwd: CWD,
     env: {
       ...process.env, PORT: "0", OBSERVER_TOKEN: "", ADMIN_TOKEN: "", NODE_ENV: "", ALLOW_OPEN: "", TRUST_LOOPBACK: "", DATA_DIR: tmp(),
-      SWITCH_CORE_ENV: join(swDir, "core.env"), SWITCH_OFFICE_CREDS: join(tmp(), "office.json"), TOPICS_FILE: topicsFile, AGENT_DIR: "/repo", ...env,
+      SWITCH_CORE_ENV: join(swDir, "core.env"), SWITCH_OFFICE_CREDS: join(tmp(), "office.json"), TOPICS_FILE: topicsFile, AGENT_DIR: "/repo",
+      LIBRARY_FILE: libFile, CLAUDE_BIN: "/usr/bin/false", ...env,
     },
     stdio: ["ignore", "pipe", "inherit"],
   });
@@ -79,7 +85,23 @@ function start(env = {}) {
     });
   });
 }
-const post = (s, path, body, headers = {}) => fetch(s.base + path, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
+// As the office in a browser on this Mac: same-origin, so Origin = the server's own.
+const post = (s, path, body, headers = {}) => fetch(s.base + path, { method: "POST", headers: { "content-type": "application/json", origin: s.base, ...headers }, body: JSON.stringify(body) });
+/** Raw HTTP so Host/Origin/X-Forwarded-* can be set exactly as a browser or proxy would. */
+function raw(s, method, path, { headers = {}, body } = {}) {
+  const port = new URL(s.base).port;
+  return new Promise((resolve, reject) => {
+    const r = request({ host: "127.0.0.1", port, method, path, headers: { host: `127.0.0.1:${port}`, ...headers } }, (res) => {
+      let d = "";
+      res.on("data", (c) => (d += c));
+      res.on("end", () => resolve({ status: res.statusCode, body: d }));
+    });
+    r.on("error", reject);
+    r.end(body === undefined ? undefined : typeof body === "string" ? body : JSON.stringify(body));
+  });
+}
+const browser = (s, extra = {}) => ({ "content-type": "application/json", origin: `http://127.0.0.1:${new URL(s.base).port}`, ...extra });
+
 const STYLE = readFileSync(new URL("../../switch/TELEGRAM_STYLE.md", import.meta.url), "utf8").trim();
 const hire = (o = {}) => ({ name: "Priya Shah", role: "Retention Lead", room: "ads", instructions: "Win back lapsed buyers.", skills: ["gstack:qa"], ...o });
 
@@ -100,6 +122,34 @@ test("guard: office writes need loopback or ADMIN_TOKEN, never open; reads stay 
   s = await start({ TRUST_LOOPBACK: "0" }); // no ADMIN_TOKEN set: still closed
   try {
     assert.equal((await post(s, "/api/command", { room: "war_room", text: "hi" })).status, 401);
+  } finally {
+    await s.stop();
+  }
+});
+
+test("CSRF + DNS rebinding (TRUST_LOOPBACK on, the default): writes need JSON, a local Host and a local Origin", async () => {
+  const s = await start({ ADMIN_TOKEN: "adm" });
+  try {
+    const writes = [["/api/command", { room: "war_room", text: "hi" }], ["/api/employees", hire()], ["/api/library/categorize", {}], ["/api/replay", {}], ["/api/replay/stop", {}]];
+    for (const [path, body] of writes) {
+      // a cross-site "simple" form/fetch POST: no preflight, text/plain
+      let r = await raw(s, "POST", path, { headers: { "content-type": "text/plain", origin: "https://evil.example" }, body });
+      assert.equal(r.status, 415, `text/plain ${path}`);
+      r = await raw(s, "POST", path, { headers: browser(s, { origin: "https://evil.example" }), body });
+      assert.equal(r.status, 403, `evil origin ${path}`);
+      r = await raw(s, "POST", path, { headers: browser(s, { host: "evil.example:80", origin: "http://evil.example:80" }), body });
+      assert.equal(r.status, 403, `rebound host ${path}`);
+    }
+    assert.equal((await raw(s, "POST", "/api/command", { headers: { "content-type": "application/json" }, body: { room: "war_room", text: "hi" } })).status, 401, "loopback without Origin is not a browser: needs the token");
+    assert.equal((await raw(s, "POST", "/api/command", { headers: browser(s), body: { room: "war_room", text: "hi" } })).status, 202, "same-origin office");
+    const vite = { "content-type": "application/json", host: "localhost:5173", origin: "http://localhost:5173" };
+    assert.equal((await raw(s, "POST", "/api/command", { headers: vite, body: { room: "war_room", text: "hi" } })).status, 202, "vite dev proxy on this Mac");
+    assert.equal((await raw(s, "POST", "/api/command", { headers: { "content-type": "application/json", host: "evil.example", authorization: "Bearer adm" }, body: { room: "war_room", text: "hi" } })).status, 202, "token clients: any host, no Origin");
+    // reads that reveal local paths: not to a rebound Host
+    let lib = JSON.parse((await raw(s, "GET", "/api/library", { headers: { host: "evil.example:80" } })).body);
+    assert.equal(lib.shelves[0].books[0].path, undefined, "rebound host sees no paths");
+    lib = JSON.parse((await raw(s, "GET", "/api/library")).body);
+    assert.equal(lib.shelves[0].books[0].path, "/skills/qa/SKILL.md", "the office on this Mac does");
   } finally {
     await s.stop();
   }

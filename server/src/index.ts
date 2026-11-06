@@ -96,9 +96,33 @@ function requireToken(req: IncomingMessage, token: string) {
 }
 // Client IP for rate limiting (no proxy header is trusted; put a proxy in front only with care).
 const clientIp = (req: IncomingMessage) => req.socket.remoteAddress || "?";
-const isLoopback = (req: IncomingMessage) => /^(127\.\d+\.\d+\.\d+|::1|::ffff:127\.\d+\.\d+\.\d+)$/.test(req.socket.remoteAddress ?? "");
-/** Office actions: loopback (unless TRUST_LOOPBACK=0) or ADMIN_TOKEN. Never open, even without ADMIN_TOKEN set. */
-const isTrusted = (req: IncomingMessage) => (TRUST_LOOPBACK && isLoopback(req)) || hasToken(req, ADMIN_TOKEN);
+
+// ---- office-action trust: CSRF, DNS rebinding and proxy laundering ----
+const LOOPBACK_IP = /^(127\.\d+\.\d+\.\d+|::1|::ffff:127\.\d+\.\d+\.\d+)$/;
+const LOCAL_HOST = /^(localhost|127\.0\.0\.1|\[::1\])(:\d{1,5})?$/i;
+// The office's own origins besides same-origin: the Vite dev server, plus OFFICE_ORIGINS (comma-separated).
+const ORIGINS = new Set(["http://localhost:5173", "http://127.0.0.1:5173", ...(env.OFFICE_ORIGINS ?? "").split(",").map((o) => o.trim()).filter(Boolean)]);
+const header = (req: IncomingMessage, name: string) => String(req.headers[name] ?? "");
+const localHost = (req: IncomingMessage) => LOCAL_HOST.test(header(req, "host"));
+/** No Origin, or the office's own: http(s)://<this local Host> or a configured web origin. */
+const originOk = (req: IncomingMessage) => {
+  const o = header(req, "origin");
+  return !o || ORIGINS.has(o) || (localHost(req) && (o === `http://${header(req, "host")}` || o === `https://${header(req, "host")}`));
+};
+/** The office on this Mac: loopback socket (unless TRUST_LOOPBACK=0) and a local Host (no DNS rebinding). */
+const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHost(req);
+/** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
+const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
+/** Office writes: ADMIN_TOKEN, or a browser on this Mac (Origin required: only non-browser token clients may omit it). */
+const isTrustedWrite = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && !!req.headers.origin && originOk(req));
+const WRITE_ROUTE = /^\/api\/(command|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?)$/;
+/** Every state-changing office/admin route: JSON only (a cross-site "simple" POST can't send it without a preflight
+ *  we never answer), a foreign Origin is refused, and without the token the Host must be local. */
+function checkWrite(req: IncomingMessage) {
+  if (!/^application\/json\s*(;|$)/i.test(header(req, "content-type"))) throw new HttpError(415, "content-type must be application/json");
+  if (!originOk(req)) throw new HttpError(403, "origin not allowed");
+  if (!hasToken(req, ADMIN_TOKEN) && !localHost(req)) throw new HttpError(403, "host not allowed");
+}
 const HITS_MAX = 10_000;
 const hits = new Map<string, { n: number; reset: number }>(); // ponytail: fixed 1-min window per IP, in memory (single instance)
 function rateLimit(ip: string) {
@@ -187,7 +211,8 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
   const route = `${method} ${url.pathname}`;
 
   // Valid tokens skip the limit: an observer burst must not drop events. Bad/missing tokens are limited (brute force).
-  if (method === "POST" && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(clientIp(req));
+  if ((method === "POST" || method === "DELETE") && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(clientIp(req));
+  if ((method === "POST" || method === "DELETE") && WRITE_ROUTE.test(url.pathname)) checkWrite(req);
 
   if (route === "GET /api/health")
     return send(res, 200, { ok: true, version: VERSION, uptime: process.uptime(), clients: wss.clients.size, history: recent(RING_MAX).length, db: dbStatus() });
@@ -211,7 +236,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
   if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(), recent(RING_MAX)));
   if (route === "GET /api/gallery") return send(res, 200, gallery());
 
-  const trusted = isTrusted(req);
+  const trusted = method === "GET" ? isTrustedRead(req) : isTrustedWrite(req);
   if (await handleOffice(req, url, { root: ROOT, roster, isTrusted: trusted, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit })) return;
   if (url.pathname.startsWith("/api/library") && (await handleLibrary(req, res, url, { isTrusted: trusted, emit }))) return;
 
