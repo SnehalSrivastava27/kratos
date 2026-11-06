@@ -88,13 +88,13 @@ export function ChatAppRotator({ every = 2200 }: { every?: number }) {
   const app = CHAT_APPS[k];
   const row = 'inline-flex items-center gap-[0.3em] font-normal whitespace-nowrap';
   return (
-    <span className="relative inline-block align-baseline" aria-label="WhatsApp, Telegram or Slack">
+    <span className="relative inline-block h-[1lh] align-top" aria-label="WhatsApp, Telegram or Slack">
       {/* invisible copies, used only to measure each name's real width */}
-      <span ref={sizer} aria-hidden="true" className="pointer-events-none invisible absolute top-0 left-0 flex flex-col">
+      <span ref={sizer} aria-hidden="true" className="pointer-events-none invisible absolute top-0 left-0 flex flex-col items-start">
         {CHAT_APPS.map((a) => <span key={a.key} className={row}>{a.logo}{a.name}</span>)}
       </span>
       <motion.span
-        className="relative inline-flex h-[1.3em] translate-y-[0.22em] overflow-hidden align-baseline"
+        className="relative inline-flex h-[1lh] overflow-hidden align-top" // exactly one line box tall, so the name sits on the sentence baseline
         initial={false}
         animate={{ width: widths[k] ? widths[k] + 2 : 'auto' }}
         transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
