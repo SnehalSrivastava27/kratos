@@ -50,22 +50,8 @@ export const getPeople = () => call<(Person & { desk?: string; hiredAt?: number 
 /** The Design agent's banners (live only; the demo pins its own as the story plays). */
 export const getGallery = () => call<GalleryItem[]>('/api/gallery', undefined, () => ({ data: [] }));
 
-/** The demo brand's headline numbers (made-up, in step with data/*.csv), for /demo and whenever /api/kpis can't answer. */
-export const MOCK_KPIS: Kpis = {
-  updated: null, window: { from: '2026-10-01', to: '2026-10-31' },
-  net_revenue: 48_20_000, orders: 6140, aov: 785, rto_pct: 11.8, return_pct: 4.6, meta_roas: 2.9, blended_roas: 3.4, ebitda_last_month: 4_30_000,
-  by_channel: [
-    { channel: 'Brand website (Shopify)', orders: 2410, net_revenue: 21_60_000, rto_pct: 14.2 },
-    { channel: 'Marketplaces', orders: 1720, net_revenue: 12_10_000, rto_pct: 6.1 },
-    { channel: 'Beauty marketplaces', orders: 1150, net_revenue: 11_10_000, rto_pct: 3.2 },
-    { channel: 'Quick commerce', orders: 860, net_revenue: 3_40_000, rto_pct: 1.1 },
-  ],
-  top_skus: [
-    { sku: 'SKU01', name: 'Vitamin C Serum', units: 1980, net_revenue: 15_80_000 },
-    { sku: 'SKU02', name: 'Sunscreen SPF 50', units: 2240, net_revenue: 11_70_000 },
-    { sku: 'SKU05', name: 'Glow Kit (bundle)', units: 410, net_revenue: 7_20_000 },
-  ],
-};
+/** The demo brand's headline numbers (a snapshot of GET /api/kpis on data/*.csv), for /demo and whenever /api/kpis can't answer. */
+export const MOCK_KPIS: Kpis = {"updated": null, "window": {"from": "2026-08-01", "to": "2026-10-31"}, "net_revenue": 11092560, "orders": 11184, "aov": 1090, "rto_pct": 7.2, "return_pct": 2.6, "meta_roas": 2.91, "blended_roas": 7.09, "ebitda_last_month": -229795, "by_channel": [{"channel": "Website", "orders": 5767, "net_revenue": 5628038, "rto_pct": 9.6}, {"channel": "Amazon", "orders": 1921, "net_revenue": 1925095, "rto_pct": 4.6}, {"channel": "Nykaa", "orders": 1467, "net_revenue": 1480717, "rto_pct": 3.7}, {"channel": "Flipkart", "orders": 763, "net_revenue": 694957, "rto_pct": 10}, {"channel": "Blinkit", "orders": 569, "net_revenue": 654764, "rto_pct": 1.6}, {"channel": "Zepto", "orders": 398, "net_revenue": 436561, "rto_pct": 1.5}, {"channel": "Myntra", "orders": 299, "net_revenue": 272428, "rto_pct": 5}], "top_skus": [{"sku": "SKU02", "name": "Sunscreen SPF 50", "units": 6483, "net_revenue": 3429699}, {"sku": "SKU01", "name": "Vitamin C Serum", "units": 3686, "net_revenue": 2926823}, {"sku": "SKU03", "name": "Hydrating Moisturiser", "units": 2677, "net_revenue": 1772655}, {"sku": "SKU05", "name": "Glow Kit (bundle)", "units": 956, "net_revenue": 1689645}, {"sku": "SKU04", "name": "Kesar Face Oil", "units": 1108, "net_revenue": 1273738}]};
 /** GET /api/kpis (public). Live but failing or empty: the sample numbers, flagged `mock`. */
 export const getKpis = (): Promise<Res<Kpis>> =>
   call<Kpis>('/api/kpis', undefined, () => ({ data: MOCK_KPIS })).then(
