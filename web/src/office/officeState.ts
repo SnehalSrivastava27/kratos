@@ -94,7 +94,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         break;
       }
       case 'celebrate':
-        s.confettiId = e.id;
+        s.confettiId ??= e.id; // several team celebrations in a row: one confetti burst, not a restart each time
         for (const p of Object.values(s.people)) {
           p.state = 'done';
           p.jumpId = e.id;

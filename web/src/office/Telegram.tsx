@@ -179,7 +179,6 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
   const info = topicOf(room);
   const msgs = useMemo(() => events.filter((e) => e.room === room), [events, room]);
   const typing = typingIn(room, events, scene);
-  const members = new Set(['founder', ...msgs.flatMap((e) => [e.speaker, ...(e.meta?.targets ?? [])])]).size + 1;
   const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: reduce ? 'auto' : 'smooth' });
@@ -200,7 +199,7 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
             {typing.length ? (
               <span className="text-[#3390EC]">{typing.join(', ')} {typing.length > 1 ? 'are' : 'is'} typing<span className="hq-dots" /></span>
             ) : (
-              <span className="text-[#8E9AA6]">{members} members{zoneOwner ? ` · ${zoneOwner.name} online` : ''}</span>
+              <span className="text-[#8E9AA6]">{roster.length} members{zoneOwner ? ` · ${zoneOwner.name} online` : ''}</span>
             )}
           </div>
         </div>

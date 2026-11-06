@@ -19,7 +19,7 @@ import './office.css';
 
 export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed?: OfficeEvent[] }) {
   // Replay (live): run the story again locally from the top, as a fresh array so the feed hook restarts.
-  const [replay, setReplay] = useState(0);
+  const [replay, setReplay] = useState(() => (mode === 'live' && new URLSearchParams(location.search).has('demo') ? 1 : 0)); // /office?demo = local story, no server
   const replayFeed = useMemo(() => (replay ? [...(feed ?? (saleDemo as OfficeEvent[]))] : undefined), [replay, feed]);
   const events = useEventFeed(replay ? 'autoplay' : mode, replayFeed ?? feed);
   const scene = useMemo(() => reduce(events, ctx), [events]);
@@ -134,7 +134,8 @@ function Outlines() {
 }
 
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
-const AZ = 0.12, EL = 0.86;
+const AZ = 0.12;
+const elevation = (aspect: number) => THREE.MathUtils.clamp(1.25 - 0.3 * aspect, 0.86, 1.02); // portrait panes look down more
 const FIT_PTS = [
   [-12.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-12.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-12.4, 2.6, 8.4],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
@@ -144,6 +145,7 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number, narrow: boolean) 
   const c = cam.clone();
   c.aspect = aspect;
   c.updateProjectionMatrix();
+  const EL = elevation(aspect);
   const dir = new THREE.Vector3(Math.sin(AZ) * Math.cos(EL), Math.sin(EL), Math.cos(AZ) * Math.cos(EL));
   const tgt = new THREE.Vector3(0, 0, 0.5);
   const v = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3();
@@ -161,7 +163,7 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number, narrow: boolean) 
     right.setFromMatrixColumn(c.matrixWorld, 0);
     up.setFromMatrixColumn(c.matrixWorld, 1);
     tgt.addScaledVector(right, ((x0 + x1) / 2) * half * aspect).addScaledVector(up, ((y0 + y1) / 2) * half);
-    const crop = narrow ? 0.66 : THREE.MathUtils.clamp(0.5 + 0.35 * aspect, 0.7, 0.9); // phones: zoom in, let the sides run off // portrait: let the sides run off rather than shrink everything
+    const crop = narrow ? 0.66 : THREE.MathUtils.clamp(0.25 + 0.45 * aspect, 0.6, 0.9); // phones: zoom in, let the sides run off // portrait: let the sides run off rather than shrink everything
     d *= Math.max((y1 - y0) / 2, ((x1 - x0) / 2) * crop) / 0.96;
   }
   return { pos: c.position.clone(), tgt };
@@ -177,7 +179,7 @@ function CameraRig({ focus }: { focus: Zone | null }) {
     const t = clock.elapsedTime;
     if (focus) {
       goal.tgt.set(focus.x, 0.8, focus.z);
-      goal.pos.copy(goal.tgt).add(new THREE.Vector3(Math.sin(AZ) * 7, 9, Math.cos(AZ) * 7 + 1));
+      goal.pos.copy(goal.tgt).add(new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1));
     } else {
       // gentle orbit around the floor centre
       const off = home.pos.clone().sub(home.tgt).applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.sin(t * 0.07) * 0.05);
