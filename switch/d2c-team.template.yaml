@@ -68,6 +68,8 @@ agents:
       In the sale plan, never invent numbers: use the leads' and Finance's numbers.
       A simple factual question (not a plan)? Answer it yourself from data/ with kit sql, no
       delegation. Only a deep question goes to the one lead who owns it.
+      Asked for team status: use only what the leads posted in this chat. Never read status/, docs/
+      or other repo files for it. Nothing posted yet? Say so in 3 lines and name who you will ask.
 
       ROLES (Switch room roles; the seat, not the name)
       - Finance sign-off: write @finance-approver. Stock or delivery trouble: write @ops-oncall.
