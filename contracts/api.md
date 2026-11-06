@@ -128,3 +128,44 @@ User      { id, email, name, createdAt }
 Workspace { id, name /* Telegram group title */, switchRoomId, chatId: string | null, ownerId, topics: Record<RoomId, { threadId: number | null }>, status: "linking" | "ready" | "needs_admin", createdAt }
 OfficeEvent.ws?: string   // server-assigned workspace id
 ```
+
+### v3 details (A1, as implemented)
+- **Write guard on auth too:** `POST /api/auth/signup|login|logout` and `POST /api/workspaces/connect` follow the
+  v2 write rules: `content-type: application/json` (logout/connect: send `{}`) else 415, a foreign `Origin` → 403,
+  `Host` must be local or the host of an `OFFICE_ORIGINS` entry (a public deployment sets
+  `OFFICE_ORIGINS=https://hq.example.com`) → else 403. Fetch with `credentials: "include"`.
+- **Office writes (v2 table) now need the session that owns the workspace, or `ADMIN_TOKEN`.** Loopback alone no
+  longer counts (it still decides whether `/api/library` shows `path`). `POST /api/command` and `POST /api/employees`
+  answer 409 while the workspace is not `ready`. Rate limits (commands, hires) are per workspace; `HIRE_MAX` is per host.
+- **Scoped requests:** no session → 401; `?ws=` not yours (or unknown) → 403; no `?ws=` → your first `ready`
+  workspace, else your first; none → 404 `{error}` (send the user to /connect). WS upgrade: same rules
+  (401/403/404 handshake), plus a foreign `Origin` → 403. Each socket gets only its workspace's events.
+- **Limits:** login 5 a minute per IP + email, signup 5 a minute per IP (then 429 + `retry-after`); codes 5 an hour
+  per user (429). A new code voids the user's older unused ones. Signup: 400 bad email / password under 10 chars.
+- **`GET /api/workspaces/connect/status`** with no code yet → `{state: "expired", detail: "no code yet"}`.
+  `detail` also explains refusals ("already linked to another account", state stays `waiting`) and `needs_admin`.
+  `needs_admin` and unfinished setups retry when the next message arrives in that group.
+- **`POST /api/events`** (observer): `meta` may also carry `chat_id` (Telegram chat id) and `switch_thread_id`
+  (Switch thread of the message; the server maps it to the workspace's topic → `room` + `meta.thread_id`). Any `ws`
+  in the body is ignored. Linked room → 201 + the stored event (with `ws`); otherwise → 202
+  `{ok: true, stored: false, linked: boolean}` (only a link attempt: room id, name, chat id, time, never the text).
+- **New groups:** while any code is live, the server joins `d2c-observer` to every Telegram room in Switch that has
+  no workspace (checked when a code is issued and every 10 s), so the code sent there is seen. If the code was sent
+  before that, sending it again works.
+- **`GET /api/people` with the observer's `OBSERVER_TOKEN`** (no session) → roster + every workspace's hires (the
+  observer maps hired agents' names). **`POST /api/replay`** needs `ADMIN_TOKEN` even in dev; body adds
+  `ws` (default: the first ready workspace); replayed events are tagged with it.
+- **Code safety:** a code is claimed atomically (one group per code). Only messages of at most 64 chars are checked.
+  Wrong codes: 10 per Switch room per 10 min, 30 per minute on the host (then no codes are checked until the minute
+  is over), and any live code is voided after 20 wrong codes anywhere (status `expired`, detail says to get a new
+  one). Only groups link: a positive (private) chat id, or a Bot API `getChat` type other than group/supergroup, is
+  refused (`detail: "Only Telegram groups can be linked."`, the code stays usable). The sender can't be checked
+  to be a group admin: Switch doesn't pass their Telegram user id.
+- **Sessions:** logout closes that session's open sockets (close code 4401); sockets of expired sessions close on the
+  next ping (30 s). Login: also 10 tries per email per 15 min from any IP; IPv6 clients are counted per /64.
+- **`GET /api/roster`** needs a session (any signed-in user) or `ADMIN_TOKEN`; it is not public.
+- **Host-wide:** `POST /api/library/categorize` needs `ADMIN_TOKEN`, or the host owner (`OWNER_EMAIL`, else the
+  first registered user) in a browser on this Mac (loopback, own Origin); else 403.
+- **Legacy data:** events and hires stored before v3 have no `ws` and stay hidden until the group whose Telegram
+  chat id is the one in `observer/topics.json` (or `LEGACY_CHAT_ID`) is linked; then they, and its topics, join that
+  workspace (once).

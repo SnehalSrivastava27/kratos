@@ -70,13 +70,16 @@ export async function gw(method: string, path: string, json?: unknown): Promise<
   }
 }
 
-/** The Switch room for the team's Telegram group: matched by chat id (observer/topics.json), else by name. */
-export async function teamRoomId(chatId: string | undefined, name: string): Promise<string> {
-  const rooms: { id: string; name: string; external_channel_id?: string | null }[] = await gw("GET", "/rooms");
-  const byChat = chatId && (await Promise.all(rooms.filter((r) => r.name === name).map((r) => gw("GET", `/rooms/${r.id}`)))).find((r) => String(r.external_channel_id) === chatId);
-  const room = byChat || rooms.find((r) => r.name === name || r.name.endsWith(`: ${name}`));
-  if (!room) throw new SwitchError(503, `Switch room "${name}" not found (add the bot to the Telegram group)`);
-  return room.id;
+/** The Telegram chat id behind a Switch room (null until Switch has one). */
+export async function roomChatId(roomId: string): Promise<string | null> {
+  const r = await gw("GET", `/rooms/${encodeURIComponent(roomId)}`);
+  return r?.external_channel_id ? String(r.external_channel_id) : null;
+}
+/** Joins the Switch agents with these names (the ones that exist) to a room. Returns the names joined. */
+export async function joinAgents(roomId: string, names: string[]): Promise<string[]> {
+  const found = (await switchAgents()).filter((a) => names.includes(a.name));
+  if (found.length) await gw("POST", `/rooms/${encodeURIComponent(roomId)}/agents`, { agent_ids: found.map((a) => a.id) });
+  return found.map((a) => a.name);
 }
 export const joinRoom = (roomId: string, agentId: string) => gw("POST", `/rooms/${roomId}/agents`, { agent_ids: [agentId] });
 
@@ -104,8 +107,8 @@ async function officeCreds(file: string, roomId: string): Promise<Creds> {
 /** Posts `body` into the team room as d2c-office. Top level: `POST /agents/{id}/message` (needs no connection).
  *  Threaded under `threadId` (a Switch message id, i.e. a forum topic): ops need an open connection, so open the
  *  event stream just long enough to connect_to_room + post_message, then close it. */
-export async function postAsOffice(o: { credsFile: string; chatId?: string; roomName: string; body: string; threadId?: string | null }) {
-  const roomId = await teamRoomId(o.chatId, o.roomName);
+export async function postAsOffice(o: { credsFile: string; roomId: string; body: string; threadId?: string | null }) {
+  const roomId = o.roomId;
   const creds = await officeCreds(o.credsFile, roomId);
   const { SWITCH_AGENT_ID: id, SWITCH_API_ENDPOINT: ep, SWITCH_API_TOKEN: token } = creds.env;
   const agent = `${ep.replace(/\/$/, "")}/agents/${id}`;

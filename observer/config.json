@@ -9,9 +9,5 @@
   "speakers": {
     "d2c-office": "founder"
   },
-  "rooms": {},
-  "forumRooms": [
-    "Kratos D2C"
-  ],
-  "topics": "topics.json"
+  "rooms": {}
 }

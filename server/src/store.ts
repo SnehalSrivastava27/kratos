@@ -1,53 +1,67 @@
-// Event store: SQLite (node:sqlite) on disk + an in-memory ring of the newest events for fast reads.
-// No node:sqlite (Node < 22.13) or the DB won't open → ring only, with a warning.
+// SQLite (node:sqlite) store: events, hired employees, accounts and workspaces (contracts/api.md v3).
+// If the DB file can't open, an in-memory SQLite DB is used instead (dbStatus "memory", lost on restart).
 import { mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import { log } from "./log.js";
 
-export type OfficeEvent = { id: string; t: number; room: string; speaker: string; [k: string]: unknown };
+export type OfficeEvent = { id: string; t: number; room: string; speaker: string; ws?: string; [k: string]: unknown };
 
-export const RING_MAX = 500;
+export const RING_MAX = 500; // newest events the read models fold
 export type Employee = {
   id: string; name: string; role: string; room: string; emoji: string; color: string; desk: string;
   hiredAt: number; switchAgentId: string | null; status: "active" | "pending_console"; instructions: string; skills: string[];
+  ws?: string; // owning workspace (v3); legacy hires get one in the Kratos D2C migration
 };
-const RETAIN = 10_000; // ponytail: rows kept on disk; prune is a single DELETE every 100 inserts
+const RETAIN = 10_000; // ponytail: rows kept per workspace; prune is a single DELETE every 100 inserts
 
-const ring: OfficeEvent[] = [];
-const employees = new Map<string, Employee>(); // mirror of the employees table (tiny), so reads never hit disk
-let db: DatabaseSync | null = null;
+let db: DatabaseSync;
+let memory = false;
 let inserts = 0;
 
+const SCHEMA = `PRAGMA busy_timeout=2000; PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA foreign_keys=ON;
+  CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE,
+    room TEXT NOT NULL, speaker TEXT NOT NULL, json TEXT NOT NULL);
+  CREATE TABLE IF NOT EXISTS probe (k TEXT PRIMARY KEY, v INTEGER NOT NULL);
+  CREATE TABLE IF NOT EXISTS kv (k TEXT PRIMARY KEY, v TEXT NOT NULL);
+  CREATE TABLE IF NOT EXISTS employees (id TEXT PRIMARY KEY, json TEXT NOT NULL);
+  CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL,
+    pass TEXT NOT NULL, created_at INTEGER NOT NULL);
+  CREATE TABLE IF NOT EXISTS sessions (id_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    expires_at INTEGER NOT NULL);
+  CREATE TABLE IF NOT EXISTS workspaces (id TEXT PRIMARY KEY, name TEXT NOT NULL, switch_room_id TEXT NOT NULL UNIQUE,
+    chat_id TEXT, owner_id TEXT NOT NULL REFERENCES users(id), topics TEXT NOT NULL DEFAULT '{}', status TEXT NOT NULL,
+    detail TEXT, created_at INTEGER NOT NULL);
+  CREATE TABLE IF NOT EXISTS link_codes (id INTEGER PRIMARY KEY AUTOINCREMENT, code_hash TEXT NOT NULL,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL,
+    used_at INTEGER, workspace_id TEXT, detail TEXT, misses INTEGER NOT NULL DEFAULT 0);
+  CREATE INDEX IF NOT EXISTS link_codes_hash ON link_codes(code_hash);
+  CREATE TABLE IF NOT EXISTS link_attempts (seq INTEGER PRIMARY KEY AUTOINCREMENT, switch_room_id TEXT NOT NULL,
+    room_name TEXT, chat_id TEXT, at INTEGER NOT NULL, matched INTEGER NOT NULL);`;
+
 export function openStore(dataDir: string) {
+  const { DatabaseSync } = (process as any).getBuiltinModule("node:sqlite") as typeof import("node:sqlite");
   try {
-    const { DatabaseSync } = (process as any).getBuiltinModule("node:sqlite") as typeof import("node:sqlite");
     mkdirSync(dataDir, { recursive: true });
-    const file = join(resolve(dataDir), "events.db");
-    db = new DatabaseSync(file);
-    db.exec(`PRAGMA busy_timeout=2000; PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;
-      CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE,
-        room TEXT NOT NULL, speaker TEXT NOT NULL, json TEXT NOT NULL);
-      CREATE INDEX IF NOT EXISTS events_room ON events(room, seq);
-      CREATE TABLE IF NOT EXISTS probe (k TEXT PRIMARY KEY, v INTEGER NOT NULL);
-      CREATE TABLE IF NOT EXISTS employees (id TEXT PRIMARY KEY, json TEXT NOT NULL);`);
-    for (const r of db.prepare("SELECT json FROM employees ORDER BY rowid").all() as { json: string }[]) {
-      const e = JSON.parse(r.json);
-      employees.set(e.id, e);
-    }
-    const rows = db.prepare("SELECT json FROM events ORDER BY seq DESC LIMIT ?").all(RING_MAX) as { json: string }[];
-    ring.push(...rows.reverse().map((r) => JSON.parse(r.json)));
-    log.info("store open", { kind: "sqlite", file, loaded: ring.length });
+    db = new DatabaseSync(join(resolve(dataDir), "events.db"));
+    db.exec(SCHEMA);
   } catch (e) {
-    db = null;
-    log.warn("node:sqlite unavailable, events are in memory only (lost on restart)", { error: String(e) });
+    log.warn("events.db unavailable, using an in-memory DB (lost on restart)", { error: String(e) });
+    db = new DatabaseSync(":memory:");
+    db.exec(SCHEMA);
+    memory = true;
   }
+  // v3 migration: every event belongs to a workspace (NULL = legacy, hidden until the Kratos D2C migration).
+  if (!(db.prepare("PRAGMA table_info(events)").all() as { name: string }[]).some((c) => c.name === "ws")) db.exec("ALTER TABLE events ADD COLUMN ws TEXT");
+  db.exec("CREATE INDEX IF NOT EXISTS events_ws_room ON events(ws, room, seq); CREATE INDEX IF NOT EXISTS events_ws ON events(ws, seq)");
+  log.info("store open", { kind: memory ? "memory" : "sqlite", events: eventCount() });
 }
 
-export const storeKind = () => (db ? "sqlite" : "memory");
+/** The open DB, for the auth and workspace modules. */
+export const sql = () => db;
 
 export function dbStatus(): "ok" | "memory" | "error" {
-  if (!db) return "memory";
+  if (memory) return "memory";
   try {
     const now = Date.now(); // real write + read: catches a full/read-only disk, not just an open handle
     db.prepare("INSERT INTO probe (k, v) VALUES ('ping', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").run(now);
@@ -57,58 +71,58 @@ export function dbStatus(): "ok" | "memory" | "error" {
   }
 }
 
+export const kvGet = (k: string) => (db.prepare("SELECT v FROM kv WHERE k = ?").get(k) as { v: string } | undefined)?.v;
+export const kvSet = (k: string, v: string) => db.prepare("INSERT INTO kv (k, v) VALUES (?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").run(k, v);
+
 export function addEvent(ev: OfficeEvent) {
-  ring.push(ev);
-  if (ring.length > RING_MAX) ring.shift();
-  if (!db) return;
-  try {
-    db.prepare("INSERT OR IGNORE INTO events (id, room, speaker, json) VALUES (?, ?, ?, ?)").run(ev.id, ev.room, ev.speaker, JSON.stringify(ev));
-    if (++inserts % 100 === 0) db.prepare("DELETE FROM events WHERE seq <= (SELECT MAX(seq) FROM events) - ?").run(RETAIN);
-  } catch (e) {
-    log.error("store insert failed", e); // event still broadcast + in the ring
-  }
+  db.prepare("INSERT OR IGNORE INTO events (id, room, speaker, ws, json) VALUES (?, ?, ?, ?, ?)").run(ev.id, ev.room, ev.speaker, ev.ws ?? null, JSON.stringify(ev));
+  if (++inserts % 100 === 0)
+    db.prepare("DELETE FROM events WHERE ws IS ? AND seq <= (SELECT seq FROM events WHERE ws IS ? ORDER BY seq DESC LIMIT 1 OFFSET ?)").run(ev.ws ?? null, ev.ws ?? null, RETAIN);
 }
 
-/** Newest `limit` events, oldest first. */
-export const recent = (limit: number) => (limit > 0 ? ring.slice(-limit) : []);
+const parse = (rows: unknown[]) => (rows as { json: string }[]).reverse().map((r) => JSON.parse(r.json) as OfficeEvent);
 
-/** Newest `limit` events in a room, oldest first. */
-export function roomEvents(room: string, limit: number): OfficeEvent[] {
-  if (!db) return ring.filter((e) => e.room === room).slice(-limit);
-  const rows = db.prepare("SELECT json FROM events WHERE room = ? ORDER BY seq DESC LIMIT ?").all(room, limit) as { json: string }[];
-  return rows.reverse().map((r) => JSON.parse(r.json));
-}
+/** Newest `limit` events of a workspace, oldest first. */
+export const recent = (ws: string, limit: number) =>
+  limit > 0 ? parse(db.prepare("SELECT json FROM events WHERE ws = ? ORDER BY seq DESC LIMIT ?").all(ws, limit)) : [];
 
-/** Per room: stored event count and the newest event. */
-export function roomStats(): Map<string, { count: number; last: OfficeEvent }> {
-  const out = new Map<string, { count: number; last: OfficeEvent }>();
-  if (!db) {
-    for (const e of ring) out.set(e.room, { count: (out.get(e.room)?.count ?? 0) + 1, last: e });
-    return out;
-  }
+/** Newest `limit` events in a room of a workspace, oldest first. */
+export const roomEvents = (ws: string, room: string, limit: number) =>
+  parse(db.prepare("SELECT json FROM events WHERE ws = ? AND room = ? ORDER BY seq DESC LIMIT ?").all(ws, room, limit));
+
+export const eventCount = () => Number((db.prepare("SELECT COUNT(*) n FROM events").get() as { n: number }).n);
+
+/** Per room of a workspace: stored event count and the newest event. */
+export function roomStats(ws: string): Map<string, { count: number; last: OfficeEvent }> {
   const rows = db.prepare(`SELECT e.room, c.n, e.json FROM events e JOIN
-    (SELECT room, COUNT(*) n, MAX(seq) s FROM events GROUP BY room) c ON e.seq = c.s`).all() as { room: string; n: number; json: string }[];
-  for (const r of rows) out.set(r.room, { count: Number(r.n), last: JSON.parse(r.json) });
-  return out;
+    (SELECT room, COUNT(*) n, MAX(seq) s FROM events WHERE ws = ? GROUP BY room) c ON e.seq = c.s`).all(ws) as { room: string; n: number; json: string }[];
+  return new Map(rows.map((r) => [r.room, { count: Number(r.n), last: JSON.parse(r.json) }]));
 }
 
-/** Hired employees, oldest first. */
-export const listEmployees = () => [...employees.values()];
+/** Hired employees, oldest first: of one workspace, or all of them (host-wide caps, Switch name clashes). */
+export function listEmployees(ws?: string): Employee[] {
+  const all = (db.prepare("SELECT json FROM employees ORDER BY rowid").all() as { json: string }[]).map((r) => JSON.parse(r.json) as Employee);
+  return ws === undefined ? all : all.filter((e) => e.ws === ws);
+}
 
 /** Insert or replace. Throws if the DB write fails, so a hire is never reported but lost. */
 export function saveEmployee(e: Employee) {
-  db?.prepare("INSERT INTO employees (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json").run(e.id, JSON.stringify(e));
-  employees.set(e.id, e);
+  db.prepare("INSERT INTO employees (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json").run(e.id, JSON.stringify(e));
 }
 
 export function deleteEmployee(id: string) {
-  db?.prepare("DELETE FROM employees WHERE id = ?").run(id);
-  employees.delete(id);
+  db.prepare("DELETE FROM employees WHERE id = ?").run(id);
+}
+
+/** Legacy (pre-v3) events and hires with no workspace join `ws`. Returns how many events moved. */
+export function adoptLegacy(ws: string) {
+  const n = Number(db.prepare("UPDATE events SET ws = ?, json = json_set(json, '$.ws', ?) WHERE ws IS NULL").run(ws, ws).changes);
+  for (const e of listEmployees()) if (!e.ws) saveEmployee({ ...e, ws });
+  return n;
 }
 
 export function closeStore() {
   try {
     db?.close();
   } catch {}
-  db = null;
 }
