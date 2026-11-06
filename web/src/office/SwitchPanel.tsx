@@ -1,5 +1,5 @@
 // The Switch hub's panel: what Switch does, live counters, and the last few messages it carried.
-import { ArrowRight, FileText, Lock, Network } from 'lucide-react';
+import { ArrowRight, FileText, Lock, Network, Sunrise, Theater } from 'lucide-react';
 import type { OfficeEvent } from '../shared/types';
 import { ROOMS, firstLine, personById, roster, swMeta } from './data';
 import { Modal } from './Hud';
@@ -39,6 +39,15 @@ export function SwitchPanel({ events, onClose }: { events: OfficeEvent[]; onClos
     const d = swMeta(e).switch_document;
     return d?.title ? [[d.id ?? d.title, { ...d, room: e.room }] as const] : [];
   })).values()].reverse().slice(0, 5);
+  // Switch room roles: who holds each seat now (an agent's own assumed / released notices).
+  const roles = new Map<string, string>();
+  for (const e of events) {
+    const r = swMeta(e).switch_role;
+    if (typeof r?.role !== 'string' || !r.role || personById[e.speaker]?.kind !== 'agent') continue;
+    if (r.action === 'assumed') roles.set(r.role, e.speaker);
+    else if (r.action === 'released' && roles.get(r.role) === e.speaker) roles.delete(r.role);
+  }
+  const brief = [...events].reverse().find((e) => swMeta(e).kind === 'morning_brief');
   return (
     <Modal label="Switch" onClose={onClose} className="sw-panel"
       title={<span className="inline-flex items-center gap-2"><span className="sw-mark"><Network className="size-4" strokeWidth={2.75} /></span> Switch</span>}>
@@ -61,6 +70,26 @@ export function SwitchPanel({ events, onClose }: { events: OfficeEvent[]; onClos
                   <FileText className="size-4 shrink-0 text-[#3390EC]" strokeWidth={2.5} />
                   <span className="min-w-0 flex-1 truncate font-extrabold">{d.title}</span>
                   <span className="text-[12px] font-bold text-[var(--muted)]">#{topicOf(d.room)}{d.version != null ? ` · v${d.version}` : ''}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        {brief && (
+          <>
+            <h3 className="sw-h">Morning brief</h3>
+            <div className="sw-brief"><Sunrise className="size-4 shrink-0" strokeWidth={2.5} /><span className="min-w-0 flex-auto truncate">{firstLine(brief.text)}</span><span className="sw-brief-t">{who(brief.speaker)} · #{topicOf(brief.room)}</span></div>
+          </>
+        )}
+        {roles.size > 0 && (
+          <>
+            <h3 className="sw-h">Room roles</h3>
+            <ul className="sw-hops">
+              {[...roles].map(([role, id]) => (
+                <li key={role} className="flex items-center gap-2">
+                  <Theater className="size-4 shrink-0 text-[#c27c00]" strokeWidth={2.5} />
+                  <span className="sw-role">{role}</span>
+                  <span className="min-w-0 flex-1 truncate text-right text-[13px] font-extrabold">{who(id)}</span>
                 </li>
               ))}
             </ul>

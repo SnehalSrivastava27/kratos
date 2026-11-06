@@ -101,9 +101,14 @@ export const isSeat = (personId: string, x: number, z: number) => {
 /**
  * Switch extras on an event's meta (not in the generated types yet; read tolerantly, all optional):
  * `private` + `to`: a private note one agent sent another through Switch (never in the Telegram chat);
- * `switch_document`: a room document pinned in Switch; `kind: 'catch_up'`: a new hire caught up from Switch context.
+ * `switch_document`: a room document pinned in Switch; `kind: 'catch_up'`: a new hire caught up from Switch context;
+ * `kind: 'morning_brief'`: the Captain's daily brief; `switch_role`: an agent assumed / released a Switch room role.
  */
-export interface SwitchMeta { private?: boolean; to?: string; kind?: string; switch_document?: { id?: string; title?: string; version?: string | number } }
+export interface SwitchMeta {
+  private?: boolean; to?: string; kind?: string;
+  switch_document?: { id?: string; title?: string; version?: string | number };
+  switch_role?: { role?: string; action?: string };
+}
 export const swMeta = (e: OfficeEvent): SwitchMeta => (e.meta ?? {}) as SwitchMeta;
 export const isPrivate = (e: OfficeEvent) => swMeta(e).private === true;
 
@@ -139,6 +144,7 @@ export function caption(events: OfficeEvent[], scene: SceneState): { text: strin
   if (!e) return { text: 'Waiting for the founder’s brief…', tone: 'idle' };
   const n = personById[e.speaker]?.name ?? e.speaker;
   const targets = (e.meta?.targets ?? []).map((t) => personById[t]?.name).filter(Boolean);
+  if (isPrivate(e)) return { text: `${n} · 🔒 private note via Switch${swMeta(e).to && personById[swMeta(e).to!] ? ` to ${personById[swMeta(e).to!].name}` : ''}`, tone: 'live' }; // never the text
   switch (e.type) {
     case 'assign':
       return { text: `${n} briefed ${targets.length > 2 ? 'the whole team' : targets.join(' & ')}`, tone: 'live' };

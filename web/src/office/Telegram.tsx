@@ -2,7 +2,7 @@
 // Everything is derived client-side from the event feed.
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
+import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile, Sunrise } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -143,6 +143,11 @@ function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean
       <div className={cn('relative max-w-[82%] rounded-2xl px-3 pt-1.5 pb-1 text-[14.5px] leading-snug shadow-[0_1px_1px_rgba(0,0,0,0.12)]', mine ? 'rounded-br-md bg-[#EEFFDE]' : 'rounded-bl-md bg-white')}
         style={accent ? { boxShadow: `inset 3px 0 0 ${accent}, 0 1px 1px rgba(0,0,0,.12)` } : undefined}>
         {!mine && first && <div className="text-[13px] font-semibold text-[#1A6FB5]">Switch <span className="font-normal text-[#707579]">bot</span></div>}
+        {swMeta(e).kind === 'morning_brief' && (
+          <div className="-mx-1 mt-1 mb-1 flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#FFE3A3] via-[#FFC58A] to-[#FF9E7A] px-2 py-1 text-[12px] font-semibold text-[#7a3a00]">
+            <Sunrise className="size-3.5" strokeWidth={2.5} /> Morning brief <span className="font-normal text-[#7a3a00]/80">· via Switch</span>
+          </div>
+        )}
         <div className="whitespace-pre-wrap text-[#000]">
           {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.name}</b>}
           {!mine && <br />}
