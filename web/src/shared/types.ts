@@ -8,6 +8,7 @@ export interface Transfer { sku: string; from: string; to: string; units: number
 
 export interface OfficeEvent {
   id: string;
+  ws?: string; // workspace id, server-assigned (v3)
   t: number;
   room: RoomId;
   speaker: string; // person id from roster
@@ -19,6 +20,8 @@ export interface OfficeEvent {
     artifact_url?: string;
     ebitda?: number;
     transfers?: Transfer[];
+    switch_room_id?: string; // observer → server (v3)
+    room_name?: string;
   };
 }
 
@@ -95,3 +98,13 @@ export interface Library {
   librarian: 'idle' | 'working';
   shelves: { id: ShelfId; label: string; books: LibraryBook[] }[];
 }
+
+// ---- v3: accounts + workspaces (contracts/api.md "v3") ----
+export interface User { id: string; email: string; name: string; createdAt: number }
+export interface Workspace {
+  id: string; name: string; switchRoomId: string; chatId: string | null; ownerId: string;
+  topics: Partial<Record<RoomId, { threadId: number | null }>>;
+  status: 'linking' | 'ready' | 'needs_admin';
+  createdAt: number;
+}
+export type ConnectState = 'waiting' | 'linking' | 'needs_admin' | 'ready' | 'expired';
