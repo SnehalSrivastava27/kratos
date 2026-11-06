@@ -73,6 +73,8 @@ export function dbStatus(): "ok" | "memory" | "error" {
 }
 
 export const kvGet = (k: string) => (db.prepare("SELECT v FROM kv WHERE k = ?").get(k) as { v: string } | undefined)?.v;
+/** Inserts k only if absent; true if this call inserted it (an atomic once-only marker). */
+export const kvClaim = (k: string, v: string) => Number(db.prepare("INSERT OR IGNORE INTO kv (k, v) VALUES (?, ?)").run(k, v).changes) === 1;
 export const kvSet = (k: string, v: string) => db.prepare("INSERT INTO kv (k, v) VALUES (?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").run(k, v);
 
 /** Stores the event; false if one with that id is already stored (idempotent ingest). */

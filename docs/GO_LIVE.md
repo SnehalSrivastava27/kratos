@@ -104,6 +104,6 @@ credentials file as `scripts/switch-up.sh`. You don't need to set anything up.
 - **Limits:** at most 12 employees on this Mac (`HIRE_MAX`) and 3 hires per 10 minutes per workspace.
 - **Fire someone** (`DELETE /api/employees/<id>`). Console stops the agent's session, the agent
   is deleted from Switch, and its desk is free again.
-- **Hire settings:** each hire gets the same provider settings as the team (copied from
+- **Hire settings:** each hire runs on Haiku (`TEAM_MODEL`, default `claude-haiku-5-5`, like the team) and gets the same provider settings as the team (copied from
   `d2c-captain`), auto mode included. It always works in this repo. Its instructions end with
   `switch/TELEGRAM_STYLE.md`. Skills must be books in the library.

@@ -18,12 +18,13 @@ set -euo pipefail
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 TEMPLATE_NAME="Kesar HQ D2C team"
+export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} # every team agent runs on Haiku
 CORE_ENV="${SWITCHDASH:-$HOME/Library/Application Support/switchdash}/local-switch-server/native/run/switch-core.env"
 # shellcheck disable=SC2207 # ids have no spaces
 TEAM=($(python3 -c 'import json,sys; print(" ".join(p["id"] for p in json.load(open(sys.argv[1]))["people"] if p["kind"]=="agent" and p["id"]!="librarian"))' "$ROOT/contracts/roster.json"))
 
 envval() { grep -E "^$2=" "$1" | head -1 | cut -d= -f2- | sed -e 's/^["'\'']//' -e 's/["'\'']$//'; }
-json() { local code=$1; shift; python3 -c "import json,sys; d=json.load(sys.stdin); $code" "$@"; }
+json() { local code=$1; shift; python3 -c "import json,os,sys; d=json.load(sys.stdin); $code" "$@"; }
 say() { printf '• %s\n' "$*"; }
 
 if [ "${DRY_RUN:-0}" = 1 ]; then
@@ -69,15 +70,16 @@ for name in "${TEAM[@]}"; do
   # The .md body (minus its "# <id>" heading) is the agent's instructions, same as the template inlines.
   rc=0
   gw GET "/management/agents/$id" | python3 -c '
-import json, sys
+import json, os, sys
 d = json.load(sys.stdin)
 body = open(sys.argv[1]).read().split("\n", 1)[1].strip()
-if d["definition"].get("instructions", "").strip() == body:
+model = os.environ["TEAM_MODEL"]
+if d["definition"].get("instructions", "").strip() == body and d["definition"].get("model") == model:
     sys.exit(3)
-print(json.dumps({"definition": {**d["definition"], "instructions": body}}))' "$ROOT/switch/agents/$name.md" > "$TMP/patch" || rc=$?
+print(json.dumps({"definition": {**d["definition"], "instructions": body, "model": model}}))' "$ROOT/switch/agents/$name.md" > "$TMP/patch" || rc=$?
   if [ "$rc" = 3 ]; then say "$name: already up to date"
   elif [ "$rc" != 0 ]; then say "$name: update FAILED (could not read the agent or its .md)"; FAIL=1
-  elif gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; then say "$name: instructions updated"
+  elif gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; then say "$name: instructions/model updated"
   else say "$name: update FAILED (PATCH refused)"; FAIL=1; fi
 done
 
@@ -92,10 +94,10 @@ ok = True
 for a in d:
     if a["name"] not in sys.argv[2:]: continue
     body = open("%s/switch/agents/%s.md" % (sys.argv[1], a["name"])).read().split("\n", 1)[1].strip()
-    has = a["definition"].get("instructions", "").strip() == body  # the full text, not just a marker
+    has = a["definition"].get("instructions", "").strip() == body and a["definition"].get("model") == os.environ["TEAM_MODEL"]
     st = a.get("status") or {}
     applied = st.get("applied_revision") == a["revision"]
     ok &= has and applied
-    print("•   %-16s current=%s  revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", a["revision"], st.get("applied_revision"), st.get("process")))
+    print("•   %-16s current=%s  model %s, revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", a["definition"].get("model"), a["revision"], st.get("applied_revision"), st.get("process")))
 sys.exit(0 if ok else 1)' "$ROOT" "${TEAM[@]}" < "$TMP/managed" || FAIL=1
 [ "$FAIL" = 0 ] && echo "All team agents have the current rules." || { echo "Some agents are not in sync (see above)."; exit 1; }

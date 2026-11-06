@@ -12,6 +12,7 @@ const roster = JSON.parse(read('contracts/roster.json'));
 const style = read('switch/TELEGRAM_STYLE.md').trim();
 const team = roster.people.filter((p) => p.kind === 'agent' && p.id !== 'librarian');
 const problems = [];
+const MODEL = 'claude-haiku-5-5'; // team model (cost); keep in sync with scripts/switch-*.sh and server/src/switch.ts TEAM_MODEL
 
 const agents = team.map((p) => {
   const body = read(`switch/agents/${p.id}.md`).split('\n').slice(1).join('\n').trim();
@@ -21,6 +22,7 @@ const agents = team.map((p) => {
     `    description: ${JSON.stringify(p.role)}`,
     '    addressing: anyone',
     '    provider: "{provider}"',
+    `    model: "${MODEL}"`,
     '    location: "{location}"',
     '    directory: "{directory}"',
     '    join: ["{team_room}"]',

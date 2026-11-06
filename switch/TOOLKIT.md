@@ -12,6 +12,49 @@ node kit/bin/kit.mjs help deck             # usage + a working example spec for 
 Specs are inline JSON (`'{"title":...}'`) or a path to a `.json` file (in the repo or `/tmp`). Write long specs to
 `/tmp/<name>.json` first. `out` (or `--out`) names the file: `a-z 0-9 - _ .` only, the extension is added for you.
 
+## Ask in one command (start here)
+
+Most questions are **one** `kit metric` call. It returns the number, its exact definition, the filters, the source tables and
+the SQL that ran. Only write SQL when no metric fits. Full definitions and Indian D2C conventions: `switch/METRICS.md`.
+
+```
+node kit/bin/kit.mjs metric list                                    # every metric + one line
+node kit/bin/kit.mjs metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --from D --to D | --last N] [--by dim[,dim]]
+node kit/bin/kit.mjs brief <analytics|ads|creators|ops|design|finance|captain>   # your dept's numbers, month vs previous
+```
+
+| Area | Metrics |
+|---|---|
+| Sales | `net_revenue` (delivered, = P&L), `gross_revenue`, `booked_revenue`, `discounts`, `discount_pct`, `orders`, `orders_all`, `order_lines`, `units`, `units_all`, `aov`, `cod_share` |
+| RTO and returns | `rto_pct` (undelivered, by order date), `return_pct` (customer returns), `returns`, `return_reasons` |
+| Margin | `cogs`, `channel_fees`, `shipping_cost`, `fees_pct`, `cm1`, `cm2`, `cm3` |
+| Finance | `ebitda`, `ebitda_pct`, `opex`, `runway_months` |
+| Marketing | `marketing_spend`, `marketing_pct`, `ad_spend`, `roas`, `meta_roas`, `google_roas`, `marketplace_roas`, `ctr_pct`, `cpc`, `cpm`, `blended_roas`, `mer`, `cac` |
+| Creators | `creator_fees`, `creator_orders`, `creator_roas`, `creator_cpm`, `creator_cost_per_order` |
+| Customers | `new_customers`, `repeat_rate`, `new_vs_returning`, `cohort_retention`, `ltv` |
+| Ops | `stock_on_hand`, `days_of_cover`, `stockout_risk`, `sell_through`, `po_value`, `po_delays`, `supplier_lead_time`, `rm_cost_change` |
+| People | `salary_bill` (gross, net, employer cost), `headcount` |
+
+| Question | Command |
+|---|---|
+| October net revenue? | `metric net_revenue --month 2026-10` |
+| Revenue by channel last 30 days? | `metric net_revenue --by channel --last 30` |
+| Website RTO, COD vs prepaid? | `metric rto_pct --channel Website --by payment` |
+| RTO by city tier / courier? | `metric rto_pct --by tier` · `metric rto_pct --channel Website --by courier` |
+| Best Meta campaign? | `metric meta_roas --by campaign --month 2026-10` |
+| Amazon ads spend and ROAS? | `metric marketplace_roas --channel Amazon --month 2026-10` (spend is in the result) |
+| Are we within the marketing cap? CAC? | `metric marketing_pct --month 2026-10` · `metric cac --month 2026-10` |
+| CM per order by channel? | `metric cm2 --by channel --month 2026-10` (`per_order`, `pct_of_net`) |
+| Which creator paid back? | `metric creator_roas --by creator` |
+| Which SKU runs out first? | `metric days_of_cover` · `metric stockout_risk` |
+| Saffron price change? | `metric rm_cost_change` |
+| Payroll by dept? | `metric salary_bill --by dept` |
+
+Rules: `--channel` is a sales channel (Website, Amazon, Flipkart, Nykaa, Myntra, Blinkit, Zepto); for ads metrics it is the
+platform (Meta, Google, Amazon, ...). `--sku` takes SKU01 or part of a name. No window = all data (2026-08-01..2026-10-31);
+`--last N` ends on 2026-10-31. Unknown metric, filter or `--by` → an error that lists what is valid. Quote the `display` value.
+Meta/Google/marketplace revenue is platform-attributed and overlaps: never add them up.
+
 ## Commands
 
 **Find data.** Every `data/*.csv` is a table named after the file (`products`, `orders`, `meta_ads_daily`, ...).
@@ -75,17 +118,18 @@ node kit/bin/kit.mjs banner '{"out":"diwali","template":"sale","headline":"Glow 
 
 | Agent | Typical commands |
 |---|---|
-| d2c-analyst, d2c-forecaster, d2c-insights | `sql`, `stats`, `forecast`, `chart`, `xlsx` |
-| d2c-ops, d2c-logistics, d2c-procurement | `sql`, `forecast` (stock cover), `xlsx` (transfer / PO sheets) |
-| d2c-ads, d2c-google, d2c-marketplaces | `sql`, `stats` (ROAS, CAC), `chart`, `deck` |
-| d2c-influencers, d2c-ugc | `sql` (creators, posts), `stats`, `xlsx` (shortlist) |
-| d2c-design, d2c-copywriter | `banner`, `chart` |
-| d2c-finance, d2c-payroll | `sql`, `xlsx` (formulas, totals), `pdf` |
-| d2c-captain | `deck`, `docx` / `pdf` (founder brief) |
+| d2c-analyst, d2c-forecaster, d2c-insights | `metric`, `brief analytics`, `sql`, `stats`, `forecast`, `chart`, `xlsx` |
+| d2c-ops, d2c-logistics, d2c-procurement | `metric`, `brief ops`, `sql`, `forecast`, `xlsx` (transfer / PO sheets) |
+| d2c-ads, d2c-google, d2c-marketplaces | `metric` (ROAS, CAC, MER), `brief ads`, `sql`, `chart`, `deck` |
+| d2c-influencers, d2c-ugc | `metric` (creator_*), `brief creators`, `sql` (creators, posts), `xlsx` (shortlist) |
+| d2c-design, d2c-copywriter | `brief design`, `banner`, `chart` |
+| d2c-finance, d2c-payroll | `metric` (cm1-3, ebitda, salary_bill), `brief finance`, `xlsx`, `pdf` |
+| d2c-captain | `brief captain`, `deck`, `docx` / `pdf` (founder brief) |
 
 ## Rules the kit enforces
 - SQL: one read-only `SELECT`/`WITH`. No `ATTACH`, `PRAGMA`, writes, `load_extension`, file functions, or `;` chains.
-  The data is an in-memory copy, so nothing you run can change `data/`.
+  The data is a read-only SQLite copy (`data/.cache/kratos.db`, rebuilt automatically when a CSV changes), so nothing you run can change `data/`.
+  Besides the CSV tables you can query the marts (`m_lines`, `m_orders`, `channel_daily`, `ads_daily_all`, ...; see `kit tables`).
 - Files only go to `gallery/live-run/`. Specs ≤ 1 MB, ≤ 10,000 rows, ≤ 40 slides, 60 s per command.
 - No network: charts take inline data or SQL only.
 

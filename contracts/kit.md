@@ -25,5 +25,9 @@ Specs are JSON files or inline JSON; inputs are validated; nothing touches the n
 | `kit pdf <spec.json>` | Simple report → `.pdf` (pdfkit). |
 | `kit banner <spec.json>` | 1080×1080 SVG banner from a template, plus PNG (sharp). |
 | `kit help [command]` | Usage and an example spec. |
+| `kit metric <name> [--channel X] [--sku Y] [--month YYYY-MM \| --from D --to D \| --last N] [--by dim[,dim]]` | One named D2C metric (`kit metric list`): {metric, definition, unit, value\|values, display, filters, source_tables, sql}. Definitions: `switch/METRICS.md`. |
+| `kit brief <analytics\|ads\|creators\|ops\|design\|finance\|captain> [--month YYYY-MM]` | A department lead's 6–10 numbers, month vs previous, each with its `kit metric` command. |
+
+Data is cached read-only in `data/.cache/kratos.db` (gitignored, rebuilt when a CSV changes); marts such as `m_lines`, `m_orders`, `channel_daily`, `ads_daily_all` are queryable with `kit sql`.
 
 Full library list and examples: `switch/TOOLKIT.md` (written by K2, read by every agent).
