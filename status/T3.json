@@ -1,1 +1,1 @@
-{ "task": "T3", "state": "queued", "progress": 0, "done": [], "next": "", "blockers": [], "contract_requests": [] }
+{ "task": "T3", "state": "working", "progress": 5, "done": [], "next": "grey-box floor", "blockers": [], "contract_requests": [], "updated": "2026-11-06T18:30:00+05:30" }
