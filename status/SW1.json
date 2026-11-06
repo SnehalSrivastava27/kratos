@@ -1,0 +1,4 @@
+{ "task": "SW1", "state": "working", "progress": 30,
+  "done": ["verified read_context in switch-core 0.31.0: MCP tool mcp__switch__read_context {limit, since, before, room_id}"],
+  "next": "hire instructions FIRST THING block + kickoff message + catch_up tagging",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T14:00:00+05:30" }
