@@ -148,7 +148,7 @@ function gallery() {
     })
     .sort((a, b) => b.mtime - a.mtime);
 }
-const limitParam = (url: URL, def: number) => Math.min(RING_MAX, Math.max(0, Number(url.searchParams.get("limit") ?? def) || 0));
+const limitParam = (url: URL, def: number) => Math.min(RING_MAX, Math.max(0, Math.floor(Number(url.searchParams.get("limit") ?? def)) || 0));
 
 async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
   const method = req.method === "HEAD" ? "GET" : req.method; // node drops the body for HEAD

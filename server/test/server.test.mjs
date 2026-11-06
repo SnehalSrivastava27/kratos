@@ -165,6 +165,12 @@ test("rooms and agents are derived from events", async () => {
     assert.equal(agents["d2c-ads"].state, "idle");
 
     assert.equal((await fetch(s.base + "/api/rooms/nope/events")).status, 404);
+    for (const q of ["1.5", "-3", "abc", "1e9", "Infinity"]) {
+      const r = await fetch(`${s.base}/api/rooms/ops/events?limit=${q}`);
+      assert.equal(r.status, 200, `room limit=${q}`);
+      assert.equal((await fetch(`${s.base}/api/history?limit=${q}`)).status, 200, `history limit=${q}`);
+    }
+    assert.equal((await (await fetch(`${s.base}/api/rooms/ops/events?limit=1.5`)).json()).length, 1);
     assert.ok(Array.isArray(await (await fetch(s.base + "/api/gallery")).json()));
   } finally {
     await s.stop();
