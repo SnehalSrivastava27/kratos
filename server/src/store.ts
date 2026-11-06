@@ -99,6 +99,20 @@ export const recent = (ws: string, limit: number) =>
 export const roomEvents = (ws: string, room: string, limit: number) =>
   parse(db.prepare("SELECT json FROM events WHERE ws = ? AND room = ? ORDER BY seq DESC LIMIT ?").all(ws, room, limit));
 
+/** Room documents pinned in Switch (observer `artifact` events with meta.switch_document): the latest state of each,
+ *  oldest first; deleted ones left out. */
+export function documents(ws: string) {
+  const rows = db.prepare("SELECT json FROM events WHERE ws = ? AND json_extract(json, '$.meta.switch_document.id') IS NOT NULL ORDER BY seq").all(ws) as { json: string }[];
+  const docs = new Map<string, Record<string, unknown>>();
+  for (const { json } of rows) {
+    const ev = JSON.parse(json) as OfficeEvent & { meta: { switch_document: { id: string; action?: string } & Record<string, unknown> } };
+    const d = ev.meta.switch_document;
+    docs.delete(d.id); // re-insert: the most recently touched last
+    if (d.action !== "deleted") docs.set(d.id, { ...d, by: ev.speaker, room: ev.room, t: ev.t, event_id: ev.id });
+  }
+  return [...docs.values()];
+}
+
 export const eventCount = () => Number((db.prepare("SELECT COUNT(*) n FROM events").get() as { n: number }).n);
 
 /** Per room of a workspace: stored event count and the newest event. */
