@@ -177,7 +177,10 @@ test("rooms and agents are derived from events", async () => {
       assert.equal((await fetch(`${s.base}/api/history?limit=${q}`)).status, 200, `history limit=${q}`);
     }
     assert.equal((await (await fetch(`${s.base}/api/rooms/ops/events?limit=1.5`)).json()).length, 1);
-    assert.ok(Array.isArray(await (await fetch(s.base + "/api/gallery")).json()));
+    const gal = await (await fetch(s.base + "/api/gallery")).json();
+    assert.ok(gal.length >= 1 && !gal.some((g) => g.name === "index.json"));
+    assert.equal(gal[0].name, "hero.html");
+    assert.match(gal[0].title, /Festive Sale/);
   } finally {
     await s.stop();
   }
@@ -243,6 +246,9 @@ test("security headers: gallery is sandboxed, built site has CSP + asset caching
     assert.equal(page.headers.get("x-content-type-options"), "nosniff");
     assert.equal(page.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
     assert.equal(page.headers.get("cache-control"), "no-cache");
+    assert.equal(page.headers.get("strict-transport-security"), null);
+    const https = await fetch(s.base + "/office", { headers: { "x-forwarded-proto": "https" } });
+    assert.match(https.headers.get("strict-transport-security"), /max-age=31536000/);
     const asset = readdirSync(new URL("assets/", DIST)).find((f) => f.endsWith(".js"));
     const a = await fetch(`${s.base}/assets/${asset}`);
     assert.equal(a.status, 200);

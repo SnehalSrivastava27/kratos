@@ -59,7 +59,11 @@ export interface AgentSummary {
 }
 
 /** GET /api/gallery */
-export interface GalleryItem { name: string; url: string; size: number; mtime: number }
+export interface GalleryItem {
+  name: string; url: string; size: number; mtime: number;
+  title: string; // from gallery/index.json, else the file name
+  sku: string | null;
+}
 
 /** GET /api/health */
 export interface Health {

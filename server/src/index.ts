@@ -81,12 +81,15 @@ function requireToken(req: IncomingMessage, token: string) {
 }
 // Behind Fly's proxy every request comes from the proxy; Fly sets Fly-Client-IP (clients can't spoof it there).
 const clientIp = (req: IncomingMessage) => (env.FLY_APP_NAME && String(req.headers["fly-client-ip"] ?? "")) || req.socket.remoteAddress || "?";
+const HITS_MAX = 10_000;
 const hits = new Map<string, { n: number; reset: number }>(); // ponytail: fixed 1-min window per IP, in memory (single instance)
 function rateLimit(ip: string) {
   const now = Date.now();
   let h = hits.get(ip);
   if (!h || now >= h.reset) {
-    if (hits.size > 10_000) for (const [k, v] of hits) if (now >= v.reset) hits.delete(k);
+    hits.delete(ip); // re-insert so Map order = window start order
+    if (hits.size >= HITS_MAX) for (const [k, v] of hits) if (now >= v.reset) hits.delete(k);
+    while (hits.size >= HITS_MAX) hits.delete(hits.keys().next().value!); // still full: evict the oldest windows
     hits.set(ip, (h = { n: 0, reset: now + 60_000 }));
   }
   if (++h.n > RATE_LIMIT) throw new HttpError(429, "rate limited");
@@ -138,15 +141,26 @@ function serveFile(res: ServerResponse, base: string, rel: string, headers: Reco
   createReadStream(file).pipe(res);
   return true;
 }
+/** Banner files, titled from gallery/index.json ([{ title, file, sku }]) when listed there: listed ones first
+ *  in index order, then the rest newest first. index.json itself is not a banner. */
 function gallery() {
   if (!existsSync(GALLERY)) return [];
+  let index: { title?: string; file?: string; sku?: string | null }[] = [];
+  try {
+    index = JSON.parse(readFileSync(join(GALLERY, "index.json"), "utf8"));
+  } catch {}
+  const pos = (name: string) => {
+    const i = Array.isArray(index) ? index.findIndex((e) => e?.file === name) : -1;
+    return i < 0 ? Infinity : i;
+  };
   return readdirSync(GALLERY, { withFileTypes: true })
-    .filter((d) => d.isFile() && !d.name.startsWith("."))
+    .filter((d) => d.isFile() && !d.name.startsWith(".") && d.name !== "index.json")
     .map((d) => {
       const st = statSync(join(GALLERY, d.name));
-      return { name: d.name, url: `/gallery/${encodeURIComponent(d.name)}`, size: st.size, mtime: st.mtimeMs };
+      const meta = index[pos(d.name)];
+      return { name: d.name, url: `/gallery/${encodeURIComponent(d.name)}`, size: st.size, mtime: st.mtimeMs, title: meta?.title ?? d.name, sku: meta?.sku ?? null };
     })
-    .sort((a, b) => b.mtime - a.mtime);
+    .sort((a, b) => pos(a.name) - pos(b.name) || b.mtime - a.mtime);
 }
 const limitParam = (url: URL, def: number) => Math.min(RING_MAX, Math.max(0, Math.floor(Number(url.searchParams.get("limit") ?? def)) || 0));
 
@@ -222,6 +236,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
 
 const server = createServer(async (req, res) => {
   const start = performance.now();
+  if (req.headers["x-forwarded-proto"] === "https") res.setHeader("strict-transport-security", "max-age=31536000; includeSubDomains"); // Fly terminates TLS
   const url = new URL(req.url ?? "/", "http://x");
   if (url.pathname !== "/api/health" && url.pathname !== "/api/ready") // probes would drown the log
     res.on("finish", () =>

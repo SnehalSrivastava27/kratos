@@ -14,7 +14,7 @@ Ports: server **8787**, web dev server **5173** (Vite proxies `/api`, `/ws`, `/g
 | GET | `/api/rooms` | office (chat UI) | – | `RoomSummary[]`, one per roster room |
 | GET | `/api/rooms/:id/events?limit=50` | office (chat UI) | – | Newest N events in that room (max 500), oldest first. Unknown room → 404 |
 | GET | `/api/agents` | office (chat UI) | – | `AgentSummary[]`, one per roster person |
-| GET | `/api/gallery` | office | – | `GalleryItem[]`, files in `gallery/`, newest first |
+| GET | `/api/gallery` | office | – | `GalleryItem[]`: files in `gallery/` (not index.json), titled and ordered by `gallery/index.json`, unlisted ones after, newest first |
 | GET | `/api/health` | ops | – | `{ ok, version, uptime, clients, history, db: "ok"\|"memory"\|"error" }` |
 | GET | `/api/ready` | load balancer | – | 200 `{ ready: true, db }`; 503 while shutting down, if a DB write/read fails, or if production with `DATA_DIR` fell back to memory |
 
@@ -39,7 +39,7 @@ All errors are `{ "error": string }` JSON (400 adds `details` = ajv errors).
 ```ts
 RoomSummary  { id, label, group /* Telegram supergroup, "Kratos D2C" */, topic /* forum topic, "War Room" */, members: string[], last: OfficeEvent | null, count }
 AgentSummary { id, name, kind, state: "idle"|"working"|"waiting"|"done", last: OfficeEvent | null, room: RoomId | null }
-GalleryItem  { name, url /* /gallery/<name> */, size, mtime /* epoch ms */ }
+GalleryItem  { name, url /* /gallery/<name> */, size, mtime /* epoch ms */, title, sku: string | null }
 ```
 - `members`: humans and `d2c-captain` are in every room, every agent is in `war_room` and its
   home room (same zone), as in switch/d2c-team.template.yaml; anyone who spoke there is added.

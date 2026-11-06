@@ -74,7 +74,17 @@ A `401` in the observer log means the token doesn't match the server's.
 fly deploy --ha=false                     # rolling restart; SIGTERM → server closes sockets and the DB
 fly releases && fly deploy --image <previous image ref>   # roll back
 fly ssh console -C "ls -la /data"         # events.db, events.db-wal
-fly ssh sftp get /data/events.db ./events-backup.db       # backup
+```
+
+Backup: don't copy `events.db` directly; with WAL on, the latest writes can still be in `events.db-wal`.
+Take a consistent snapshot first. The image has no `sqlite3` CLI, so use Node:
+
+```bash
+fly ssh console     # then, on the machine:
+node -e "new (require('node:sqlite').DatabaseSync)('/data/events.db').exec(\"VACUUM INTO '/data/backup.db'\")"
+exit
+fly ssh sftp get /data/backup.db ./events-backup.db
+fly ssh console -C "rm /data/backup.db"
 fly volumes snapshots list <volume id>    # Fly snapshots volumes daily
 ```
 

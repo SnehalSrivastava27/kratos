@@ -20,7 +20,7 @@ export function openStore(dataDir: string) {
     mkdirSync(dataDir, { recursive: true });
     const file = join(resolve(dataDir), "events.db");
     db = new DatabaseSync(file);
-    db.exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA busy_timeout=2000;
+    db.exec(`PRAGMA busy_timeout=2000; PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;
       CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE,
         room TEXT NOT NULL, speaker TEXT NOT NULL, json TEXT NOT NULL);
       CREATE INDEX IF NOT EXISTS events_room ON events(room, seq);
