@@ -1,3 +1,14 @@
-{ "task": "E3", "state": "working", "progress": 10,
-  "done": [], "next": "baseline bytes, multi-part number scoring, tier 3 bank",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T12:00:00+05:30" }
+{ "task": "E3", "state": "done", "progress": 100,
+  "done": [
+    "Leaner instructions: switch/agents/*.md 219,205 -> 153,322 bytes (-30.1%; specialists ~12.7 KB -> ~8.7 KB, Captain 17.1 -> 13.2 KB, Finance 16.5 -> 12.8 KB). Per-agent TABLES (own + orders/products, other tables by name), one compact procedure/definitions/team block; SAFETY, TEAM HABITS, TELEGRAM_STYLE (byte-identical) and each job kept",
+    "Tier 3 evals: 17 founder-style asks (vague 'returns'/'cash'/'COD'/'best seller', two-part, follow-ups quoting an earlier number, made-up SKU/campaign/creator/marketplace); multi-part number truths [a, [b1, b2]]; refusal scorer accepts 'no rows/not found/in our Meta data'",
+    "Haiku runs 8-10: 163/166 -> 163/166 -> 166/166 first pass (tier 1 84/84, tier 2 65/65, tier 3 17/17), p50 6s / p90 7s, 1.0 tool calls/q, $0.21; tier 1+2 cost $0.185 vs $0.20 in run 7. Template rebuilt; server, evals tests and evals:truth pass"
+  ],
+  "findings": [
+    "Trimming 30% of the prompt cost no score but saved only ~7% in cost and nothing in latency: prompt caching already discounts the repeated text and the wall time is the one kit call.",
+    "What trimming broke (and the fix): Haiku recomputed a courier x zone RTO from orders.csv once orders' courier/zone columns were visible (the old partial column list had steered it to couriers.rto_pct) -> one rate-card line for Logistics; 'how many orders were COD' counted delivered only -> 'order counts by an attribute = all statuses'; a squeezed 'a bullet Source, last line Next' sentence was copied literally into a reply -> two plain sentences. Small models read compressed rules literally: compress lists, not rules.",
+    "Tier 3 barely separates Haiku: 16/17 on the old instructions (17/17 with the fixed scorer). It already names RTO vs customer returns, answers both parts of a two-part ask, recomputes a quoted number instead of trusting it, and refuses made-up names, though often as 'No X found' rather than the 'Not in our data' title. Remaining tier-3 issues were format: exact rupees instead of lakhs, a ***triple*** key line, an extra italic note line.",
+    "Next separator: real multi-turn sessions (resumed context with a wrong earlier number), or live mode where Switch tools and teammates are in play."
+  ],
+  "next": "orchestrator: merge task/E3, then switch-sync-agents.sh to push the leaner instructions live",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T03:40:00+05:30" }
