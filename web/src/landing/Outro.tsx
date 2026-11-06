@@ -45,7 +45,7 @@ export function HowItWorks() {
 }
 
 const FAQ = [
-  { q: 'What is D2C Agent HQ?', a: 'Six AI teammates for a D2C brand: a Sale Captain plus Analytics, Ads, Creators, Ops and Design. They plan work together inside one Telegram group, one topic each, and a live 3D office shows who is doing what.' },
+  { q: 'What is Kratos?', a: 'Six AI teammates for a D2C brand: a Sale Captain plus Analytics, Ads, Creators, Ops and Design. They plan work together inside one Telegram group, one topic each, and a live 3D office shows who is doing what.' },
   { q: 'Does it need Switch?', a: 'Yes. Switch connects the agents to your Telegram group through one bot, routes each message to the right teammate and gives them shared context, so the Captain can see what Creators proposed.' },
   { q: 'Telegram only, or WhatsApp too?', a: 'Telegram is live today: one group with Topics turned on. WhatsApp is on the roadmap; a production version would use the official WhatsApp Business API.' },
   { q: 'What happens to my data?', a: 'The demo runs on a fictional brand, Kesar & Co., with sample CSVs for products, sales, stock and campaigns. Your teammates only read the files and the Telegram group you connect.' },

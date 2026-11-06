@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Check, CheckCheck, ChevronRight, Shield, Users } from 'lucide-react';
+import { Check, CheckCheck, ChevronRight, Users } from 'lucide-react';
 import { TOPICS } from '@/landing/data';
 import { TG_WALL } from '@/landing/Telegram';
 import { DeptIcon } from './dept';
 import { EASE } from '@/landing/ui';
+import { Logo } from '@/brand/Logo';
 import { cn } from '@/lib/utils';
 
 /** Right column of /connect: a light Telegram mock that follows the step you're on. Decorative. */
@@ -67,8 +68,8 @@ function AdminView({ bot }: { bot: string }) {
       <p className="mt-5 px-1 pb-1.5 text-[11.5px] font-medium tracking-wide text-neutral-400 uppercase">Admin rights · @{bot}</p>
       <div className="overflow-hidden rounded-xl bg-white">
         <div className="flex items-center gap-3 border-b border-black/[0.05] px-3.5 py-3">
-          <span className="grid size-9 place-items-center rounded-full bg-neutral-900 text-white"><Shield className="size-4" /></span>
-          <div><p className="text-[13.5px] font-medium">D2C Agent HQ</p><p className="text-[12px] text-tg">@{bot}</p></div>
+          <span className="grid size-9 place-items-center rounded-full bg-neutral-900"><Logo variant="mark" label="" className="h-3.5 text-white" /></span>
+          <div><p className="text-[13.5px] font-medium">Kratos</p><p className="text-[12px] text-tg">@{bot}</p></div>
         </div>
         <Row label="Manage topics" right={<Toggle />} strong />
         <Row label="Pin messages" right={<Toggle off />} />

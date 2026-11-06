@@ -20,6 +20,7 @@ import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
 import type { GalleryItem } from './engine/props';
+import { Logo } from '@/brand/Logo';
 import './office.css';
 
 const MAX_CHAT = 200;
@@ -347,7 +348,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       <div className="hq-hud">
         <header className="ao-top">
           <div className="ao-panel ao-brand">
-            <div className="ao-logo">K</div>
+            <div className="ao-logo"><Logo variant="mark" label="" className="h-[15px] text-[#FAFAF9]" /></div>
             <div className="min-w-0">
               <div className="ao-name">
                 {isDemo ? 'Kesar HQ' : workspace?.name ?? 'Your office'}

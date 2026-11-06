@@ -91,7 +91,7 @@ export default function Connect() {
     <div className="min-h-svh bg-canvas text-foreground antialiased selection:bg-saffron/25">
       <header className="sticky top-0 z-30 border-b border-black/[0.07] bg-canvas/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1264px] items-center gap-3 px-5 md:px-12">
-          <Link to="/" aria-label="D2C Agent HQ home"><Logo /></Link>
+          <Link to="/" aria-label="Kratos home"><Logo /></Link>
           <div className="ml-auto flex items-center gap-1.5">
             {hasOffice && (
               <Button variant="ghost" className="h-9 rounded-full px-3 text-[14px]" render={<Link to="/app" />} nativeButton={false}>

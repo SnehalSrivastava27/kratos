@@ -95,7 +95,7 @@ export default function AuthPage({ mode }: { mode: Mode }) {
     <div className="grid min-h-svh bg-canvas text-foreground antialiased selection:bg-saffron/25 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
       <div className="flex min-h-svh flex-col px-5 py-5 md:px-12">
         <header className="flex items-center justify-between">
-          <Link to="/" aria-label="D2C Agent HQ home"><Logo /></Link>
+          <Link to="/" aria-label="Kratos home"><Logo /></Link>
           <p className="text-[14px] text-neutral-500">
             <span className="hidden sm:inline">{signup ? 'Have an account?' : 'New here?'} </span>
             <Link to={signup ? '/login' : '/signup'} state={from ? { from } : undefined} className="font-medium text-foreground underline-offset-4 hover:underline">
