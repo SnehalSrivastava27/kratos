@@ -1,0 +1,3 @@
+{ "task": "E2", "state": "working", "progress": 25,
+  "done": ["tier 2 question bank (64) + refusal/safety/must/forbid scoring", "runner: Haiku default, locked-down tools, p50/p90, tool calls"],
+  "next": "run 1 (baseline on Haiku)", "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
