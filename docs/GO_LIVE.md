@@ -18,6 +18,11 @@ Rerun it after any step below. It is safe to run again, and it prints whatever i
    Check that the directory is this repo. Console has to do this step because it runs the agents' Claude Code sessions.
    Rerun the script afterwards, so it adds them to the group.
 
+**Changed an agent's rules** (`switch/agents/<id>.md`)? Run `scripts/switch-sync-agents.sh`. It updates the
+live agents and the stored template, and checks each agent took the change. Running sessions pick up the new
+instructions on their next message. Keep `switch/d2c-team.template.yaml` in step with the `.md` files.
+Preview how a reply will look in Telegram with `python3 scripts/tg-render.py - < reply.md`.
+
 ## Start the demo (phone)
 5. In the **War Room** topic, send:
    `@d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L marketing budget`

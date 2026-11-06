@@ -85,3 +85,46 @@ Library     { updatedAt: number | null, librarian: "idle" | "working", shelves: 
 ShelfId     = "war_room" | "analytics" | "ads" | "creators" | "ops" | "design" | "engineering" | "general"
 ```
 Event types gain `hired` (a new employee joined) and `command` (reserved: the office console sent a command; the echo from Telegram arrives as a normal `message`).
+
+## v3: accounts, workspaces, private office (decided with the user 2026-11-06)
+
+**Rule:** the public site (`/`) shows ONLY the scripted demo (made-up Kesar & Co. data, replayed in
+the browser from demo/feeds/sale-demo.json). Every real Telegram message, the live office, people,
+hires and commands require a signed-in user and are scoped to that user's workspace.
+
+**Accounts:** email + password. Passwords hashed with scrypt (node:crypto), min 10 chars. Session =
+random 32-byte id in cookie `hq_session` (HttpOnly, SameSite=Lax, Path=/, Secure when served over
+https, 30-day expiry, stored hashed in SQLite). Login is rate limited per IP+email.
+
+**Workspace:** one Telegram group (one Switch room) belonging to one user. The 6 team agents and the
+observer are joined to it, and it gets the 6 forum topics. Every stored event has a server-assigned `ws`.
+
+| Method | Path | Auth | Body → Result |
+|---|---|---|---|
+| POST | `/api/auth/signup` | none | `{email, password, name}` → 201 `{user}` + cookie. 409 if the email exists |
+| POST | `/api/auth/login` | none | `{email, password}` → 200 `{user}` + cookie, 401 generic error |
+| POST | `/api/auth/logout` | session | → 204, cookie cleared, session deleted |
+| GET | `/api/auth/me` | session | `{user, workspaces: Workspace[]}` or 401 |
+| POST | `/api/workspaces/connect` | session | → `{code /* 6 digits, 15 min */, botUsername, expiresAt}` |
+| GET | `/api/workspaces/connect/status` | session | `{state: "waiting"\|"linking"\|"needs_admin"\|"ready"\|"expired", workspace?: Workspace, detail?}` |
+| GET | `/api/workspaces` | session | `Workspace[]` |
+
+**Linking:** the user adds @kratosd2c_bot to their Telegram group (Topics on, bot admin with
+"Manage topics") and sends the 6-digit code there. The observer forwards messages from rooms with
+no workspace to the server (`meta.switch_room_id`, `meta.room_name`). If the text contains a live
+code, the server links that room to the user, creates the 6 topics, joins the 6 agents + observer,
+and replies nothing into the group except Switch's own greetings. Codes are single-use; a room
+already linked to someone else can't be claimed.
+
+**Scoping (changes to v1/v2 endpoints):** `/api/history`, `/ws`, `/api/rooms`, `/api/agents`,
+`/api/people`, `/api/employees`, `/api/command`, `/api/library*` now require a session (or
+ADMIN_TOKEN for scripts) and act on the workspace in `?ws=<id>` (default: the user's first). `/ws`
+reads the cookie on upgrade. `/api/replay*` is admin-only. Public: `/api/health`, `/api/ready`,
+`/gallery/*` and static assets. `POST /api/events` stays observer-token only; events from rooms
+mapped to no workspace are stored only as link attempts, never broadcast.
+
+```ts
+User      { id, email, name, createdAt }
+Workspace { id, name /* Telegram group title */, switchRoomId, chatId: string | null, ownerId, topics: Record<RoomId, { threadId: number | null }>, status: "linking" | "ready" | "needs_admin", createdAt }
+OfficeEvent.ws?: string   // server-assigned workspace id
+```

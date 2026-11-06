@@ -100,8 +100,20 @@
         "employee_id": {
           "type": "string",
           "description": "person id of a newly hired employee (type=hired)"
+        },
+        "switch_room_id": {
+          "type": "string",
+          "description": "Switch room id (observer → server, v3)"
+        },
+        "room_name": {
+          "type": "string",
+          "description": "Switch room name (observer → server, v3)"
         }
       }
+    },
+    "ws": {
+      "type": "string",
+      "description": "workspace id, assigned by the server (v3)"
     }
   }
 }
