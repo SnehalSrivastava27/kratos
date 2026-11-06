@@ -143,7 +143,7 @@ test('evals/questions.mjs truths (computed from raw CSVs) match one-command metr
     [/marketing spend as a % of net revenue in October/, ['marketing_pct', '--month', '2026-10']],
     [/total opex in October/, ['opex', '--month', '2026-10']],
     [/total COGS in August/, ['cogs', '--month', '2026-08']],
-    [/orders did we get in October 2026 \(all statuses\)/, ['order_lines', '--month', '2026-10']],
+    [/orders did we get in October 2026 \(all statuses\)/, ['orders_all', '--month', '2026-10']],
     [/units of SKU01 were ordered in October/, ['units_all', '--sku', 'SKU01', '--month', '2026-10']],
     [/customers are in customers.csv/, ['new_customers']],
     [/repeat rate/, ['repeat_rate']],
