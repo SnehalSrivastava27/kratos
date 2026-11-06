@@ -6,6 +6,7 @@ import Character from './Character';
 import { useMemo } from 'react';
 import { ctx, roster } from './data';
 import { reduce } from './officeState';
+import { ScenePropsLayer } from './SceneProps';
 import { useEventFeed } from './useEventFeed';
 
 export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed?: OfficeEvent[] }) {
@@ -17,6 +18,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
         <ambientLight intensity={0.6} />
         <directionalLight position={[8, 14, 6]} intensity={1.2} />
         <Floor />
+        <ScenePropsLayer scene={scene} />
         {roster.map((p) => <Character key={p.id} person={p} ps={scene.people[p.id]} />)}
         <OrbitControls target={[0, 0, 0]} maxPolarAngle={1.2} />
       </Canvas>
@@ -31,6 +33,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
 }
 
 const CSS = `
+.hq-chip { color: #fff; font: 700 12px system-ui; padding: 3px 8px; border-radius: 999px; white-space: nowrap; transition: background .4s }
 .hq-state { font: 600 10px system-ui; color: #1E1328; opacity: .7 }
 .hq-bubble { width: max-content; max-width: 220px; white-space: pre-line; background: #fff; color: #1E1328;
   font: 12px/1.35 system-ui; padding: 6px 9px; border-radius: 12px; box-shadow: 0 4px 14px rgba(30,19,40,.18) }

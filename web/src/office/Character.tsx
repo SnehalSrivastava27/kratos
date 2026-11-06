@@ -5,6 +5,7 @@ import type { Group, Mesh } from 'three';
 import type { AgentState, Person } from '../shared/types';
 import type { PersonState } from './officeState';
 import { spot } from './data';
+import { useAge } from './useAge';
 
 const SPEED = 3.5; // m/s
 const JUMP_S = 0.7;
@@ -15,7 +16,7 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
   const root = useRef<Group>(null);
   const body = useRef<Group>(null);
   const waypoints = useRef<[number, number][]>([]);
-  const jumpAt = useRef(-1);
+  const jumpAge = useAge(ps.jumpId);
   const [walking, setWalking] = useState(false);
   const [start] = useState(() => spot(ps.zone, person.id));
   const beacon = useRef<Mesh>(null);
@@ -30,9 +31,6 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
     waypoints.current = ps.route.map((z) => spot(z, person.id));
     if (!ps.routeId && root.current) root.current.position.set(...xz(spot(ps.zone, person.id))); // feed reset: snap home
   }, [ps.routeId]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (ps.jumpId) jumpAt.current = -2; // armed; set to clock time on next frame
-  }, [ps.jumpId]);
 
   useFrame(({ clock }, dt) => {
     const g = root.current, b = body.current;
@@ -53,8 +51,7 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
       }
     }
     if (moving !== walking) setWalking(moving);
-    if (jumpAt.current === -2) jumpAt.current = t;
-    const jp = jumpAt.current >= 0 ? (t - jumpAt.current) / JUMP_S : 1;
+    const jp = jumpAge(t) / JUMP_S;
 
     b.position.y = 0;
     b.rotation.z = 0;

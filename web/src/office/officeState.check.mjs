@@ -25,3 +25,10 @@ assert.ok(end.confettiId && Object.values(end.people).every((p) => p.state === '
 // every event changes something visible
 for (let i = 1; i <= feed.length; i++) assert.notDeepEqual(at(i), at(i - 1), `event ${i} changed nothing`);
 console.log('officeState ok');
+const extra = reduce([
+  { id: 'x1', t: 0, room: 'ops', speaker: 'd2c-ops', type: 'message', text: 'move stock', meta: { transfers: [{ sku: 'SKU01', from: 'BLR', to: 'DEL', units: 50 }] } },
+  { id: 'x2', t: 1, room: 'design', speaker: 'd2c-design', type: 'artifact', text: 'banner', meta: { artifact_url: '/gallery/hero.html' } },
+], ctx);
+assert.equal(extra.pinPulseId, 'x1');
+assert.deepEqual(extra.gallery, ['/gallery/hero.html']);
+console.log('extra events ok');
