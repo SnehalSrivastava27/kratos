@@ -23,6 +23,14 @@ const ORB_Y = 1.55; // metres a second
 const TRAIL = [1, 0.78, 0.6, 0.45, 0.32];
 const GAP = 0.2; // metres between trail beads
 const MAX_PULSES = 14;
+// Private notes are the story's quiet moment, so they read from the overview: slower, bigger beads lifted
+// off the floor, a longer glowing trail, and a lock riding the head.
+const P_SPEED = 4.8;
+const P_TRAIL = [1, 0.86, 0.74, 0.63, 0.53, 0.44, 0.36, 0.29, 0.23, 0.18];
+const P_GAP = 0.17;
+const P_SCALE = 1.9;
+const P_LIFT = 0.22;
+const MAX_LOCKS = 4;
 const v = new THREE.Vector3();
 const m4 = new THREE.Matrix4();
 const q = new THREE.Quaternion();
@@ -55,7 +63,7 @@ function endpoint(zoneId: string): THREE.Vector3 {
 }
 
 interface Leg { c: THREE.Curve<THREE.Vector3>; len: number; rev: boolean }
-interface Pulse { legs: Leg[]; total: number; born: number; color: THREE.Color; port: number; hitCore: boolean }
+interface Pulse { legs: Leg[]; total: number; born: number; color: THREE.Color; port: number; hitCore: boolean; priv: boolean }
 
 export class SwitchHub {
   readonly group = new THREE.Group();
@@ -67,6 +75,8 @@ export class SwitchHub {
   private wallIn: { curve: THREE.Curve<THREE.Vector3>; len: number };
   private wallOut: { curve: THREE.Curve<THREE.Vector3>; len: number };
   private beads: THREE.InstancedMesh;
+  private glow: THREE.InstancedMesh;
+  private locks: THREE.InstancedMesh;
   private ports: THREE.InstancedMesh;
   private portPos: THREE.Vector3[] = [];
   private portHit: number[] = [];
@@ -157,13 +167,19 @@ export class SwitchHub {
     g.add(c);
 
     // Pulses: a bright bead with a fading trail, one instance each.
-    this.beads = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 10, 8), new THREE.MeshBasicMaterial({ toneMapped: false }), MAX_PULSES * TRAIL.length);
-    this.beads.frustumCulled = false;
-    this.beads.count = 0;
-    this.beads.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    g.add(this.beads);
+    this.beads = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 10, 8), new THREE.MeshBasicMaterial({ toneMapped: false }), MAX_PULSES * P_TRAIL.length);
+    // Private notes: a soft additive halo round each bead, and a lock tag riding the head bead (both instanced).
+    this.glow = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshBasicMaterial({ color: '#b37cf0', transparent: true, opacity: 0.32, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }), MAX_LOCKS * P_TRAIL.length);
+    this.locks = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.46, 0.46), new THREE.MeshBasicMaterial({ map: lockTex(), transparent: true, depthWrite: false, toneMapped: false }), MAX_LOCKS);
+    for (const o of [this.beads, this.glow, this.locks]) {
+      o.frustumCulled = false;
+      o.count = 0;
+      o.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      g.add(o);
+    }
+    this.locks.renderOrder = 2;
     noOutline(g);
-    for (const o of [cables, this.ports, this.beads]) o.castShadow = o.receiveShadow = false;
+    for (const o of [cables, this.ports, this.beads, this.glow, this.locks]) o.castShadow = o.receiveShadow = false;
 
     // ---- The name over it (live office only): a button that opens the Switch panel ----
     if (onOpen) {
@@ -213,7 +229,7 @@ export class SwitchHub {
     if (sm.private) {
       // A private note through Switch (agent → agent): desk → core → their desk, in violet, never up to Telegram.
       const from = this.zoneOf(e.speaker, e.room), to = this.zoneOf(sm.to ?? targets[0] ?? '', e.room);
-      if (to && to !== from) this.spawn([...leg(from, true), ...leg(to, false)], born, new THREE.Color(PRIVATE), to);
+      if (to && to !== from) this.spawn([...leg(from, true), ...leg(to, false)], born, new THREE.Color(PRIVATE), to, true);
       return;
     }
     if (p.kind === 'human') {
@@ -228,10 +244,11 @@ export class SwitchHub {
     for (const z of new Set(targets.map((t) => this.zoneOf(t, e.room)))) if (z && z !== from) this.spawn([...leg(from, true), ...leg(z, false)], born + 0.1, color, z);
   }
 
-  private spawn(legs: Leg[], born: number, color: THREE.Color, zone: string | null) {
+  private spawn(legs: Leg[], born: number, color: THREE.Color, zone: string | null, priv = false) {
     if (!legs.length) return;
     if (this.pulses.length >= MAX_PULSES) this.pulses.shift();
-    this.pulses.push({ legs, total: legs.reduce((a, l) => a + l.len, 0), born, color, port: zone ? this.routes.get(zone)?.port ?? -1 : -1, hitCore: false });
+    if (priv && this.pulses.filter((p) => p.priv).length >= MAX_LOCKS) this.pulses.splice(this.pulses.findIndex((p) => p.priv), 1);
+    this.pulses.push({ legs, total: legs.reduce((a, l) => a + l.len, 0), born, color, port: zone ? this.routes.get(zone)?.port ?? -1 : -1, hitCore: false, priv });
   }
 
   private pointAt(p: Pulse, s: number, out: THREE.Vector3) {
@@ -255,36 +272,47 @@ export class SwitchHub {
     this.band.emissiveIntensity = 0.55 + this.flash * 1.6 + Math.sin(t * 2) * 0.1;
     this.orbMat.emissiveIntensity = 0.5 + this.flash * 1.5;
 
-    let n = 0;
+    let n = 0, ng = 0, nl = 0;
     this.pulses = this.pulses.filter((p) => {
-      const s = (t - p.born) * SPEED;
+      const trail = p.priv ? P_TRAIL : TRAIL, gap = p.priv ? P_GAP : GAP, size = p.priv ? P_SCALE : 1;
+      const s = (t - p.born) * (p.priv ? P_SPEED : SPEED);
       if (s < 0) return true;
       const first = p.legs[0].len;
       if (!p.hitCore && s >= first && p.legs.length > 1) {
         p.hitCore = true;
         this.flash = 1;
       }
-      if (s > p.total + GAP * TRAIL.length) {
+      if (s > p.total + gap * trail.length) {
         if (p.port >= 0) this.portHit[p.port] = t;
         return false;
       }
-      TRAIL.forEach((k, i) => {
-        const si = s - i * GAP;
+      trail.forEach((k, i) => {
+        const si = s - i * gap;
         if (si < 0 || si > p.total) return;
         this.pointAt(p, si, v);
-        v.y += 0.07;
-        m4.compose(v, q, s3.setScalar(k));
+        v.y += p.priv ? P_LIFT : 0.07;
+        m4.compose(v, q, s3.setScalar(k * size));
         this.beads.setMatrixAt(n, m4);
         this.beads.setColorAt(n, col.copy(p.color).lerp(WHITE, i === 0 ? 0.55 : 0.1));
         n++;
+        if (!p.priv) return;
+        this.glow.setMatrixAt(ng++, m4.compose(v, q, s3.setScalar(k * size * 2.6)));
+        if (i === 0) {
+          v.y += 0.5;
+          this.locks.setMatrixAt(nl++, m4.compose(v, camera.quaternion, s3.setScalar(1 + Math.sin(t * 6) * 0.06)));
+        }
       });
       return true;
     });
     this.beads.count = n;
+    this.glow.count = ng;
+    this.locks.count = nl;
     if (n) {
       this.beads.instanceMatrix.needsUpdate = true;
       if (this.beads.instanceColor) this.beads.instanceColor.needsUpdate = true;
     }
+    if (ng) this.glow.instanceMatrix.needsUpdate = true;
+    if (nl) this.locks.instanceMatrix.needsUpdate = true;
     // Ports flare for a moment when a pulse lands.
     let busy = false;
     this.portPos.forEach((p, i) => {
@@ -314,6 +342,8 @@ export class SwitchHub {
       if (m.isMesh && (m.material as THREE.Material).type === 'MeshBasicMaterial') (m.material as THREE.Material).dispose();
     });
     this.beads.dispose();
+    this.glow.dispose();
+    this.locks.dispose();
     this.ports.dispose();
     this.tag?.remove();
   }
@@ -335,6 +365,32 @@ function labelTex() {
     g.textAlign = 'center';
     g.textBaseline = 'middle';
     g.fillText('SWITCH', W / 2, H / 2 + 6);
+  });
+}
+
+/** The lock that rides a private note: a white padlock on a violet disc. */
+function lockTex() {
+  return paint(128, 128, (g) => {
+    g.fillStyle = PRIVATE;
+    g.beginPath();
+    g.arc(64, 64, 60, 0, Math.PI * 2);
+    g.fill();
+    g.strokeStyle = '#ffffff';
+    g.lineWidth = 6;
+    g.stroke();
+    g.lineWidth = 11;
+    g.beginPath();
+    g.arc(64, 54, 18, Math.PI, 0);
+    g.stroke();
+    g.fillStyle = '#ffffff';
+    g.beginPath();
+    g.roundRect(36, 54, 56, 40, 8);
+    g.fill();
+    g.fillStyle = PRIVATE;
+    g.beginPath();
+    g.arc(64, 70, 6, 0, Math.PI * 2);
+    g.fill();
+    g.fillRect(61, 70, 6, 13);
   });
 }
 

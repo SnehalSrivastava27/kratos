@@ -46,3 +46,15 @@ const extra = reduce([
 assert.equal(extra.pinPulseId, 'x1');
 assert.deepEqual(extra.gallery, ['/gallery/hero.html']);
 console.log('extra events ok');
+// Switch: private notes never put their text in a bubble; room roles follow the agent's own notices
+const msg = (id, speaker, meta) => ({ id, t: 0, room: 'finance', speaker, type: 'message', text: 'secret ₹', meta });
+const pv = reduce([msg('v1', 'd2c-finance', { private: true, to: 'd2c-ops' })], ctx).people['d2c-finance'].bubble;
+assert.ok(pv.priv && pv.text === '');
+const role = (action, who = 'd2c-finance', r = 'finance-approver') => msg(`r-${who}-${action}`, who, { switch_role: { role: r, action } });
+assert.equal(reduce([role('assumed')], ctx).people['d2c-finance'].role, 'finance-approver');
+assert.equal(reduce([role('assumed'), role('released')], ctx).people['d2c-finance'].role, undefined);
+const moved = reduce([role('assumed'), role('assumed', 'd2c-payroll')], ctx).people;
+assert.ok(!moved['d2c-finance'].role && moved['d2c-payroll'].role === 'finance-approver'); // one holder at a time
+assert.equal(reduce([role('assumed', 'founder')], ctx).people.founder.role, undefined); // only agents
+assert.equal(reduce([msg('m', 'd2c-finance', { switch_role: { action: 'assumed' } })], ctx).people['d2c-finance'].role, undefined); // tolerant
+console.log('switch extras ok');

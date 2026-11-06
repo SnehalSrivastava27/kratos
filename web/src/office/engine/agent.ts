@@ -133,7 +133,7 @@ export class Agent {
       this.bubbleEl = null;
       if (ps.bubble) {
         this.bubbleT = t;
-        this.bubbleEl = this.makeBubble(ps.bubble.text, ps.bubble.t);
+        this.bubbleEl = this.makeBubble(ps.bubble.text, ps.bubble.t, ps.bubble.priv);
         this.over.prepend(this.bubbleEl);
       }
     }
@@ -326,7 +326,7 @@ export class Agent {
     const shown: AgentState = walking ? 'walking' : ps.state;
     const talking = !!this.bubbleEl;
     const ding = t - this.dingT < 1.6;
-    const key = `${shown}|${!!ps.beacon}|${talking}|${ding}|${!!this.drive}`;
+    const key = `${shown}|${!!ps.beacon}|${talking}|${ding}|${!!this.drive}|${ps.role ?? ''}`;
     if (key === this.tagKey) return;
     this.tagKey = key;
     const { name } = this.info;
@@ -339,6 +339,8 @@ export class Agent {
       if (text) s.append(text);
       this.tag.append(s);
     };
+    // A Switch room role this agent holds: a small seat badge on top of the tag.
+    if (ps.role && !this.hero && !talking) span('hq-tag-role', `🎭 ${ps.role}`);
     if (this.hero) {
       if (!talking) span('hq-tag-name hq-tag-badge', '', true); // the hero: just the badge
       this.el.style.zIndex = talking ? '40' : '10';
@@ -362,16 +364,22 @@ export class Agent {
     this.over.prepend(this.bubbleEl);
   }
 
-  private makeBubble(text: string, at: number) {
+  private makeBubble(text: string, at: number, priv = false) {
     const b = document.createElement('div');
-    b.className = 'hq-bubble';
+    b.className = priv ? 'hq-bubble hq-bubble-priv' : 'hq-bubble';
     const who = document.createElement('div');
     who.className = 'hq-bubble-who';
     who.style.color = readable(this.info.color);
     who.append(iconSvg(personDept(this.info), 13), ` ${this.info.name}`);
     const body = document.createElement('div');
     body.className = 'hq-bubble-text';
-    body.append(tgDom(clean(text), 2)); // the bold title and the first fact
+    if (priv) {
+      // A private note: the office never shows its text (that stays in the Switch panel).
+      const lock = document.createElement('span');
+      lock.className = 'hq-priv-lock';
+      lock.textContent = '🔒';
+      body.append(lock, 'private note via Switch');
+    } else body.append(tgDom(clean(text), 2)); // the bold title and the first fact
     const time = document.createElement('span');
     time.className = 'hq-bubble-time';
     time.textContent = clock(at);

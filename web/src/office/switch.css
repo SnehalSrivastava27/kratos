@@ -29,6 +29,9 @@
 .sw-route { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; font-weight: 900; font-size: 13.5px }
 .sw-route svg { width: 13px; height: 13px; stroke-width: 3; color: #3390EC; flex: none }
 .sw-via { background: #1E1328; color: #fff; border-radius: 6px; padding: 0 6px 1px; font-size: 12px }
+.sw-role { font: 900 12px var(--font); color: #F4A300; background: #1E1328; border-radius: 6px; padding: 1px 7px 2px; white-space: nowrap }
+.sw-brief { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 8px 10px; border-radius: 12px; border: 2px solid #f3c48a; background: linear-gradient(90deg, #FFF1D0, #FFE0C7); font-weight: 800; font-size: 13.5px; color: #7a3a00 }
+.sw-brief-t { flex: none; font-size: 12px; font-weight: 700; color: #a0632a }
 .sw-text { margin-top: 2px; font-size: 12.5px; font-weight: 700; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 
 /* Demo prompts: floating cards over the office, bottom centre (the start card sits in the middle). */
@@ -74,3 +77,4 @@
   .sw-chip { position: absolute; top: 56px; left: 0; padding: 4px 10px 4px 4px; gap: 7px }
   .sw-chip .sw-mark { width: 26px; height: 26px } .sw-chip-text b { font-size: 13px } .sw-chip-n { font-size: 11px }
 }
+.sw-hops + .sw-h { margin-top: 16px }
