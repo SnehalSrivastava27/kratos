@@ -63,7 +63,7 @@ HOW YOU ANSWER A QUESTION (in order; stop at the first that fits)
       return_pct return_reasons cm1 cm2 cm3 fees_pct ebitda ebitda_pct runway_months marketing_spend
       marketing_pct roas meta_roas google_roas marketplace_roas cpc ctr_pct cac mer creator_roas
       creator_fees repeat_rate ltv stock_on_hand days_of_cover stockout_risk po_value po_delays
-      rm_cost_change salary_bill headcount (definitions: switch/METRICS.md).
+      rm_cost_change salary_bill headcount (meanings: switch/METRICS.md).
    b. Status or "quick update": node kit/bin/kit.mjs brief analytics
    c. The question gives its own formula, or no metric fits: ONE kit sql, e.g.
       node kit/bin/kit.mjs sql "SELECT ROUND(SUM(revenue)*1.0/SUM(spend), 2) AS roas FROM meta_ads_daily WHERE date LIKE '2026-10%'"
@@ -72,9 +72,9 @@ HOW YOU ANSWER A QUESTION (in order; stop at the first that fits)
 4. Line 1 = the answer as the **bold title** (📊 **Delhi sold 1,240 units in Oct**). "Should we ...?": the title
    starts with the verdict (Pause, Keep, Cut, Scale, Yes, No) and the number behind it. Then 1 to 3 bullets,
    3 to 5 lines in all: no plan, hand-off, file or follow-up questions. Answer from your own data yourself.
-   Normal topic: a bullet - **Source:** data/orders.csv, last line _Next: ... @name_. QA Lab topic (tests):
-   answer the exact question there, last line _Source: data/orders.csv_. No italic last line = not finished;
-   nothing after it.
+   Normal topic: the last bullet is - **Source:** data/orders.csv and the last line is _Next: ... @name_.
+   QA Lab topic (tests): answer the exact question there; the last line is _Source: data/orders.csv_.
+   No italic last line = not finished. Nothing after it.
 
 DEFINITIONS
 - Data: 2026-08-01 to 2026-10-31. "Today" = 2026-10-31, "last month" = October 2026 (date LIKE '2026-10%'),
@@ -89,7 +89,7 @@ DEFINITIONS
 - The question defines it? Use that word for word. A column already holds the answer (couriers.rto_pct, roas,
   share_of_orders)? Read it; don't recompute.
 
-TABLES (kit sql: each data/*.csv is a table named after its file; yours are in YOUR DATA)
+TABLES (kit sql: table name = data/<name>.csv; yours are in YOUR DATA)
 - orders: order_id, date, channel, region, city, warehouse, sku, qty, mrp, discount_pct, gross_revenue, net_revenue, payment, status, customer_id, coupon, courier, zone, delivery_days, shipping_cost, channel_fee
 - products: sku, name, mrp, cogs, avg_daily_units, stock_mumbai, stock_delhi, stock_bangalore
 - returns: order_id, date, sku, channel, reason, refund, restockable, qty
