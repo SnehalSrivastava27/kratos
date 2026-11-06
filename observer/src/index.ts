@@ -157,6 +157,15 @@ export function switchDocument(text: string): { id: string; title: string; versi
   const id = title.replace(/[\s\u2014\u2013-]*\bv\d+\s*$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
   return { id, title, ...(v ? { version: Number(v[1]) } : {}), action: m[1] };
 }
+/** Switch announces a role change from the agent itself: "🎭 assumed the `ops-oncall` role." / "🎭 released the
+ *  `ops-oncall` role." (switch_core/bridges/agent/protocol/agent_core.py _post_role_change_notice, assume/release_room_role). */
+export function switchRole(text: string): { role: string; action: "assumed" | "released" } | null {
+  const m = text.match(/^\u{1F3AD}\s*(assumed|released) the `([^`]+)` role\.?$/u);
+  return m ? { role: m[2], action: m[1] as "assumed" | "released" } : null;
+}
+/** The Captain's daily brief (server/src/brief.ts asks for it; title "🎯 **Morning brief, 7 Nov**", docs/switch/12-feature-survey.md). */
+export const isMorningBrief = (speaker: string, text: string) => speaker === "d2c-captain" && /^(?:\u{1F3AF}|\u2600\uFE0F?)\s*\*\*Morning brief/u.test(text);
+
 /** The team room a private "Finance desk" room belongs to: its description carries `team_room:<id>`
  *  (switch/agents/d2c-finance.md). Desk rooms are agents-only (internal_only), never on Telegram. */
 export const deskTeamRoom = (description?: string | null) => description?.match(/\bteam_room:([\w-]+)/)?.[1];
@@ -252,6 +261,9 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     };
     const doc = desk ? null : switchDocument(text);
     if (doc) Object.assign(meta, { switch_document: doc });
+    const role = desk ? null : switchRole(text);
+    if (role) Object.assign(meta, { switch_role: role });
+    if (!desk && isMorningBrief(speaker, text)) Object.assign(meta, { kind: "morning_brief" });
     const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: desk ? "message" : doc ? "artifact" : inferType(text), text, meta };
     sendToOffice(cfg.server, office, `${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
   }

@@ -11,6 +11,7 @@ import { AuthError, signup, login, createSession, deleteSession, sessionUser, se
 import { resolveWs, userWorkspaces, allWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, upgradeAll, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
 import { handleOffice, syncPending, employeePerson, tagCatchUp } from "./office.js";
+import { startBriefs, briefNow } from "./brief.js";
 import { SwitchError, switchHealth } from "./switch.js";
 import { handleLibrary } from "./library/index.js";
 import { handleQa } from "./qa.js";
@@ -131,7 +132,7 @@ const localHops = (req: IncomingMessage) =>
 const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHops(req) && localHost(req);
 /** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
 const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
-const WRITE_ROUTE = /^\/api\/(command|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
+const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
 /** Every state-changing office/admin/auth route: JSON only (a cross-site "simple" POST can't send it without a preflight
  *  we never answer), a foreign Origin is refused, and without the token the Host must be local or configured. */
 function checkWrite(req: IncomingMessage) {
@@ -345,7 +346,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, 200, [...roster.people, ...listEmployees().map((e) => employeePerson(e, roster.rooms))]);
 
   // ---- scoped to one workspace (v3): session (or ADMIN_TOKEN) + ?ws= ----
-  if (/^\/api\/(history|rooms|agents|people|employees|command|library|documents)(\/|$)/.test(url.pathname)) {
+  if (/^\/api\/(history|rooms|agents|people|employees|command|brief|library|documents)(\/|$)/.test(url.pathname)) {
     const { user, ws } = scope(req, url);
     if (route === "GET /api/history") return send(res, 200, recent(ws.id, limitParam(url, 200)));
     if (route === "GET /api/rooms") return send(res, 200, rooms(liveRoster(ws), roomStats(ws.id), recent(ws.id, RING_MAX)));
@@ -354,6 +355,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
       if (!ROOM_IDS.has(roomMatch[1])) return send(res, 404, { error: `unknown room: ${roomMatch[1]}` });
       return send(res, 200, roomEvents(ws.id, roomMatch[1], limitParam(url, 50)));
     }
+    if (route === "POST /api/brief") return send(res, 202, await briefNow(ROOT, ws)); // SW4: the Captain's morning brief, now
     if (route === "GET /api/documents") return send(res, 200, documents(ws.id)); // SW2: room documents pinned in Switch
     if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(ws), recent(ws.id, RING_MAX)));
     if (await handleOffice(req, url, { root: ROOT, roster, ws, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit: emitTo(ws.id) })) return;
@@ -469,6 +471,8 @@ pendingSync.unref();
 // While a link code is live, new Telegram rooms get the observer so the code is seen (workspaces.ts watchRooms).
 const roomWatch = setInterval(() => watchRooms().catch((e) => log.warn("room watch failed", { error: String(e.message ?? e) })), Number(env.ROOM_WATCH_MS) || 10_000);
 roomWatch.unref();
+// SW4: the Captain's 9 AM IST morning brief, asked through Switch (brief.ts). MORNING_BRIEF=off disables it.
+const briefs = startBriefs(ROOT);
 
 server.listen(PORT, () => {
   const port = (server.address() as { port: number }).port;
@@ -485,6 +489,7 @@ function shutdown(sig: string, code = 0) {
   clearInterval(heartbeat);
   clearInterval(pendingSync);
   clearInterval(roomWatch);
+  if (briefs) clearInterval(briefs);
   for (const c of wss.clients) c.close(1001, "server shutting down");
   wss.close();
   let done = false;
