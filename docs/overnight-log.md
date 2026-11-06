@@ -19,7 +19,7 @@ findings list. It feeds the blog.
 | A | SW4: survey every Switch 0.31.0 feature, build the best 2–3 (roles, schedules, approvals…) | agent SW4 | merged |
 | A | DM1: demo feed with pinned plan, private nudge, catch-up beats; demo/script.md; README for v2 | agent DM1 | merged |
 | B | Full live festive-sale demo in War Room (after LV1 + E2 fixes synced) | LV1 | |
-| B | BL1: blog pack: every feature documented, new Excalidraw diagrams, findings | agent BL1 | |
+| B | BL1: blog pack: every feature documented, new Excalidraw diagrams, findings | agent BL1 | merged (11 TODO markers wait for E2 + live demo) |
 | C | Final CI, adversarial review of anything unreviewed, merge to main, push | orchestrator | |
 
 ## Run log
@@ -33,6 +33,7 @@ findings list. It feeds the blog.
 | 02:45 | SW4 merged after fixes (atomic brief marker, agent-only role notices, roles never re-created after a human deletes them); 69/69 server tests. BL1 blog pack started. |
 | 03:00 | K3 merged: `kit metric` (50 named D2C metrics with definitions + the SQL that ran), `kit brief <dept>`, cached read-only marts; p50 kit sql 199 → ~65 ms, metric 61 ms; 27/27 kit tests. E2 told to move agents onto kit metric. |
 | 03:20 | K3 security review: no injection, planted cache can't execute; 5 lows fixed (lockdown before trusting cache, ctime+inode signature, in-memory for outside --data, hasOwn lookups, real calendar dates); 28/28 kit tests. |
+| 03:35 | BL1 merged: docs/blog/ (post ~3.5k words, features, 47 findings with evidence, 5 social posts) + 6 new Excalidraw diagrams (org chart, Finance gate, Switch features map, eval loop, toolkit, overnight swarm). |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
