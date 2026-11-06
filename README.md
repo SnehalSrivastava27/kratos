@@ -77,7 +77,7 @@ Instructions for each agent: `switch/agents/<agent-id>.md`. All of them load fro
 
 ## 4. Setup
 
-You need: Node 20+, Docker, a Telegram account, and Python 3 (only for the number checker).
+You need: Node 22.13+ (24 recommended), Docker, a Telegram account, and Python 3 (only for the number checker).
 
 ### 4a. Just see the office (no Switch, no Telegram)
 
@@ -131,22 +131,25 @@ npm run demo         # server :8787 + web :5173, Ctrl+C stops both
 ### 4c. Production / deploy
 
 One Node process serves the built site (with SPA fallback, so `/office` works), `/api`, `/ws`
-and `/gallery`. Health check: `GET /api/health`. Stops cleanly on SIGTERM.
+and `/gallery`. Events are stored in SQLite (`node:sqlite`, Node ≥ 22.13) under `DATA_DIR`
+(default `./.data`), so history survives restarts. Health: `GET /api/health`, readiness: `GET /api/ready`.
 
 ```bash
 npm run build                 # vite build → web/dist, tsc → server/dist
 PORT=8787 npm start           # http://localhost:8787 and /office
+cd server && npm test         # node:test suite
 ```
 
-Docker (multi-stage, `node:22-alpine`, listens on `$PORT`, default 8787):
+Set `OBSERVER_TOKEN` (observer → `POST /api/events`) and `ADMIN_TOKEN` (replay) in production.
+The observer sends its token from `OBSERVER_TOKEN` and finds the server with `SERVER_URL`.
+
+Deploy to Fly.io (volume + websockets, single instance): see [`docs/DEPLOY.md`](docs/DEPLOY.md).
+Docker (`node:24-alpine`, data in `/data`):
 
 ```bash
 docker build -t d2c-agent-hq .
-docker run --rm -p 8787:8787 d2c-agent-hq
+docker run --rm -p 8787:8787 -v hq_data:/data -e OBSERVER_TOKEN=… -e ADMIN_TOKEN=… d2c-agent-hq
 ```
-
-On a PaaS (Render, Railway, Fly), point it at the Dockerfile; it reads the platform's `PORT`.
-History is in memory, so run a single instance.
 
 ## 5. Run the demo
 
