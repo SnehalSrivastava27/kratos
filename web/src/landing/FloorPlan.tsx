@@ -1,16 +1,16 @@
 import { motion } from 'framer-motion';
-import { Coffee, Send } from 'lucide-react';
+import { Armchair, Coffee, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DEPT, PEOPLE } from './data';
 
-// Floor plan from contracts/zones.json, row by row. Person ids for desks, plus two shared rooms.
-const ROOMS = ['d2c-design', 'd2c-analyst', 'hub', 'd2c-influencers', 'd2c-captain', 'd2c-ads', 'd2c-ops', 'pantry', 'founder'];
-const SHARED: Record<string, { room: string; Icon: typeof Coffee }> = { hub: { room: 'Telegram Hub', Icon: Send }, pantry: { room: 'Chai Pantry', Icon: Coffee } };
+// Floor plan from contracts/zones.json, row by row: the west wing (library, finance, open desks), then the main floor.
+const ROOMS = ['librarian', 'd2c-design', 'd2c-analyst', 'hub', 'd2c-finance', 'd2c-influencers', 'd2c-captain', 'd2c-ads', 'desks', 'd2c-ops', 'pantry', 'founder'];
+const SHARED: Record<string, { room: string; Icon: typeof Coffee }> = { hub: { room: 'Telegram Hub', Icon: Send }, pantry: { room: 'Chai Pantry', Icon: Coffee }, desks: { room: 'Open Desks', Icon: Armchair } };
 
-/** Flat 3×3 plan of the office. `lit` is a person id; their room glows in their colour. */
+/** Flat 4×3 plan of the office. `lit` is a person id; their room glows in their colour. */
 export function FloorPlan({ lit, className }: { lit?: string; className?: string }) {
   return (
-    <div className={cn('grid grid-cols-3 gap-1.5', className)}>
+    <div className={cn('grid grid-cols-4 gap-1.5', className)}>
       {ROOMS.map((id) => {
         const d = DEPT[id] ?? SHARED[id];
         const on = id === lit;

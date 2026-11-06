@@ -15,6 +15,13 @@ assert.equal(at(2).people['d2c-ads'].state, 'working');
 assert.equal(at(2).people['d2c-ads'].zone, 'growth_pod');
 assert.equal(at(2).people['d2c-captain'].route.length, 6); // 5 desks + back
 assert.equal(at(3).people['d2c-analyst'].state, 'done');
+// specialists start at their desks and get to work when their lead is assigned
+assert.equal(at(0).people['d2c-forecaster'].zone, 'data_wall');
+assert.equal(at(0).people['d2c-forecaster'].state, 'idle');
+assert.equal(at(2).people['d2c-forecaster'].state, 'working');
+assert.equal(at(2).people['d2c-copywriter'].state, 'working');
+assert.equal(at(2).people['d2c-payroll'].state, 'idle'); // finance isn't on the sale brief
+assert.equal(at(feed.findIndex((e) => e.speaker === 'd2c-analyst' && e.type === 'done') + 1).people['d2c-insights'].state, 'done');
 assert.equal(at(4).people['d2c-influencers'].state, 'done');
 assert.match(at(6).people['d2c-captain'].beacon, /founder/);
 const end = at(7);

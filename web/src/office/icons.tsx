@@ -1,8 +1,8 @@
 // One department → icon + colour map for the whole office UI (Lucide, 1.5px stroke). Emoji stay only
 // inside real Telegram message text.
 import {
-  BarChart3, BookOpen, Camera, Code2, Coffee, Crown, Gem, Heart, Lightbulb, Megaphone, Package, Palette, Rocket,
-  Shapes, ShoppingCart, Sparkles, Star, Target, UserRound, Zap, type LucideIcon,
+  BarChart3, BookOpen, Camera, Clapperboard, ClipboardList, Code2, Coffee, Crown, Gem, Heart, Lightbulb, Megaphone, Package, Palette, PenLine, Rocket,
+  IndianRupee, ScanSearch, Search, Shapes, ShoppingCart, Sparkles, Star, Target, TrendingUp, Truck, UserRound, Users, Zap, type LucideIcon,
 } from 'lucide-react';
 import type { Person } from '../shared/types';
 import { readable } from './data';
@@ -13,12 +13,17 @@ const D = (Icon: LucideIcon, color: string, name: string): Dept => ({ Icon, colo
 /** By topic / shelf id. */
 export const DEPT: Record<string, Dept> = {
   war_room: D(Target, '#F4A300', 'Target'), analytics: D(BarChart3, '#2563EB', 'BarChart3'), ads: D(Megaphone, '#DB2777', 'Megaphone'),
-  creators: D(Star, '#F59E0B', 'Star'), ops: D(Package, '#059669', 'Package'), design: D(Palette, '#9333EA', 'Palette'),
+  creators: D(Star, '#F59E0B', 'Star'), ops: D(Package, '#059669', 'Package'), design: D(Palette, '#9333EA', 'Palette'), finance: D(IndianRupee, '#0F766E', 'IndianRupee'),
   engineering: D(Code2, '#475569', 'Code2'), general: D(Shapes, '#64748B', 'Shapes'),
 };
 const BY_PERSON: Record<string, Dept> = {
   founder: D(Crown, '#7C3AED', 'Crown'), 'd2c-captain': DEPT.war_room, 'd2c-analyst': DEPT.analytics, 'd2c-ads': DEPT.ads,
-  'd2c-influencers': DEPT.creators, 'd2c-ops': DEPT.ops, 'd2c-design': DEPT.design, librarian: D(BookOpen, '#8B5E3C', 'BookOpen'),
+  'd2c-influencers': DEPT.creators, 'd2c-ops': DEPT.ops, 'd2c-design': DEPT.design, 'd2c-finance': DEPT.finance, librarian: D(BookOpen, '#8B5E3C', 'BookOpen'),
+  // specialists: their own tool, in their own (department-shade) colour
+  'd2c-forecaster': D(TrendingUp, '#3B82F6', 'TrendingUp'), 'd2c-insights': D(ScanSearch, '#1D4ED8', 'ScanSearch'),
+  'd2c-marketplaces': D(ShoppingCart, '#E11D48', 'ShoppingCart'), 'd2c-google': D(Search, '#BE185D', 'Search'),
+  'd2c-ugc': D(Clapperboard, '#D97706', 'Clapperboard'), 'd2c-procurement': D(ClipboardList, '#047857', 'ClipboardList'),
+  'd2c-logistics': D(Truck, '#065F46', 'Truck'), 'd2c-copywriter': D(PenLine, '#7E22CE', 'PenLine'), 'd2c-payroll': D(Users, '#115E59', 'Users'),
 };
 /** Icons a hire can wear. The contract carries an emoji, so each icon travels as its emoji twin. */
 export const HIRE_ICONS: { Icon: LucideIcon; emoji: string; name: string }[] = [

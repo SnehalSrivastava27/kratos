@@ -1,6 +1,6 @@
 import rosterJson from '../../../contracts/roster.json';
 import zonesJson from '../../../contracts/zones.json';
-import type { OfficeEvent, Person, Zone } from '../shared/types';
+import type { OfficeEvent, Person, Room, Zone } from '../shared/types';
 import type { Ctx, SceneState } from './officeState';
 import { tgPlain } from './tgtext';
 
@@ -21,14 +21,16 @@ export let TG_GROUP = (rosterJson as { telegram?: { group: string } }).telegram?
 export const DEMO_GROUP = 'Kesar HQ';
 TG_GROUP = DEMO_GROUP;
 export const setGroup = (name: string) => void (TG_GROUP = name);
-export const ROOMS = (rosterJson.rooms as { id: string; label: string; zone: string; topic?: string }[]).map((r) => ({ ...r, topic: r.topic ?? r.label }));
+/** The Telegram topics the UI shows: `internal` rooms (QA Lab) stay hidden everywhere. */
+export const ROOMS = (rosterJson.rooms as Room[]).filter((r) => !r.internal).map((r) => ({ ...r, topic: r.topic ?? r.label }));
+export const INTERNAL_ROOMS = new Set<string>((rosterJson.rooms as Room[]).filter((r) => r.internal).map((r) => r.id));
 export const roomZone = Object.fromEntries(rosterJson.rooms.map((r) => [r.id, r.zone])) as Record<string, string>;
 export const ctx: Ctx = { roster, roomZone };
 
 export const C = { saffron: '#F4A300', cream: '#FFF6E5', plum: '#1E1328', mint: '#3CCB8B', red: '#E5484D', cyan: '#22D3EE', tg: '#3390EC' };
 export const ZONE_EMOJI: Record<string, string> = {
   design_studio: '🎨', data_wall: '📊', telegram_hub: '💬', creator_studio: '⭐', war_room: '🎯',
-  growth_pod: '📣', dispatch_dock: '📦', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑',
+  growth_pod: '📣', dispatch_dock: '📦', finance_cabin: '💰', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑',
 };
 const owner = (zoneId: string) => roster.find((p) => p.zone === zoneId);
 export const zoneColor = (zoneId: string) =>
@@ -47,7 +49,7 @@ export const world = (zoneId: string, [dx, dz]: [number, number]): [number, numb
   return [z.x + dx, z.z + dz];
 };
 
-/** Who sits where: zone owners at desk #0, hires wherever they were given. Grows as people are hired. */
+/** Who sits where: the k-th roster person in a zone at desk #k (lead first, then specialists; server office.ts desk() agrees), hires wherever they were given. */
 export const deskOf: Record<string, string> = {};
 let session: string | null = null;
 export const peopleSession = () => session;
@@ -56,9 +58,11 @@ export function resetPeople(key: string) {
   roster.splice(0, roster.length, ...STATIC_ROSTER);
   for (const k of Object.keys(personById)) delete personById[k];
   for (const k of Object.keys(deskOf)) delete deskOf[k];
+  const taken: Record<string, number> = {};
   for (const p of roster) {
     personById[p.id] = p;
-    if (deskById[`${p.zone}#0`]) deskOf[p.id] = `${p.zone}#0`;
+    const k = (taken[p.zone] = (taken[p.zone] ?? -1) + 1);
+    if (deskById[`${p.zone}#${k}`]) deskOf[p.id] = `${p.zone}#${k}`;
   }
 }
 resetPeople('');
