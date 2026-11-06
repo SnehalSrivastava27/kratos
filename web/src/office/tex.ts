@@ -2,7 +2,7 @@
 import { CanvasTexture, SRGBColorSpace } from 'three';
 import type { PersonState } from './officeState';
 import type { OfficeEvent } from '../shared/types';
-import { C, ROOMS, TG_GROUP, clean, personById, roster } from './data';
+import { C, ROOMS, TG_GROUP, personById, plain, roster } from './data';
 
 type G = CanvasRenderingContext2D;
 export const FONT = `Nunito, ui-rounded, 'SF Pro Rounded', system-ui, sans-serif`;
@@ -227,7 +227,7 @@ export function drawTelegramWall(g: G, W: number, H: number, events: OfficeEvent
     g.fillStyle = on ? '#fff' : '#000'; g.font = `800 22px ${FONT}`; g.fillText(r.topic, 72, y + 27);
     const e = last[r.id];
     g.fillStyle = on ? 'rgba(255,255,255,.85)' : '#707579'; g.font = `600 17px ${FONT}`;
-    const prev = e ? `${personById[e.speaker]?.name ?? ''}: ${clean(e.text).replace(/\n/g, ' ')}` : 'No messages yet';
+    const prev = e ? `${personById[e.speaker]?.name ?? ''}: ${plain(e.text).replace(/\n+/g, ' ')}` : 'No messages yet';
     g.fillText(prev.length > 34 ? prev.slice(0, 33) + '…' : prev, 72, y + 52);
     if (count[r.id] && !on) {
       g.fillStyle = C.tg; rr(g, LW - 62, y + 20, 40, 26, 13); g.fill();
@@ -247,7 +247,7 @@ export function drawTelegramWall(g: G, W: number, H: number, events: OfficeEvent
   for (const e of [...thread].reverse()) {
     const mine = personById[e.speaker]?.kind === 'human';
     g.font = `600 20px ${FONT}`;
-    const lines = wrapText(g, clean(e.text), 520, 4);
+    const lines = wrapText(g, plain(e.text), 520, 4);
     const h = 44 + lines.length * 26;
     y -= h + 10;
     if (y < 80) break;

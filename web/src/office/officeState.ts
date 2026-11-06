@@ -21,14 +21,17 @@ export interface SceneState {
 
 export interface Ctx { roster: Person[]; roomZone: Record<string, string> }
 
-const BUBBLE_CHARS = 80;
+const BUBBLE_CHARS = 600; // bubbles show the first two lines; this only bounds memory
 const IDLE_ZONE = 'chai_pantry';
+const STORY_TEAM = new Set(['d2c-analyst', 'd2c-ads', 'd2c-influencers', 'd2c-ops', 'd2c-design']);
+/** Speak from where they are: the librarian works in the library whatever topic she reports to. */
+const STAYS = new Set(['librarian']);
 
 export function initialState({ roster }: Ctx): SceneState {
   const people: Record<string, PersonState> = {};
   for (const p of roster) {
-    // Founder and captain start at their posts; everyone else idles in the pantry until assigned.
-    const zone = p.kind === 'human' || p.id === 'd2c-captain' ? p.zone : IDLE_ZONE;
+    // The sale team idles in the pantry until assigned; the founder, captain, librarian and hires start at their posts.
+    const zone = STORY_TEAM.has(p.id) ? IDLE_ZONE : p.zone;
     people[p.id] = { state: 'idle', zone, route: [] };
   }
   return { people, gallery: [] };
@@ -51,7 +54,9 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
     if (!sp) continue; // unknown speaker: ignore rather than crash
     const roomZone = ctx.roomZone[e.room] ?? sp.zone;
     const targets = (e.meta?.targets ?? []).filter((t) => s.people[t]);
-    walk(e.speaker, [roomZone], e.id);
+    if (e.type === 'command') continue; // reserved: the founder's console; its Telegram echo arrives as a message
+    if (e.type === 'hired') sp.state = 'idle'; // they walk in to their own desk (engine), not to the room
+    else if (!STAYS.has(e.speaker)) walk(e.speaker, [roomZone], e.id);
     for (const p of Object.values(s.people)) p.bubble = undefined; // one bubble on screen at a time
     sp.bubble = { id: e.id, t: e.t, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
 
@@ -66,7 +71,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         break;
       case 'working':
       case 'message':
-        if (sp.state === 'idle' && e.type === 'working') sp.state = 'working';
+        if (e.type === 'working' && (sp.state === 'idle' || STAYS.has(e.speaker))) sp.state = 'working';
         break;
       case 'done':
       case 'artifact':
