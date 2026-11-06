@@ -1,6 +1,6 @@
-// Office actions (contracts/api.md "Office actions (v2)"). Each call falls back to local fake data when
-// the endpoint isn't there yet (unknown route 404, or no server behind the dev proxy), so the office is
-// demoable before the backend lands. Real errors (bad input, 401 off-loopback, rate limit) are thrown.
+// Office actions (contracts/api.md "Office actions (v2)", scoped per v3). Live: the signed-in user's
+// workspace (`?ws=<id>`, the session cookie), a 401 calls onUnauthorized, errors are thrown, and nothing
+// is ever faked. Demo (landing hero, explicit demo): no request leaves the page; local fake data answers.
 import type { Employee, Library, LibraryBook, Person, RoomId } from '../shared/types';
 import exampleLib from '../../../data/library.example.json';
 import { DESKS, deskById, freeDesks, roomZone, roster } from './data';
@@ -12,24 +12,28 @@ export class ApiError extends Error {
 }
 export interface Res<T> { data: T; status: number; mock: boolean }
 
-/** Missing route or no server: use the mock. Anything else the server says is real. */
-const missing = (status: number, body: unknown) =>
-  status === 404 ? (body as { error?: string } | null)?.error === 'not found' || body === null : status >= 500 && body === null;
+const scope: { live: boolean; ws?: string; onUnauthorized?: () => void } = { live: false };
+/** Office calls this on every render: live + workspace, or demo. */
+export function configureApi(live: boolean, ws?: string, onUnauthorized?: () => void) {
+  Object.assign(scope, { live, ws, onUnauthorized });
+}
 
 async function call<T>(path: string, init: RequestInit | undefined, mock: () => { data: T; status?: number }): Promise<Res<T>> {
-  let status = 0, body: unknown = null;
-  try {
-    const r = await fetch(path, { ...init, headers: { 'content-type': 'application/json', ...init?.headers } });
-    status = r.status;
-    body = await r.json().catch(() => null);
-  } catch {
-    status = 0; // offline / no server
-  }
-  if (status === 0 || missing(status, body)) {
+  if (!scope.live) {
     const m = mock();
     return { data: m.data, status: m.status ?? 200, mock: true };
   }
-  if (status >= 400) throw new ApiError(status, (body as { error?: string })?.error ?? `HTTP ${status}`);
+  const url = scope.ws ? `${path}${path.includes('?') ? '&' : '?'}ws=${encodeURIComponent(scope.ws)}` : path;
+  let status = 0, body: unknown = null;
+  try {
+    const r = await fetch(url, { ...init, credentials: 'include', headers: { 'content-type': 'application/json', ...init?.headers } });
+    status = r.status;
+    body = await r.json().catch(() => null);
+  } catch {
+    throw new ApiError(0, 'The office server is unreachable');
+  }
+  if (status === 401) scope.onUnauthorized?.();
+  if (status >= 400) throw new ApiError(status, status === 404 && (body as { error?: string })?.error === 'not found' ? 'not available on this server yet' : (body as { error?: string })?.error ?? `HTTP ${status}`);
   return { data: body as T, status, mock: false };
 }
 

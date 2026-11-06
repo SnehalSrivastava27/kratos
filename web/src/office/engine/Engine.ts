@@ -38,6 +38,10 @@ export interface EngineOpts {
   onTarget?: (t: Target | null) => void;
   /** A click on the world in player mode (panels that aren't pinned close). */
   onWorldClick?: () => void;
+  /** The landing hero (autoplay): clean badges, one short bubble, no floor stickers; 'hero' frames the middle of the floor. */
+  hero?: 'wide' | 'hero' | null;
+  /** The world is built and its first frame drawn. */
+  onReady?: () => void;
 }
 export const targetKey = (t: Target | null) => (t ? `${t.kind}:${'desk' in t ? t.desk : 'shelf' in t ? t.shelf : 'id' in t ? t.id : t.url}` : '');
 export const shelfLabel = (s: ShelfId) => SHELF_LABEL[s];
@@ -82,6 +86,40 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
   }
   return { tx: tgt.x, ty: tgt.y, tz: tgt.z, yaw: AZ, pitch: EL, dist: d };
 }
+
+/**
+ * The landing hero's shot: the War Room in the middle, looking down at the floor so the frame is all office
+ * (no sky band, no wall cut off at its top). The farthest camera whose four frame corners, at either end of
+ * the slow orbit, still land on the floor (or on the back wall below its top).
+ */
+const HERO = { tx: 0, tz: 0.6, pitch: 0.98, sway: 0.09 };
+function heroPose(fov: number, aspect: number): Pose {
+  const c = new THREE.PerspectiveCamera(fov, aspect, 0.5, 200);
+  const ray = new THREE.Raycaster(), v = new THREE.Vector2();
+  const fits = (d: number) => [AZ - HERO.sway, AZ + HERO.sway].every((yaw) => {
+    c.position.set(HERO.tx + Math.sin(yaw) * Math.cos(HERO.pitch) * d, Math.sin(HERO.pitch) * d, HERO.tz + Math.cos(yaw) * Math.cos(HERO.pitch) * d);
+    c.lookAt(HERO.tx, 0, HERO.tz);
+    c.updateMatrixWorld();
+    return [[-1, -1], [1, -1], [1, 1], [-1, 1]].every(([x, y]) => {
+      ray.setFromCamera(v.set(x, y), c);
+      const { origin: o, direction: dir } = ray.ray;
+      if (dir.y >= 0) return false;
+      const t = -o.y / dir.y, gx = o.x + dir.x * t, gz = o.z + dir.z * t;
+      if (gx < -17.8 || gx > 12.1 || gz > 8.2) return false;
+      if (gz >= -7.95) return true;
+      const tw = (-8.0 - o.z) / dir.z; // past the back wall: fine if it hits the wall below its top
+      return o.y + dir.y * tw < WALL_TOP;
+    });
+  });
+  let lo = 4, hi = 60;
+  for (let i = 0; i < 24; i++) {
+    const mid = (lo + hi) / 2;
+    if (fits(mid)) lo = mid;
+    else hi = mid;
+  }
+  return { tx: HERO.tx, ty: 0, tz: HERO.tz, yaw: AZ, pitch: HERO.pitch, dist: lo * 0.97 };
+}
+const WALL_TOP = 2.5;
 
 /** Name tags that would sit on top of each other: the one further back steps up above the other. */
 function declutter(agents: Agent[]) {
@@ -130,6 +168,8 @@ export class OfficeEngine {
   private speaker: Agent | null = null;
   private latest: { scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[] } | null = null;
   private home: Pose = fitHome(32, 1.6, false);
+  private heroShot: Pose = heroPose(32, 1.6);
+  private ready = false;
   private cur: Pose | null = null;
   private vel = Object.fromEntries(KEYS.map((k) => [k, { v: 0 }])) as Record<(typeof KEYS)[number], { v: number }>;
   private focusZone: string | null = null;
@@ -162,7 +202,7 @@ export class OfficeEngine {
     const canvas = renderer.domElement;
     canvas.style.cssText = 'display:block;width:100%;height:100%;outline:none';
     if (opts.interactive) canvas.style.touchAction = 'none';
-    this.overlay.className = 'hq-overlay';
+    this.overlay.className = opts.hero ? 'hq-overlay hq-hero' : 'hq-overlay';
     host.append(canvas, this.overlay);
 
     const hemi = new THREE.HemisphereLight('#fff5e6', '#c9a27a', 1.5);
@@ -187,7 +227,7 @@ export class OfficeEngine {
     Promise.all([loadModels(), loadFont()])
       .then(([models]) => {
         if (this.disposed) return;
-        this.world = buildWorld(models);
+        this.world = buildWorld(models, !opts.hero);
         this.nav = new NavGrid(FLOOR, this.world.solids, 0.3);
         if (this.founder && this.view === 'player' && !this.nav.free(this.player!.x, this.player!.z)) this.placeNear(this.founder.pos.x, this.founder.pos.z + 0.6);
         this.props = new LiveProps();
@@ -239,6 +279,7 @@ export class OfficeEngine {
       const ps: PersonState = this.latest?.scene.people[p.id] ?? start.people[p.id] ?? { state: 'idle', zone: p.zone, route: [] };
       const a = new Agent(p, ps);
       a.onDing = () => this.ding();
+      a.hero = !!this.opts.hero;
       if (p.id === 'librarian') a.wander = [...SECTIONS.map(browseSpot), seatOf(deskById['library#0'])];
       if (arriving.has(p.id)) a.walkIn(DOOR, this.nav);
       this.scene.add(a.person.root);
@@ -383,8 +424,16 @@ export class OfficeEngine {
     this.scene.updateMatrixWorld();
     for (const a of this.agents) a.project(this.camera, this.size.w, this.size.h);
     declutter(this.agents);
+    if (this.opts.hero) this.unclutterBubble();
     for (const a of this.agents) a.place(dt);
-    if (this.world) this.effect.render(this.scene, this.camera);
+    if (this.world) {
+      this.effect.render(this.scene, this.camera);
+      if (!this.ready) {
+        this.ready = true;
+        this.host.dataset.ready = '1'; // for poster capture scripts
+        this.opts.onReady?.();
+      }
+    }
     this.raf = requestAnimationFrame(this.frame);
   };
 
@@ -405,6 +454,11 @@ export class OfficeEngine {
       const aspect = this.size.w / this.size.h;
       goal = { tx: this.player.x, ty: 0.7, tz: this.player.z, yaw: AZ, pitch: FOLLOW_PITCH, dist: aspect < 1 ? 21 : 18 };
       lag = this.cur && Math.hypot(this.cur.tx - goal.tx, this.cur.tz - goal.tz) > 6 ? 0.6 : 0.28; // long jumps glide, walking stays tight
+    } else if (this.opts.hero === 'hero' && !z) {
+      // The hero: a slow cinematic orbit and a gentle push in, never wider than the shot that fits.
+      const h = this.heroShot, drift = this.calm.matches ? 0 : 1;
+      goal = { ...h, yaw: h.yaw + Math.sin(t * 0.045) * HERO.sway * drift, dist: h.dist * (1 - (0.5 + 0.5 * Math.sin(t * 0.03 - 1.5)) * 0.06 * drift) };
+      lag = 1.2;
     } else if (z) {
       goal = { tx: z.x, ty: 0.8, tz: z.z, yaw: AZ, pitch: Math.atan2(ZOOM_OFF.y, Math.hypot(ZOOM_OFF.x, ZOOM_OFF.z)), dist: ZOOM_OFF.length() };
     } else {
@@ -418,7 +472,7 @@ export class OfficeEngine {
         goal.tz += (s.pos.z - h.tz) * 0.08;
       }
     }
-    if (!this.cur) this.cur = { ...this.home }; // start on the whole office; player mode then swoops down to you
+    if (!this.cur) this.cur = this.opts.hero ? { ...goal } : { ...this.home }; // start on the whole office; player mode then swoops down to you
     for (const k of KEYS) this.cur[k] = smoothDamp(this.cur[k], goal[k], this.vel[k], lag, dt);
     const e = 1 - Math.exp(-dt * 10);
     const u = this.userShown;
@@ -441,6 +495,8 @@ export class OfficeEngine {
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
     this.home = fitHome(this.camera.fov, w / h, w < 520);
+    this.heroShot = heroPose(this.camera.fov, w / h);
+    if (this.opts.hero === 'hero') this.cur = null; // a resize re-frames at once, no swoop
   }
 
   // ---- Input (player.ts third-person orbit) ----
@@ -582,6 +638,19 @@ export class OfficeEngine {
     if (!hit) return null;
     const { x, z } = hit.point;
     return zones.find((zn) => Math.abs(x - zn.x) <= zn.w / 2 && Math.abs(z - zn.z) <= zn.d / 2)?.id ?? null;
+  }
+
+  /** The hero shows one bubble: badges it would cover fade out until it's gone. */
+  private unclutterBubble() {
+    const s = this.agents.find((a) => a.talking);
+    for (const a of this.agents) {
+      let cover = false;
+      if (s && a !== s) {
+        const b = s.bubbleBox();
+        cover = a.sx > s.sx - b.w / 2 - 20 && a.sx < s.sx + b.w / 2 + 20 && a.sy > s.sy - b.h - 30 && a.sy < s.sy + 10;
+      }
+      a.el.classList.toggle('hq-dim', cover);
+    }
   }
 
   /** A soft two-note ding when someone delivers (live office only, once the page has had a click). */

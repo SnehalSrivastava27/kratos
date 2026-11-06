@@ -14,8 +14,8 @@ const SPINES = ['#ef476f', '#118ab2', '#06d6a0', '#ffd166', '#9d4edd', '#ff8a5b'
 const T = 0.05; // board thickness
 const D = 0.45; // case depth
 export const SHELF_LABEL: Record<ShelfId, string> = {
-  war_room: '🎯 War Room', analytics: '📊 Analytics', ads: '📣 Ads', creators: '⭐ Creators',
-  ops: '📦 Ops', design: '🎨 Design', engineering: '🛠️ Engineering', general: '📚 General',
+  war_room: 'War Room', analytics: 'Analytics', ads: 'Ads', creators: 'Creators',
+  ops: 'Ops', design: 'Design', engineering: 'Engineering', general: 'General',
 };
 /** Two rows facing the room (+z): against the back wall, and a freestanding row with an aisle behind it. */
 const ROWS: { x: number; z: number; w: number; h: number; levels: number; shelves: ShelfId[] }[] = [

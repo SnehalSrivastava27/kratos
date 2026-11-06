@@ -175,3 +175,14 @@
 .md ul { padding-left: 24px; list-style: disc } .md ol { padding-left: 24px; list-style: decimal }
 .md li + li { margin-top: 3px }
 .md hr { border: 0; border-top: 2px dashed #ddd0bf; margin: 18px 0 }
+.ao-empty { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 18px 24px; text-align: center; display: grid; gap: 6px; max-width: min(440px, calc(100vw - 32px)) }
+/* Lucide icons inside the DOM tags and bubbles */
+.hq-tag-name { display: inline-flex; align-items: center; gap: 4px }
+.hq-tag-name svg, .hq-bubble-who svg { flex: none; vertical-align: -2px; display: inline-block }
+.hq-tag-badge { padding: 3px 4px; line-height: 0 }
+.hq-tag-you svg { stroke: var(--paper) }
+.hq-ding { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--good); color: #fff; font: 900 15px var(--font); border: 2.5px solid var(--ink) }
+/* The landing hero: soft white badges, no ink, and a calmer bubble */
+.hq-hero .hq-tag-badge { background: rgba(255,255,255,.92); border: 0; box-shadow: 0 1px 2px rgba(16,35,47,.18), 0 3px 10px rgba(16,35,47,.12); padding: 4px }
+.hq-hero .hq-bubble { animation-duration: .5s; transition: opacity .4s, transform .4s }
+.hq-hero .hq-dim { opacity: 0; transition: opacity .3s }

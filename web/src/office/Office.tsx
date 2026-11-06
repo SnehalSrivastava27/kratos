@@ -2,11 +2,14 @@
 // Full-screen office, laid out like AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs
 // (src/client/index.html + style.css: the world edge to edge, a top bar, panels floating over it).
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Library, OfficeEvent, RoomId, ShelfId, Zone } from '../shared/types';
+import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { addPerson, caption, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import { DEMO_GROUP, addPerson, caption, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
+import { DEPT, personDept, type Dept } from './icons';
+
+const HintIcon = ({ dept }: { dept: Dept }) => <dept.Icon size={17} color="#ffd166" strokeWidth={2} className="mr-1.5 inline -translate-y-px" />;
 import { HireDialog } from './HireDialog';
 import { LibraryWindow } from './LibraryWindow';
 import { toast } from 'sonner';
@@ -20,6 +23,8 @@ import type { GalleryItem } from './engine/props';
 import './office.css';
 
 const MAX_CHAT = 200;
+/** The poster's story moment: the team at their desks, mid-plan. */
+const POSTER_AT = 9;
 
 /** A panel's open/pinned flags, remembered per browser (best effort: storage can be blocked). */
 function usePanel(key: string, open0: boolean) {
@@ -37,11 +42,40 @@ function usePanel(key: string, open0: boolean) {
   return [s, set] as const;
 }
 
-export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed?: OfficeEvent[] }) {
-  // Replay (live): run the story again locally from the top, as a fresh array so the feed hook restarts.
-  const [replay, setReplay] = useState(() => (mode === 'live' && new URLSearchParams(location.search).has('demo') ? 1 : 0)); // /office?demo = local story, no server
-  const replayFeed = useMemo(() => (replay ? [...(feed ?? (saleDemo as OfficeEvent[]))] : undefined), [replay, feed]);
-  const feedEvents = useEventFeed(replay ? 'autoplay' : mode, replayFeed ?? feed);
+const urlHas = (k: string) => typeof location !== 'undefined' && new URLSearchParams(location.search).has(k);
+
+export interface OfficeProps {
+  /** live: the signed-in workspace's office (you walk it). autoplay: the landing hero, a chrome-less spectator loop of the demo. */
+  mode: 'live' | 'autoplay';
+  feed?: OfficeEvent[];
+  /** The signed-in user's workspace (contracts/api.md v3): every call and /ws carry ?ws=<id>; its name is the group's. */
+  workspace?: Workspace;
+  /** Any 401 (the session is gone): the app sends them to /login. */
+  onUnauthorized?: () => void;
+  /** The scripted demo story with the full HUD (never real chats). Also /office?demo when no workspace is given. */
+  demo?: boolean;
+  /** Autoplay camera: 'hero' (default) a tight cinematic shot of the middle of the floor; 'wide' the whole office. */
+  framing?: 'wide' | 'hero';
+  /** The world is built and has drawn its first frame (the landing crossfades from its poster). */
+  onReady?: () => void;
+}
+
+export default function Office({ mode, feed, workspace, onUnauthorized, demo, framing, onReady }: OfficeProps) {
+  // Dev only: /office?poster renders the hero shot at a fixed story moment, no bubbles, for capturing a poster PNG.
+  const poster = import.meta.env.DEV && urlHas('poster');
+  if (poster) mode = 'autoplay';
+  const isDemo = mode === 'autoplay' || !!demo || (!workspace && urlHas('demo'));
+  const [run, setRun] = useState(0); // demo: Replay restarts the story (a fresh array restarts the feed hook)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const demoFeed = useMemo(() => [...(feed ?? (saleDemo as OfficeEvent[]))], [run, feed]);
+  const unauth = useRef(onUnauthorized);
+  unauth.current = onUnauthorized;
+  const onUnauth = useCallback(() => unauth.current?.(), []);
+  api.configureApi(!isDemo, workspace?.id, onUnauth);
+  setGroup(isDemo ? DEMO_GROUP : workspace?.name ?? 'Your Telegram group');
+  const streamed = useEventFeed(isDemo, isDemo ? demoFeed : undefined, { ws: workspace?.id, onUnauthorized: onUnauth });
+  const posterEvents = useMemo(() => (poster ? demoFeed.slice(0, POSTER_AT) : null), [poster, demoFeed]);
+  const feedEvents = posterEvents ?? streamed;
   // Local echoes while the backend isn't there (mock command / hire / librarian): appended after the feed.
   const [extra, setExtra] = useState<OfficeEvent[]>([]);
   useEffect(() => { if (!feedEvents.length) setExtra([]); }, [feedEvents.length]);
@@ -50,12 +84,13 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     setExtra((x) => [...x, { ...e, id: `local-${Date.now()}-${x.length}`, t: Math.max(feedEvents[feedEvents.length - 1]?.t ?? 0, x[x.length - 1]?.t ?? 0) + 1000 }]);
   const [peopleVer, setPeopleVer] = useState(0); // bumps when someone joins the roster
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const scene = useMemo(() => reduce(events, ctx), [events, peopleVer]);
+  const scene = useMemo(() => {
+    const s = reduce(events, ctx);
+    if (poster) for (const p of Object.values(s.people)) p.bubble = undefined;
+    return s;
+  }, [events, peopleVer, poster]);
   // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
   const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
-  // local replay (button, ?demo, or the feed hook's fallback when the server is down) vs server events (`id@run` or epoch t)
-  const last = events[events.length - 1];
-  const local = replay > 0 || (!!last && !last.id.includes('@') && last.t < 1e12);
   const gallery = useMemo(
     () => events.flatMap((e) => {
       const url = e.type === 'artifact' ? galleryUrl(e.meta?.artifact_url) : null;
@@ -74,7 +109,11 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   const [view, setView] = useState<'player' | 'spectator'>(() => (new URLSearchParams(location.search).has('spectator') ? 'spectator' : 'player'));
   const [target, setTarget] = useState<Target | null>(null);
   const hooks = useRef({ onTarget: setTarget, onWorldClick: () => {} });
-  const stage = <Stage interactive={mode === 'live'} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks} view={mode === 'live' ? view : 'spectator'} />;
+  const readyRef = useRef(onReady);
+  readyRef.current = onReady;
+  const hero = mode === 'autoplay' ? framing ?? 'hero' : null;
+  const stage = <Stage interactive={mode === 'live'} hero={hero} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks}
+    view={mode === 'live' ? view : 'spectator'} onReady={() => readyRef.current?.()} />;
 
   // Telegram side: which topic is open, unread counts.
   const narrow = typeof window !== 'undefined' && window.innerWidth < 760;
@@ -161,7 +200,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     const r = await api.hire(body, hireAt?.desk);
     const e = 'action' in r.data ? r.data.employee : r.data;
     joinPeople([{ id: e.id, name: e.name, emoji: e.emoji, kind: 'agent', zone: deskById[e.desk]?.zone ?? roomZone[e.room], color: e.color, desk: e.desk, room: e.room, role: e.role }], true);
-    toast(`${e.emoji} ${e.name} is on the way to their desk`);
+    toast(`${e.name} is on the way to their desk`);
     if (r.mock) echo({ room: e.room, speaker: e.id, type: 'hired', text: `👋 **${e.name}** joined as ${e.role}` });
     return r;
   };
@@ -176,7 +215,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
         echo({ room: 'war_room', speaker: 'librarian', type: 'done', text: `📚 **Library re-shelved**\n${n} skills on 8 shelves` });
         setLibrary((l) => (l ? { ...l, librarian: 'idle', updatedAt: Date.now() } : l));
       }, 12000);
-      return 'The Librarian is on it (demo: no server, acted out locally).';
+      return 'The Librarian is on it (demo: acted out locally).';
     }
     void loadLibrary();
     return 'The Librarian is on it: watch her walk the shelves.';
@@ -198,12 +237,12 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     } else if (t.kind === 'library') setLibAt({ shelf: t.shelf });
     else if (t.kind === 'frame') window.open(t.url, '_blank', 'noopener');
   }
-  const hint = (t: Target | null): { title?: string; text: string } | null => {
+  const hint = (t: Target | null): { title?: React.ReactNode; text: string } | null => {
     if (!t) return null;
-    if (t.kind === 'desk') return { text: `Hire at this desk`, title: zoneById[deskById[t.desk]?.zone]?.label };
-    if (t.kind === 'library') return { text: `Open the library · ${shelfLabel(t.shelf)} shelf`, title: '📚' };
-    if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: personById[t.id]?.emoji };
-    return { text: 'Open this banner', title: '🖼️' };
+    if (t.kind === 'desk') return { text: `Hire at this desk · ${zoneById[deskById[t.desk]?.zone]?.label ?? ''}` };
+    if (t.kind === 'library') return { text: `Open the library · ${shelfLabel(t.shelf)} shelf`, title: <HintIcon dept={DEPT[t.shelf] ?? DEPT.general} /> };
+    if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: <HintIcon dept={personDept(personById[t.id])} /> };
+    return { text: 'Open this banner', title: <HintIcon dept={DEPT.design} /> };
   };
 
   // Fullscreen API: the button, F, and the browser's own Esc all keep `full` in step.
@@ -255,7 +294,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
   if (mode === 'autoplay') {
     // landing hero: chrome-less, just the scene with its bubbles
     return (
-      <div className="hq-root" style={{ height: '100%', width: '100%' }}>
+      <div className={poster ? 'hq-root hq-full' : 'hq-root'} style={{ height: '100%', width: '100%' }}>
         {stage}
       </div>
     );
@@ -278,8 +317,8 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
             <div className="ao-logo">K</div>
             <div className="min-w-0">
               <div className="ao-name">
-                Kesar HQ
-                <span className={`ao-pill ${local ? 'replay' : 'live'}`}><i />{local ? 'Replay' : 'Live'}</span>
+                {isDemo ? 'Kesar HQ' : workspace?.name ?? 'Your office'}
+                <span className={`ao-pill ${isDemo ? 'replay' : 'live'}`}><i />{isDemo ? 'Demo' : 'Live'}</span>
               </div>
               <div className={`ao-meta ${cap.tone}`} title={cap.text}>{cap.text}</div>
             </div>
@@ -299,7 +338,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
               title={view === 'player' ? 'Spectator: watch the whole office' : 'Walk the office as the founder'} aria-label={view === 'player' ? 'Spectator view' : 'Walk as the founder'}>
               {view === 'player' ? <Eye /> : <User />}
             </button>
-            <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setSeen({}); setReplay((r) => r + 1); }} title="Replay the story" aria-label="Replay the story"><RotateCcw /></button>
+            {isDemo && <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} title="Replay the demo story" aria-label="Replay the demo story"><RotateCcw /></button>}
             <button type="button" className="ao-btn icon" onClick={toggleFull} title="Fullscreen (F)" aria-label="Fullscreen">{full ? <Shrink /> : <Expand />}</button>
             <button type="button" className="ao-btn icon" onClick={() => setHelp(true)} title="Controls (?)" aria-label="Controls"><HelpCircle /></button>
           </div>
@@ -315,10 +354,17 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
           </div>
         )}
       </div>
+      {!isDemo && events.length === 0 && (
+        <div className="ao-panel ao-empty" role="status">
+          <MessageCircle className="mx-auto size-8 text-[#3390EC]" strokeWidth={1.5} />
+          <div className="text-[17px] font-black">Waiting for your first Telegram message…</div>
+          <div className="text-[13.5px] font-bold text-[var(--muted)]">Say something in {workspace?.name ?? 'your group'}, or press <span className="ao-key">/</span> to write to a topic from here.</div>
+        </div>
+      )}
       {view === 'player' && !modalOpen && (() => {
         const h = hint(target);
         if (h) return <Hint title={h.title} text={h.text} />;
-        if (waiting) return <Hint k="N" title="🔴" text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
+        if (waiting) return <Hint k="N" text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
         return null;
       })()}
       {help && <HelpDialog onClose={() => setHelp(false)} />}
@@ -337,21 +383,23 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
  * reducer's latest scene and the focused zone into it; the scene itself is never re-rendered by React.
  */
 type Hooks = { onTarget: (t: Target | null) => void; onWorldClick: () => void };
-const Stage = memo(function Stage({ interactive, scene, events, gallery, focus, onPick, engineRef, hooks, view }: {
-  interactive: boolean; scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[]; focus: string | null; onPick: (id: string | null) => void;
-  engineRef: React.MutableRefObject<OfficeEngine | null>; hooks: React.MutableRefObject<Hooks>; view: 'player' | 'spectator';
+const Stage = memo(function Stage({ interactive, hero, scene, events, gallery, focus, onPick, engineRef, hooks, view, onReady }: {
+  interactive: boolean; hero: 'wide' | 'hero' | null; scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[]; focus: string | null; onPick: (id: string | null) => void;
+  engineRef: React.MutableRefObject<OfficeEngine | null>; hooks: React.MutableRefObject<Hooks>; view: 'player' | 'spectator'; onReady: () => void;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const engine = engineRef;
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
   useEffect(() => {
     const e = (engine.current = new OfficeEngine(host.current!, {
-      interactive, onPick, onTarget: (t) => hooks.current.onTarget(t), onWorldClick: () => hooks.current.onWorldClick(),
+      interactive, onPick, onTarget: (t) => hooks.current.onTarget(t), onWorldClick: () => hooks.current.onWorldClick(), hero, onReady: () => onReadyRef.current(),
     }));
     return () => {
       e.dispose();
       engine.current = null;
     };
-  }, [interactive, onPick]);
+  }, [interactive, onPick, hero]);
   useEffect(() => engine.current?.apply(scene, events, gallery), [scene, events, gallery, interactive, onPick]);
   useEffect(() => engine.current?.focus(focus), [focus, interactive, onPick]);
   useEffect(() => engine.current?.setView(view), [view, interactive, onPick]);

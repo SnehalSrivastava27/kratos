@@ -10,6 +10,7 @@ import { C, clean, deskById, isSeat, readable, spot, zoneById } from '../data';
 import { clock } from '../Telegram';
 import { noOutline, toonUnique } from '../toon';
 import { tgDom } from '../md';
+import { iconSvg, personDept } from '../icons';
 import { Person, type Look } from './person';
 import type { NavGrid } from './nav';
 
@@ -20,6 +21,7 @@ const DECEL = 5;
 const JUMP_S = 0.7;
 const SEAT_HIPS = 0.56;
 const BUBBLE_S = 5.2;
+const HERO_BUBBLE_S = 3.4; // the landing hero: one short line at a time, in and out
 const DANCE_S = 5;
 const STOP_PAUSE = 0.75; // seconds at each desk on a tour (a tap on the shoulder)
 
@@ -76,6 +78,8 @@ export class Agent {
   drive: { moving: boolean; speed: number; facing: number } | null = null;
   /** Wanders between these spots while working (the librarian between her shelves). */
   wander: [number, number][] | null = null;
+  /** The landing hero: a small icon badge over the head and nothing else; bubbles come and go quicker. */
+  hero = false;
   private wanderT = 0;
 
   constructor(readonly info: RosterPerson, ps: PersonState) {
@@ -289,10 +293,11 @@ export class Agent {
     if (this.ring.visible) this.ring.scale.setScalar(1 + Math.sin(t * 6) * 0.12);
     if (this.bubbleEl) {
       const age = t - this.bubbleT;
-      if (age > BUBBLE_S) {
+      const life = this.hero ? HERO_BUBBLE_S : BUBBLE_S;
+      if (age > life) {
         this.bubbleEl.remove();
         this.bubbleEl = null;
-      } else if (age > BUBBLE_S - 0.4) this.bubbleEl.classList.add('hq-out');
+      } else if (age > life - 0.4) this.bubbleEl.classList.add('hq-out');
     }
     this.drawTag(moving || this.path.length > 0, t);
   }
@@ -312,18 +317,24 @@ export class Agent {
     const key = `${shown}|${!!ps.beacon}|${talking}|${ding}|${!!this.drive}`;
     if (key === this.tagKey) return;
     this.tagKey = key;
-    const { emoji, name } = this.info;
+    const { name } = this.info;
     this.tag.className = `hq-tag hq-tag-${shown}`;
     this.tag.replaceChildren();
-    const span = (cls: string, text: string) => {
+    const span = (cls: string, text: string, icon = false) => {
       const s = document.createElement('span');
       s.className = cls;
-      s.textContent = text;
+      if (icon) s.append(iconSvg(personDept(this.info), this.hero ? 17 : 14));
+      if (text) s.append(text);
       this.tag.append(s);
     };
-    if (ding) span('hq-ding', '✅');
+    if (this.hero) {
+      if (!talking) span('hq-tag-name hq-tag-badge', '', true); // the hero: just the badge
+      this.el.style.zIndex = talking ? '40' : '10';
+      return;
+    }
+    if (ding) span('hq-ding', '✓');
     const you = !!this.drive; // the founder you're walking
-    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : shown === 'idle' ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? `${emoji} You` : shown === 'idle' ? emoji : `${emoji} ${name}`);
+    if (!talking) span(you ? 'hq-tag-name hq-tag-you' : shown === 'idle' ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : shown === 'idle' ? '' : name, true);
     if (shown !== 'idle' && shown !== 'walking') span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
     this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
   }
@@ -334,7 +345,7 @@ export class Agent {
     const who = document.createElement('div');
     who.className = 'hq-bubble-who';
     who.style.color = readable(this.info.color);
-    who.textContent = `${this.info.emoji} ${this.info.name}`;
+    who.append(iconSvg(personDept(this.info), 13), ` ${this.info.name}`);
     const body = document.createElement('div');
     body.className = 'hq-bubble-text';
     body.append(tgDom(clean(text), 2)); // the bold title and the first fact
@@ -356,6 +367,16 @@ export class Agent {
   lift = 0;
   private liftShown = 0;
 
+  get talking() {
+    return !!this.bubbleEl;
+  }
+  private box = { w: 0, h: 0, id: '' };
+  /** The bubble's size on screen (measured once per bubble). */
+  bubbleBox() {
+    if (this.bubbleEl && this.box.id !== this.bubbleId) this.box = { w: this.bubbleEl.offsetWidth, h: this.bubbleEl.offsetHeight, id: this.bubbleId ?? '' };
+    return this.box;
+  }
+
   /** Projects the head to the canvas; kept `pad` px inside it so a bubble near an edge isn't cut off. */
   project(camera: THREE.Camera, w: number, h: number) {
     v.setFromMatrixPosition(this.person.tagAnchor.matrixWorld).project(camera);
@@ -366,7 +387,7 @@ export class Agent {
     this.sx = Math.min(Math.max(rx, pad), w - pad);
     this.sy = Math.max(ry, this.bubbleEl ? pad * 0.9 : 0);
     const walking = this.moving || this.path.length > 0;
-    this.wide = this.bubbleEl ? 0 : this.ps.state === 'idle' && !walking ? 34 : 112;
+    this.wide = this.bubbleEl ? 0 : this.hero || (this.ps.state === 'idle' && !walking) ? 30 : 112;
     this.tall = walking || this.ps.state === 'idle' ? 24 : 44; // name pill, plus the state chip under it
     this.lift = 0;
   }

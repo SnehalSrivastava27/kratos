@@ -3,7 +3,7 @@
 // once and merged by colour into a handful of draw calls. Every solid piece leaves a footprint
 // (office.ts Collider) that the people's paths go round.
 import * as THREE from 'three';
-import { C, DESKS, ZONE_EMOJI, zoneById, zoneColor, zones } from '../data';
+import { C, DESKS, zoneById, zoneColor, zones } from '../data';
 import { BOOKCASE_SOLIDS } from './library';
 import { mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { piece, plant, type Models } from './models';
@@ -144,7 +144,7 @@ function cardboard(s = 1) {
   return g;
 }
 
-function buildOffice(m: Models, solids: Rect[]) {
+function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   const root = new THREE.Group();
   const box3 = new THREE.Box3();
   /** Places `o`; a solid one leaves its footprint (shrunk by `inset`) for the paths to go round. */
@@ -199,7 +199,8 @@ function buildOffice(m: Models, solids: Rect[]) {
   for (const z of zones) {
     const col = '#' + new THREE.Color(zoneColor(z.id)).lerp(new THREE.Color('#ffffff'), 0.62).getHexString();
     add(mesh(roundedBox(z.w - 0.4, 0.04, z.d - 0.4, 0.35), toon(col)), z.x, 0.02, z.z);
-    const sign = floorSign(`${ZONE_EMOJI[z.id]} ${z.label.toUpperCase()}`);
+    if (!signs) continue; // the landing hero: no stickers on the floor
+    const sign = floorSign(z.label.toUpperCase());
     sign.position.set(z.x - z.w / 2 + 0.35 + sign.userData.w / 2, 0.05, z.z + z.d / 2 - 0.5);
     root.add(sign);
   }
@@ -214,9 +215,9 @@ function buildOffice(m: Models, solids: Rect[]) {
   const lib = zoneById.library;
   add(piece(m.lounge, 'pouf', { Cloth: '#9d4edd' }), lib.x - 1.9, 0, lib.z + 3.0, 0, true); // a reading pouf by the librarian
   // The front door: a mat at the open front edge, where new hires walk in.
-  const mat = floorSign('👋 WELCOME');
+  const mat = floorSign('WELCOME');
   mat.position.set(DOOR[0], 0.05, DOOR[1] - 0.15);
-  root.add(mat);
+  if (signs) root.add(mat);
 
   // War room: glass cabin, wooden table, chairs either side, a stand for the big plan screen.
   const war = zoneById.war_room;
@@ -309,9 +310,9 @@ export const FLOOR: Rect = { minX: -18.0, maxX: 12.3, minZ: -8.0, maxZ: 8.3 };
 export const DOOR: [number, number] = [5.0, 8.0];
 
 /** The whole static office: merged furniture, the textured plank floor, and every solid footprint. */
-export function buildWorld(models: Models) {
+export function buildWorld(models: Models, signs = true) {
   const solids: Rect[] = [];
-  const raw = buildOffice(models, solids);
+  const raw = buildOffice(models, solids, signs);
   const merged = mergeByColor(raw);
   raw.traverse((o) => (o as THREE.Mesh).isMesh && (o as THREE.Mesh).geometry.dispose()); // merged copied them; textures stay (merged uses them)
   const FW = FLOOR.maxX - FLOOR.minX + 0.2;

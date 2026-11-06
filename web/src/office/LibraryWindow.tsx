@@ -2,7 +2,8 @@
 // right. Ported from agent-office's ui/library.ts (list + page, "Taking the books down…", stale reads
 // ignored), adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs.
 import { useEffect, useRef, useState } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { Library as LibraryIcon, RefreshCw, Tag } from 'lucide-react';
+import { DEPT, IconTile } from './icons';
 import type { Library, LibraryBook, ShelfId } from '../shared/types';
 import { getBook } from './api';
 import { Modal } from './Hud';
@@ -44,9 +45,9 @@ export function LibraryWindow({ library, shelf0, onClose, onRecategorize }: {
   const working = library?.librarian === 'working';
   return (
     <Modal className="ao-lib" onClose={onClose} label="Library"
-      title={<>📚 Skills Library <span className="ml-1 text-[13px] font-bold text-[var(--muted)]">{library ? `${total} skills on ${library.shelves.length} shelves` : 'Taking the books down…'}</span></>}
+      title={<span className="inline-flex items-center gap-2"><LibraryIcon className="size-5" strokeWidth={2.5} /> Skills Library <span className="ml-1 text-[13px] font-bold text-[var(--muted)]">{library ? `${total} skills on ${library.shelves.length} shelves` : 'Taking the books down…'}</span></span>}
       footer={<>
-        <span className="grow">{note || (working ? '📚 The Librarian is re-shelving every skill…' : library?.updatedAt ? `Shelved ${new Date(library.updatedAt).toLocaleString()}` : 'The Librarian reads every installed skill and shelves it by department.')}</span>
+        <span className="grow">{note || (working ? 'The Librarian is re-shelving every skill…' : library?.updatedAt ? `Shelved ${new Date(library.updatedAt).toLocaleString()}` : 'The Librarian reads every installed skill and shelves it by department.')}</span>
         <button type="button" className="ao-btn" disabled={working} onClick={() => onRecategorize().then(setNote, (e) => setNote(`Could not start: ${e instanceof Error ? e.message : e}`))}>
           <RefreshCw /> Re-shelve with the Librarian
         </button>
@@ -56,7 +57,7 @@ export function LibraryWindow({ library, shelf0, onClose, onRecategorize }: {
           {library?.shelves.map((s) => (
             <section key={s.id} data-shelf={s.id}>
               <button type="button" className="ao-lib-shelf" aria-expanded={open === s.id} onClick={() => setOpen(open === s.id ? undefined : s.id)}>
-                <span>{SHELF_LABEL[s.id] ?? s.label}</span><span className="ao-lib-n">{s.books.length}</span>
+                <span className="flex items-center gap-2"><IconTile dept={DEPT[s.id] ?? DEPT.general} size={24} />{SHELF_LABEL[s.id] ?? s.label}</span><span className="ao-lib-n">{s.books.length}</span>
               </button>
               {open === s.id && s.books.map((b) => (
                 <button key={b.id} type="button" title={b.why || b.description} className={`ao-lib-book${reading?.id === b.id ? ' on' : ''}`} onClick={() => void read(b)}>
@@ -75,9 +76,9 @@ export function LibraryWindow({ library, shelf0, onClose, onRecategorize }: {
           {fm && reading && (
             <>
               <div className="ao-lib-head">
-                <div className="text-[20px] font-black">📕 {reading.name}</div>
+                <div className="flex items-center gap-2.5 text-[20px] font-black"><IconTile dept={DEPT[reading.department] ?? DEPT.general} size={34} />{reading.name}</div>
                 <div className="text-[13px] font-bold text-[var(--muted)]">{SHELF_LABEL[reading.department]} · {reading.source}</div>
-                {reading.why && <div className="mt-1.5 text-[13.5px] font-bold">🏷️ {reading.why}</div>}
+                {reading.why && <div className="mt-1.5 flex items-center gap-1.5 text-[13.5px] font-bold"><Tag className="size-4" strokeWidth={2} /> {reading.why}</div>}
               </div>
               <Markdown src={fm.body} />
             </>

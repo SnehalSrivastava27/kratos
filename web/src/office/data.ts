@@ -8,7 +8,10 @@ export const roster = rosterJson.people as Person[];
 export const zones = zonesJson.zones as Zone[];
 export const zoneById = Object.fromEntries(zones.map((z) => [z.id, z])) as Record<string, Zone>;
 export const personById = Object.fromEntries(roster.map((p) => [p.id, p])) as Record<string, Person>;
-export const TG_GROUP = (rosterJson as { telegram?: { group: string } }).telegram?.group ?? 'Telegram';
+/** The Telegram group's title: the demo's made-up one, or the signed-in workspace's (setGroup, from Office). A live binding: importers see the change. */
+export let TG_GROUP = (rosterJson as { telegram?: { group: string } }).telegram?.group ?? 'Telegram';
+export const DEMO_GROUP = TG_GROUP;
+export const setGroup = (name: string) => void (TG_GROUP = name);
 export const ROOMS = (rosterJson.rooms as { id: string; label: string; zone: string; topic?: string }[]).map((r) => ({ ...r, topic: r.topic ?? r.label }));
 export const roomZone = Object.fromEntries(rosterJson.rooms.map((r) => [r.id, r.zone])) as Record<string, string>;
 export const ctx: Ctx = { roster, roomZone };

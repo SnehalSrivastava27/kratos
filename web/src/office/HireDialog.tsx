@@ -2,7 +2,8 @@
 // ui/employees.ts (a name, a role and skill set, installed skills as chips to attach) and ui/prompt.ts
 // (the window), adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs.
 import { useMemo, useState } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, UserPlus } from 'lucide-react';
+import { HIRE_ICONS } from './icons';
 import type { Library, RoomId } from '../shared/types';
 import type { HireBody, HireResult } from './api';
 import { deskById, zoneById } from './data';
@@ -10,7 +11,7 @@ import { Modal } from './Hud';
 import { ROOMS } from './Telegram';
 import { SHELF_LABEL } from './engine/library';
 
-const EMOJI = ['🧑‍💻', '🧑‍🎨', '🧾', '📈', '🛒', '🎬', '🧪', '🤝', '🦊', '🚀'];
+
 const COLORS = ['#ef476f', '#ff8a5b', '#f4a300', '#06d6a0', '#118ab2', '#5bc0eb', '#9d4edd', '#2b2d42'];
 const safeUrl = (u: string) => /^https?:\/\//i.test(u);
 
@@ -18,7 +19,7 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
   desk?: string; room0: string; library: Library | null; onClose: () => void;
   onHire: (b: HireBody) => Promise<{ data: HireResult; status: number }>;
 }) {
-  const [f, setF] = useState({ name: '', role: '', room: room0 as RoomId, emoji: EMOJI[0], color: COLORS[4], instructions: '' });
+  const [f, setF] = useState({ name: '', role: '', room: room0 as RoomId, emoji: HIRE_ICONS[0].emoji, color: COLORS[4], instructions: '' });
   const [skills, setSkills] = useState<string[]>([]);
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
@@ -50,7 +51,7 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
 
   if (pending)
     return (
-      <Modal title="🧑‍💼 One more step" onClose={onClose}>
+      <Modal title="One more step" onClose={onClose}>
         <div className="ao-body text-[15px] font-bold">
           <p className="mb-4">{pending.name} has a desk, but Switch needs a human to finish creating the agent. Open the Switch Console, confirm, and they start work.</p>
           <a href={pending.url} target="_blank" rel="noopener noreferrer" className="ao-btn primary !h-11 !text-[15px]"><ExternalLink /> {pending.label}</a>
@@ -59,11 +60,11 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
     );
 
   return (
-    <Modal title={<>🧑‍💼 Hire a teammate{where && <span className="ml-2 text-[13px] font-bold text-[var(--muted)]">{where}</span>}</>} label="Hire a teammate" onClose={onClose} className="w-[min(720px,100%)]"
+    <Modal title={<span className="inline-flex items-center gap-2"><UserPlus className="size-5" strokeWidth={2.5} /> Hire a teammate{where && <span className="ml-2 text-[13px] font-bold text-[var(--muted)]">{where}</span>}</span>} label="Hire a teammate" onClose={onClose} className="w-[min(720px,100%)]"
       footer={<>
         <span className="grow">{err ? <span className="text-[#C8303A]">{err}</span> : 'They join Kratos D2C on Telegram and walk in to their desk.'}</span>
         <button type="button" className="ao-btn" onClick={onClose}>Cancel</button>
-        <button type="button" className="ao-btn primary" disabled={busy} onClick={() => void submit()}>{busy ? 'Hiring…' : '✨ Hire'}</button>
+        <button type="button" className="ao-btn primary" disabled={busy} onClick={() => void submit()}>{busy ? 'Hiring…' : 'Hire'}</button>
       </>}>
       <form className="ao-body grid gap-x-4 sm:grid-cols-2" onSubmit={(e) => (e.preventDefault(), void submit())}>
         <label className="ao-field"><span>Name</span><input className="ao-input" maxLength={24} value={f.name} onChange={set('name')} placeholder="e.g. Meera" autoFocus /></label>
@@ -75,9 +76,11 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
         </label>
         <div className="ao-field"><span>Look</span>
           <div className="flex flex-wrap items-center gap-1">
-            {EMOJI.map((e) => (
-              <button key={e} type="button" aria-label={`Emoji ${e}`} aria-pressed={f.emoji === e} onClick={() => setF((s) => ({ ...s, emoji: e }))}
-                className={`grid size-8 place-items-center rounded-lg text-lg ${f.emoji === e ? 'bg-white shadow-[0_2px_0_var(--ink)] ring-[3px] ring-[var(--ink)]' : 'hover:bg-black/5'}`}>{e}</button>
+            {HIRE_ICONS.map(({ Icon, emoji, name }) => (
+              <button key={name} type="button" aria-label={`Icon ${name}`} aria-pressed={f.emoji === emoji} onClick={() => setF((s) => ({ ...s, emoji }))}
+                className={`grid size-8 place-items-center rounded-lg ${f.emoji === emoji ? 'bg-white shadow-[0_2px_0_var(--ink)] ring-[2.5px] ring-[var(--ink)]' : 'hover:bg-black/5'}`}>
+                <Icon size={18} color={f.color} strokeWidth={1.75} />
+              </button>
             ))}
           </div>
           <div className="mt-1.5 flex gap-1.5">

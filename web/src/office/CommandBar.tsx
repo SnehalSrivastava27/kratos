@@ -3,7 +3,7 @@
 // the event feed like any Telegram message. Window shell from agent-office's ui/prompt.ts (Enter to send,
 // Shift+Enter for a new line), adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs.
 import { useState } from 'react';
-import { ArrowUp, BookOpen, Megaphone, PackageSearch, UserPlus } from 'lucide-react';
+import { ArrowUp, BookOpen, Send, Megaphone, PackageSearch, UserPlus } from 'lucide-react';
 import type { RoomId } from '../shared/types';
 import { TG_GROUP } from './data';
 import { Modal } from './Hud';
@@ -39,7 +39,7 @@ export function CommandBar({ room0, text0 = '', onClose, onSend, onHire, onLibra
   ];
 
   return (
-    <Modal top className="w-[min(640px,100%)]" onClose={onClose} label="Command bar" title={<span className="flex items-center gap-2">⌘ Message the team <span className="text-[13px] font-bold text-[var(--muted)]">· {TG_GROUP}</span></span>}>
+    <Modal top className="w-[min(640px,100%)]" onClose={onClose} label="Command bar" title={<span className="flex items-center gap-2"><Send className="size-[18px]" strokeWidth={2.5} /> Message the team <span className="text-[13px] font-bold text-[var(--muted)]">· {TG_GROUP}</span></span>}>
       <div className="ao-body !pb-3">
         <div className="mb-3 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Topic">
           {ROOMS.map((r) => (
@@ -63,7 +63,7 @@ export function CommandBar({ room0, text0 = '', onClose, onSend, onHire, onLibra
         <div className="mt-2 min-h-5 text-[13px] font-bold" aria-live="polite">
           {status.k === 'sending' && <span className="text-[var(--muted)]">Sending to {topic.topic}<span className="hq-dots" /></span>}
           {status.k === 'sent' && (
-            <span className="text-[#0F7A4F]">Sent ✓ to {ROOMS.find((r) => r.id === status.room)?.topic}{status.mock ? ' (demo: no server, echoed locally)' : ' · it will show up in the chat when Telegram echoes it'}</span>
+            <span className="text-[#0F7A4F]">Sent ✓ to {ROOMS.find((r) => r.id === status.room)?.topic}{status.mock ? ' (demo: shown locally, nothing sent)' : ' · it will show up in the chat when Telegram echoes it'}</span>
           )}
           {status.k === 'error' && <span className="text-[#C8303A]">Not sent: {status.msg}</span>}
           {status.k === 'idle' && <span className="text-[var(--muted)]">Enter to send · Shift+Enter for a new line · @name to mention</span>}

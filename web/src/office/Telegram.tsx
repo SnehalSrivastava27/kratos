@@ -2,7 +2,7 @@
 // Everything is derived client-side from the event feed.
 import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, CheckCheck, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
+import { ArrowLeft, Check, CheckCheck, Pencil, ExternalLink, Mic, Paperclip, Search, Smile } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import type { OfficeEvent } from '../shared/types';
 import type { SceneState } from './officeState';
 import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
 import { Tg, tgPlain } from './md';
+import { PersonAvatar, RoomTile } from './icons';
 
 export { ROOMS };
 export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
@@ -32,14 +33,9 @@ export function typingIn(room: string, events: OfficeEvent[], scene: SceneState)
   return roster.filter((p) => p.kind === 'agent' && scene.people[p.id]?.state === 'working' && lastRoom[p.id] === room).map((p) => p.name);
 }
 
-/** A forum topic's icon: Telegram draws these as a tinted rounded bubble with the topic emoji. */
+/** A forum topic's icon: the department's Lucide icon on a tinted rounded square. */
 export function TopicIcon({ room, size = 40 }: { room: string; size?: number }) {
-  const c = ROOM_COLOR[room];
-  return (
-    <div className="grid shrink-0 place-items-center rounded-[38%]" style={{ width: size, height: size, fontSize: size * 0.5, background: `${c}22`, boxShadow: `inset 0 0 0 1.5px ${c}55` }}>
-      {ROOM_EMOJI[room]}
-    </div>
-  );
+  return <RoomTile room={room} size={size} />;
 }
 function GroupAvatar({ size = 42 }: { size?: number }) {
   return (
@@ -137,7 +133,7 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
   return (
     <div className={cn('flex items-end gap-2', mine ? 'justify-end' : 'justify-start')}>
       {!mine && (last ? (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#5AB0F5] to-[#3390EC] text-[11px] font-bold text-white">SW</div>
+        <PersonAvatar person={p} size={32} />
       ) : (
         <div className="w-8 shrink-0" />
       ))}
@@ -145,7 +141,7 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
         style={accent ? { boxShadow: `inset 3px 0 0 ${accent}, 0 1px 1px rgba(0,0,0,.12)` } : undefined}>
         {!mine && first && <div className="text-[13px] font-semibold text-[#1A6FB5]">Switch <span className="font-normal text-[#707579]">bot</span></div>}
         <div className="whitespace-pre-wrap text-[#000]">
-          {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.emoji} {p?.name}</b>}
+          {!mine && <b style={{ color: readable(p?.color ?? '#1A6FB5') }}>{p?.name}</b>}
           {!mine && <br />}
           <Tg text={body} />
         </div>
@@ -166,9 +162,9 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
         <div className="clear-both" />
         {e.type === 'approval_needed' && (
           <div className="-mx-1 mt-1 mb-0.5 grid grid-cols-2 gap-1">
-            {['✅ Approve', '✏️ Ask changes'].map((b) => (
-              <button key={b} onClick={() => toast(`Sent “${b.slice(2)}” to ${p?.name ?? 'the bot'}`)}
-                className="rounded-lg bg-[#3390EC]/10 py-1.5 text-[13px] font-semibold text-[#1A6FB5] hover:bg-[#3390EC]/20">{b}</button>
+            {([[Check, 'Approve'], [Pencil, 'Ask changes']] as const).map(([Icon, b]) => (
+              <button key={b} onClick={() => toast(`Sent “${b}” to ${p?.name ?? 'the bot'}`)}
+                className="flex items-center justify-center gap-1.5 rounded-lg bg-[#3390EC]/10 py-1.5 text-[13px] font-semibold text-[#1A6FB5] hover:bg-[#3390EC]/20"><Icon className="size-3.5" strokeWidth={2} />{b}</button>
             ))}
           </div>
         )}
