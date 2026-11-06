@@ -191,7 +191,7 @@ Switch reports the hire `live`, because a message sent earlier would never reach
 
 **Switch.** `define_role`, `assume_role`, `list_roles`; role-mention delivery. `docs/switch/12-feature-survey.md`
 
-<!-- TODO(orchestrator): SW4 is reviewed but not yet merged into backend-v2 at time of writing; confirm the agent rules got the role patches -->
+<!-- TODO(orchestrator): the agents' assume_role / @finance-approver rules land with E2's instruction patches; confirm they are in switch/agents/*.md after E2 merges -->
 
 ## 14. The morning brief
 
@@ -206,7 +206,7 @@ for the founder. Once per workspace per day.
 
 **Switch.** None for the clock: Switch 0.31.0 has no scheduler. The brief itself is `post_message` + addressing.
 
-<!-- TODO(orchestrator): server/src/brief.ts comes with SW4; confirm merged and that the Captain's MORNING BRIEF rules landed -->
+<!-- TODO(orchestrator): the Captain's MORNING BRIEF rules land with E2; confirm after E2 merges -->
 
 ## 15. Accounts and linked groups
 
@@ -270,16 +270,19 @@ library. A Claude Code "librarian" sorted them in 45.5 s, in batches of 40.
 
 ## 20. The toolkit (`kit`)
 
-**What it does.** One CLI for agents: `sql`, `tables`, `stats`, `forecast`, `chart`, `deck`, `xlsx`,
-`docx`, `pdf`, `banner`. One JSON object out. Files land in `gallery/live-run/` and come back as a link.
+**What it does.** One CLI for agents: `metric` (50 named D2C metrics, each with its definition and the SQL
+that ran), `brief <dept>` (a department's 6–10 numbers, month vs previous), `sql`, `tables`, `stats`,
+`forecast`, `chart`, `deck`, `xlsx`, `docx`, `pdf`, `banner`. One JSON object out. Files land in
+`gallery/live-run/` and come back as a link. CSVs and 17 marts are cached in a read-only SQLite file
+(`data/.cache/kratos.db`, rebuilt when a CSV changes): a cold `kit sql` takes ~60 ms (was 199 ms).
 
-**How to use it.** `node kit/bin/kit.mjs help <command>` prints a working example.
+**How to use it.** `node kit/bin/kit.mjs metric list` · `node kit/bin/kit.mjs metric rto_pct --channel Website --by payment` ·
+`node kit/bin/kit.mjs brief finance` · `node kit/bin/kit.mjs help <command>` prints a working example · `node kit/bench.mjs` for timings.
 
-**Files.** `kit/bin/kit.mjs` · `kit/lib/*.mjs` · `kit/test/` · guide: `switch/TOOLKIT.md`.
+**Files.** `kit/bin/kit.mjs` · `kit/lib/*.mjs` (`metrics.mjs`, `marts.mjs`, `data.mjs`) · `kit/test/` · guides:
+`switch/TOOLKIT.md`, `switch/METRICS.md` (definitions and Indian D2C conventions).
 
 **Switch.** None; agents run it through Claude Code's Bash tool (the offline evals allow only `Bash(node kit/bin/kit.mjs:*)`).
-
-<!-- TODO(orchestrator): K3 adds `kit metric` (50 named D2C metrics), `kit brief <dept>` and a read-only SQLite cache with marts (data/.cache/kratos.db); add usage lines once merged -->
 
 ![Toolkit](../diagrams/toolkit.png)
 
