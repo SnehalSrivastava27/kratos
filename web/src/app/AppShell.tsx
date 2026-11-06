@@ -8,6 +8,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { Logo } from '@/brand/Logo';
 
 // P1 is adding `workspace` + `onUnauthorized` to <Office>. Until that lands the props are ignored;
 // this local type lets us pass them now without touching web/src/office/**.
@@ -53,6 +54,7 @@ function AccountMenu({ name, email, current, all }: { name: string; email: strin
           {initials(name)}
         </DropdownMenuTrigger>
         <DropdownMenuContent side="top" align="start" sideOffset={10} className="w-64 rounded-xl p-1.5">
+          <div className="px-2 pt-1.5 pb-2"><Logo className="h-[18px]" /></div>
           <DropdownMenuGroup>
             <DropdownMenuLabel className="px-2 py-1.5">
               <span className="block truncate text-[13.5px] font-medium text-foreground">{name}</span>

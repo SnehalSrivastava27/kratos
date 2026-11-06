@@ -94,17 +94,4 @@ export function LiveDot({ className }: { className?: string }) {
   );
 }
 
-export function Logo({ className }: { className?: string }) {
-  return (
-    <span className={cn('inline-flex items-center gap-2 text-[15px] font-semibold tracking-tight text-foreground', className)}>
-      <svg viewBox="0 0 24 24" className="size-6" aria-hidden="true">
-        <rect width="24" height="24" rx="7" fill="#171717" />
-        <rect x="6" y="6" width="5" height="5" rx="1.2" fill="#fff" opacity=".9" />
-        <rect x="13" y="6" width="5" height="5" rx="1.2" fill="#fff" opacity=".35" />
-        <rect x="6" y="13" width="5" height="5" rx="1.2" fill="#fff" opacity=".35" />
-        <rect x="13" y="13" width="5" height="5" rx="1.2" fill="#F4A300" />
-      </svg>
-      D2C Agent HQ
-    </span>
-  );
-}
+export { Logo } from '@/brand/Logo';

@@ -1,4 +1,4 @@
-# D2C Agent HQ — Telegram Edition
+# Kratos — Telegram Edition
 
 > Every corner of your D2C brand gets an AI teammate. They work together in your team's **Telegram** groups through **Switch**, and a live office shows them planning your next sale.
 

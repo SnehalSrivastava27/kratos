@@ -63,7 +63,7 @@ function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-black/[0.07] bg-canvas/80 backdrop-blur-md">
       <Container className="flex h-16 items-center gap-6">
-        <Link to="/" aria-label="D2C Agent HQ home"><Logo /></Link>
+        <Link to="/" aria-label="Kratos home"><Logo /></Link>
         <nav className="mx-auto hidden items-center gap-7 text-[14px] text-neutral-500 lg:flex" aria-label="Sections">
           {LINKS.map(([label, href]) => <a key={href} href={href} className="transition-colors hover:text-foreground">{label}</a>)}
         </nav>

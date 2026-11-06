@@ -1,4 +1,6 @@
-# D2C Agent HQ
+# Kratos
+
+AI teammates for every department of a D2C brand, in Telegram, powered by Switch.
 
 > Every department of your D2C brand gets an AI teammate. They work together in your team's
 > **Telegram** groups through **Switch**, and a live 3D office shows them planning your next sale.
@@ -16,7 +18,7 @@ Indian D2C teams don't run on Slack. They run on Telegram and WhatsApp groups. P
 festive sale means 6 teams, 40 voice notes and 3 days of back-and-forth: marketing overspends,
 ops finds a stockout too late, finance says no after everything is booked.
 
-**D2C Agent HQ** puts an AI teammate in each department's Telegram group. The founder types one
+**Kratos** puts an AI teammate in each department's Telegram group. The founder types one
 message in the War Room, and the team plans the whole sale, including Finance pushing back when
 the numbers don't work. Nobody on the team learns a new tool.
 
