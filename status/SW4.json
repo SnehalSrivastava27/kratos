@@ -1,0 +1,4 @@
+{ "task": "SW4", "state": "working", "progress": 20,
+  "done": ["worktree", "surveyed switch-core 0.31.0 ops, gateway, commands, approvals, roles, budgets"],
+  "next": "roles + morning brief in server, observer role notices, tests, survey doc",
+  "blockers": [], "contract_requests": [], "findings": [], "updated": "2026-11-07T02:30:00+05:30" }
