@@ -45,13 +45,15 @@ const HELP = {
   docx: { usage: 'kit docx <spec.json | inline JSON> [--out name]', notes: 'One-page brief: title, subtitle, date, kpis (max 4), blocks: {h}|{p}|{bullets}|{callout}|{table}|{chart}, footer.', example: EX.docx },
   pdf: { usage: 'kit pdf <spec.json | inline JSON> [--out name]', notes: 'Same spec as docx, A4 PDF.', example: EX.pdf },
   banner: { usage: 'kit banner <spec.json | inline JSON> [--out name]', notes: '1080x1080. template: sale | launch | quote. Fields: headline, sub, badge, cta, footnote, brand, accent (#RRGGBB). Writes .svg and .png.', example: EX.banner },
+  metric: { usage: 'kit metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --from YYYY-MM-DD --to YYYY-MM-DD | --last N] [--by dim[,dim]]', notes: 'One named D2C metric with its exact definition, value(s), filters, source tables and the SQL that ran. kit metric list = every name. Default window: all data (2026-08-01..2026-10-31). Definitions: switch/METRICS.md.', example: 'kit metric rto_pct --channel Website --by payment --month 2026-10' },
+  brief: { usage: 'kit brief <analytics|ads|creators|ops|design|finance|captain> [--month YYYY-MM]', notes: 'The 6-10 numbers a department lead needs, for the month (default: latest) vs the month before, each with the kit metric command behind it.', example: 'kit brief finance' },
   help: { usage: 'kit help [command]' },
 };
 
 async function main() {
   const { values: o, positionals: pos } = parseArgs({
     allowPositionals: true, strict: true,
-    options: { data: { type: 'string' }, limit: { type: 'string' }, by: { type: 'string' }, out: { type: 'string' }, table: { type: 'string' }, date: { type: 'string' }, value: { type: 'string' }, days: { type: 'string' }, uplift: { type: 'string' } },
+    options: { data: { type: 'string' }, limit: { type: 'string' }, by: { type: 'string' }, out: { type: 'string' }, table: { type: 'string' }, date: { type: 'string' }, value: { type: 'string' }, days: { type: 'string' }, uplift: { type: 'string' }, channel: { type: 'string' }, sku: { type: 'string' }, month: { type: 'string' }, from: { type: 'string' }, to: { type: 'string' }, last: { type: 'string' } },
   });
   const [cmd, ...args] = pos;
   if (!cmd || cmd === 'help') {
@@ -64,6 +66,16 @@ async function main() {
   switch (cmd) {
     case 'sql': return data.query(dir, args.join(' '), o.limit);
     case 'tables': { const { tables, marts } = data.openDb(dir); return { tables, marts: marts.map((m) => ({ table: m.table, rows: m.rows, columns: m.columns.map((c) => c.name) })) }; }
+    case 'metric': {
+      const mx = await import('../lib/metrics.mjs');
+      if (!args[0] || args[0] === 'list') return mx.list();
+      if (args.length > 1) fail(`one metric per call (got: ${args.join(' ')})`);
+      return mx.metric(dir, args[0], o);
+    }
+    case 'brief': {
+      if (!args[0]) fail(HELP.brief.usage);
+      return (await import('../lib/metrics.mjs')).brief(dir, args[0], o);
+    }
     case 'stats': if (args.length < 2) fail(HELP.stats.usage); return data.stats(dir, args[0], args[1], o.by);
     case 'forecast': return data.forecast(dir, { table: o.table, date: o.date, value: o.value, by: o.by, days: o.days ?? 5, uplift: o.uplift ?? 1 });
     case 'chart': {

@@ -1,13 +1,13 @@
 // Precomputed marts, built once into the cached DB (see data.mjs). Order matters: later marts read earlier ones.
 // A mart whose source tables/columns are missing (e.g. test fixtures) is skipped. Bump MART_VERSION on any change.
-export const MART_VERSION = 1;
+export const MART_VERSION = 2;
 
 const notCancelled = "status <> 'cancelled'";
 
 export const MARTS = [
   // One row per order line + month, city tier, first-line flag, P&L COGS, new/returning.
   ['m_lines', `
-    SELECT o.*, substr(o.date, 1, 7) AS month, t.city_tier,
+    SELECT o.*, p.name AS product, substr(o.date, 1, 7) AS month, t.city_tier,
       CASE WHEN ROW_NUMBER() OVER (PARTITION BY o.order_id ORDER BY o.rowid) = 1 THEN 1 ELSE 0 END AS is_first,
       CASE WHEN o.status = 'delivered' OR (o.status = 'returned' AND r.restockable = 'no') THEN o.qty * p.cogs ELSE 0 END AS cogs,
       CASE WHEN o.order_id = f.first_order THEN 'new' ELSE 'returning' END AS customer_type
