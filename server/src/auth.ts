@@ -76,6 +76,13 @@ export async function login(body: any): Promise<User> {
   return row2user(r);
 }
 
+/** The host owner may run host-wide actions (re-shelving the skills library): OWNER_EMAIL, else the first user. */
+export function isHostOwner(user: User) {
+  const owner = process.env.OWNER_EMAIL?.trim().toLowerCase();
+  if (owner) return user.email === owner;
+  return (sql().prepare("SELECT id FROM users ORDER BY created_at, rowid LIMIT 1").get() as { id: string } | undefined)?.id === user.id;
+}
+
 /** New session for `userId`; returns the raw id for the cookie (only its hash is stored). */
 export function createSession(userId: string) {
   const id = randomBytes(32).toString("base64url");

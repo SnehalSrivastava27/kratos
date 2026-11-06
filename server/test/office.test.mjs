@@ -72,6 +72,35 @@ test("guard (v3): office reads and writes need the workspace owner's session or 
   }
 });
 
+test("host-wide actions (re-shelving the library): ADMIN_TOKEN, or the host owner in the office on this Mac", async () => {
+  fake.chats["room-2"] = "-222";
+  let s = await start({ ADMIN_TOKEN: "adm" }); // s.cookie = the first registered user = host owner
+  try {
+    const other = await account(s);
+    await link(s, other, { room: "room-2" });
+    let r = await post(s, "/api/library/categorize", {}, { cookie: other });
+    assert.equal(r.status, 403, "a signed-in user who isn't the host owner");
+    r = await post(s, "/api/library/categorize", {}, { cookie: s.cookie, "x-forwarded-for": "203.0.113.9" });
+    assert.equal(r.status, 403, "the owner, but not from this Mac");
+    r = await post(s, "/api/library/categorize", {});
+    assert.equal(r.status, 202, "the owner in the office on this Mac");
+  } finally {
+    await s.stop();
+  }
+  s = await start({ ADMIN_TOKEN: "adm", OWNER_EMAIL: "boss@example.com" }, { linked: false });
+  try {
+    s.cookie = await account(s); // first user, but OWNER_EMAIL names someone else
+    await link(s, s.cookie);
+    assert.equal((await post(s, "/api/library/categorize", {})).status, 403);
+    const boss = await account(s, "Boss@Example.com");
+    fake.chats["room-3"] = "-333";
+    await link(s, boss, { room: "room-3" });
+    assert.equal((await post(s, "/api/library/categorize", {}, { cookie: boss })).status, 202);
+  } finally {
+    await s.stop();
+  }
+});
+
 test("CSRF + DNS rebinding (TRUST_LOOPBACK on, the default): writes need JSON, a local Host and a local Origin", async () => {
   const s = await start({ ADMIN_TOKEN: "adm" });
   try {

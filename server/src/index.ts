@@ -7,7 +7,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
 import { openStore, closeStore, addEvent, recent, roomEvents, roomStats, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
-import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, type User } from "./auth.js";
+import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, type User } from "./auth.js";
 import { resolveWs, userWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
 import { handleOffice, syncPending, employeePerson } from "./office.js";
@@ -315,7 +315,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
 
   // ---- scoped to one workspace (v3): session (or ADMIN_TOKEN) + ?ws= ----
   if (/^\/api\/(history|rooms|agents|people|employees|command|library)(\/|$)/.test(url.pathname)) {
-    const { ws } = scope(req, url);
+    const { user, ws } = scope(req, url);
     if (route === "GET /api/history") return send(res, 200, recent(ws.id, limitParam(url, 200)));
     if (route === "GET /api/rooms") return send(res, 200, rooms(liveRoster(ws), roomStats(ws.id), recent(ws.id, RING_MAX)));
     const roomMatch = method === "GET" && url.pathname.match(/^\/api\/rooms\/([\w-]+)\/events$/);
@@ -325,7 +325,11 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     }
     if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(ws), recent(ws.id, RING_MAX)));
     if (await handleOffice(req, url, { root: ROOT, roster, ws, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit: emitTo(ws.id) })) return;
-    // Library paths are shown only to the office on this Mac (or ADMIN_TOKEN); writes are already scoped above.
+    // Library paths are shown only to the office on this Mac (or ADMIN_TOKEN). Re-shelving is host-wide (rewrites
+    // data/library.json, runs Claude Code): ADMIN_TOKEN, or the host owner in a browser on this Mac.
+    if (method !== "GET" && url.pathname.startsWith("/api/library") && !hasToken(req, ADMIN_TOKEN) &&
+        !(user && isHostOwner(user) && isLocalOffice(req) && !!req.headers.origin && originOk(req)))
+      throw new HttpError(403, "only the host owner, in the office on this Mac");
     const trusted = method === "GET" ? isTrustedRead(req) : true;
     if (url.pathname.startsWith("/api/library") && (await handleLibrary(req, res, url, { isTrusted: trusted, emit: emitTo(ws.id) }))) return;
   }
