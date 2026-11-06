@@ -10,8 +10,8 @@ import { Modal } from './Hud';
 import { Markdown, frontMatter } from './md';
 import { SHELF_LABEL } from './engine/library';
 
-export function LibraryWindow({ library, shelf0, onClose, onRecategorize }: {
-  library: Library | null; shelf0?: ShelfId; onClose: () => void; onRecategorize: () => Promise<string>;
+export function LibraryWindow({ library, error, onRetry, shelf0, onClose, onRecategorize }: {
+  library: Library | null; error?: string; onRetry: () => void; shelf0?: ShelfId; onClose: () => void; onRecategorize: () => Promise<string>;
 }) {
   const [open, setOpen] = useState<ShelfId | undefined>(shelf0 ?? library?.shelves.find((s) => s.books.length)?.id);
   const [reading, setReading] = useState<LibraryBook | null>(null);
@@ -45,7 +45,7 @@ export function LibraryWindow({ library, shelf0, onClose, onRecategorize }: {
   const working = library?.librarian === 'working';
   return (
     <Modal className="ao-lib" onClose={onClose} label="Library"
-      title={<span className="inline-flex items-center gap-2"><LibraryIcon className="size-5" strokeWidth={2.5} /> Skills Library <span className="ml-1 text-[13px] font-bold text-[var(--muted)]">{library ? `${total} skills on ${library.shelves.length} shelves` : 'Taking the books down…'}</span></span>}
+      title={<span className="inline-flex items-center gap-2"><LibraryIcon className="size-5" strokeWidth={2.5} /> Skills Library <span className="ml-1 text-[13px] font-bold text-[var(--muted)]">{library ? `${total} skills on ${library.shelves.length} shelves` : error ? 'Could not open' : 'Taking the books down…'}</span></span>}
       footer={<>
         <span className="grow">{note || (working ? 'The Librarian is re-shelving every skill…' : library?.updatedAt ? `Shelved ${new Date(library.updatedAt).toLocaleString()}` : 'The Librarian reads every installed skill and shelves it by department.')}</span>
         <button type="button" className="ao-btn" disabled={working} onClick={() => onRecategorize().then(setNote, (e) => setNote(`Could not start: ${e instanceof Error ? e.message : e}`))}>
@@ -70,7 +70,13 @@ export function LibraryWindow({ library, shelf0, onClose, onRecategorize }: {
           ))}
         </nav>
         <article className="ao-lib-page">
-          {!page && <p className="ao-lib-quiet">{library ? 'Pick a book.' : 'Taking the books down…'}</p>}
+          {!page && !library && error && (
+            <div className="ao-lib-quiet" role="alert">
+              <p className="mb-3">The library didn't load: {error}</p>
+              <button type="button" className="ao-btn" onClick={onRetry}><RefreshCw /> Try again</button>
+            </div>
+          )}
+          {!page && !(error && !library) && <p className="ao-lib-quiet">{library ? 'Pick a book.' : 'Taking the books down…'}</p>}
           {page && !page.md && !page.err && <p className="ao-lib-quiet">Opening…</p>}
           {page?.err && <p className="ao-lib-quiet">{page.err}</p>}
           {fm && reading && (

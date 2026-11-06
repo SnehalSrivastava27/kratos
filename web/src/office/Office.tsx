@@ -175,7 +175,11 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [libAt, setLibAt] = useState<{ shelf?: ShelfId } | null>(null);
   const [library, setLibrary] = useState<Library | null>(null);
   const [music, setMusic] = useState(false); // muted until asked
-  const loadLibrary = useCallback(() => api.getLibrary().then((r) => setLibrary(r.data), () => {}), []);
+  const [libErr, setLibErr] = useState('');
+  const loadLibrary = useCallback(() => {
+    setLibErr('');
+    return api.getLibrary().then((r) => setLibrary(r.data), (e) => setLibErr(e instanceof Error ? e.message : 'Could not load the library'));
+  }, []);
   useEffect(() => { if (mode === 'live') void loadLibrary(); }, [mode, loadLibrary, peopleKey]);
   useEffect(() => engine.current?.setLibrary(library), [library]);
   // While the Librarian works, look again every few seconds (the real one moves books around).
@@ -403,8 +407,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
         <CommandBar room0={cmd.room} text0={cmd.text} onClose={() => setCmd(null)} onSend={sendCommand}
           onHire={() => (setCmd(null), setHireAt({ room: cmd.room }))} onLibrary={() => (setCmd(null), setLibAt({}))} />
       )}
-      {hireAt && <HireDialog desk={hireAt.desk} room0={hireAt.room} library={library} onClose={() => setHireAt(null)} onHire={doHire} />}
-      {libAt && <LibraryWindow library={library} shelf0={libAt.shelf} onClose={() => setLibAt(null)} onRecategorize={recategorize} />}
+      {hireAt && <HireDialog desk={hireAt.desk} room0={hireAt.room} library={library} libError={libErr} onRetry={() => void loadLibrary()} onClose={() => setHireAt(null)} onHire={doHire} />}
+      {libAt && <LibraryWindow library={library} error={libErr} onRetry={() => void loadLibrary()} shelf0={libAt.shelf} onClose={() => setLibAt(null)} onRecategorize={recategorize} />}
     </div>
   );
 }

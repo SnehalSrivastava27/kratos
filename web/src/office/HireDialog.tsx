@@ -16,8 +16,8 @@ const COLORS = ['#ef476f', '#ff8a5b', '#f4a300', '#06d6a0', '#118ab2', '#5bc0eb'
 /** Links we'll open for the console step: the web, or the Switch desktop app (switchdash://open/template/<id>). Nothing else. */
 const safeUrl = (u: string) => /^(https?|switchdash):\/\//i.test(u);
 
-export function HireDialog({ desk, room0, library, onClose, onHire }: {
-  desk?: string; room0: string; library: Library | null; onClose: () => void;
+export function HireDialog({ desk, room0, library, libError, onRetry, onClose, onHire }: {
+  desk?: string; room0: string; library: Library | null; libError?: string; onRetry: () => void; onClose: () => void;
   onHire: (b: HireBody) => Promise<{ data: HireResult; status: number }>;
 }) {
   const [f, setF] = useState({ name: '', role: '', room: room0 as RoomId, emoji: HIRE_ICONS[0].emoji, color: COLORS[4], instructions: '' });
@@ -101,7 +101,7 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
             placeholder="What they own and how they work, e.g. “Own repeat purchase: win-back flows, WhatsApp nudges, and a weekly cohort report in Analytics.”" />
         </label>
         <div className="ao-field sm:col-span-2 !mb-0">
-          <span>Skills from the library <span className="font-bold text-[var(--muted)]">({skills.length} picked{library ? '' : ' · loading…'})</span></span>
+          <span>Skills from the library <span className="font-bold text-[var(--muted)]">({skills.length} picked{library ? '' : libError ? '' : ' · loading…'})</span></span>
           <input className="ao-input !py-1.5 !text-[14px]" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search skills…" aria-label="Search skills" />
           <div className="mt-2 flex max-h-36 flex-wrap gap-1.5 overflow-y-auto">
             {books.map((b) => {
@@ -115,6 +115,11 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
               );
             })}
             {library && !books.length && <span className="text-[13px] text-[var(--muted)]">No skill matches “{q}”.</span>}
+            {!library && libError && (
+              <span className="flex items-center gap-2 text-[13px] text-[#C8303A]" role="alert">
+                Skills didn't load ({libError}). <button type="button" className="ao-btn !h-7 !text-[12.5px]" onClick={onRetry}>Try again</button>
+              </span>
+            )}
           </div>
         </div>
         <button type="submit" hidden />
