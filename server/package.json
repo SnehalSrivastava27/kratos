@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "check": "node check.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

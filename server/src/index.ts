@@ -132,6 +132,8 @@ const server = createServer(async (req, res) => {
 });
 
 const wss = new WebSocketServer({ server, path: "/ws" });
+wss.on("connection", (ws) => ws.on("error", () => ws.terminate())); // malformed frame: drop that client, not the server
+wss.on("error", (e) => console.error("wss error:", e.message));
 server.listen(PORT, () => console.log(`hq-server on http://localhost:${PORT} (root ${ROOT}${SERVE_WEB ? ", serving web/dist" : ""})`));
 
 function shutdown(sig: string) {
