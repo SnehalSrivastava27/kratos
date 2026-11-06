@@ -143,7 +143,7 @@ cd server && npm test         # node:test suite
 Set `OBSERVER_TOKEN` (observer → `POST /api/events`) and `ADMIN_TOKEN` (replay) in production.
 The observer sends its token from `OBSERVER_TOKEN` and finds the server with `SERVER_URL`.
 
-Deploy to Fly.io (volume + websockets, single instance): see [`docs/DEPLOY.md`](docs/DEPLOY.md).
+Self-hosting and Docker: see [`docs/DEPLOY.md`](docs/DEPLOY.md).
 Docker (`node:24-alpine`, data in `/data`):
 
 ```bash

@@ -15,7 +15,7 @@ const PORT = Number(env.PORT ?? env.SERVER_PORT ?? 8787);
 const OBSERVER_TOKEN = env.OBSERVER_TOKEN || "";
 const ADMIN_TOKEN = env.ADMIN_TOKEN || "";
 const RATE_LIMIT = Number(env.RATE_LIMIT_PER_MIN) || 120; // POSTs per IP per minute
-const MAX_WS_CLIENTS = Number(env.MAX_WS_CLIENTS) || 400; // keep below fly.toml hard_limit
+const MAX_WS_CLIENTS = Number(env.MAX_WS_CLIENTS) || 400; // cap on live office viewers
 const BODY_MAX = 64 * 1024;
 const GALLERY = join(ROOT, "gallery");
 const DIST = join(ROOT, "web/dist"); // production: serve the built site if present
@@ -79,8 +79,8 @@ const hasToken = (req: IncomingMessage, token: string) => !!token && timingSafeE
 function requireToken(req: IncomingMessage, token: string) {
   if (token && !hasToken(req, token)) throw new HttpError(401, "unauthorized");
 }
-// Behind Fly's proxy every request comes from the proxy; Fly sets Fly-Client-IP (clients can't spoof it there).
-const clientIp = (req: IncomingMessage) => (env.FLY_APP_NAME && String(req.headers["fly-client-ip"] ?? "")) || req.socket.remoteAddress || "?";
+// Client IP for rate limiting (no proxy header is trusted; put a proxy in front only with care).
+const clientIp = (req: IncomingMessage) => req.socket.remoteAddress || "?";
 const HITS_MAX = 10_000;
 const hits = new Map<string, { n: number; reset: number }>(); // ponytail: fixed 1-min window per IP, in memory (single instance)
 function rateLimit(ip: string) {
@@ -236,7 +236,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
 
 const server = createServer(async (req, res) => {
   const start = performance.now();
-  if (req.headers["x-forwarded-proto"] === "https") res.setHeader("strict-transport-security", "max-age=31536000; includeSubDomains"); // Fly terminates TLS
+  if (req.headers["x-forwarded-proto"] === "https") res.setHeader("strict-transport-security", "max-age=31536000; includeSubDomains"); // behind a TLS proxy
   const url = new URL(req.url ?? "/", "http://x");
   if (url.pathname !== "/api/health" && url.pathname !== "/api/ready") // probes would drown the log
     res.on("finish", () =>
