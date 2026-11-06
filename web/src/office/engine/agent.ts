@@ -157,6 +157,15 @@ export class Agent {
     this.plan([this.ps.zone], nav);
   }
 
+  /** Walk to (x, z) and settle there (sits if it's their own seat). */
+  goTo(x: number, z: number, nav: NavGrid) {
+    this.drive = null;
+    const legs = nav.path(this.pos.x, this.pos.z, x, z);
+    this.path = legs.map(([wx, wz], k) => ({ x: wx, z: wz, stop: k === legs.length - 1, zone: this.ps.zone }));
+    this.maxSpeed = WALK;
+    this.pause = 0;
+  }
+
   /** A new hire: appears at the door and walks to their desk. */
   walkIn(door: [number, number], nav: NavGrid) {
     this.pos.set(door[0], 0, door[1]);

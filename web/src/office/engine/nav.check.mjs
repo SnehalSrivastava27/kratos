@@ -49,7 +49,7 @@ solids.push(r(war.x, war.z - 0.1, 3.8, 1.6), r(war.x - 4.2, war.z - 0.1, 0.1, 5.
 solids.push(r(war.x - 1.3, war.z - 2.6, 0.12, 0.12), r(war.x + 1.3, war.z - 2.6, 0.12, 0.12));
 solids.push(r(mr.x, mr.z - 2.2, 4.3, 0.1), r(mr.x - 2.05, mr.z - 0.1, 0.1, 4.3), r(mr.x + 2.05, mr.z - 1.0, 0.1, 2.5), r(mr.x, mr.z - 0.4, 1.5, 1.5));
 const st = stations(Z);
-solids.push(r(st.hire.at[0], st.hire.at[1], 0.86, 2.56), r(rc.x - 1.8, rc.z - 0.4, 0.42, 2.46));
+solids.push(r(st.hire.at[0], st.hire.at[1], 2.36, 0.86), r(rc.x - 1.65, rc.z - 0.2, 1.5, 2.2)); // counter, sample wall (angled: its bounding box)
 const [cx, cz] = corePos(Z.telegram_hub);
 solids.push(r(cx, cz, 1.7, 1.7));
 const floor = new NavGrid(FLOOR, solids, 0.28);

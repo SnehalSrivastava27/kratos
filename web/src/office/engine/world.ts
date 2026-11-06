@@ -348,7 +348,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   const lowTable = piece(m.lounge, 'coffee_table');
   lowTable.scale.setScalar(0.6);
   add(lowTable, chai.x - 1.3, 0, chai.z - 0.2, 0, true);
-  add(wallBoard(1.5, 0.42, PAL.ink, neonTex('☕ CHAI', C.saffron)), chai.x + 0.4, 2.2, chai.z - 1.5);
+  add(wallBoard(1.5, 0.42, PAL.ink, neonTex('☕ CHAI', C.saffron)), chai.x + 0.4, 1.55, chai.z - 1.5);
 
   // Huddle room: a glass box (open to the front, a door in its right side), a round table, four chairs, a sticky-note board.
   const mr = zoneById.meeting_room;
@@ -373,13 +373,13 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   if (rc) {
     const [hx, hz] = stations(zoneById).hire.at;
     const counter = new THREE.Group();
-    counter.add(mesh(roundedBox(0.7, 1.0, 2.4, 0.12), toon(PAL.wood), 0, 0.5, 0));
-    counter.add(mesh(roundedBox(0.86, 0.07, 2.56, 0.05), toon('#fffaf3'), 0, 1.03, 0));
-    counter.add(mesh(roundedBox(0.06, 0.32, 0.5, 0.03).rotateY(Math.PI / 2), toon(PAL.ink), 0.15, 1.24, -0.6));
-    counter.add(mesh(new THREE.SphereGeometry(0.07, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), toon('#ffd166'), -0.2, 1.07, 0.7)); // the bell
+    counter.add(mesh(roundedBox(2.2, 1.0, 0.7, 0.12), toon(PAL.wood), 0, 0.5, 0));
+    counter.add(mesh(roundedBox(2.36, 0.07, 0.86, 0.05), toon('#fffaf3'), 0, 1.03, 0));
+    counter.add(mesh(roundedBox(0.5, 0.32, 0.06, 0.03), toon(PAL.ink), 0.55, 1.24, -0.15)); // a screen for the visitor book
+    counter.add(mesh(new THREE.SphereGeometry(0.07, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), toon('#ffd166'), -0.7, 1.07, 0.2)); // the bell
     add(counter, hx, 0, hz, 0, true);
-    add(wallBoard(1.9, 0.42, PAL.ink, neonTex('KESAR & CO.', C.saffron)), hx - 0.43, 0.55, hz, -Math.PI / 2);
-    add(plant(m, 'ficus', 0.9), hx + 0.2, 0, hz + 1.75, 0, true, 0.2);
+    add(wallBoard(1.7, 0.4, PAL.ink, neonTex('KESAR & CO.', C.saffron)), hx, 0.55, hz + 0.43);
+    add(plant(m, 'ficus', 0.9), hx + 0.75, 0, hz - 1.0, 0, true, 0.2);
     const shelf = new THREE.Group();
     for (const x of [-1.2, 1.2]) shelf.add(mesh(box(0.06, 1.9, 0.42), toon(PAL.wood), x, 0.95, 0));
     shelf.add(mesh(box(2.46, 1.9, 0.04), toon('#fff1dc'), 0, 0.95, -0.2));
@@ -392,7 +392,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
         else shelf.add(mesh(roundedBox(0.2, 0.17, 0.16, 0.04), toon(c), x, 0.23 + lv * 0.5, 0.02));
       }
     }
-    add(shelf, rc.x - 1.8, 0, rc.z - 0.4, Math.PI / 2, true);
+    add(shelf, rc.x - 1.65, 0, rc.z - 0.2, Math.PI / 2 - 0.55, true); // angled to the door and the room
   }
 
   // Plants in the corners and along the walls.

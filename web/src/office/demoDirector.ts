@@ -11,7 +11,7 @@ const LEAD_IN = 400; // ms from a click to the first event
 export function useDemoDirector(feed: OfficeEvent[], on: boolean) {
   const [events, setEvents] = useState<OfficeEvent[]>([]);
   const [phase, setPhase] = useState<DemoPhase>('ready');
-  const s = useRef({ at: 0, timers: [] as number[], t0: 0, rev: 0, phase: 'ready' as DemoPhase });
+  const s = useRef({ at: 0, timers: [] as number[], t0: 0, rev: 0, phase: 'ready' as DemoPhase, revGate: null as OfficeEvent | null });
   const go = (p: DemoPhase) => setPhase((s.current.phase = p));
   const clear = () => {
     s.current.timers.forEach(clearTimeout);
@@ -19,7 +19,7 @@ export function useDemoDirector(feed: OfficeEvent[], on: boolean) {
   };
   useEffect(() => {
     clear();
-    Object.assign(s.current, { at: 0, rev: 0, t0: 0 });
+    Object.assign(s.current, { at: 0, rev: 0, t0: 0, revGate: null });
     setEvents([]);
     go('ready');
     return clear;
@@ -55,6 +55,13 @@ export function useDemoDirector(feed: OfficeEvent[], on: boolean) {
     if (s.current.phase !== 'waiting') return;
     const gate = [...feed.slice(0, s.current.at)].reverse().find((e) => e.type === 'approval_needed');
     const founder = roster.find((p) => p.kind === 'human')?.id ?? 'founder';
+    // After a revision: approve the revised plan (the recording's own approval is about the original, so skip it).
+    const rev = s.current.revGate;
+    if (rev) {
+      s.current.revGate = null;
+      if (feed[s.current.at]?.type === 'approved') s.current.at++;
+      return resume([approvalFor(rev, founder)]);
+    }
     // The recording's own approval if it follows the gate, else the founder's.
     resume(feed[s.current.at]?.type === 'approved' || !gate ? [] : [approvalFor(gate, founder)]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +72,9 @@ export function useDemoDirector(feed: OfficeEvent[], on: boolean) {
     const gate = [...feed.slice(0, s.current.at)].reverse().find((e) => e.type === 'approval_needed');
     const fin = personById['d2c-finance'];
     const lead = fin && zoneById[fin.zone] ? fin : personById['d2c-ads'] ?? personById['d2c-captain'];
-    play(revision(++s.current.rev, { ask, founder, captain: gate?.speaker ?? 'd2c-captain', lead: { id: lead.id, emoji: lead.emoji ?? '💬' } }), 'waiting');
+    const list = revision(++s.current.rev, { ask, founder, captain: gate?.speaker ?? 'd2c-captain', lead: { id: lead.id, emoji: lead.emoji ?? '💬' } });
+    s.current.revGate = list[list.length - 1];
+    play(list, 'waiting');
   }, [feed]);
   /** Text from the command bar or the chat: starts the story, or answers the open approval. */
   const command = useCallback((text: string): boolean => {

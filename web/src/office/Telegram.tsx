@@ -212,6 +212,14 @@ export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, cl
   const reduce = useReducedMotion();
   const info = topicOf(room);
   const msgs = useMemo(() => events.filter((e) => e.room === room), [events, room]);
+  // Only the latest gate still waiting on a decision keeps its buttons (an old one, or one already answered, doesn't).
+  const openGate = useMemo(() => {
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].type === 'approved') return null;
+      if (msgs[i].type === 'approval_needed') return msgs[i].id;
+    }
+    return null;
+  }, [msgs]);
   const typing = typingIn(room, events, scene);
   const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -246,7 +254,7 @@ export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, cl
           <AnimatePresence initial={false}>
             {msgs.map((e, i) => (
               <motion.div key={e.id} initial={reduce ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
-                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={onCommand} />
+                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={e.id === openGate ? onCommand : undefined} />
               </motion.div>
             ))}
           </AnimatePresence>

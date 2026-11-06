@@ -31,12 +31,15 @@ export const approvalFor = (gate: OfficeEvent, founder: string): OfficeEvent => 
  */
 export function revision(n: number, o: { ask?: string; founder: string; captain: string; lead: { id: string; emoji: string } }): OfficeEvent[] {
   const ask = o.ask?.trim() || 'Can we shift ₹20k from ads to creators?';
+  // Each round moves another ₹20k (capped): ads 3L → 2.8L → 2.6L…, creators 1.18L → 1.38L → 1.58L…
+  const k = Math.min(n, 5), L = (v: number) => `₹${+v.toFixed(2)}L`;
+  const [ads0, ads1, cr0, cr1] = [3 - 0.2 * (k - 1), 3 - 0.2 * k, 1.18 + 0.2 * (k - 1), 1.18 + 0.2 * k].map(L);
   const e = (k: number, t: number, speaker: string, type: OfficeEvent['type'], text: string, targets?: string[]): OfficeEvent =>
     ({ id: `rev${n}-${k}`, t, room: 'war_room', speaker, type, text, ...(targets ? { meta: { targets } } : {}) });
   return [
     e(1, 0, o.founder, 'message', `👑 @${o.captain} ${ask}`, [o.captain]),
     e(2, 1400, o.captain, 'working', `🎯 **On it**\n\n_@${o.lead.id} can you rework one line?_`, [o.lead.id]),
-    e(3, 3800, o.lead.id, 'done', `${o.lead.emoji} **One line changed**\n\n- **Ads:** ₹3L → **₹2.8L**\n- **Creators:** ₹1.18L → **₹1.38L**\n\n_Total spend unchanged._`, [o.captain]),
-    e(4, 6000, o.captain, 'approval_needed', `🎯 **Revised plan**\n\n- **Ads:** **₹2.8L** (was ₹3L)\n- **Creators:** **₹1.38L**\n- **Everything else:** unchanged\n\n**_@${o.founder} approve the plan?_**`, [o.founder]),
+    e(3, 3800, o.lead.id, 'done', `${o.lead.emoji} **One line changed**\n\n- **Ads:** ${ads0} → **${ads1}**\n- **Creators:** ${cr0} → **${cr1}**\n\n_Total spend unchanged._`, [o.captain]),
+    e(4, 6000, o.captain, 'approval_needed', `🎯 **Revised plan**\n\n- **Ads:** **${ads1}** (was ${ads0})\n- **Creators:** **${cr1}**\n- **Everything else:** unchanged\n\n**_@${o.founder} approve the plan?_**`, [o.founder]),
   ];
 }

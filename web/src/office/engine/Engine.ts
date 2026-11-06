@@ -77,7 +77,7 @@ const v3 = new THREE.Vector3();
 interface Pose { tx: number; ty: number; tz: number; yaw: number; pitch: number; dist: number }
 const KEYS = ['tx', 'ty', 'tz', 'yaw', 'pitch', 'dist'] as const;
 
-/** Distance + aim so the whole floor fits the canvas (a little cropped on narrow screens). */
+/** Distance + aim so the whole floor fits the canvas. */
 function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
   const c = new THREE.PerspectiveCamera(fov, aspect, 0.5, 200);
   const EL = elevation(aspect);
@@ -98,8 +98,8 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
     right.setFromMatrixColumn(c.matrixWorld, 0);
     up.setFromMatrixColumn(c.matrixWorld, 1);
     tgt.addScaledVector(right, ((x0 + x1) / 2) * half * aspect).addScaledVector(up, ((y0 + y1) / 2) * half);
-    const crop = narrow ? 0.66 : THREE.MathUtils.clamp(0.25 + 0.45 * aspect, 0.6, 0.9); // portrait / phones: let the sides run off rather than shrink everything
-    d *= Math.max((y1 - y0) / 2, ((x1 - x0) / 2) * crop) / 0.96;
+    // The whole floor fits the visible part of the canvas (a hair of margin), phones included.
+    d *= Math.max((y1 - y0) / 2, (x1 - x0) / 2) / (narrow ? 0.98 : 0.94);
   }
   return { tx: tgt.x, ty: tgt.y, tz: tgt.z, yaw: AZ, pitch: EL, dist: d };
 }
@@ -367,9 +367,17 @@ export class OfficeEngine {
       f.drive = { moving: false, speed: 0, facing: this.player.facing };
     } else {
       this.player.stop();
-      this.founder.release(this.nav);
+      const own = deskById['founder_desk#0'];
+      if (this.sitNext && own) this.founder.goTo(own.x, own.z + 0.85, this.nav); // sat down at their desk (E there)
+      else this.founder.release(this.nav);
+      this.sitNext = false;
       this.setTarget(null);
     }
+  }
+  private sitNext = false;
+  /** The next switch to spectator seats the founder at their own desk (rather than where the feed puts them). */
+  sitDown() {
+    this.sitNext = true;
   }
 
   /** Keys walk only while no window is open. */
@@ -466,8 +474,9 @@ export class OfficeEngine {
     const f = this.founder;
     if (!f) return;
     f.chaiUntil = this.t + 7;
+    if (this.player && this.view === 'player') this.player.facing = 0; // turn to the room, cup in hand
     const near = this.agents
-      .filter((a) => a !== f && a.pos.distanceTo(f.pos) < 5.5 && !a.talking)
+      .filter((a) => a !== f && a.pos.distanceTo(f.pos) < 9 && !a.talking)
       .sort((a, b) => a.pos.distanceTo(f.pos) - b.pos.distanceTo(f.pos))
       .slice(0, 3);
     near.forEach((a, i) => setTimeout(() => !this.disposed && a.say(HELLOS[(Math.floor(this.t) + i) % HELLOS.length], this.t), 500 + i * 900));
@@ -577,7 +586,7 @@ export class OfficeEngine {
       // Third person: behind and above you, the same heading as the overview so the office reads the same way.
       const aspect = this.size.w / this.size.h;
       // Near the open front and side edges the camera stops short, so the frame stays on the office, not the void past it.
-      const dist = aspect < 1 ? 27 : 18;
+      const dist = aspect < 1 ? 28 : 20.5;
       // Panels over the canvas (topics left, chat right): keep you in the middle of what's still visible.
       const halfW = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * dist * aspect;
       const shift = ((this.inset.right - this.inset.left) / 2 / this.size.w) * 2 * halfW;

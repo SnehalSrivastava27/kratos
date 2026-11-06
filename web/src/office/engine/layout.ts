@@ -52,7 +52,7 @@ export function stations(z: Record<string, Box>): Record<StationId, Station> {
   return {
     plan: { at: [war.x, war.z - 0.1], stand: [war.x - 1.0, war.z + 1.25], reach: 2.4 }, // the war-room table (its screen behind)
     kpi: { at: [dw.x, FLOOR.minZ + 0.3], stand: [dw.x, FLOOR.minZ + 1.6], reach: 2.6 }, // the aisle in front of the Data Wall
-    hire: { at: [rc.x + 1.15, rc.z], stand: [rc.x + 0.1, rc.z], reach: 1.8 }, // the reception counter
+    hire: { at: [rc.x + 0.85, rc.z - 0.6], stand: [rc.x + 0.85, rc.z + 0.65], reach: 1.8 }, // the reception counter
     ledger: { at: [WALL.outerX + WALL.t / 2, fin.z - 1.0], stand: [WALL.outerX + 1.4, fin.z - 1.0], reach: 2.2 }, // the P&L screen on the west wall
     chai: { at: [chai.x + 0.4, chai.z - 1.05], stand: [chai.x + 0.4, chai.z + 0.1], reach: 1.9 }, // the chai counter
     switch: { at: [cx, cz], stand: [cx, cz + 1.25], reach: 2.0 },

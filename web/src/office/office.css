@@ -191,3 +191,13 @@
 .ao-kpi { position: absolute; top: 80px; left: 12px; width: 320px; overflow: hidden; z-index: 5; animation: ao-slide .2s ease-out; font-family: var(--font); color: var(--ink) }
 @media (max-width: 760px) { .ao-kpi { top: 116px; left: 12px !important; right: 12px; width: auto } }
 @media (prefers-reduced-motion: reduce) { .ao-kpi { animation: none } }
+
+/* First-visit controls card (Hud.tsx Coach): bottom-left, above the demo pill. */
+.ao-coach { position: absolute; left: 12px; bottom: 64px; z-index: 6; width: 268px; padding: 11px 13px 12px; font-family: var(--font); color: var(--ink); animation: ao-slide .25s ease-out }
+.ao-coach-title { font-weight: 900; font-size: 14.5px; margin-bottom: 8px }
+.ao-coach-grid { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; align-items: center; font-size: 13px; font-weight: 700; color: var(--muted) }
+.ao-coach-k { white-space: nowrap; font-weight: 900; color: var(--ink) }
+.ao-coach-k .ao-key { margin-right: 3px; min-width: 22px; padding: 0 5px; font-size: 12px; border: 2px solid var(--ink); box-shadow: 0 2px 0 var(--ink) }
+.ao-coach-ok { height: 30px; margin-top: 10px; width: 100%; font-size: 13px }
+@media (max-width: 760px) { .ao-coach { left: 8px; right: 8px; width: auto; bottom: 74px } }
+@media (prefers-reduced-motion: reduce) { .ao-coach { animation: none } }

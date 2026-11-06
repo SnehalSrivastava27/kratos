@@ -1,7 +1,7 @@
 // Adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs
 // src/client/ui/dom.ts (openModal: backdrop, Esc / click-outside to close) and ui/hud.ts (openHelp's
 // controls grid). The HUD bits shared by every overlay: the modal shell, the help window, the hint chip.
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Gamepad2, X } from 'lucide-react';
 import { TG_GROUP } from './data';
 
@@ -44,8 +44,8 @@ export function Modal({ title, onClose, children, footer, className = '', top = 
 }
 
 const CONTROLS: [string, string][] = [
-  ['W A S D / ← ↑ → ↓', 'Walk (hold Shift to run). Click the floor to walk there'],
-  ['E', 'Use what you face: hire at an empty desk, open the library, talk to a teammate, pet the dog, play the jukebox'],
+  ['W A S D / ← ↑ → ↓', 'Walk (hold Shift to sprint). Click or tap the floor to walk there'],
+  ['E (or tap the hint)', 'Use what you face: talk to a teammate, review the plan at the War Room table, the numbers at the Data Wall, the ledger in the Finance Cabin, hire at reception or an empty desk, the library, Switch, a chai, sit at your desk'],
   ['N', 'Jump to whoever is waiting on you (the red ring)'],
   ['T', 'Open the chat'],
   ['/ or Ctrl K', 'Command bar: message any Telegram topic, or hire, or open the library'],
@@ -85,3 +85,27 @@ export const isTyping = (e: Event) => {
   const el = e.target as HTMLElement | null;
   return !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
 };
+
+const COACH_KEY = 'hq.coach';
+/** First visit: how to walk and use things, until dismissed (remembered per browser, best effort). */
+export function Coach({ touch }: { touch: boolean }) {
+  const [shown, setShown] = useState(() => {
+    try { return localStorage.getItem(COACH_KEY) !== '1'; } catch { return true; }
+  });
+  if (!shown) return null;
+  const close = () => {
+    setShown(false);
+    try { localStorage.setItem(COACH_KEY, '1'); } catch { /* storage blocked */ }
+  };
+  const rows: [ReactNode, string][] = touch
+    ? [['Tap', 'the floor to walk there'], ['Tap', 'the dark hint to use what’s near you'], ['Drag', 'to turn · pinch to zoom']]
+    : [[<><span className="ao-key">W</span><span className="ao-key">A</span><span className="ao-key">S</span><span className="ao-key">D</span></>, 'walk (or arrows, or click the floor)'],
+       [<span className="ao-key">Shift</span>, 'sprint'], [<span className="ao-key">E</span>, 'talk / use what you face'], [<span className="ao-key">Esc</span>, 'close']];
+  return (
+    <div className="ao-panel ao-coach" role="note" aria-label="How to walk the office">
+      <div className="ao-coach-title">You’re the founder: walk your office</div>
+      <div className="ao-coach-grid">{rows.map(([k, v], i) => [<span key={`k${i}`} className="ao-coach-k">{k}</span>, <span key={`v${i}`}>{v}</span>])}</div>
+      <button type="button" className="ao-btn ao-coach-ok" onClick={close}>Got it</button>
+    </div>
+  );
+}

@@ -1,5 +1,6 @@
 // /demo, playable: the start card, the founder's decision on the Captain's plan, and "play again".
-import { Check, Pencil, Play, RotateCcw } from 'lucide-react';
+import { Check, ClipboardList, Pencil, Play, RotateCcw } from 'lucide-react';
+import { Modal } from './Hud';
 import type { OfficeEvent } from '../shared/types';
 import { Tg } from './md';
 import { clean, personById } from './data';
@@ -7,7 +8,7 @@ import type { DemoPhase } from './demoDirector';
 import './switch.css';
 
 /** The plan being asked about: the gate itself if it lists the plan, else the asker's last delivery before it. */
-function planOf(events: OfficeEvent[]) {
+export function planOf(events: OfficeEvent[]) {
   let gi = events.length - 1;
   while (gi >= 0 && events[gi].type !== 'approval_needed') gi--;
   if (gi < 0) return null;
@@ -17,8 +18,8 @@ function planOf(events: OfficeEvent[]) {
   return { gate, plan };
 }
 
-export function DemoPrompt({ phase, events, first, onStart, onApprove, onChanges, onRestart }: {
-  phase: DemoPhase; events: OfficeEvent[]; first?: OfficeEvent;
+export function DemoPrompt({ phase, events, first, onStart, onApprove, onChanges, onRestart, nudge = 0 }: {
+  phase: DemoPhase; events: OfficeEvent[]; first?: OfficeEvent; nudge?: number;
   onStart: () => void; onApprove: () => void; onChanges: () => void; onRestart: () => void;
 }) {
   if (phase === 'ready') {
@@ -38,7 +39,7 @@ export function DemoPrompt({ phase, events, first, onStart, onApprove, onChanges
     if (!p) return null;
     const asker = personById[p.gate.speaker];
     return (
-      <div className="dm-card dm-ask" role="dialog" aria-label="Approve the plan">
+      <div key={nudge} className={`dm-card dm-ask${nudge ? ' dm-nudge' : ''}`} role="dialog" aria-label="Approve the plan">
         <div className="dm-head">
           <span className="dm-avatar" style={{ background: asker?.color }}>{asker?.emoji ?? '🎯'}</span>
           <div className="min-w-0">
@@ -63,4 +64,40 @@ export function DemoPrompt({ phase, events, first, onStart, onApprove, onChanges
     );
   }
   return null;
+}
+
+/**
+ * "Review the plan" (E at the War Room table): the Captain's latest plan, read-only, with the way to answer it.
+ * The /demo approval itself stays in DemoPrompt (the director); this card covers every other moment.
+ */
+export function PlanCard({ events, captain, onReply, onStart, onClose }: {
+  events: OfficeEvent[]; captain: string; onReply: () => void; onStart?: () => void; onClose: () => void;
+}) {
+  const bullets = (e: OfficeEvent) => /^\s*[-•]/m.test(e.text);
+  const gate = planOf(events);
+  const plan = gate?.plan ?? [...events].reverse().find((e) => e.room === 'war_room' && e.speaker === captain && bullets(e));
+  const who = personById[plan?.speaker ?? captain];
+  return (
+    <Modal className="w-[min(480px,100%)]" onClose={onClose} label="The plan" title={
+      <span className="flex items-center gap-2"><ClipboardList className="size-5" strokeWidth={2.5} /> The plan <span className="text-[13px] font-bold text-[var(--muted)]">· War Room</span></span>
+    }>
+      <div className="ao-body grid gap-3 !pt-3">
+        {plan ? (
+          <>
+            <div className="text-[12.5px] font-extrabold text-[var(--muted)]">From {who?.name ?? 'the Captain'}{gate ? ' · waiting on your call' : ''}</div>
+            <div className="dm-plan !m-0"><Tg text={clean(plan.text).replace(/\n{2,}/g, '\n')} /></div>
+          </>
+        ) : (
+          <p className="m-0 text-[14px] font-bold text-[var(--muted)]">No plan on the screen yet. Brief {who?.name ?? 'the Captain'} and the team will draw one up here.</p>
+        )}
+        <div className="flex flex-wrap gap-2">
+          {onStart ? (
+            <button type="button" className="ao-btn primary" onClick={onStart}><Play />Start the sale plan</button>
+          ) : (
+            <button type="button" className="ao-btn tg" onClick={onReply}><Pencil />{plan ? `Reply to ${who?.name ?? 'the Captain'}` : `Brief ${who?.name ?? 'the Captain'}`}</button>
+          )}
+        </div>
+      </div>
+    </Modal>
+  );
 }
