@@ -44,9 +44,11 @@ test("auth: OBSERVER_TOKEN guards /api/events, ADMIN_TOKEN guards replay, reads 
     assert.equal((await post(s, "/api/replay", {})).status, 401);
     assert.equal((await post(s, "/api/replay/stop", {}, { authorization: "Bearer obs-secret" })).status, 401);
     assert.equal((await post(s, "/api/replay/stop", {}, { authorization: "Bearer admin-secret" })).status, 200);
-    for (const path of ["/api/history", "/api/rooms", "/api/rooms/ops/events", "/api/agents", "/api/people", "/api/employees", "/api/library"])
+    for (const path of ["/api/history", "/api/rooms", "/api/rooms/ops/events", "/api/agents", "/api/people", "/api/employees", "/api/library", "/api/roster"])
       assert.equal((await fetch(s.base + path)).status, 401, `${path} needs a session`);
-    for (const path of ["/api/health", "/api/ready", "/api/roster", "/api/gallery", "/gallery/hero.html"]) assert.equal((await fetch(s.base + path)).status, 200, `${path} is public`);
+    for (const path of ["/api/health", "/api/ready", "/api/gallery", "/gallery/hero.html"]) assert.equal((await fetch(s.base + path)).status, 200, `${path} is public`);
+    const cookie = await account(s);
+    assert.equal((await get(s, "/api/roster", cookie)).status, 200, "roster: any signed-in user, workspace or not");
     assert.equal((await get(s, "/api/history", null, { authorization: "Bearer admin-secret" })).status, 404, "admin, but no workspace yet");
   } finally {
     await s.stop();

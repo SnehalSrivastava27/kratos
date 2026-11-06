@@ -163,6 +163,7 @@ OfficeEvent.ws?: string   // server-assigned workspace id
   to be a group admin: Switch doesn't pass their Telegram user id.
 - **Sessions:** logout closes that session's open sockets (close code 4401); sockets of expired sessions close on the
   next ping (30 s). Login: also 10 tries per email per 15 min from any IP; IPv6 clients are counted per /64.
+- **`GET /api/roster`** needs a session (any signed-in user) or `ADMIN_TOKEN`; it is not public.
 - **Host-wide:** `POST /api/library/categorize` needs `ADMIN_TOKEN`, or the host owner (`OWNER_EMAIL`, else the
   first registered user) in a browser on this Mac (loopback, own Origin); else 403.
 - **Legacy data:** events and hires stored before v3 have no `ws` and stay hidden until the group whose Telegram

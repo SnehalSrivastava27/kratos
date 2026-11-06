@@ -251,6 +251,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, ready ? 200 : 503, { ready, db });
   }
   if (route === "GET /api/roster") {
+    if (!hasToken(req, ADMIN_TOKEN)) needUser(req); // not public (v3): the demo imports its own copy
     res.writeHead(200, { "content-type": "application/json", ...BASE_HEADERS });
     return res.end(ROSTER_RAW);
   }
