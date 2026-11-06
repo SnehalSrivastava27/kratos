@@ -1,11 +1,27 @@
 {
  "task": "K3",
- "state": "working",
- "progress": 10,
- "done": ["read brief, kit, data, evals"],
- "next": "SQLite cache + marts, then kit metric / brief",
+ "state": "done",
+ "progress": 100,
+ "done": [
+  "kit metric: 50 named D2C metrics in kit/lib/metrics.mjs (sales, RTO/returns, CM1-3, ROAS/MER/CAC, creators, cohorts/LTV, cover/stockout, POs, payroll, EBITDA, runway); validated filters/--by, suggestions, returns definition + filters + source_tables + the exact SQL; kit brief <dept> for 7 departments with month-vs-previous and policy checks",
+  "Speed: CSVs + 17 marts cached in read-only data/.cache/kratos.db keyed by CSV mtimes/size + mart version (atomic temp+rename, symlink-safe, memory fallback, authorizer/query_only/defensive kept). Cold p50: kit sql 199 -> 59-76 ms, kit metric 61 ms, kit brief 86 ms (node kit/bench.mjs)",
+  "kit/test/metrics.test.mjs (9 tests): every metric runs, P&L ties and CM3 bridge to EBITDA, ~35 README story numbers, 20 evals truths, brief, cache rebuild/symlink/read-only; 27/27 kit tests pass. Docs: switch/METRICS.md + TOOLKIT 'Ask in one command'"
+ ],
+ "next": "",
  "blockers": [],
- "contract_requests": [],
- "findings": [],
- "updated": "2026-11-07T10:00:00+05:30"
+ "contract_requests": [
+  "contracts/kit.md table, add rows: | `kit metric <name> [--channel X] [--sku Y] [--month YYYY-MM | --from D --to D | --last N] [--by dim[,dim]]` | One named D2C metric (kit metric list): {metric, definition, unit, value|values, display, filters, source_tables, sql}. Definitions: switch/METRICS.md. | and | `kit brief <analytics|ads|creators|ops|design|finance|captain> [--month YYYY-MM]` | A department lead's 6-10 numbers, month vs previous, each with its kit metric command. |; and under the table: 'Data is cached read-only in data/.cache/kratos.db (gitignored, rebuilt when a CSV changes); marts m_lines, m_orders, channel_daily, ads_daily_all, ... are queryable with kit sql.'"
+ ],
+ "findings": [
+  "Unit economics are fine, fixed costs are not: quarter CM1 72.4%, CM2 57.0%, CM3 37.3% of net revenue (above typical Indian beauty D2C targets), yet EBITDA is -5.5% because salaries + opex eat ~43% of net revenue at ₹3.7 Cr/yr scale.",
+  "CM1/CM2/CM3 are not standardised in Indian D2C: sources disagree whether fulfilment sits in CM1 or CM2 and whether CM3 subtracts all marketing or only brand spend. We use CM1 = net - COGS, CM2 = - fees - shipping, CM3 = - all marketing, and test EBITDA = CM3 - salaries - opex.",
+  "'Orders' has three honest answers for October: 4,329 (P&L, excl. cancelled), 4,496 (all statuses) and 5,893 order lines. The eval question 'orders in October (all statuses)' scores against 5,893 lines, so a model that answers the P&L number fails it.",
+  "The README says stock cover is at the 'last-4-weeks rate' but divides by 29 days (Oct 3-31): Delhi SKU01 13.3 days at 29 days vs 13.1 at 28.",
+  "Platform-attributed ad revenue (₹46.7L) + creator coupon revenue (₹15.5L) cover only ~56% of net revenue (₹110.9L): blended ROAS 7.09x vs platform ROAS 2.98x. Attribution undercounts here, the opposite of the usual Meta over-claim story.",
+  "Creator ROAS on paid posts fell every month (2.95x Aug, 2.72x Sep, 1.88x Oct) while fees more than doubled (₹1.22L -> ₹2.76L); cost per coupon order rose from ₹400 to ₹549.",
+  "Over the quarter Flipkart, not the website, has the highest RTO (10.0% vs 9.6% of shipped orders); the website wins only in some months. Website COD RTO is 23.2% vs 1.3% prepaid (18x).",
+  "Cash is not the problem: ₹1.18 Cr cash / ₹2.03L average monthly EBITDA loss = ~58 months runway (38 above the ₹40L cash floor).",
+  "Speed: the 26-CSV parse costs ~110 ms of every kit call; caching to one SQLite file cut a cold kit sql from 199 to ~60 ms p50, of which ~50 ms is two Node process starts (the timeout watchdog child)."
+ ],
+ "updated": "2026-11-07T11:30:00+05:30"
 }
