@@ -52,5 +52,9 @@ credentials file as `scripts/switch-up.sh`. You don't need to set anything up.
   `npx vite --host` therefore shares only the reads (the office view) with your phone or LAN: the
   buttons answer 401 there. Behind a reverse proxy on the same host, set `TRUST_LOOPBACK=0`.
   `NODE_ENV=production` sets it by default.
-- **Remove a hire:** Console → Your Agents → delete it. The office keeps the employee record
-  (no delete endpoint yet).
+- **Limits:** at most 12 employees (`HIRE_MAX`) and 3 hires per 10 minutes.
+- **Fire someone** (`DELETE /api/employees/<id>`). Console stops the agent's session, the agent
+  is deleted from Switch, and its desk is free again.
+- **Hire settings:** each hire gets the same provider settings as the team (copied from
+  `d2c-captain`), auto mode included. It always works in this repo. Its instructions end with
+  `switch/TELEGRAM_STYLE.md`. Skills must be books in the library.
