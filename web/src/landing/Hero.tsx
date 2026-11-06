@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { AGENT_IDS, PEOPLE, TG_GROUP, TOPICS, body, clock, saleDemo } from './data';
 import { Container, EASE, MateIcon } from './ui';
-import { BrandMarquee } from './Brands';
+import { BrandMarquee, Mark } from './Brands';
 
 const HeroOffice = lazy(() => import('./HeroOffice'));
 
@@ -159,7 +159,7 @@ function Notifications({ run }: { run: boolean }) {
           <div className="min-w-0 flex-1">
             <p className="flex items-baseline gap-1.5 text-[12px] text-neutral-400">
               <b className="truncate text-[13.5px] font-semibold text-foreground">{PEOPLE[e.speaker].name}</b>
-              <span className="truncate">{TG_GROUP} › {topic}</span>
+              <span className="inline-flex min-w-0 items-center gap-1"><Mark name="telegram" color="#26A5E4" className="size-3 shrink-0" /><span className="truncate">{TG_GROUP} › {topic}</span></span>
               <span className="ml-auto shrink-0 tabular-nums">{clock(e.t)}</span>
             </p>
             <p className="mt-1 truncate text-[13.5px] font-medium text-neutral-800">{title}</p>
