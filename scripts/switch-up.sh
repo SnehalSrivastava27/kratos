@@ -124,16 +124,20 @@ say "template \"$TEMPLATE_NAME\" stored ($TPL_ID)"
 
 gw GET /agents > "$TMP/agents"
 agent_id() { json 'print(next((a["id"] for a in d if a["name"]==sys.argv[1]), ""))' "$1" < "$TMP/agents"; }
-MISSING=()
-for a in "${TEAM[@]}"; do [ -n "$(agent_id "$a")" ] || MISSING+=("$a"); done
+gw GET /management/agents > "$TMP/managed"
+managed_id() { json 'print(next((a["agent_id"] for a in d if a["name"]==sys.argv[1]), ""))' "$1" < "$TMP/managed"; }
+MISSING=() # neither a Switch agent nor a managed one (a managed agent may not be registered yet: never POST it twice)
+for a in "${TEAM[@]}"; do [ -n "$(agent_id "$a")" ] || [ -n "$(managed_id "$a")" ] || MISSING+=("$a"); done
 if [ ${#MISSING[@]} -eq 0 ]; then say "all ${#TEAM[@]} team agents exist"
 else
   say "team agents missing: ${MISSING[*]}"
-  gw GET /management/agents > "$TMP/managed"; gw GET /management/controllers > "$TMP/controllers"
+  gw GET /management/controllers > "$TMP/controllers"
   for a in "${MISSING[@]}"; do
-    if ! create_body "$a" "$TMP/managed" "$TMP/controllers" > "$TMP/create"; then
+    rc=0; create_body "$a" "$TMP/managed" "$TMP/controllers" > "$TMP/create" || rc=$?
+    if [ "$rc" = 4 ]; then
       todo "Open Switch Console (its controller must be online), then rerun. Or by hand: \`open 'switchdash://open/template/$TPL_ID'\` → Use → directory = $AGENT_DIR → Create."
       break
+    elif [ "$rc" != 0 ]; then todo "Building the create request for $a failed (exit $rc, see the error above): check contracts/roster.json and switch/agents/$a.md."; continue
     fi
     if NEW_ID=$(gw POST /management/agents "$(cat "$TMP/create")" | json 'print(d["agent_id"])'); then
       gw PUT "/agents/$NEW_ID/addressing-policy" '{"policy":null}' >/dev/null || say "$a: addressing not set yet (rerun)"

@@ -21,15 +21,14 @@ TEMPLATE_NAME="Kesar HQ D2C team"
 CORE_ENV="${SWITCHDASH:-$HOME/Library/Application Support/switchdash}/local-switch-server/native/run/switch-core.env"
 # shellcheck disable=SC2207 # ids have no spaces
 TEAM=($(python3 -c 'import json,sys; print(" ".join(p["id"] for p in json.load(open(sys.argv[1]))["people"] if p["kind"]=="agent" and p["id"]!="librarian"))' "$ROOT/contracts/roster.json"))
-MARK="HOW YOU WRITE IN TELEGRAM"
 
 envval() { grep -E "^$2=" "$1" | head -1 | cut -d= -f2- | sed -e 's/^["'\'']//' -e 's/["'\'']$//'; }
 json() { local code=$1; shift; python3 -c "import json,sys; d=json.load(sys.stdin); $code" "$@"; }
 say() { printf '• %s\n' "$*"; }
 
-node "$ROOT/scripts/build-template.mjs" | sed 's/^/• /'
 if [ "${DRY_RUN:-0}" = 1 ]; then
-  echo "DRY RUN: no API calls."
+  echo "DRY RUN: no API calls, no file writes."
+  node "$ROOT/scripts/build-template.mjs" --check | sed 's/^/• /'
   for a in "${TEAM[@]}"; do
     [ -f "$ROOT/switch/agents/$a.md" ] && say "$a: would PATCH /gateway/management/agents/<id> from switch/agents/$a.md ($(wc -c < "$ROOT/switch/agents/$a.md" | tr -d ' ') bytes)" \
       || say "$a: switch/agents/$a.md MISSING"
@@ -37,6 +36,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   say "would PATCH the stored \"$TEMPLATE_NAME\" template"
   exit 0
 fi
+node "$ROOT/scripts/build-template.mjs" | sed 's/^/• /'
 
 [ -f "$CORE_ENV" ] || { echo "No local Switch server found ($CORE_ENV). Open Switch Console and start it."; exit 1; }
 API="http://127.0.0.1:$(envval "$CORE_ENV" SERVER_PORT)"
@@ -67,15 +67,18 @@ for name in "${TEAM[@]}"; do
   id=$(json 'print(next((a["agent_id"] for a in d if a["name"]==sys.argv[1]), ""))' "$name" < "$TMP/managed")
   if [ -z "$id" ]; then say "$name: not on this server (run scripts/switch-up.sh: it creates missing agents)"; FAIL=1; continue; fi
   # The .md body (minus its "# <id>" heading) is the agent's instructions, same as the template inlines.
+  rc=0
   gw GET "/management/agents/$id" | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
 body = open(sys.argv[1]).read().split("\n", 1)[1].strip()
 if d["definition"].get("instructions", "").strip() == body:
     sys.exit(3)
-print(json.dumps({"definition": {**d["definition"], "instructions": body}}))' "$ROOT/switch/agents/$name.md" > "$TMP/patch" \
-    && { gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; say "$name: instructions updated"; } \
-    || { [ $? -eq 3 ] && say "$name: already up to date" || { say "$name: update FAILED"; FAIL=1; }; }
+print(json.dumps({"definition": {**d["definition"], "instructions": body}}))' "$ROOT/switch/agents/$name.md" > "$TMP/patch" || rc=$?
+  if [ "$rc" = 3 ]; then say "$name: already up to date"
+  elif [ "$rc" != 0 ]; then say "$name: update FAILED (could not read the agent or its .md)"; FAIL=1
+  elif gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; then say "$name: instructions updated"
+  else say "$name: update FAILED (PATCH refused)"; FAIL=1; fi
 done
 
 # ---- read back: stored text + the controller applied the revision -------------------------------
@@ -88,10 +91,11 @@ json '
 ok = True
 for a in d:
     if a["name"] not in sys.argv[2:]: continue
-    has = sys.argv[1] in a["definition"].get("instructions", "")
+    body = open("%s/switch/agents/%s.md" % (sys.argv[1], a["name"])).read().split("\n", 1)[1].strip()
+    has = a["definition"].get("instructions", "").strip() == body  # the full text, not just a marker
     st = a.get("status") or {}
     applied = st.get("applied_revision") == a["revision"]
     ok &= has and applied
-    print("•   %-16s rules=%s  revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", a["revision"], st.get("applied_revision"), st.get("process")))
-sys.exit(0 if ok else 1)' "$MARK" "${TEAM[@]}" < "$TMP/managed" || FAIL=1
+    print("•   %-16s current=%s  revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", a["revision"], st.get("applied_revision"), st.get("process")))
+sys.exit(0 if ok else 1)' "$ROOT" "${TEAM[@]}" < "$TMP/managed" || FAIL=1
 [ "$FAIL" = 0 ] && echo "All team agents have the current rules." || { echo "Some agents are not in sync (see above)."; exit 1; }
