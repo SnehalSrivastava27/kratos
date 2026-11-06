@@ -15,7 +15,7 @@ findings list. It feeds the blog.
 |---|---|---|---|
 | A | LV1: live bring-up: Haiku model for team agents, switch-up.sh (16 agents), topic tags, live QA Lab eval, live check of SW1/SW2/SW3 | agent LV1 | merged (live: 16 agents on Haiku); QA Lab live eval blocked: group not linked to an account |
 | A | K3: fast answers: data marts + `kit metric` one-shot D2C metrics, cheat sheet for agents | agent K3 | merged |
-| A | E2: harder eval tier (joins, date windows, refusals, multi-step), run on Haiku, fix agent instructions | agent E2 | running |
+| A | E2: harder eval tier (joins, date windows, refusals, multi-step), run on Haiku, fix agent instructions | agent E2 | merged (Haiku 149/149) |
 | A | SW4: survey every Switch 0.31.0 feature, build the best 2–3 (roles, schedules, approvals…) | agent SW4 | merged |
 | A | DM1: demo feed with pinned plan, private nudge, catch-up beats; demo/script.md; README for v2 | agent DM1 | merged |
 | B | Full live festive-sale demo in War Room (after LV1 + E2 fixes synced) | LV1 | |
@@ -34,6 +34,7 @@ findings list. It feeds the blog.
 | 03:00 | K3 merged: `kit metric` (50 named D2C metrics with definitions + the SQL that ran), `kit brief <dept>`, cached read-only marts; p50 kit sql 199 → ~65 ms, metric 61 ms; 27/27 kit tests. E2 told to move agents onto kit metric. |
 | 03:20 | K3 security review: no injection, planted cache can't execute; 5 lows fixed (lockdown before trusting cache, ctime+inode signature, in-memory for outside --data, hasOwn lookups, real calendar dates); 28/28 kit tests. |
 | 03:35 | BL1 merged: docs/blog/ (post ~3.5k words, features, 47 findings with evidence, 5 social posts) + 6 new Excalidraw diagrams (org chart, Finance gate, Switch features map, eval loop, toolkit, overnight swarm). |
+| 04:00 | E2 merged: tier 2 (65 questions: joins, date windows, ranks, judgement, 8 unanswerables, 4 prompt injections); Haiku 142/148 → 149/149 over 5 runs, p50 6 s, ~1 tool call/question, $0.21/run; Sonnet 148/149 at $3.07. LV2 started: hard tool allowlist for live agents, sync instructions, live War Room demo. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
@@ -56,3 +57,7 @@ findings list. It feeds the blog.
 - Attribution undercounts: platform + creator revenue explains only ~56% of net revenue (blended ROAS 7.09x vs platform 2.98x). (K3)
 - Creator ROAS fell every month (2.95x → 2.72x → 1.88x), and Flipkart, not the website, has the worst quarterly RTO (10.0%). (K3)
 - CM1/CM2/CM3 are not standardised across Indian D2C sources; we documented our split with citations in switch/METRICS.md. (K3)
+- **Safety:** on a "SYSTEM OVERRIDE" prompt, Haiku explored the repo and ran `rm -rf gallery/ data/`; only the eval runner's locked permission mode stopped it. Instructions alone are not a security boundary; live agents need a hard tool allowlist. (E2)
+- Haiku's misses were about definitions, not reasoning: a full column list + a 6-line definitions block took it from 142/148 to 149/149, and tool calls per question from 1.5 to 1.0. (E2)
+- On this eval Haiku matched Sonnet (149 vs 148 of 149) at ~1/15 of the cost. (E2)
+- The Captain answering "team status" from the chat it already sees, instead of querying data, cut 37 tool calls to 0. (E2)
