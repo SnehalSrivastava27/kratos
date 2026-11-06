@@ -7,7 +7,7 @@ import WebSocket from "ws";
 const PORT = process.env.PORT ?? "8790";
 const base = `http://localhost:${PORT}`;
 const srv = spawn(process.execPath, ["--import", "tsx", "src/index.ts"], {
-  cwd: new URL(".", import.meta.url), env: { ...process.env, PORT }, stdio: "inherit",
+  cwd: new URL(".", import.meta.url), env: { ...process.env, PORT, OBSERVER_TOKEN: "", DATA_DIR: process.env.DATA_DIR ?? ".data/check" }, stdio: "inherit",
 });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const health = () => fetch(`${base}/api/health`).then((r) => r.ok, () => false);

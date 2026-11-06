@@ -1,5 +1,9 @@
 # Switch + Telegram setup (macOS, Apple Silicon)
 
+> **Superseded (2026-11-06):** the team is now 6 agents (Finance removed) in ONE Telegram forum group,
+> "Kratos D2C", with one topic per department. Use `scripts/switch-up.sh` + `docs/GO_LIVE.md`.
+> The steps below describe the older 7-group layout and are kept for reference.
+
 👤 marks a step only you can do: a phone, BotFather or a click in the app. Every other step is a
 copy-paste command run from the repo root (`/Users/snehal/Desktop/repos/switch-wmd`).
 For the reasons and sources behind each step, see `contracts/switch-protocol-notes.md`.

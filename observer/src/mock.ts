@@ -7,26 +7,30 @@ import { loadConfig, run } from "./index.ts";
 
 const AGENT = "mock-observer";
 const ROOMS = [
-  { room_id: "r-war", name: "Kesar HQ · War Room" },
-  { room_id: "r-fin", name: "Kesar HQ · Finance" },
-  { room_id: "r-cre", name: "Kesar HQ · Creators" },
+  { room_id: "r-kd", name: "Kratos D2C" }, // forum group: topics → departments
+  { room_id: "r-cre", name: "Kesar HQ · Creators" }, // one-group-per-department still works
   { room_id: "r-x", name: "Random chat" }, // unknown → logged, skipped
 ];
-const msg = (seq: number, room_id: string, sender_name: string, body: string) => ({
+const TOPICS = { topics: {
+  war_room: { name: "War Room", message_thread_id: 2, switch_thread_id: "ev-war" },
+  ads: { name: "Ads", message_thread_id: 4, switch_thread_id: "ev-ads" },
+} };
+const msg = (seq: number, room_id: string, sender_name: string, body: string, thread_id: string | null = null) => ({
   type: "message", room_id, bridge_id: "b-telegram", channel_type: "channel_public", sequence: seq,
-  payload: { addressed: false, sender: `@switch-x-${seq}:switch.local`, sender_name, message_id: `m${seq}`, body, timestamp: Date.now(), thread_id: null, attachments: [] },
+  payload: { addressed: false, sender: `@switch-x-${seq}:switch.local`, sender_name, message_id: `m${seq}`, body, timestamp: Date.now(), thread_id, attachments: [] },
 });
 const EVENTS = [
-  msg(1, "r-war", "Snehal", "Plan our festive sale: 30% off, 5 days, ₹5L marketing budget"),
-  msg(2, "r-war", "d2c-captain", "🎯 Festive sale · 30% off · 5 days · ₹5L\n@d2c-analyst forecast first, then @d2c-ads."),
-  msg(3, "r-fin", "d2c-finance", "💰 Marketing ₹7.05L vs ₹5L budget\nEBITDA −₹0.76L ❌\n@d2c-influencers cut ₹2.05L"),
+  msg(1, "r-kd", "Snehal", "Plan our festive sale: 30% off, 5 days, ₹5L marketing budget", "ev-war"),
+  msg(2, "r-kd", "d2c-captain", "🎯 Festive sale · 30% off · 5 days · ₹5L\n@d2c-analyst forecast first, then @d2c-ads.", "ev-war"),
+  msg(3, "r-kd", "d2c-ads", "📣 Meta split ₹3L · ROAS 3.4 ❌ cut retargeting", "ev-ads"),
   msg(4, "r-x", "d2c-ops", "should be skipped: unknown room"),
-  msg(5, "r-fin", "d2c-finance", "💰 Marketing ₹5L ✅ EBITDA +₹1.29L ✅\n@d2c-captain Finance approved"),
-  msg(6, "r-war", "d2c-captain", "🎯 Final plan ready. Finance approved.\n@founder please approve?"),
+  msg(5, "r-kd", "d2c-ops", "🚚 Transfers booked ✅ approved", null), // no topic → speaker's home department
+  msg(6, "r-cre", "d2c-influencers", "🌟 4 creators · ₹1.5L"),
+  msg(7, "r-kd", "d2c-captain", "🎯 Final plan ready.\n@founder please approve?", "ev-unknown"), // unmapped thread → home
 ];
 const EXPECT = [
-  ["war_room", "founder", "message"], ["war_room", "d2c-captain", "message"], ["finance", "d2c-finance", "pushback"],
-  ["finance", "d2c-finance", "approved"], ["war_room", "d2c-captain", "approval_needed"],
+  ["war_room", "founder", "message", 2], ["war_room", "d2c-captain", "message", 2], ["ads", "d2c-ads", "pushback", 4],
+  ["ops", "d2c-ops", "approved", null], ["creators", "d2c-influencers", "message", null], ["war_room", "d2c-captain", "approval_needed", null],
 ];
 
 const bridge = createServer((req, res) => {
@@ -47,13 +51,13 @@ const bridge = createServer((req, res) => {
 });
 
 bridge.listen(0, async () => {
-  const cfg = loadConfig();
+  const cfg = { ...loadConfig(), topics: TOPICS };
   const t0 = Date.now();
   const port = (bridge.address() as { port: number }).port;
   run({ agentId: AGENT, apiEndpoint: `http://127.0.0.1:${port}`, token: "mock-token" }, cfg);
   await new Promise((r) => setTimeout(r, 200 * EVENTS.length + 1500));
   const history = (await (await fetch(`${cfg.server}/api/history?limit=200`)).json()) as any[];
-  const got = history.filter((e) => e.t >= t0 - 1000 && String(e.id).startsWith("srv-")).map((e) => [e.room, e.speaker, e.type]);
+  const got = history.filter((e) => e.t >= t0 - 1000 && String(e.id).startsWith("srv-")).map((e) => [e.room, e.speaker, e.type, e.meta?.thread_id ?? null]);
   const ok = JSON.stringify(got.slice(-EXPECT.length)) === JSON.stringify(EXPECT);
   console.log(ok ? `mock OK: ${EXPECT.length} events reached ${cfg.server}` : `mock FAILED\n want ${JSON.stringify(EXPECT)}\n got  ${JSON.stringify(got)}`);
   process.exit(ok ? 0 : 1);

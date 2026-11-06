@@ -6,3 +6,4 @@ dist/
 *.tsbuildinfo
 .switch/
 .claude/settings.local.json
+.data/
