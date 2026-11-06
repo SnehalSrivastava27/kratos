@@ -10,6 +10,7 @@ npm run evals:truth                         # print every question + computed tr
 npm run evals                               # offline: one `claude -p` per question (default model sonnet)
 npm run evals -- --agent d2c-ops,d2c-ads    # filter by agent
 npm run evals -- --limit 5 --model haiku    # first 5, cheaper model
+npm run evals -- --per-agent 2              # first 2 questions of every agent
 npm run evals -- --failed                   # rerun only the failures of the newest report
 npm run evals -- --live                     # through Switch via the QA Lab admin API (see below)
 node --test evals/test/*.test.mjs           # parser, style check, v2 truths on a fixture, live mode vs a mock server

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // QA Lab evals. Modes: --truth (no LLM), --offline (default, `claude -p` per question), --live (B3 admin API).
-// Filters: --agent a,b  --limit N  --failed (rerun failures of the newest report). Options: --model sonnet
+// Filters: --agent a,b  --limit N  --per-agent N (first N of each agent)  --failed (rerun failures of the newest report). Options: --model sonnet
 // --concurrency 4  --timeout 180 (seconds). Live: SERVER_URL (default http://localhost:8787), ADMIN_TOKEN.
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
@@ -22,6 +22,7 @@ function args(argv) {
     else if (a === '--model') o.model = v();
     else if (a === '--agent') o.agents = v().split(',');
     else if (a === '--limit') o.limit = Number(v());
+    else if (a === '--per-agent') o.perAgent = Number(v());
     else if (a === '--concurrency') o.concurrency = Number(v());
     else if (a === '--timeout') o.timeout = Number(v());
     else if (a === '--failed') o.failed = true;
@@ -157,6 +158,7 @@ async function main() {
   // --failed: rerun the newest report's failures and merge the new results into it
   const prev = o.failed ? newestReport() : null;
   if (prev) { const f = new Set(prev.results.filter(r => !r.pass).map(r => r.id)); items = items.filter(i => f.has(i.id)); }
+  if (o.perAgent) items = Object.values(Object.groupBy(items, i => i.q.agent)).flatMap(g => g.slice(0, o.perAgent));
   items = items.slice(0, o.limit);
   console.log(`${o.mode}: ${items.length} questions, model ${o.model}, concurrency ${o.concurrency}`);
 
