@@ -1,0 +1,4 @@
+{ "task": "BL1", "state": "working", "progress": 15,
+  "done": ["read docs, status files, overnight log, SW4/E2/K3 branches; found D1's diagram generator (exc.py + gstack render bundle)"],
+  "next": "6 new Excalidraw diagrams, then blog pack",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T03:45:00+05:30" }
