@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Check, ChevronDown, Images, LayoutGrid, MessagesSquare, Paperclip, Search, ShoppingBag, Smile, Sparkles, Store, Megaphone, Zap, Mic } from 'lucide-react';
@@ -21,15 +21,15 @@ const enter = (delay: number) => ({
 export default function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-black/[0.07]">
-      <Container className="grid gap-10 pt-16 pb-12 md:grid-cols-2 md:gap-0 md:pt-28 md:pb-16">
+      <Container className="grid gap-8 pt-14 pb-12 md:grid-cols-2 md:gap-x-0 md:gap-y-9 md:pt-24 md:pb-16">
         <div className="md:col-span-2">
-          <motion.h1 {...enter(0)} className="max-w-[15ch] text-[44px] leading-[1.02] font-medium tracking-[-0.035em] text-balance md:text-[68px]">
-            Your brand never sleeps. <span className="text-dim">Neither do your teammates.</span>
+          <motion.h1 {...enter(0)} className="max-w-[13ch] text-[44px] leading-[1.02] font-medium tracking-[-0.035em] md:max-w-[22ch] md:text-[64px]">
+            Your brand never sleeps.<br className="hidden md:block" /> <span className="text-dim">Neither do your teammates.</span>
           </motion.h1>
         </div>
         <div>
           <motion.p {...enter(0.08)} className="max-w-[46ch] text-[17px] leading-[1.55] text-neutral-500 md:text-lg [&_b]:font-normal [&_b]:text-foreground">
-            <b>An AI teammate for every department</b> of your D2C brand. They plan together in the <b>Telegram groups</b> you already use, and a live office shows who’s doing what.
+            <b>An AI teammate for every department</b> of your D2C brand. They plan together in the <b>Telegram</b> you already use, one topic per department, and a live office shows who’s doing what.
           </motion.p>
           <motion.div {...enter(0.16)} className="mt-8 flex flex-wrap gap-3">
             <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/office" />} nativeButton={false}>
@@ -40,7 +40,7 @@ export default function Hero() {
             </Button>
           </motion.div>
         </div>
-        <motion.div {...enter(0.24)} className="flex min-w-0 flex-col justify-end gap-5">
+        <motion.div {...enter(0.24)} className="flex min-w-0 flex-col justify-end gap-5 md:pl-8">
           <p className="text-[17px] text-neutral-500 md:text-lg">
             Sells everywhere you sell: <u className="decoration-neutral-300 underline-offset-4 text-foreground">D2C</u>, <u className="decoration-neutral-300 underline-offset-4 text-foreground">marketplaces</u> &amp; <u className="decoration-neutral-300 underline-offset-4 text-foreground">quick commerce</u>.
           </p>
@@ -98,13 +98,15 @@ function Stage() {
         <TgDesktop ms={ms} className="absolute top-10 right-0 hidden h-[560px] w-[320px] xl:flex" />
         <Window
           className="relative z-10 mx-auto h-[440px] w-full max-w-[720px] md:h-[560px] xl:h-[560px]"
-          title="Kesar HQ · live office"
-          right={<span className="inline-flex items-center gap-1.5 rounded-full bg-saffron/10 px-2 py-0.5 text-[11px] font-medium text-saffron-ink"><LiveDot />Replaying the festive sale</span>}
+          title={<span className="hidden sm:inline">Kesar HQ · live office</span>}
+          right={<span className="inline-flex items-center gap-1.5 rounded-full bg-saffron/10 px-2 py-0.5 text-[11px] font-medium text-saffron-ink"><LiveDot />Replaying<span className="hidden sm:inline"> the festive sale</span></span>}
         >
           {small ? <Office2D run={inView && !reduce} /> : (
-            <Suspense fallback={<OfficeSkeleton />}>
-              <HeroOffice />
-            </Suspense>
+            <Fallback to={<Office2D run={inView && !reduce} />}>
+              <Suspense fallback={<OfficeSkeleton />}>
+                <HeroOffice />
+              </Suspense>
+            </Fallback>
           )}
           {/* Keeps OrbitControls from eating page scroll; click opens the full office. */}
           <Link to="/office" className="group absolute inset-0 z-10" aria-label="Open the live office">
@@ -118,6 +120,13 @@ function Stage() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 hidden h-24 bg-gradient-to-b from-transparent to-canvas xl:block" />
     </motion.div>
   );
+}
+
+/** If WebGL or the 3D office fails, show the 2D office instead of blanking the page. */
+class Fallback extends Component<{ to: ReactNode; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() { return this.state.failed ? this.props.to : this.props.children; }
 }
 
 function OfficeSkeleton() {

@@ -33,7 +33,8 @@ export { FEED };
 export const WAR_ROOM = FEED.filter((e) => e.room === 'war_room');
 
 /** Drop the leading department emoji; the UI already shows who is speaking. */
-export const body = (text: string) => text.replace(/^\p{Extended_Pictographic}️?\s*/u, '');
+export const body = (text: string) =>
+  text.replace(/^\p{Extended_Pictographic}️?\s*/u, '').replace(/@([\w-]+)/g, (m, id) => (PEOPLE[id] ? `@${PEOPLE[id].name}` : m));
 /** "9:41 PM" style timestamps that advance with the feed. */
 export const clock = (t: number) => `9:${String(41 + Math.floor(t / 15000)).padStart(2, '0')} PM`;
 

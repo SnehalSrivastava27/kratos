@@ -41,7 +41,7 @@ export default function Threads() {
 
   return (
     <Band>
-      <Container className="grid gap-10 pb-16 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-12 md:pb-24 lg:gap-16">
+      <Container className="grid gap-10 py-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-12 md:py-16 lg:gap-16">
         <Reveal>
           <ol className="border-l border-black/[0.08]">
             {STEPS.map((s, i) => (
@@ -74,7 +74,7 @@ export default function Threads() {
           <div ref={ref}>
           <Window title="D2C Agent HQ" className="h-[540px]">
             <div className="flex h-full">
-              <aside className={cn('hidden w-[184px] shrink-0 flex-col gap-0.5 border-r border-black/[0.06] bg-neutral-50/70 p-2.5 transition-shadow sm:flex', step === 0 && 'shadow-[inset_0_0_0_2px_var(--color-saffron)]')}>
+              <aside className={cn('hidden w-[184px] shrink-0 flex-col gap-0.5 border-r border-black/[0.06] bg-neutral-50/70 p-2.5 transition-shadow sm:flex', step === 0 && 'bg-saffron/[0.06]')}>
                 <p className="px-2 pt-1 pb-2 text-[11px] font-medium text-neutral-400">Teammates</p>
                 {AGENT_IDS.map((id) => {
                   const D = DEPT[id];

@@ -27,7 +27,7 @@ export default function Departments() {
 
   return (
     <Band>
-      <Container className="pb-16 md:pb-24">
+      <Container className="py-10 md:py-16">
         <Tabs value={id} onValueChange={(v) => setId(v as string)}>
           <Reveal>
             <TabsList variant="line" className="-mx-1 h-auto w-full justify-start gap-1 overflow-x-auto border-b border-black/[0.07] pb-px [scrollbar-width:none]">

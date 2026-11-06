@@ -58,7 +58,7 @@ export function TopicTabs({ active }: { active: string }) {
 export function TgMessages({ events, compact }: { events: OfficeEvent[]; compact?: boolean }) {
   return (
     <div className={cn('flex flex-col gap-1.5', compact ? 'text-[12.5px]' : 'text-[13.5px]')}>
-      <AnimatePresence initial={false} mode="popLayout">
+      <AnimatePresence initial={false}>
         {events.filter((e) => e.type !== 'working').map((e) => {
           const me = e.speaker === 'founder';
           const p = PEOPLE[e.speaker];
@@ -68,7 +68,6 @@ export function TgMessages({ events, compact }: { events: OfficeEvent[]; compact
               layout="position"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
               className={cn(
                 'relative max-w-[88%] rounded-2xl px-3 pt-1.5 pb-1 leading-[1.4] shadow-[0_1px_1px_rgba(0,0,0,0.08)]',
@@ -77,7 +76,7 @@ export function TgMessages({ events, compact }: { events: OfficeEvent[]; compact
             >
               <p className="whitespace-pre-line text-[#111]">
                 {!me && <b className="font-semibold">{p.emoji} {p.name}{'\n'}</b>}
-                {me ? e.text : body(e.text)}
+                {body(e.text)}
                 <span className={cn('float-right mt-1.5 ml-2 inline-flex translate-y-0.5 items-center gap-0.5 text-[10.5px]', me ? 'text-[#4FAE4E]' : 'text-[#A0ACB6]')}>
                   {clock(e.t)}{me && <CheckCheck className="size-3.5" />}
                 </span>

@@ -31,7 +31,7 @@ export default function TeamChat() {
     <Band id="telegram" className="scroll-mt-16 overflow-hidden">
       <Container className="grid items-center gap-12 py-16 md:grid-cols-2 md:gap-0 md:py-24">
         <Reveal className="md:pr-16">
-          <TwoTone a="Works where your team works." b="No new tool to learn." className="max-w-[16ch] text-[28px] leading-[1.1] md:text-[36px]" />
+          <TwoTone stack a="Works where your team works." b="No new tool to learn." className="text-[28px] leading-[1.12] md:text-[36px]" />
           <p className="mt-5 max-w-[44ch] text-[17px] leading-[1.55] text-neutral-500 [&_b]:font-normal [&_b]:text-foreground">
             Indian D2C teams don’t run on Slack. They run on <b>Telegram</b>. Your teammates live in one group, <b>one topic per department</b>, all posting through a single bot.
           </p>
@@ -77,7 +77,7 @@ export default function TeamChat() {
               {tab === 'wa' ? (
                 <div className="m-auto max-w-[240px] rounded-2xl bg-white/90 p-5 text-center shadow-sm">
                   <p className="text-[15px] font-semibold">WhatsApp is coming soon</p>
-                  <p className="mt-1.5 text-[13px] leading-snug text-neutral-500">Same teammates, same groups. Telegram is live today.</p>
+                  <p className="mt-1.5 text-[13px] leading-snug text-neutral-500">Same teammates, same topics. Telegram is live today.</p>
                 </div>
               ) : (
                 <TgMessages events={visible.slice(-5)} />

@@ -11,7 +11,7 @@ export function Reveal({ delay = 0, y = 12, ...p }: HTMLMotionProps<'div'> & { d
     <motion.div
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
+      viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.55, ease: EASE, delay }}
       {...p}
     />
@@ -29,10 +29,10 @@ export function Band({ className, ...p }: React.ComponentProps<'section'>) {
 }
 
 /** Two-tone heading: first phrase in foreground, second in muted. */
-export function TwoTone({ a, b, className, as: Tag = 'h2' }: { a: ReactNode; b: ReactNode; className?: string; as?: 'h1' | 'h2' | 'h3' }) {
+export function TwoTone({ a, b, className, stack, as: Tag = 'h2' }: { a: ReactNode; b: ReactNode; className?: string; stack?: boolean; as?: 'h1' | 'h2' | 'h3' }) {
   return (
     <Tag className={cn('font-medium tracking-tight text-balance', className)}>
-      <span className="text-foreground">{a}</span> <span className="text-dim">{b}</span>
+      <span className={cn('text-foreground', stack && 'block')}>{a}</span> <span className={cn('text-dim', stack && 'block')}>{b}</span>
     </Tag>
   );
 }
@@ -58,11 +58,11 @@ export function AccentPill({ href, Icon, children, className }: { href: string; 
 export function SectionRow({ id, a, b, children, cta }: { id?: string; a: ReactNode; b: ReactNode; children: ReactNode; cta?: { href: string; Icon: LucideIcon; label: string } }) {
   return (
     <Band id={id} className="scroll-mt-16">
-      <Container className="grid gap-5 py-14 md:grid-cols-2 md:gap-0 md:py-24">
+      <Container className="grid gap-5 py-14 md:grid-cols-2 md:gap-0 md:py-20">
         <Reveal>
-          <TwoTone a={a} b={b} className="max-w-[16ch] text-[28px] leading-[1.1] md:text-[36px]" />
+          <TwoTone stack a={a} b={b} className="text-[28px] leading-[1.12] md:text-[36px]" />
         </Reveal>
-        <Reveal delay={0.06} className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
+        <Reveal delay={0.06} className="flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-8 md:pl-8">
           <p className="max-w-[44ch] text-[17px] leading-[1.55] text-neutral-500 [&_b]:font-normal [&_b]:text-foreground">{children}</p>
           {cta && <AccentPill href={cta.href} Icon={cta.Icon}>{cta.label}</AccentPill>}
         </Reveal>

@@ -4,6 +4,7 @@ import { CircleCheck, LoaderCircle } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { DEPT, PEOPLE } from './data';
+import { BANNERS, Banner } from './Banners';
 import { Band, Container, Reveal } from './ui';
 
 type Row = { label: string; value: string; pct?: number; tone?: 'pos' | 'neg' | 'muted' };
@@ -24,9 +25,9 @@ const JOBS: Job[] = [
     rows: [{ label: 'Advantage+ Shopping', value: '₹1.2L', pct: 40 }, { label: 'Retargeting', value: '₹0.9L', pct: 30 }, { label: 'Lookalike 1%', value: '₹0.9L', pct: 30 }, { label: 'Broad prospecting', value: 'Cut', pct: 0, tone: 'muted' }],
   },
   {
-    id: 'creators', who: 'd2c-influencers', ask: 'The top 4 by reach cost ₹3.55L, ₹2.05L over the guide. Fix the shortlist.',
-    steps: ['Dropped the top 4 by reach (₹3.55L)', 'Re-ranked 8 creators by engagement and past ROAS', 'Kept fees under the ₹1.5L guide', 'Sent the new list to the Captain'],
-    title: 'Revised shortlist · ₹1.18L', note: 'Average engagement 6.8%',
+    id: 'creators', who: 'd2c-influencers', ask: 'Creators for the festive sale. ₹1.5L guide.',
+    steps: ['Scanned 8 proposed creators', 'Big names cost ₹60k–₹1.2L each', 'Ranked by engagement and ROAS per ₹', 'Picked 4 under the ₹1.5L cap'],
+    title: 'Shortlist · 4 creators · ₹1.18L', note: 'Engagement 5.8% to 8.0%',
     rows: [{ label: 'GlowWithAnu', value: '₹45K', pct: 38 }, { label: 'Desi Skin Desk', value: '₹30K', pct: 25 }, { label: 'Tanvi Tries', value: '₹25K', pct: 21 }, { label: 'Kavya Care', value: '₹18K', pct: 15 }],
   },
   {
@@ -38,8 +39,7 @@ const JOBS: Job[] = [
   {
     id: 'design', who: 'd2c-design', ask: 'Sale banners for the gallery.',
     steps: ['Sketched the hero banner', 'Spotlighted the best seller', 'Built a bundle card for the Glow Kit', 'Pinned all three to the gallery'],
-    title: '3 banners pinned', note: 'Clickable on the office Gallery Wall',
-    rows: [{ label: 'Hero banner', value: 'Festive 30% off' }, { label: 'Spotlight', value: 'Vitamin C Serum' }, { label: 'Bundle card', value: 'Glow Kit' }],
+    title: '3 banners pinned', note: 'Live on the office Gallery Wall', rows: [],
   },
 ];
 
@@ -62,7 +62,7 @@ export default function Jobs() {
 
   return (
     <Band>
-      <Container className="pb-16 md:pb-24">
+      <Container className="py-10 md:py-16">
         <Tabs value={id} onValueChange={(v) => setId(v as string)}>
           <Reveal className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] md:mx-0 md:px-0">
             <TabsList className="h-10 rounded-full bg-black/[0.04] p-1">
@@ -80,7 +80,7 @@ export default function Jobs() {
             <div ref={ref} className="mt-8 grid overflow-hidden rounded-2xl border border-black/[0.07] bg-white md:grid-cols-2">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div key={id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.3, ease: 'easeOut' }} className="p-6 md:p-10">
-                  <p className="text-[12px] text-neutral-400">{job.who === 'd2c-influencers' ? 'Sale Captain' : 'Founder'} → {p.name}</p>
+                  <p className="text-[12px] text-neutral-400">Sale Captain → {p.name}</p>
                   <p className="mt-1.5 text-[20px] leading-snug font-medium tracking-tight text-balance">“{job.ask}”</p>
                   <p className={cn('mt-8 flex items-center gap-2 text-[13px] font-medium', finished ? 'text-emerald-700' : 'text-saffron-ink')} aria-live="polite">
                     {finished ? <CircleCheck className="size-4" /> : <LoaderCircle className="size-4 animate-spin motion-reduce:animate-none" />}
@@ -105,7 +105,12 @@ export default function Jobs() {
                     <span className={cn('rounded-full px-2 py-0.5 font-medium', finished ? 'bg-emerald-50 text-emerald-700' : 'bg-neutral-100 text-neutral-500')}>{finished ? 'Ready' : 'Drafting…'}</span>
                   </div>
                   <h3 className="mt-3 text-[22px] font-medium tracking-tight">{job.title}</h3>
-                  <div className="mt-5 flex flex-col gap-3.5">
+                  {job.id === 'design' && (
+                    <div className="mt-5 grid grid-cols-3 gap-2">
+                      {BANNERS.map((b) => <Banner key={b.id} {...b} className="ring-1 ring-black/[0.06]" />)}
+                    </div>
+                  )}
+                  <div className="mt-5 flex flex-col gap-3.5 empty:hidden">
                     {job.rows.map((r) => (
                       <div key={r.label} className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1.5 text-[14px]">
                         <span className={r.tone === 'muted' ? 'text-neutral-400 line-through' : 'text-neutral-600'}>{r.label}</span>

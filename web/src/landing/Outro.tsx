@@ -8,9 +8,9 @@ import { PEOPLE, REPO_URL, SWITCH_URL } from './data';
 import { Band, Container, Logo, Reveal, TwoTone } from './ui';
 
 const HOW = [
-  { Icon: Send, title: 'Telegram', text: 'The founder drops one message in the War Room group.' },
+  { Icon: Send, title: 'Telegram', text: 'The founder drops one message in the War Room topic.' },
   { Icon: Cable, title: 'Switch', text: 'Switch routes it to the right teammates and gives them shared context.' },
-  { Icon: Bot, title: 'Agents', text: 'Each teammate works in its own department group, then reports back.' },
+  { Icon: Bot, title: 'Agents', text: 'Each teammate works in its own department topic, then reports back.' },
   { Icon: Monitor, title: 'Office', text: 'The live office shows who is doing what, right now.' },
 ];
 
@@ -22,8 +22,8 @@ export function HowItWorks() {
     <Band id="how" className="scroll-mt-16">
       <Container className="py-16 md:py-24">
         <Reveal className="grid gap-5 md:grid-cols-2">
-          <TwoTone a="One message in." b="A whole plan out." className="max-w-[16ch] text-[28px] leading-[1.1] md:text-[36px]" />
-          <p className="max-w-[44ch] self-end text-[17px] leading-[1.55] text-neutral-500">The whole festive sale, from first message to founder approval, took <b className="font-normal text-foreground">about 45 seconds</b> in the demo.</p>
+          <TwoTone stack a="One message in." b="A whole plan out." className="text-[28px] leading-[1.12] md:text-[36px]" />
+          <p className="max-w-[44ch] self-end text-[17px] md:pl-8 leading-[1.55] text-neutral-500">The whole festive sale, from first message to founder approval, took <b className="font-normal text-foreground">about 45 seconds</b> in the demo.</p>
         </Reveal>
         <div ref={ref} className="relative mt-14 grid sm:grid-cols-2 lg:grid-cols-4">
           <div className="absolute inset-x-0 top-0 h-px bg-black/[0.08]" />
@@ -45,11 +45,11 @@ export function HowItWorks() {
 }
 
 const FAQ = [
-  { q: 'What is D2C Agent HQ?', a: 'A team of seven AI teammates for a D2C brand: a Sale Captain plus Analytics, Ads, Creators, Ops, Design and Finance. They plan work together inside your Telegram groups, and a live 3D office shows who is doing what.' },
-  { q: 'Does it need Switch?', a: 'Yes. Switch connects the agents to your Telegram groups, routes messages to the right teammate and gives them shared context, so Finance can see what Creators proposed.' },
-  { q: 'Telegram only, or WhatsApp too?', a: 'Telegram is live today. WhatsApp is on the roadmap; a production version would use the official WhatsApp Business API.' },
-  { q: 'What happens to my data?', a: 'The demo runs on a fictional brand, Kesar & Co., with sample CSVs for products, sales, stock and campaigns. Your teammates only read the files and groups you connect.' },
-  { q: 'Can I add my own teammates?', a: 'Yes. Each teammate is a Switch agent with its own prompt and group. Add one for CX, returns or retention the same way.' },
+  { q: 'What is D2C Agent HQ?', a: 'Six AI teammates for a D2C brand: a Sale Captain plus Analytics, Ads, Creators, Ops and Design. They plan work together inside one Telegram group, one topic each, and a live 3D office shows who is doing what.' },
+  { q: 'Does it need Switch?', a: 'Yes. Switch connects the agents to your Telegram group through one bot, routes each message to the right teammate and gives them shared context, so the Captain can see what Creators proposed.' },
+  { q: 'Telegram only, or WhatsApp too?', a: 'Telegram is live today: one group with Topics turned on. WhatsApp is on the roadmap; a production version would use the official WhatsApp Business API.' },
+  { q: 'What happens to my data?', a: 'The demo runs on a fictional brand, Kesar & Co., with sample CSVs for products, sales, stock and campaigns. Your teammates only read the files and the Telegram group you connect.' },
+  { q: 'Can I add my own teammates?', a: 'Yes. Each teammate is a Switch agent with its own prompt and topic. Add one for CX, returns or retention the same way.' },
   { q: 'What does it cost?', a: 'The project is open source. You bring your own model keys and Switch setup.' },
 ];
 
@@ -58,7 +58,7 @@ export function Faq() {
     <Band id="faq" className="scroll-mt-16">
       <Container className="grid gap-8 py-16 md:grid-cols-2 md:gap-0 md:py-24">
         <Reveal>
-          <TwoTone a="Questions," b="answered." className="text-[28px] leading-[1.1] md:text-[36px]" />
+          <TwoTone stack a="Questions," b="answered." className="text-[28px] leading-[1.12] md:text-[36px]" />
         </Reveal>
         <Reveal delay={0.06}>
           <Accordion className="border-t border-black/[0.07]">
@@ -78,7 +78,7 @@ export function Faq() {
 function MiniCard({ who, title, line, className }: { who: string; title: string; line: string; className?: string }) {
   const p = PEOPLE[who];
   return (
-    <div aria-hidden="true" className={`w-[260px] rounded-2xl border border-black/[0.07] bg-white p-4 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.25)] ${className ?? ''}`}>
+    <div aria-hidden="true" className={`w-[264px] rounded-2xl border border-black/[0.07] bg-white p-4 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.25)] ${className ?? ''}`}>
       <p className="flex items-center gap-1.5 text-[12px] text-neutral-500"><span className="size-1.5 rounded-full" style={{ background: p.color }} />{p.name}</p>
       <p className="mt-2 text-[15px] font-medium tracking-tight">{title}</p>
       <p className="mt-1 flex items-center gap-1.5 text-[13px] text-emerald-700"><Check className="size-3.5" />{line}</p>
@@ -90,8 +90,8 @@ export function FinalCta() {
   return (
     <Band className="overflow-hidden">
       <Container className="relative py-24 text-center md:py-36">
-        <MiniCard who="d2c-ops" title="Mumbai → Delhi · 110 units" line="Arrives in 2 days" className="absolute top-20 left-12 hidden -rotate-2 xl:block" />
-        <MiniCard who="d2c-finance" title="EBITDA +₹1.61L" line="Finance approved" className="absolute right-12 bottom-20 hidden rotate-2 xl:block" />
+        <MiniCard who="d2c-ops" title="Mumbai → Delhi · 110 units" line="Arrives in 2 days" className="absolute top-16 left-12 hidden xl:block" />
+        <MiniCard who="d2c-captain" title="Final plan · ₹4.68L of ₹5L" line="Founder approved" className="absolute right-12 bottom-16 hidden xl:block" />
         <Reveal>
           <h2 className="mx-auto max-w-[14ch] text-[40px] leading-[1.04] font-medium tracking-[-0.035em] text-balance md:text-[64px]">
             Meet your new teammates. <span className="text-dim">They’re already at work.</span>
@@ -117,10 +117,10 @@ export function Footer() {
   ] as const;
   return (
     <footer className="relative">
-      <Container className="grid gap-10 py-14 md:grid-cols-[2fr_1fr_1fr] md:py-16">
+      <Container className="grid gap-10 py-14 md:grid-cols-[2fr_1fr_1fr] md:py-16 md:[&>*:nth-child(2)]:pl-8">
         <div>
           <Logo />
-          <p className="mt-4 max-w-[34ch] text-[14px] leading-relaxed text-neutral-500">AI teammates for every department of your D2C brand, working in the Telegram groups you already use.</p>
+          <p className="mt-4 max-w-[34ch] text-[14px] leading-relaxed text-neutral-500">AI teammates for every department of your D2C brand, working in the Telegram you already use.</p>
         </div>
         {cols.map(([title, links]) => (
           <div key={title}>

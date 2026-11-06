@@ -9,7 +9,7 @@ import Departments from './Departments';
 import Threads from './Threads';
 import Jobs from './Jobs';
 import TeamChat from './TeamChat';
-import Finance from './Finance';
+import Approve from './Approve';
 import { Faq, FinalCta, Footer, HowItWorks } from './Outro';
 import { Band, Container, Logo, Reveal, SectionRow, TwoTone } from './ui';
 
@@ -25,20 +25,20 @@ export default function Landing() {
         <main className="relative">
           <Hero />
           <SectionRow id="teammates" a="Every department" b="has a teammate." cta={{ href: '/office', Icon: Users, label: 'Meet the team' }}>
-            <b>Seven AI teammates</b>, one per department, plus a <b>Sale Captain</b> who splits the work. Each knows what to take off your plate and <b>when to act on its own</b>.
+            <b>Five department teammates</b> plus a <b>Sale Captain</b> who splits the work and brings back one plan. Each knows what to take off your plate and <b>when to act on its own</b>.
           </SectionRow>
           <Departments />
           <SectionRow id="threads" a="A dedicated thread" b="for every teammate." cta={{ href: '/office', Icon: MessagesSquare, label: 'Read a thread' }}>
             Every teammate keeps <b>one thread that never closes</b>: what it was asked, what it did, and how long it took. <b>Step in any time</b> in plain language.
           </SectionRow>
           <Threads />
-          <SectionRow id="jobs" a="Give teammates a job." b="Watch them think it through." cta={{ href: '/office', Icon: ListChecks, label: 'See it live' }}>
+          <SectionRow id="jobs" a="Give teammates a job." b="Watch them work it out." cta={{ href: '/office', Icon: ListChecks, label: 'See it live' }}>
             Ask in plain language. Each teammate <b>works through it step by step</b>, then hands back <b>something you can ship</b>: a forecast, a media plan, a transfer.
           </SectionRow>
           <Jobs />
           <Trio />
           <TeamChat />
-          <Finance />
+          <Approve />
           <HowItWorks />
           <Faq />
           <FinalCta />
@@ -95,17 +95,17 @@ function Nav() {
 }
 
 const TRIO = [
-  { Icon: Send, a: 'In Telegram', b: 'by default.', text: 'No new app for the team. Teammates work in the groups you already use, one per department.' },
-  { Icon: ShieldCheck, a: 'Accountable', b: 'by design.', text: 'Every step, number and pushback is in the thread. Finance signs off before anything reaches you.' },
+  { Icon: Send, a: 'In Telegram', b: 'by default.', text: 'No new app for the team. Teammates work in one Telegram group you already use, one topic per department.' },
+  { Icon: ShieldCheck, a: 'Accountable', b: 'by design.', text: 'Every step and number is in the thread. The Captain checks the budget before anything reaches you.' },
   { Icon: Moon, a: 'Never off', b: 'the clock.', text: 'Stock runs low at midnight? Ops has already drafted the transfer. You wake up to a decision, not a fire.' },
 ];
 
 function Trio() {
   return (
-    <Band>
-      <Container className="grid md:grid-cols-3">
+    <Band className="bg-canvas">
+      <Container className="grid border-black/[0.07] md:grid-cols-3 md:border-x">
         {TRIO.map(({ Icon, a, b, text }, i) => (
-          <Reveal key={a} delay={i * 0.06} className="border-black/[0.07] py-12 not-first:border-t md:px-8 md:py-20 md:not-first:border-t-0 md:not-first:border-l md:first:pl-0 md:last:pr-0">
+          <Reveal key={a} delay={i * 0.06} className="border-black/[0.07] py-12 not-first:border-t md:px-8 md:py-20 md:not-first:border-t-0 md:not-first:border-l md:not-first:border-dashed md:not-first:border-saffron/40 md:first:pl-0 md:last:pr-0">
             <Icon className="size-7 text-saffron" strokeWidth={1.4} />
             <TwoTone as="h3" a={a} b={b} className="mt-6 text-[22px]" />
             <p className="mt-3 max-w-[36ch] text-[16px] leading-relaxed text-neutral-500">{text}</p>
