@@ -128,3 +128,16 @@
     @apply font-sans;
     }
 }
+/* landing — tokens for web/src/landing only (owner: L3) */
+@theme {
+    --color-canvas: #FAFAF9;
+    --color-saffron: #F4A300;
+    --color-saffron-ink: #9A5B00; /* saffron for text: 5:1 on canvas */
+    --color-tg: #3390EC;
+    --color-dim: #8E8E8B; /* second tone of two-tone headings: 3.2:1, large text only */
+    --animate-marquee: marquee 40s linear infinite;
+    @keyframes marquee {
+        to { transform: translateX(-50%); }
+    }
+}
+/* end landing */
