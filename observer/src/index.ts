@@ -111,7 +111,8 @@ export function makeMapper(cfg: Config) {
     /** Forum group: topic (by Switch thread id) → speaker's home department → war_room. Else one group per room. */
     room(id: string, name: string | undefined, threadId: string | null, speaker: string): { room: string; thread_id?: number } | null {
       const n = norm(name ?? "");
-      if (forum.has(n) || forum.has(norm(id))) {
+      // Switch prefixes bridge rooms ("Telegram: Kratos D2C"), so match the forum name as a suffix too.
+      if (forum.has(n) || forum.has(norm(id)) || [...forum].some((f) => n.endsWith(": " + f))) {
         const t = Object.entries(topics()).find(([, v]) => threadId && v.switch_thread_id === threadId);
         if (t) return { room: t[0], thread_id: t[1].message_thread_id };
         const home = roster.people.find((p) => p.id === speaker)?.topic;
