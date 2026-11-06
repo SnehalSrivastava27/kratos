@@ -13,12 +13,12 @@ export const fail = (msg) => { throw new KitError(msg); };
 
 const inside = (p, root) => p === root || p.startsWith(root + path.sep);
 
-// Resolve a user-given read path; only the repo and the OS temp dir are readable.
+// Resolve a user-given read path; only the repo and the temp dirs are readable.
 export function readablePath(p) {
   const abs = path.resolve(REPO, p);
   let real;
   try { real = fs.realpathSync(abs); } catch { fail(`not found: ${p}`); }
-  const roots = [REPO, fs.realpathSync(os.tmpdir())].map((r) => fs.realpathSync(r));
+  const roots = [REPO, os.tmpdir(), '/tmp'].filter((r) => fs.existsSync(r)).map((r) => fs.realpathSync(r));
   if (!roots.some((r) => inside(real, r))) fail(`path outside repo: ${p}`);
   return real;
 }
