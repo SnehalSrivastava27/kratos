@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import channels from '../../../data/channels.csv?raw';
@@ -57,44 +57,63 @@ export function BrandMarquee() {
 
 
 const CHAT_APPS = [
-  { key: 'whatsapp', name: 'WhatsApp', w: '5.95em', logo: <Mark name="whatsapp" color="#25D366" className="size-[0.95em]" /> },
-  { key: 'telegram', name: 'Telegram', w: '5.5em', logo: <Mark name="telegram" color="#26A5E4" className="size-[0.95em]" /> },
-  { key: 'slack', name: 'Slack', w: '3.95em', logo: <img src="/brands/slack.svg" alt="" className="size-[0.9em]" draggable={false} /> },
+  { key: 'whatsapp', name: 'WhatsApp', logo: <Mark name="whatsapp" color="#25D366" className="size-[0.95em]" /> },
+  { key: 'telegram', name: 'Telegram', logo: <Mark name="telegram" color="#26A5E4" className="size-[0.95em]" /> },
+  { key: 'slack', name: 'Slack', logo: <img src="/brands/slack.svg" alt="" className="size-[0.9em]" draggable={false} /> },
 ];
 
 /** Inline "the [chat app] you already use": rotates WhatsApp → Telegram → Slack, logo + name. */
 export function ChatAppRotator({ every = 2200 }: { every?: number }) {
   const reduce = useReducedMotion();
   const [i, setI] = useState(1); // start on Telegram, the one that's live today
+  const sizer = useRef<HTMLSpanElement>(null);
+  const [widths, setWidths] = useState<number[]>([]);
+  // Measure every name as the browser really renders it (font, size, zoom), and re-measure on resize/font load.
+  useLayoutEffect(() => {
+    const el = sizer.current;
+    if (!el) return;
+    const measure = () => setWidths([...el.children].map((c) => Math.ceil((c as HTMLElement).getBoundingClientRect().width)));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    document.fonts?.ready.then(measure).catch(() => {});
+    return () => ro.disconnect();
+  }, []);
   useEffect(() => {
     if (reduce) return;
     const t = setInterval(() => setI((n) => (n + 1) % CHAT_APPS.length), every);
     return () => clearInterval(t);
   }, [reduce, every]);
-  const app = CHAT_APPS[reduce ? 1 : i];
+  const k = reduce ? 1 : i;
+  const app = CHAT_APPS[k];
+  const row = 'inline-flex items-center gap-[0.3em] font-normal whitespace-nowrap';
   return (
-    // the box eases to each name's width, so nothing is clipped and no gap is left behind
-    <motion.span
-      className="relative inline-flex h-[1.3em] translate-y-[0.22em] overflow-hidden align-baseline"
-      aria-label="WhatsApp, Telegram or Slack"
-      initial={false}
-      animate={{ width: app.w }}
-      transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <AnimatePresence initial={false} mode="popLayout">
-        <motion.span
-          key={app.key}
-          initial={{ y: '100%', opacity: 0 }}
-          animate={{ y: '0%', opacity: 1 }}
-          exit={{ y: '-100%', opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-y-0 left-0 inline-flex items-center gap-[0.3em] font-normal whitespace-nowrap text-foreground"
-          aria-hidden="true"
-        >
-          {app.logo}
-          {app.name}
-        </motion.span>
-      </AnimatePresence>
-    </motion.span>
+    <span className="relative inline-block align-baseline" aria-label="WhatsApp, Telegram or Slack">
+      {/* invisible copies, used only to measure each name's real width */}
+      <span ref={sizer} aria-hidden="true" className="pointer-events-none invisible absolute top-0 left-0 flex flex-col">
+        {CHAT_APPS.map((a) => <span key={a.key} className={row}>{a.logo}{a.name}</span>)}
+      </span>
+      <motion.span
+        className="relative inline-flex h-[1.3em] translate-y-[0.22em] overflow-hidden align-baseline"
+        initial={false}
+        animate={{ width: widths[k] ? widths[k] + 2 : 'auto' }}
+        transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.span
+            key={app.key}
+            initial={{ y: '100%', opacity: 0 }}
+            animate={{ y: '0%', opacity: 1 }}
+            exit={{ y: '-100%', opacity: 0 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className={`absolute inset-y-0 left-0 text-foreground ${row}`}
+            aria-hidden="true"
+          >
+            {app.logo}
+            {app.name}
+          </motion.span>
+        </AnimatePresence>
+      </motion.span>
+    </span>
   );
 }
