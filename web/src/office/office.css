@@ -187,3 +187,7 @@
 .hq-hero .hq-bubble { animation-duration: .5s; transition: opacity .4s, transform .4s }
 .hq-hero .hq-dim { opacity: 0; transition: opacity .3s }
 .hq-woof { background: var(--warn) }
+/* Data Wall numbers (KpiPanel): top-left, beside the topics drawer when it's open; a top card on phones. */
+.ao-kpi { position: absolute; top: 72px; left: 12px; width: 320px; overflow: hidden; z-index: 5; animation: ao-slide .2s ease-out; font-family: var(--font); color: var(--ink) }
+@media (max-width: 760px) { .ao-kpi { left: 12px !important; right: 12px; width: auto } }
+@media (prefers-reduced-motion: reduce) { .ao-kpi { animation: none } }

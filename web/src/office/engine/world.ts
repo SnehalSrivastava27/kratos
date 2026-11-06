@@ -292,8 +292,8 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   if (fin) {
     const wallX = WALL.outerX + WALL.t / 2;
     const cab = new THREE.Group();
-    cab.add(mesh(roundedBox(0.55, 1.3, 0.62, 0.05), toon('#8d99ae'), 0, 0.65, 0));
-    for (const y of [0.3, 0.72, 1.12]) {
+    cab.add(mesh(roundedBox(0.55, 0.95, 0.62, 0.05), toon('#8d99ae'), 0, 0.475, 0));
+    for (const y of [0.3, 0.72]) {
       cab.add(mesh(box(0.02, 0.34, 0.5), toon('#adb5bd'), 0.28, y, 0));
       cab.add(mesh(box(0.04, 0.04, 0.2), toon(PAL.ink), 0.3, y + 0.08, 0));
     }
@@ -305,8 +305,8 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
     dial.rotation.z = Math.PI / 2;
     safe.add(dial);
     safe.add(mesh(box(0.05, 0.05, 0.18), toon('#ffd166'), 0.35, 0.3, 0.12));
-    add(safe, wallX + 0.36, 0, fin.z + 1.0, 0, true);
-    add(wallBoard(1.5, 0.94, PAL.ink, ledgerTex()), wallX + 0.06, 1.62, fin.z - 0.25, Math.PI / 2);
+    add(safe, wallX + 0.36, 0, fin.z + 0.4, 0, true); // clear of the floor sign
+    add(wallBoard(1.5, 0.94, PAL.ink, ledgerTex()), wallX + 0.06, 1.72, fin.z - 0.75, Math.PI / 2);
     const fd0 = DESKS.find((d) => d.id === 'finance_cabin#0');
     if (fd0) {
       const calc = new THREE.Group();

@@ -11,7 +11,7 @@ type Db = {
   pending: { code: string; ownerId: string; issuedAt: number; expiresAt: number } | null;
 };
 const KEY = 'hq.devmock.v1';
-const ROOMS: RoomId[] = ['war_room', 'analytics', 'ads', 'creators', 'ops', 'design'];
+const ROOMS: RoomId[] = ['war_room', 'analytics', 'ads', 'creators', 'ops', 'design', 'finance'];
 const WAIT_MS = 6000;
 const LINK_MS = 4000;
 

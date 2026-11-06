@@ -11,6 +11,7 @@ import type { SceneState } from './officeState';
 import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
 import { Tg, tgPlain } from './md';
 import { PersonAvatar, RoomTile } from './icons';
+import { FileChip, isFile } from './FileChip';
 
 export { ROOMS };
 export const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨', finance: '💰' };
@@ -147,7 +148,8 @@ function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean
           {!mine && <br />}
           <Tg text={body} />
         </div>
-        {e.type === 'artifact' && link && (
+        {e.type === 'artifact' && link && isFile(link) && <FileChip url={link} />}
+        {e.type === 'artifact' && link && !isFile(link) && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
             <div className="size-11 shrink-0 rounded bg-gradient-to-br from-[#F4A300] to-[#DB2777]" />
             <div className="min-w-0">

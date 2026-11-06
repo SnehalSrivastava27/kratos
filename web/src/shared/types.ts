@@ -42,12 +42,12 @@ export interface Zone {
   desks?: [number, number][]; // zone-local desk centres; desk id '<zone>#<i>'
 }
 
-/** GET /api/kpis (B3). Money in rupees; percentages as 0–100. */
+/** GET /api/kpis (B3): made-up demo brand numbers from data/*.csv. Money in rupees; percentages 0–100; null = no data. */
 export interface Kpis {
-  updated: string; window: { from: string; to: string };
-  net_revenue: number; orders: number; aov: number; rto_pct: number; return_pct: number;
-  meta_roas: number; blended_roas: number; ebitda_last_month: number;
-  by_channel: { channel: string; orders: number; net_revenue: number; rto_pct: number }[];
+  updated: number | null; window: { from: string | null; to: string | null };
+  net_revenue: number | null; orders: number | null; aov: number | null; rto_pct: number | null; return_pct: number | null;
+  meta_roas: number | null; blended_roas: number | null; ebitda_last_month: number | null;
+  by_channel: { channel: string; orders: number; net_revenue: number; rto_pct: number | null }[];
   top_skus: { sku: string; name: string; units: number; net_revenue: number }[];
 }
 

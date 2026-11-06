@@ -4,7 +4,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { DEMO_GROUP, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import { DEMO_GROUP, INTERNAL_ROOMS, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
 import { DEPT, personDept, type Dept } from './icons';
@@ -12,6 +12,7 @@ import { DEPT, personDept, type Dept } from './icons';
 const HintIcon = ({ dept }: { dept: Dept }) => <dept.Icon size={17} color="#ffd166" strokeWidth={2} className="mr-1.5 inline -translate-y-px" />;
 import { HireDialog } from './HireDialog';
 import { LibraryWindow } from './LibraryWindow';
+import { KpiPanel } from './KpiPanel';
 import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { HelpDialog, Hint } from './Hud';
@@ -76,7 +77,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   setGroup(isDemo ? DEMO_GROUP : workspace?.name ?? 'Your Telegram group');
   const streamed = useEventFeed(isDemo, isDemo ? demoFeed : undefined, { ws: workspace?.id, onUnauthorized: onUnauth });
   const posterEvents = useMemo(() => (poster ? demoFeed.slice(0, POSTER_AT) : null), [poster, demoFeed]);
-  const feedEvents = posterEvents ?? streamed;
+  // Internal rooms (QA Lab) never reach the UI: not the chat, the walls, nor the people.
+  const feedEvents = useMemo(() => (posterEvents ?? streamed).filter((e) => !INTERNAL_ROOMS.has(e.room)), [posterEvents, streamed]);
   // Local echoes while the backend isn't there (mock command / hire / librarian): appended after the feed.
   const [extra, setExtra] = useState<OfficeEvent[]>([]);
   useEffect(() => { if (!feedEvents.length) setExtra([]); }, [feedEvents.length]);
@@ -225,7 +227,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const doHire = async (body: api.HireBody) => {
     const r = await api.hire(body, hireAt?.desk);
     const e = 'action' in r.data ? r.data.employee : r.data;
-    joinPeople([{ id: e.id, name: e.name, emoji: e.emoji, kind: 'agent', zone: deskById[e.desk]?.zone ?? roomZone[e.room], color: e.color, desk: e.desk, room: e.room, role: e.role }], true);
+    joinPeople([{ id: e.id, name: e.name, emoji: e.emoji, kind: 'agent', zone: deskById[e.desk]?.zone ?? roomZone[e.room], color: e.color, desk: e.desk, room: e.room, role: e.role, reports_to: body.reports_to }], true);
     toast('action' in r.data ? `${e.name} has a desk: finish them in Switch Console` : `${e.name} is on the way to their desk`);
     if (r.mock) echo({ room: e.room, speaker: e.id, type: 'hired', text: `👋 **${e.name}** joined as ${e.role}` });
     return r;
@@ -249,6 +251,17 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const modalOpen = help || !!cmd || !!hireAt || !!libAt;
   useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
   useEffect(() => engine.current?.setInsets(!narrow && drawer.open ? 332 : 0, !narrow && chat.open ? 402 : 0), [narrow, drawer.open, chat.open]);
+
+  // The Data Wall's numbers: walk up to the wall (player) or click it (either view). Closing hides them until you come back.
+  const [nearWall, setNearWall] = useState(false);
+  useEffect(() => {
+    if (mode !== 'live' || view !== 'player') return setNearWall(false);
+    const id = setInterval(() => setNearWall(engine.current?.playerZone() === 'data_wall'), 400);
+    return () => clearInterval(id);
+  }, [mode, view]);
+  const wantKpi = nearWall || focus?.id === 'data_wall';
+  const [kpiShut, setKpiShut] = useState(false);
+  useEffect(() => { if (!wantKpi) setKpiShut(false); }, [wantKpi]);
 
   function jumpToWaiting() {
     if (!waiting) return;
@@ -403,6 +416,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
         if (waiting) return <Hint k="N" onClick={jumpToWaiting} text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
         return null;
       })()}
+      {wantKpi && !kpiShut && !modalOpen && <KpiPanel onClose={() => setKpiShut(true)} style={!narrow && drawer.open ? { left: 344 } : undefined} />}
       {help && <HelpDialog onClose={() => setHelp(false)} />}
       {cmd && (
         <CommandBar room0={cmd.room} text0={cmd.text} onClose={() => setCmd(null)} onSend={sendCommand}

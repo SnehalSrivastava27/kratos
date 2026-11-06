@@ -23,6 +23,7 @@ TG_GROUP = DEMO_GROUP;
 export const setGroup = (name: string) => void (TG_GROUP = name);
 /** The Telegram topics the UI shows: `internal` rooms (QA Lab) stay hidden everywhere. */
 export const ROOMS = (rosterJson.rooms as Room[]).filter((r) => !r.internal).map((r) => ({ ...r, topic: r.topic ?? r.label }));
+export const INTERNAL_ROOMS = new Set<string>((rosterJson.rooms as Room[]).filter((r) => r.internal).map((r) => r.id));
 export const roomZone = Object.fromEntries(rosterJson.rooms.map((r) => [r.id, r.zone])) as Record<string, string>;
 export const ctx: Ctx = { roster, roomZone };
 

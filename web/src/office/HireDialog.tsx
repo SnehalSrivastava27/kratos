@@ -6,7 +6,7 @@ import { ExternalLink, UserPlus } from 'lucide-react';
 import { HIRE_ICONS } from './icons';
 import type { Library, RoomId } from '../shared/types';
 import type { HireBody, HireResult } from './api';
-import { TG_GROUP, deskById, zoneById } from './data';
+import { STATIC_ROSTER, TG_GROUP, deskById, roomZone, zoneById } from './data';
 import { Modal } from './Hud';
 import { ROOMS } from './Telegram';
 import { SHELF_LABEL } from './engine/library';
@@ -17,12 +17,15 @@ const COLORS = ['#ef476f', '#ff8a5b', '#f4a300', '#06d6a0', '#118ab2', '#5bc0eb'
 /** The server takes at most this many skills per hire. */
 const MAX_SKILLS = 20;
 const safeUrl = (u: string) => /^(https?|switchdash):\/\//i.test(u);
+/** The department's lead (roster v4 `lead`), whom a hire can report to. */
+const leadOf = (room: string) => STATIC_ROSTER.find((p) => p.lead && p.kind === 'agent' && p.zone === roomZone[room]);
 
 export function HireDialog({ desk, room0, library, libError, onRetry, onClose, onHire }: {
   desk?: string; room0: string; library: Library | null; libError?: string; onRetry: () => void; onClose: () => void;
   onHire: (b: HireBody) => Promise<{ data: HireResult; status: number }>;
 }) {
-  const [f, setF] = useState({ name: '', role: '', room: room0 as RoomId, emoji: HIRE_ICONS[0].emoji, color: COLORS[4], instructions: '' });
+  const [f, setF] = useState({ name: '', role: '', room: room0 as RoomId, emoji: HIRE_ICONS[0].emoji, color: COLORS[4], instructions: '', reports_to: '' });
+  const lead = leadOf(f.room);
   const [skills, setSkills] = useState<string[]>([]);
   const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
@@ -41,7 +44,8 @@ export function HireDialog({ desk, room0, library, libError, onRetry, onClose, o
     setBusy(true);
     setErr('');
     try {
-      const r = await onHire({ ...f, name: f.name.trim(), role: f.role.trim(), instructions: f.instructions.trim(), skills });
+      const { reports_to, ...rest } = f;
+      const r = await onHire({ ...rest, name: f.name.trim(), role: f.role.trim(), instructions: f.instructions.trim(), skills, ...(reports_to && reports_to === lead?.id ? { reports_to } : {}) });
       const d = r.data;
       // A 202 always means a human step is left: show it (with a link only when it's one we trust), never a silent success.
       if ('action' in d) setPending({ url: d.action.kind === 'open_url' && safeUrl(d.action.url) ? d.action.url : '', label: d.action.label || 'Finish in Switch Console', name: d.employee.name });
@@ -78,8 +82,14 @@ export function HireDialog({ desk, room0, library, libError, onRetry, onClose, o
         <label className="ao-field"><span>Name</span><input className="ao-input" maxLength={24} value={f.name} onChange={set('name')} placeholder="e.g. Meera" autoFocus /></label>
         <label className="ao-field"><span>Role</span><input className="ao-input" maxLength={60} value={f.role} onChange={set('role')} placeholder="e.g. Retention marketer" /></label>
         <label className="ao-field"><span>Topic / department</span>
-          <select className="ao-input" value={f.room} onChange={set('room')}>
+          <select className="ao-input" value={f.room} onChange={(e) => setF((s) => ({ ...s, room: e.target.value as RoomId, reports_to: '' }))}>
             {ROOMS.map((r) => <option key={r.id} value={r.id}>{r.topic}</option>)}
+          </select>
+        </label>
+        <label className="ao-field"><span>Reports to <span className="font-bold text-[var(--muted)]">(optional)</span></span>
+          <select className="ao-input" value={f.reports_to} onChange={set('reports_to')} disabled={!lead}>
+            <option value="">{lead ? 'No one: works with the whole team' : 'No lead in this topic'}</option>
+            {lead && <option value={lead.id}>{lead.name}</option>}
           </select>
         </label>
         <div className="ao-field"><span>Look</span>
