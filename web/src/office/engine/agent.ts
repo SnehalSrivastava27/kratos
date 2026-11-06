@@ -18,7 +18,7 @@ const ACCEL = 6;
 const DECEL = 5;
 const JUMP_S = 0.7;
 const SEAT_HIPS = 0.56;
-const BUBBLE_MS = 5200;
+const BUBBLE_S = 5.2;
 const DANCE_S = 5;
 const STOP_PAUSE = 0.75; // seconds at each desk on a tour (a tap on the shoulder)
 
@@ -237,9 +237,12 @@ export class Agent {
     });
     this.ring.visible = !!ps.beacon;
     if (this.ring.visible) this.ring.scale.setScalar(1 + Math.sin(t * 6) * 0.12);
-    if (this.bubbleEl && t - this.bubbleT > BUBBLE_MS / 1000) {
-      this.bubbleEl.remove();
-      this.bubbleEl = null;
+    if (this.bubbleEl) {
+      const age = t - this.bubbleT;
+      if (age > BUBBLE_S) {
+        this.bubbleEl.remove();
+        this.bubbleEl = null;
+      } else if (age > BUBBLE_S - 0.4) this.bubbleEl.classList.add('hq-out');
     }
     this.drawTag(moving || this.path.length > 0, t);
   }

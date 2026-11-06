@@ -124,6 +124,7 @@ export class OfficeEngine {
   private io: IntersectionObserver;
   private audio: AudioContext | null = null;
   private raycaster = new THREE.Raycaster();
+  private calm = matchMedia('(prefers-reduced-motion: reduce)');
   private cleanup: (() => void)[] = [];
 
   constructor(private host: HTMLElement, private opts: EngineOpts) {
@@ -295,7 +296,8 @@ export class OfficeEngine {
     } else {
       // Overview: a slow breathing orbit; the hero leans a little toward whoever is talking.
       const h = this.home;
-      goal = { ...h, yaw: h.yaw + Math.sin(t * 0.07) * 0.06, dist: h.dist * (1 + Math.sin(t * 0.05) * 0.015) };
+      const drift = this.calm.matches ? 0 : 1;
+      goal = { ...h, yaw: h.yaw + Math.sin(t * 0.07) * 0.06 * drift, dist: h.dist * (1 + Math.sin(t * 0.05) * 0.015 * drift) };
       const s = this.speaker;
       if (s && !this.opts.interactive) {
         goal.tx += (s.pos.x - h.tx) * 0.12;

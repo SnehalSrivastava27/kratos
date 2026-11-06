@@ -41,7 +41,7 @@ export class Confetti {
     this.mesh = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.08, 0.13), mat, MAX);
     this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.mesh.frustumCulled = false;
-    this.mesh.visible = false;
+    this.mesh.count = 0; // drawn (so its shader compiles on the first frame, not mid-party) but with nothing in it
     const hidden = new THREE.Matrix4().makeScale(0, 0, 0);
     for (let i = 0; i < MAX; i++) {
       this.mesh.setMatrixAt(i, hidden);
@@ -72,7 +72,7 @@ export class Confetti {
       this.mesh.setColorAt(i, this.c.set(COLORS[Math.floor(Math.random() * COLORS.length)]));
     }
     this.mesh.instanceColor!.needsUpdate = true;
-    this.mesh.visible = true;
+    this.mesh.count = MAX;
   }
 
   /** Everything gone at once (a feed reset). */
@@ -81,7 +81,7 @@ export class Confetti {
     this.bits.fill(null);
     this.live = 0;
     this.mesh.instanceMatrix.needsUpdate = true;
-    this.mesh.visible = false;
+    this.mesh.count = 0;
   }
 
   update(dt: number) {
@@ -122,7 +122,7 @@ export class Confetti {
       this.mesh.setMatrixAt(i, this.m.compose(b.pos, this.q, this.s));
     }
     this.mesh.instanceMatrix.needsUpdate = true;
-    if (!this.live) this.mesh.visible = false;
+    if (!this.live) this.mesh.count = 0;
   }
 
   dispose() {

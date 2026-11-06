@@ -35,14 +35,14 @@
 /* In-scene speech bubble: a mini Telegram message (white, soft shadow, sender in colour, time). Grows upward. */
 .hq-bubble { position: relative; width: max-content; max-width: 250px; margin-bottom: 9px; background: #fff; border-radius: 14px 14px 14px 4px;
   padding: 6px 10px 5px; box-shadow: 0 1px 2px rgba(16,35,47,.15), 0 6px 18px rgba(16,35,47,.14); font-family: 'Geist Variable', system-ui, sans-serif;
-  animation: hq-bubble 5.2s ease both; transform-origin: 50% 100% }
+  animation: hq-bubble .32s ease-out both; transform-origin: 50% 100%; transition: opacity .4s, transform .4s }
+.hq-bubble.hq-out { opacity: 0; transform: translateY(-6px) } /* the engine says when, on its own clock */
 .hq-bubble::after { content: ''; position: absolute; left: -6px; bottom: 0; width: 12px; height: 14px; background: #fff;
   clip-path: path('M12 0 C12 8 8 13 0 14 L12 14 Z') }
 .hq-bubble-who { font: 600 12px 'Geist Variable', system-ui, sans-serif; margin-bottom: 1px }
 .hq-bubble-text { font: 400 12.5px/1.35 'Geist Variable', system-ui, sans-serif; color: #000; white-space: pre-line }
 .hq-bubble-time { float: right; margin: 3px 0 -2px 8px; font-size: 10px; color: #707579 }
-@keyframes hq-bubble { 0% { opacity: 0; transform: translateY(8px) scale(.9) } 6% { opacity: 1; transform: none }
-  92% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-6px) } }
+@keyframes hq-bubble { 0% { opacity: 0; transform: translateY(8px) scale(.9) } 100% { opacity: 1; transform: none } }
 @media (prefers-reduced-motion: reduce) { .hq-bubble, .hq-ding, .hq-tag-waiting .hq-tag-state, .hq-dots::after { animation: none !important } }
 
 /* Telegram chat wallpaper + typing dots. */
