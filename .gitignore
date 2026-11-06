@@ -4,3 +4,5 @@ dist/
 .orchestrator/
 *.log
 *.tsbuildinfo
+.switch/
+.claude/settings.local.json
