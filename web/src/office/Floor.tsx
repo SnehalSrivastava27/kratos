@@ -1,12 +1,12 @@
 // The office shell and furniture, built once in the agent-office toon style and merged by colour into a
 // handful of draw calls. Toon builders (chair, desk, wall boards) adapted from AgentSystemLabs/agent-office
 // (MIT), Copyright (c) 2026 AgentSystemLabs: src/client/world/office/{seats,props,materials}.ts.
-import { useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
 import type { Zone } from '../shared/types';
 import { C, DESK, ZONE_EMOJI, roster, world, zoneById, zoneColor, zones } from './data';
-import { mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
+import { disposeTree, mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
 import { piece, plant, useModels, type Models } from './models';
 import { FONT, chartsTex, neonTex, paint, polaroidTex } from './tex';
 
@@ -267,7 +267,8 @@ function buildOffice(m: Models) {
   return root;
 }
 
-export default function Floor({ onPick }: { onPick: (z: Zone | null) => void }) {
+/** Built once per loaded model set; memo'd so feed updates never rebuild it. Pass a stable onPick. */
+export default memo(function Floor({ onPick }: { onPick: (z: Zone | null) => void }) {
   useFont();
   const models = useModels();
   const { merged, floor } = useMemo(() => {
@@ -279,6 +280,7 @@ export default function Floor({ onPick }: { onPick: (z: Zone | null) => void }) 
     noOutline(floor);
     return { merged, floor };
   }, [models]);
+  useEffect(() => () => { disposeTree(merged); disposeTree(floor); }, [merged, floor]);
   const pick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
     const { x, z } = e.point;
@@ -290,4 +292,4 @@ export default function Floor({ onPick }: { onPick: (z: Zone | null) => void }) 
       <primitive object={merged} />
     </group>
   );
-}
+});

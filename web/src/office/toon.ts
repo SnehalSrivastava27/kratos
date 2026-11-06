@@ -69,6 +69,23 @@ export function roundedBox(w: number, h: number, d: number, r = 0.06): THREE.Buf
   return geo;
 }
 
+/**
+ * Frees what a built tree owns on the GPU: every geometry, and every textured material with its texture
+ * (canvas signs, screens). Untextured toon materials are shared through the cache, so they stay.
+ */
+export function disposeTree(root: THREE.Object3D) {
+  root.traverse((o) => {
+    const m = o as THREE.Mesh;
+    if (!m.isMesh) return;
+    m.geometry.dispose();
+    for (const mat of [m.material].flat() as THREE.MeshBasicMaterial[]) {
+      if (!mat.map) continue;
+      mat.map.dispose();
+      mat.dispose();
+    }
+  });
+}
+
 /** Nothing flat (a sign, a screen, a board's face) and nothing unlit under `obj` gets the toon outline. */
 export const noOutline = (obj: THREE.Object3D) =>
   obj.traverse((o) => {

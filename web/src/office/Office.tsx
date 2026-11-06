@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js';
@@ -28,6 +28,10 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
     [events],
   );
   const [focus, setFocus] = useState<Zone | null>(null);
+  // stable handler for the memo'd Floor; always calls the latest pickZone
+  const pickRef = useRef(pickZone);
+  pickRef.current = pickZone;
+  const onPick = useCallback((z: Zone | null) => mode === 'live' && pickRef.current(z), [mode]);
   useEffect(() => {
     const esc = (e: KeyboardEvent) => e.key === 'Escape' && setFocus(null);
     window.addEventListener('keydown', esc);
@@ -41,7 +45,7 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
       <directionalLight position={[-8, 18, 10]} intensity={2.2} color="#fff1d6" castShadow shadow-mapSize={[2048, 2048]}
         shadow-camera-left={-16} shadow-camera-right={16} shadow-camera-top={14} shadow-camera-bottom={-14} shadow-bias={-0.0008} shadow-normalBias={0.03} />
       <Suspense fallback={null}>
-        <Floor onPick={(z) => mode === 'live' && pickZone(z)} />
+        <Floor onPick={onPick} />
       </Suspense>
       <ScenePropsLayer scene={scene} gallery={gallery} events={events} />
       {roster.map((p) => <Character key={p.id} person={p} ps={scene.people[p.id]} celebrateId={scene.confettiId} />)}
@@ -127,7 +131,8 @@ function Outlines() {
     (window as unknown as { __hqInfo: () => object }).__hqInfo = () => {
       let meshes = 0;
       scene.traverse((o) => { if ((o as THREE.Mesh).isMesh && o.visible) meshes++; });
-      return { meshes, calls: gl.info.render.calls };
+      const mem = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory;
+      return { meshes, calls: gl.info.render.calls, geometries: gl.info.memory.geometries, textures: gl.info.memory.textures, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1e6) : null };
     };
   }
   return null;

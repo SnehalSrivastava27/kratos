@@ -2,6 +2,7 @@
 // src/client/world/models.ts + office/props.ts: the Blender-modelled props. Every material in the .glb
 // files is only a name; we paint each name with a toon colour.
 import * as THREE from 'three';
+import { useMemo } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { toon } from './toon';
 
@@ -13,7 +14,11 @@ export type Models = Record<'plants' | 'desk_props' | 'lounge' | 'kitchen', THRE
 /** All four model scenes (suspends until loaded). */
 export function useModels(): Models {
   const [plants, desk_props, lounge, kitchen] = useGLTF(MODEL_URLS as unknown as string[]) as unknown as { scene: THREE.Object3D }[];
-  return { plants: plants.scene, desk_props: desk_props.scene, lounge: lounge.scene, kitchen: kitchen.scene };
+  // same object while the (cached) scenes are the same, so whoever memoises on it builds once
+  return useMemo(
+    () => ({ plants: plants.scene, desk_props: desk_props.scene, lounge: lounge.scene, kitchen: kitchen.scene }),
+    [plants.scene, desk_props.scene, lounge.scene, kitchen.scene],
+  );
 }
 
 const PALETTE = { plant: '#5fb760', plantDark: '#3f8f45', pot: '#e76f51', wood: '#c98b5a', deskLeg: '#3d405b' };
