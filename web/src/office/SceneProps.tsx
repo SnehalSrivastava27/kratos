@@ -7,10 +7,17 @@ import type { OfficeEvent } from '../shared/types';
 import { C, DESK, clean, personById, roster, world, zoneById } from './data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './Floor';
 import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from './tex';
-import { mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
+import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
 import { useAge } from './useAge';
 
 const GW = 5.2, GH = 2.0;
+/** A geometry made once per mount and freed on unmount. */
+function useOwned<T extends { dispose(): void }>(make: () => T): T {
+  const o = useMemo(make, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => o.dispose(), [o]);
+  return o;
+}
+
 const WALL_FACE = WALL.backZ + WALL.t / 2 + 0.06;
 const popIn = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 + 2.7 * (x - 1) ** 3 + 1.7 * (x - 1) ** 2);
 const SCREEN: Record<string, string> = { idle: '#4a4e69', working: '#8ecae6', waiting: '#ff8fa3', done: '#95f2c3' };
@@ -98,6 +105,7 @@ export function DispatchDock({ pulseId, boxId }: { pulseId?: string; boxId?: str
     }
   });
   const pinMat = toon(C.red, { emissive: '#7a1418' });
+  const boxGeo = useOwned(() => roundedBox(0.36, 0.32, 0.36, 0.03));
   return (
     <group>
       <group position={[WALL.leftX + WALL.t / 2 + 0.06, 1.55, z.z - 0.2]} rotation-y={Math.PI / 2}>
@@ -112,9 +120,7 @@ export function DispatchDock({ pulseId, boxId }: { pulseId?: string; boxId?: str
         {pulseId && <mesh geometry={arc} material={arcMat} />}
       </group>
       <group ref={box} position={[z.x - 0.9, 0.63, z.z + 0.9]} visible={false}>
-        <mesh position-y={0.17} material={toon('#d4a373')} castShadow>
-          <primitive object={roundedBox(0.36, 0.32, 0.36, 0.03)} attach="geometry" />
-        </mesh>
+        <mesh position-y={0.17} material={toon('#d4a373')} geometry={boxGeo} castShadow />
       </group>
     </group>
   );
@@ -143,6 +149,7 @@ function Frame({ url, title, i, x }: { url: string; title: string; i: number; x:
     noOutline(o);
     return o;
   }, [title, i]);
+  useEffect(() => () => disposeTree(obj), [obj]); // a loop reset unmounts the frames: free their banner + geometry
   useFrame(({ clock }) => {
     born.current ??= clock.elapsedTime;
     g.current?.scale.setScalar(Math.max(0.001, popIn((clock.elapsedTime - born.current) / 0.5)));
@@ -227,13 +234,12 @@ function FounderPhone({ events }: { events: OfficeEvent[] }) {
       }),
     [war.map((e) => e.id).join()], // eslint-disable-line react-hooks/exhaustive-deps
   );
+  const caseGeo = useOwned(() => roundedBox(0.27, 0.46, 0.03, 0.04).rotateX(Math.PI / 2));
   const fd = personById.founder;
   const [x, z] = world(fd.zone, DESK[fd.zone]);
   return (
     <group position={[x + 0.55, DESK_SIZE.h, z + 0.05]} rotation-x={-0.25}>
-      <mesh position-y={0.22} material={toon(PAL.ink)}>
-        <primitive object={roundedBox(0.27, 0.46, 0.03, 0.04).rotateX(Math.PI / 2)} attach="geometry" />
-      </mesh>
+      <mesh position-y={0.22} material={toon(PAL.ink)} geometry={caseGeo} />
       <mesh position={[0, 0.22, 0.017]}>
         <planeGeometry args={[0.24, 0.43]} />
         <meshBasicMaterial map={tex} toneMapped={false} />
