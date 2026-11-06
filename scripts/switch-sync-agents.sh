@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Push switch/agents/<id>.md into the LIVE team agents on the local Switch server (Switch Console),
 # and the stored "Kesar HQ D2C team" template from switch/d2c-team.template.yaml.
-# Idempotent: rerun after editing switch/agents/*.md. Unchanged agents are left alone.
+# Idempotent: rerun after editing switch/agents/*.md or switch/lockdown.json. Unchanged agents are left alone.
+# Also applies the hard tool limits in switch/lockdown.json (tool allowlist, auto mode off) to every agent.
 #
 #   scripts/switch-sync-agents.sh
 #   DRY_RUN=1 scripts/switch-sync-agents.sh   # list what would be pushed; no API calls
@@ -34,6 +35,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
     [ -f "$ROOT/switch/agents/$a.md" ] && say "$a: would PATCH /gateway/management/agents/<id> from switch/agents/$a.md ($(wc -c < "$ROOT/switch/agents/$a.md" | tr -d ' ') bytes)" \
       || say "$a: switch/agents/$a.md MISSING"
   done
+  say "each also gets switch/lockdown.json: $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("tools", d["advanced_config"]["tools"], "auto_mode", d["auto_mode"])' "$ROOT/switch/lockdown.json")"
   say "would PATCH the stored \"$TEMPLATE_NAME\" template"
   exit 0
 fi
@@ -73,13 +75,17 @@ for name in "${TEAM[@]}"; do
 import json, os, sys
 d = json.load(sys.stdin)
 body = open(sys.argv[1]).read().split("\n", 1)[1].strip()
-model = os.environ["TEAM_MODEL"]
-if d["definition"].get("instructions", "").strip() == body and d["definition"].get("model") == model:
+lock = json.load(open(sys.argv[2]))
+cur = d["definition"]
+want = {**cur, "instructions": body, "model": os.environ["TEAM_MODEL"],
+        "advanced_config": {**(cur.get("advanced_config") or {}), **lock["advanced_config"]},
+        "auto_mode": lock["auto_mode"], "auto_approve": lock["auto_approve"]}
+if all(cur.get(k) == want[k] for k in ("model", "advanced_config", "auto_mode", "auto_approve")) and cur.get("instructions", "").strip() == body:
     sys.exit(3)
-print(json.dumps({"definition": {**d["definition"], "instructions": body, "model": model}}))' "$ROOT/switch/agents/$name.md" > "$TMP/patch" || rc=$?
+print(json.dumps({"definition": want}))' "$ROOT/switch/agents/$name.md" "$ROOT/switch/lockdown.json" > "$TMP/patch" || rc=$?
   if [ "$rc" = 3 ]; then say "$name: already up to date"
   elif [ "$rc" != 0 ]; then say "$name: update FAILED (could not read the agent or its .md)"; FAIL=1
-  elif gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; then say "$name: instructions/model updated"
+  elif gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; then say "$name: instructions/model/lockdown updated"
   else say "$name: update FAILED (PATCH refused)"; FAIL=1; fi
 done
 
@@ -94,10 +100,14 @@ ok = True
 for a in d:
     if a["name"] not in sys.argv[2:]: continue
     body = open("%s/switch/agents/%s.md" % (sys.argv[1], a["name"])).read().split("\n", 1)[1].strip()
-    has = a["definition"].get("instructions", "").strip() == body and a["definition"].get("model") == os.environ["TEAM_MODEL"]
+    lock = json.load(open("%s/switch/lockdown.json" % sys.argv[1]))
+    df = a["definition"]
+    has = (df.get("instructions", "").strip() == body and df.get("model") == os.environ["TEAM_MODEL"]
+           and all(df.get("advanced_config", {}).get(k) == v for k, v in lock["advanced_config"].items())
+           and df.get("auto_mode") == lock["auto_mode"] and df.get("auto_approve") == lock["auto_approve"])
     st = a.get("status") or {}
     applied = st.get("applied_revision") == a["revision"]
     ok &= has and applied
-    print("•   %-16s current=%s  model %s, revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", a["definition"].get("model"), a["revision"], st.get("applied_revision"), st.get("process")))
+    print("•   %-16s current=%s  model %s, tools %s, auto_mode %s, revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", df.get("model"), df.get("advanced_config", {}).get("tools"), df.get("auto_mode"), a["revision"], st.get("applied_revision"), st.get("process")))
 sys.exit(0 if ok else 1)' "$ROOT" "${TEAM[@]}" < "$TMP/managed" || FAIL=1
 [ "$FAIL" = 0 ] && echo "All team agents have the current rules." || { echo "Some agents are not in sync (see above)."; exit 1; }

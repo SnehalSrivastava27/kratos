@@ -20,6 +20,7 @@ export function readablePath(p) {
   try { real = fs.realpathSync(abs); } catch { fail(`not found: ${p}`); }
   const roots = [REPO, os.tmpdir(), '/tmp'].filter((r) => fs.existsSync(r)).map((r) => fs.realpathSync(r));
   if (!roots.some((r) => inside(real, r))) fail(`path outside repo: ${p}`);
+  if (/(^|[\\/])(\.env[^\\/]*|\.switch)([\\/]|$)/.test(path.relative(REPO, real))) fail(`not allowed: ${p}`); // secrets: .env*, .switch/ keys
   return real;
 }
 

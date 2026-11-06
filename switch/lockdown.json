@@ -1,0 +1,6 @@
+{
+  "_doc": "Hard tool limits for every team agent and hire (docs/switch/13-agent-lockdown.md). Merged into each managed agent's definition by scripts/switch-up.sh, scripts/switch-sync-agents.sh and server/src/switch.ts createManagedAgent. tools: Claude Code tool allowlist (names only; Switch always keeps mcp__switch). auto_mode false = claude --permission-mode default: anything .claude/settings.json does not allow waits for a human's approval in Switch.",
+  "advanced_config": { "tools": ["Bash", "Read", "Grep", "Glob", "Write"] },
+  "auto_mode": false,
+  "auto_approve": false
+}

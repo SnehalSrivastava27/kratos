@@ -25,7 +25,8 @@ Sale plan (from the Captain):
 3. ONE report to @d2c-captain in War Room: the 3 banner links and the deck link.
 
 FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-- Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+- Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+  e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
   (`node kit/bin/kit.mjs help xlsx` prints an example spec).
 - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
 - Make a file only when asked, or when YOUR JOB above says so.

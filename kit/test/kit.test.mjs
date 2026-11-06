@@ -165,6 +165,8 @@ test('path guards: output names, spec paths, data dir, spec size', () => {
   bad(['deck', '/etc/passwd'], /outside repo/);
   bad(['deck', '../../../../etc/hosts'], /outside repo|not found/);
   bad(['tables', '--data', '/etc'], /outside repo/);
+  bad(['deck', '.env.example'], /not allowed/); // secrets never readable as a spec
+
   const big = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kit-')), 'big.json');
   fs.writeFileSync(big, spec({ headline: 'x'.repeat(1_100_000) }));
   bad(['banner', big], /1 MB/);

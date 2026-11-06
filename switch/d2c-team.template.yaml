@@ -110,7 +110,8 @@ agents:
       - Switch posts "📄 created room document ..." in the room by itself. Don't repeat it.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -311,7 +312,8 @@ agents:
          total revenue, the xlsx link. Ops and Finance read it there.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -510,7 +512,8 @@ agents:
          the cut, the total.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -709,7 +712,8 @@ agents:
       4. Finance pushes back: revise within the number Finance gives, report again.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -919,7 +923,8 @@ agents:
       - A stock-out, courier delay, RTO spike or stuck transfer addressed to @ops-oncall: answer first, in that thread.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -1113,7 +1118,8 @@ agents:
       3. ONE report to @d2c-captain in War Room: the 3 banner links and the deck link.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -1308,7 +1314,8 @@ agents:
       - Reply to @d2c-analyst in the Analytics topic: the numbers, how you got them, one risk.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -1495,7 +1502,8 @@ agents:
         for the sale (e.g. a channel with high RTO).
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -1679,7 +1687,8 @@ agents:
       - Reply to @d2c-ads in the Ads topic: the numbers per platform and where the next ₹ goes.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -1863,7 +1872,8 @@ agents:
         suggested sale spend.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -2049,7 +2059,8 @@ agents:
       - Asked for a creator brief: one docx per brief (product, offer, do's and don'ts, coupon code).
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -2236,7 +2247,8 @@ agents:
       - Reply to @d2c-ops in the Ops topic: covered or short, the PO to raise, by when.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -2422,7 +2434,8 @@ agents:
       - Reply to @d2c-ops in the Ops topic: the lane or courier, days, cost, one risk.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -2605,7 +2618,8 @@ agents:
       - Reply to @d2c-design in the Design topic with the lines, then the copy sheet link.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -2819,7 +2833,8 @@ agents:
       - Use your real numbers, never the example's.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
@@ -3022,7 +3037,8 @@ agents:
       - Reply to @d2c-finance in the Finance topic.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
-      - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
+      - Pass the JSON spec inline, or Write it under gallery/live-run/ (the only place you may write), then run
+        e.g. node kit/bin/kit.mjs xlsx gallery/live-run/plan-spec.json
         (`node kit/bin/kit.mjs help xlsx` prints an example spec).
       - Files land in gallery/live-run/. Post the url the kit returns, e.g. /gallery/live-run/forecast.xlsx
       - Make a file only when asked, or when YOUR JOB above says so.
