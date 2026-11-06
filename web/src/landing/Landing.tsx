@@ -5,6 +5,10 @@ import Hero from './Hero';
 import Channels from './Channels';
 import TeamChat from './TeamChat';
 import Teammates from './Teammates';
+import Thinking from './Thinking';
+import FinanceMoment from './FinanceMoment';
+import HowItWorks from './HowItWorks';
+import FinalCta from './FinalCta';
 
 export default function Landing() {
   return (
@@ -19,6 +23,10 @@ export default function Landing() {
         <Channels />
         <TeamChat />
         <Teammates />
+        <Thinking />
+        <FinanceMoment />
+        <HowItWorks />
+        <FinalCta />
       </main>
     </MotionConfig>
   );
