@@ -178,6 +178,10 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number, narrow: boolean) 
 }
 
 /** Home view with a slow drift; click a zone → fly there; click it again / Esc / empty floor → back home. */
+// scratch vectors: the rig runs every frame, so it allocates nothing
+const ZOOM_OFF = new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1);
+const UP = new THREE.Vector3(0, 1, 0);
+const OFF = new THREE.Vector3();
 function CameraRig({ focus }: { focus: Zone | null }) {
   const { camera, size } = useThree();
   const home = useMemo(() => fitHome(camera as THREE.PerspectiveCamera, size.width / size.height, size.width < 520), [camera, size.width, size.height]);
@@ -187,12 +191,12 @@ function CameraRig({ focus }: { focus: Zone | null }) {
     const t = clock.elapsedTime;
     if (focus) {
       goal.tgt.set(focus.x, 0.8, focus.z);
-      goal.pos.copy(goal.tgt).add(new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1));
+      goal.pos.copy(goal.tgt).add(ZOOM_OFF);
     } else {
       // gentle orbit around the floor centre
-      const off = home.pos.clone().sub(home.tgt).applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.sin(t * 0.07) * 0.05);
+      OFF.copy(home.pos).sub(home.tgt).applyAxisAngle(UP, Math.sin(t * 0.07) * 0.05);
       goal.tgt.copy(home.tgt);
-      goal.pos.copy(home.tgt).add(off);
+      goal.pos.copy(home.tgt).add(OFF);
     }
     if (!cur.current) cur.current = { pos: goal.pos.clone(), tgt: goal.tgt.clone() };
     const k = 1 - Math.exp(-dt * 2.5);

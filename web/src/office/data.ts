@@ -42,10 +42,11 @@ export function spot(zoneId: string, personId: string): [number, number] {
   }
   return [z.x + (i - 4.5) * 0.55, z.z + z.d / 2 - 0.75 - (i % 2) * 0.6];
 }
+const SEATS = Object.fromEntries(roster.map((p) => [p.id, spot(p.zone, p.id)]));
+/** Is (x, z) this person's own desk seat? (precomputed: called per character per frame) */
 export const isSeat = (personId: string, x: number, z: number) => {
-  const p = personById[personId];
-  const [sx, sz] = spot(p.zone, p.id);
-  return Math.hypot(sx - x, sz - z) < 0.15;
+  const s = SEATS[personId];
+  return !!s && Math.hypot(s[0] - x, s[1] - z) < 0.15;
 };
 
 /** Only same-origin gallery pages may become links: `/gallery/<file>` and nothing else (no schemes, no `..`). */
