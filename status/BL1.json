@@ -1,0 +1,8 @@
+{ "task": "BL1", "state": "done", "progress": 100,
+  "done": [
+    "docs/blog/: post.md (~3.5k words, Switch features with real snippets + what broke, evals Haiku vs Sonnet runs 0-3, K3 metrics, swarm + overnight loop), features.md (26 features: what/how/files/Switch), findings.md (47 findings with path:line evidence), social.md (5 #HowISwitch posts <280 chars)",
+    "6 new Excalidraw diagrams (.excalidraw/.svg/.png, D1 style): org-chart, finance-gate, switch-features-map, eval-loop, toolkit, overnight-swarm; generator docs/diagrams/gen/bl1.py (+ D1's exc.py, render.sh via the gstack diagram bundle, overflow check); every PNG viewed",
+    "docs/switch/README.md diagram table + README 'Docs' line; merged backend-v2 (SW4, K3); 11 TODO(orchestrator) markers left for final E2 run, live demo/role results, screenshots/video, commit counts"
+  ],
+  "next": "orchestrator: fill TODO(orchestrator) markers after E2 + Wave B/C",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T04:30:00+05:30" }
