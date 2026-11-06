@@ -1,0 +1,30 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+            web/package-lock.json
+            demo/package-lock.json
+            e2e/package-lock.json
+      - name: Install (root postinstall installs server + web)
+        run: npm ci
+      - name: Install Playwright chromium
+        run: |
+          npx --yes playwright@1.49.1 install --with-deps chromium
+          npm ci --prefix e2e --no-audit --no-fund
+          echo "CHROME_PATH=$(cd e2e && node -e "import('playwright-core').then(m => console.log(m.chromium.executablePath()))")" >> "$GITHUB_ENV"
+      # build → server check → feed validate → numbers check → e2e smoke
+      - run: npm run ci

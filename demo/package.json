@@ -1,0 +1,11 @@
+{
+  "name": "hq-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node validate.mjs feeds/sale-demo.json"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0"
+  }
+}

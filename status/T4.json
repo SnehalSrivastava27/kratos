@@ -1,0 +1,8 @@
+{ "task": "T4", "state": "done", "progress": 100,
+  "done": [
+    "Landing.tsx with all 8 PLAN §9.7 sections (hero+HeroOffice placeholder, channels, Telegram phone, teammates iso floor, thinking cards, EBITDA count, self-drawing how-it-works, final CTA to /office)",
+    "Light §9.3 palette in web/src/landing/landing.css; Framer Motion with MotionConfig reducedMotion=user + useReducedMotion for tickers/counter/line",
+    "npm run build passes; checked in browser at 1440px and 390px (no horizontal overflow)"
+  ],
+  "next": "T8: replace HeroOffice.tsx with <Office mode=\"autoplay\" />; orchestrator: set REPO_URL in FinalCta.tsx",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-06T21:00:00+05:30" }

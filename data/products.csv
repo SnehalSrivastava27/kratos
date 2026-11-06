@@ -1,0 +1,6 @@
+sku,name,mrp,cogs,avg_daily_units,stock_mumbai,stock_delhi,stock_bangalore
+SKU01,Vitamin C Serum,899,210,40,1200,250,600
+SKU02,Sunscreen SPF 50,599,140,70,2000,1500,900
+SKU03,Hydrating Moisturiser,749,180,30,900,700,500
+SKU04,Kesar Face Oil,1299,320,12,400,300,250
+SKU05,Glow Kit (bundle),1999,520,10,300,80,150

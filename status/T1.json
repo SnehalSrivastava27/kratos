@@ -1,0 +1,5 @@
+{ "task": "T1", "state": "done", "progress": 100,
+  "done": ["data/: 8 demo files copied verbatim from PLAN §7",
+           "switch/agents/*.md (7, ids match roster, Telegram rule) + switch/d2c-team.template.yaml",
+           "switch/check_numbers.py: EBITDA +128,914 at ₹5L, −76,086 with top-4 creators (whole-rupee prices, whole orders)"],
+  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T16:08:00+05:30" }

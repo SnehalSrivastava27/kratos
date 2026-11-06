@@ -1,0 +1,61 @@
+/* Office HUD. Tokens, panels, buttons and pills adapted from AgentSystemLabs/agent-office (MIT),
+   Copyright (c) 2026 AgentSystemLabs: src/client/styles/base.css. */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap');
+
+.hq-root {
+  --ink: #2b2d42; --paper: #fffaf3; --paper-2: #fff1de; --accent: #ff8a5b; --muted: #7a6f65;
+  --good: #06d6a0; --warn: #ffd166; --bad: #ef476f; --info: #5bc0eb; --saffron: #f4a300;
+  --shadow: 0 4px 0 var(--ink); --radius: 16px;
+  --font: 'Nunito', ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, sans-serif;
+  position: relative; overflow: hidden; font-family: var(--font); color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  background: linear-gradient(180deg, #a9d8ff 0%, #cdebff 55%, #ffe9cf 100%);
+}
+.hq-root * { box-sizing: border-box; }
+.hq-stage { position: absolute; inset: 0 }
+
+/* Name tags and status, over each head (person.ts setLabel / setDoing). The engine moves each .hq-anchor to
+   its person's head every frame (transform only: no layout); .hq-over grows upward from that point. */
+.hq-overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden }
+.hq-anchor { position: absolute; left: 0; top: 0; will-change: transform }
+.hq-over { position: absolute; left: 0; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px }
+.hq-ding { font-size: 22px; line-height: 1; animation: hq-ding 1.6s ease-out both }
+@keyframes hq-ding { 0% { opacity: 0; transform: translateY(10px) scale(.4) } 15% { opacity: 1; transform: translateY(-4px) scale(1.15) }
+  30% { transform: none } 80% { opacity: 1 } 100% { opacity: 0; transform: translateY(-14px) } }
+.hq-tag { display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap }
+.hq-tag-name { font: 800 12px var(--font); background: var(--paper); border: 2.5px solid var(--ink); border-radius: 999px; padding: 1px 9px 2px }
+.hq-tag-state { font: 900 10px var(--font); border: 2px solid var(--ink); border-radius: 999px; padding: 0 7px 1px; background: #e9ecef }
+.hq-tag-badge { padding: 1px 4px 2px; font-size: 13px; line-height: 1.1 }
+.hq-tag-working .hq-tag-state { background: var(--warn) }
+.hq-tag-walking .hq-tag-state { background: #e0f2fe }
+.hq-tag-waiting .hq-tag-state { background: var(--bad); color: #fff; animation: hq-pulse 1s infinite }
+.hq-tag-done .hq-tag-state { background: var(--good); color: #fff }
+.hq-tag-waiting .hq-tag-name { border-color: var(--bad) }
+
+/* In-scene speech bubble: a mini Telegram message (white, soft shadow, sender in colour, time). Grows upward. */
+.hq-bubble { position: relative; width: max-content; max-width: 250px; margin-bottom: 9px; background: #fff; border-radius: 14px 14px 14px 4px;
+  padding: 6px 10px 5px; box-shadow: 0 1px 2px rgba(16,35,47,.15), 0 6px 18px rgba(16,35,47,.14); font-family: 'Geist Variable', system-ui, sans-serif;
+  animation: hq-bubble .32s ease-out both; transform-origin: 50% 100%; transition: opacity .4s, transform .4s }
+.hq-bubble.hq-out { opacity: 0; transform: translateY(-6px) } /* the engine says when, on its own clock */
+.hq-bubble::after { content: ''; position: absolute; left: -6px; bottom: 0; width: 12px; height: 14px; background: #fff;
+  clip-path: path('M12 0 C12 8 8 13 0 14 L12 14 Z') }
+.hq-bubble-who { font: 600 12px 'Geist Variable', system-ui, sans-serif; margin-bottom: 1px }
+.hq-bubble-text { font: 400 12.5px/1.35 'Geist Variable', system-ui, sans-serif; color: #000; white-space: pre-line }
+.hq-bubble-time { float: right; margin: 3px 0 -2px 8px; font-size: 10px; color: #707579 }
+@keyframes hq-bubble { 0% { opacity: 0; transform: translateY(8px) scale(.9) } 100% { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) { .hq-bubble, .hq-ding, .hq-tag-waiting .hq-tag-state, .hq-dots::after { animation: none !important } }
+
+/* Telegram chat wallpaper + typing dots. */
+.hq-tg-wall { background-color: #C6DDB0; background-image: radial-gradient(circle at 20% 15%, rgba(255,255,255,.35) 0 2px, transparent 3px),
+  radial-gradient(circle at 70% 60%, rgba(255,255,255,.28) 0 2px, transparent 3px), linear-gradient(160deg, #D5E6B5 0%, #A9CFA0 55%, #8DBFA3 100%);
+  background-size: 38px 38px, 52px 52px, 100% 100% }
+.hq-dots::after { content: '…'; display: inline-block; width: 1em; animation: hq-dots 1.2s steps(4) infinite; overflow: hidden; vertical-align: bottom }
+@keyframes hq-dots { 0% { width: 0 } 100% { width: 1em } }
+@keyframes hq-pulse { 50% { transform: scale(1.07) } }
+
+
+@media (max-width: 760px) {
+  .hq-tag-done .hq-tag-state, .hq-tag-idle .hq-tag-state { display: none }
+  .hq-tag-name { font-size: 10px; padding: 0 6px 1px; border-width: 2px } .hq-tag-state { font-size: 9px }
+  .hq-bubble { max-width: 200px; padding: 12px 10px 7px } .hq-bubble-text { font-size: 11.5px }
+}
