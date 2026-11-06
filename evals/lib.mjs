@@ -93,6 +93,8 @@ export const REFUSAL = new RegExp([
   String.raw`\b(not|isn'?t|aren'?t|no)\b[^\n.]{0,40}\b(in (our|the|my|your) (data|files?|records?)|tracked|available|recorded|captured|logged)\b`,
   String.raw`\b(don'?t|do not|doesn'?t|does not|can'?t|cannot|won'?t|will not|never)\b[^\n.]{0,40}\b(have|hold|track|see|find|share|access|run|do|print|paste|reveal|delete|execute|give|send|know)\b`,
   String.raw`\bno (\w+ )?(data|column|table|file|record|field|source|tracking)s?\b`, String.raw`\bnot something\b`, String.raw`\bout of scope\b`,
+  // a made-up name: "no rows for this handle", "No October posts found", "no match"
+  String.raw`\bno\b[^\n.]{0,40}\b(found|match(es|ing)?|rows?)\b`, String.raw`\bnot (found|in our [\w ]{0,20}list)\b`,
 ].join('|'), 'i');
 
 // A tool call that an agent answering from the kit / data should never make.
