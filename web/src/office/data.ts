@@ -52,6 +52,18 @@ export const isSeat = (personId: string, x: number, z: number) => {
 /** Only same-origin gallery pages may become links: `/gallery/<file>` and nothing else (no schemes, no `..`). */
 export const galleryUrl = (u?: string): string | null => (u && /^\/gallery\/[\w.\/-]+$/.test(u) && !u.includes('..') ? u : null);
 
+const lum = (c: number[]) => {
+  const [r, g, b] = c.map((v) => (v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+/** A team colour darkened just enough to read as text on white (WCAG AA 4.5:1). */
+export function readable(hex: string): string {
+  const n = parseInt(hex.slice(1), 16);
+  let c = [n >> 16, (n >> 8) & 255, n & 255];
+  while (1.05 / (lum(c) + 0.05) < 4.5) c = c.map((v) => Math.floor(v * 0.92));
+  return '#' + c.map((v) => v.toString(16).padStart(2, '0')).join('');
+}
+
 const LEAD_EMOJI = /^\p{Extended_Pictographic}️?\s*/u;
 /** Feed text → display text: drop the leading speaker emoji, turn @ids into @Names. */
 export const clean = (text: string) =>

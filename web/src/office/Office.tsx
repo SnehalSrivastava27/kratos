@@ -95,11 +95,11 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
       <header className="z-10 flex h-12 shrink-0 items-center gap-3 border-b border-black/[0.06] bg-white px-3 md:px-4">
         <div className="grid size-7 place-items-center rounded-lg bg-gradient-to-br from-[#F4A300] to-[#E07A00] text-sm font-bold text-white">K</div>
         <div className="text-[15px] font-semibold">Kesar HQ</div>
-        <span className={cn('flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold', replay ? 'bg-[#3390EC]/10 text-[#3390EC]' : 'bg-[#3CCB8B]/15 text-[#14895A]')}>
+        <span className={cn('flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-semibold', replay ? 'bg-[#3390EC]/10 text-[#1A6FB5]' : 'bg-[#3CCB8B]/15 text-[#0F7A4F]')}>
           <span className={cn('size-1.5 rounded-full', replay ? 'bg-[#3390EC]' : 'animate-pulse bg-[#3CCB8B]')} />
           {replay ? 'Replay' : 'Live'}
         </span>
-        <div className={cn('hidden min-w-0 flex-1 truncate text-sm md:block', cap.tone === 'red' ? 'text-[#E5484D]' : cap.tone === 'mint' ? 'text-[#14895A]' : 'text-[#707579]')}>
+        <div className={cn('hidden min-w-0 flex-1 truncate text-sm md:block', cap.tone === 'red' ? 'text-[#C8303A]' : cap.tone === 'mint' ? 'text-[#0F7A4F]' : 'text-[#707579]')}>
           {cap.text}
         </div>
         <Button variant="outline" size="sm" className="ml-auto md:ml-0" onClick={() => { overview(); setSeen({}); setReplay((r) => r + 1); }}>

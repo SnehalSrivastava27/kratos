@@ -4,7 +4,7 @@ import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import type { AgentState, Person as RosterPerson } from '../shared/types';
 import type { PersonState } from './officeState';
-import { C, DESK, clean, isSeat, spot } from './data';
+import { C, DESK, clean, isSeat, readable, spot } from './data';
 import { Person, type Look } from './person';
 import { noOutline, toonUnique } from './toon';
 import { useAge } from './useAge';
@@ -116,7 +116,7 @@ export default function Character({ person, ps, celebrateId }: { person: RosterP
         <div className="hq-over">
           {talking && (
             <div key={bubble.id} className="hq-bubble">
-              <div className="hq-bubble-who" style={{ color: person.color }}>{person.emoji} {person.name}</div>
+              <div className="hq-bubble-who" style={{ color: readable(person.color) }}>{person.emoji} {person.name}</div>
               <div className="hq-bubble-text">{clean(bubble.text)}<span className="hq-bubble-time">{clock(bubble.t)}</span></div>
             </div>
           )}

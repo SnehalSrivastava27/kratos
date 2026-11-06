@@ -34,7 +34,7 @@
   clip-path: path('M12 0 C12 8 8 13 0 14 L12 14 Z') }
 .hq-bubble-who { font: 600 12px 'Geist Variable', system-ui, sans-serif; margin-bottom: 1px }
 .hq-bubble-text { font: 400 12.5px/1.35 'Geist Variable', system-ui, sans-serif; color: #000; white-space: pre-line }
-.hq-bubble-time { float: right; margin: 3px 0 -2px 8px; font-size: 10px; color: #8E9AA6 }
+.hq-bubble-time { float: right; margin: 3px 0 -2px 8px; font-size: 10px; color: #707579 }
 @keyframes hq-bubble { 0% { opacity: 0; transform: translateY(8px) scale(.9) } 6% { opacity: 1; transform: none }
   92% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-6px) } }
 @media (prefers-reduced-motion: reduce) { .hq-bubble, .hq-tag-waiting .hq-tag-state, .hq-dots::after { animation: none !important } }
