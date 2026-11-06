@@ -2,7 +2,7 @@
   "done": [
     "Survey: docs/switch/12-feature-survey.md, every switch-core 0.31.0 capability scored (V/E), rejected list, instruction patches, live checks",
     "Built: Switch room roles finance-approver + ops-oncall defined idempotently via the gateway on team join/start (server/src/roles.ts); observer tags '🎭 assumed the `x` role.' as meta.switch_role",
-    "Built: 9 AM IST morning brief asked through Switch as d2c-office (server/src/brief.ts, POST /api/brief); observer tags the Captain's reply meta.kind morning_brief; 4 server tests + observer parser test; README table updated"
+    "Built: 9 AM IST morning brief asked through Switch as d2c-office (server/src/brief.ts, POST /api/brief); observer tags the Captain's reply meta.kind morning_brief; 7 server tests (fake Switch + real observer) + observer parser test; README table updated"
   ],
   "next": "orchestrator: apply 'Instruction patches' in docs/switch/12-feature-survey.md to switch/agents/*.md (E2 owns them), then live checks listed there",
   "blockers": [],
@@ -16,4 +16,4 @@
     "Per-room aliases (!set-alias @d2c-finance @finance) exist only as a chat command, with no gateway route.",
     "Switch has per-agent spend budgets (gateway /tenants/{id}/budgets) that refuse addressed messages once a cap is hit."
   ],
-  "updated": "2026-11-07T03:30:00+05:30" }
+  "updated": "2026-11-07T04:15:00+05:30" }

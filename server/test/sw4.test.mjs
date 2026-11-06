@@ -2,7 +2,8 @@
 // (on a schedule and with POST /api/brief). Fake Switch only (helpers.mjs).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { start, tmp, calls, fake, post, account, link, sleep } from "./helpers.mjs";
+import { spawn, spawnSync } from "node:child_process";
+import { start, tmp, calls, fake, post, account, link, sleep, getJson, upstream } from "./helpers.mjs";
 
 const officePosts = () => calls.filter((c) => c.path === "/agents/office-1/message" || c.path === "/agents/office-1/ops/post_message");
 const roleCalls = () => calls.filter((c) => c.path === "/gateway/rooms/room-1/roles");
@@ -25,8 +26,18 @@ test("roles: linking defines finance-approver and ops-oncall in the Switch room 
   calls.length = 0;
   s = await start({ DATA_DIR, MORNING_BRIEF: "off" });
   try {
-    for (let i = 0; i < 40 && !roleCalls().length; i++) await sleep(50);
-    assert.deepEqual(roleCalls().map((c) => c.method), ["GET"], "existing roles are left alone");
+    await sleep(500);
+    assert.deepEqual(roleCalls(), [], "already set up: Switch is not asked again");
+  } finally {
+    await s.stop();
+  }
+  // a human deletes ops-oncall in Console: a restart never brings it back
+  fake.roles["room-1"] = fake.roles["room-1"].filter((r) => r.name !== "ops-oncall");
+  calls.length = 0;
+  s = await start({ DATA_DIR, MORNING_BRIEF: "off" });
+  try {
+    await sleep(500);
+    assert.equal(roleCalls().filter((c) => c.method === "POST").length, 0, "a deleted role stays deleted");
   } finally {
     await s.stop();
   }
@@ -106,4 +117,66 @@ test("brief: the scheduler asks once a day inside the window, and never outside 
   await sleep(400);
   await s.stop();
   assert.equal(officePosts().length, 0, "a restart in the afternoon sends no morning brief");
+});
+
+test("brief: asked early with POST /api/brief, the 09:00 run skips today", async () => {
+  fake.roles = {};
+  const DATA_DIR = tmp();
+  let s = await start({ DATA_DIR, MORNING_BRIEF: "off" });
+  const cookie = await account(s);
+  const ws = (await link(s, cookie)).workspace;
+  assert.equal((await post(s, `/api/brief?ws=${ws.id}`, {}, { cookie })).status, 202);
+  await s.stop();
+  calls.length = 0;
+  s = await start({ DATA_DIR, MORNING_BRIEF_AT: istAt(-1), BRIEF_TICK_MS: "50" });
+  await sleep(400);
+  await s.stop();
+  assert.equal(officePosts().length, 0, "one brief a day, however it was asked");
+});
+
+test("brief: a bad MORNING_BRIEF_AT warns and falls back to 09:00; a window may cross midnight", async () => {
+  const s = await start({ MORNING_BRIEF_AT: "25:00" });
+  try {
+    assert.match(s.log(), /MORNING_BRIEF_AT is not HH:MM/);
+  } finally {
+    await s.stop();
+  }
+  const out = spawnSync(process.execPath, ["--import", "tsx", "-e", `
+    const { dueDay, parseAt } = await import("./src/brief.ts");
+    const ist = (iso) => Date.parse(iso) - 330 * 60000;
+    console.log(JSON.stringify([dueDay(ist("2026-11-07T23:45:00Z"), 1410), dueDay(ist("2026-11-08T01:00:00Z"), 1410),
+      dueDay(ist("2026-11-08T02:00:00Z"), 1410), dueDay(ist("2026-11-07T09:30:00Z"), 540), parseAt("25:00"), parseAt("7:05"), parseAt("09:60")]));`],
+    { cwd: new URL("..", import.meta.url), encoding: "utf8" });
+  assert.deepEqual(JSON.parse(out.stdout.trim().split("\n").pop()), ["2026-11-07", "2026-11-07", null, "2026-11-07", null, 425, null]);
+});
+
+test("observer: an agent's role notice → meta.switch_role; the same text from a person stays plain", async () => {
+  fake.roles = {};
+  const s = await start({ MORNING_BRIEF: "off" });
+  const cookie = await account(s);
+  await link(s, cookie);
+  const msg = (sender, kind, body) => ({ room_id: "room-1", payload: { sender_name: sender, sender_kind: kind, body, message_id: `m-${Math.random()}`, timestamp: Date.now() } });
+  fake.obsRooms = [{ room_id: "room-1", name: "Telegram: Kratos D2C", description: "" }];
+  fake.obsFrames = [
+    msg("d2c-finance", "agent", "\u{1F3AD} assumed the `finance-approver` role."),
+    msg("Snehal", "user", "\u{1F3AD} released the `finance-approver` role."),
+  ];
+  const obs = spawn(process.execPath, ["src/index.ts"], {
+    cwd: new URL("../../observer/", import.meta.url),
+    env: { ...process.env, SERVER_URL: s.base, OBSERVER_TOKEN: "", SWITCH_AGENT_ID: "obs", SWITCH_API_ENDPOINT: upstream, SWITCH_API_TOKEN: "obs-key" },
+    stdio: "ignore",
+  });
+  try {
+    let h = [];
+    for (let i = 0; i < 100 && h.length < 3; i++) await sleep(50), (h = await getJson(s, "/api/history", cookie));
+    const [agent, human] = h.slice(-2);
+    assert.deepEqual(agent.meta.switch_role, { role: "finance-approver", action: "assumed" });
+    assert.equal(human.speaker, "founder");
+    assert.equal(human.meta.switch_role, undefined, "humans don't hold roles");
+  } finally {
+    obs.kill("SIGKILL");
+    fake.obsRooms = [];
+    fake.obsFrames = [];
+    await s.stop();
+  }
 });

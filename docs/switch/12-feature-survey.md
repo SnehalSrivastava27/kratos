@@ -86,18 +86,21 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
 ## What we built tonight (SW4)
 
 1. **Room roles.** When the team joins a workspace's room (and on every server start for ready workspaces), the
-   office server defines two exclusive roles through the admin gateway, idempotently, never editing one a human
-   tuned: `finance-approver` (held by d2c-finance) and `ops-oncall` (held by d2c-ops) (`server/src/roles.ts`,
+   office server defines two exclusive roles through the admin gateway, once per workspace: every role name it
+   has seen in the room is remembered (kv `roles:<ws>`), so one a human tuned or deleted in Console is never edited or re-created: `finance-approver` (held by d2c-finance) and `ops-oncall` (held by d2c-ops) (`server/src/roles.ts`,
    hooked in `server/src/workspaces.ts` joinTeam + upgradeAll). The Captain then writes `@finance-approver`;
    Switch delivers it to whoever holds the seat. When an agent assumes a role, Switch posts
    "🎭 assumed the \`finance-approver\` role." from that agent; the observer tags it `meta.switch_role`.
 2. **Morning brief.** Switch has no scheduler, so the office server is the clock (`server/src/brief.ts`): at
    09:00 IST (`MORNING_BRIEF_AT`, `MORNING_BRIEF=off` to disable) it asks `@d2c-captain` through Switch, as
-   d2c-office, in the War Room topic, once per workspace per day, only inside a 2-hour window.
+   d2c-office, in the War Room topic, once per workspace per day (an atomic kv marker `brief:<ws>:<day>`), only
+   inside a 2-hour window (a window opened late in the evening runs past midnight and counts for the day it opened).
+   A bad `MORNING_BRIEF_AT` (not HH:MM 00:00-23:59) is logged and falls back to 09:00. An early brief from
+   `POST /api/brief` also claims the day, so 09:00 skips it.
    `POST /api/brief` (session + `?ws=`, JSON, once a minute) asks now. The Captain's reply
    ("🎯 **Morning brief, 7 Nov**") is tagged `meta.kind: "morning_brief"` by the observer.
 
-Tests: `server/test/sw4.test.mjs` (4, fake Switch), `observer/src/docs.test.ts` (role + brief parsers).
+Tests: `server/test/sw4.test.mjs` (7, fake Switch + the real observer), `observer/src/docs.test.ts` (role + brief parsers).
 
 ### Office event shapes (for `web/`)
 

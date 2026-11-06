@@ -387,7 +387,7 @@ async function joinTeam(w: Workspace, upgrade: boolean) {
 
 /** Switch room roles (roles.ts). Never blocks setup: a Switch without roles just means agents are addressed by name. */
 const rolesFor = (w: Workspace) =>
-  ensureRoles(w.switchRoomId).then(
+  ensureRoles(w.id, w.switchRoomId).then(
     (made) => made.length && log.info("switch roles defined", { ws: w.id, roles: made }),
     (e) => log.warn("switch roles not defined", { ws: w.id, error: String(e?.message ?? e) }),
   );

@@ -261,7 +261,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     };
     const doc = desk ? null : switchDocument(text);
     if (doc) Object.assign(meta, { switch_document: doc });
-    const role = desk ? null : switchRole(text);
+    const role = desk || !speaker.startsWith("d2c-") ? null : switchRole(text); // only agents assume roles; a human typing it is just text
     if (role) Object.assign(meta, { switch_role: role });
     if (!desk && isMorningBrief(speaker, text)) Object.assign(meta, { kind: "morning_brief" });
     const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: desk ? "message" : doc ? "artifact" : inferType(text), text, meta };

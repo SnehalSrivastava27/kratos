@@ -3,6 +3,7 @@
 // so the Captain asks "@finance-approver" instead of a fixed name. Defined here through the admin gateway
 // (POST /gateway/rooms/{id}/roles, gateway/rooms.py:891), idempotently, whenever the team joins a workspace room.
 import { gw } from "./switch.js";
+import { kvGet, kvSet } from "./store.js";
 
 export type RoleSpec = { name: string; holder: string; exclusive: boolean; instructions: string };
 
@@ -19,14 +20,21 @@ export const ROLES: RoleSpec[] = [
   },
 ];
 
-/** Defines the roles the room lacks. Never edits an existing one (a human may have tuned it in Console). Returns the names created. */
-export async function ensureRoles(roomId: string): Promise<string[]> {
+/** Defines the roles the room lacks, once per workspace: a role it has ever seen there (made by us or a human) is
+ *  remembered, so one a human deleted or tuned in Console is never re-created or edited. Returns the names created. */
+export async function ensureRoles(wsId: string, roomId: string): Promise<string[]> {
+  const key = `roles:${wsId}`;
+  const known = new Set<string>(JSON.parse(kvGet(key) ?? "[]"));
+  if (ROLES.every((r) => known.has(r.name))) return [];
   const path = `/rooms/${encodeURIComponent(roomId)}/roles`;
-  const have = new Set(((await gw("GET", path)) as { name: string }[]).map((r) => r.name));
+  for (const r of (await gw("GET", path)) as { name: string }[]) known.add(r.name);
   const made: string[] = [];
-  for (const r of ROLES.filter((x) => !have.has(x.name))) {
+  for (const r of ROLES.filter((x) => !known.has(x.name))) {
     await gw("POST", path, { name: r.name, instructions: r.instructions, exclusive: r.exclusive });
     made.push(r.name);
+    known.add(r.name);
+    kvSet(key, JSON.stringify([...known]));
   }
+  kvSet(key, JSON.stringify([...known]));
   return made;
 }
