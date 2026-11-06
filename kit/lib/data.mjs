@@ -6,6 +6,8 @@ import { parse } from 'csv-parse/sync';
 import * as ss from 'simple-statistics';
 import { REPO, LIMITS, fail, readablePath } from './util.mjs';
 
+const MAX_VALUE = 100_000; // bytes per string/blob value inside SQLite
+const MAX_CELL = 2_000; // chars per cell returned to the agent
 const NUM = /^-?(0|[1-9]\d*)(\.\d+)?$/; // no leading zeros, so pincodes/ids stay text
 const qi = (id) => '"' + String(id).replace(/"/g, '""') + '"';
 
@@ -16,11 +18,16 @@ export function dataDir(opt) {
 let cache;
 export function openDb(dir) {
   if (cache) return cache;
-  const db = new DatabaseSync(':memory:', { enableForeignKeyConstraints: false });
+  // Value size capped (strings/blobs), so a query cannot build huge values in memory.
+  const db = new DatabaseSync(':memory:', { enableForeignKeyConstraints: false, limits: { length: MAX_VALUE, sqlLength: 40_000, attach: 0 } });
   const tables = [];
+  const realDir = fs.realpathSync(dir);
   for (const f of fs.readdirSync(dir).filter((f) => f.endsWith('.csv')).sort()) {
+    const p = path.join(dir, f);
+    // Regular files only, and only if they really live in the data dir (no symlinks out).
+    if (!fs.lstatSync(p).isFile() || path.dirname(fs.realpathSync(p)) !== realDir) continue;
     const name = f.slice(0, -4).toLowerCase().replace(/[^a-z0-9_]/g, '_');
-    const recs = parse(fs.readFileSync(path.join(dir, f)), { columns: false, skip_empty_lines: true, bom: true, relax_column_count: true });
+    const recs = parse(fs.readFileSync(p), { columns: false, skip_empty_lines: true, bom: true, relax_column_count: true });
     if (!recs.length) continue;
     const cols = recs[0].map((c, i) => String(c).trim() || `col${i + 1}`);
     const body = recs.slice(1);
@@ -35,7 +42,7 @@ export function openDb(dir) {
   db.exec('PRAGMA query_only = ON');
   db.enableDefensive(true);
   // Only reads, selects and plain functions are authorized from here on.
-  const DENY_FN = new Set(['load_extension', 'readfile', 'writefile', 'edit', 'fts3_tokenizer']);
+  const DENY_FN = new Set(['load_extension', 'readfile', 'writefile', 'edit', 'fts3_tokenizer', 'randomblob', 'zeroblob', 'printf', 'format', 'char', 'replicate', 'unhex']);
   db.setAuthorizer((code, a1, a2) => {
     if (code === C.SQLITE_SELECT || code === C.SQLITE_READ || code === C.SQLITE_RECURSIVE) return C.SQLITE_OK;
     if (code === C.SQLITE_FUNCTION) return DENY_FN.has(String(a2).toLowerCase()) ? C.SQLITE_DENY : C.SQLITE_OK;
@@ -62,18 +69,21 @@ export function checkSql(sql) {
   return sql;
 }
 
+const cellOut = (v) => (v instanceof Uint8Array ? `<blob ${v.length} bytes>` : typeof v === 'string' && v.length > MAX_CELL ? v.slice(0, MAX_CELL) + '…' : v);
+
 export function query(dir, sql, limit = LIMITS.defaultRows) {
   checkSql(sql);
   const cap = Math.min(Math.max(1, Number(limit) || LIMITS.defaultRows), LIMITS.rows);
   const { db } = openDb(dir);
   let stmt;
-  try { stmt = db.prepare(sql); } catch (e) { fail(`SQL error: ${e.message}`); }
+  // Wrapping as a subquery makes SQLite reject anything after the first statement.
+  try { stmt = db.prepare(`SELECT * FROM (\n${sql.trim().replace(/;\s*$/, '')}\n)`); } catch (e) { fail(`SQL error: ${e.message}`); }
   const rows = [];
   let truncated = false;
   try {
     for (const r of stmt.iterate()) {
       if (rows.length >= cap) { truncated = true; break; }
-      rows.push({ ...r });
+      rows.push(Object.fromEntries(Object.entries(r).map(([k, v]) => [k, cellOut(v)])));
     }
   } catch (e) { fail(`SQL error: ${e.message}`); }
   return { columns: stmt.columns().map((c) => c.name), rows, count: rows.length, truncated };

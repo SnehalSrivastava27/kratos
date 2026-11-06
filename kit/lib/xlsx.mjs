@@ -14,6 +14,16 @@ export const FORMATS = {
 };
 const MONEY = /(revenue|spend|fee|cost|mrp|amount|refund|gross|net_pay|salary|ctc|price|total|budget|cogs|ebitda|marketing|opex)/i;
 
+// Formula allowlist: {col}, {r}, numbers, arithmetic, and a few safe functions. Blocks WEBSERVICE, DDE (cmd|...), links.
+const FN_OK = new Set(['SUM', 'ROUND', 'IF', 'IFERROR', 'MIN', 'MAX', 'AVERAGE', 'ABS']);
+export function checkFormula(f) {
+  const x = String(f ?? '').trim().replace(/^=/, '');
+  if (!x || x.length > 500) fail('formula must be 1-500 chars');
+  const rest = x.replace(/\{[a-z0-9_]+\}/gi, '0').replace(/\b([A-Z]+)\s*\(/gi, (m, fn) => (FN_OK.has(fn.toUpperCase()) ? '(' : fail(`formula function not allowed: ${fn} (use ${[...FN_OK].join(', ')})`)));
+  if (!/^[0-9+\-*/(),.\s<>=]*$/.test(rest)) fail('formula may only use {column}, {r}, numbers, + - * / ( ) , and SUM ROUND IF IFERROR MIN MAX AVERAGE ABS');
+  return x;
+}
+
 const letter = (n) => { let s = ''; for (n++; n > 0; n = Math.floor((n - 1) / 26)) s = String.fromCharCode(65 + ((n - 1) % 26)) + s; return s; };
 
 export async function buildXlsx(spec, dir) {
@@ -45,7 +55,7 @@ export async function buildXlsx(spec, dir) {
       const vals = cols.map((c, j) => (c.fmt === 'lakh' && typeof r[j] === 'number' ? r[j] / 1e5 : r[j] ?? null));
       for (const f of formulas) {
         // "{qty}*{mrp}" -> "C2*D2"; "{r}" -> row number.
-        const expr = String(f.formula || '').replace(/^=/, '').replace(/\{([^}]+)\}/g, (m, k2) => (k2 === 'r' ? rn : pos[k2] ? pos[k2] + rn : fail(`formula refers to unknown column {${k2}}`)));
+        const expr = checkFormula(f.formula).replace(/^=/, '').replace(/\{([^}]+)\}/g, (m, k2) => (k2 === 'r' ? rn : pos[k2] ? pos[k2] + rn : fail(`formula refers to unknown column {${k2}}`)));
         vals.push({ formula: expr });
       }
       ws.addRow(vals);

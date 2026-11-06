@@ -9,11 +9,12 @@ const print = (o) => process.stdout.write(JSON.stringify(o) + '\n');
 
 // Run the real work in a child so a runaway query or render is killed after LIMITS.timeoutMs.
 if (!process.env.KIT_CHILD) {
-  const r = spawnSync(process.execPath, ['--disable-warning=ExperimentalWarning', fileURLToPath(import.meta.url), ...process.argv.slice(2)], {
+  const r = spawnSync(process.execPath, ['--disable-warning=ExperimentalWarning', '--max-old-space-size=1024', fileURLToPath(import.meta.url), ...process.argv.slice(2)], {
     env: { ...process.env, KIT_CHILD: '1' }, stdio: ['ignore', 'pipe', 'inherit'],
     timeout: Number(process.env.KIT_TIMEOUT_MS) || LIMITS.timeoutMs, maxBuffer: 64 << 20,
   });
   if (r.error || r.signal) { print({ ok: false, error: r.error?.code === 'ETIMEDOUT' || r.signal ? 'timed out' : String(r.error) }); process.exit(1); }
+  if (r.status !== 0 && !r.stdout.length) { print({ ok: false, error: 'internal error' }); process.exit(1); }
   process.stdout.write(r.stdout);
   process.exit(r.status ?? 1);
 }
@@ -96,6 +97,8 @@ async function main() {
     default: fail(`unknown command: ${cmd} (try: kit help)`);
   }
 }
+
+process.on('unhandledRejection', (e) => { print({ ok: false, error: `internal error: ${e?.message || e}` }); process.exit(1); });
 
 try {
   print({ ok: true, ...(await main()) });

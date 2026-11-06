@@ -30,14 +30,17 @@ const config = {
 const loader = vega.loader();
 loader.load = loader.sanitize = loader.http = loader.file = async (uri) => fail(`chart may not load external data (${String(uri).slice(0, 80)})`);
 
-function inlineSql(node, dir) {
-  if (Array.isArray(node)) return node.forEach((n) => inlineSql(n, dir));
+function inlineSql(node, dir, budget = { values: 10_000 }) {
+  if (Array.isArray(node)) return node.forEach((n) => inlineSql(n, dir, budget));
   if (!node || typeof node !== 'object') return;
   for (const [k, v] of Object.entries(node)) {
     if (k === 'url') fail('chart may not load external data (url): use data.values or data.sql');
+    if (k === 'sequence' || k === 'sphere' || k === 'graticule') fail(`chart data generator "${k}" not allowed: use data.values or data.sql`);
+    if (k === 'values' && Array.isArray(v) && (budget.values -= v.length) < 0) fail('chart has more than 10000 data values');
     if (k === 'data' && v && typeof v === 'object' && typeof v.sql === 'string') {
       node.data = { values: query(dir, v.sql, v.limit ?? 10_000).rows };
-    } else inlineSql(v, dir);
+      if ((budget.values -= node.data.values.length) < 0) fail('chart has more than 10000 data values');
+    } else inlineSql(v, dir, budget);
   }
 }
 

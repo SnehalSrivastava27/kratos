@@ -172,3 +172,41 @@ test('path guards: output names, spec paths, data dir, spec size', () => {
   const r = ok(['banner', b, '--out', 'test-ok.exe']);
   assert.equal(r.files[0].path, 'gallery/live-run/test-ok.svg');
 });
+
+test('review 1: symlinked CSVs in the data dir are not loaded', () => {
+  const d = fs.mkdtempSync(path.join(os.tmpdir(), 'kit-data-'));
+  fs.copyFileSync(path.join(REPO, FIX, 'products.csv'), path.join(d, 'products.csv'));
+  fs.symlinkSync('/etc/shells', path.join(d, 'shells.csv'));
+  fs.symlinkSync(path.join(REPO, FIX, 'orders.csv'), path.join(d, 'orders.csv'));
+  const t = ok(['tables', '--data', d]).tables.map((x) => x.table);
+  assert.deepEqual(t, ['products']);
+  bad(['sql', 'SELECT * FROM shells', '--data', d], /no such table/);
+});
+
+test('review 2: size-producing SQL is blocked; blobs and long cells are summarized', () => {
+  bad(['sql', 'SELECT randomblob(100000000)']);
+  bad(['sql', 'SELECT zeroblob(100000000)']);
+  bad(['sql', "SELECT printf('%.*c', 100000000, 'x')"]);
+  bad(['sql', 'SELECT group_concat(a.order_id || b.order_id || c.order_id) FROM orders a, orders b, orders c']);
+  assert.equal(ok(['sql', "SELECT x'00ff' AS b"]).rows[0].b, '<blob 2 bytes>');
+  assert.ok(ok(['sql', "SELECT substr(group_concat(a.order_id), 1, 5000) s FROM orders a, orders b"]).rows[0].s.length <= 2001);
+});
+
+test('review 3: chart data generators and oversized inline data are refused', () => {
+  bad(['chart', spec({ out: 'test-x', data: { sequence: { start: 0, stop: 1e9, as: 'x' } }, mark: 'point' })], /generator/);
+  bad(['chart', spec({ out: 'test-x', data: { sphere: true }, mark: 'geoshape' })], /generator/);
+  bad(['chart', spec({ out: 'test-x', data: { values: Array.from({ length: 10_001 }, (_, i) => ({ i })) }, mark: 'point' })], /10000/);
+});
+
+test('review 4: xlsx formulas are allowlisted', () => {
+  const sheet = (formula) => spec({ out: 'test-f', sheets: [{ columns: ['a', 'b'], rows: [[1, 2]], formulas: [{ formula }] }] });
+  for (const f of ['WEBSERVICE("http://x")', "cmd|' /c calc'!A0", '=HYPERLINK("http://x")', 'A1*2', '{a}&"x"', 'INDIRECT("A1")']) bad(['xlsx', sheet(f)], /formula/);
+  ok(['xlsx', sheet('=IFERROR(ROUND({a}/{b}*100, 1), 0)')]);
+  ok(['xlsx', sheet('IF({a}>{b}, {a}, SUM({a},{b}))')]);
+});
+
+test('review 6: nothing may follow the first statement, even hidden by a quote in a comment', () => {
+  bad(['sql', "SELECT 1 -- '\n; ATTACH 'x' AS y"]);
+  assert.equal(ok(['sql', 'SELECT 1 AS n; ']).rows[0].n, 1);
+  assert.equal(ok(['sql', 'SELECT 1 AS n -- trailing comment']).rows[0].n, 1);
+});

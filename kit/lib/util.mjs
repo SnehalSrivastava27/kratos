@@ -48,6 +48,7 @@ export function outPath(name, ext, fallback) {
   const abs = path.join(OUT_DIR, n);
   if (!inside(abs, OUT_DIR)) fail(`bad output name: ${name}`);
   fs.mkdirSync(OUT_DIR, { recursive: true });
+  if (!inside(fs.realpathSync(OUT_DIR), fs.realpathSync(REPO))) fail('gallery/live-run resolves outside the repo');
   // Refuse to follow a symlink planted in the output dir.
   try { if (fs.lstatSync(abs).isSymbolicLink()) fail(`refusing to overwrite symlink: ${n}`); } catch (e) { if (e instanceof KitError) throw e; }
   return abs;
