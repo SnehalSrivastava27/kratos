@@ -32,7 +32,7 @@ export default function Hero() {
             <b>An AI teammate for every department</b> of your D2C brand. They plan together in the <b>Telegram</b> you already use, one topic per department, and a live office shows who’s doing what.
           </motion.p>
           <motion.div {...enter(0.16)} className="mt-8 flex flex-wrap gap-3">
-            <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/office" />} nativeButton={false}>
+            <Button size="lg" className="h-11 rounded-full px-5 text-[15px]" render={<Link to="/demo" />} nativeButton={false}>
               Watch them plan a sale <ArrowRight data-icon="inline-end" />
             </Button>
             <Button size="lg" variant="outline" className="h-11 rounded-full bg-transparent px-5 text-[15px]" render={<a href="#how" />} nativeButton={false}>
@@ -109,7 +109,7 @@ function Stage() {
             </Fallback>
           )}
           {/* Keeps OrbitControls from eating page scroll; click opens the full office. */}
-          <Link to="/office" className="group absolute inset-0 z-10" aria-label="Open the live office">
+          <Link to="/demo" className="group absolute inset-0 z-10" aria-label="Open the demo office">
             <span className="absolute right-3 bottom-3 inline-flex items-center gap-1 rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm backdrop-blur transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
               Open the full office <ArrowUpRight className="size-3.5" />
             </span>
