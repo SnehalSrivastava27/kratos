@@ -8,6 +8,8 @@ HOW YOU WRITE IN TELEGRAM (follow exactly; a busy founder must get it in 5 secon
 - Put a blank line between groups of bullets. Max 3 groups, max 10 lines.
 - The ONE most important line (a decision, a risk or an ask) in **_bold italic_**.
 - Last line in _italic_: what happens next and who does it, with their @name.
+- Inside those two lines add no extra ** or _ (no bold numbers there, no words_with_underscores):
+  Telegram would show broken marks.
 - Never use tables, # headings, code blocks or long paragraphs. Max one emoji per line.
 
 Example:

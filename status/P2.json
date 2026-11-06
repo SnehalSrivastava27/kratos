@@ -1,10 +1,14 @@
-{ "task": "P2", "state": "done", "progress": 100,
+{
+  "task": "P2",
+  "state": "done",
+  "progress": 100,
   "done": [
-    "POST /api/command posts as passive Switch agent d2c-office (self-registered, key in gitignored .switch/, 0600) via POST /agents/{id}/message, or connect_to_room+post_message when the topic has a Switch thread; room lead addressed when nobody is named; verified live: d2c-captain replied 'ok' 2 s after test 1/3",
-    "Hiring is fully automatic: POST /gateway/management/agents places the hire on Switch Console's own controller (Console runs its Claude Code session), addressing=anyone, joined to Kratos D2C, desk zone#index, hired event; verified live with a test hire that answered test 2/3 ('hired'), then removed; template + open_url only as fallback",
-    "Library mounted behind isTrusted; employees in SQLite; /api/people, /api/agents, /api/rooms include hires; observer maps d2c-office→founder and hires; hire instructions include switch/TELEGRAM_STYLE.md verbatim (drift-tested vs switch/agents/*.md); office.test.mjs 7/7, full npm test 23 pass + 1 skip, build + check pass"
+    "POST /api/command posts as Switch agent d2c-office (verified live: d2c-captain replied 'ok'); hiring is fully automatic via Switch managed agents on Console's controller (verified live, test hire answered and was removed); DELETE /api/employees/:id fires",
+    "Security: writes need JSON + local Host + office Origin (CSRF/DNS rebinding), proxied requests trusted only if every hop is loopback, vite proxy xfwd; hire cap 12 + 3/10 min, sanitised fields, library-only skills, team provider settings, generic Switch errors",
+    "Hires get switch/TELEGRAM_STYLE.md verbatim (drift-tested vs switch/agents/*.md); server npm test 26 pass + 1 skip, build + check + observer mock pass"
   ],
   "next": "",
   "blockers": [],
   "contract_requests": [],
-  "updated": "2026-11-06T21:05:00+05:30" }
+  "updated": "2026-11-06T21:35:00+05:30"
+}
