@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // QA Lab evals. Modes: --truth (no LLM), --offline (default, `claude -p` per question), --live (B3 admin API).
-// Filters: --agent a,b  --tier 1|2  --limit N  --per-agent N (first N of each agent)  --failed (rerun failures of the newest
+// Filters: --agent a,b  --tier 1|2|3  --limit N  --per-agent N (first N of each agent)  --failed (rerun failures of the newest
 // report). Options: --model haiku
 // --concurrency 4  --timeout 180 (seconds). Live: SERVER_URL (default http://localhost:8787), ADMIN_TOKEN.
 import { spawn } from 'node:child_process';
@@ -50,7 +50,7 @@ function truthMode(items) {
   let bad = 0;
   for (const it of items) {
     if (it.skip) { console.log(`SKIP ${it.id}  ${it.skip}`); continue; }
-    if (it.error || (it.q.kind === 'number' && !Number.isFinite(it.truth)) || (it.q.kind === 'oneof' && !it.truth?.length)) {
+    if (it.error || (it.q.kind === 'number' && ![it.truth].flat(2).every(Number.isFinite)) || (it.q.kind === 'oneof' && !it.truth?.length)) {
       bad++; console.error(`FAIL ${it.id}  ${it.error || `bad truth: ${JSON.stringify(it.truth)}`}`); continue;
     }
     console.log(`ok   ${it.id.padEnd(22)} [${it.q.kind}] ${it.text}\n     => ${JSON.stringify(it.truth)}`);
@@ -134,14 +134,14 @@ export function toMarkdown(rep) {
   for (const r of rep.results) (by[r.agent] ??= []).push(r);
   const all = rep.results, tier = n => all.filter(r => (r.tier ?? 1) === n);
   const L = [`# QA Lab evals — ${rep.mode} (${rep.model}) — ${rep.at}`, '',
-    `**Score: ${frac(all)}** (tier 1 ${frac(tier(1))}, tier 2 ${frac(tier(2))})` +
+    `**Score: ${frac(all)}** (tier 1 ${frac(tier(1))}, tier 2 ${frac(tier(2))}, tier 3 ${frac(tier(3))})` +
     ` · latency p50 ${sec(pctile(all.map(r => r.ms), 50))}, p90 ${sec(pctile(all.map(r => r.ms), 90))} · ${avgCalls(all)} tool calls/question` +
     (rep.cost ? ` · cost $${rep.cost.toFixed(2)}` : '') + (rep.skipped ? ` · ${rep.skipped} skipped` : ''), '',
-    '| Agent | Tier 1 | Tier 2 | p50 latency | Tool calls | Style ok (all replies) | Cost |', '|---|---|---|---|---|---|---|'];
+    '| Agent | Tier 1 | Tier 2 | Tier 3 | p50 latency | Tool calls | Style ok (all replies) | Cost |', '|---|---|---|---|---|---|---|---|'];
   for (const [a, rs] of Object.entries(by)) {
     const withReply = rs.filter(r => r.reply), style = withReply.filter(r => styleCheck(r.reply).ok).length;
     const cost = rs.reduce((s, r) => s + (r.cost || 0), 0);
-    L.push(`| ${a} | ${frac(rs.filter(r => (r.tier ?? 1) === 1))} | ${frac(rs.filter(r => r.tier === 2))} | ${sec(pctile(rs.map(r => r.ms), 50))} | ` +
+    L.push(`| ${a} | ${frac(rs.filter(r => (r.tier ?? 1) === 1))} | ${frac(rs.filter(r => r.tier === 2))} | ${frac(rs.filter(r => r.tier === 3))} | ${sec(pctile(rs.map(r => r.ms), 50))} | ` +
       `${avgCalls(rs)} | ${style}/${withReply.length} | $${cost.toFixed(2)} |`);
   }
   const kinds = [...new Set(all.map(r => r.kind))];
