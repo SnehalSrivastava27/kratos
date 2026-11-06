@@ -62,7 +62,7 @@ export const questions = [
     truth: db => prod(db, 'SKU01').mrp },
   { agent: 'd2c-analyst', kind: 'number', text: 'What sale uplift (x) did the Glow Kit get in Summer Sale 2026?',
     truth: db => one(db.t('past_sales', ['sku', 'sale_uplift_x']), r => r.sku === 'SKU05', 'SKU05').sale_uplift_x },
-  { agent: 'd2c-analyst', kind: 'number', text: 'What share of orders (%) comes from the North region?',
+  { agent: 'd2c-analyst', kind: 'number', text: 'What share of orders (%) comes from the North region, per regions.csv?',
     truth: db => one(db.t('regions', ['region', 'share_of_orders']), r => r.region === 'North', 'North').share_of_orders * 100 },
   { agent: 'd2c-analyst', kind: 'number', text: 'What is the per-unit gross margin in rupees (MRP minus COGS) of Vitamin C Serum?',
     truth: db => { const p = prod(db, 'SKU01'); return p.mrp - p.cogs; } },

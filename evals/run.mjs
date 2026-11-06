@@ -74,7 +74,7 @@ function askClaude(agent, text, o) {
       const ms = Date.now() - t0;
       try {
         const j = JSON.parse(out);
-        res({ reply: j.result ?? '', ms, cost: j.total_cost_usd ?? null, error: j.is_error ? (j.subtype || 'is_error') : null });
+        res({ reply: j.result ?? '', ms, cost: j.total_cost_usd ?? null, error: j.is_error ? String(j.result || j.subtype || 'is_error').slice(0, 200) : null });
       } catch {
         res({ reply: '', ms, cost: null, error: ms >= o.timeout * 1000 ? 'timeout' : `exit ${code}: ${(err || out).slice(0, 200)}` });
       }
@@ -154,7 +154,9 @@ async function main() {
   if (noMd.size) { console.log(`no instructions yet (skipped): ${[...noMd].join(', ')}`); skipped += items.filter(i => noMd.has(i.q.agent)).length; }
   items = items.filter(i => !noMd.has(i.q.agent));
   if (o.agents) items = items.filter(i => o.agents.includes(i.q.agent));
-  if (o.failed) { const f = new Set(newestReport().results.filter(r => !r.pass).map(r => r.id)); items = items.filter(i => f.has(i.id)); }
+  // --failed: rerun the newest report's failures and merge the new results into it
+  const prev = o.failed ? newestReport() : null;
+  if (prev) { const f = new Set(prev.results.filter(r => !r.pass).map(r => r.id)); items = items.filter(i => f.has(i.id)); }
   items = items.slice(0, o.limit);
   console.log(`${o.mode}: ${items.length} questions, model ${o.model}, concurrency ${o.concurrency}`);
 
@@ -170,6 +172,7 @@ async function main() {
       console.log(`${s.pass ? 'PASS' : 'FAIL'} ${it.id.padEnd(22)} ${(a.ms / 1000).toFixed(0)}s ${s.pass ? '' : s.why}`);
     }
   });
+  if (prev) { const done = new Set(results.map(r => r.id)); results.push(...prev.results.filter(r => !done.has(r.id))); }
   results.sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true }));
   const at = new Date().toISOString();
   const rep = { at, mode: o.mode, model: o.mode === 'live' ? 'switch' : o.model, skipped,

@@ -85,7 +85,7 @@ export function extractNumbers(text) {
   return out;
 }
 
-const norm = s => String(s).toLowerCase().replace(/[*_`]/g, '').replace(/\s+/g, ' ').trim();
+const norm = s => String(s).toLowerCase().replace(/[*_`]/g, '').replace(/[\u2010-\u2015]/g, '-').replace(/\s+/g, ' ').trim();
 
 // ---------- scoring ----------
 // q.kind: 'number' (tolerance = relative, default 0.01), 'text' (truth substring), 'oneof' (any of truth[]),
