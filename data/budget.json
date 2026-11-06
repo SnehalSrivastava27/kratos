@@ -1,0 +1,8 @@
+{
+  "total_marketing_budget": 500000,
+  "guidance": { "ads": 300000, "influencers": 150000, "creative_production": 50000 },
+  "sale": { "discount_pct": 30, "days": 5 },
+  "unit_costs": { "shipping_per_order": 60, "payment_gateway_pct": 2, "returns_pct_of_revenue": 8, "units_per_order": 1.3 },
+  "fixed_costs_sale_period": 350000,
+  "rule": "Total marketing spend must not exceed the budget and EBITDA must be positive."
+}
