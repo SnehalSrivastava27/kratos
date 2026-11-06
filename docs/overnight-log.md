@@ -16,7 +16,7 @@ findings list. It feeds the blog.
 | A | LV1: live bring-up: Haiku model for team agents, switch-up.sh (16 agents), topic tags, live QA Lab eval, live check of SW1/SW2/SW3 | agent LV1 | merged (live: 16 agents on Haiku); QA Lab live eval blocked: group not linked to an account |
 | A | K3: fast answers: data marts + `kit metric` one-shot D2C metrics, cheat sheet for agents | agent K3 | running |
 | A | E2: harder eval tier (joins, date windows, refusals, multi-step), run on Haiku, fix agent instructions | agent E2 | running |
-| A | SW4: survey every Switch 0.31.0 feature, build the best 2–3 (roles, schedules, approvals…) | agent SW4 | done, in review |
+| A | SW4: survey every Switch 0.31.0 feature, build the best 2–3 (roles, schedules, approvals…) | agent SW4 | merged |
 | A | DM1: demo feed with pinned plan, private nudge, catch-up beats; demo/script.md; README for v2 | agent DM1 | merged |
 | B | Full live festive-sale demo in War Room (after LV1 + E2 fixes synced) | LV1 | |
 | B | BL1: blog pack: every feature documented, new Excalidraw diagrams, findings | agent BL1 | |
@@ -30,6 +30,7 @@ findings list. It feeds the blog.
 | 02:05 | SW4 done: Switch room roles (finance-approver, ops-oncall) + server-side 09:00 morning brief; survey of ~40 Switch features in docs/switch/12. Adversarial review started; instruction patches routed to E2. |
 | 02:15 | DM1 merged: demo now shows Finance's private nudge (violet pulse, hidden from chat) and the plan + sign-off pinned in Switch; 48-event feed validates; video script in demo/script.md; README rewritten for v2. Landing now hides private notes. |
 | 02:30 | LV1 merged: all 16 team agents live in Switch on claude-haiku-5-5 (Switch passes definition.model to `claude --model`); office server + observer restarted on backend-v2. Haiku offline check 32/32 (p50 12 s). Live QA Lab blocked: no account has linked the group yet (needs the founder: signup → /connect → send code). SW4 review: no blockers, 5 low fixes sent back. |
+| 02:45 | SW4 merged after fixes (atomic brief marker, agent-only role notices, roles never re-created after a human deletes them); 69/69 server tests. BL1 blog pack started. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
