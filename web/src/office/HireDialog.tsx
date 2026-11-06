@@ -13,7 +13,8 @@ import { SHELF_LABEL } from './engine/library';
 
 
 const COLORS = ['#ef476f', '#ff8a5b', '#f4a300', '#06d6a0', '#118ab2', '#5bc0eb', '#9d4edd', '#2b2d42'];
-const safeUrl = (u: string) => /^https?:\/\//i.test(u);
+/** Links we'll open for the console step: the web, or the Switch desktop app (switchdash://open/template/<id>). Nothing else. */
+const safeUrl = (u: string) => /^(https?|switchdash):\/\//i.test(u);
 
 export function HireDialog({ desk, room0, library, onClose, onHire }: {
   desk?: string; room0: string; library: Library | null; onClose: () => void;
@@ -40,7 +41,8 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
     try {
       const r = await onHire({ ...f, name: f.name.trim(), role: f.role.trim(), instructions: f.instructions.trim(), skills });
       const d = r.data;
-      if ('action' in d && d.action.kind === 'open_url' && safeUrl(d.action.url)) setPending({ url: d.action.url, label: d.action.label || 'Finish in Switch Console', name: d.employee.name });
+      // A 202 always means a human step is left: show it (with a link only when it's one we trust), never a silent success.
+      if ('action' in d) setPending({ url: d.action.kind === 'open_url' && safeUrl(d.action.url) ? d.action.url : '', label: d.action.label || 'Finish in Switch Console', name: d.employee.name });
       else onClose();
     } catch (e) {
       setErr(e instanceof Error ? e.message : 'Could not hire');
@@ -54,7 +56,11 @@ export function HireDialog({ desk, room0, library, onClose, onHire }: {
       <Modal title="One more step" onClose={onClose}>
         <div className="ao-body text-[15px] font-bold">
           <p className="mb-4">{pending.name} has a desk, but Switch needs a human to finish creating the agent. Open the Switch Console, confirm, and they start work.</p>
-          <a href={pending.url} target="_blank" rel="noopener noreferrer" className="ao-btn primary !h-11 !text-[15px]"><ExternalLink /> {pending.label}</a>
+          {pending.url ? (
+            <a href={pending.url} target="_blank" rel="noopener noreferrer" className="ao-btn primary !h-11 !text-[15px]"><ExternalLink /> {pending.label}</a>
+          ) : (
+            <p className="text-[var(--muted)]">Open Switch Console and finish setting up {pending.name} there.</p>
+          )}
         </div>
       </Modal>
     );

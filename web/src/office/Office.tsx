@@ -221,7 +221,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     const r = await api.hire(body, hireAt?.desk);
     const e = 'action' in r.data ? r.data.employee : r.data;
     joinPeople([{ id: e.id, name: e.name, emoji: e.emoji, kind: 'agent', zone: deskById[e.desk]?.zone ?? roomZone[e.room], color: e.color, desk: e.desk, room: e.room, role: e.role }], true);
-    toast(`${e.name} is on the way to their desk`);
+    toast('action' in r.data ? `${e.name} has a desk: finish them in Switch Console` : `${e.name} is on the way to their desk`);
     if (r.mock) echo({ room: e.room, speaker: e.id, type: 'hired', text: `👋 **${e.name}** joined as ${e.role}` });
     return r;
   };
