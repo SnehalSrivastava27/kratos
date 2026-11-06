@@ -10,7 +10,7 @@ import { openStore, closeStore, addEvent, getEvent, recent, roomEvents, roomStat
 import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, ipKey, sha as shaHex, type User } from "./auth.js";
 import { resolveWs, userWorkspaces, allWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, upgradeAll, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
-import { handleOffice, syncPending, employeePerson } from "./office.js";
+import { handleOffice, syncPending, employeePerson, tagCatchUp } from "./office.js";
 import { SwitchError, switchHealth } from "./switch.js";
 import { handleLibrary } from "./library/index.js";
 import { handleQa } from "./qa.js";
@@ -319,6 +319,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     if (dup) return send(res, 200, dup);
     if (sid && inflight.has(sid)) return send(res, 202, { ok: true, stored: false, duplicate: true }); // a copy is being ingested
     if (sid) inflight.add(sid);
+    tagCatchUp(ev as OfficeEvent); // a fresh hire's first message: meta.kind "catch_up"
     try {
       const { event, linked } = await ingest(ev as OfficeEvent);
       if (!event) return send(res, 202, { ok: true, stored: false, linked: !!linked }); // no workspace: a link attempt only

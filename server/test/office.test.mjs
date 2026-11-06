@@ -240,6 +240,54 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
   }
 });
 
+const KICKOFF = (id) => `@${id} you just joined — catch up and say hello`;
+/** Office posts so far: [path, body or content, thread_id] (the kickoff is sent in the background). */
+const officePosts = () => calls.filter((c) => /^\/agents\/office-1\/(message|ops\/post_message)$/.test(c.path)).map((c) => [c.path, c.json.body ?? c.json.content, c.json.thread_id ?? null]);
+async function until(fn, ms = 3000) {
+  for (const end = Date.now() + ms; Date.now() < end; await new Promise((r) => setTimeout(r, 25))) if (fn()) return;
+  assert.fail("timed out");
+}
+
+test("new hire joins briefed: read_context block in instructions, one kickoff in its topic once live, catch_up tag", async () => {
+  const DATA_DIR = tmp();
+  let s = await start({ DATA_DIR, KICKOFF_WAIT_MS: "1" });
+  try {
+    assert.equal((await post(s, "/api/employees", hire())).status, 201);
+    const ins = calls.find((c) => c.path === "/gateway/management/agents" && c.method === "POST").json.definition.instructions;
+    assert.match(ins, /FIRST THING YOU DO[\s\S]*mcp__switch__read_context with \{"limit": 100\}[\s\S]*mcp__switch__post_message[\s\S]*Caught up on[\s\S]*_Next: @d2c-ads /, "catch-up addresses the Ads lead");
+    await until(() => officePosts().length);
+    const live = calls.findIndex((c) => c.path === "/gateway/agents/sw-d2c-priya-shah" && c.method === "GET");
+    const kick = calls.findIndex((c) => c.path === "/agents/office-1/ops/post_message");
+    assert.ok(live >= 0 && live < kick, "waits for the session to be live first");
+    assert.deepEqual(officePosts(), [["/agents/office-1/ops/post_message", KICKOFF("d2c-priya-shah"), "sw_thread_ads"]], "once, in the Ads topic");
+
+    // no topic thread known → War Room (top level); not live in time → sent anyway
+    fake.notLive = true;
+    calls.length = 0;
+    assert.equal((await post(s, "/api/employees", hire({ name: "Ravi", room: "ops" }))).status, 201);
+    await until(() => officePosts().length);
+    assert.deepEqual(officePosts(), [["/agents/office-1/message", KICKOFF("d2c-ravi"), null]]);
+    assert.equal(calls.find((c) => c.path === "/agents/office-1/message").json.room_id, "room-1");
+
+    // the hire's first message is its catch-up; later ones are not
+    const send = (text) => post(s, "/api/events", { t: Date.now(), room: "ads", speaker: "d2c-priya-shah", type: "message", text, meta: { switch_room_id: "room-1" } }).then((r) => r.json());
+    assert.equal((await send("🧾 **Caught up on the sale plan**")).meta.kind, "catch_up");
+    assert.equal((await send("later")).meta.kind, undefined);
+  } finally {
+    fake.notLive = false;
+    await s.stop();
+  }
+  // a restart (the same employees synced back) kicks nobody off
+  calls.length = 0;
+  s = await start({ DATA_DIR, KICKOFF_WAIT_MS: "1" }, { linked: false });
+  try {
+    await new Promise((r) => setTimeout(r, 300));
+    assert.deepEqual(officePosts(), []);
+  } finally {
+    await s.stop();
+  }
+});
+
 test("hiring fallback: no managed agents → one-agent template + 202 open_url", async () => {
   fake.managementDown = true;
   const s = await start();
@@ -253,6 +301,8 @@ test("hiring fallback: no managed agents → one-agent template + 202 open_url",
     const tpl = JSON.parse(calls.findLast((c) => c.path === "/gateway/templates").json.content);
     assert.equal(tpl.agents[0].name, "d2c-dev");
     assert.equal(tpl.agents[0].addressing, "anyone");
+    await new Promise((r) => setTimeout(r, 200));
+    assert.deepEqual(officePosts(), [], "no kickoff until the agent exists (syncPending never kicks off)");
   } finally {
     fake.managementDown = false;
     await s.stop();

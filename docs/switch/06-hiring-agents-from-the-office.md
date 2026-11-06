@@ -53,9 +53,47 @@ The hire's instructions are built from the form plus the team's rules:
 e.instructions,
 `Skills from the office library to use when relevant: ${e.skills.join(", ")}.`,
 telegramStyle(root),            // switch/TELEGRAM_STYLE.md, re-read on every hire
-`… yours is ${topic}. … Reply in the topic that addressed you … Report to @d2c-captain.`
+`… yours is ${topic}. … Reply in the topic that addressed you … Report to @${lead}.`, // reports_to, else the department lead
+catchUpBlock(topic, lead),     // "FIRST THING YOU DO", see below
 ```
 (`server/src/office.ts:92-103`)
+
+## Joining already briefed (read_context)
+
+A hire should not ask "what's going on?". Its first turn is a catch-up:
+
+1. **The instructions say so.** Every hire's instructions end with a "FIRST THING YOU DO" block
+   (`catchUpBlock`, `server/src/office.ts:90-100`): call `mcp__switch__read_context` with
+   `{"limit": 100}`, read the War Room (top-level threads) and its department topic (the thread of
+   the message that addressed it), then post **one** catch-up with `mcp__switch__post_message` in
+   that thread: a bold "🧾 **Caught up on …**" title, 2-4 bullets, an italic Next line to its lead.
+2. **The server gives it a first turn.** Right after create + join, the server waits until Switch
+   shows the agent `live` in the room (`GET /gateway/agents/{id}`, `rooms[].status`; up to
+   `KICKOFF_WAIT_MS`, default 2 min, `server/src/switch.ts:261-271`), then `d2c-office` posts
+   `@<new-agent> you just joined — catch up and say hello` in the department topic, or top level
+   (War Room) when Switch has no thread for it yet (`server/src/office.ts:124-133`). Waiting matters:
+   a new agent connection starts at its newest event, so a message sent before Console's
+   controller is watching never arrives (`switch:bridges/agent/api/handlers.py:766-829`).
+   Only fresh managed hires get it; template fallbacks, `syncPending` and restarts do not.
+3. **The office sees it.** The hire's next message through the observer is tagged
+   `meta.kind: "catch_up"` (`tagCatchUp`, `server/src/office.ts:119-122`).
+
+How `read_context` works (switch-core 0.31.0):
+
+- It is an agent **operation**; every operation is also an MCP tool of the Switch MCP server
+  (`switch:bridges/agent/mcp/server.py:161-169`), which Claude Code shows as
+  `mcp__switch__<tool>` (Console's agent-controller skill text, `agent-controller.mjs:79213`).
+  Over HTTP it is `POST /agents/{id}/ops/read_context`, or `GET /agents/{id}/rooms/{room}/history`
+  (`switch:bridges/agent/api/handlers.py:1653`).
+- Args: `limit` (default 50, capped at 500, `switch:bridges/agent/protocol/agent_core.py:183-186`),
+  `since` / `before` (ISO-8601), `room_id` (omit = the connected room; any room you are a member of
+  otherwise). It has no thread filter: it reads the whole room
+  (`switch:bridges/agent/operations/definitions.py:639-731`).
+- Returns `{threads: [{root, replies}], truncated, oldest_timestamp}`, freshest thread last; each
+  entry is `{id, kind: "message"|"room_join", sender, sender_name, body, timestamp, attachments}`.
+  Reading the connected room also clears its unread count.
+
+(`switch:` paths here are `switch_core/` in the installed 0.31.0 package.)
 
 ## Auto mode
 

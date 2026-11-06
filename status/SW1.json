@@ -1,0 +1,7 @@
+{ "task": "SW1", "state": "done", "progress": 100,
+  "done": [
+    "Hire instructions end with a FIRST THING YOU DO block: mcp__switch__read_context {limit:100} (verified in switch-core 0.31.0 definitions.py:639 + MCP server.py:161-169), then one TELEGRAM_STYLE catch-up via mcp__switch__post_message in the topic thread, Next line to reports_to / dept lead",
+    "Fresh managed hires get one kickoff from d2c-office ('@<id> you just joined — catch up and say hello') in their dept topic (top level if no thread) once Switch shows them live (waitLive, KICKOFF_WAIT_MS); none for template fallback, syncPending or restarts; their next observed message gets meta.kind 'catch_up'",
+    "Tests in server/test/office.test.mjs (build, 58 pass + 1 pre-existing skip, check ok); docs 06 'Joining already briefed' + README feature row"
+  ],
+  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-07T14:40:00+05:30" }
