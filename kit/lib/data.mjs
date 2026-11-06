@@ -49,7 +49,9 @@ function cacheFile(realDir) {
 // Read-only from here on: query_only, defensive, and an authorizer that allows only reads and plain functions.
 function harden(db) {
   db.exec('PRAGMA query_only = ON');
-  db.enableDefensive(true);
+  // Fail closed: the authorizer is the real guard, so a Node without it can't run kit.
+  if (typeof db.setAuthorizer !== 'function') throw new Error(`kit needs a Node with node:sqlite setAuthorizer (Node 24+); this is ${process.version}`);
+  if (typeof db.enableDefensive === 'function') db.enableDefensive(true); // extra hardening where available
   db.setAuthorizer((code, a1, a2) => {
     if (code === C.SQLITE_SELECT || code === C.SQLITE_READ || code === C.SQLITE_RECURSIVE) return C.SQLITE_OK;
     if (code === C.SQLITE_FUNCTION) return DENY_FN.has(String(a2).toLowerCase()) ? C.SQLITE_DENY : C.SQLITE_OK;

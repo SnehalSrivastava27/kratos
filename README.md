@@ -187,7 +187,7 @@ chats appear only in your office. The public site shows only the demo.
 
 ## 8. Setup
 
-You need Node 22.13+ (24 recommended) and Python 3. The live version also needs Switch Console and Telegram.
+You need Node 24+ (the toolkit needs node:sqlite's authorizer) and Python 3. The live version also needs Switch Console and Telegram.
 
 ### 8a. Just see it (no Switch, no Telegram)
 
