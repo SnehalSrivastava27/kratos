@@ -1,15 +1,19 @@
-{ "task": "P1", "state": "done", "progress": 100,
+{
+  "task": "P1",
+  "state": "done",
+  "progress": 100,
   "done": [
     "Full-screen /office like agent-office: walk the founder (WASD/arrows/click), follow camera, E/N/T/F/Esc, ⌘K command bar, spectator toggle; Telegram topics drawer + chat as pinnable overlays (bottom sheets on phones).",
     "Hire at empty desks (west wing open desks + spare desks), skills library (instanced spines from /api/library, +N more plaques, SKILL.md reader, re-shelve), librarian walking shelves, dog, jukebox lo-fi, gallery wall, lawn + day light.",
-    "v3: workspace-scoped live mode (?ws, credentials, onUnauthorized, never the demo), hero autoplay (clean badges, one 2-line bubble, cinematic framing, onReady, /office?poster), safe Telegram markdown, Lucide department icons."
+    "v3: workspace-scoped live mode (?ws, credentials, onUnauthorized, never the demo), hero autoplay (clean badges, one 2-line bubble, cinematic framing, onReady, /office?poster), safe Telegram markdown, Lucide department icons.",
+    "Review fixes: per-mount people (no cross-workspace hires), switchdash:// console step, unsigned look hash, linear-time markdown cap, library error + retry, 20-skill cap, Approve/Ask changes → /api/command, 1008/4401 → onUnauthorized, modal focus trap, rAF hover, 409 = group still being set up. Poster: /demo?demo&poster (dev)."
   ],
   "next": "",
   "blockers": [],
   "contract_requests": [
     "POST /api/employees: accept optional `desk` (the desk the founder pressed E at); today the server picks, the client seats them where the server says.",
     "Server desk assignment should use contracts/zones.json `desks` (desk id '<zone>#<i>', index 0 = owner) so hires land on desks that exist in the 3D office.",
-    "e2e/smoke.mjs '/office renders an event within 15s' assumes the old local-replay fallback; live mode no longer falls back (v3). Use /office?demo or a signed-in workspace.",
     "landing/data.ts DEPT has no 'librarian' entry: Threads/Approve crash on the roster's librarian (seen on /)."
   ],
-  "updated": "2026-11-06T21:30:00+05:30" }
+  "updated": "2026-11-06T23:10:00+05:30"
+}
