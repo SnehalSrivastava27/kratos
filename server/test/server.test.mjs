@@ -159,7 +159,7 @@ test("rooms and agents are derived from events", async () => {
     assert.equal(fin.group, "Kratos D2C");
     assert.equal(fin.topic, "Ops");
     assert.deepEqual(fin.members.sort(), ["d2c-captain", "d2c-ops", "founder"]);
-    assert.equal(rooms.find((r) => r.id === "war_room").members.length, 7);
+    assert.equal(rooms.find((r) => r.id === "war_room").members.length, 8); // founder + 6 department agents + librarian
     assert.equal(rooms.find((r) => r.id === "ads").last, null);
 
     const agents = Object.fromEntries((await (await fetch(s.base + "/api/agents")).json()).map((a) => [a.id, a]));
