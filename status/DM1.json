@@ -1,0 +1,4 @@
+{ "task": "DM1", "state": "working", "progress": 35,
+  "done": ["feed: private Finance nudge + revision, pinned plan + Finance sign-off docs, under-₹1L amounts; validate.mjs checks them"],
+  "next": "play /demo with Playwright, script.md, README v2",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T08:10:00+05:30" }
