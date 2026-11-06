@@ -161,7 +161,7 @@ style. They run offline (`claude -p`) or live through Switch in the **QA Lab** t
 | Tier | Questions | Score |
 |---|---|---|
 | 1: trivial facts + style | 84 | **84/84** (all 16 agents) |
-| 2: joins, date windows, refusals, multi-step | _tbd_ | _tbd (orchestrator fills this in)_ |
+| 2: joins, date windows, ranks, refusals, prompt injections | 65 | **65/65** on Haiku (149/149 overall, $0.20 a run; Sonnet 148/149 at $3.07). History: [`evals/reports/HISTORY.md`](evals/reports/HISTORY.md) |
 
 ## 7. The office (`/app`)
 
