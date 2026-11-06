@@ -105,6 +105,7 @@ DEFINITIONS
 - ROAS = SUM(revenue) / SUM(spend), never AVG(roas). A % = 100.0 * part / whole.
 - RTO % = distinct orders with status 'rto' / distinct orders not 'cancelled'.
 - The question gives its own definition? Use it word for word.
+- A column already holds the answer (rto_pct, roas, share_of_orders)? Read it; don't recompute.
 - Rupees to lakhs in SQL: ROUND(x/100000.0, 2).
 
 TABLES (kit sql: each data/*.csv is a table named after its file)

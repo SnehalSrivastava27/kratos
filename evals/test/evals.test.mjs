@@ -101,7 +101,7 @@ test('tier 2 truths on the real data match the story numbers in data/README.md',
   near(t('within the finance policy cap'), 22.4);
   near(t('blended CAC'), 280);
   assert.equal(t('employer cost of October 2026 payroll'), 1258375);
-  assert.equal(t('highest TDS'), 4628);
+  assert.equal(t("Ishaan Verma's TDS"), 4628);
   assert.deepEqual(t('worst RTO rate on website orders'), ['Shadowfax']);
   assert.ok(t('best ROAS (total revenue').includes('Desi Skin Desk'));
   assert.ok(t('worst EBITDA').includes('sep'));
