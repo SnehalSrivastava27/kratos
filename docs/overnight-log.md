@@ -32,6 +32,7 @@ findings list. It feeds the blog.
 | 02:30 | LV1 merged: all 16 team agents live in Switch on claude-haiku-5-5 (Switch passes definition.model to `claude --model`); office server + observer restarted on backend-v2. Haiku offline check 32/32 (p50 12 s). Live QA Lab blocked: no account has linked the group yet (needs the founder: signup → /connect → send code). SW4 review: no blockers, 5 low fixes sent back. |
 | 02:45 | SW4 merged after fixes (atomic brief marker, agent-only role notices, roles never re-created after a human deletes them); 69/69 server tests. BL1 blog pack started. |
 | 03:00 | K3 merged: `kit metric` (50 named D2C metrics with definitions + the SQL that ran), `kit brief <dept>`, cached read-only marts; p50 kit sql 199 → ~65 ms, metric 61 ms; 27/27 kit tests. E2 told to move agents onto kit metric. |
+| 03:20 | K3 security review: no injection, planted cache can't execute; 5 lows fixed (lockdown before trusting cache, ctime+inode signature, in-memory for outside --data, hasOwn lookups, real calendar dates); 28/28 kit tests. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
