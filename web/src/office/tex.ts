@@ -92,6 +92,7 @@ export function screenTex() {
 
 export function neonTex(text: string, col: string) {
   return paint(640, 128, (g, W, H) => {
+    g.fillStyle = '#2b2d42'; g.fillRect(0, 0, W, H);
     g.font = `800 64px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.shadowColor = col; g.shadowBlur = 26; g.fillStyle = col;
     g.fillText(text, W / 2, H / 2 + 4); g.fillText(text, W / 2, H / 2 + 4);

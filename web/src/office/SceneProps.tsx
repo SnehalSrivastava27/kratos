@@ -9,6 +9,7 @@ import { CITIES, FONT, bannerTex, drawWarScreen, indiaTex, paint, repaint, scree
 import { mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
 import { useAge } from './useAge';
 
+const GW = 2.4, GH = 1.5;
 const WALL_FACE = WALL.backZ + WALL.t / 2 + 0.06;
 const lakh = (n: number) => `${n < 0 ? '−' : '+'}₹${(Math.abs(n) / 1e5).toFixed(2)}L`;
 const popIn = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 + 2.7 * (x - 1) ** 3 + 1.7 * (x - 1) ** 2);
@@ -55,7 +56,7 @@ export function EbitdaMeter({ ebitda, glow }: { ebitda: number | null; glow: boo
   const needle = useRef<THREE.Group>(null);
   const tex = useMemo(() => paint(512, 320, () => {}), []);
   const board = useMemo(() => {
-    const b = wallBoard(1.9, 1.2, PAL.trim, tex);
+    const b = wallBoard(GW, GH, PAL.trim, tex);
     noOutline(b);
     return b;
   }, [tex]);
@@ -78,13 +79,13 @@ export function EbitdaMeter({ ebitda, glow }: { ebitda: number | null; glow: boo
   useFrame((_, dt) => {
     if (needle.current) needle.current.rotation.z += (target - needle.current.rotation.z) * Math.min(1, dt * 3);
   });
-  // gauge centre on the board face: canvas (256, 230) of 512x320 over a 1.9 x 1.2 face
-  const gy = (0.5 - 230 / 320) * 1.2;
+  // gauge centre on the board face: canvas (256, 230) of 512x320
+  const gy = (0.5 - 230 / 320) * GH, k = GH / 1.2;
   return (
     <group>
-      <group position={[z.x - 1.4, 1.6, WALL_FACE]}>
+      <group position={[z.x - 1.3, 1.5, WALL_FACE]}>
         <primitive object={board} />
-        <group ref={needle} position={[0, gy, 0.12]}>
+        <group ref={needle} position={[0, gy, 0.12]} scale={k}>
           <mesh position-y={0.24} material={toon(PAL.ink)}>
             <boxGeometry args={[0.05, 0.5, 0.04]} />
           </mesh>

@@ -17,7 +17,8 @@
 @media (max-width: 760px) { .hq-live .hq-stage { right: 0; top: 96px; bottom: 38vh } }
 
 /* Name tags and status, over each head (person.ts setLabel / setDoing). */
-.hq-tag { display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap; transform: translateY(-50%) }
+.hq-over { position: absolute; left: 0; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px }
+.hq-tag { display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap }
 .hq-tag-name { font: 800 12px var(--font); background: var(--paper); border: 2.5px solid var(--ink); border-radius: 999px; padding: 1px 9px 2px }
 .hq-tag-state { font: 900 10px var(--font); border: 2px solid var(--ink); border-radius: 999px; padding: 0 7px 1px; background: #e9ecef }
 .hq-tag-working .hq-tag-state { background: var(--warn) }
@@ -27,7 +28,7 @@
 .hq-tag-waiting .hq-tag-name { border-color: var(--bad) }
 
 /* Speech bubble: a cream card with an ink outline and a tail (toon.ts cardSprite). Grows upward from its anchor. */
-.hq-bubble { position: absolute; bottom: 0; left: 0; transform: translateX(-50%); width: max-content; max-width: 260px;
+.hq-bubble { position: relative; width: max-content; max-width: 260px; margin-bottom: 8px;
   background: var(--paper); border: 3px solid var(--ink); border-radius: 16px; padding: 14px 13px 9px; box-shadow: 0 4px 0 rgba(43,45,66,.85);
   animation: hq-bubble 5.2s ease both }
 .hq-bubble::after { content: ''; position: absolute; left: 50%; bottom: -10px; width: 14px; height: 14px; background: var(--paper);
@@ -35,8 +36,8 @@
 .hq-bubble-who { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 900 11px var(--font);
   color: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 1px 9px 2px; text-shadow: 0 1px 0 rgba(0,0,0,.25) }
 .hq-bubble-text { font: 700 13px/1.35 var(--font); white-space: pre-line; text-align: center }
-@keyframes hq-bubble { 0% { opacity: 0; transform: translate(-50%, 8px) scale(.9) } 6% { opacity: 1; transform: translate(-50%, 0) scale(1) }
-  92% { opacity: 1; transform: translate(-50%, 0) } 100% { opacity: 0; transform: translate(-50%, -6px) } }
+@keyframes hq-bubble { 0% { opacity: 0; transform: translateY(8px) scale(.9) } 6% { opacity: 1; transform: none }
+  92% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-6px) } }
 @keyframes hq-pulse { 50% { transform: scale(1.07) } }
 
 /* Zone signs. */
@@ -94,3 +95,7 @@
 .hq-thinking { font-style: italic; opacity: .7; padding: 6px 4px; animation: hq-blink 1.4s infinite; font-weight: 800 }
 @keyframes hq-blink { 50% { opacity: .3 } }
 @media (max-width: 760px) { .hq-panel { top: auto; left: 12px; width: auto; height: calc(38vh - 12px) } }
+@media (max-width: 760px) {
+  .hq-tag-name { font-size: 10px; padding: 0 6px 1px; border-width: 2px } .hq-tag-state { font-size: 9px }
+  .hq-bubble { max-width: 200px; padding: 12px 10px 7px } .hq-bubble-text { font-size: 11.5px }
+}

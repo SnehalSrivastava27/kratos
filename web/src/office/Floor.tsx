@@ -5,10 +5,10 @@ import { useMemo } from 'react';
 import * as THREE from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
 import type { Zone } from '../shared/types';
-import { C, DESK, roster, world, zoneById, zoneColor, zones } from './data';
+import { C, DESK, ZONE_EMOJI, roster, world, zoneById, zoneColor, zones } from './data';
 import { mergeByColor, mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
 import { piece, plant, useModels, type Models } from './models';
-import { chartsTex, neonTex, paint, polaroidTex } from './tex';
+import { FONT, chartsTex, neonTex, paint, polaroidTex } from './tex';
 
 export const PAL = {
   wall: '#fff6ea', trim: '#e8a87c', floor: '#f2d7b0', floorAlt: '#e9c89a', seam: '#d9b88c',
@@ -111,6 +111,37 @@ function glassWall(w: number, h: number) {
   return g;
 }
 
+/** A zone's name painted on the front of its rug: an ink-outlined paper pill lying flat (toon.ts textPlane, on the floor). */
+function floorSign(text: string) {
+  const size = 44;
+  const c = document.createElement('canvas').getContext('2d')!;
+  c.font = `900 ${size}px ${FONT}`;
+  const w = Math.ceil(c.measureText(text).width) + size * 1.2, h = Math.ceil(size * 1.7);
+  const tex = paint(w, h, (g) => {
+    g.font = `900 ${size}px ${FONT}`;
+    g.fillStyle = '#fffaf3'; g.strokeStyle = PAL.ink; g.lineWidth = 6;
+    g.beginPath(); g.roundRect(4, 4, w - 8, h - 8, 18); g.fill(); g.stroke();
+    g.fillStyle = PAL.ink; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(text, w / 2, h / 2 + 3);
+  });
+  const S = 0.0062;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w * S, h * S), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false }));
+  m.rotation.x = -Math.PI / 2;
+  m.userData.w = w * S;
+  return m;
+}
+
+let fontReady: Promise<void> | null = null;
+let fontOk = false;
+/** Suspends until Nunito is in (or 2s pass), so canvas-painted signs use it. */
+function useFont() {
+  if (fontOk) return;
+  fontReady ??= Promise.race([document.fonts.load(`900 44px Nunito`).then(() => {}), new Promise<void>((r) => setTimeout(r, 2000))]).then(() => {
+    fontOk = true;
+  });
+  throw fontReady;
+}
+
 function cardboard(s = 1) {
   const g = new THREE.Group();
   g.add(mesh(roundedBox(0.5 * s, 0.4 * s, 0.5 * s, 0.03), toon('#d4a373'), 0, 0.2 * s, 0));
@@ -150,6 +181,9 @@ function buildOffice(m: Models) {
   for (const z of zones) {
     const col = '#' + new THREE.Color(zoneColor(z.id)).lerp(new THREE.Color('#ffffff'), 0.62).getHexString();
     add(mesh(roundedBox(z.w - 0.4, 0.04, z.d - 0.4, 0.35), toon(col)), z.x, 0.02, z.z);
+    const sign = floorSign(`${ZONE_EMOJI[z.id]} ${z.label.toUpperCase()}`);
+    sign.position.set(z.x - z.w / 2 + 0.35 + sign.userData.w / 2, 0.05, z.z + z.d / 2 - 0.5);
+    root.add(sign);
   }
 
   // Desks for everyone with a home zone (the captain runs the war-room table).
@@ -206,8 +240,7 @@ function buildOffice(m: Models) {
   const stock = ['#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#f4a261', '#9d4edd'];
   for (let s = 0; s < 3; s++) for (let k = 0; k < 6; k++) rack.add(mesh(roundedBox(0.26, 0.3, 0.3, 0.05), toon(stock[(k + s * 2) % 6]), -0.82 + k * 0.33, 0.33 + s * 0.5, 0));
   add(rack, ds.x, 0, ds.z - 0.95);
-  const sign = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 0.48), new THREE.MeshBasicMaterial({ map: neonTex('⚡ 10-MIN DELIVERY', C.saffron), transparent: true, toneMapped: false }));
-  add(sign, ds.x, 2.05, ds.z - 0.95);
+  add(wallBoard(2.3, 0.46, PAL.ink, neonTex('⚡ 10-MIN DELIVERY', C.saffron)), ds.x, 2.1, ds.z - 0.95);
   // Chai pantry: the kitchen counter + espresso machine + fridge, poufs to perch on.
   const chai = zoneById.chai_pantry;
   const kitchen = piece(m.kitchen);
@@ -217,7 +250,7 @@ function buildOffice(m: Models) {
   add(piece(m.lounge, 'pouf', { Cloth: '#06d6a0' }), chai.x + 1.6, 0, chai.z + 0.6).scale.setScalar(0.7);
   // Founder's corner: a sofa and coffee table beside the desk.
   const fd = zoneById.founder_desk;
-  add(piece(m.lounge, 'sofa'), fd.x + 1.95, 0, fd.z + 0.3, -Math.PI / 2).scale.setScalar(0.5);
+  add(piece(m.lounge, 'sofa'), fd.x + 1.85, 0, fd.z + 0.2, -Math.PI / 2).scale.setScalar(0.62);
   // Finance: a filing cabinet. Design: a mood board easel.
   const fin = zoneById.finance_cabin;
   add(mesh(roundedBox(0.6, 1.1, 0.5, 0.06), toon('#adb5bd')), fin.x - 0.3, 0.55, fin.z - 1.55);
@@ -235,6 +268,7 @@ function buildOffice(m: Models) {
 }
 
 export default function Floor({ onPick }: { onPick: (z: Zone | null) => void }) {
+  useFont();
   const models = useModels();
   const { merged, floor } = useMemo(() => {
     const merged = mergeByColor(buildOffice(models));

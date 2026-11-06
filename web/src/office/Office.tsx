@@ -1,13 +1,13 @@
+/// <reference types="vite/client" />
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { OutlineEffect } from 'three/examples/jsm/effects/OutlineEffect.js';
 import type { OfficeEvent, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
 import Floor from './Floor';
 import Character from './Character';
-import { ZONE_EMOJI, caption, ctx, firstLine, roster, zoneById, zones } from './data';
+import { caption, ctx, firstLine, roster, zoneById } from './data';
 import SidePanel from './SidePanel';
 import { reduce } from './officeState';
 import { ScenePropsLayer } from './SceneProps';
@@ -47,11 +47,6 @@ export default function Office({ mode, feed }: { mode: 'live' | 'autoplay'; feed
           </Suspense>
           <ScenePropsLayer scene={scene} gallery={gallery} />
           {roster.map((p) => <Character key={p.id} person={p} ps={scene.people[p.id]} celebrateId={scene.confettiId} />)}
-          {zones.map((z) => (
-            <Html key={z.id} position={[z.x - z.w / 2 + 0.45, 0.05, z.z + z.d / 2 - 0.35]} zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
-              <div className="hq-zone">{ZONE_EMOJI[z.id]} {z.label}</div>
-            </Html>
-          ))}
           <CameraRig focus={focus} />
           <Outlines />
         </Canvas>
@@ -77,11 +72,19 @@ function Outlines() {
   const { gl, scene, camera } = useThree();
   const fx = useMemo(() => new OutlineEffect(gl, { defaultThickness: 0.0035, defaultColor: [0.17, 0.18, 0.26] }), [gl]);
   useFrame(() => fx.render(scene, camera), 1);
+  if (import.meta.env.DEV) {
+    // dev probe for the screenshot loop: meshes in the scene and draw calls in the last frame
+    (window as unknown as { __hqInfo: () => object }).__hqInfo = () => {
+      let meshes = 0;
+      scene.traverse((o) => { if ((o as THREE.Mesh).isMesh && o.visible) meshes++; });
+      return { meshes, calls: gl.info.render.calls };
+    };
+  }
   return null;
 }
 
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
-const AZ = 0.38, EL = 0.9;
+const AZ = 0.26, EL = 0.86;
 const FIT_PTS = [
   [-12.4, 0, 8.4], [12.4, 0, 8.4], [12.4, 0, -8.2], [-12.4, 2.6, -8.2], [12.4, 2.6, -8.2], [-12.4, 2.6, 8.4],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
@@ -108,7 +111,7 @@ function fitHome(cam: THREE.PerspectiveCamera, aspect: number) {
     right.setFromMatrixColumn(c.matrixWorld, 0);
     up.setFromMatrixColumn(c.matrixWorld, 1);
     tgt.addScaledVector(right, ((x0 + x1) / 2) * half * aspect).addScaledVector(up, ((y0 + y1) / 2) * half);
-    const crop = aspect < 1 ? 0.62 : 0.94; // portrait: let the sides run off rather than shrink everything
+    const crop = aspect >= 1.2 ? 0.88 : 0.5; // portrait: let the sides run off rather than shrink everything
     d *= Math.max((y1 - y0) / 2, ((x1 - x0) / 2) * crop) / 0.96;
   }
   return { pos: c.position.clone(), tgt };

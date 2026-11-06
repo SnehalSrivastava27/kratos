@@ -101,23 +101,24 @@ export default function Character({ person, ps, celebrateId }: { person: RosterP
   });
 
   const shown: AgentState = walking ? 'walking' : ps.state;
+  const talking = !!bubble && ps.bubble?.id === bubble.id;
   return (
     <primitive object={p.root}>
       <primitive object={ring} />
-      <Html position={[0, 2.12, 0]} center zIndexRange={[10, 0]} style={{ pointerEvents: 'none' }}>
-        <div className={`hq-tag hq-tag-${shown}`}>
-          <span className="hq-tag-name">{person.emoji} {person.name}</span>
-          {shown !== 'idle' && <span className="hq-tag-state">{ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]}</span>}
+      <Html position={[0, 1.95, 0]} zIndexRange={talking ? [40, 30] : [10, 0]} style={{ pointerEvents: 'none' }}>
+        <div className="hq-over">
+          {talking && (
+            <div key={bubble.id} className="hq-bubble">
+              <div className="hq-bubble-who" style={{ background: person.color }}>{person.emoji} {person.name}</div>
+              <div className="hq-bubble-text">{clean(bubble.text)}</div>
+            </div>
+          )}
+          <div className={`hq-tag hq-tag-${shown}`}>
+            {!talking && <span className="hq-tag-name">{person.emoji} {person.name}</span>}
+            {shown !== 'idle' && shown !== 'walking' && <span className="hq-tag-state">{ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]}</span>}
+          </div>
         </div>
       </Html>
-      {bubble && (
-        <Html position={[0, 2.62, 0]} zIndexRange={[30, 20]} style={{ pointerEvents: 'none' }}>
-          <div key={bubble.id} className="hq-bubble">
-            <div className="hq-bubble-who" style={{ background: person.color }}>{person.emoji} {person.name}</div>
-            <div className="hq-bubble-text">{clean(bubble.text)}</div>
-          </div>
-        </Html>
-      )}
     </primitive>
   );
 }
