@@ -1,0 +1,3 @@
+{ "task": "E1", "state": "working", "progress": 10,
+  "done": [], "next": "evals lib + question bank",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:00:00+05:30" }
