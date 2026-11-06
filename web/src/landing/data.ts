@@ -20,7 +20,8 @@ export const TOPICS = ROOMS.map((r) => ({ id: r.id, label: r.topic, owner: AGENT
 /** Stable module-level ref so <Office> doesn't restart its replay on every render. */
 export const saleDemo = feed as OfficeEvent[];
 /** Events the landing mockups show: only people and topics in the current roster. */
-const FEED = saleDemo.filter((e) => PEOPLE[e.speaker] && TOPICS.some((t) => t.id === e.room));
+// Private Switch notes (Finance's nudge) are agent-to-agent; the landing shows only what Telegram shows.
+const FEED = saleDemo.filter((e) => PEOPLE[e.speaker] && TOPICS.some((t) => t.id === e.room) && !(e.meta as { private?: boolean } | undefined)?.private);
 /** Same loop length as the office replay (last event + 5s gap), so the mockups stay roughly in step. */
 export const LOOP_MS = saleDemo[saleDemo.length - 1].t + 5000;
 
