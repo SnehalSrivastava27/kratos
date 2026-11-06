@@ -6,7 +6,7 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { WebSocketServer, WebSocket } from "ws";
 import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
-import { openStore, closeStore, addEvent, getEvent, recent, roomEvents, roomStats, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
+import { openStore, closeStore, addEvent, getEvent, recent, roomEvents, roomStats, documents, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
 import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, ipKey, sha as shaHex, type User } from "./auth.js";
 import { resolveWs, userWorkspaces, allWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, upgradeAll, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
@@ -344,7 +344,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, 200, [...roster.people, ...listEmployees().map((e) => employeePerson(e, roster.rooms))]);
 
   // ---- scoped to one workspace (v3): session (or ADMIN_TOKEN) + ?ws= ----
-  if (/^\/api\/(history|rooms|agents|people|employees|command|library)(\/|$)/.test(url.pathname)) {
+  if (/^\/api\/(history|rooms|agents|people|employees|command|library|documents)(\/|$)/.test(url.pathname)) {
     const { user, ws } = scope(req, url);
     if (route === "GET /api/history") return send(res, 200, recent(ws.id, limitParam(url, 200)));
     if (route === "GET /api/rooms") return send(res, 200, rooms(liveRoster(ws), roomStats(ws.id), recent(ws.id, RING_MAX)));
@@ -353,6 +353,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
       if (!ROOM_IDS.has(roomMatch[1])) return send(res, 404, { error: `unknown room: ${roomMatch[1]}` });
       return send(res, 200, roomEvents(ws.id, roomMatch[1], limitParam(url, 50)));
     }
+    if (route === "GET /api/documents") return send(res, 200, documents(ws.id)); // SW2: room documents pinned in Switch
     if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(ws), recent(ws.id, RING_MAX)));
     if (await handleOffice(req, url, { root: ROOT, roster, ws, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit: emitTo(ws.id) })) return;
     // Library paths are shown only to the office on this Mac (or ADMIN_TOKEN). Re-shelving is host-wide (rewrites

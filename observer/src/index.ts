@@ -145,6 +145,19 @@ export function inferType(text: string): string {
   return "message";
 }
 
+/** Switch announces an agent's room-document change in the room, from that agent, as
+ *  "📄 created|updated room document “<name>”." / "🗑 deleted room document “<name>”."
+ *  (switch_core/bridges/agent/protocol/agent_core.py request_room_document_*). The Switch document id is not on the
+ *  stream, so `id` is the name without its version ("Festive sale plan — v2" → "festive-sale-plan"). */
+export function switchDocument(text: string): { id: string; title: string; version?: number; action: string } | null {
+  const m = text.match(/^(?:\u{1F4C4}|\u{1F5D1}\uFE0F?)\s*(created|updated|deleted) room document \u201c(.+)\u201d\.?$/u);
+  if (!m) return null;
+  const title = m[2].trim();
+  const v = title.match(/\bv(\d+)\s*$/i);
+  const id = title.replace(/[\s\u2014\u2013-]*\bv\d+\s*$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
+  return { id, title, ...(v ? { version: Number(v[1]) } : {}), action: m[1] };
+}
+
 // ---- SSE ----
 /** SSE frames; `onData` is called for every chunk (keepalives too), for the idle watchdog. */
 async function* sse(body: ReadableStream<Uint8Array>, onData: () => void = () => {}): AsyncGenerator<Frame> {
@@ -227,7 +240,9 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
       ...(p.thread_id ? { switch_thread_id: String(p.thread_id) } : {}),
       ...(p.message_id ? { switch_message_id: String(p.message_id) } : {}), // the server dedupes on it
     };
-    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: inferType(text), text, meta };
+    const doc = switchDocument(text);
+    if (doc) Object.assign(meta, { switch_document: doc });
+    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: doc ? "artifact" : inferType(text), text, meta };
     sendToOffice(cfg.server, office, `${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
   }
 

@@ -63,10 +63,28 @@ agents:
          report, ask @d2c-finance again.
       6. Finance approves: make the plan deck, post ONE final plan in War Room (forecast, ads,
          creators, transfers, banners, marketing vs the ₹5L budget, EBITDA from Finance, deck
-         link), then ask @founder to approve.
+         link), then ask @founder to approve. Pin it in Switch first (PIN THE PLAN, below)
+         and add the bullet - **Pinned in Switch:** Festive sale plan v1
       In the sale plan, never invent numbers: use the leads' and Finance's numbers.
       A simple factual question (not a plan)? Answer it yourself from data/ with kit sql, no
       delegation. Only a deep question goes to the one lead who owns it.
+
+      PIN THE PLAN (Switch room document, before the final plan message)
+      - Create it: mcp__switch__create_room_document(name="Festive sale plan — v1",
+        description="Final festive sale plan, Finance approved", instructions="The plan the
+        founder approves. Finance reads it before checking.", content=the full plan text, with
+        the file links). Keep the document_id it returns.
+      - Name taken (an older run)? mcp__switch__list_references, take that document's id, and
+        update it as the next version instead.
+      - Revision after a pushback: mcp__switch__update_room_document(document_id, name="Festive
+        sale plan — v2", content=the new plan). Then the bullet says v2.
+      - Files: mcp__switch__list_reference_types. If it lists kratos_file, for each file you post
+        (/gallery/live-run/sale-plan.pptx, the forecast): mcp__switch__create_reference(type=
+        "kratos_file", name, description, instructions, value={"urls": ["/gallery/live-run/..."]},
+        read_visibility="public"), then mcp__switch__attach_reference_to_room(room_id, reference_id),
+        room_id = the Kratos D2C room from mcp__switch__list_rooms.
+        No kratos_file type? Skip this; the links are in the document.
+      - Switch posts "📄 created room document ..." in the room by itself. Don't repeat it.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
       - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json
@@ -1807,6 +1825,16 @@ agents:
          One fails: push back by @name with the exact gap (₹ to cut and from whom).
          A negative EBITDA is written "EBITDA: loss of ₹76,086", never with a minus sign.
       Asked about team cost or salaries: ask @d2c-payroll in the Finance topic.
+
+      THE PINNED PLAN (Switch room documents)
+      - Before you check (or re-check) the plan: mcp__switch__list_references, find the document
+        "Festive sale plan — vN", read it with mcp__switch__load_internal_documents([its id]).
+        Check that version. Still compute every number yourself with the kit.
+      - On approval, pin your sign-off: mcp__switch__create_room_document(name="Finance sign-off",
+        description=one line, e.g. "Finance sign-off: EBITDA +₹1.29L at ₹5L marketing",
+        instructions="Finance's verdict on the pinned plan", content=that line plus the plan
+        version and the rules checked). Already made it? mcp__switch__update_room_document instead.
+      - Use your real numbers, never the example's.
 
       FILES YOU MAKE (the kit, see switch/TOOLKIT.md)
       - Write a JSON spec, then run e.g. node kit/bin/kit.mjs xlsx spec.json

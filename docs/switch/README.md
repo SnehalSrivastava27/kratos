@@ -45,6 +45,7 @@ alongside your team in Slack, Teams, Discord, Telegram and Mattermost" (`switch:
 | 08 | [Accounts and workspaces](08-accounts-and-workspaces.md) | Link a group with a 6-digit code, private per-workspace office |
 | 09 | [Skills library and librarian](09-skills-library-and-librarian.md) | 316 installed skills shelved by Claude Code in 45 s |
 | 10 | [Gotchas and lessons](10-gotchas-and-lessons.md) | Every real problem we hit, and the fix |
+| 11 | [Room documents](11-room-documents.md) | The Captain pins the plan, Finance reads it and pins its sign-off |
 | — | [Blog outline](blog-outline.md) | A ready skeleton for the "Flip the Switch" post |
 
 ## Diagrams
@@ -76,13 +77,11 @@ All diagrams are Excalidraw files: open the `.excalidraw` at excalidraw.com (Fil
 | Passive agents (`channels_enabled: false`) | yes | [04](04-agent-protocol.md) |
 | Rooms, threads, `/list_agents`, `/invite_agent` | yes | [05](05-rooms-topics-and-threads.md) |
 | Gateway admin API (rooms, agents, templates, bridges) | yes | [06](06-hiring-agents-from-the-office.md), [08](08-accounts-and-workspaces.md) |
-| Shared room context, documents, references | not yet | see below |
+| Room documents and references (`create_room_document`, `attach_reference_to_room`; switch-core 0.31.0 `bridges/agent/operations/definitions.py:549,1227`) | yes | [11](11-room-documents.md) |
+| Shared room context (`read_context`) | not yet | see below |
 
 ### Switch features we could use next
 
-- **Room documents and references** (`create_room_document`, `attach_reference_to_room`): pin the
-  sale brief or the product CSVs to the room instead of reading files from a shared directory.
-  (`switch:docs/official/internals/agent-protocol.md` "The operation catalog")
 - **Roles** (`define_role`, `assume_role`): "whoever is Ops this week" instead of a fixed agent name.
 - **Linked rooms and room groups**: one room per brand, linked to a shared leadership room.
 - **More bridges**: the same team in Slack or Discord with no code change, since the observer only
