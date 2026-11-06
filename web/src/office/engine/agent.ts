@@ -40,7 +40,7 @@ const LOOKS: Record<string, Look> = {
 const lookFor = (id: string): Look => {
   let h = 7;
   for (const c of id) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return { skin: h % 8, hair: (h >> 3) % 10, style: (h >> 7) % 7 };
+  return { skin: h % 8, hair: (h >>> 3) % 10, style: (h >>> 7) % 7 }; // >>>: h can be ≥ 2^31
 };
 const STATE_LABEL: Record<AgentState, string> = { idle: 'Idle', working: 'Working', walking: 'On the move', waiting: 'Waiting', done: 'Done' };
 
