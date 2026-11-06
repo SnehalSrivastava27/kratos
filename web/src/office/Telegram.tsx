@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { OfficeEvent, RoomId } from '../shared/types';
 import type { SceneState } from './officeState';
-import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster } from './data';
+import { ROOMS, TG_GROUP, clean, firstLine, galleryUrl, personById, readable, roomZone, roster, swMeta } from './data';
 import { Tg, tgPlain } from './md';
 import { PersonAvatar, RoomTile } from './icons';
 import { FileChip, isFile } from './FileChip';
@@ -148,6 +148,8 @@ function Message({ e, first, last, onCommand }: { e: OfficeEvent; first: boolean
           {!mine && <br />}
           <Tg text={body} />
         </div>
+        {swMeta(e).kind === 'catch_up' && <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-[#3390EC]/10 px-2 py-0.5 text-[11.5px] font-semibold text-[#1A6FB5]">↻ caught up via Switch</div>}
+        {swMeta(e).switch_document?.title && <div className="mt-1 ml-1 inline-flex items-center gap-1 rounded-full bg-[#F4A300]/15 px-2 py-0.5 text-[11.5px] font-semibold text-[#8a5a00]">📌 Pinned in Switch</div>}
         {e.type === 'artifact' && link && isFile(link) && <FileChip url={link} />}
         {e.type === 'artifact' && link && !isFile(link) && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="mt-1.5 flex gap-2 rounded-md border-l-[3px] border-[#3390EC] bg-[#3390EC]/[0.07] p-1.5 pr-2 no-underline hover:bg-[#3390EC]/[0.12]">
@@ -212,6 +214,14 @@ export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, cl
   const reduce = useReducedMotion();
   const info = topicOf(room);
   const msgs = useMemo(() => events.filter((e) => e.room === room), [events, room]);
+  // Only the latest gate still waiting on a decision keeps its buttons (an old one, or one already answered, doesn't).
+  const openGate = useMemo(() => {
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].type === 'approved') return null;
+      if (msgs[i].type === 'approval_needed') return msgs[i].id;
+    }
+    return null;
+  }, [msgs]);
   const typing = typingIn(room, events, scene);
   const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -246,7 +256,7 @@ export function ChatPane({ room, events, scene, onBack, onCompose, onCommand, cl
           <AnimatePresence initial={false}>
             {msgs.map((e, i) => (
               <motion.div key={e.id} initial={reduce ? false : { opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.22, ease: 'easeOut' }}>
-                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={onCommand} />
+                <Message e={e} first={i === 0 || isMine(msgs[i - 1]) !== isMine(e)} last={i === msgs.length - 1 || isMine(msgs[i + 1]) !== isMine(e)} onCommand={e.id === openGate ? onCommand : undefined} />
               </motion.div>
             ))}
           </AnimatePresence>

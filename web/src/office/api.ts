@@ -17,6 +17,8 @@ const scope: { live: boolean; ws?: string; onUnauthorized?: () => void } = { liv
 export function configureApi(live: boolean, ws?: string, onUnauthorized?: () => void) {
   Object.assign(scope, { live, ws, onUnauthorized });
 }
+/** Which data the calls answer for right now (demo, or a workspace): caches key on it. */
+export const apiScope = () => (scope.live ? `ws:${scope.ws ?? ''}` : 'demo');
 
 async function call<T>(path: string, init: RequestInit | undefined, mock: () => { data: T; status?: number }): Promise<Res<T>> {
   if (!scope.live) {

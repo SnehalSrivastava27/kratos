@@ -4,7 +4,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
-import { DEMO_GROUP, INTERNAL_ROOMS, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
+import { DEMO_GROUP, INTERNAL_ROOMS, isPrivate, roster, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
 import { DEPT, personDept, type Dept } from './icons';
@@ -12,15 +12,16 @@ import { DEPT, personDept, type Dept } from './icons';
 const HintIcon = ({ dept }: { dept: Dept }) => <dept.Icon size={17} color="#ffd166" strokeWidth={2} className="mr-1.5 inline -translate-y-px" />;
 import { HireDialog } from './HireDialog';
 import { LibraryWindow } from './LibraryWindow';
-import { KpiPanel } from './KpiPanel';
+import { KpiPanel, LedgerCard } from './KpiPanel';
+import { AgentCard } from './AgentCard';
 import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
-import { HelpDialog, Hint } from './Hud';
-import { Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
+import { Coach, HelpDialog, Hint } from './Hud';
+import { Armchair, BarChart3, ClipboardList, Coffee, IndianRupee, UserPlus, Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
 import { useDemoDirector } from './demoDirector';
-import { DemoPrompt } from './ApprovalPrompt';
+import { DemoPrompt, PlanCard } from './ApprovalPrompt';
 import { SwitchChip, SwitchPanel } from './SwitchPanel';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
 import type { GalleryItem } from './engine/props';
@@ -115,6 +116,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   }, [events, peopleVer, poster, peopleKey]);
   // the live array never resets: chat UI, the hub wall and the phone only ever see the latest MAX_CHAT events
   const recent = useMemo(() => (events.length > MAX_CHAT ? events.slice(-MAX_CHAT) : events), [events]);
+  // The Telegram side never shows private notes agents send each other through Switch (the hub still pulses them).
+  const chatEvents = useMemo(() => recent.filter((e) => !isPrivate(e)), [recent]);
   const [walls, setWalls] = useState<{ url: string; title: string }[]>([]); // /api/gallery banners (live)
   useEffect(() => {
     if (!isDemo) api.getGallery().then((r) => setWalls(r.data.flatMap((g) => (galleryUrl(g.url) ? [{ url: g.url, title: g.title }] : []))), () => {});
@@ -142,7 +145,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
   const hero = mode === 'autoplay' ? framing ?? 'hero' : null;
-  const stage = <Stage key={peopleKey} interactive={mode === 'live'} hero={hero} scene={scene} events={recent} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks}
+  const stage = <Stage key={peopleKey} interactive={mode === 'live'} hero={hero} scene={scene} events={recent} routed={events.length} gallery={gallery} focus={focus?.id ?? null} onPick={onPick} engineRef={engine} hooks={hooks}
     view={mode === 'live' ? view : 'spectator'} onReady={() => readyRef.current?.()} />;
 
   // Telegram side: which topic is open, unread counts.
@@ -155,9 +158,9 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [seen, setSeen] = useState<Record<string, number>>({});
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
-    for (const e of recent) c[e.room] = (c[e.room] ?? 0) + 1;
+    for (const e of chatEvents) c[e.room] = (c[e.room] ?? 0) + 1;
     return c;
-  }, [recent]);
+  }, [chatEvents]);
   useEffect(() => setSeen((s) => (events.length === 0 ? {} : chat.open ? { ...s, [room]: counts[room] ?? 0 } : s)), [room, counts, events.length, chat.open]);
   const unread = Object.fromEntries(ROOMS.map((r) => [r.id, Math.max(0, (counts[r.id] ?? 0) - (seen[r.id] ?? 0))]));
   const totalUnread = Object.values(unread).reduce((a, b) => a + b, 0);
@@ -229,7 +232,12 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     return ROOMS.find((r) => r.zone === z)?.id ?? room;
   };
   const sendCommand = async (to: RoomId, text: string) => {
-    if (playable && director.command(text)) return { data: { ok: true, via: 'demo' }, status: 202, mock: true };
+    // /demo: the director owns the story. Input it can't use right now is swallowed, never echoed as a stray message
+    // (a stray "Approved ✅" would re-open the gate and stall the hub's pulses).
+    if (playable) {
+      if (!director.command(text)) toast(director.phase === 'done' ? 'The story is over: press Play again to replay it' : 'The team is on it: you’ll get the call when the plan is ready');
+      return { data: { ok: true, via: 'demo' }, status: 202, mock: true };
+    }
     const r = await api.sendCommand(to, text);
     if (r.mock) echo({ room: to, speaker: 'founder', type: 'message', text });
     return r;
@@ -258,18 +266,24 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     void loadLibrary();
     return 'The Librarian is on it: watch her walk the shelves.';
   };
-  const modalOpen = help || !!cmd || !!hireAt || !!libAt || sw;
+  // The founder's stations (E): a teammate's card, the plan, the ledger, the numbers; sitting at their desk.
+  const [card, setCard] = useState<string | null>(null);
+  const [planOpen, setPlanOpen] = useState(false);
+  const [ledger, setLedger] = useState(false);
+  const [kpiOpen, setKpiOpen] = useState(false);
+  const [seated, setSeated] = useState(false);
+  const [nudge, setNudge] = useState(0);
+  const modalOpen = help || !!cmd || !!hireAt || !!libAt || sw || !!card || planOpen || ledger;
   useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
   useEffect(() => engine.current?.setInsets(!narrow && drawer.open ? 332 : 0, !narrow && chat.open ? 402 : 0), [narrow, drawer.open, chat.open]);
 
-  // The Data Wall's numbers: walk up to the wall (player) or click it (either view). Closing hides them until you come back.
-  const [nearWall, setNearWall] = useState(false);
+  // The Data Wall's numbers: E at the wall (player) or click it (spectator). Walking away puts them away.
   useEffect(() => {
-    if (mode !== 'live' || view !== 'player') return setNearWall(false);
-    const id = setInterval(() => setNearWall(engine.current?.playerZone() === 'data_wall'), 400);
+    if (!kpiOpen || view !== 'player') return;
+    const id = setInterval(() => engine.current?.playerZone() !== 'data_wall' && setKpiOpen(false), 400);
     return () => clearInterval(id);
-  }, [mode, view]);
-  const wantKpi = nearWall || focus?.id === 'data_wall';
+  }, [kpiOpen, view]);
+  const wantKpi = kpiOpen || focus?.id === 'data_wall';
   const [kpiShut, setKpiShut] = useState(false);
   useEffect(() => { if (!wantKpi) setKpiShut(false); }, [wantKpi]);
 
@@ -278,14 +292,37 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     engine.current?.jumpTo(waiting);
     openRoom(ROOMS.find((r) => r.zone === personById[waiting]?.zone)?.id ?? 'war_room');
   }
+  const roomOf = (id: string) => {
+    const p = personById[id];
+    return (p as { room?: string })?.room ?? ROOMS.find((rm) => rm.zone === p?.zone)?.id ?? 'war_room';
+  };
+  /** Prefill the command bar in someone's topic, addressed to them. */
+  const askIn = (id: string, text = '') => {
+    const r = roomOf(id);
+    setRoom(r);
+    setCmd({ room: r, text: `@${personById[id]?.name ?? id} ${text}` });
+  };
+  const captain = roster.find((p) => p.zone === 'war_room' && p.kind === 'agent')?.id ?? 'd2c-captain';
+  const financeLead = roster.find((p) => p.zone === 'finance_cabin' && p.lead)?.id;
+  const sit = (on: boolean) => {
+    if (on) engine.current?.sitDown();
+    setSeated(on);
+    setFocus(null);
+    setView(on ? 'spectator' : 'player');
+  };
   /** E: use what you face. */
   function interact(t: Target | null) {
     if (!t) return;
-    if (t.kind === 'agent') {
-      const p = personById[t.id];
-      const r = (p as { room?: string })?.room ?? ROOMS.find((rm) => rm.zone === p?.zone)?.id ?? 'war_room';
-      setRoom(r);
-      setCmd({ room: r, text: `@${p?.name ?? t.id} ` });
+    if (t.kind === 'agent') setCard(t.id);
+    else if (t.kind === 'seat') sit(true);
+    else if (t.kind === 'station') {
+      if (t.id === 'plan') {
+        if (playable && director.phase === 'waiting') setNudge((n) => n + 1); // the approval prompt is already up: point at it
+        else setPlanOpen(true);
+      } else if (t.id === 'kpi') (setKpiShut(false), setKpiOpen(true));
+      else if (t.id === 'hire') setHireAt({ room: 'war_room' });
+      else if (t.id === 'ledger') setLedger(true);
+      else if (t.id === 'chai') engine.current?.chai();
     } else if (t.kind === 'desk') {
       const z = deskById[t.desk]?.zone;
       setHireAt({ desk: t.desk, room: ROOMS.find((r) => r.zone === z)?.id ?? 'war_room' });
@@ -300,6 +337,18 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     if (t.kind === 'desk') return { text: `Hire at this desk · ${zoneById[deskById[t.desk]?.zone]?.label ?? ''}` };
     if (t.kind === 'library') return { text: `Open the library · ${shelfLabel(t.shelf)} shelf`, title: <HintIcon dept={DEPT[t.shelf] ?? DEPT.general} /> };
     if (t.kind === 'agent') return { text: `Talk to ${personById[t.id]?.name ?? t.id}`, title: <HintIcon dept={personDept(personById[t.id])} /> };
+    if (t.kind === 'seat') return { text: 'Sit at your desk · watch the whole office', title: <HintIcon dept={{ ...DEPT.general, Icon: Armchair }} /> };
+    if (t.kind === 'station') {
+      const S = {
+        plan: [ClipboardList, playable && director.phase === 'waiting' ? 'Review the plan · it needs your call' : 'Review the plan'],
+        kpi: [BarChart3, 'See the numbers · Data Wall'],
+        hire: [UserPlus, 'Hire a teammate'],
+        ledger: [IndianRupee, 'Check the ledger · last month’s P&L'],
+        chai: [Coffee, 'Have a chai with the team'],
+      } as const;
+      const [Icon, text] = S[t.id];
+      return { text, title: <HintIcon dept={{ ...DEPT.general, Icon }} /> };
+    }
     if (t.kind === 'dog') return { text: 'Pet the office dog', title: <HintIcon dept={{ ...DEPT.general, Icon: PawPrint }} /> };
     if (t.kind === 'switch') return { text: 'Open Switch · see every message it routes', title: <HintIcon dept={{ ...DEPT.general, Icon: Network }} /> };
     if (t.kind === 'jukebox') return { text: music ? 'Stop the music' : 'Play some lo-fi', title: <HintIcon dept={{ ...DEPT.general, Icon: Music }} /> };
@@ -323,6 +372,10 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     const typing = (e.target as HTMLElement)?.closest?.('input, textarea, select, [contenteditable]');
     if (e.key === 'Escape') {
       if (help) return setHelp(false);
+      if (card) return setCard(null);
+      if (planOpen) return setPlanOpen(false);
+      if (ledger) return setLedger(false);
+      if (kpiOpen) return setKpiOpen(false);
       if (cmd) return setCmd(null);
       if (hireAt) return setHireAt(null);
       if (libAt) return setLibAt(null);
@@ -338,7 +391,10 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     }
     if (typing || modalOpen || e.metaKey || e.ctrlKey || e.altKey) return;
     if (['KeyE', 'KeyN', 'KeyT', 'KeyF'].includes(e.code)) e.preventDefault(); // the key mustn't also type into the window it opens
-    if (e.code === 'KeyE') interact(target);
+    if (e.code === 'KeyE') {
+      if (seated && view === 'spectator') sit(false);
+      else interact(target);
+    }
     else if (e.code === 'KeyN') jumpToWaiting();
     else if (e.code === 'KeyT') setChat((c) => ({ ...c, open: true }));
     else if (e.code === 'KeyF') toggleFull();
@@ -395,7 +451,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
             <button type="button" className="ao-btn tg" onClick={() => setCmd({ room: hereRoom() })} title="Command bar (/ or Ctrl K)">
               <Command /><span className="hidden sm:inline">Message</span>
             </button>
-            <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setView((v) => (v === 'player' ? 'spectator' : 'player')); }}
+            <button type="button" className="ao-btn icon" onClick={() => { setFocus(null); setSeated(false); setView((v) => (v === 'player' ? 'spectator' : 'player')); }}
               title={view === 'player' ? 'Spectator: watch the whole office' : 'Walk the office as the founder'} aria-label={view === 'player' ? 'Spectator view' : 'Walk as the founder'}>
               {view === 'player' ? <Eye /> : <User />}
             </button>
@@ -408,12 +464,12 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
         </header>
         {drawer.open && (
           <div className="ao-panel ao-drawer">
-            <ChatList events={recent} scene={scene} selected={room} unread={unread} onSelect={openRoom} className="border-r-0" actions={panelBtns(drawer, setDrawer, 'topics')} />
+            <ChatList events={chatEvents} scene={scene} selected={room} unread={unread} onSelect={openRoom} className="border-r-0" actions={panelBtns(drawer, setDrawer, 'topics')} />
           </div>
         )}
         {chat.open && (
           <div className="ao-panel ao-chat">
-            <ChatPane room={room} events={recent} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} onCommand={sendCommand} actions={panelBtns(chat, setChat, 'chat')} />
+            <ChatPane room={room} events={chatEvents} scene={scene} className="border-l-0" onCompose={() => setCmd({ room })} onCommand={sendCommand} actions={panelBtns(chat, setChat, 'chat')} />
           </div>
         )}
       </div>
@@ -424,15 +480,27 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
           <div className="text-[13.5px] font-bold text-[var(--muted)]">Say something in {workspace?.name ?? 'your group'}, or press <span className="ao-key">/</span> to write to a topic from here.</div>
         </div>
       )}
-      {view === 'player' && !modalOpen && (() => {
+      {view === 'spectator' && seated && !modalOpen && <Hint title={<HintIcon dept={{ ...DEPT.general, Icon: User }} />} text="Stand up and walk" onClick={() => sit(false)} />}
+      {view === 'player' && !modalOpen && !(playable && director.phase === 'ready') && <Coach touch={typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches} />}
+      {view === 'player' && !modalOpen && !(playable && director.phase === 'waiting') && (() => { /* the approval card owns the bottom while it's up */
         const h = hint(target);
         if (h) return <Hint title={h.title} text={h.text} onClick={() => interact(target)} />;
         if (waiting && director.phase !== 'waiting') return <Hint k="N" onClick={jumpToWaiting} text={`${personById[waiting]?.name ?? 'Someone'} is waiting on you`} red />;
         return null;
       })()}
-      {wantKpi && !kpiShut && !modalOpen && <KpiPanel onClose={() => setKpiShut(true)} style={!narrow && drawer.open ? { left: 344 } : undefined} />}
-      {playable && !modalOpen && <DemoPrompt phase={director.phase} events={events} first={demoFeed[0]} onStart={director.start} onApprove={director.approve} onChanges={() => director.changes()} onRestart={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} />}
+      {wantKpi && !kpiShut && !modalOpen && <KpiPanel onClose={() => (setKpiOpen(false), setKpiShut(true))} style={!narrow && drawer.open ? { left: 344 } : undefined} />}
+      {playable && !modalOpen && <DemoPrompt nudge={nudge} phase={director.phase} events={events} first={demoFeed[0]} onStart={director.start} onApprove={director.approve} onChanges={() => director.changes()} onRestart={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} />}
       {sw && <SwitchPanel events={events} onClose={() => setSw(false)} />}
+      {card && personById[card] && (
+        <AgentCard person={personById[card]} ps={scene.people[card]} last={[...recent].reverse().find((e) => e.speaker === card)}
+          topic={ROOMS.find((r) => r.id === roomOf(card))?.topic ?? 'War Room'} onClose={() => setCard(null)}
+          onAsk={() => (setCard(null), askIn(card))} onAssign={() => (setCard(null), askIn(card, 'New task: '))} />
+      )}
+      {planOpen && (
+        <PlanCard events={events} captain={captain} onClose={() => setPlanOpen(false)} onReply={() => (setPlanOpen(false), askIn(captain))}
+          onStart={playable && director.phase === 'ready' ? () => (setPlanOpen(false), director.start()) : undefined} />
+      )}
+      {ledger && <LedgerCard onClose={() => setLedger(false)} onAsk={financeLead ? () => (setLedger(false), askIn(financeLead, 'About last month’s EBITDA: ')) : undefined} />}
       {help && <HelpDialog onClose={() => setHelp(false)} />}
       {cmd && (
         <CommandBar room0={cmd.room} text0={cmd.text} onClose={() => setCmd(null)} onSend={sendCommand}
@@ -449,8 +517,8 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
  * reducer's latest scene and the focused zone into it; the scene itself is never re-rendered by React.
  */
 type Hooks = { onTarget: (t: Target | null) => void; onWorldClick: () => void; onSwitch: () => void };
-const Stage = memo(function Stage({ interactive, hero, scene, events, gallery, focus, onPick, engineRef, hooks, view, onReady }: {
-  interactive: boolean; hero: 'wide' | 'hero' | null; scene: SceneState; events: OfficeEvent[]; gallery: GalleryItem[]; focus: string | null; onPick: (id: string | null) => void;
+const Stage = memo(function Stage({ interactive, hero, scene, events, routed, gallery, focus, onPick, engineRef, hooks, view, onReady }: {
+  interactive: boolean; hero: 'wide' | 'hero' | null; scene: SceneState; events: OfficeEvent[]; routed: number; gallery: GalleryItem[]; focus: string | null; onPick: (id: string | null) => void;
   engineRef: React.MutableRefObject<OfficeEngine | null>; hooks: React.MutableRefObject<Hooks>; view: 'player' | 'spectator'; onReady: () => void;
 }) {
   const host = useRef<HTMLDivElement>(null);
@@ -466,7 +534,7 @@ const Stage = memo(function Stage({ interactive, hero, scene, events, gallery, f
       engine.current = null;
     };
   }, [interactive, onPick, hero]);
-  useEffect(() => engine.current?.apply(scene, events, gallery), [scene, events, gallery, interactive, onPick]);
+  useEffect(() => engine.current?.apply(scene, events, gallery, routed), [scene, events, gallery, routed, interactive, onPick]);
   useEffect(() => engine.current?.focus(focus), [focus, interactive, onPick]);
   useEffect(() => engine.current?.setView(view), [view, interactive, onPick]);
   return <div ref={host} className="hq-stage" />;

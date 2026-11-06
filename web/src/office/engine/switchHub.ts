@@ -6,17 +6,18 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { OfficeEvent } from '../../shared/types';
-import { DESKS, deskById, deskOf, personById, roomZone, roster, zoneById, zones } from '../data';
+import { DESKS, deskById, deskOf, personById, roomZone, roster, swMeta, zoneById, zones } from '../data';
 import { FONT, paint } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { WALL } from './world';
+import { LANES, corePos } from './layout';
 
 const TG = '#3390EC';
+const PRIVATE = '#9d4edd'; // private notes between agents
 const hub = zoneById.telegram_hub;
 /** The core stands between the Telegram wall and the lounge sofa. */
-export const CORE: [number, number] = [hub.x, hub.z - 1.3];
+export const CORE: [number, number] = corePos(hub);
 const Y = 0.035; // cables lie on the floor
-const BUS_Z = -2.75; // the corridor between the back row of rooms and the middle row
 const SPEED = 7.5;
 const ORB_Y = 1.55; // metres a second
 const TRAIL = [1, 0.78, 0.6, 0.45, 0.32];
@@ -100,7 +101,13 @@ export class SwitchHub {
     for (const id of ends) {
       if (!zoneById[id]) continue; // a roster zone the floor plan doesn't have yet
       const e = endpoint(id);
-      const curve = trace([core, new THREE.Vector3(cx, Y, BUS_Z), new THREE.Vector3(e.x, Y, BUS_Z), e]);
+      // Along the back corridor; rooms in the front row go down the nearer aisle and along the front corridor.
+      const B = LANES.back, F = LANES.front;
+      const aisle = LANES.aisles.reduce((a, b) => (Math.abs(b - e.x) < Math.abs(a - e.x) ? b : a));
+      const pts = e.z > F
+        ? [core, new THREE.Vector3(cx, Y, B), new THREE.Vector3(aisle, Y, B), new THREE.Vector3(aisle, Y, F), new THREE.Vector3(e.x, Y, F), e]
+        : [core, new THREE.Vector3(cx, Y, B), new THREE.Vector3(e.x, Y, B), e];
+      const curve = trace(pts);
       this.routes.set(id, { curve, len: curve.getLength(), port: portPos.length });
       portPos.push(e);
     }
@@ -172,18 +179,17 @@ export class SwitchHub {
   }
 
   /** New events since last time → pulses. A reset (replay, other workspace) clears the board. */
-  sync(events: OfficeEvent[]) {
+  sync(events: OfficeEvent[], total = events.length) {
     const at = this.lastId ? events.findIndex((e) => e.id === this.lastId) : -1;
     let fresh: OfficeEvent[];
     if (at >= 0) fresh = events.slice(at + 1);
     else {
       this.pulses.length = 0;
       fresh = events.slice(-1); // first look (or a history load): animate only the latest
-      this.routed = Math.max(0, events.length - 1);
     }
     this.lastId = events[events.length - 1]?.id;
     fresh.slice(-4).forEach((e, i) => this.route(e, this.t + i * 0.25));
-    this.routed += fresh.length;
+    this.routed = total; // the whole feed, like the Switch chip (events may be a recent window)
     if (this.tagCount) this.tagCount.textContent = `${this.routed} routed`;
   }
 
@@ -203,6 +209,13 @@ export class SwitchHub {
       return r ? [{ c: r.curve, len: r.len, rev }] : [];
     };
     const targets = (e.meta?.targets ?? []).filter((t) => personById[t]?.kind === 'agent').slice(0, 6);
+    const sm = swMeta(e);
+    if (sm.private) {
+      // A private note through Switch (agent → agent): desk → core → their desk, in violet, never up to Telegram.
+      const from = this.zoneOf(e.speaker, e.room), to = this.zoneOf(sm.to ?? targets[0] ?? '', e.room);
+      if (to && to !== from) this.spawn([...leg(from, true), ...leg(to, false)], born, new THREE.Color(PRIVATE), to);
+      return;
+    }
     if (p.kind === 'human') {
       // Founder in Telegram → Switch → each agent they addressed (or the topic's room).
       const to = targets.length ? targets.map((t) => this.zoneOf(t, e.room)) : [this.zoneOf('', e.room)];

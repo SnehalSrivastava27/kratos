@@ -81,6 +81,8 @@ export class Agent {
   /** The landing hero: a small icon badge over the head and nothing else; bubbles come and go quicker. */
   hero = false;
   private wanderT = 0;
+  /** Holding a cup of chai until this time (the founder at the chai corner). */
+  chaiUntil = -1;
 
   constructor(readonly info: RosterPerson, ps: PersonState) {
     this.ps = ps;
@@ -153,6 +155,15 @@ export class Agent {
   release(nav: NavGrid) {
     this.drive = null;
     this.plan([this.ps.zone], nav);
+  }
+
+  /** Walk to (x, z) and settle there (sits if it's their own seat). */
+  goTo(x: number, z: number, nav: NavGrid) {
+    this.drive = null;
+    const legs = nav.path(this.pos.x, this.pos.z, x, z);
+    this.path = legs.map(([wx, wz], k) => ({ x: wx, z: wz, stop: k === legs.length - 1, zone: this.ps.zone }));
+    this.maxSpeed = WALK;
+    this.pause = 0;
   }
 
   /** A new hire: appears at the door and walks to their desk. */
@@ -267,7 +278,7 @@ export class Agent {
 
     const atSeat = !this.drive && !moving && !this.path.length && isSeat(this.info.id, g.x, g.z);
     p.sit(atSeat && !airborne && !dancing ? SEAT_HIPS : null);
-    p.holdMug(!moving && ps.state === 'idle' && ps.zone === 'chai_pantry');
+    p.holdMug((!moving && ps.state === 'idle' && ps.zone === 'chai_pantry') || t < this.chaiUntil);
 
     // Facing: along the way while walking; at the desk the screen; else the speaker, the zone's owner or the room.
     if (!moving && !this.path.length && !this.drive) {
@@ -340,6 +351,15 @@ export class Agent {
     if (!talking) span(you ? 'hq-tag-name hq-tag-you' : quiet ? 'hq-tag-name hq-tag-badge' : 'hq-tag-name', you ? 'You' : quiet ? '' : name, true);
     if (shown !== 'idle' && shown !== 'walking' && !(this.crew && !ps.beacon)) span('hq-tag-state', ps.beacon && !walking ? 'Needs a reply' : STATE_LABEL[shown]);
     this.el.style.zIndex = talking ? '40' : ps.beacon ? '20' : '10';
+  }
+
+  /** A local one-liner (a hello at the chai corner): a bubble that never touches the feed; the next feed bubble replaces it. */
+  say(text: string, t: number) {
+    this.bubbleEl?.remove();
+    this.bubbleT = t - (this.hero ? HERO_BUBBLE_S : BUBBLE_S) + 2.6; // a short one: 2.6 s
+    this.box.id = '';
+    this.bubbleEl = this.makeBubble(text, Date.now());
+    this.over.prepend(this.bubbleEl);
   }
 
   private makeBubble(text: string, at: number) {

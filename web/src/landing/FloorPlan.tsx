@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { DEPT, PEOPLE } from './data';
 
 // Floor plan from contracts/zones.json, row by row: the west wing (library, finance, open desks), then the main floor.
-const ROOMS = ['librarian', 'd2c-design', 'd2c-analyst', 'hub', 'd2c-finance', 'd2c-influencers', 'd2c-captain', 'd2c-ads', 'desks', 'd2c-ops', 'pantry', 'founder'];
+const ROOMS = ['librarian', 'd2c-design', 'hub', 'd2c-analyst', 'd2c-finance', 'd2c-influencers', 'd2c-captain', 'd2c-ads', 'desks', 'd2c-ops', 'pantry', 'founder'];
 const SHARED: Record<string, { room: string; Icon: typeof Coffee }> = { hub: { room: 'Telegram Hub', Icon: Send }, pantry: { room: 'Chai Pantry', Icon: Coffee }, desks: { room: 'Open Desks', Icon: Armchair } };
 
 /** Flat 4×3 plan of the office. `lit` is a person id; their room glows in their colour. */

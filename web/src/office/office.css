@@ -134,7 +134,7 @@
   .ao-brand { max-width: 52vw; padding: 5px 9px 5px 5px } .ao-logo { width: 30px; height: 30px } .ao-name { font-size: 15px }
   .ao-controls { padding: 5px; gap: 5px } .ao-btn { height: 32px } .ao-btn.icon { width: 32px }
   .ao-drawer, .ao-chat { top: auto; left: 0; right: 0; bottom: 0; width: auto; height: 64svh; border-radius: 20px 20px 0 0; border-bottom: 0; z-index: 30; animation: ao-sheet .22s ease-out }
-  .ao-hint { bottom: 18px; font-size: 13.5px; padding: 7px 12px; max-width: calc(100vw - 24px) }
+  .ao-hint { bottom: 62px; font-size: 13.5px; padding: 7px 12px; max-width: calc(100vw - 24px) } /* clear of the demo's sign-up pill */
   @keyframes ao-sheet { from { transform: translateY(40px); opacity: 0 } }
 }
 @media (prefers-reduced-motion: reduce) { .ao-hint, .ao-drawer, .ao-chat, .ao-modal, .ao-backdrop { animation: none !important } }
@@ -191,3 +191,13 @@
 .ao-kpi { position: absolute; top: 80px; left: 12px; width: 320px; overflow: hidden; z-index: 5; animation: ao-slide .2s ease-out; font-family: var(--font); color: var(--ink) }
 @media (max-width: 760px) { .ao-kpi { top: 116px; left: 12px !important; right: 12px; width: auto } }
 @media (prefers-reduced-motion: reduce) { .ao-kpi { animation: none } }
+
+/* First-visit controls card (Hud.tsx Coach): bottom-left, above the demo pill. */
+.ao-coach { position: absolute; left: 12px; bottom: 64px; z-index: 6; width: 318px; padding: 11px 13px 12px; font-family: var(--font); color: var(--ink); animation: ao-slide .25s ease-out }
+.ao-coach-title { font-weight: 900; font-size: 14.5px; margin-bottom: 8px }
+.ao-coach-grid { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; align-items: center; font-size: 13px; font-weight: 700; color: var(--muted) }
+.ao-coach-k { white-space: nowrap; font-weight: 900; color: var(--ink) }
+.ao-coach-k .ao-key { margin-right: 3px; min-width: 22px; padding: 0 5px; font-size: 12px; border: 2px solid var(--ink); box-shadow: 0 2px 0 var(--ink) }
+.ao-coach-ok { height: 30px; margin-top: 10px; width: 100%; font-size: 13px }
+@media (max-width: 760px) { .ao-coach { left: 8px; right: 8px; width: auto; top: 116px; bottom: auto } }
+@media (prefers-reduced-motion: reduce) { .ao-coach { animation: none } }

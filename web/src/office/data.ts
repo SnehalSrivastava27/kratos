@@ -30,7 +30,7 @@ export const ctx: Ctx = { roster, roomZone };
 export const C = { saffron: '#F4A300', cream: '#FFF6E5', plum: '#1E1328', mint: '#3CCB8B', red: '#E5484D', cyan: '#22D3EE', tg: '#3390EC' };
 export const ZONE_EMOJI: Record<string, string> = {
   design_studio: '🎨', data_wall: '📊', telegram_hub: '💬', creator_studio: '⭐', war_room: '🎯',
-  growth_pod: '📣', dispatch_dock: '📦', finance_cabin: '💰', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑',
+  growth_pod: '📣', dispatch_dock: '📦', finance_cabin: '💰', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑', library: '📚', open_desks: '🪑', meeting_room: '🗣️', reception: '🛎️',
 };
 const owner = (zoneId: string) => roster.find((p) => p.zone === zoneId);
 export const zoneColor = (zoneId: string) =>
@@ -97,6 +97,15 @@ export const isSeat = (personId: string, x: number, z: number) => {
   const d = deskById[deskOf[personId]];
   return !!d && Math.hypot(d.x - x, d.z + SEAT_OFF - z) < 0.15;
 };
+
+/**
+ * Switch extras on an event's meta (not in the generated types yet; read tolerantly, all optional):
+ * `private` + `to`: a private note one agent sent another through Switch (never in the Telegram chat);
+ * `switch_document`: a room document pinned in Switch; `kind: 'catch_up'`: a new hire caught up from Switch context.
+ */
+export interface SwitchMeta { private?: boolean; to?: string; kind?: string; switch_document?: { id?: string; title?: string; version?: string | number } }
+export const swMeta = (e: OfficeEvent): SwitchMeta => (e.meta ?? {}) as SwitchMeta;
+export const isPrivate = (e: OfficeEvent) => swMeta(e).private === true;
 
 /** Only same-origin gallery pages may become links: `/gallery/<file>` and nothing else (no schemes, no `..`). */
 export const galleryUrl = (u?: string): string | null => (u && /^\/gallery\/[\w.\/-]+$/.test(u) && !u.includes('..') ? u : null);
