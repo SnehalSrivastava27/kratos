@@ -16,7 +16,7 @@ Ports: server **8787**, web dev server **5173** (Vite proxies `/api`, `/ws`, `/g
 | GET | `/api/agents` | office (chat UI) | – | `AgentSummary[]`, one per roster person |
 | GET | `/api/gallery` | office | – | `GalleryItem[]`, files in `gallery/`, newest first |
 | GET | `/api/health` | ops | – | `{ ok, version, uptime, clients, history, db: "ok"\|"memory"\|"error" }` |
-| GET | `/api/ready` | load balancer | – | 200 `{ ready: true, db }`; 503 while shutting down or if the DB fails |
+| GET | `/api/ready` | load balancer | – | 200 `{ ready: true, db }`; 503 while shutting down, if a DB write/read fails, or if production with `DATA_DIR` fell back to memory |
 
 Feed files live in `demo/feeds/<name>.json` and follow the same schema with `t` = ms offset.
 

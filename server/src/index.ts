@@ -161,7 +161,8 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, 200, { ok: true, version: VERSION, uptime: process.uptime(), clients: wss.clients.size, history: recent(RING_MAX).length, db: dbStatus() });
   if (route === "GET /api/ready") {
     const db = dbStatus();
-    const ready = !shuttingDown && db !== "error";
+    // DATA_DIR in production means "persist": a memory fallback there is a broken deploy, not a degraded one.
+    const ready = !shuttingDown && db !== "error" && !(PROD && env.DATA_DIR && db === "memory");
     return send(res, ready ? 200 : 503, { ready, db });
   }
   if (route === "GET /api/roster") {

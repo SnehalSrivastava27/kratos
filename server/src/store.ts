@@ -23,7 +23,8 @@ export function openStore(dataDir: string) {
     db.exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA busy_timeout=2000;
       CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL UNIQUE,
         room TEXT NOT NULL, speaker TEXT NOT NULL, json TEXT NOT NULL);
-      CREATE INDEX IF NOT EXISTS events_room ON events(room, seq);`);
+      CREATE INDEX IF NOT EXISTS events_room ON events(room, seq);
+      CREATE TABLE IF NOT EXISTS probe (k TEXT PRIMARY KEY, v INTEGER NOT NULL);`);
     const rows = db.prepare("SELECT json FROM events ORDER BY seq DESC LIMIT ?").all(RING_MAX) as { json: string }[];
     ring.push(...rows.reverse().map((r) => JSON.parse(r.json)));
     log.info("store open", { kind: "sqlite", file, loaded: ring.length });
@@ -38,8 +39,9 @@ export const storeKind = () => (db ? "sqlite" : "memory");
 export function dbStatus(): "ok" | "memory" | "error" {
   if (!db) return "memory";
   try {
-    db.prepare("SELECT 1").get();
-    return "ok";
+    const now = Date.now(); // real write + read: catches a full/read-only disk, not just an open handle
+    db.prepare("INSERT INTO probe (k, v) VALUES ('ping', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v").run(now);
+    return (db.prepare("SELECT v FROM probe WHERE k = 'ping'").get() as { v: number }).v === now ? "ok" : "error";
   } catch {
     return "error";
   }

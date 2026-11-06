@@ -115,7 +115,13 @@ test("production refuses to start without tokens unless ALLOW_OPEN=1", async () 
   const s = await start({ NODE_ENV: "production", ALLOW_OPEN: "1" });
   await s.stop();
   const t = await start({ NODE_ENV: "production", OBSERVER_TOKEN: "a", ADMIN_TOKEN: "b" });
+  assert.equal((await fetch(t.base + "/api/ready")).status, 200);
   await t.stop();
+  // DATA_DIR is a file, so the DB can't open → memory fallback → not ready in production
+  const f = await start({ NODE_ENV: "production", ALLOW_OPEN: "1", DATA_DIR: new URL(import.meta.url).pathname });
+  assert.equal((await (await fetch(f.base + "/api/health")).json()).db, "memory");
+  assert.equal((await fetch(f.base + "/api/ready")).status, 503);
+  await f.stop();
 });
 
 test("persistence: history and room events survive a restart", async () => {
