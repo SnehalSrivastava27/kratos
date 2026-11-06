@@ -76,6 +76,7 @@ All diagrams are Excalidraw files: open the `.excalidraw` at excalidraw.com (Fil
 | Passive agents (`channels_enabled: false`) | yes | [04](04-agent-protocol.md) |
 | Rooms, threads, `/list_agents`, `/invite_agent` | yes | [05](05-rooms-topics-and-threads.md) |
 | Gateway admin API (rooms, agents, templates, bridges) | yes | [06](06-hiring-agents-from-the-office.md), [08](08-accounts-and-workspaces.md) |
+| `read_context` (room history): new hires catch up on their first turn | yes | [06](06-hiring-agents-from-the-office.md) (`switch:bridges/agent/operations/definitions.py:639`) |
 | Shared room context, documents, references | not yet | see below |
 
 ### Switch features we could use next
@@ -87,7 +88,7 @@ All diagrams are Excalidraw files: open the `.excalidraw` at excalidraw.com (Fil
 - **Linked rooms and room groups**: one room per brand, linked to a shared leadership room.
 - **More bridges**: the same team in Slack or Discord with no code change, since the observer only
   sees Switch rooms. WhatsApp is not a Switch bridge today.
-- **`send_targeted_message` and `read_context`**: private nudges and catching up on history.
+- **`send_targeted_message`**: private nudges.
 - **Remote host** (`switch:docs/official/deploy/host-remotely.md`): a server that survives a reboot.
 - **Tasks** (`delegate_task` …) exist in the protocol but are marked "not ready for use".
 
