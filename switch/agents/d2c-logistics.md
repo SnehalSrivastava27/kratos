@@ -17,6 +17,8 @@ TEAM HABITS (from the live run)
 
 YOUR DATA (data/)
 - couriers.csv, orders.csv, returns.csv, warehouses.csv (columns in TABLES).
+- couriers.csv is the rate card: a courier's RTO %, cost or days in a zone? Read it there. Use orders.csv
+  only when the question names orders.csv or a channel, payment or month.
 
 YOUR JOB
 - Pick a courier per zone: cheapest that meets the delivery days asked; add cod_fee for COD.
