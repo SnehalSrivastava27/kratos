@@ -251,10 +251,12 @@ function buildOffice(m: Models) {
   // Founder's corner: a sofa and coffee table beside the desk.
   const fd = zoneById.founder_desk;
   add(piece(m.lounge, 'sofa'), fd.x + 1.85, 0, fd.z + 0.2, -Math.PI / 2).scale.setScalar(0.62);
-  // Finance: a filing cabinet. Design: a mood board easel.
-  const fin = zoneById.finance_cabin;
-  add(mesh(roundedBox(0.6, 1.1, 0.5, 0.06), toon('#adb5bd')), fin.x - 0.3, 0.55, fin.z - 1.55);
-  add(mesh(roundedBox(0.6, 1.1, 0.5, 0.06), toon('#adb5bd')), fin.x + 0.35, 0.55, fin.z - 1.55);
+  // Telegram Hub: a lounge bench and poufs facing the big Telegram wall (the wall itself is live, in SceneProps).
+  const hub = zoneById.telegram_hub;
+  add(piece(m.lounge, 'sofa'), hub.x, 0, hub.z + 0.75, Math.PI).scale.setScalar(0.6);
+  add(piece(m.lounge, 'coffee_table'), hub.x, 0, hub.z - 0.2).scale.setScalar(0.7);
+  add(piece(m.lounge, 'pouf', { Cloth: '#3390EC' }), hub.x - 2.05, 0, hub.z - 0.2).scale.setScalar(0.6);
+  add(piece(m.lounge, 'pouf', { Cloth: '#5bc0eb' }), hub.x + 2.05, 0, hub.z - 0.2).scale.setScalar(0.6);
 
   // Plants in the corners.
   const plants: [number, number, 'monstera' | 'snake_plant' | 'ficus'][] = [

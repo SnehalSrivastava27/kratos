@@ -22,9 +22,8 @@ const LOOKS: Record<string, Look> = {
   'd2c-analyst': { skin: 1, hair: 0, style: 5 },
   'd2c-ads': { skin: 4, hair: 0, style: 3 },
   'd2c-influencers': { skin: 2, hair: 7, style: 1 },
-  'd2c-ops': { skin: 5, hair: 2, style: 0 },
+  'd2c-ops': { skin: 6, hair: 5, style: 6 },
   'd2c-design': { skin: 0, hair: 8, style: 4 },
-  'd2c-finance': { skin: 6, hair: 5, style: 6 },
 };
 const v = new THREE.Vector3();
 /** Project like drei's Html, but keep the overlay `pad` px inside the canvas so bubbles near an edge aren't cut off. */

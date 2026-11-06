@@ -7,21 +7,23 @@ export const roster = rosterJson.people as Person[];
 export const zones = zonesJson.zones as Zone[];
 export const zoneById = Object.fromEntries(zones.map((z) => [z.id, z])) as Record<string, Zone>;
 export const personById = Object.fromEntries(roster.map((p) => [p.id, p])) as Record<string, Person>;
+export const TG_GROUP = (rosterJson as { telegram?: { group: string } }).telegram?.group ?? 'Telegram';
+export const ROOMS = (rosterJson.rooms as { id: string; label: string; zone: string; topic?: string }[]).map((r) => ({ ...r, topic: r.topic ?? r.label }));
 export const roomZone = Object.fromEntries(rosterJson.rooms.map((r) => [r.id, r.zone])) as Record<string, string>;
 export const ctx: Ctx = { roster, roomZone };
 
-export const C = { saffron: '#F4A300', cream: '#FFF6E5', plum: '#1E1328', mint: '#3CCB8B', red: '#E5484D', cyan: '#22D3EE' };
+export const C = { saffron: '#F4A300', cream: '#FFF6E5', plum: '#1E1328', mint: '#3CCB8B', red: '#E5484D', cyan: '#22D3EE', tg: '#3390EC' };
 export const ZONE_EMOJI: Record<string, string> = {
-  design_studio: '🎨', data_wall: '📊', finance_cabin: '💰', creator_studio: '⭐', war_room: '🎯',
+  design_studio: '🎨', data_wall: '📊', telegram_hub: '💬', creator_studio: '⭐', war_room: '🎯',
   growth_pod: '📣', dispatch_dock: '📦', dark_store: '⚡', chai_pantry: '☕', founder_desk: '👑',
 };
 const owner = (zoneId: string) => roster.find((p) => p.zone === zoneId);
 export const zoneColor = (zoneId: string) =>
-  zoneId === 'dark_store' ? C.cyan : zoneId === 'war_room' || zoneId === 'chai_pantry' ? C.saffron : owner(zoneId)?.color ?? C.saffron;
+  zoneId === 'dark_store' ? C.cyan : zoneId === 'telegram_hub' ? C.tg : zoneId === 'war_room' || zoneId === 'chai_pantry' ? C.saffron : owner(zoneId)?.color ?? C.saffron;
 
 /** Zone-local desk centre for each zone owner (monitor faces +z, the owner sits on the camera side). */
 export const DESK: Record<string, [number, number]> = {
-  design_studio: [-1.5, -0.55], data_wall: [1.4, -0.15], finance_cabin: [1.3, -0.55], creator_studio: [-1.5, -0.6],
+  design_studio: [-1.5, -0.55], data_wall: [1.4, -0.15], creator_studio: [-1.5, -0.6],
   growth_pod: [0, -0.6], dispatch_dock: [1.5, -0.9], founder_desk: [0.4, -0.5],
 };
 const SEAT_OFF = 0.85;

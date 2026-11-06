@@ -1,7 +1,8 @@
 // Canvas-painted textures: one draw call buys a whole chart wall / floor plan / map. No image assets to load.
 import { CanvasTexture, SRGBColorSpace } from 'three';
 import type { PersonState } from './officeState';
-import { C, roster } from './data';
+import type { OfficeEvent } from '../shared/types';
+import { C, ROOMS, TG_GROUP, clean, personById, roster } from './data';
 
 type G = CanvasRenderingContext2D;
 export const FONT = `Nunito, ui-rounded, 'SF Pro Rounded', system-ui, sans-serif`;
@@ -166,26 +167,96 @@ const ST: Record<string, [string, string]> = {
   waiting: ['Blocked', C.red], done: ['Done ✓', C.mint],
 };
 /** War-room big screen: the live sale plan, checklist driven by agent states. */
-export function drawWarScreen(g: G, W: number, H: number, people: Record<string, PersonState>, ebitda: number | null, shipped: boolean) {
+export function drawWarScreen(g: G, W: number, H: number, people: Record<string, PersonState>, shipped: boolean) {
   const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#1B1030'); bg.addColorStop(1, '#0D0A18');
   g.fillStyle = bg; g.fillRect(0, 0, W, H);
   g.fillStyle = C.saffron; g.font = `800 44px ${FONT}`; g.fillText('Festive Sale', 40, 70);
   g.fillStyle = 'rgba(255,255,255,.6)'; g.font = `600 24px ${FONT}`; g.fillText('30% off · 5 days · ₹5L marketing', 40, 108);
   const agents = roster.filter((p) => p.kind === 'agent' && p.id !== 'd2c-captain');
   agents.forEach((p, i) => {
-    const y = 160 + i * 52, s = people[p.id];
+    const y = 170 + i * 58, s = people[p.id];
     const [label, col] = ST[s?.state ?? 'idle'];
-    g.fillStyle = 'rgba(255,255,255,.06)'; rr(g, 34, y - 34, 560, 44, 12); g.fill();
-    g.fillStyle = '#fff'; g.font = `600 26px ${FONT}`; g.fillText(`${p.emoji}  ${p.name}`, 50, y - 3);
-    g.fillStyle = col; g.beginPath(); g.arc(430, y - 12, 8, 0, 7); g.fill();
-    g.font = `700 22px ${FONT}`; g.fillText(label, 448, y - 4);
+    g.fillStyle = 'rgba(255,255,255,.06)'; rr(g, 34, y - 36, 600, 48, 12); g.fill();
+    g.fillStyle = '#fff'; g.font = `600 27px ${FONT}`; g.fillText(`${p.emoji}  ${p.name}`, 50, y - 3);
+    g.fillStyle = col; g.beginPath(); g.arc(440, y - 12, 9, 0, 7); g.fill();
+    g.font = `700 24px ${FONT}`; g.fillText(label, 460, y - 3);
   });
-  const ex = 650;
-  g.fillStyle = 'rgba(255,255,255,.55)'; g.font = `700 22px ${FONT}`; g.fillText('EBITDA', ex, 160);
-  g.fillStyle = ebitda == null ? 'rgba(255,255,255,.35)' : ebitda < 0 ? C.red : C.mint;
-  g.font = `800 64px ${FONT}`;
-  g.fillText(ebitda == null ? '—' : `${ebitda < 0 ? '−' : '+'}₹${(Math.abs(ebitda) / 1e5).toFixed(2)}L`, ex, 230);
-  g.fillStyle = 'rgba(255,255,255,.55)'; g.font = `700 22px ${FONT}`; g.fillText('Founder sign-off', ex, 320);
+  const done = agents.filter((p) => people[p.id]?.state === 'done').length;
+  const ex = 690;
+  g.fillStyle = 'rgba(255,255,255,.55)'; g.font = `700 22px ${FONT}`; g.fillText('Team progress', ex, 160);
+  g.fillStyle = 'rgba(255,255,255,.12)'; rr(g, ex, 180, 290, 22, 11); g.fill();
+  g.fillStyle = C.mint; rr(g, ex, 180, Math.max(22, (290 * done) / agents.length), 22, 11); g.fill();
+  g.fillStyle = '#fff'; g.font = `800 40px ${FONT}`; g.fillText(`${done}/${agents.length}`, ex, 250);
+  g.fillStyle = 'rgba(255,255,255,.55)'; g.font = `700 22px ${FONT}`; g.fillText('Founder sign-off', ex, 330);
   g.fillStyle = shipped ? C.mint : 'rgba(255,255,255,.35)'; g.font = `800 40px ${FONT}`;
-  g.fillText(shipped ? 'Approved 🚀' : 'Pending', ex, 370);
+  g.fillText(shipped ? 'Approved 🚀' : 'Pending', ex, 380);
+}
+
+const TOPIC_ICON: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
+const wrapText = (g: G, text: string, maxW: number, maxLines: number) => {
+  const out: string[] = [];
+  for (const para of text.split('\n')) {
+    let line = '';
+    for (const w of para.split(' ')) {
+      const next = line ? `${line} ${w}` : w;
+      if (g.measureText(next).width > maxW && line) { out.push(line); line = w; } else line = next;
+    }
+    out.push(line);
+  }
+  if (out.length > maxLines) { out.length = maxLines; out[maxLines - 1] += '…'; }
+  return out;
+};
+/** The Telegram Hub wall: Telegram Desktop, light theme — the supergroup's topics and the latest thread. */
+export function drawTelegramWall(g: G, W: number, H: number, events: OfficeEvent[]) {
+  const LW = 440;
+  g.fillStyle = '#fff'; g.fillRect(0, 0, LW, H);
+  g.fillStyle = '#F1F1F4'; g.fillRect(LW, 0, 2, H);
+  // group header
+  g.fillStyle = C.tg; g.beginPath(); g.arc(44, 42, 24, 0, 7); g.fill();
+  g.fillStyle = '#fff'; g.font = `800 24px ${FONT}`; g.textAlign = 'center'; g.fillText('K', 44, 51); g.textAlign = 'left';
+  g.fillStyle = '#000'; g.font = `800 26px ${FONT}`; g.fillText(TG_GROUP, 82, 40);
+  g.fillStyle = '#8E9AA6'; g.font = `600 18px ${FONT}`; g.fillText(`${ROOMS.length} topics · ${roster.length} members`, 82, 64);
+  const last: Record<string, OfficeEvent> = {}, count: Record<string, number> = {};
+  for (const e of events) { last[e.room] = e; count[e.room] = (count[e.room] ?? 0) + 1; }
+  const active = events[events.length - 1]?.room ?? 'war_room';
+  ROOMS.forEach((r, i) => {
+    const y = 88 + i * 68;
+    if (r.id === active) { g.fillStyle = C.tg; rr(g, 8, y, LW - 16, 64, 12); g.fill(); }
+    const on = r.id === active;
+    g.font = `400 30px ${FONT}`; g.fillText(TOPIC_ICON[r.id] ?? '#', 22, y + 43);
+    g.fillStyle = on ? '#fff' : '#000'; g.font = `800 22px ${FONT}`; g.fillText(r.topic, 72, y + 27);
+    const e = last[r.id];
+    g.fillStyle = on ? 'rgba(255,255,255,.85)' : '#707579'; g.font = `600 17px ${FONT}`;
+    const prev = e ? `${personById[e.speaker]?.name ?? ''}: ${clean(e.text).replace(/\n/g, ' ')}` : 'No messages yet';
+    g.fillText(prev.length > 34 ? prev.slice(0, 33) + '…' : prev, 72, y + 52);
+    if (count[r.id] && !on) {
+      g.fillStyle = C.tg; rr(g, LW - 62, y + 20, 40, 26, 13); g.fill();
+      g.fillStyle = '#fff'; g.font = `800 16px ${FONT}`; g.textAlign = 'center'; g.fillText(String(count[r.id]), LW - 42, y + 39); g.textAlign = 'left';
+    }
+  });
+  // thread
+  const wall = g.createLinearGradient(LW, 0, W, H); wall.addColorStop(0, '#D5E6B5'); wall.addColorStop(1, '#8DBFA3');
+  g.fillStyle = wall; g.fillRect(LW + 2, 0, W - LW, H);
+  g.fillStyle = '#fff'; g.fillRect(LW + 2, 0, W - LW, 70);
+  g.fillStyle = '#000'; g.font = `800 26px ${FONT}`;
+  const room = ROOMS.find((r) => r.id === active);
+  g.fillText(`${TOPIC_ICON[active] ?? ''} ${room?.topic ?? ''}`, LW + 26, 34);
+  g.fillStyle = C.tg; g.font = `600 18px ${FONT}`; g.fillText(TG_GROUP, LW + 26, 58);
+  let y = H - 16;
+  const thread = events.filter((e) => e.room === active);
+  for (const e of [...thread].reverse()) {
+    const mine = personById[e.speaker]?.kind === 'human';
+    g.font = `600 20px ${FONT}`;
+    const lines = wrapText(g, clean(e.text), 520, 4);
+    const h = 44 + lines.length * 26;
+    y -= h + 10;
+    if (y < 80) break;
+    const bw = 580, x = mine ? W - bw - 24 : LW + 24;
+    g.fillStyle = mine ? '#EEFFDE' : '#fff'; rr(g, x, y, bw, h, 18); g.fill();
+    const p = personById[e.speaker];
+    g.fillStyle = mine ? '#4FAE4E' : p?.color ?? C.tg; g.font = `800 20px ${FONT}`;
+    g.fillText(mine ? 'Founder' : `${p?.emoji ?? ''} ${p?.name ?? ''}`, x + 16, y + 28);
+    g.fillStyle = '#000'; g.font = `600 20px ${FONT}`;
+    lines.forEach((l, i) => g.fillText(l, x + 16, y + 56 + i * 26));
+  }
 }

@@ -8,11 +8,10 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { OfficeEvent } from '../shared/types';
 import type { SceneState } from './officeState';
-import { clean, personById, roomZone, roster } from './data';
-import rosterJson from '../../../contracts/roster.json';
+import { ROOMS, TG_GROUP, clean, personById, roomZone, roster } from './data';
 
-export const ROOMS = rosterJson.rooms as { id: string; label: string; zone: string }[];
-const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨', finance: '💰' };
+export { ROOMS };
+const ROOM_EMOJI: Record<string, string> = { war_room: '🎯', analytics: '📊', ads: '📣', creators: '⭐', ops: '📦', design: '🎨' };
 const ROOM_COLOR: Record<string, string> = Object.fromEntries(ROOMS.map((r) => [r.id, roster.find((p) => p.zone === r.zone)?.color ?? '#3390EC']));
 export const TG = { blue: '#3390EC', green: '#4FAE4E', out: '#EEFFDE', bg: '#F1F1F1' };
 
@@ -23,7 +22,7 @@ export const clock = (t: number) => {
   return `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 };
 const strip = (e: OfficeEvent) => clean(e.text);
-const groupName = (label: string) => `Kesar HQ · ${label}`;
+const topicOf = (room: string) => ROOMS.find((r) => r.id === room)!;
 
 /** Who's "typing…" in a room: agents working whose latest message was posted there. */
 export function typingIn(room: string, events: OfficeEvent[], scene: SceneState) {
@@ -32,11 +31,19 @@ export function typingIn(room: string, events: OfficeEvent[], scene: SceneState)
   return roster.filter((p) => p.kind === 'agent' && scene.people[p.id]?.state === 'working' && lastRoom[p.id] === room).map((p) => p.name);
 }
 
-function GroupAvatar({ room, size = 46 }: { room: string; size?: number }) {
+/** A forum topic's icon: Telegram draws these as a tinted rounded bubble with the topic emoji. */
+function TopicIcon({ room, size = 40 }: { room: string; size?: number }) {
   const c = ROOM_COLOR[room];
   return (
-    <div className="grid shrink-0 place-items-center rounded-full text-white shadow-inner" style={{ width: size, height: size, fontSize: size * 0.45, background: `linear-gradient(160deg, ${c}cc, ${c})` }}>
+    <div className="grid shrink-0 place-items-center rounded-[38%]" style={{ width: size, height: size, fontSize: size * 0.5, background: `${c}22`, boxShadow: `inset 0 0 0 1.5px ${c}55` }}>
       {ROOM_EMOJI[room]}
+    </div>
+  );
+}
+function GroupAvatar({ size = 42 }: { size?: number }) {
+  return (
+    <div className="grid shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#5AB0F5] to-[#3390EC] font-semibold text-white" style={{ width: size, height: size, fontSize: size * 0.42 }}>
+      {TG_GROUP.charAt(0)}
     </div>
   );
 }
@@ -57,11 +64,14 @@ export function ChatList({ events, scene, selected, unread, onSelect, className 
           <Search className="size-4" /> Search
         </div>
       </div>
-      <div className="flex gap-1 px-3 pb-2 text-[13px] font-medium">
-        <span className="rounded-full bg-[#3390EC]/10 px-2.5 py-1 text-[#3390EC]">All chats</span>
-        <span className="rounded-full px-2.5 py-1 text-[#707579]">Agents</span>
-        <span className="rounded-full px-2.5 py-1 text-[#707579]">Approvals</span>
+      <div className="mx-1.5 mb-1 flex items-center gap-3 rounded-xl px-2 py-2">
+        <GroupAvatar />
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[15px] font-semibold">{TG_GROUP}</div>
+          <div className="truncate text-[13px] text-[#8E9AA6]">{ROOMS.length} topics · {roster.length} members</div>
+        </div>
       </div>
+      <div className="px-4 pb-1 text-[12px] font-semibold tracking-wide text-[#8E9AA6] uppercase">Topics</div>
       <div className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-2">
         {rows.map((r) => {
           const active = r.id === selected;
@@ -76,10 +86,10 @@ export function ChatList({ events, scene, selected, unread, onSelect, className 
               onClick={() => onSelect(r.id)}
               className={cn('flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-colors', active ? 'bg-[#3390EC] text-white' : 'hover:bg-[#F4F4F5]')}
             >
-              <GroupAvatar room={r.id} />
+              <TopicIcon room={r.id} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="truncate text-[15px] font-semibold">{groupName(r.label)}</span>
+                  <span className="truncate text-[15px] font-semibold">{r.topic}</span>
                   {r.last && (
                     <span className={cn('ml-auto flex shrink-0 items-center gap-0.5 text-xs', active ? 'text-white/80' : 'text-[#8E9AA6]')}>
                       {personById[r.last.speaker]?.kind === 'human' && <CheckCheck className={cn('size-3.5', active ? 'text-white' : 'text-[#4FAE4E]')} />}
@@ -166,7 +176,7 @@ function Message({ e, first, last }: { e: OfficeEvent; first: boolean; last: boo
 
 export function ChatPane({ room, events, scene, onBack, className }: { room: string; events: OfficeEvent[]; scene: SceneState; onBack?: () => void; className?: string }) {
   const reduce = useReducedMotion();
-  const info = ROOMS.find((r) => r.id === room)!;
+  const info = topicOf(room);
   const msgs = useMemo(() => events.filter((e) => e.room === room), [events, room]);
   const typing = typingIn(room, events, scene);
   const members = new Set(['founder', ...msgs.flatMap((e) => [e.speaker, ...(e.meta?.targets ?? [])])]).size + 1;
@@ -183,9 +193,9 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
             <ArrowLeft className="size-5 text-[#707579]" />
           </Button>
         )}
-        <GroupAvatar room={room} size={40} />
+        <TopicIcon room={room} size={38} />
         <div className="min-w-0">
-          <div className="truncate text-[15px] font-semibold">{groupName(info.label)}</div>
+          <div className="truncate text-[15px] font-semibold">{info.topic} <span className="font-normal text-[#8E9AA6]">· {TG_GROUP}</span></div>
           <div className="truncate text-[13px]">
             {typing.length ? (
               <span className="text-[#3390EC]">{typing.join(', ')} {typing.length > 1 ? 'are' : 'is'} typing<span className="hq-dots" /></span>
@@ -210,7 +220,7 @@ export function ChatPane({ room, events, scene, onBack, className }: { room: str
       </div>
       <footer className="flex shrink-0 items-center gap-2 border-t border-black/[0.06] px-3 py-2 text-[#8E9AA6]">
         <Paperclip className="size-5 shrink-0" />
-        <div className="flex-1 truncate text-sm">Message {groupName(info.label)}</div>
+        <div className="flex-1 truncate text-sm">Message in {info.topic}</div>
         <Smile className="size-5 shrink-0" />
         <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#3390EC] text-white"><Mic className="size-4.5" /></div>
       </footer>

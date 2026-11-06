@@ -13,8 +13,6 @@ export interface PersonState {
 
 export interface SceneState {
   people: Record<string, PersonState>;
-  ebitda: number | null;
-  financeGlow: boolean;
   gallery: string[];
   pinPulseId?: string;
   boxId?: string;
@@ -33,7 +31,7 @@ export function initialState({ roster }: Ctx): SceneState {
     const zone = p.kind === 'human' || p.id === 'd2c-captain' ? p.zone : IDLE_ZONE;
     people[p.id] = { state: 'idle', zone, route: [] };
   }
-  return { people, ebitda: null, financeGlow: false, gallery: [] };
+  return { people, gallery: [] };
 }
 
 export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
@@ -79,7 +77,6 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         break;
       case 'pushback':
         sp.state = 'working';
-        s.financeGlow = false;
         for (const t of targets) {
           s.people[t].state = 'waiting';
           s.people[t].beacon = `${name[e.speaker]} pushed back on ${name[t]}`;
@@ -88,7 +85,6 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
       case 'approved':
         sp.state = 'done';
         sp.jumpId = e.id;
-        if (e.room === 'finance' || e.speaker === 'd2c-finance') s.financeGlow = true;
         for (const t of targets) s.people[t].beacon = undefined;
         break;
       case 'approval_needed': {
@@ -106,7 +102,6 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
         }
         break;
     }
-    if (typeof e.meta?.ebitda === 'number') s.ebitda = e.meta.ebitda;
     if (e.meta?.transfers?.length) s.pinPulseId = s.boxId = e.id;
   }
   return s;

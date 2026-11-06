@@ -6,13 +6,12 @@ import type { SceneState } from './officeState';
 import type { OfficeEvent } from '../shared/types';
 import { C, DESK, clean, personById, roster, world, zoneById } from './data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './Floor';
-import { CITIES, FONT, bannerTex, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from './tex';
+import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from './tex';
 import { mesh, noOutline, roundedBox, toon, toonUnique } from './toon';
 import { useAge } from './useAge';
 
-const GW = 2.4, GH = 1.5;
+const GW = 5.2, GH = 2.0;
 const WALL_FACE = WALL.backZ + WALL.t / 2 + 0.06;
-const lakh = (n: number) => `${n < 0 ? '−' : '+'}₹${(Math.abs(n) / 1e5).toFixed(2)}L`;
 const popIn = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 + 2.7 * (x - 1) ** 3 + 1.7 * (x - 1) ** 2);
 const SCREEN: Record<string, string> = { idle: '#4a4e69', working: '#8ecae6', waiting: '#ff8fa3', done: '#95f2c3' };
 
@@ -46,70 +45,22 @@ function WarScreen({ scene }: { scene: SceneState }) {
     return b;
   }, [tex, war]);
   const shipped = !!scene.confettiId;
-  const key = Object.values(scene.people).map((p) => p.state).join() + scene.ebitda + shipped;
-  useEffect(() => repaint(tex, (g, W, H) => drawWarScreen(g, W, H, scene.people, scene.ebitda, shipped)), [key]); // eslint-disable-line react-hooks/exhaustive-deps
+  const key = Object.values(scene.people).map((p) => p.state).join() + shipped;
+  useEffect(() => repaint(tex, (g, W, H) => drawWarScreen(g, W, H, scene.people, shipped)), [key]); // eslint-disable-line react-hooks/exhaustive-deps
   return <primitive object={board} />;
 }
 
-/** Finance gauge on the back wall: red half, green half, a needle that swings with EBITDA. */
-export function EbitdaMeter({ ebitda, glow }: { ebitda: number | null; glow: boolean }) {
-  const z = zoneById.finance_cabin;
-  const needle = useRef<THREE.Group>(null);
-  const tex = useMemo(() => paint(512, 320, () => {}), []);
+/** Telegram Hub showpiece: the Kratos D2C supergroup live on the back wall, topics on the left, the busiest thread on the right. */
+function TelegramWall({ events }: { events: OfficeEvent[] }) {
+  const hub = zoneById.telegram_hub;
+  const tex = useMemo(() => paint(1300, 500, () => {}), []);
   const board = useMemo(() => {
-    const b = wallBoard(GW, GH, PAL.trim, tex);
+    const b = wallBoard(GW, GH, PAL.ink, tex);
     noOutline(b);
     return b;
   }, [tex]);
-  useEffect(
-    () =>
-      repaint(tex, (g, W, H) => {
-        g.fillStyle = '#fffaf3'; g.fillRect(0, 0, W, H);
-        const cx = W / 2, cy = 230, R = 160;
-        g.lineWidth = 46;
-        g.strokeStyle = C.red; g.beginPath(); g.arc(cx, cy, R, Math.PI, Math.PI * 1.5); g.stroke();
-        g.strokeStyle = C.mint; g.beginPath(); g.arc(cx, cy, R, Math.PI * 1.5, Math.PI * 2); g.stroke();
-        g.lineWidth = 6; g.strokeStyle = PAL.ink; g.beginPath(); g.arc(cx, cy, R + 25, Math.PI, 0); g.stroke(); g.beginPath(); g.arc(cx, cy, R - 25, Math.PI, 0); g.stroke();
-        g.textAlign = 'center'; g.fillStyle = PAL.ink; g.font = `900 30px ${FONT}`; g.fillText('EBITDA', cx, 40);
-        g.font = `900 46px ${FONT}`; g.fillStyle = ebitda == null ? '#8d99ae' : ebitda < 0 ? C.red : '#1f9d63';
-        g.fillText(ebitda == null ? '—' : lakh(ebitda), cx, 300);
-      }),
-    [ebitda, tex],
-  );
-  const target = ebitda == null ? 0 : -THREE.MathUtils.clamp(ebitda / 1.6e5, -1, 1) * 1.3;
-  useFrame((_, dt) => {
-    if (needle.current) needle.current.rotation.z += (target - needle.current.rotation.z) * Math.min(1, dt * 3);
-  });
-  // gauge centre on the board face: canvas (256, 230) of 512x320
-  const gy = (0.5 - 230 / 320) * GH, k = GH / 1.2;
-  return (
-    <group>
-      <group position={[z.x - 1.3, 1.5, WALL_FACE]}>
-        <primitive object={board} />
-        <group ref={needle} position={[0, gy, 0.12]} scale={k}>
-          <mesh position-y={0.24} material={toon(PAL.ink)}>
-            <boxGeometry args={[0.05, 0.5, 0.04]} />
-          </mesh>
-          <mesh material={toon(PAL.ink)}>
-            <sphereGeometry args={[0.07, 12, 10]} />
-          </mesh>
-        </group>
-      </group>
-      {glow && <ApprovedGlow />}
-    </group>
-  );
-}
-
-/** Mint wash over the finance cabin's rug once the plan is approved. */
-function ApprovedGlow() {
-  const z = zoneById.finance_cabin;
-  const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: C.mint, transparent: true, opacity: 0.4, depthWrite: false }), []);
-  useFrame(({ clock }) => (mat.opacity = 0.28 + Math.sin(clock.elapsedTime * 3) * 0.12));
-  return (
-    <mesh rotation-x={-Math.PI / 2} position={[z.x, 0.05, z.z]} material={mat}>
-      <planeGeometry args={[z.w - 0.5, z.d - 0.5]} />
-    </mesh>
-  );
+  useEffect(() => repaint(tex, (g, W, H) => drawTelegramWall(g, W, H, events)), [events.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  return <primitive object={board} position={[hub.x, 1.45, WALL_FACE]} />;
 }
 
 /** Dispatch dock: India map on the left wall (pins pulse on a transfer, an arc Mumbai → Delhi) and a box riding the conveyor. */
@@ -297,7 +248,7 @@ export function ScenePropsLayer({ scene, gallery, events }: { scene: SceneState;
       <FounderPhone events={events} />
       <Screens scene={scene} />
       <WarScreen scene={scene} />
-      <EbitdaMeter ebitda={scene.ebitda} glow={scene.financeGlow} />
+      <TelegramWall events={events} />
       <DispatchDock pulseId={scene.pinPulseId} boxId={scene.boxId} />
       <GalleryWall items={gallery} />
       <Confetti id={scene.confettiId} />
