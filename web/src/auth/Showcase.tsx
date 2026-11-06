@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { Check, Search } from 'lucide-react';
-import { FEED, PEOPLE, TG_GROUP, TOPICS, body, clock } from '@/landing/data';
-import { TgAvatar, TopicIcon } from '@/landing/Telegram';
+import { FEED, PEOPLE, TOPICS, body, clock } from '@/landing/data';
+import { DeptIcon } from './dept';
 import { EASE, TwoTone } from '@/landing/ui';
 
 // Right half of /login and /signup: a calm, still Telegram topics list. Only scripted demo copy
-// (demo/feeds/sale-demo.json), never real chats: this page is public.
+// (demo/feeds/sale-demo.json) and the demo brand, never real chats or group names: this page is public.
+const DEMO_GROUP = 'Kesar HQ';
 const plain = (s: string) => body(s).replace(/[*_`]/g, '');
 const ROWS = TOPICS.map((t) => {
   const inRoom = FEED.filter((e) => e.room === t.id && e.type !== 'working');
@@ -29,9 +30,9 @@ export default function Showcase() {
         >
           <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_30px_70px_-30px_rgba(0,0,0,0.25)]">
             <div className="flex items-center gap-3 border-b border-black/[0.06] px-4 py-3">
-              <TgAvatar size="size-10" />
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#FFB830] to-[#F08A00] text-sm font-semibold text-white">K</span>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[14.5px] font-semibold tracking-tight">{TG_GROUP}</p>
+                <p className="truncate text-[14.5px] font-semibold tracking-tight">{DEMO_GROUP}</p>
                 <p className="text-[12px] text-neutral-400">{TOPICS.length} topics · 7 members · 1 bot</p>
               </div>
               <Search className="size-4 text-neutral-300" />
@@ -39,7 +40,7 @@ export default function Showcase() {
             <ul>
               {ROWS.map((r) => (
                 <li key={r.id} className="flex items-center gap-3 border-b border-black/[0.045] px-4 py-2.5 last:border-0">
-                  <TopicIcon emoji={r.emoji} className="size-10 rounded-full" />
+                  <DeptIcon room={r.id} className="size-10 rounded-xl" />
                   <div className="min-w-0 flex-1">
                     <p className="flex items-baseline justify-between gap-2">
                       <span className="truncate text-[13.5px] font-semibold">{r.label}</span>

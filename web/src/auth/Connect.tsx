@@ -4,7 +4,7 @@ import { AlertTriangle, ArrowLeft, ArrowRight, Check, Copy, ExternalLink, Loader
 import { Button } from '@/components/ui/button';
 import { Logo, TwoTone } from '@/landing/ui';
 import { cn } from '@/lib/utils';
-import { api, isMock, type ConnectCode, type ConnectStatus } from './api';
+import { api, ApiError, isMock, type ConnectCode, type ConnectStatus } from './api';
 import { useAuth } from './AuthProvider';
 import ConnectPreview from './ConnectPreview';
 
@@ -22,7 +22,7 @@ const TAPS: ReactNode[] = [
 ];
 
 export default function Connect() {
-  const { user, workspaces, refresh, logout } = useAuth();
+  const { user, workspaces, refresh, logout, expire } = useAuth();
   const nav = useNavigate();
   const [step, setStep] = useState(0);
   const [code, setCode] = useState<ConnectCode | null>(null);
@@ -42,12 +42,13 @@ export default function Connect() {
       setCode(c);
       setStatus({ state: 'waiting' });
       setNow(Date.now());
-    } catch {
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 401) return expire(); // session gone → RequireAuth sends you to /login
       setIssueErr(true);
     } finally {
       issuing.current = false;
     }
-  }, []);
+  }, [expire]);
 
   useEffect(() => { if (step === 2 && !code) void issue(); }, [step, code, issue]);
 
@@ -66,13 +67,14 @@ export default function Connect() {
         setPollErr(false);
         setStatus(s);
         if (s.state === 'ready') void refresh();
-      } catch {
+      } catch (e) {
+        if (e instanceof ApiError && e.status === 401) return expire();
         if (!stop) setPollErr(true);
       }
     };
     const id = setInterval(tick, POLL_MS);
     return () => { stop = true; clearInterval(id); };
-  }, [live, refresh]);
+  }, [live, refresh, expire]);
 
   useEffect(() => {
     if (!code || state === 'ready') return;
@@ -104,7 +106,7 @@ export default function Connect() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1264px] gap-12 px-5 py-10 md:px-12 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-20 lg:py-20">
+      <div className="mx-auto grid max-w-[1264px] gap-12 px-5 py-10 md:px-12 md:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-20">
         <main className="min-w-0">
           <p className="flex items-center gap-2 text-[13px] font-medium text-saffron-ink">
             Connect Telegram
@@ -133,7 +135,7 @@ export default function Connect() {
                   {TAPS.map((t, i) => (
                     <li key={i} className="flex items-center gap-3 text-[15px] text-neutral-700 [&_b]:font-medium [&_b]:text-foreground">
                       <span className="grid size-6 shrink-0 place-items-center rounded-full border border-black/[0.1] bg-white text-[12px] font-medium text-neutral-500 tabular-nums">{i + 1}</span>
-                      {t}
+                      <span>{t}</span>
                     </li>
                   ))}
                 </ol>
@@ -156,7 +158,7 @@ export default function Connect() {
                     <p>Post it as a normal message in the group. The bot reads it and links the group to your account.</p>
                     <Code code={code?.code} expired={state === 'expired'} left={left} />
                     {issueErr && <Note tone="error">We couldn’t get a code. <button className="font-medium underline underline-offset-2" onClick={() => void issue()}>Try again</button></Note>}
-                    <Live state={state} pollErr={pollErr} detail={status?.detail} onNewCode={() => void issue()} onAdmin={() => setStep(1)} />
+                    <Live state={state} pollErr={pollErr} onNewCode={() => void issue()} onAdmin={() => setStep(1)} />
                     <Next back={() => setStep(1)} />
                   </>
                 )}
@@ -244,7 +246,7 @@ function Code({ code, expired, left }: { code?: string; expired: boolean; left: 
         <div className={cn('flex gap-1.5 sm:gap-2', expired && 'opacity-35')} aria-label={code ? `Code ${code.split('').join(' ')}` : 'Getting your code'} role="group">
           {Array.from({ length: 6 }, (_, i) => (
             <span key={i} className={cn(
-              'grid h-14 w-11 place-items-center rounded-xl border border-black/[0.1] bg-canvas font-mono text-[28px] font-medium tabular-nums shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)] sm:h-16 sm:w-12 sm:text-[30px]',
+              'grid h-14 w-11 place-items-center rounded-xl border border-black/[0.1] bg-canvas text-[28px] font-medium text-foreground tabular-nums shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)] sm:h-16 sm:w-12 sm:text-[30px]',
               i === 2 && 'mr-2 sm:mr-3',
               expired && 'line-through decoration-1',
             )}>
@@ -261,7 +263,7 @@ function Code({ code, expired, left }: { code?: string; expired: boolean; left: 
   );
 }
 
-function Live({ state, pollErr, detail, onNewCode, onAdmin }: { state?: string; pollErr: boolean; detail?: string; onNewCode: () => void; onAdmin: () => void }) {
+function Live({ state, pollErr, onNewCode, onAdmin }: { state?: string; pollErr: boolean; onNewCode: () => void; onAdmin: () => void }) {
   if (state === 'expired') {
     return (
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black/[0.08] bg-neutral-50 px-4 py-3">
@@ -288,7 +290,6 @@ function Live({ state, pollErr, detail, onNewCode, onAdmin }: { state?: string; 
       )}
       <span className="min-w-0 flex-1">
         {linking ? 'Creating your 6 topics and inviting your team…' : 'Waiting for the code in your group…'}
-        {linking && detail && <span className="ml-1 text-saffron-ink/70">({detail})</span>}
       </span>
       {pollErr && <span className="text-[12px] text-neutral-400">Reconnecting…</span>}
     </div>

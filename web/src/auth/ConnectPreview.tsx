@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, CheckCheck, ChevronRight, Shield, Users } from 'lucide-react';
 import { TOPICS } from '@/landing/data';
-import { TG_WALL, TopicIcon } from '@/landing/Telegram';
+import { TG_WALL } from '@/landing/Telegram';
+import { DeptIcon } from './dept';
 import { EASE } from '@/landing/ui';
 import { cn } from '@/lib/utils';
 
@@ -67,7 +68,7 @@ function AdminView({ bot }: { bot: string }) {
       <div className="overflow-hidden rounded-xl bg-white">
         <div className="flex items-center gap-3 border-b border-black/[0.05] px-3.5 py-3">
           <span className="grid size-9 place-items-center rounded-full bg-neutral-900 text-white"><Shield className="size-4" /></span>
-          <div><p className="text-[13.5px] font-medium">Kratos D2C bot</p><p className="text-[12px] text-tg">@{bot}</p></div>
+          <div><p className="text-[13.5px] font-medium">D2C Agent HQ</p><p className="text-[12px] text-tg">@{bot}</p></div>
         </div>
         <Row label="Manage topics" right={<Toggle />} strong />
         <Row label="Pin messages" right={<Toggle off />} />
@@ -84,7 +85,7 @@ function ChatView({ code, bot, linking, ready }: { code?: string; bot: string; l
       {code && (
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3, ease: EASE }}
           className="self-end rounded-2xl rounded-br-md bg-[#EFFDDE] px-3.5 py-2 shadow-sm">
-          <span className="font-mono text-[18px] tracking-[0.18em] text-foreground">{code}</span>
+          <span className="text-[18px] font-medium tracking-[0.16em] tabular-nums text-foreground">{code}</span>
           <span className="ml-2 inline-flex items-center gap-0.5 align-middle text-[10.5px] text-emerald-600">now{(linking || ready) && <CheckCheck className="size-3.5" />}</span>
         </motion.div>
       )}
@@ -95,7 +96,7 @@ function ChatView({ code, bot, linking, ready }: { code?: string; bot: string; l
             {TOPICS.map((t, i) => (
               <motion.div key={t.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE, delay: ready ? 0 : i * 0.45 }}
                 className="flex items-center gap-2 rounded-lg bg-neutral-50 px-2 py-1.5">
-                <TopicIcon emoji={t.emoji} on className="size-6 rounded-md text-[12px]" />
+                <DeptIcon room={t.id} className="size-6 rounded-md" />
                 <span className="truncate text-[12.5px] font-medium">{t.label}</span>
                 {ready && <Check className="ml-auto size-3.5 text-emerald-600" />}
               </motion.div>

@@ -23,13 +23,23 @@ export interface AuthApi {
   workspaces(): Promise<Workspace[]>;
 }
 
+/** DEV only: the v3 backend isn't answering (route 404s, or the Vite proxy can't reach :8787). */
+class NoBackend extends Error {}
+const DEV = import.meta.env.DEV;
+
 async function req<T>(method: string, path: string, body?: unknown): Promise<T> {
-  const r = await fetch(path, {
-    method,
-    credentials: 'include',
-    headers: body === undefined ? { Accept: 'application/json' } : { Accept: 'application/json', 'Content-Type': 'application/json' },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  let r: Response;
+  try {
+    r = await fetch(path, {
+      method,
+      credentials: 'include',
+      headers: body === undefined ? { Accept: 'application/json' } : { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } catch (e) {
+    throw DEV ? new NoBackend() : e;
+  }
+  if (DEV && (r.status === 404 || (r.status >= 500 && !r.headers.get('content-type')?.includes('json')))) throw new NoBackend();
   if (r.status === 204) return undefined as T;
   const data = await r.json().catch(() => null);
   if (!r.ok) throw new ApiError(r.status, (data as { error?: string } | null)?.error ?? r.statusText);
@@ -46,30 +56,34 @@ const real: AuthApi = {
   workspaces: () => req<Workspace[]>('GET', '/api/workspaces'),
 };
 
-/** True when we fell back to the dev mock (shown as a small badge in the UI). */
+/** True while the last call fell back to the dev mock (a small badge in the UI says so). */
 export let isMock = false;
-let picked: Promise<AuthApi> | null = null;
 
-/** Real backend unless DEV and /api/auth/me 404s or the dev proxy can't reach the server. */
-function pick(): Promise<AuthApi> {
-  if (!import.meta.env.DEV) return Promise.resolve(real);
-  return (picked ??= fetch('/api/auth/me', { credentials: 'include' })
-    .then((r) => r.status === 404 || (r.status >= 500 && !r.headers.get('content-type')?.includes('json')))
-    .catch(() => true)
-    .then(async (useMock) => {
-      if (!useMock) return real;
-      isMock = true;
-      console.warn('[auth] v3 backend not found: using the DEV localStorage mock (web/src/auth/mock.ts)');
-      return (await import('./mock')).mock;
-    }));
+/**
+ * Every call tries the real server first; the real answer always wins, so the mock switches itself
+ * off the moment the backend comes up. Only in DEV, and only when the server isn't there, the
+ * localStorage mock (./mock.ts) answers instead. Production never loads it.
+ */
+function via<K extends keyof AuthApi>(k: K): AuthApi[K] {
+  return ((...args: unknown[]) =>
+    (real[k] as (...a: unknown[]) => Promise<unknown>)(...args).then(
+      (v) => { isMock = false; return v; },
+      async (e) => {
+        if (!(e instanceof NoBackend)) throw e;
+        if (!isMock) console.warn('[auth] v3 backend not answering: using the DEV localStorage mock (web/src/auth/mock.ts)');
+        isMock = true;
+        const { mock } = await import('./mock');
+        return (mock[k] as (...a: unknown[]) => Promise<unknown>)(...args);
+      },
+    )) as AuthApi[K];
 }
 
 export const api: AuthApi = {
-  me: () => pick().then((a) => a.me()),
-  signup: (b) => pick().then((a) => a.signup(b)),
-  login: (b) => pick().then((a) => a.login(b)),
-  logout: () => pick().then((a) => a.logout()),
-  connect: () => pick().then((a) => a.connect()),
-  connectStatus: () => pick().then((a) => a.connectStatus()),
-  workspaces: () => pick().then((a) => a.workspaces()),
+  me: via('me'),
+  signup: via('signup'),
+  login: via('login'),
+  logout: via('logout'),
+  connect: via('connect'),
+  connectStatus: via('connectStatus'),
+  workspaces: via('workspaces'),
 };

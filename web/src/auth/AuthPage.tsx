@@ -97,15 +97,15 @@ export default function AuthPage({ mode }: { mode: Mode }) {
         <header className="flex items-center justify-between">
           <Link to="/" aria-label="D2C Agent HQ home"><Logo /></Link>
           <p className="text-[14px] text-neutral-500">
-            {signup ? 'Have an account?' : 'New here?'}{' '}
+            <span className="hidden sm:inline">{signup ? 'Have an account?' : 'New here?'} </span>
             <Link to={signup ? '/login' : '/signup'} state={from ? { from } : undefined} className="font-medium text-foreground underline-offset-4 hover:underline">
               {signup ? 'Sign in' : 'Create an account'}
             </Link>
           </p>
         </header>
 
-        <main className="mx-auto flex w-full max-w-[380px] flex-1 flex-col justify-center py-14">
-          <TwoTone as="h1" stack a={signup ? 'Hire your team.' : 'Welcome back.'} b={signup ? 'It takes two minutes.' : 'Your team kept working.'}
+        <main className="mx-auto flex w-full max-w-[380px] flex-1 flex-col pt-14 pb-10 md:justify-center md:py-14">
+          <TwoTone as="h1" stack a={signup ? 'Hire your team.' : 'Welcome back.'} b={signup ? 'It takes two minutes.' : 'Your team kept at it.'}
             className="text-[32px] leading-[1.08] tracking-[-0.03em] md:text-[36px]" />
           <p className="mt-4 text-[15px] leading-relaxed text-neutral-500">
             {signup ? 'Create an account, then link your Telegram group. Six AI teammates move in.' : 'Sign in to open your live office and your team’s Telegram topics.'}
@@ -115,7 +115,7 @@ export default function AuthPage({ mode }: { mode: Mode }) {
             {signup && field('name', 'Your name', { autoComplete: 'name', placeholder: 'Asha Rao', autoFocus: true })}
             {field('email', 'Work email', { type: 'email', autoComplete: 'email', inputMode: 'email', placeholder: 'you@brand.com', autoFocus: !signup, spellCheck: false })}
             {field('password', 'Password',
-              { type: show ? 'text' : 'password', autoComplete: signup ? 'new-password' : 'current-password', placeholder: signup ? 'At least 10 characters' : '••••••••••' },
+              { type: show ? 'text' : 'password', autoComplete: signup ? 'new-password' : 'current-password', },
               <button
                 type="button"
                 onClick={() => setShow((s) => !s)}

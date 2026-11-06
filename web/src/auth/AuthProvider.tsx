@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
   useEffect(() => void refresh(), [refresh]);
+  const expire = useCallback(() => { setUser(null); setWorkspaces([]); }, []);
 
   const value = useMemo<Auth>(() => ({
     loading, user, workspaces, refresh,
@@ -45,8 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setWorkspaces([]);
     },
-    expire: () => { setUser(null); setWorkspaces([]); },
-  }), [loading, user, workspaces, refresh]);
+    expire,
+  }), [loading, user, workspaces, refresh, expire]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
