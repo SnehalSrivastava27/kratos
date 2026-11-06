@@ -6,7 +6,7 @@
     "kit": "bin/kit.mjs"
   },
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test \"test/*.test.mjs\""
   },
   "dependencies": {
     "csv-parse": "7.0.3",
