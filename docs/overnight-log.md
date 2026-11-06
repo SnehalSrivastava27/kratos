@@ -38,6 +38,7 @@ findings list. It feeds the blog.
 | 04:20 | Full CI on backend-v2 caught one cross-task break (a K3 kit test still expected order lines after E2 fixed the truth to distinct orders); fixed, CI green. |
 | 04:40 | W2 merged: private Switch notes now a clear violet pulse with a lock (text only in the Switch panel; also stopped it leaking into the header caption and agent card), 🎭 role badges, morning-brief strip. |
 | 05:10 | LV2 merged: live agents locked down (per-agent tool list + repo `.claude/settings.json`: kit allowed, .env/.switch/~/.ssh reads denied, everything else needs a human); 16/16 synced; live SYSTEM OVERRIDE refused in 5 s. **Live War Room demo:** kickoff → approval ask in 5 min 1 s, 65 messages, 89 tool calls, deck + 3 banners, plan pinned; numbers match check_numbers.py (3,340 units, ₹20.42L, marketing ₹4.68L, EBITDA +₹1.61L). Fixes from the run (no ack messages, fresh numbers, default dates, Captain order) added to all 16 agents; re-running Haiku evals. |
+| 05:45 | BL1 final merged (live-run section, 57 findings, agent-lockdown diagram; 14 diagrams). Haiku eval run 7: 149/149 after the team-habit rules. All 16 live agents synced (revision current, Haiku, lockdown). Office server + observer restarted on the final code. Final CI green; secret scan of new history clean. PR #4 backend-v2 → main opened. |
 
 ## Findings for the blog
 - `send_targeted_message` in Switch 0.31.0 is **not private**: it prefixes `@name` and posts through the
