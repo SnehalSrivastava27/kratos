@@ -73,8 +73,10 @@ async function call(url: string, init: RequestInit & { json?: unknown } = {}) {
 }
 
 /** GET {switch}/health, for /api/ready: "ok", "down", or "unconfigured" (no local Switch server). Cached 10 s. */
-let health: { at: number; v: Promise<"ok" | "down" | "unconfigured"> } | null = null;
-export function switchHealth() {
+type Health = "ok" | "down" | "unconfigured";
+let health: { at: number; v: Promise<Health>; last?: Health } | null = null;
+/** Stale-while-revalidate: after the first probe, readiness checks never wait on a slow Switch. */
+export function switchHealth(): Promise<Health> {
   if (health && Date.now() - health.at < 10_000) return health.v;
   const probe = async () => {
     let url: string;
@@ -87,8 +89,12 @@ export function switchHealth() {
     await res?.body?.cancel().catch(() => {});
     return res?.ok ? ("ok" as const) : ("down" as const);
   };
-  health = { at: Date.now(), v: probe() };
-  return health.v;
+  const prev = health;
+  const v = probe();
+  health = { at: Date.now(), v, last: prev?.last };
+  const h = health;
+  void v.then((x) => (h.last = x));
+  return prev?.last ? Promise.resolve(prev.last) : v;
 }
 
 // ---- admin gateway (cookie session, re-login once on 401) ----

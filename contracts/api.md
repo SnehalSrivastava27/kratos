@@ -169,3 +169,57 @@ OfficeEvent.ws?: string   // server-assigned workspace id
 - **Legacy data:** events and hires stored before v3 have no `ws` and stay hidden until the group whose Telegram
   chat id is the one in `observer/topics.json` (or `LEGACY_CHAT_ID`) is linked; then they, and its topics, join that
   workspace (once).
+
+## v4: multi-agent team, QA Lab, KPIs, robustness (B3)
+
+**Roster-driven setup.** A linked workspace gets one forum topic per `roster.json` room (8 today: the 6 departments,
+Finance, QA Lab) and every roster Switch agent (16: all `kind: "agent"` except `librarian`) + `d2c-observer` joined
+(+ `d2c-office` on its first post). Workspaces set up under an older roster are upgraded on server start and on
+their next message (at most once a minute while it fails): only missing topics are created (stored topics that still
+exist are kept, legacy `topics.json` adoption unchanged), status stays `ready`.
+
+**Topic threads are learned.** Commands (and QA asks) land in a topic only once its Switch thread is known; until
+then they go to General tagged `#Topic` (as in v2). The server learns a topic's Switch thread from observed events
+and persists it per workspace:
+- explicit: a person sends just the topic's tag inside that topic, e.g. `#Analytics`, `#Finance`, `#QALab`;
+- votes: department agents (and hires) posting 3+ times in one thread, more than twice as often as the captain →
+  that department; the captain plus 2+ departments in one thread → War Room (overrides a department guess);
+- a thread under a General message (a reply chain) is never learned.
+The observer now forwards `meta.switch_message_id` (Switch `payload.message_id`).
+
+**Idempotent ingest.** `POST /api/events` with `meta.switch_message_id` (+ `switch_room_id`) gets the stable id
+`sw-<24 hex>`; the same message again → `200` + the stored event, not stored or broadcast twice.
+
+**Members** (`GET /api/rooms`): unchanged rules, which now include specialists (same zone as their lead) and
+Finance; `qa_lab` has the humans, the captain and whoever spoke there.
+
+**Hires** (`POST /api/employees`): `room` may be `finance` (not `qa_lab`); optional `reports_to` = a roster
+`lead` of that department (else 400); stored on `Employee.reports_to` (`string | null`) and on the `Person` from
+`/api/people`; the hire's instructions say "Report to @<reports_to>" (default `d2c-captain`). `HIRE_MAX` default 24.
+
+| Method | Path | Auth | Body / query → Result |
+|---|---|---|---|
+| POST | `/api/qa/ask` | `ADMIN_TOKEN` only (401 otherwise, also in dev); JSON | `{ agent: string /* roster agent or hire */, text: string /* 1–1000 */, workspace?: string }` → `202 { id, sentAt /* ms */, workspace, thread: "topic" \| "group" }`. Posts `@agent text` into the workspace's QA Lab topic as `d2c-office` (same path as `/api/command`; `group` = no QA Lab thread yet, so General tagged `#QALab`). Default workspace: the oldest ready one. 400 bad agent/text · 403 unknown workspace · 409 not ready · 429 over `QA_PER_MIN` (30) asks a minute per workspace · 502/503 Switch |
+| GET | `/api/qa/replies?after=<ms>&agent=<id>&workspace=<id>` | `ADMIN_TOKEN` only | `OfficeEvent[]` in the QA Lab topic with `t > after` (and `speaker = agent` if given), oldest first, newest last, max 500. While the QA Lab topic has no thread, every event of the workspace counts (filter by `agent`). |
+| GET | `/api/kpis` | public (made-up demo data, never chats) | `Kpis` below, from `data/*.csv` (`KPI_DATA_DIR`), recomputed when a file's mtime changes |
+| GET | `/api/ready` | public | adds `switch: "ok" \| "down" \| "unconfigured"` (local Switch `/health`, cached 10 s, never blocks after the first probe) and `workspaces: { ready, linking, needs_admin }` counts; with `ADMIN_TOKEN` also `workspace_status: [{ id, status, detail }]`. Switch down does not make it 503. |
+
+```ts
+Kpis {
+  updated: number | null /* newest source file mtime, ms */, window: { from: string | null, to: string | null } /* orders.date */,
+  net_revenue: number | null /* delivered lines' net_revenue */, orders: number | null /* distinct order_id, not cancelled */,
+  aov: number | null /* net_revenue / delivered orders */, rto_pct: number | null, return_pct: number | null /* % of orders */,
+  meta_roas: number | null /* meta_ads_daily revenue/spend; v1: meta_campaigns.csv */,
+  blended_roas: number | null /* net_revenue / (meta + google + marketplace ad spend) */, ebitda_last_month: number | null /* pnl_monthly */,
+  by_channel: { channel, orders, net_revenue, rto_pct }[] /* by net_revenue desc */, top_skus: { sku, name, units, net_revenue }[] /* top 5 */
+}
+```
+Without v2 files only `meta_roas` (and `updated`) are filled; the rest are `null` / `[]`.
+
+**Robustness.** Switch GETs are retried twice (backoff + jitter) on unreachable/429/5xx, writes never; every Switch
+and Bot API call has a timeout (`SWITCH_TIMEOUT_MS`, 15 s; the office's threaded post can't hang on its stream);
+Bot API 429 is retried after `retry_after` (max 10 s), reads also on 5xx. SIGTERM/SIGINT close sockets, stop timers
+and checkpoint the SQLite WAL (`busy_timeout` 5 s, WAL); unhandled rejections are logged, an uncaught exception
+flushes and exits 1. Numbers in a linked group's chat never count as wrong link codes. The observer reconnects
+with exponential backoff + jitter (1 → 30 s, reset after a minute up), resumes with `Last-Event-ID`, reopens a
+stream silent for 45 s, and times out every HTTP call (10 s).

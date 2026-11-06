@@ -325,3 +325,20 @@ test("graceful shutdown: SIGTERM checkpoints the WAL into events.db", async () =
   await s.stop();
   assert.ok(!existsSync(wal) || statSync(wal).size === 0, "WAL flushed on shutdown");
 });
+
+test("numbers in a linked group's chat don't count as wrong link codes (no voiding everyone's codes)", async () => {
+  const s = await linked();
+  try {
+    const other = await account(s);
+    const { code } = await (await post(s, "/api/workspaces/connect", {}, { cookie: other })).json();
+    for (let i = 0; i < 25; i++) {
+      const n = String((Number(code) + 1 + i) % 1_000_000).padStart(6, "0");
+      await evAt({ text: `budget ${n}` });
+    }
+    fake.chats["room-num"] = "-4242";
+    const r = await post(s, "/api/events", ev({ text: code }, "room-num"));
+    assert.equal((await r.json()).linked, true, "the other user's code still works");
+  } finally {
+    await s.stop();
+  }
+});

@@ -131,7 +131,9 @@ const CODE_MISS_BUDGET = 20;
 const misses = new Map<string, { n: number; reset: number }>(); // per room; entries only for rooms that guessed
 let minute = { n: 0, reset: 0 };
 /** The live code in `text` (6 digits on their own), if any. */
-function findCode(text: string, room: string) {
+/** `linked`: a message in an already linked group. Its numbers ("budget 500000") are checked against live codes
+ *  but never count as wrong guesses: a busy linked group must not void everyone's codes. */
+function findCode(text: string, room: string, linked = false) {
   const cands = text.length <= 64 ? [...text.matchAll(/(?<!\d)\d{6}(?!\d)/g)].map((m) => m[0]) : [];
   if (!cands.length) return null;
   const now = Date.now();
@@ -142,6 +144,7 @@ function findCode(text: string, room: string) {
     if (m.n >= ROOM_MISSES || minute.n >= MISSES_PER_MIN) return null;
     const c = liveCode(cand);
     if (c) return c;
+    if (linked) continue;
     m.n++;
     minute.n++;
     misses.set(room, m);
@@ -160,7 +163,7 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   const text = String(ev.text ?? "");
   const mapped = room ? wsByRoom(room) : null;
   if (mapped) {
-    const code = findCode(text, room);
+    const code = findCode(text, room, true);
     if (code && code.user_id === mapped.ownerId) take(code) && bind(code, mapped); // re-sent in their own group: confirms it
     else if (code) refuse(code, ALREADY_LINKED);
     if (mapped.status !== "ready") void setup(mapped.id);
