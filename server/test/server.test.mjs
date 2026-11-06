@@ -2,7 +2,7 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, existsSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import WebSocket from "ws";
@@ -222,13 +222,31 @@ test("malformed or oversized WS frames drop that client, not the server; replay 
   }
 });
 
-test("security headers on static responses", async () => {
+const DIST = new URL("../../web/dist/", import.meta.url);
+test("security headers: gallery is sandboxed, built site has CSP + asset caching", async (t) => {
   const s = await start();
   try {
-    const r = await fetch(s.base + "/api/health");
-    assert.equal(r.headers.get("x-content-type-options"), "nosniff");
-    assert.ok(r.headers.get("referrer-policy"));
-    assert.equal((await fetch(s.base + "/api/ready")).status, 200);
+    const g = await fetch(s.base + "/gallery/hero.html");
+    assert.equal(g.status, 200);
+    assert.equal(g.headers.get("x-content-type-options"), "nosniff");
+    assert.match(g.headers.get("content-security-policy"), /^sandbox allow-scripts;/);
+
+    if (!existsSync(new URL("index.html", DIST))) return t.skip("web/dist not built (npm run build)");
+    const page = await fetch(s.base + "/office");
+    assert.equal(page.status, 200);
+    assert.match(page.headers.get("content-type"), /text\/html/);
+    const csp = page.headers.get("content-security-policy");
+    assert.match(csp, /default-src 'self'/);
+    assert.match(csp, /script-src 'self'(;|$)/);
+    assert.match(csp, /https:\/\/fonts\.googleapis\.com/);
+    assert.match(csp, /https:\/\/fonts\.gstatic\.com/);
+    assert.equal(page.headers.get("x-content-type-options"), "nosniff");
+    assert.equal(page.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
+    assert.equal(page.headers.get("cache-control"), "no-cache");
+    const asset = readdirSync(new URL("assets/", DIST)).find((f) => f.endsWith(".js"));
+    const a = await fetch(`${s.base}/assets/${asset}`);
+    assert.equal(a.status, 200);
+    assert.equal(a.headers.get("cache-control"), "public, max-age=31536000, immutable");
   } finally {
     await s.stop();
   }
