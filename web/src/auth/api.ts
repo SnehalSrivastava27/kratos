@@ -50,8 +50,8 @@ const real: AuthApi = {
   me: () => req<Me>('GET', '/api/auth/me').catch((e) => (e instanceof ApiError && e.status === 401 ? null : Promise.reject(e))),
   signup: (b) => req<{ user: User }>('POST', '/api/auth/signup', b).then((r) => r.user),
   login: (b) => req<{ user: User }>('POST', '/api/auth/login', b).then((r) => r.user),
-  logout: () => req<void>('POST', '/api/auth/logout'),
-  connect: () => req<ConnectCode>('POST', '/api/workspaces/connect'),
+  logout: () => req<void>('POST', '/api/auth/logout', {}), // the server's write guard requires a JSON body
+  connect: () => req<ConnectCode>('POST', '/api/workspaces/connect', {}),
   connectStatus: () => req<ConnectStatus>('GET', '/api/workspaces/connect/status'),
   workspaces: () => req<Workspace[]>('GET', '/api/workspaces'),
 };
