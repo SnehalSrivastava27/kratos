@@ -157,6 +157,9 @@ export function switchDocument(text: string): { id: string; title: string; versi
   const id = title.replace(/[\s\u2014\u2013-]*\bv\d+\s*$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
   return { id, title, ...(v ? { version: Number(v[1]) } : {}), action: m[1] };
 }
+/** The team room a private "Finance desk" room belongs to: its description carries `team_room:<id>`
+ *  (switch/agents/d2c-finance.md). Desk rooms are agents-only (internal_only), never on Telegram. */
+export const deskTeamRoom = (description?: string | null) => description?.match(/\bteam_room:([\w-]+)/)?.[1];
 
 // ---- SSE ----
 /** SSE frames; `onData` is called for every chunk (keepalives too), for the idle watchdog. */
@@ -189,7 +192,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
   const auth = { Authorization: `Bearer ${creds.token}` };
   const connectionId = randomUUID(); // reused across reconnects (protocol: connection outlives socket)
   const map = makeMapper(cfg);
-  const roomNames = new Map<string, { name: string; chatId?: string }>();
+  const roomNames = new Map<string, { name: string; chatId?: string; team?: string }>();
   let cursor = 0;
   let stream: AbortController | null = null;
 
@@ -203,8 +206,11 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
   async function refreshRooms() {
     try {
       const res = await call("ops/list_rooms", {});
-      const { result } = (await res.json()) as { result: { room_id: string; name: string; external_channel_id?: string | number | null }[] };
-      for (const r of result) roomNames.set(r.room_id, { name: r.name, ...(r.external_channel_id ? { chatId: String(r.external_channel_id) } : {}) });
+      const { result } = (await res.json()) as { result: { room_id: string; name: string; description?: string | null; external_channel_id?: string | number | null }[] };
+      for (const r of result) {
+        const team = deskTeamRoom(r.description);
+        roomNames.set(r.room_id, { name: r.name, ...(r.external_channel_id ? { chatId: String(r.external_channel_id) } : {}), ...(team ? { team } : {}) });
+      }
     } catch (e) {
       console.warn("[observer] list_rooms failed:", String(e));
     }
@@ -232,17 +238,21 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     const info = roomNames.get(ev.room_id);
     const room = map.room(ev.room_id, info?.name, speaker);
     const targets = map.targets(text).filter((t) => t !== speaker);
+    // A Finance desk message is a private agent-to-agent note: filed under its team room (so the server finds the
+    // workspace), with no thread (it is in no Telegram topic) and always a plain message (a nudge is not a pushback).
+    const desk = info?.team;
     const meta = {
       ...(targets.length ? { targets } : {}),
-      switch_room_id: String(ev.room_id),
-      ...(info?.name ? { room_name: info.name } : {}),
-      ...(info?.chatId ? { chat_id: info.chatId } : {}),
-      ...(p.thread_id ? { switch_thread_id: String(p.thread_id) } : {}),
+      ...(desk ? { private: true, ...(targets[0] ? { to: targets[0] } : {}), desk_room_id: String(ev.room_id) } : {}),
+      switch_room_id: desk ?? String(ev.room_id),
+      ...(info?.name && !desk ? { room_name: info.name } : {}),
+      ...(info?.chatId && !desk ? { chat_id: info.chatId } : {}),
+      ...(p.thread_id && !desk ? { switch_thread_id: String(p.thread_id) } : {}),
       ...(p.message_id ? { switch_message_id: String(p.message_id) } : {}), // the server dedupes on it
     };
-    const doc = switchDocument(text);
+    const doc = desk ? null : switchDocument(text);
     if (doc) Object.assign(meta, { switch_document: doc });
-    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: doc ? "artifact" : inferType(text), text, meta };
+    const office = { t: Number(p.timestamp) || Date.now(), room, speaker, type: desk ? "message" : doc ? "artifact" : inferType(text), text, meta };
     sendToOffice(cfg.server, office, `${room} ${speaker} ${office.type}: ${text.split("\n")[0].slice(0, 60)}`);
   }
 

@@ -171,8 +171,11 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
   const room = typeof meta.switch_room_id === "string" ? meta.switch_room_id : "";
   const text = String(ev.text ?? "");
   const mapped = room ? wsByRoom(room) : null;
+  // A private agent-to-agent note (observer: Finance desk, meta.private) is shown in its workspace's office only:
+  // it never links a group or confirms a code. Nothing here posts events to Telegram.
+  const priv = meta.private === true;
   if (mapped) {
-    const code = findCode(text, room, true);
+    const code = priv ? null : findCode(text, room, true);
     if (code && code.user_id === mapped.ownerId) take(code) && bind(code, mapped); // re-sent in their own group: confirms it
     else if (code) refuse(code, ALREADY_LINKED);
     if (mapped.status !== "ready") void setup(mapped.id);
@@ -184,7 +187,7 @@ export async function ingest(ev: OfficeEvent): Promise<{ event: OfficeEvent | nu
     if (t) Object.assign(out, { room: t[0], meta: { ...meta, ...(t[1].threadId ? { thread_id: t[1].threadId } : {}) } });
     return { event: out };
   }
-  if (!room) return { event: null };
+  if (!room || priv) return { event: null };
   const name = typeof meta.room_name === "string" ? meta.room_name.replace(/^Telegram:\s*/i, "").trim().slice(0, 128) : "";
   let chatId = typeof meta.chat_id === "string" || typeof meta.chat_id === "number" ? String(meta.chat_id) : null;
   const code = findCode(text, room);
