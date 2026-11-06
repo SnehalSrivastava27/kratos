@@ -7,7 +7,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
 import { openStore, closeStore, addEvent, recent, roomEvents, roomStats, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
-import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, type User } from "./auth.js";
+import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, sha as shaHex, type User } from "./auth.js";
 import { resolveWs, userWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
 import { handleOffice, syncPending, employeePerson } from "./office.js";
@@ -272,6 +272,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     const id = cookieValue(req);
     if (!id || !sessionUser(req)) throw new HttpError(401, "sign in first");
     deleteSession(id);
+    closeSockets((h) => h === shaHex(id)); // this session's live offices stop at once
     res.writeHead(204, { "cache-control": "no-store", ...BASE_HEADERS, "set-cookie": sessionCookie(null, isHttps(req)) });
     return res.end();
   }
@@ -388,6 +389,14 @@ server.headersTimeout = 15_000;
 // Upgrade needs a session cookie that owns ?ws= (or ADMIN_TOKEN); a foreign Origin is refused (cross-site WS hijacking).
 const upgradeWs = new WeakMap<IncomingMessage, string>();
 const socketWs = new WeakMap<WebSocket, string>();
+const socketSession = new WeakMap<WebSocket, string>(); // sha256 of the session id (sockets opened with ADMIN_TOKEN have none)
+/** Closes (4401) the sockets whose session hash matches: on logout, and on expiry (checked every ping). */
+function closeSockets(match: (sessionHash: string) => boolean) {
+  for (const c of wss.clients) {
+    const h = socketSession.get(c);
+    if (h && match(h)) c.close(4401, "signed out");
+  }
+}
 const wss = new WebSocketServer({
   server, path: "/ws", maxPayload: 4096,
   verifyClient: ({ req }, done) => {
@@ -405,11 +414,14 @@ wss.on("connection", (ws, req) => {
   ws.on("error", () => ws.terminate()); // malformed frame: drop that client, not the server
   if (wss.clients.size > MAX_WS_CLIENTS) return ws.close(1013, "server full, retry later");
   socketWs.set(ws, upgradeWs.get(req)!);
+  const cookie = cookieValue(req);
+  if (cookie && !hasToken(req, ADMIN_TOKEN)) socketSession.set(ws, shaHex(cookie));
   alive.set(ws, true);
   ws.on("pong", () => alive.set(ws, true));
 });
 wss.on("error", (e) => log.error("wss error", e));
 const heartbeat = setInterval(() => {
+  closeSockets((h) => !sessionValid(h)); // expired or deleted sessions
   for (const ws of wss.clients) {
     if (!alive.get(ws)) {
       ws.terminate();

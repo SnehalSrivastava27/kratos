@@ -325,3 +325,23 @@ test("brute force: 20 wrong codes anywhere void every live code; over 30 wrong a
     await s.stop();
   }
 });
+
+test("logout closes that session's open sockets (4401), not the user's other sessions", async () => {
+  const s = await start();
+  try {
+    const email = "sockets@example.com";
+    const one = await account(s, email);
+    await link(s, one);
+    const two = cookieOf(await post(s, "/api/auth/login", { email, password: PW }));
+    const open = (cookie) => new Promise((r) => { const w = new WebSocket(`ws://127.0.0.1:${s.port}/ws`, { headers: { cookie } }); w.on("open", () => r(w)); });
+    const [a, b] = await Promise.all([open(one), open(two)]);
+    const closed = new Promise((r) => a.on("close", (code) => r(code)));
+    assert.equal((await post(s, "/api/auth/logout", {}, { cookie: one })).status, 204);
+    assert.equal(await Promise.race([closed, sleep(1000).then(() => "still open")]), 4401);
+    await sleep(100);
+    assert.equal(b.readyState, WebSocket.OPEN, "the other session's socket");
+    b.close();
+  } finally {
+    await s.stop();
+  }
+});

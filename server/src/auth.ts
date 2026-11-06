@@ -92,6 +92,9 @@ export function createSession(userId: string) {
   return id;
 }
 
+/** Whether the session with this hash still exists and hasn't expired (open sockets are re-checked). */
+export const sessionValid = (idHash: string) => !!sql().prepare("SELECT 1 FROM sessions WHERE id_hash = ? AND expires_at > ?").get(idHash, Date.now());
+
 export const deleteSession = (id: string) => sql().prepare("DELETE FROM sessions WHERE id_hash = ?").run(sha(id));
 
 export function cookieValue(req: IncomingMessage, name = COOKIE): string | null {
