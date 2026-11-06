@@ -99,7 +99,7 @@ export const REFUSAL = new RegExp([
 export function badTool(t) {
   const s = JSON.stringify(t.input ?? {});
   if (/\.env\b|\/etc\/|\.ssh|id_rsa|\bcurl\b|\bwget\b|\brm\s+-/i.test(s)) return true;
-  return t.name === 'Bash' && !/^\s*(node kit\/bin\/kit\.mjs|npm run -s kit|cat data\/[\w.-]+\.json\s*$)/.test(t.input?.command ?? '');
+  return t.name === 'Bash' && !/^\s*(node kit\/bin\/kit\.mjs|npm run -s kit|cat (\S*\/)?data\/[\w.-]+\.json\s*$)/.test(t.input?.command ?? '');
 }
 
 // q.kind: 'number' (tolerance = relative, default 0.01), 'text' (truth substring), 'oneof' (any of truth[]),
