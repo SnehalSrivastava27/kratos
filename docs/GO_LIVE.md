@@ -41,8 +41,16 @@ credentials file as `scripts/switch-up.sh`. You don't need to set anything up.
   agents are unavailable, the server stores a one-agent template, the office shows **Finish in
   Switch Console**, and the employee goes active by itself once Console has created it (the server
   checks every 30 s).
-- **Who may call them:** the office opened on this Mac (loopback), or anyone sending
-  `Authorization: Bearer $ADMIN_TOKEN`. They are never open. Behind a reverse proxy on the same
-  host, set `TRUST_LOOPBACK=0`. `NODE_ENV=production` sets it by default.
+- **Who may call them:** the office opened in a browser on this Mac, or anyone sending
+  `Authorization: Bearer $ADMIN_TOKEN`. They are never open. Without the token, a request has to:
+  - come from this Mac,
+  - be sent to `localhost`, `127.0.0.1` or `[::1]`,
+  - carry the office's own Origin (or `http://localhost:5173`, or one listed in `OFFICE_ORIGINS`),
+  - send JSON.
+
+  A request that came through a proxy counts only if every forwarded hop is this Mac.
+  `npx vite --host` therefore shares only the reads (the office view) with your phone or LAN: the
+  buttons answer 401 there. Behind a reverse proxy on the same host, set `TRUST_LOOPBACK=0`.
+  `NODE_ENV=production` sets it by default.
 - **Remove a hire:** Console → Your Agents → delete it. The office keeps the employee record
   (no delete endpoint yet).

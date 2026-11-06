@@ -142,7 +142,7 @@ test("CSRF + DNS rebinding (TRUST_LOOPBACK on, the default): writes need JSON, a
     }
     assert.equal((await raw(s, "POST", "/api/command", { headers: { "content-type": "application/json" }, body: { room: "war_room", text: "hi" } })).status, 401, "loopback without Origin is not a browser: needs the token");
     assert.equal((await raw(s, "POST", "/api/command", { headers: browser(s), body: { room: "war_room", text: "hi" } })).status, 202, "same-origin office");
-    const vite = { "content-type": "application/json", host: "localhost:5173", origin: "http://localhost:5173" };
+    const vite = { "content-type": "application/json", host: "localhost:5173", origin: "http://localhost:5173", "x-forwarded-for": "127.0.0.1" };
     assert.equal((await raw(s, "POST", "/api/command", { headers: vite, body: { room: "war_room", text: "hi" } })).status, 202, "vite dev proxy on this Mac");
     assert.equal((await raw(s, "POST", "/api/command", { headers: { "content-type": "application/json", host: "evil.example", authorization: "Bearer adm" }, body: { room: "war_room", text: "hi" } })).status, 202, "token clients: any host, no Origin");
     // reads that reveal local paths: not to a rebound Host
@@ -150,6 +150,22 @@ test("CSRF + DNS rebinding (TRUST_LOOPBACK on, the default): writes need JSON, a
     assert.equal(lib.shelves[0].books[0].path, undefined, "rebound host sees no paths");
     lib = JSON.parse((await raw(s, "GET", "/api/library")).body);
     assert.equal(lib.shelves[0].books[0].path, "/skills/qa/SKILL.md", "the office on this Mac does");
+  } finally {
+    await s.stop();
+  }
+});
+
+test("proxied requests are not loopback-trusted unless every hop is this Mac", async () => {
+  const s = await start();
+  try {
+    const cmd = (extra) => raw(s, "POST", "/api/command", { headers: browser(s, extra), body: { room: "war_room", text: "hi" } }).then((r) => r.status);
+    assert.equal(await cmd({ "x-forwarded-for": "203.0.113.9" }), 401, "remote client via vite --host");
+    assert.equal(await cmd({ "x-forwarded-for": "127.0.0.1, 203.0.113.9" }), 401, "spoofed loopback hop");
+    assert.equal(await cmd({ forwarded: "for=203.0.113.9" }), 401);
+    assert.equal(await cmd({ "x-forwarded-for": "127.0.0.1", "x-forwarded-host": "192.168.1.5:5173" }), 401, "LAN host via proxy");
+    assert.equal(await cmd({ "x-forwarded-for": "::1" }), 202);
+    const lib = JSON.parse((await raw(s, "GET", "/api/library", { headers: { "x-forwarded-for": "203.0.113.9" } })).body);
+    assert.equal(lib.shelves[0].books[0].path, undefined, "no paths to proxied remote readers");
   } finally {
     await s.stop();
   }

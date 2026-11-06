@@ -109,8 +109,14 @@ const originOk = (req: IncomingMessage) => {
   const o = header(req, "origin");
   return !o || ORIGINS.has(o) || (localHost(req) && (o === `http://${header(req, "host")}` || o === `https://${header(req, "host")}`));
 };
-/** The office on this Mac: loopback socket (unless TRUST_LOOPBACK=0) and a local Host (no DNS rebinding). */
-const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHost(req);
+/** Proxied requests (the Vite dev proxy sets X-Forwarded-*) count as local only if every hop is this Mac:
+ *  a proxy appends the real client address, so a remote client can't fake an all-loopback chain. */
+const localHops = (req: IncomingMessage) =>
+  !req.headers.forwarded &&
+  (!req.headers["x-forwarded-host"] || LOCAL_HOST.test(header(req, "x-forwarded-host"))) &&
+  header(req, "x-forwarded-for").split(",").every((ip) => !ip.trim() || LOOPBACK_IP.test(ip.trim()));
+/** The office on this Mac: loopback socket and hops (unless TRUST_LOOPBACK=0) and a local Host (no DNS rebinding). */
+const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHops(req) && localHost(req);
 /** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
 const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
 /** Office writes: ADMIN_TOKEN, or a browser on this Mac (Origin required: only non-browser token clients may omit it). */
