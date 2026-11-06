@@ -175,9 +175,9 @@ def eval_loop():
     s.text(150, 236, "rerun\n(--failed reruns only the misses)", 16, color=GRAY)
     s.box("nums", 40, 470, 1530, 130,
           "Run 0 · Sonnet · tier 1 only: 84/84, $6.78\n"
-          "Run 1 · Haiku · old rules: 142/148 (tier 1 83/84, tier 2 59/64), p50 6 s, $0.26\n"
-          "Per question: Haiku $0.002 vs Sonnet $0.08. Misses: a refusal, a prompt injection, a privacy rule, a definition.\n"
-          "Later runs (instruction fixes): evals/reports/HISTORY.md", "white", fs=18,
+          "Run 1 · Haiku · old rules: 142/148 (tier 1 83/84, tier 2 59/64), 1.5 tool calls/q, $0.26\n"
+          "Run 3 · Haiku · new rules: 146/149 (tier 1 83/84, tier 2 63/65), 1.1 tool calls/q, $0.20\n"
+          "Per question: Haiku $0.0013 vs Sonnet $0.08 · every run: evals/reports/HISTORY.md", "white", fs=18,
           stroke="#495057")
     s.save(OUT + "eval-loop.excalidraw")
     return check(s, "eval-loop")
