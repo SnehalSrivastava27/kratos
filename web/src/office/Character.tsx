@@ -7,7 +7,7 @@ import type { PersonState } from './officeState';
 import { spot } from './data';
 import { useAge } from './useAge';
 
-const SPEED = 3.5; // m/s
+const SPEED = 5; // m/s
 const JUMP_S = 0.7;
 const BUBBLE_MS = 5000;
 const xz = ([x, z]: [number, number]) => [x, 0, z] as const;
@@ -68,13 +68,13 @@ export default function Character({ person, ps }: { person: Person; ps: PersonSt
   return (
     <group ref={root} position={[start[0], 0, start[1]]}>
       <group ref={body}>
-        <mesh position-y={0.55}>
+        <mesh position-y={0.55} castShadow>
           <capsuleGeometry args={[0.25, 0.5, 4, 12]} />
           <meshStandardMaterial color={person.color} />
         </mesh>
-        <mesh position-y={1.15}>
+        <mesh position-y={1.15} castShadow>
           <sphereGeometry args={[0.2, 16, 12]} />
-          <meshStandardMaterial color="#f1c27d" />
+          <meshStandardMaterial color="#E0AC69" roughness={0.6} />
         </mesh>
       </group>
       {ps.beacon && (

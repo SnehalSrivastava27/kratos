@@ -54,6 +54,7 @@ export function reduce(events: OfficeEvent[], ctx: Ctx): SceneState {
     const roomZone = ctx.roomZone[e.room] ?? sp.zone;
     const targets = (e.meta?.targets ?? []).filter((t) => s.people[t]);
     walk(e.speaker, [roomZone], e.id);
+    for (const p of Object.values(s.people)) p.bubble = undefined; // one bubble on screen at a time
     sp.bubble = { id: e.id, text: e.text.length > BUBBLE_CHARS ? e.text.slice(0, BUBBLE_CHARS - 1) + '…' : e.text };
 
     switch (e.type) {
