@@ -9,6 +9,8 @@ const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
 const PORT = Number(process.env.PORT ?? process.env.SERVER_PORT ?? 8787);
 const HISTORY_MAX = 500;
 const GALLERY = join(ROOT, "gallery");
+const DIST = join(ROOT, "web/dist"); // production: serve the built site if present
+const SERVE_WEB = existsSync(join(DIST, "index.html"));
 
 type OfficeEvent = { id: string; t: number; [k: string]: unknown };
 
@@ -27,6 +29,7 @@ function broadcast(ev: OfficeEvent) {
 
 // --- replay ---
 let replayTimers: NodeJS.Timeout[] = [];
+let replayRun = 0; // per-iteration id suffix (`evt-001@<run>`); epoch-ms based so it keeps increasing across restarts
 function stopReplay() {
   replayTimers.forEach(clearTimeout);
   replayTimers = [];
@@ -41,7 +44,8 @@ function loadFeed(name: string): OfficeEvent[] | null {
 function startReplay(feed: OfficeEvent[], loop: boolean, speed: number) {
   stopReplay();
   const last = Math.max(0, ...feed.map((e) => e.t));
-  for (const ev of feed) replayTimers.push(setTimeout(() => broadcast({ ...ev }), ev.t / speed));
+  const run = (replayRun = Math.max(Date.now(), replayRun + 1));
+  for (const ev of feed) replayTimers.push(setTimeout(() => broadcast({ ...ev, id: `${ev.id}@${run}` }), ev.t / speed));
   if (loop) replayTimers.push(setTimeout(() => startReplay(feed, loop, speed), (last + 3000) / speed));
 }
 
@@ -60,13 +64,25 @@ async function readJson(req: IncomingMessage): Promise<any> {
 }
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json",
+  ".mjs": "text/javascript", ".map": "application/json", ".txt": "text/plain", ".ico": "image/x-icon", ".woff2": "font/woff2",
   ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".svg": "image/svg+xml", ".webp": "image/webp", ".gif": "image/gif",
 };
+
+/** Streams `rel` from inside `base`; false if it isn't a file there. Rejects traversal outside `base`. */
+function serveFile(res: ServerResponse, base: string, rel: string, headers: Record<string, string> = {}): boolean | "forbidden" {
+  const file = resolve(base, "." + rel);
+  if (!file.startsWith(base + sep)) return "forbidden";
+  if (!existsSync(file) || !statSync(file).isFile()) return false;
+  res.writeHead(200, { "content-type": MIME[extname(file).toLowerCase()] ?? "application/octet-stream", ...headers });
+  createReadStream(file).pipe(res);
+  return true;
+}
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", "http://x");
   const route = `${req.method} ${url.pathname}`;
   try {
+    if (route === "GET /api/health") return send(res, 200, { ok: true, uptime: process.uptime(), clients: wss.clients.size, history: history.length });
     if (route === "GET /api/roster") {
       res.writeHead(200, { "content-type": "application/json" });
       return res.end(readFileSync(join(ROOT, "contracts/roster.json")));
@@ -95,11 +111,19 @@ const server = createServer(async (req, res) => {
       return send(res, 200, { ok: true });
     }
     if (req.method === "GET" && url.pathname.startsWith("/gallery/")) {
-      const file = resolve(GALLERY, "." + decodeURIComponent(url.pathname.slice("/gallery".length)));
-      if (!file.startsWith(GALLERY + sep)) return send(res, 403, { error: "forbidden" });
-      if (!existsSync(file) || !statSync(file).isFile()) return send(res, 404, { error: "not found" });
-      res.writeHead(200, { "content-type": MIME[extname(file).toLowerCase()] ?? "application/octet-stream" });
-      return createReadStream(file).pipe(res);
+      const r = serveFile(res, GALLERY, decodeURIComponent(url.pathname.slice("/gallery".length)));
+      if (r === "forbidden") return send(res, 403, { error: "forbidden" });
+      if (!r) return send(res, 404, { error: "not found" });
+      return;
+    }
+    if (SERVE_WEB && req.method === "GET" && !url.pathname.startsWith("/api/")) {
+      const path = decodeURIComponent(url.pathname);
+      const cache: Record<string, string> = path.startsWith("/assets/") ? { "cache-control": "public, max-age=31536000, immutable" } : {};
+      const r = path === "/" ? false : serveFile(res, DIST, path, cache);
+      if (r === "forbidden") return send(res, 403, { error: "forbidden" });
+      if (r) return;
+      // SPA fallback: extension-less paths (/office) get index.html; missing assets stay 404.
+      if (!extname(path) && serveFile(res, DIST, "/index.html", { "cache-control": "no-cache" })) return;
     }
     send(res, 404, { error: "not found" });
   } catch (e) {
@@ -108,4 +132,14 @@ const server = createServer(async (req, res) => {
 });
 
 const wss = new WebSocketServer({ server, path: "/ws" });
-server.listen(PORT, () => console.log(`hq-server on http://localhost:${PORT} (root ${ROOT})`));
+server.listen(PORT, () => console.log(`hq-server on http://localhost:${PORT} (root ${ROOT}${SERVE_WEB ? ", serving web/dist" : ""})`));
+
+function shutdown(sig: string) {
+  console.log(`${sig}: shutting down`);
+  stopReplay();
+  for (const c of wss.clients) c.close(1001, "server shutting down");
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(0), 3000).unref(); // don't hang on keep-alive sockets
+}
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
