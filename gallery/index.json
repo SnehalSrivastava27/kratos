@@ -1,0 +1,5 @@
+[
+  { "title": "Festive Sale · 30% off · 5 days", "file": "hero.html", "sku": null },
+  { "title": "Best-seller · Vitamin C Serum · ₹899 → ₹629", "file": "serum.html", "sku": "SKU01" },
+  { "title": "The Glow Kit · ₹1,999 → ₹1,399", "file": "glowkit.html", "sku": "SKU05" }
+]
