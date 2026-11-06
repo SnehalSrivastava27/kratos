@@ -62,6 +62,16 @@
       "zone": "design_studio",
       "color": "#9333EA",
       "topic": "Design"
+    },
+    {
+      "id": "librarian",
+      "name": "Librarian",
+      "emoji": "📚",
+      "kind": "agent",
+      "zone": "library",
+      "color": "#8B5E3C",
+      "topic": "War Room",
+      "role": "Keeps the skills library: reads every installed skill and shelves it by department"
     }
   ],
   "rooms": [

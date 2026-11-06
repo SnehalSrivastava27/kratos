@@ -2,7 +2,7 @@
 export type RoomId = 'war_room' | 'analytics' | 'ads' | 'creators' | 'ops' | 'design';
 export type EventType =
   | 'message' | 'assign' | 'working' | 'approval_needed'
-  | 'pushback' | 'approved' | 'done' | 'artifact' | 'celebrate';
+  | 'pushback' | 'approved' | 'done' | 'artifact' | 'celebrate' | 'hired' | 'command';
 
 export interface Transfer { sku: string; from: string; to: string; units: number }
 
@@ -69,4 +69,29 @@ export interface GalleryItem {
 export interface Health {
   ok: boolean; version: string; uptime: number; clients: number; history: number;
   db: 'ok' | 'memory' | 'error';
+}
+
+// ---- v2: hiring + skills library (contracts/api.md "Office actions") ----
+export type ShelfId = 'war_room' | 'analytics' | 'ads' | 'creators' | 'ops' | 'design' | 'engineering' | 'general';
+
+export interface Employee {
+  id: string; name: string; role: string; room: RoomId; emoji: string; color: string;
+  desk: string; // zone id + index, e.g. "growth_pod#2"
+  hiredAt: number;
+  switchAgentId: string | null;
+  status: 'active' | 'pending_console';
+}
+
+export interface LibraryBook {
+  id: string; name: string; description: string;
+  source: string; // e.g. "~/.claude/skills", "gstack", "plugin:x"
+  path?: string; // server-side SKILL.md path; omitted for non-loopback clients
+  department: ShelfId;
+  why: string; // librarian's one-line reason
+}
+
+export interface Library {
+  updatedAt: number | null;
+  librarian: 'idle' | 'working';
+  shelves: { id: ShelfId; label: string; books: LibraryBook[] }[];
 }

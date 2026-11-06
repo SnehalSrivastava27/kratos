@@ -49,3 +49,27 @@ GalleryItem  { name, url /* /gallery/<name> */, size, mtime /* epoch ms */, titl
   `assign` → speaker + targets working; `working` → working; `done`/`artifact`/`approved` → done;
   `pushback` → speaker working, targets waiting; `approval_needed` → waiting; `celebrate` → all done.
   A newer replay run (`id@<run>`) starts from idle. `last`/`room` = that person's newest sent event.
+
+## Office actions (v2: full-screen office, commands, hiring, skills library)
+
+**Who may call them:** requests from loopback (127.0.0.1 / ::1, i.e. the office opened on the same Mac)
+OR with `Authorization: Bearer $ADMIN_TOKEN`. Everyone else gets 401. They are never open, even in dev.
+
+| Method | Path | Body / query | Result |
+|---|---|---|---|
+| POST | `/api/command` | `{ room: RoomId, text: string (1–2000 chars) }` | Posts `text` into that Telegram topic through Switch, as the founder's office console. `202 { ok, via }`. It comes back into the office through the observer like any Telegram message. |
+| GET | `/api/people` | none | `Person[]`: contracts/roster.json people plus hired employees (with `desk` and `hiredAt`). The office uses this, not the static roster, in live mode. |
+| GET | `/api/employees` | none | `Employee[]` (hired only) |
+| POST | `/api/employees` | `{ name, role, room: RoomId, emoji?, color?, instructions, skills?: string[] /* library book ids */ }` | Creates the agent in Switch, joins it to "Kratos D2C", gives it a free desk. `201 Employee`, or `202 { employee, action: { kind: "open_url", url, label } }` if a human must click in Switch Console. Emits a `hired` event (speaker = new id, meta.employee_id). |
+| GET | `/api/library` | none | `Library` (shelves by department, books = installed skills) |
+| GET | `/api/library/book?id=` | none | `{ book: LibraryBook, markdown: string }` (the SKILL.md body, max 200 KB) |
+| POST | `/api/library/categorize` | none | Starts the Librarian (a Claude Code run) re-shelving every skill. `202 { ok, runId }`. Emits `working` / `done` events from speaker `librarian` in `war_room`. |
+
+## v2 types (web/src/shared/types.ts)
+```ts
+Employee    { id, name, role, room, emoji, color, desk: string /* zone id + index, e.g. "growth_pod#2" */, hiredAt: number, switchAgentId: string | null, status: "active" | "pending_console" }
+LibraryBook { id /* stable: source + skill name */, name, description, source /* e.g. "~/.claude/skills", "gstack", "plugin:x" */, path /* absolute SKILL.md path, server-side only, never sent to non-loopback clients */, department: ShelfId, why: string /* librarian's one-line reason */ }
+Library     { updatedAt: number | null, librarian: "idle" | "working", shelves: { id: ShelfId, label: string, books: LibraryBook[] }[] }
+ShelfId     = "war_room" | "analytics" | "ads" | "creators" | "ops" | "design" | "engineering" | "general"
+```
+Event types gain `hired` (a new employee joined) and `command` (reserved: the office console sent a command; the echo from Telegram arrives as a normal `message`).

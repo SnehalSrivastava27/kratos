@@ -121,6 +121,19 @@
         "desk",
         "phone"
       ]
+    },
+    {
+      "id": "library",
+      "label": "Skills Library",
+      "x": -3,
+      "z": -1,
+      "w": 3,
+      "d": 4,
+      "props": [
+        "bookcases",
+        "reading_chair"
+      ],
+      "note": "placeholder position; the office owner (P1) may move zones and grow the floor"
     }
   ]
 }
