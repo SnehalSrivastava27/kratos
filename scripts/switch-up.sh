@@ -163,7 +163,8 @@ if [ "$ROOT" != "$MAIN" ] && [ -f "$OBS_CREDS" ]; then mkdir -p "$ROOT/observer/
 # ---- 5. rooms + invites ----------------------------------------------------------------------
 gw GET /rooms > "$TMP/rooms"
 json '[print("•   room %r (%s) agents=%s" % (r["name"], r.get("bridge_type"), r.get("agent_count"))) for r in d]' < "$TMP/rooms"
-ROOM_ID=$(json 'print(next((r["id"] for r in d if r["name"]==sys.argv[1]), ""))' "$ROOM_NAME" < "$TMP/rooms")
+# Two rooms can share the name (a basic group upgraded to a forum supergroup gets a new chat id): prefer the supergroup (-100…).
+ROOM_ID=$(json 'rs=sorted((r for r in d if r["name"]==sys.argv[1]), key=lambda r: not str(r.get("external_channel_id") or "").startswith("-100")); print(rs[0]["id"] if rs else "")' "$ROOM_NAME" < "$TMP/rooms")
 CHAT_ID=""
 if [ -z "$ROOM_ID" ]; then
   todo "Phone: add @$BOT_USERNAME to the Telegram group \"$ROOM_NAME\" (it becomes a Switch room)."
