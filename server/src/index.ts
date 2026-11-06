@@ -117,7 +117,7 @@ const server = createServer(async (req, res) => {
       if (!r) return send(res, 404, { error: "not found" });
       return;
     }
-    if (SERVE_WEB && method === "GET" && !url.pathname.startsWith("/api/")) {
+    if (SERVE_WEB && method === "GET" && !/^\/(api|ws|gallery)(\/|$)/.test(url.pathname)) {
       const path = decodeURIComponent(url.pathname);
       const cache: Record<string, string> = path.startsWith("/assets/") ? { "cache-control": "public, max-age=31536000, immutable" } : {};
       const r = path === "/" ? false : serveFile(res, DIST, path, cache);
