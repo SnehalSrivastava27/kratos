@@ -59,3 +59,82 @@
   .hq-tag-name { font-size: 10px; padding: 0 6px 1px; border-width: 2px } .hq-tag-state { font-size: 9px }
   .hq-bubble { max-width: 200px; padding: 12px 10px 7px } .hq-bubble-text { font-size: 11.5px }
 }
+
+/* ---------- Full-screen HUD (v2) ----------
+   Adapted from AgentSystemLabs/agent-office (MIT), Copyright (c) 2026 AgentSystemLabs: src/client/style.css
+   (.panel, .btn, .topbar, .hint, .key, .backdrop, .modal, .help-grid, .md, .lib-*). */
+.hq-full { position: fixed; inset: 0 }
+.hq-hud { position: absolute; inset: 0; pointer-events: none; z-index: 5 }
+.hq-hud > * { pointer-events: auto }
+.ao-panel { background: var(--paper); border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow) }
+.ao-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 11px; font: 800 14px var(--font); color: var(--ink);
+  background: #fff; border: 3px solid var(--ink); border-radius: 12px; cursor: pointer; box-shadow: 0 3px 0 var(--ink); transition: transform .05s; white-space: nowrap }
+.ao-btn:hover { background: var(--paper-2) }
+.ao-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink) }
+.ao-btn:focus-visible { outline: 3px solid var(--info); outline-offset: 2px }
+.ao-btn.on { background: var(--ink); color: var(--paper) }
+.ao-btn.primary { background: var(--accent); color: #fff }
+.ao-btn.tg { background: #3390EC; color: #fff }
+.ao-btn.icon { width: 36px; padding: 0 }
+.ao-btn:disabled { opacity: .5; cursor: default }
+.ao-btn svg { width: 17px; height: 17px; stroke-width: 2.5 }
+.ao-top { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; pointer-events: none !important }
+.ao-top > * { pointer-events: auto }
+.ao-brand { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 7px; min-width: 0; max-width: min(560px, 46vw) }
+.ao-logo { display: grid; place-items: center; width: 34px; height: 34px; flex: none; border: 3px solid var(--ink); border-radius: 11px; font: 900 17px var(--font); color: #fff;
+  background: linear-gradient(135deg, #F4A300, #E07A00) }
+.ao-name { font-weight: 900; font-size: 17px; line-height: 1.1; white-space: nowrap }
+.ao-meta { font-size: 12.5px; font-weight: 700; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.ao-meta.red { color: #c8303a } .ao-meta.mint { color: #0f7a4f }
+.ao-pill { display: inline-flex; align-items: center; gap: 5px; border: 2px solid var(--ink); border-radius: 999px; padding: 0 8px 1px; font: 900 11px var(--font); background: var(--good); color: #fff; vertical-align: 2px; margin-left: 6px }
+.ao-pill.replay { background: var(--info) }
+.ao-pill i { width: 6px; height: 6px; border-radius: 50%; background: #fff }
+.ao-pill.live i { animation: hq-pulse 1s infinite }
+.ao-controls { display: flex; gap: 7px; padding: 7px; flex-wrap: wrap; justify-content: flex-end }
+.ao-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--ink); color: var(--paper); border: 3px solid var(--paper); border-radius: 14px;
+  padding: 9px 15px; font-weight: 800; font-size: 15px; box-shadow: 0 4px 0 rgba(0,0,0,.35); display: flex; gap: 14px; align-items: center; white-space: nowrap; pointer-events: none !important;
+  animation: ao-rise .18s ease-out }
+.ao-hint .title { color: #ffd166 }
+.ao-hint.red { background: #c8303a }
+.ao-key { display: inline-block; min-width: 26px; padding: 1px 7px; margin-right: 6px; border-radius: 7px; background: var(--paper); color: var(--ink); text-align: center; font-weight: 900; box-shadow: 0 2px 0 #999 }
+@keyframes ao-rise { from { transform: translate(-50%, 8px); opacity: 0 } }
+
+/* Telegram overlays: a topic drawer (left) and the chat (right), framed like agent-office panels. */
+.ao-drawer, .ao-chat { position: absolute; top: 72px; bottom: 12px; display: flex; flex-direction: column; overflow: hidden; animation: ao-slide .2s ease-out }
+.ao-drawer { left: 12px; width: 320px }
+.ao-chat { right: 12px; width: 390px }
+.ao-drawer > *, .ao-chat > * { flex: 1; min-height: 0 }
+@keyframes ao-slide { from { opacity: 0; transform: translateY(6px) } }
+.ao-x { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: #707579; flex: none }
+.ao-x:hover { background: #f1f1f4; color: #000 }
+.ao-x.on { color: #3390EC }
+.ao-x svg { width: 17px; height: 17px }
+
+/* Modals (dom.ts openModal + .modal) */
+.ao-backdrop { position: fixed; inset: 0; background: rgba(43,45,66,.45); display: grid; place-items: center; padding: 16px; z-index: 50; animation: ao-fade .15s; pointer-events: auto }
+.ao-backdrop.top { place-items: start center; padding-top: 12vh }
+@keyframes ao-fade { from { opacity: 0 } }
+.ao-modal { background: var(--paper); border: 3px solid var(--ink); border-radius: 20px; box-shadow: 0 6px 0 var(--ink); width: min(560px, 100%); max-height: calc(100svh - 32px);
+  display: flex; flex-direction: column; overflow: hidden; animation: ao-pop .18s ease-out; font-family: var(--font); color: var(--ink) }
+@keyframes ao-pop { from { transform: scale(.96); opacity: .5 } }
+.ao-modal > header { display: flex; align-items: center; gap: 10px; padding: 11px 14px 11px 16px; border-bottom: 3px solid var(--ink); background: var(--paper-2) }
+.ao-modal > header h2 { margin: 0; font-size: 18px; font-weight: 900; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.ao-modal .ao-body { padding: 16px; overflow: auto }
+.ao-modal > footer { display: flex; gap: 8px; justify-content: flex-end; padding: 11px 16px; border-top: 3px solid var(--ink); background: var(--paper-2); align-items: center }
+.ao-modal > footer .grow { flex: 1; font-size: 12px; color: var(--muted); font-weight: 700 }
+.ao-field { display: block; font-weight: 800; font-size: 13.5px; margin: 0 0 12px }
+.ao-field > span { display: block; margin-bottom: 5px }
+.ao-input { width: 100%; font: 600 15px var(--font); color: var(--ink); border: 3px solid var(--ink); border-radius: 12px; padding: 8px 11px; background: #fff; outline: none; resize: vertical }
+.ao-input:focus { border-color: var(--accent) }
+.help-grid { display: grid; grid-template-columns: auto 1fr; gap: 9px 14px; align-items: center; font-weight: 700; font-size: 14px }
+.help-grid .ao-key { justify-self: start; white-space: nowrap }
+
+@media (max-width: 760px) {
+  .ao-top { top: 8px; left: 8px; right: 8px }
+  .ao-brand { max-width: 52vw; padding: 5px 9px 5px 5px } .ao-logo { width: 30px; height: 30px } .ao-name { font-size: 15px }
+  .ao-controls { padding: 5px; gap: 5px } .ao-btn { height: 32px } .ao-btn.icon { width: 32px }
+  .ao-drawer, .ao-chat { top: auto; left: 0; right: 0; bottom: 0; width: auto; height: 64svh; border-radius: 20px 20px 0 0; border-bottom: 0; z-index: 30; animation: ao-sheet .22s ease-out }
+  .ao-hint { bottom: 18px; font-size: 13.5px; padding: 7px 12px; max-width: calc(100vw - 24px) }
+  @keyframes ao-sheet { from { transform: translateY(40px); opacity: 0 } }
+}
+@media (prefers-reduced-motion: reduce) { .ao-hint, .ao-drawer, .ao-chat, .ao-modal, .ao-backdrop { animation: none !important } }
