@@ -252,15 +252,47 @@ export async function storeHireTemplate(h: HireSpec, roomName: string): Promise<
   const content = JSON.stringify({
     version: 1,
     params: { directory: { type: "directory", default: h.directory }, team_room: { type: "room", default: [roomName] } },
-    agents: [{ name: h.id, description: h.description, addressing: "anyone", provider: "claude", model: TEAM_MODEL, location: "local", directory: "{directory}", join: ["{team_room}"], instructions: h.instructions }],
+    agents: [{ name: h.id, description: h.description, addressing: "anyone" /* scoped by activate() once created (syncPending) */, provider: "claude", model: TEAM_MODEL, location: "local", directory: "{directory}", join: ["{team_room}"], instructions: h.instructions }],
   }, null, 2);
   const t = await gw("POST", "/templates", { name: `Hire: ${h.displayName} (${h.id})`, description: h.description, kind: "group", content });
   return t.id;
 }
 
-/** Open addressing (anyone in the room, people and agents), like the team, then join the room. */
+/** Who may address a team agent (docs internals/identity-and-access#addressing-policy). Replaces the legacy open
+ *  `policy: null`, under which anyone in any room could address it, and so answer its permission requests:
+ *  1. anyone, people and agents, in our team rooms. The founder talks from Telegram without a linked Switch account,
+ *     which only `users: "*"` admits;
+ *  2. anywhere else, only agents (and the owner): d2c-finance creates the agents-only "Finance desk" at run time, so
+ *     its id can't be listed up front. People outside our rooms get Switch's visible refusal.
+ *  `platform` stays false, as under the open policy. scripts/switch-up.sh writes the same shape. */
+export const teamPolicy = (rooms: string[]) => ({
+  rules: [
+    { rooms, room_groups: "*", users: "*", agents: "*", owner: true, owner_agents: true, platform: false },
+    { rooms: "*", room_groups: "*", users: [], agents: "*", owner: true, owner_agents: true, platform: false },
+  ],
+});
+/** Scopes these agents' addressing to `roomIds` plus the team rooms their policy already names (rooms only grow:
+ *  one team serves every linked group). An agent already on that policy is left alone. */
+let scoping: Promise<unknown> = Promise.resolve();
+export function scopeAddressing(agentIds: string[], roomIds: string[]): Promise<void> {
+  // One at a time: two links (or a link during startup) must not read the same old rooms list and drop each other's room.
+  const next = scoping.then(() => scopeNow(agentIds, roomIds));
+  scoping = next.catch(() => {});
+  return next;
+}
+async function scopeNow(agentIds: string[], roomIds: string[]) {
+  const all: { id: string; addressing_policy?: { rules?: { rooms?: unknown }[] } | null }[] = await gw("GET", "/agents");
+  for (const id of agentIds) {
+    const cur = all.find((a) => a.id === id)?.addressing_policy;
+    const had = cur?.rules?.[0]?.rooms;
+    const policy = teamPolicy([...new Set([...(Array.isArray(had) ? had : []), ...roomIds])].sort());
+    if (JSON.stringify(cur) !== JSON.stringify(policy)) await gw("PUT", `/agents/${id}/addressing-policy`, { policy });
+  }
+}
+
+/** Team addressing (teamPolicy), then join the room. */
 export async function activate(agentId: string, roomId: string) {
-  await gw("PUT", `/agents/${agentId}/addressing-policy`, { policy: null });
+  await scopeAddressing([agentId], [roomId]);
   await joinRoom(roomId, agentId);
 }
 

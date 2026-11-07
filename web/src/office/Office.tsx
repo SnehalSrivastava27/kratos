@@ -18,13 +18,15 @@ import { AgentCard } from './AgentCard';
 import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { Coach, HelpDialog, Hint } from './Hud';
-import { Armchair, BarChart3, ClipboardList, Coffee, IndianRupee, UserPlus, Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
+import { Armchair, BarChart3, Coins, ClipboardList, Coffee, IndianRupee, UserPlus, Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, Trophy, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
 import { useDemoDirector } from './demoDirector';
 import { DemoPrompt, PlanCard } from './ApprovalPrompt';
 import { SwitchChip, SwitchPanel } from './SwitchPanel';
+import { RoiPanel } from './RoiPanel';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
+import { HACKATHON_URL } from './engine/layout';
 import type { GalleryItem } from './engine/props';
 import { Logo } from '@/brand/Logo';
 import './office.css';
@@ -144,6 +146,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [view, setView] = useState<'player' | 'spectator'>(() => (new URLSearchParams(location.search).has('spectator') ? 'spectator' : 'player'));
   const [target, setTarget] = useState<Target | null>(null);
   const [sw, setSw] = useState(false); // the Switch panel
+  const [roi, setRoi] = useState(false); // SW5: Switch ROI + Trust
   const hooks = useRef<Hooks>({ onTarget: setTarget, onWorldClick: () => {}, onSwitch: () => setSw(true) });
   const readyRef = useRef(onReady);
   readyRef.current = onReady;
@@ -276,7 +279,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
   const [kpiOpen, setKpiOpen] = useState(false);
   const [seated, setSeated] = useState(false);
   const [nudge, setNudge] = useState(0);
-  const modalOpen = help || !!cmd || !!hireAt || !!libAt || sw || !!card || planOpen || ledger;
+  const modalOpen = help || !!cmd || !!hireAt || !!libAt || sw || !!card || planOpen || ledger || roi;
   useEffect(() => engine.current?.setEnabled(!modalOpen), [modalOpen]);
   useEffect(() => engine.current?.setInsets(!narrow && drawer.open ? 332 : 0, !narrow && chat.open ? 402 : 0), [narrow, drawer.open, chat.open]);
 
@@ -355,6 +358,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     if (t.kind === 'dog') return { text: 'Pet the office dog', title: <HintIcon dept={{ ...DEPT.general, Icon: PawPrint }} /> };
     if (t.kind === 'switch') return { text: 'Open Switch · see every message it routes', title: <HintIcon dept={{ ...DEPT.general, Icon: Network }} /> };
     if (t.kind === 'jukebox') return { text: music ? 'Stop the music' : 'Play some lo-fi', title: <HintIcon dept={{ ...DEPT.general, Icon: Music }} /> };
+    if (t.url === HACKATHON_URL) return { text: 'Open the Flip the Switch hackathon page ↗', title: <HintIcon dept={{ ...DEPT.general, Icon: Trophy }} /> };
     return { text: 'Open this banner', title: <HintIcon dept={DEPT.design} /> };
   };
 
@@ -383,6 +387,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       if (hireAt) return setHireAt(null);
       if (libAt) return setLibAt(null);
       if (sw) return setSw(false);
+      if (roi) return setRoi(false);
       if (narrow && (drawer.open || chat.open)) return (setDrawer((d) => ({ ...d, open: false })), setChat((c) => ({ ...c, open: false })));
       if (drawer.open && !drawer.pinned) return setDrawer((d) => ({ ...d, open: false }));
       if (chat.open && !chat.pinned) return setChat((c) => ({ ...c, open: false }));
@@ -451,6 +456,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
               <MessageCircle /><span className="hidden sm:inline">Chat</span>
               {totalUnread > 0 && !chat.open && <span className="rounded-full bg-[#3390EC] px-1.5 text-[11px] text-white">{totalUnread}</span>}
             </button>
+            <button type="button" className="ao-btn icon" onClick={() => setRoi(true)} title="Switch ROI: what each agent costs and delivers" aria-label="Switch ROI and Trust"><Coins /></button>
             <button type="button" className="ao-btn tg" onClick={() => setCmd({ room: hereRoom() })} title="Command bar (/ or Ctrl K)">
               <Command /><span className="hidden sm:inline">Message</span>
             </button>
@@ -494,6 +500,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
       {wantKpi && !kpiShut && !modalOpen && <KpiPanel onClose={() => (setKpiOpen(false), setKpiShut(true))} style={!narrow && drawer.open ? { left: 344 } : undefined} />}
       {playable && !modalOpen && <DemoPrompt nudge={nudge} phase={director.phase} events={events} first={demoFeed[0]} onStart={director.start} onApprove={director.approve} onChanges={() => director.changes()} onRestart={() => { setFocus(null); setSeen({}); setRun((r) => r + 1); }} />}
       {sw && <SwitchPanel events={events} onClose={() => setSw(false)} />}
+      {roi && <RoiPanel onClose={() => setRoi(false)} />}
       {card && personById[card] && (
         <AgentCard person={personById[card]} ps={scene.people[card]} last={[...chatEvents].reverse().find((e) => e.speaker === card)}
           topic={ROOMS.find((r) => r.id === roomOf(card))?.topic ?? 'War Room'} onClose={() => setCard(null)}

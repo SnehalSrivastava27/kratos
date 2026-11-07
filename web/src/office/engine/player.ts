@@ -6,8 +6,8 @@
 import type { NavGrid, Rect } from './nav';
 
 export const RADIUS = 0.28;
-const WALK = 4.0; // m/s: a 44 m floor wants a brisk walk
-const RUN = 7.2; // Shift: sprint
+const WALK = 4.6; // m/s: an 88 m floor wants a brisk walk
+const RUN = 9.5; // Shift: sprint
 const KEYS: Record<string, [number, number]> = {
   KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1],
   KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0],

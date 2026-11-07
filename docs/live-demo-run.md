@@ -104,6 +104,15 @@ Kickoff: `#WarRoom @d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L ma
 - **No topics:** everything landed in the group's General topic because no forum topic is anchored as a
   Switch thread yet (Logistics' one reply landed in a thread under its ask).
 
+### Optional next run: the Captain as main agent
+Not used in this run. Before the kickoff, the founder sends `!assign-agent @d2c-captain` in the group
+(Switch 0.31 follow-ups, docs `using/work-in-a-room#keep-talking-without-tagging-the-agent`). Then untagged
+founder messages ("now make it 30% off") reach the Captain; an `@` still wins and `!unassign-agent` undoes it.
+ROI caveat: the Captain already takes ~40% of team turns ([switch/14-roi-trust.md](switch/14-roi-trust.md)) and
+every untagged founder message would add one, so read Captain turns in `/api/roi` before and after; if they jump,
+`!follow-ups off` keeps the main agent and drops thread follow-ups. Founder only, by hand: Switch accepts it only
+from someone the Captain takes instructions from.
+
 ## 3. QA Lab, live (02:49)
 The group is still not linked to an office workspace, so `/api/qa/*` can't run. Instead, 4 trivial questions
 posted directly with `#QALab`, one per agent, answers checked against the data with the kit:

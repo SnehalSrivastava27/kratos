@@ -65,6 +65,8 @@ team already uses. You run a Switch server (I used the **Switch Console** Mac ap
 connect a chat app through a **bridge**, and add agents. Agents talk to the server over an open
 **agent protocol**, so you can write your own.
 
+![Kratos end to end](../diagrams/18-architecture.png)
+
 ![Every Switch feature Kratos uses](../diagrams/switch-features-map.png)
 
 I did not want to build a chat app, a bot framework and a Telegram integration. I wanted to build
@@ -224,6 +226,40 @@ Like room documents, a role change is not a stream event: Switch posts "🎭 ass
 
 <!-- TODO(user): say whether the role notice and the 9 AM brief showed up live in Telegram (in the live run, Finance's assume_role call failed once and it carried on without the role) -->
 
+### 12. ROI and Trust: what every agent costs, and what guards it
+
+Switch's site sells three pillars: Rooms, ROI and Trust. Everything above is Rooms. On the last
+morning I went after the other two.
+
+**ROI.** Switch keeps usage counters per agent and model: turns, messages, input, output and
+cache tokens, in hourly buckets (`GET /gateway/tenants/{id}/usage`). The office server joins them with
+what each agent posted or pinned in your workspace and prices the tokens at list rates. The coin
+button in the office shows the result: turns, estimated cost, deliverables and cost per deliverable
+per agent, and a plain recommendation or two.
+
+![Switch ROI + Trust](../diagrams/16-roi-trust.png)
+
+What the last 24 hours said:
+
+- **Model choice is the whole bill.** 96 team turns cost about **$9.08**: **$8.75** on the early
+  Opus runs, **$0.33** on Haiku. Opus is 40x Haiku per token.
+- **Agents mostly re-read.** About **250 cache-read tokens for every token written**. Prompt caching
+  is what makes a chatty 16-agent room affordable.
+- **The Captain is the cost centre:** 40% of all turns, because every report wakes it. Cutting
+  "confirmed" replies saves more than trimming prompts.
+- **It is a floor, not a bill.** Switch counts tokens, not money, and Haiku prompts over 100K tokens
+  bill at 5x, so our estimate is a lower bound.
+
+Switch also has **budgets**: a cap per agent, metric and model over a rolling period, enforced at
+delivery. The panel lists them, but creating one is off unless `ROI_BUDGETS=on`: a cap that trips
+mid-demo silences an agent.
+
+**Trust.** Switch Trust checks every message against a hosted guardrails service before delivery
+(block, redact, alert). Without a policy id and key it runs a null client that allows everything,
+so here it is **disabled**, and the panel says so. The guardrails that run today are ours: the tool
+lockdown, the SAFETY block in every agent, and the Finance + founder approval gate (below). Full
+write-up: [`docs/switch/14-roi-trust.md`](../switch/14-roi-trust.md).
+
 ## The data and the toolkit
 
 Agents should not guess numbers. Every number comes from a command.
@@ -299,7 +335,9 @@ in the data" refusals, and one prompt injection.
 | 6 | Sonnet | 83/84 | 65/65 | 5 s | 1.0 | $3.07 | Same rules as run 5, for comparison |
 
 On the final rules, **Haiku scored 149/149 for $0.21; Sonnet scored 148/149 for $3.07**, about 15x
-the cost for no gain. Sonnet's one miss read "orders" as delivered orders only. Style went from
+the cost for no gain. A **tier 3** (17 vague, two-part, quoted-follow-up and made-up-name asks) and
+30% shorter instructions later, Haiku is at **166/166 for $0.21**.
+Sonnet's one miss read "orders" as delivered orders only. Style went from
 149/152 to 152/152 once the rules said "no italic last line = not finished". The misses along the
 way taught more than the passes:
 
@@ -339,9 +377,21 @@ repo it let `rm` and `touch` through), and an agent's `tools` list matches tool 
 
 ## The 3D office
 
-The office is a 44 × 22 m floor built on three.js: pods for each department, a War Room, a Data
-Wall, a Finance cabin, a library of 316 skills, a chai corner and an office dog. You walk it as
-the founder with WASD.
+The office started as a 44 × 22 m floor built on three.js: pods for each department, a War Room, a
+Data Wall, a Finance cabin, a library of 316 skills, a chai corner and an office dog. On the last
+morning it grew to **88 × 44 m**, four times the area with no new desks: the original office is
+the front-left block, open north and east wings add a boulevard, atriums, lounges, a café, glass
+meeting rooms and a Town Hall, and Finance, Creators and Growth moved out into the wings so the
+old block could breathe.
+
+![The office floor plan](../diagrams/17-office-floor-plan.png)
+
+You walk it as the founder with WASD, and the camera now sits behind you at eye level, ported from
+[agent-office](https://github.com/AgentSystemLabs/agent-office) (MIT). Two lessons from the size:
+a follow camera needs walls of its own (backed through a doorway it stares at the lintel), and a
+big office makes it easy to miss the story, so when you stand still the camera glides to whoever is
+talking. The Town Hall screen was meant to show the hackathon page live; the site sends
+`X-Frame-Options: DENY`, so it is a screenshot, and pressing E opens the real page.
 
 It never talks to Telegram. It only watches Switch, through the observer. Every message sends a
 pulse Telegram → Switch → desk; private notes are violet. Click the Switch core to see what it
@@ -384,6 +434,11 @@ the feature survey's instruction patches went to the evals agent, which owns the
 By 02:30, all 16 agents were live in Switch on Haiku. One thing the loop could not do: link the
 founder's real Telegram group to a test account so it could run the live QA Lab. The permission
 layer refused. That step needs a human, by design.
+
+**File ownership is not conflict-proof.** The ROI panel and the bigger office were built in
+separate worktrees with separate owners, and still collided: both added an icon to the same
+one-line `lucide-react` import in the office HUD. Keeping both was trivial, but only because the
+orchestrator did a trial merge on a throwaway branch first. Shared HUD files are the hotspot.
 
 In numbers: about 44 task branches, 45 merges and 382 commits in roughly 11.5 hours, 93 of them by
 the orchestrator.
@@ -430,6 +485,8 @@ Every problem we hit, why, and the fix, with sources: [`findings.md`](findings.m
 4. **Match by id, not by name.** Names get prefixes, and anyone can call a group "Kratos D2C".
 5. **Trivial evals saturate fast.** The useful signal starts at joins, date windows and refusals.
 6. **Agents reviewing agents works,** as long as the reviewer is fresh and told to break things.
+7. **Measure cost per agent, not per run.** Switch's usage counters showed one agent taking 40% of
+   the turns and one model taking 96% of the bill. Neither was visible from the chat.
 
 ## What's next
 
@@ -437,7 +494,8 @@ Every problem we hit, why, and the fix, with sources: [`findings.md`](findings.m
   bridges, but no WhatsApp adapter yet.
 - **Approval cards** for the founder's sign-off: Telegram buttons that Switch already has, once a
   passive approvals agent can stay connected.
-- **Budgets per teammate.** Switch has spend caps per agent.
+- **Budgets per teammate.** Switch has spend caps per agent; the panel lists them, turning them on is one flag.
+- **Switch Trust**, once we have a policy id and key: hosted block / redact / alert on every message.
 - **Live Shopify data** instead of CSVs, returns triage and restock alerts.
 
 ## Try it

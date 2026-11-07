@@ -3,6 +3,7 @@ import zonesJson from '../../../contracts/zones.json';
 import type { OfficeEvent, Person, Room, Zone } from '../shared/types';
 import type { Ctx, SceneState } from './officeState';
 import { tgPlain } from './tgtext';
+import { placeZone } from './engine/layout';
 
 /** contracts/roster.json, never changed. */
 export const STATIC_ROSTER: readonly Person[] = Object.freeze((rosterJson.people as Person[]).map((p) => Object.freeze({ ...p })));
@@ -12,7 +13,8 @@ export const STATIC_ROSTER: readonly Person[] = Object.freeze((rosterJson.people
  * so one workspace's (or the demo's) hires never show up in another. Mutated in place: everything holds these refs.
  */
 export const roster: Person[] = [...STATIC_ROSTER];
-export const zones = zonesJson.zones as Zone[];
+/** contracts/zones.json, placed on the web floor (engine/layout.ts ZONE_MOVES: some departments sit in the new wings). */
+export const zones = (zonesJson.zones as Zone[]).map(placeZone);
 export const zoneById = Object.fromEntries(zones.map((z) => [z.id, z])) as Record<string, Zone>;
 export const personById: Record<string, Person> = {};
 /** The Telegram group's title: the demo's made-up one, or the signed-in workspace's (setGroup, from Office). A live binding: importers see the change. */
@@ -38,7 +40,7 @@ export const zoneColor = (zoneId: string) =>
 
 /** Every desk in the office (contracts/zones.json `desks`): id `<zone>#<i>`, world centre. Monitor faces +z, the sitter is on the camera side. */
 export interface Desk { id: string; zone: string; x: number; z: number }
-export const DESKS: Desk[] = (zonesJson.zones as (Zone & { desks?: [number, number][] })[]).flatMap((z) =>
+export const DESKS: Desk[] = (zones as (Zone & { desks?: [number, number][] })[]).flatMap((z) =>
   (z.desks ?? []).map(([dx, dz], i) => ({ id: `${z.id}#${i}`, zone: z.id, x: z.x + dx, z: z.z + dz })),
 );
 export const deskById = Object.fromEntries(DESKS.map((d) => [d.id, d])) as Record<string, Desk>;

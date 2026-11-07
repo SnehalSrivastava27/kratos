@@ -13,3 +13,4 @@ data/library.json
 data/*.tmp
 evals/reports/*.json
 data/.cache/
+__pycache__/

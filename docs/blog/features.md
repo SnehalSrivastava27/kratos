@@ -12,7 +12,8 @@ Contents: [Team](#1-the-16-agent-team) · [Finance gate](#2-the-finance-gate) ·
 [Accounts](#15-accounts-and-linked-groups) · [3D office](#16-the-3d-office) · [Switch hub](#17-the-switch-hub-in-the-office) ·
 [Demo replay](#18-the-demo-replay) · [Skills library](#19-the-skills-library-and-librarian) · [Toolkit](#20-the-toolkit-kit) ·
 [Data](#21-the-data) · [Evals](#22-qa-lab-evals) · [KPIs](#23-the-data-wall-kpis) · [Landing](#24-the-landing-page) ·
-[Security](#25-server-and-security) · [Build swarm](#26-the-build-swarm) · [Lockdown](#27-the-agent-lockdown)
+[Security](#25-server-and-security) · [Build swarm](#26-the-build-swarm) · [Lockdown](#27-the-agent-lockdown) ·
+[ROI + Trust](#28-switch-roi-and-trust-panel)
 
 ---
 
@@ -223,20 +224,28 @@ link by id. [08](../switch/08-accounts-and-workspaces.md)
 
 ## 16. The 3D office
 
-**What it does.** A 44 × 22 m toon-shaded office: three rows of pods, a west wing with the Library,
-Finance cabin and open desks. Every message makes someone walk, type or talk. You walk it as the founder.
+**What it does.** An 88 × 44 m toon-shaded HQ with the same 21 desks as before. The original 44 × 22 m office
+(rows of pods, a west wing with the Library and open desks) is the front-left block; the Finance Cabin and
+Creator Studio moved into the north wing and the Growth Pod into the east wing, with Switch cables following
+them. The wings add room to walk: a 4 m boulevard, two atriums, two lounges, a café, glass
+meeting rooms and a **Town Hall** whose screen shows the "Flip the Switch" hackathon page (a screenshot: the
+site refuses to be framed; click or E opens it). Every message makes someone walk, type or talk.
 
-**How to use it.** `/app` (live) or `/demo`. WASD or click to walk, Shift to sprint, E to use what you face,
-the eye button for the spectator view.
+**How to use it.** `/app` (live) or `/demo`. WASD or click to walk, Shift to sprint, E to use what you face.
+The camera is an eye-level third-person follow camera (drag or two-finger scroll orbits, pinch or wheel zooms);
+stand still while the story plays and it glides to whoever is talking. The eye button is the spectator view.
 
-**Files.** `web/src/office/` (`Office.tsx`, `engine/`, `officeState.ts`) · `contracts/zones.json` · checks:
-`officeState.check.mjs`, `nav.check` (all 21 desks reachable).
+**Files.** `web/src/office/` (`Office.tsx`, `engine/`, `officeState.ts`) · `engine/layout.ts` (floor, walls,
+wings) · `contracts/zones.json` · checks: `officeState.check.mjs`, `nav.check` (all 21 desks reachable) ·
+camera and engine adapted from AgentSystemLabs/agent-office (MIT, `web/src/office/THIRD_PARTY_LICENSE.md`).
+
+![The office floor plan](../diagrams/17-office-floor-plan.png)
 
 **Switch.** None directly: it reads Switch through the observer and the office server.
 
 ## 17. The Switch hub in the office
 
-**What it does.** A Switch core sits behind the Telegram wall, with cables to every desk. Each event
+**What it does.** A Switch core, wearing the real Switch logo (from switchagents.ai), sits behind the Telegram wall, with cables to every desk. Each event
 sends a pulse Telegram → Switch → desk (violet for private notes). Click it for counters, the last
 routed hops and the documents pinned in Switch.
 
@@ -367,3 +376,23 @@ Change the tool list in `switch/lockdown.json`, the rules in `.claude/settings.j
 **Switch.** Managed agent definition: `advanced_config.tools`, `auto_mode`, `auto_approve`; approval requests.
 
 ![Agent lockdown](../diagrams/agent-lockdown.png)
+
+## 28. Switch ROI and Trust panel
+
+**What it does.** The coin button in the office HUD opens **Switch ROI** (per agent: turns and share, models,
+estimated cost, deliverables posted or pinned, cost per deliverable, one or two plain recommendations) and
+**Switch Trust** (whether hosted guardrails are on, plus the ones that run today: tool lockdown, the SAFETY block,
+the Finance + founder gate, eval injection refusals). Live numbers come from Switch's own usage counters; dollars
+are an estimate at list prices. `/demo` shows numbers modelled on the live War Room run, labelled "demo".
+
+**How to use it.** Coin button in `/app` or `/demo`. API: `GET /api/roi?ws=<id>&hours=24` (max 720). Live numbers
+need the host owner (Switch usage is tenant-wide). Budget creation: `POST /api/roi/budgets`, only with
+`ROI_BUDGETS=on`.
+
+**Files.** `server/src/roi.ts` · `web/src/office/RoiPanel.tsx` · `server/test/sw5.test.mjs` ·
+`docs/switch/14-roi-trust.md`.
+
+**Switch.** Tenant usage (`GET /gateway/tenants/{id}/usage`), budgets (`/gateway/tenants/{id}/budgets`), trust
+settings (`GET /gateway/trust-settings`). Switch Trust itself is hosted and disabled here (no policy id or key).
+
+![ROI + Trust data flow](../diagrams/16-roi-trust.png)

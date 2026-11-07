@@ -19,6 +19,8 @@
 .hq-overlay { position: absolute; inset: 0; pointer-events: none; overflow: hidden }
 .hq-anchor { position: absolute; left: 0; top: 0; will-change: transform }
 .hq-over { position: absolute; left: 0; bottom: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px }
+/* The overview (people drawn bigger from far off): their tags grow with them. */
+.hq-far .hq-over { scale: 1.25; transform-origin: 50% 100% }
 .hq-ding { font-size: 22px; line-height: 1; animation: hq-ding 1.6s ease-out both }
 @keyframes hq-ding { 0% { opacity: 0; transform: translateY(10px) scale(.4) } 15% { opacity: 1; transform: translateY(-4px) scale(1.15) }
   30% { transform: none } 80% { opacity: 1 } 100% { opacity: 0; transform: translateY(-14px) } }

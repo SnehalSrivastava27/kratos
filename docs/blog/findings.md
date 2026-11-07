@@ -302,3 +302,69 @@ nothing to push back on and no nudge went out. The scripted demo still shows it.
 Chrome's software GPU (SwiftShader) silently drops the office's instanced pulse beads, so screenshots
 of the Switch hub need the real GPU (`--use-angle=metal`).
 - `docs/overnight-log.md:67`
+
+## ROI, Trust and the bigger office (7 Nov morning)
+
+### 58. Model choice is the whole bill
+Switch's usage counters for the last 24 hours: 96 team turns, an estimated **$9.08**. **$8.75** of it was early
+runs on Opus 5.5 (before the team moved to Haiku), **$0.33** on Haiku 5.5. Per token Opus is 40x Haiku. Switch
+splits tokens by model, so this showed up without any logging of our own.
+- `docs/switch/14-roi-trust.md` "Findings" 1 · `server/src/roi.ts` (`PRICES`, `groupUsage`)
+
+### 59. Agents mostly re-read
+31.4M cache-read tokens against 126K output tokens: about **250 tokens read for every token written**. The
+Captain re-reads 96% of its input from cache. Prompt caching is what makes a chatty 16-agent room affordable.
+- `docs/switch/14-roi-trust.md` "Findings" 2
+
+### 60. The Captain is the cost centre
+**40% of all turns** (38 of 96), because every report wakes it. Fewer wake-ups (no "confirmed" replies, one ask
+per plan) save more than any prompt trim (compare finding 52).
+- `docs/switch/14-roi-trust.md` "Findings" 3
+
+### 61. Switch counts tokens, not money, and our dollars are a floor
+The usage API returns turns, messages and four token counters per model; dollars are our estimate at list prices.
+Haiku prompts over 100K tokens bill at 5x, and a long-chat Captain turn can cross that, so the panel's number is
+a lower bound.
+- `server/src/roi.ts:10-17` · `docs/switch/14-roi-trust.md` "What we use"
+
+### 62. Switch Trust is hosted-only
+Trust sends each message to an external check endpoint before delivery. With no policy id and key Switch runs a
+null client that allows everything; the live check said `enabled: false`. So the guardrails that actually run
+are ours: tool lockdown, the SAFETY block, the Finance + founder gate. The panel says so instead of pretending.
+- `docs/switch/14-roi-trust.md` "What is hosted-only" · `core:trust/client.py`
+
+### 63. Budgets can stop an agent mid-demo
+Switch enforces spend caps at delivery and counts usage after a turn ends, so a cap overshoots by one turn and
+then silences the agent until the period turns over. We list budgets and keep creation behind `ROI_BUDGETS=on`.
+- `docs/switch/14-roi-trust.md` "How to turn on budgets" · `server/src/index.ts:365-366`
+
+### 64. Usage is tenant-wide, not per room
+Switch's usage covers every workspace's agents on the instance, so only the host owner gets live numbers;
+other accounts see "unavailable" without Switch being asked.
+- `server/src/roi.ts` (`roi`, `allowed`) · `server/src/index.ts:361-364`
+
+### 65. The hackathon page can't be framed
+The Town Hall screen was meant to show the "Flip the Switch" page live. The site sends `X-Frame-Options: DENY`,
+so the screen is a screenshot texture with a label, and click / E opens the real page in a new tab.
+- `status/O7.json` (task/O7) · `web/src/office/engine/layout.ts` `HACKATHON_URL` (task/O7)
+
+### 66. A bigger floor needs walking room, not desks
+The office went from 44 × 22 m to 88 × 44 m (4x the area) with **no new desks**: the original office is the
+front-left block and the wings are mostly corridors, atriums, lounges and meeting rooms. Only three departments
+moved out (Finance, Creators, Growth), as web-only zone moves, so `contracts/zones.json` and every desk id stayed
+the same and the server never noticed. The size needed a real path-finder (a rasterised nav grid and a
+binary-heap A*: the floor is about 100k cells) and a shadow box that follows you (22 m around you while walking, the whole floor in the overview).
+- `web/src/office/engine/layout.ts` `FLOOR`, `CORE`, `ANNEX`, `ZONE_MOVES` · `web/src/office/engine/Engine.ts` `updateSky` · `web/src/office/engine/nav.ts:84` (task/O7)
+
+### 67. A follow camera needs walls of its own
+At eye level, a camera backed through a doorway looks at the lintel. The port keeps it on your side of every
+wall (doorways filled in, walls grown so the near plane never pokes through), lets long jumps glide while
+walking stays tight, and only glides to whoever is talking after you stand still for 3.5 s.
+- `web/src/office/engine/Engine.ts` `CAM_WALLS`, `updateCamera` (task/O7) · credit: `web/src/office/THIRD_PARTY_LICENSE.md` (task/O7)
+
+### 68. Parallel branches collide on one-line imports
+The ROI panel (SW5) and the bigger office (O7) were built in separate worktrees with separate file ownership,
+and still conflicted: both added an icon to the same single-line `lucide-react` import in `Office.tsx`. The fix
+was trivial (keep both), but only because we did a trial merge on a throwaway branch first. Shared HUD files are
+the hotspot that file ownership doesn't cover.
+- merge `53b8325` (task/O7) · branch `trial/O7-SW5`

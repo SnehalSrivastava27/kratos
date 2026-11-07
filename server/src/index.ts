@@ -16,6 +16,7 @@ import { SwitchError, switchHealth } from "./switch.js";
 import { handleLibrary } from "./library/index.js";
 import { handleQa } from "./qa.js";
 import { kpis } from "./kpis.js";
+import { roi, createBudget } from "./roi.js";
 
 const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
 const env = process.env;
@@ -132,7 +133,7 @@ const localHops = (req: IncomingMessage) =>
 const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHops(req) && localHost(req);
 /** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
 const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
-const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
+const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|roi\/budgets|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
 /** Every state-changing office/admin/auth route: JSON only (a cross-site "simple" POST can't send it without a preflight
  *  we never answer), a foreign Origin is refused, and without the token the Host must be local or configured. */
 function checkWrite(req: IncomingMessage) {
@@ -346,7 +347,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, 200, [...roster.people, ...listEmployees().map((e) => employeePerson(e, roster.rooms))]);
 
   // ---- scoped to one workspace (v3): session (or ADMIN_TOKEN) + ?ws= ----
-  if (/^\/api\/(history|rooms|agents|people|employees|command|brief|library|documents)(\/|$)/.test(url.pathname)) {
+  if (/^\/api\/(history|rooms|agents|people|employees|command|brief|library|documents|roi)(\/|$)/.test(url.pathname)) {
     const { user, ws } = scope(req, url);
     if (route === "GET /api/history") return send(res, 200, recent(ws.id, limitParam(url, 200)));
     if (route === "GET /api/rooms") return send(res, 200, rooms(liveRoster(ws), roomStats(ws.id), recent(ws.id, RING_MAX)));
@@ -357,6 +358,15 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     }
     if (route === "POST /api/brief") return send(res, 202, await briefNow(ROOT, ws)); // SW4: the Captain's morning brief, now
     if (route === "GET /api/documents") return send(res, 200, documents(ws.id)); // SW2: room documents pinned in Switch
+    // SW5: Switch ROI + Trust. Usage is tenant-wide, so live numbers only for the host owner (or ADMIN_TOKEN).
+    const owner = hasToken(req, ADMIN_TOKEN) || (!!user && isHostOwner(user));
+    if (route === "GET /api/roi")
+      return send(res, 200, await roi({ root: ROOT, hours: Math.min(720, Math.max(1, Math.floor(Number(url.searchParams.get("hours") ?? 24)) || 24)), events: recent(ws.id, RING_MAX), docs: documents(ws.id), allowed: owner }));
+    if (route === "POST /api/roi/budgets") {
+      if (env.ROI_BUDGETS !== "on") return send(res, 404, { error: "not found" }); // off by default: a reached cap stops an agent mid-demo
+      if (!owner) throw new HttpError(403, "only the host owner");
+      return send(res, 201, await createBudget(await readJson(req)));
+    }
     if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(ws), recent(ws.id, RING_MAX)));
     if (await handleOffice(req, url, { root: ROOT, roster, ws, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit: emitTo(ws.id) })) return;
     // Library paths are shown only to the office on this Mac (or ADMIN_TOKEN). Re-shelving is host-wide (rewrites

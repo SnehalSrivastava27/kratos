@@ -4,7 +4,7 @@ import { Hand, Zap } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DEPT, FEED, PEOPLE, TG_GROUP } from './data';
 import { TgText } from './Telegram';
-import { FloorPlan } from './FloorPlan';
+import { FloorPlan, SHARED } from './FloorPlan';
 import { Band, Container, MateIcon, Reveal } from './ui';
 
 // PLAN §9.1 section D; the captain's row follows the hero workflow in §3.
@@ -19,15 +19,23 @@ const TEAM = [
 ];
 /** Who works under each lead (roster `reports_to`). */
 const CREW = (lead: string) => Object.values(PEOPLE).filter((p) => p.reports_to === lead).map((p) => p.name);
+/** Floor-plan tiles that aren't a department lead: who (if anyone) is there and what the room is for. */
+const OTHER: Record<string, string> = {
+  founder: 'Your desk, by the front door. Walk the office from here, or sit down and watch the whole team work.',
+  librarian: 'The skills library: the Librarian reads every installed skill and shelves it by department.',
+  ...Object.fromEntries(Object.entries(SHARED).map(([k, v]) => [k, v.about])),
+};
 // The teammate's last real message in the demo, shown as proof.
 const LAST = Object.fromEntries(TEAM.map(({ id }) => [id, [...FEED].reverse().find((e) => e.speaker === id && e.type !== 'working')]));
 
 export default function Departments() {
+  // The selected tile: a department lead (the tabs), or any other room picked on the floor plan.
   const [id, setId] = useState(TEAM[0].id);
-  const t = TEAM.find((m) => m.id === id)!;
+  const t = TEAM.find((m) => m.id === id);
   const p = PEOPLE[id];
-  const { room } = DEPT[id];
+  const room = (DEPT[id] ?? SHARED[id]).room;
   const last = LAST[id];
+  const Other = (DEPT[id] ?? SHARED[id]).Icon;
 
   return (
     <Band>
@@ -48,6 +56,18 @@ export default function Departments() {
           <Reveal delay={0.06} className="mt-8 grid overflow-hidden rounded-2xl border border-black/[0.07] bg-white md:grid-cols-2">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div key={id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.3, ease: 'easeOut' }} className="flex flex-col gap-7 p-6 md:p-10">
+                {!t ? (
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="grid size-10 shrink-0 place-items-center rounded-xl" style={{ background: `${p?.color ?? '#3390EC'}17`, color: p?.color ?? '#3390EC' }}><Other className="size-5" strokeWidth={1.5} /></span>
+                      <div>
+                        <h3 className="text-lg font-medium tracking-tight">{room}</h3>
+                        {p && <p className="text-[13px] text-neutral-500">{p.name}</p>}
+                      </div>
+                    </div>
+                    <p className="text-[15px] leading-relaxed text-neutral-700">{OTHER[id]}</p>
+                  </div>
+                ) : (<>
                 <div className="flex items-center gap-3">
                   <MateIcon id={id} size="lg" />
                   <div>
@@ -72,10 +92,11 @@ export default function Departments() {
                     <TgText text={last.text} className="mt-1.5 text-[14px] leading-snug text-neutral-800" />
                   </figure>
                 )}
+                </>)}
               </motion.div>
             </AnimatePresence>
             <div className="border-t border-black/[0.07] bg-[#FFF8EC] p-4 md:border-t-0 md:border-l md:p-8">
-              <FloorPlan lit={id} className="h-full min-h-[300px]" />
+              <FloorPlan lit={id} onPick={setId} className="h-full min-h-[300px]" />
             </div>
           </Reveal>
         </Tabs>

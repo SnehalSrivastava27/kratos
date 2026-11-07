@@ -1,4 +1,4 @@
-# #HowISwitch: 5 short posts
+# #HowISwitch: 6 short posts
 
 Plain and specific. Each fits X (under 280 characters with the link) and works on LinkedIn as is.
 Swap `<link>` for the blog URL. Suggested image under each.
@@ -37,8 +37,8 @@ reaches the group. Read what a feature does. #HowISwitch <link>
 
 **4. Haiku vs Sonnet**
 
-Evals for 16 AI teammates, answers computed from the data. On 149 questions Haiku scored 149/149
-for $0.21; Sonnet 148/149 for $3.07. The agents even caught 4 bad answer keys that counted order
+Evals for 16 AI teammates, answers computed from the data. Haiku: 166/166 for $0.21. Sonnet on
+the same rules: 148/149 for $3.07. The agents even caught 4 bad answer keys that counted order
 lines, not orders. #HowISwitch <link>
 
 *Image: `docs/diagrams/eval-loop.png`*
@@ -52,5 +52,15 @@ fresh agent trying to break every branch before merge. It caught an XSS, a GPU l
 Then I slept; it ran the night shift. #HowISwitch <link>
 
 *Image: `docs/diagrams/overnight-swarm.png`*
+
+---
+
+**6. What 16 agents cost**
+
+Switch counts every agent's turns and tokens by model. My last 24 h: 96 turns, about $9.08, and
+$8.75 of it was early Opus runs; Haiku cost $0.33. The Captain took 40% of the turns. Measure per
+agent, not per run. #HowISwitch <link>
+
+*Image: `docs/diagrams/16-roi-trust.png`*
 
 <!-- TODO(user): the Switch account handle to tag on X/LinkedIn -->

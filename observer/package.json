@@ -5,6 +5,7 @@
   "engines": { "node": ">=22.18" },
   "scripts": {
     "start": "node src/index.ts",
+    "test": "node --test src/*.test.ts",
     "mock": "node src/mock.ts",
     "build": "tsc --noEmit"
   },
