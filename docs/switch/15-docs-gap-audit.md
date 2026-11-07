@@ -166,7 +166,7 @@ Conventions:
      subdirectory with its own `.claude/settings.local.json` (changes `definition.directory`), or accept one "kratos-team"
      agent in Trust and keep the per-agent split in our `/api/roi`.
    - Don't also wrap with the SDK, or the cost is counted twice.
-8. **`maxTurns` in the lockdown + the runbook commands.** Demo 2, effort S. **Status: `maxTurns: 40` done (SW7)**;
+8. **`maxTurns` in the lockdown + the runbook commands.** Demo 2, effort S. **Status: `maxTurns` tried in SW7, then removed at review**: Console applies it only as agent frontmatter; Claude Code clearly honours it for subagents, but for a long-lived `--agent` session it is either ignored or a whole-session cap (the Captain took 38 of 96 turns in one run), so it could stop the Captain mid-demo. Verify on a throwaway agent (maxTurns 2, three prompts) before turning it on;
    the GO_LIVE runbook commands are still open.
    - Add `"maxTurns": 40` to `switch/lockdown.json` `advanced_config`. It flows through `createManagedAgent` and
      `switch-up.sh` unchanged.

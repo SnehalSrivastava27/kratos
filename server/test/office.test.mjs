@@ -208,7 +208,7 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
     assert.equal(create.json.controller_id, "c1", "the team lead's controller");
     assert.equal(create.json.desired_state, "running");
     const { instructions: _, ...def } = create.json.definition;
-    assert.deepEqual(def, { provider: "claude", model: "claude-haiku-5-5", advanced_config: { effort: "high", tools: ["Bash", "Read", "Grep", "Glob", "Write"], maxTurns: 40 }, auto_mode: false, auto_approve: false, isolation: "shared", directory: "/repo" },
+    assert.deepEqual(def, { provider: "claude", model: "claude-haiku-5-5", advanced_config: { effort: "high", tools: ["Bash", "Read", "Grep", "Glob", "Write"] }, auto_mode: false, auto_approve: false, isolation: "shared", directory: "/repo" },
       "the team's provider settings + switch/lockdown.json (tool allowlist, auto mode off); directory is the repo, not the lead's or the request's");
     assert.match(create.json.definition.instructions, /Win back lapsed buyers[\s\S]*gstack:qa[\s\S]*HOW YOU WRITE IN TELEGRAM[\s\S]*yours is Ads/);
     assert.ok(create.json.definition.instructions.includes(STYLE), "exact team Telegram style block");

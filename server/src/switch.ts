@@ -273,7 +273,14 @@ export const teamPolicy = (rooms: string[]) => ({
 });
 /** Scopes these agents' addressing to `roomIds` plus the team rooms their policy already names (rooms only grow:
  *  one team serves every linked group). An agent already on that policy is left alone. */
-export async function scopeAddressing(agentIds: string[], roomIds: string[]) {
+let scoping: Promise<unknown> = Promise.resolve();
+export function scopeAddressing(agentIds: string[], roomIds: string[]): Promise<void> {
+  // One at a time: two links (or a link during startup) must not read the same old rooms list and drop each other's room.
+  const next = scoping.then(() => scopeNow(agentIds, roomIds));
+  scoping = next.catch(() => {});
+  return next;
+}
+async function scopeNow(agentIds: string[], roomIds: string[]) {
   const all: { id: string; addressing_policy?: { rules?: { rooms?: unknown }[] } | null }[] = await gw("GET", "/agents");
   for (const id of agentIds) {
     const cur = all.find((a) => a.id === id)?.addressing_policy;

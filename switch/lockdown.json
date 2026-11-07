@@ -1,6 +1,6 @@
 {
-  "_doc": "Hard tool limits for every team agent and hire (docs/switch/13-agent-lockdown.md). Merged into each managed agent's definition by scripts/switch-up.sh, scripts/switch-sync-agents.sh and server/src/switch.ts createManagedAgent. tools: Claude Code tool allowlist (names only; Switch always keeps mcp__switch). maxTurns: Claude Code agent field (Console advanced config 'Max turns'), a cap on model round-trips per run; the live War Room run peaked at 10 per prompt, so 40 never cuts a normal reply but stops a runaway loop. auto_mode false = claude --permission-mode default: anything .claude/settings.json does not allow waits for a human's approval in Switch.",
-  "advanced_config": { "tools": ["Bash", "Read", "Grep", "Glob", "Write"], "maxTurns": 40 },
+  "_doc": "Hard tool limits for every team agent and hire (docs/switch/13-agent-lockdown.md). Merged into each managed agent's definition by scripts/switch-up.sh, scripts/switch-sync-agents.sh and server/src/switch.ts createManagedAgent. tools: Claude Code tool allowlist (names only; Switch always keeps mcp__switch). maxTurns is deliberately not set: Console applies it only as agent frontmatter, and for a long-lived --agent session it may be ignored or count turns for the whole session (would cut the Captain mid-demo); see docs/switch/15-docs-gap-audit.md gap 8. auto_mode false = claude --permission-mode default: anything .claude/settings.json does not allow waits for a human's approval in Switch.",
+  "advanced_config": { "tools": ["Bash", "Read", "Grep", "Glob", "Write"] },
   "auto_mode": false,
   "auto_approve": false
 }

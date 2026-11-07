@@ -330,7 +330,7 @@ if (import.meta.main) {
   const cfg = loadConfig();
   // …except taken_over: another observer holds our connection. Exit non-zero so a supervisor notices; don't retry.
   run(loadCreds(cfg), cfg).catch((e) => {
-    console.error(`[observer] FATAL ${e instanceof Error ? e.message : e} — another client holds this connection; not reconnecting`);
+    console.error(`[observer] FATAL ${e instanceof Error ? e.message : e}; not reconnecting`);
     process.exit(3);
   });
 }
