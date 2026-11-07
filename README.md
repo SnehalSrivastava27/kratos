@@ -185,7 +185,7 @@ On the same rules Sonnet scored 148/149 (tiers 1–2) for $3.07, about 15× the 
 team runs on Haiku. Every run: [`evals/reports/HISTORY.md`](evals/reports/HISTORY.md).
 
 <!-- EVAL:latest -->
-_Latest full offline run: in progress (the orchestrator fills this line)._
+_Latest full offline run (7 Nov, 04:47 UTC, Haiku): **166/166** (tier 1 84/84, tier 2 65/65, tier 3 17/17) · p50 6 s, p90 8 s · 1.0 tool calls/question · $0.21. Report: [evals/reports/latest.md](evals/reports/latest.md)._
 
 ![The eval loop](docs/diagrams/eval-loop.png)
 

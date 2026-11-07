@@ -17,6 +17,7 @@ made-up names). p50 = per-question wall time, cost = API cost for the whole run.
 | 8 | haiku | 81/84 | 65/65 | 17/17 | 163/166 | 6s / 8s | 1.1 | $0.22 | E3: instructions -30% (219 KB → 153 KB: per-agent TABLES, compact shared blocks) + tier 3 (old instructions: 16/17 on tier 3, the miss a scorer gap for "no rows for this handle"). Fails: a courier×zone RTO recomputed from orders.csv instead of read from couriers.rto_pct, "how many orders were COD" counted delivered only, an 11-line style reply. Fixed in the definitions, 166/166 on rerun |
 | 9 | haiku | 82/84 | 65/65 | 16/17 | 163/166 | 6s / 7s | 1.1 | $0.21 | Same + those fixes. Fails: 2 replies put the Source after the italic last line (one copied "last line _Next…_" literally: the squeezed Source/Next sentence was ambiguous), and a correct "No Diwali Retargeting campaign in our Meta data" the refusal scorer missed. Clearer rule + scorer fix, 166/166 on rerun |
 | 10 | haiku | 84/84 | 65/65 | 17/17 | 166/166 | 6s / 7s | 1.0 | $0.21 | Final E3 instructions, first pass. Tier 1+2 alone: $0.185 vs $0.20 in run 7 (-7%), same p50, 1.01 tool calls/q |
+| 11 | haiku | 84/84 | 65/65 | 17/17 | 166/166 | 6s / 8s | 1.0 | $0.21 | Re-run on 7 Nov morning after the office/ROI work (no instruction change): stable, first pass |
 
 What moved Haiku: (1) a 4-step decision procedure (unsafe → not in data → one kit command → answer) with a full TABLES
 list, so it stopped running `kit tables`/`ls`/`grep` first (1.5 → 1.0 tool calls, p90 10 s → 7-8 s); (2) "should we…?" =

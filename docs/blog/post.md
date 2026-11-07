@@ -337,7 +337,7 @@ in the data" refusals, and one prompt injection.
 On the final rules, **Haiku scored 149/149 for $0.21; Sonnet scored 148/149 for $3.07**, about 15x
 the cost for no gain. A **tier 3** (17 vague, two-part, quoted-follow-up and made-up-name asks) and
 30% shorter instructions later, Haiku is at **166/166 for $0.21**.
-<!-- TODO(user): swap in the newest full offline run if it changed (see README "Evals") --> Sonnet's one miss read "orders" as delivered orders only. Style went from
+Sonnet's one miss read "orders" as delivered orders only. Style went from
 149/152 to 152/152 once the rules said "no italic last line = not finished". The misses along the
 way taught more than the passes:
 
