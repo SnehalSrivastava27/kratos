@@ -1,12 +1,12 @@
 # Data catalog (v2)
 
-Demo data for **Kesar & Co.**, an Indian skincare D2C brand. Everything lives flat in `data/`.
-Owner: task R1. Agents (`switch/agents/*.md`), the toolkit (`kit/`) and the evals (`evals/`) build against
-these **file names and columns**. R1 may add columns at the end of a file; it never renames or removes one.
+Sample data for **Kesar & Co.**, an Indian skincare D2C brand. Everything lives flat in `data/`.
+Agents (`switch/agents/*.md`), the toolkit (`kit/`) and the evals (`evals/`) build against
+these **file names and columns**. New columns are added only at the end of a file; none is ever renamed or removed.
 
 Rules:
 - Deterministic: `node data/gen/generate.mjs` (seeded, no deps) rewrites every generated file byte-for-byte.
-- The 8 v1 files below are **frozen** (the demo story and `switch/check_numbers.py` depend on them).
+- The 8 v1 files below are **frozen** (the product tour and `switch/check_numbers.py` depend on them).
 - History window: **2026-08-01 to 2026-10-31** (92 days). Money is INR, integers (rupees) unless named `_pct`.
 - Dates `YYYY-MM-DD`. Months `YYYY-MM`. IDs are stable strings.
 - 5 SKUs only (from `products.csv`): SKU01 Vitamin C Serum, SKU02 Sunscreen SPF 50, SKU03, SKU04, SKU05.

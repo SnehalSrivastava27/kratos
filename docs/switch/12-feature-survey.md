@@ -6,8 +6,8 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
 - `core:` = `~/Library/Application Support/switchdash/local-switch-server/native/switch-core/0.31.0/src/core/switch_core/`
 - `ops:` = `core:bridges/agent/operations/definitions.py` (every op is also the MCP tool `mcp__switch__<op>`,
   `core:bridges/agent/mcp/server.py:161-169`)
-- **V** = value to a D2C founder (1-5), **E** = effort for us tonight (1 = an hour, 5 = days). **Not ready** = the
-  source or docs say so, or it needs something we don't have.
+- **V** = value to a D2C founder (1-5), **E** = effort to adopt (1 = an hour, 5 = days). **Not ready** = the
+  source or docs say so, or it needs something Kratos doesn't have.
 - docs.switchagents.ai (`/llms.txt`) has no scheduler, cron or trigger page. Its incident-response use case
   does "approval" with a plain chat reply, gated only by the agent's instructions.
 
@@ -17,11 +17,11 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
 |---|---|---|---|---|---|
 | `list_rooms`, `connect_to_room` | `ops:214,246` | yes | – | – | observer + d2c-office |
 | `post_message(body, thread_id)` | `ops:768` | yes | – | – | d2c-office posts into forum topics |
-| `send_targeted_message(target_names, target_roles)` | `ops:795` | yes | 3 | 1 | not private (SW3); now also reaches roles |
+| `send_targeted_message(target_names, target_roles)` | `ops:795` | yes | 3 | 1 | not private on its own; also reaches roles |
 | Room-wide mention (`target_names: ["everyone"]`) | `core:room_wide_mention.py` | no | 2 | 1 | top level only; pages people, wakes no agent |
-| `read_context` (room history) | `ops:640` | yes | – | – | new hires catch up (SW1) |
+| `read_context` (room history) | `ops:640` | yes | – | – | new hires catch up |
 | `list_participants` | `ops:738` | no | 1 | 1 | |
-| `create_room(internal_only)` | `ops:877,906` | yes | – | – | private Finance desk (SW3) |
+| `create_room(internal_only)` | `ops:877,906` | yes | – | – | private Finance desk |
 | `create_room_from_yaml`, room tree "runs" | `ops:1551`, `core:agent_runs.py` | no | 2 | 3 | a room per campaign; runs can be paused/stopped |
 | `archive_room` / `unarchive_room`, `update_room` | `ops:2477,2505,2396` | no | 1 | 1 | |
 | `add_users_to_room`, `invite_agent_to_room`, `remove_agent_from_room` | `ops:1418,1369,1393` | partly | 2 | 1 | we use the gateway equivalent |
@@ -33,8 +33,8 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
 
 | Capability | Where | Kratos | V | E | Note |
 |---|---|---|---|---|---|
-| **Room roles** (`define_role`, `assume_role`, `release_role`, `list_roles`) | `ops:1016-1140`; gateway `core:gateway/rooms.py:878-955` | **built (SW4)** | 4 | 1 | `@role` reaches the live holder (`core:delivery/addressing.py:246-269`) |
-| Role notice "🎭 assumed the \`x\` role." | `core:bridges/agent/protocol/agent_core.py:1816-1824,3536,3562` | **built (SW4)** | 3 | 1 | observer → `meta.switch_role` |
+| **Room roles** (`define_role`, `assume_role`, `release_role`, `list_roles`) | `ops:1016-1140`; gateway `core:gateway/rooms.py:878-955` | **yes** | 4 | 1 | `@role` reaches the live holder (`core:delivery/addressing.py:246-269`) |
+| Role notice "🎭 assumed the \`x\` role." | `core:bridges/agent/protocol/agent_core.py:1816-1824,3536,3562` | **yes** | 3 | 1 | observer → `meta.switch_role` |
 | Roles in room YAML | `core:rooms_yaml.py:429` | no | 1 | 2 | we define them from the gateway instead |
 | Per-room aliases (`!set-alias @d2c-finance @finance`) | `core:aliases.py`, `core:bridges/agent/commands.py:1995` | no | 3 | 1 | chat command only, no gateway route: a manual step (below) |
 | `!assign-agent` (every message goes to one agent) | `commands.py:1979` | no | 2 | 1 | could make the Captain the default listener |
@@ -44,8 +44,8 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
 
 | Capability | Where | Kratos | V | E | Note |
 |---|---|---|---|---|---|
-| Room documents | `ops:549-635` | yes | – | – | the pinned plan (SW2) |
-| References + `attach_reference_to_room` | `ops:1143-1290` | yes | – | – | `kratos_file` type (SW2) |
+| Room documents | `ops:549-635` | yes | – | – | the pinned plan |
+| References + `attach_reference_to_room` | `ops:1143-1290` | yes | – | – | `kratos_file` type |
 | `!list-documents`, `!list-references` | `commands.py:1952` | no | 2 | 0 | free: the founder can type them today |
 | Attachments (multi-file messages) | `core:attachments.py` | no | 2 | 3 | bots could post the deck as a Telegram file; ops send text only |
 
@@ -69,21 +69,21 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
 | `list_agents`, `get_agent_detail`, `update_agent_detail`, `request_agent_deletion` | `ops:2097-2202` | partly | 1 | 1 | |
 | `set_agent_service` / `remove_agent_service` (GitHub, Atlassian … grants) | `core:bridges/agent/operations/agent_services.py:43,113` | no | 2 | 3 | Shopify isn't a Switch service |
 | `get_my_context` | `core:bridges/agent/operations/my_context.py:45` | no | 1 | 1 | |
-| Chat commands `!reset`, `!compact`, `!interrupt`, `!agents-status`, `!agents-greet`, `!roles` … | `core:bridges/agent/commands.py:1845-2135` | `/list_agents` only | 3 | 0 | `!agents-greet` is a nice demo opener |
+| Chat commands `!reset`, `!compact`, `!interrupt`, `!agents-status`, `!agents-greet`, `!roles` … | `core:bridges/agent/commands.py:1845-2135` | `/list_agents` only | 3 | 0 | `!agents-greet` is a good session opener |
 | Tasks (`delegate_task` …) | protocol docs | no | – | – | **not ready** (marked so in the protocol) |
 
 ## Cost, trust, transport
 
 | Capability | Where | Kratos | V | E | Note |
 |---|---|---|---|---|---|
-| Budgets: per-agent / workspace spend caps | `core:budgets.py`, `core:gateway/tenants.py:711-792` | no | 4 | 2 | "Ads may spend ₹X of tokens a month". Next candidate |
-| Switch Trust guardrails / ROI | `core:trust/`, docs.switchagents.ai | no | 2 | 4 | hosted product |
+| Budgets: per-agent / workspace spend caps | `core:budgets.py`, `core:gateway/tenants.py:711-792` | yes | 4 | 2 | "Ads may spend ₹X of tokens a month"; see [14](14-roi-trust.md) |
+| Switch Trust guardrails / ROI | `core:trust/`, docs.switchagents.ai | yes | 2 | 4 | hosted guardrails; see [14](14-roi-trust.md) |
 | Agent protocol: SSE + heartbeat (compat window), WebSocket `/connection/ws` | `core:bridges/agent/api/handlers.py:773-781` | SSE | – | – | move to WS if SSE ever answers 410 |
 | Inbound webhooks for push-style bridges (WhatsApp, SMS, email…) | `core:bridges/collaboration/webhooks.py:1-10` | no | 3 | 5 | only the routing exists; no WhatsApp adapter ships in 0.31.0 |
 | Bridges: Slack, Teams, Discord, Mattermost, Telegram | `core:bridges/collaboration/*` | Telegram | 3 | 3 | same team in Slack needs no code in Kratos |
-| **Scheduler / cron / triggers** | – | **not in 0.31.0** | – | – | grep for cron/schedul finds only internal timers. We built the clock in the office server |
+| **Scheduler / cron / triggers** | – | **not in 0.31.0** | – | – | grep for cron/schedul finds only internal timers. The office server is the clock |
 
-## What we built tonight (SW4)
+## Room roles and the morning brief
 
 1. **Room roles.** When the team joins a workspace's room (and on every server start for ready workspaces), the
    office server defines two exclusive roles through the admin gateway, once per workspace: every role name it
@@ -100,7 +100,7 @@ it, and how much it would be worth to a D2C team. Read from the source, not the 
    `POST /api/brief` (session + `?ws=`, JSON, once a minute) asks now. The Captain's reply
    ("🎯 **Morning brief, 7 Nov**") is tagged `meta.kind: "morning_brief"` by the observer.
 
-Tests: `server/test/sw4.test.mjs` (7, fake Switch + the real observer), `observer/src/docs.test.ts` (role + brief parsers).
+Tests: `server/test/sw4.test.mjs` (fake Switch + the real observer), `observer/src/docs.test.ts` (role + brief parsers).
 
 ### Office event shapes (for `web/`)
 
@@ -120,22 +120,24 @@ Suggested rendering: a small badge over the holder's desk ("💰 approver", "�
 `switch_role` for that person is `assumed`; a sunrise card in War Room for `morning_brief`. The d2c-office
 request is spoken by `founder` (observer config maps d2c-office → founder).
 
-## Rejected (and why)
+## Not adopted (and why)
 
-- **Approval cards as the founder's sign-off.** The most visible feature, but not low-risk tonight. The API is
+- **Approval cards as the founder's sign-off.** The most visible feature, but not low-risk. The API is
   the session host's: the opening agent must have a **live connection** or the card says "Host offline"
   (`core:session_activity/publisher.py:130,576`); the answerer must be allowed to **address** that agent
   (`service.py:452-520`), which for our owner-only d2c-office/observer means changing addressing policies; and
-  we would need a session id and an outcomes poller. A good v2: a dedicated passive `d2c-approvals` agent,
+  we would need a session id and an outcomes poller. A future version: a dedicated passive `d2c-approvals` agent,
   addressing = people in the room, held live by the observer process, opening one card when the Captain posts
   the final plan, then posting "Founder approved" on the outcome.
 - **Reactions / polls.** No agent op for either in 0.31.0; the only reaction is the built-in 👀 working mark.
 - **Linked rooms / room groups.** Kratos is one room with topics; linking pays off only with several brands.
-- **Budgets.** Real value (cost cap per teammate), but spend comes from Console's usage reports and caps stop an
-  agent mid-demo. Next after the hackathon.
+- **Budget creation by default.** A reached cap stops an agent mid-task, so creating budgets from the office is
+  opt-in (`ROI_BUDGETS=on`).
 - **Native scheduler.** Doesn't exist; built server-side instead.
 
-## Instruction patches (for the orchestrator to apply to `switch/agents/*.md`, then rebuild the template)
+## Agent instructions for roles and the brief
+
+These sections are part of `switch/agents/*.md` and ship in the team template.
 
 **d2c-finance.md**, new section after YOUR JOB:
 ```
@@ -173,12 +175,12 @@ MORNING BRIEF (d2c-office asks at 9 AM IST: "⏰ Morning brief for <date>")
 - Last line: _Next: @founder ..._ . No assignments, no files, no plan.
 ```
 
-**Founder-facing (docs/GO_LIVE.md or the demo script), optional, one manual step each:**
+**Founder-facing, optional, one manual step each:**
 - In the group: `!roles` shows who holds each seat.
 - In the group: `!set-alias @d2c-finance @finance` and `!set-alias @d2c-ops @ops` so the founder can type the short
   names (an alias may not collide with a role name, `core:aliases.py`).
 
-## What to verify live (LV1 / orchestrator)
+## Verifying roles and the brief on a live install
 
 1. After the server starts: `GET /gateway/rooms/<room>/roles` lists both roles; Console → room → Roles shows them.
 2. Finance's and Ops's first turn posts "🎭 assumed the `finance-approver` role." to Telegram, and `!roles` shows the

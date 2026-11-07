@@ -1,7 +1,0 @@
-{ "task": "O6", "state": "done", "progress": 100,
-  "done": [
-    "Floor 44 x 22 m (was 30.3 x 16.3): three rows of pods with 2 m+ cross corridors and two aisles, Telegram hub + Switch core centred in the back row (cables run the corridors to every pod), new Huddle Room and Reception (counter + product sample wall) zones, chai corner, more windows and plants; layout.ts shared by world/engine/nav.check; nav.check proves all 21 desks, 6 stations and 8 shelves reachable from the door (window.__hqReach() checks the exact furniture in dev). Overview fits the visible area at 1440 (beside the chat) and 390 (portrait looks in from the open east side); walk 4.0 m/s, Shift sprint 7.2",
-    "Founder interactions via E / tap the hint: Talk to <agent> card (role, status, last message, Ask a question / Assign task prefill the command bar), War Room table (plan card, or nudges the director's approval prompt in /demo), Data Wall numbers, Reception hire, Finance ledger P&L card, chai (cup + staggered hellos), sit at your desk (spectator) and stand up; first-visit controls coach",
-    "Orchestrator fixes: /demo input never falls through to the mock, revisions scale by round, approval after a revision approves the revision, only the open gate keeps buttons, hub count = chip, KPI cache per workspace; tolerant Switch extras (private notes violet + hidden from chat, Pinned in Switch list/badge, caught-up tag); new landing poster. build, office checks, e2e pass"
-  ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-07T02:00:00+05:30" }

@@ -1,5 +1,5 @@
-"""Blog-pack diagrams (BL1). Run: python3 docs/diagrams/gen/bl1.py, then
-bash docs/diagrams/gen/render.sh docs/diagrams org-chart finance-gate switch-features-map eval-loop toolkit overnight-swarm agent-lockdown
+"""Product diagrams. Run: python3 docs/diagrams/gen/bl1.py, then
+bash docs/diagrams/gen/render.sh docs/diagrams org-chart finance-gate switch-features-map eval-loop toolkit agent-lockdown
 Exits 1 if any box label would overflow its box (estimated Excalifont width)."""
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -217,50 +217,6 @@ def toolkit():
     return check(s, "toolkit")
 
 
-# 6. Overnight swarm --------------------------------------------------------------------------
-def overnight():
-    s = Scene(16)
-    s.text(40, 10, "The overnight loop: the founder sleeps, the orchestrator ships", 30)
-    s.box("fo", 40, 80, 360, 90, "Founder (01:45 IST)\na written grant, then sleep", "yellow", fs=18)
-    s.box("or", 520, 70, 520, 110,
-          "Orchestrator (Claude Code)\nplan + run log + findings: overnight-log.md\nbriefs · status/*.json · merges", "violet", fs=18)
-    s.arrow([s.anchor("fo", "r"), s.anchor("or", "l")], start="fo", end="or")
-    s.box("grant", 1140, 70, 420, 110,
-          "Grant: live Switch OK, Haiku for\nTelegram agents, merge when CI\nand reviews pass, write findings", "gray", fs=17)
-    s.arrow([s.anchor("or", "r"), s.anchor("grant", "l")], start="or", end="grant", both=True, dashed=True)
-    s.box("waveA", 30, 240, 1540, 210, "", "none", dashed=True, stroke=GRAY)
-    s.text(250, 418, "Wave A (01:50): 5 agents at once, each in ../hq-worktrees/<ID>, branch task/<ID>", 17, color=GRAY)
-    tasks = [("LV1", "LV1 live bring-up\n16 agents on Haiku"), ("K3", "K3 kit metric\ncache + marts"),
-             ("E2", "E2 tier-2 evals\nfix instructions"), ("SW4", "SW4 feature survey\nroles + morning brief"),
-             ("DM1", "DM1 demo feed\nscript + README")]
-    for i, (k, lab) in enumerate(tasks):
-        x = 50 + i * 305
-        s.box(k, x, 300, 280, 100, lab, "blue", fs=18)
-        s.arrow([s.anchor("or", "b", 0.1 + 0.2 * i), s.anchor(k, "t")], start="or", end=k)
-    a, b = s.anchor("SW4", "b", 0.3), s.anchor("E2", "b", 0.75)
-    s.arrow([a, (a[0], 428), (b[0], 428), b], start="SW4", end="E2", dashed=True, color="#e8590c",
-            label="SW4 patches → E2", label_at=(a[0] + 12, 410))
-    pipe = [("val", "Validate\nbuild + tests + checks", "green"),
-            ("rev", "Adversarial review\nfresh subagent reads the diff", "red"),
-            ("fix", "Fix, or waive\nin the run log", "orange"),
-            ("mg", "Merge\ninto backend-v2", "violet")]
-    for i, (k, lab, f) in enumerate(pipe):
-        s.box(k, 50 + i * 390, 500, 340, 90, lab, f, fs=18)
-        if i:
-            s.arrow([s.anchor(pipe[i - 1][0], "r"), s.anchor(k, "l")], start=pipe[i - 1][0], end=k)
-    s.arrow([s.anchor("LV1", "b"), s.anchor("val", "t", 0.4)], start="LV1", end="val")
-    s.text(220, 462, "status/<ID>.json says done", 16, color=GRAY)
-    s.box("B", 50, 660, 720, 80, "Wave B: full live demo in War Room · BL1 blog pack", "blue", fs=18)
-    s.box("C", 830, 660, 740, 80, "Wave C: final CI, review anything unreviewed, merge to main", "violet", fs=18)
-    s.arrow([s.anchor("mg", "b", 0.3), (1323, 625), (410, 625), s.anchor("B", "t")], start="mg", end="B")
-    s.arrow([s.anchor("B", "r"), s.anchor("C", "l")], start="B", end="C")
-    p = s.anchor("mg", "r")
-    s.arrow([p, (1590, p[1]), (1590, 210), (1100, 210), (1100, 160), s.anchor("or", "r", 0.82)], end="or", dashed=True)
-    s.text(1460, 214, "next wave", 16, color=GRAY)
-    s.save(OUT + "overnight-swarm.excalidraw")
-    return check(s, "overnight-swarm")
-
-
 # 7. Agent lockdown -----------------------------------------------------------------------------
 def lockdown():
     s = Scene(17)
@@ -297,5 +253,5 @@ def lockdown():
 
 
 if __name__ == "__main__":
-    ok = all([org_chart(), finance_gate(), features_map(), eval_loop(), toolkit(), overnight(), lockdown()])
+    ok = all([org_chart(), finance_gate(), features_map(), eval_loop(), toolkit(), lockdown()])
     sys.exit(0 if ok else 1)

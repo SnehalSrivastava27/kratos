@@ -1,6 +1,6 @@
 # hq-server
 
-Node + TypeScript event server for D2C Agent HQ. Implements `contracts/api.md`.
+Node + TypeScript event server for Kratos. Implements `contracts/api.md`.
 
 ```sh
 cd server && npm install

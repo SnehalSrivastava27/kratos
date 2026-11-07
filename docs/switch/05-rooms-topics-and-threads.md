@@ -7,8 +7,7 @@ topics). Getting a topic to behave as a Switch thread takes one small trick: `/l
 
 ## Why one group with topics (and not seven groups)
 
-The first plan was seven Telegram groups, one per department (`docs/SWITCH_SETUP.md:3-5`, now
-superseded). We switched to **one supergroup with Topics on**:
+An alternative layout is seven Telegram groups, one per department. Kratos uses **one supergroup with Topics on** instead:
 
 - one place for the founder to look, with a tab per department;
 - one Switch room, so every agent shares one context and can hand work across topics;

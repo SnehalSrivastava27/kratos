@@ -1,8 +1,0 @@
-{ "task": "L4", "state": "done", "progress": 100,
-  "done": [
-    "Hero is one focal stage: poster (web/public/hero) crossfades to the live office on Office onReady (framing=hero); one Telegram notification stack cycling 5 sale-demo beats; presence pill; phones get the poster only",
-    "Lucide teammate avatars everywhere (MateIcon + DEPT map incl. librarian), Kesar HQ / Kesar & Co. naming, Telegram markdown rendered (TgText); real brand-logo marquee with order-share tooltips and Telegram/WhatsApp marks",
-    "Teammates sidebar + thread moved into the Threads section in the liked light style; checked at 1440/1280/1024/768/390, npm run build passes"
-  ],
-  "next": "After P1 merges: recapture the poster from /office?poster (2336x1316 @2x via cwebp) so it matches the hero framing; until then the poster stays up because the office never fires onReady",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-06T21:30:00+05:30" }

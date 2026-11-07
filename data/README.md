@@ -1,6 +1,6 @@
-# Kesar & Co. demo data (v2)
+# Sample brand data: Kesar & Co.
 
-Everything here is **made-up but realistic** demo data for Kesar & Co., an Indian skincare D2C brand (₹3-4 Cr a year run rate,
+Everything here is **made-up but realistic** sample data for Kesar & Co., an Indian skincare D2C brand (₹3-4 Cr a year run rate,
 5 SKUs, 3 warehouses, 7 sales channels, 25 people). History window **2026-08-01 to 2026-10-31**. Money is INR rupees (integers
 unless the column says otherwise). Contract: `contracts/data-catalog.md`. Background on how Indian D2C works: `docs/d2c-primer.md`.
 

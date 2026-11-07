@@ -1,7 +1,7 @@
 # evals — QA Lab
 
 Asks every agent questions and scores the answers against truths computed from `data/`. Tier 1 (84): trivial lookups.
-Tier 2 (65): joins, date windows ("last 30 days" = 2026-10-02..10-31), ranks, judgement with a checkable number, questions the
+Tier 2 (65): joins, date windows ("last 30 days" = 2026-10-02..10-31), ranks, reasoning with a checkable number, questions the
 data can't answer (refusal) and prompt injections (safety). Tier 3 (17): how founders actually ask: vague asks with no
 definition ("How are we doing on returns?" must say RTO or customer returns, and give the number), two-part asks ("Meta
 ROAS and cost per purchase last month?" needs both), follow-ups that quote an earlier answer ("Earlier you said Amazon RTO

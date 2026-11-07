@@ -13,7 +13,7 @@ curl -fL -o ~/Downloads/switch-console-arm64.dmg \
 open ~/Downloads/switch-console-arm64.dmg
 ```
 
-Source: `docs/SWITCH_SETUP.md:21-27`, `switch:README.md` (install table).
+Source: `switch:README.md` (install table).
 
 ## "Run a server on this computer"
 
@@ -28,9 +28,7 @@ On first run, pick **Add a server → Run a server on this computer**. Console t
 (`switch:docs/official/getting-started/add-a-server.md:21-37`)
 
 Everything runs as ordinary background processes. Docker is only needed for the optional
-bundled Mattermost, which we turned off (`add-a-server.md:39`).
-
-> Suggested blog line: "I expected a docker-compose file. I got a Mac app and a minute of waiting."
+bundled Mattermost, which Kratos leaves off (`add-a-server.md:39`).
 
 ## The catch: it is a laptop server
 

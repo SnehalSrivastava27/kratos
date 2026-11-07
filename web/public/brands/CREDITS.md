@@ -1,7 +1,7 @@
 # Brand logos
 
 All names and logos are trademarks of their respective owners. They are shown only to identify the
-sales channels and chat apps D2C Agent HQ works with; no endorsement or partnership is implied.
+sales channels and chat apps Kratos works with; no endorsement or partnership is implied.
 
 | File | Licence (copyright) | Source |
 |---|---|---|

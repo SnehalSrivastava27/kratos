@@ -1,7 +1,0 @@
-{ "task": "DM1", "state": "done", "progress": 100,
-  "done": [
-    "demo feed: Finance private nudge + Creators private revision (violet pulse, hidden from chat), Finance sign-off + 'Festive sale plan — v1' pinned in Switch, ₹90,000/₹50,000 under-₹1L amounts; validate.mjs checks all of it (48 events, pass)",
-    "demo/script.md: 3-minute video script, exact messages and what to point at, plus the feed beat table",
-    "README v2: 16-agent org chart, Switch feature table, kit, data, evals (tier 2 placeholder), office, setup; Challenges kept + 5 overnight rows"
-  ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-07T08:45:00+05:30" }

@@ -1,8 +1,0 @@
-{ "task": "O7", "state": "done", "progress": 100,
-  "done": [
-    "Floor 44x22 -> 88x44 m with open north + east wings (corridors, atriums, lounges, cafe, glass rooms, Town Hall); Finance Cabin + Creator Studio moved to the north wing and Growth Pod to the east wing (web-only ZONE_MOVES; zone/desk ids unchanged), Switch cables routed to them, nav reach check covers them",
-    "Eye-level follow camera ported from agent-office player.ts (orbit, zoom, lifts over / stops short of walls, glides to the speaker when idle); overview frames the department area and draws people + tags bigger from far off",
-    "Real Switch logo on hub core, overhead sign (name tag now sits on top of it), hub tag, chip, panel; hackathon screenshot screen in the Town Hall opens the site; landing floor-plan tiles are clickable and follow the new layout"
-  ],
-  "next": "",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T11:30:00+05:30" }

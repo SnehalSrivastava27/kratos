@@ -146,6 +146,3 @@ An adversarial review of the first version led to these fixes (commits `4371981`
 | Arbitrary "skills" text | Skills must be ids of books in the library, max 20 | `server/src/office.ts:174-179` |
 | Name clash with an existing Switch agent | Ids are checked against roster, employees, in-flight hires **and** Switch's own agent list | `server/src/office.ts:70-76` |
 | Switch errors leaking internals | Callers get "Switch refused the request"; the detail goes to the server log only | `server/src/switch.ts:16-22,45` |
-
-> Suggested blog line: "The Hire button is a `POST` that starts a coding agent on my laptop. It
-> got the most review of anything in the repo."

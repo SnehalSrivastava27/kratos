@@ -1,7 +1,0 @@
-{ "task": "T5", "state": "done", "progress": 100,
-  "done": [
-    "server/: node:http + ws + ajv(2020) implementing every row of contracts/api.md; history last 500",
-    "replay of demo/feeds/<name>.json with loop/speed; sale-demo falls back to contracts/sample-feed.json",
-    "verified: server tests pass; office tests now reset shared topics/library fixtures per start to avoid cross-test state leakage after /api/library/categorize"
-  ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T21:48:00+05:30" }

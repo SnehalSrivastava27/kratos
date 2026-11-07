@@ -4,17 +4,17 @@
 You prove a group is yours by sending a 6-digit code in it. Switch carries the code to us like
 any other message.
 
-> Status: merged to main (contract v3). Full contract: `contracts/api.md` "v3".
+Full contract: `contracts/api.md` "v3".
 
 ![Workspace linking](../diagrams/workspace-linking.png)
 
 ## Why accounts at all
 
-Before v3 the office showed every message the observer saw. Once the bot can be in more than one
-group, that would show one founder's sales numbers to another. The rule now
+Without accounts, the office would show every message the observer sees. Once the bot is in more than one
+group, that would show one founder's sales numbers to another. The rule
 (`contracts/api.md`, "v3"):
 
-> the public site (`/`) shows ONLY the scripted demo … Every real Telegram message, the live
+> the public site (`/`) shows ONLY the product tour … Every real Telegram message, the live
 > office, people, hires and commands require a signed-in user and are scoped to that user's workspace.
 
 ## Accounts

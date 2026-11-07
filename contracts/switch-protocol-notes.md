@@ -1,10 +1,10 @@
-# Switch protocol notes (T6 research, 2026-11-06)
+# Switch protocol notes
 
 Source: `github.com/sandbox-quantum/switch` @ `93c132c`, read as reference only. Paths below are
 relative to that repo. `docs/official/*` is the synced copy of docs.switchagents.ai.
 **[unverified]** = read from docs or code, not yet seen running on our machine.
 
-## TL;DR (what unblocks T6)
+## Summary
 
 | Question | Answer | Source |
 |---|---|---|
@@ -51,7 +51,7 @@ Spec: `docs/official/internals/agent-protocol.md`. Server: `core/switch_core/bri
 - Every created agent must state `provider`, `location` (or `machine`) and `directory`, or the run refuses (`TEMPLATES.md:322-328`). All agents share the repo checkout as `directory`, so they can read `data/` and write `gallery/`. Console writes one credentials file per agent, so a shared directory is supported (`add-agent.ts:217-220`).
 - `room:` + `kickoff:` would create a channel, which Telegram refuses (`room_service.py:621`, `adapter.py:582`). These were replaced by `room`-typed params, with defaults `["Kesar HQ · <Dept>"]`, that each agent `join`s. Console adds the agents to the rooms after the run (`TEMPLATES.md:420-422,527-561`).
 
-## Still unverified (check on first live run)
+## Open questions
 1. The exact `sender_name` for a Telegram human (display name vs `@username`). The observer logs unknown names and maps them to `founder` by default.
 2. Whether adopted room names exactly equal the Telegram group title. The code passes `chat.title` (`telegram/adapter.py:2697,2710`), and the observer also matches on the department label.
 3. Whether Switch posts a greeting when the observer is invited. That would be harmless, since it comes from Switch and not from the observer.
