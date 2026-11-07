@@ -1,0 +1,4 @@
+{ "task": "BL2", "state": "working", "progress": 30,
+  "done": ["diagrams 16-roi-trust, 17-office-floor-plan, 18-architecture (gen/bl2.py, rendered, viewed)"],
+  "next": "README, blog pack, switch index, overnight log, link check",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:40:00+05:30" }
