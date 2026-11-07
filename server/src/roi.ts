@@ -140,7 +140,12 @@ export type RoiCtx = { root: string; hours: number; events: OfficeEvent[]; docs:
 export async function roi(c: RoiCtx) {
   const until = new Date();
   const since = new Date(until.getTime() - c.hours * 3_600_000);
-  guard ??= readGuardrails(c.root);
+  // switch/ and evals/ aren't in the Docker image: fall back instead of a 500 (and don't cache the fallback).
+  let g0 = guard;
+  if (!g0) {
+    try { g0 = guard = readGuardrails(c.root); }
+    catch { g0 = { lockdown: { tools: [], autoMode: false, autoApprove: false }, approvalRequired: true, safetyBlock: { agents: 0, of: 0 }, injectionRefusals: null }; }
+  }
   const base = { window: { since: since.toISOString(), until: until.toISOString(), hours: c.hours }, pricing: { estimate: true, perMTok: PRICES } };
 
   const trust = c.allowed
@@ -149,17 +154,21 @@ export async function roi(c: RoiCtx) {
         (e) => ({ switchTrust: "unavailable", reason: why(e) }),
       )
     : { switchTrust: "unavailable", reason: "only the host owner sees Switch settings" };
-  const trustOut = { ...trust, ...guard };
+  const trustOut = { ...trust, ...g0 };
   if (!c.allowed) return { source: "unavailable", reason: "Switch usage covers every workspace's agents: only the host owner sees it", ...base, rows: [], totals: null, recommendations: [], budgets: [], trust: trustOut };
 
   try {
     const tenant = await gw("GET", "/tenants/current");
     const id = encodeURIComponent(String(tenant?.id ?? ""));
     const q = new URLSearchParams({ since: since.toISOString(), until: until.toISOString() });
-    const [usage, budgets] = await Promise.all([gw("GET", `/tenants/${id}/usage?${q}`), gw("GET", `/tenants/${id}/budgets`).catch(() => [])]);
+    // allSettled: wait for both, so a failed usage call never leaves the budgets request in flight.
+    const [u, b] = await Promise.allSettled([gw("GET", `/tenants/${id}/usage?${q}`), gw("GET", `/tenants/${id}/budgets`)]);
+    if (u.status === "rejected") throw u.reason;
+    const usage = u.value, budgets = b.status === "fulfilled" ? b.value : [];
     const g = groupUsage(Array.isArray(usage) ? usage : [], c.events, c.docs, since.getTime());
     return { source: "switch", ...base, ...g, budgets: Array.isArray(budgets) ? budgets : [], trust: trustOut };
   } catch (e) {
+    console.warn("[roi] Switch usage unavailable:", e instanceof SwitchError ? `${e.status} ${e.message}` : String(e));
     return { source: "unavailable", reason: why(e), ...base, rows: [], totals: null, recommendations: [], budgets: [], trust: trustOut };
   }
 }

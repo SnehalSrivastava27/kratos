@@ -102,7 +102,7 @@ export function RoiPanel({ onClose }: { onClose: () => void }) {
                     </tbody>
                   </table>
                 </div>
-                <p className="mt-1.5 mb-4 text-[11.5px] font-bold text-[var(--muted)]">Cost is an estimate: Switch counts tokens per model; priced at Anthropic list prices (Haiku 5.5: $0.10 in · $0.50 out · $0.01 cached per M tokens).</p>
+                <p className="mt-1.5 mb-4 text-[11.5px] font-bold text-[var(--muted)]">Cost is an estimate: Switch counts tokens per model; priced at Anthropic list prices (Haiku 5.5: $0.10 in · $0.50 out · $0.01 cached per M tokens, the ≤100K-token prompt rate; turns that re-read a longer chat cost up to 5× more).</p>
               </>
             )}
             {d.source === 'switch' && d.rows.length === 0 && <p className="sw-empty mb-4">No agent turns in the last {d.window.hours} h.</p>}

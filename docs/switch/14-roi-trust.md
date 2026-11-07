@@ -20,7 +20,7 @@ cost per deliverable, and one or two plain recommendations. `?hours=` sets the w
 
 **Pricing is an estimate.** Switch counts tokens, not money. We price them at Anthropic list prices
 (USD per million tokens, from the claude-api skill): Haiku 5.5 $0.10 in, $0.50 out, $0.01 cache read, $0.125
-cache write (5-minute writes at 1.25x input; the <=100K-prompt card); Opus 5.5 $4 / $20 / $0.20 / $5;
+cache write (5-minute writes at 1.25x input; the <=100K-prompt card (prompts over 100K tokens are billed 5x: a long-chat Captain turn can cross it, so treat the estimate as a floor)); Opus 5.5 $4 / $20 / $0.20 / $5;
 Sonnet 5.5 $2 / $10 / $0.20 / $2.50. An unknown model counts tokens but no dollars.
 
 **Fails soft.** Switch down, an admin login that isn't owner/admin of the tenant (403), an older Switch with no
