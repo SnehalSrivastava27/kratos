@@ -152,7 +152,7 @@ export default function Connect() {
             {step === 2 && (
               <Step n={3} title={state === 'ready' ? 'Your office is ready' : 'Send this code in the group'}>
                 {state === 'ready' ? (
-                  <Ready name={ws?.name} onOpen={() => nav(ws ? `/app/${ws.id}` : '/app')} />
+                  <Ready name={ws?.name} bot={bot} onOpen={() => nav(ws ? `/app/${ws.id}` : '/app')} />
                 ) : (
                   <>
                     <p>Post it as a normal message in the group. The bot reads it and links the group to your account.</p>
@@ -306,7 +306,7 @@ function Live({ state, detail, pollErr, onNewCode, onAdmin, onRecheck }: { state
   );
 }
 
-function Ready({ name, onOpen }: { name?: string; onOpen: () => void }) {
+function Ready({ name, bot, onOpen }: { name?: string; bot: string; onOpen: () => void }) {
   return (
     <div>
       <div className="mt-4 flex items-center gap-4 rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-4">
@@ -316,10 +316,29 @@ function Ready({ name, onOpen }: { name?: string; onOpen: () => void }) {
           <p className="text-[13.5px] text-emerald-800">6 topics created · your teammates have joined</p>
         </div>
       </div>
+      <div className="mt-5 rounded-xl border border-black/[0.08] bg-neutral-50 px-4 py-4">
+        <p className="text-[14px] font-medium text-foreground">One last step: send these two lines in the group</p>
+        <p className="mt-1 text-[13px] text-neutral-500">Then you can talk normally. The Captain answers without being tagged.</p>
+        <CopyLine text="!assign-agent @d2c-captain" />
+        <CopyLine text={`!set-alias @d2c-captain @${bot}`} />
+      </div>
       <p className="mt-5">Say hi in the War Room topic, or give the Captain a job. Everything shows up in your office live.</p>
       <div className="mt-8 flex justify-end border-t border-black/[0.06] pt-6">
         <Button autoFocus className="h-11 rounded-full px-5 text-[15px]" onClick={onOpen}>Open your office <ArrowRight data-icon="inline-end" /></Button>
       </div>
+    </div>
+  );
+}
+
+function CopyLine({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => navigator.clipboard?.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600); }, () => {});
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      <code className="min-w-0 flex-1 truncate rounded-lg border border-black/[0.08] bg-white px-3 py-2 font-mono text-[13px] text-foreground">{text}</code>
+      <Button size="sm" variant="outline" className="h-8 shrink-0 rounded-full bg-white px-3 text-[13px]" onClick={copy}>
+        {copied ? <><Check data-icon="inline-start" />Copied</> : <><Copy data-icon="inline-start" />Copy</>}
+      </Button>
     </div>
   );
 }
