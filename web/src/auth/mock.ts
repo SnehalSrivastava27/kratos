@@ -69,6 +69,7 @@ export const mock: AuthApi = {
     save(d);
     return { code: d.pending.code, botUsername: 'kratosd2c_bot', expiresAt: d.pending.expiresAt };
   }),
+  recheck: () => mock.connectStatus(),
   connectStatus: () => later(() => {
     const d = load();
     const u = sessionUser(d);

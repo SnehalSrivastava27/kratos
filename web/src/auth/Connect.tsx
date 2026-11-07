@@ -158,7 +158,8 @@ export default function Connect() {
                     <p>Post it as a normal message in the group. The bot reads it and links the group to your account.</p>
                     <Code code={code?.code} expired={state === 'expired'} left={left} />
                     {issueErr && <Note tone="error">We couldn’t get a code. <button className="font-medium underline underline-offset-2" onClick={() => void issue()}>Try again</button></Note>}
-                    <Live state={state} pollErr={pollErr} onNewCode={() => void issue()} onAdmin={() => setStep(1)} />
+                    <Live state={state} detail={status?.detail} pollErr={pollErr} onNewCode={() => void issue()} onAdmin={() => setStep(1)}
+                      onRecheck={async () => { const s = await api.recheck().catch(() => null); if (s) { setStatus(s); if (s.state === 'ready') void refresh(); } }} />
                     <Next back={() => setStep(1)} />
                   </>
                 )}
@@ -263,7 +264,8 @@ function Code({ code, expired, left }: { code?: string; expired: boolean; left: 
   );
 }
 
-function Live({ state, pollErr, onNewCode, onAdmin }: { state?: string; pollErr: boolean; onNewCode: () => void; onAdmin: () => void }) {
+function Live({ state, detail, pollErr, onNewCode, onAdmin, onRecheck }: { state?: string; detail?: string; pollErr: boolean; onNewCode: () => void; onAdmin: () => void; onRecheck: () => Promise<void> }) {
+  const [checking, setChecking] = useState(false);
   if (state === 'expired') {
     return (
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-black/[0.08] bg-neutral-50 px-4 py-3">
@@ -275,9 +277,16 @@ function Live({ state, pollErr, onNewCode, onAdmin }: { state?: string; pollErr:
   if (state === 'needs_admin') {
     return (
       <Note tone="warn">
-        Got your code, but the bot isn’t an admin with Manage topics yet. Make it one and this page moves on by
-        itself in a few seconds.{' '}
-        <button className="font-medium underline underline-offset-2" onClick={onAdmin}>Show me the admin steps</button>
+        <span className="block">Got your code. One more step in Telegram:</span>
+        <span className="mt-1 block">{(detail ?? 'Make the bot an admin with Manage topics on.').replace(/\s*Kratos checks again every few seconds\.?/, '')}</span>
+        <span className="mt-2 flex flex-wrap items-center gap-3">
+          <Button size="sm" variant="outline" className="h-8 rounded-full px-3 text-[13px]" disabled={checking}
+            onClick={async () => { setChecking(true); try { await onRecheck(); } finally { setChecking(false); } }}>
+            {checking ? <Loader2 data-icon="inline-start" className="animate-spin" /> : <RefreshCw data-icon="inline-start" />}Check again
+          </Button>
+          <button className="font-medium underline underline-offset-2" onClick={onAdmin}>Show me the admin steps</button>
+          <span className="text-[12px] opacity-70">This page also checks by itself every few seconds.</span>
+        </span>
       </Note>
     );
   }
