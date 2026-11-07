@@ -23,7 +23,8 @@ MAIN=$(cd "$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)/.
 ENV_FILE=${ENV_FILE:-$MAIN/.env}
 AGENT_DIR=${AGENT_DIR:-$MAIN}             # the template's `directory`: where Console runs the agents
 ROOM_NAME=${ROOM_NAME:-Kratos D2C}
-export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} # every team agent runs on Haiku (definition.model → claude --model)
+export TEAM_PROVIDER=${TEAM_PROVIDER:-claude}   # any Switch agent provider: claude, codex, opencode
+[ "$TEAM_PROVIDER" = claude ] && export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} || export TEAM_MODEL=${TEAM_MODEL:-} # empty = provider default
 BOT_USERNAME=${BOT_USERNAME:-kratosd2c_bot}
 TEMPLATE_NAME="Kesar HQ D2C team"
 SWITCHDASH=${SWITCHDASH:-"$HOME/Library/Application Support/switchdash"}
@@ -58,7 +59,7 @@ base = (lead or {}).get("definition") or {"provider": "claude", "model": None, "
 keys = ("provider", "model", "advanced_config", "auto_mode", "auto_approve", "isolation")
 print(json.dumps({"name": aid, "description": p["role"], "display_name": p["name"], "icon_url": None,
   "controller_id": ctl["id"] if ctl else "<online console controller>", "desired_state": "running",
-  "definition": {**{k: base.get(k) for k in keys}, "model": os.environ["TEAM_MODEL"], "directory": adir, "instructions": open(md).read().split("\n", 1)[1].strip(),
+  "definition": {**{k: base.get(k) for k in keys}, "provider": os.environ["TEAM_PROVIDER"], "model": os.environ["TEAM_MODEL"] or None, "directory": adir, "instructions": open(md).read().split("\n", 1)[1].strip(),
   # hard tool limits (switch/lockdown.json): tool allowlist + no auto mode
   "advanced_config": {**(base.get("advanced_config") or {}), **lock["advanced_config"]}, "auto_mode": lock["auto_mode"], "auto_approve": lock["auto_approve"]}}))
 PY
@@ -78,11 +79,11 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   say "roster: ${#TEAM[@]} team agents: ${TEAM[*]}"
   say "topics (roster rooms): $TOPICS"
   node "$ROOT/scripts/build-template.mjs" --check | sed 's/^/• /'
-  say "would sign in to the local gateway, connect @$BOT_USERNAME, check Claude Code"
+  say "would sign in to the local gateway, connect @$BOT_USERNAME, check the $TEAM_PROVIDER provider"
   say "would store template \"$TEMPLATE_NAME\" from switch/d2c-team.template.yaml"
   say "each team agent missing on the server: POST /gateway/management/agents"
   for a in "${TEAM[@]}"; do
-    create_body "$a" | json 'print("•   %-17s display=%r, model %s, instructions %d chars, directory %s, tools %s, maxTurns %s, auto_mode %s" % (d["name"], d["display_name"], d["definition"]["model"], len(d["definition"]["instructions"]), d["definition"]["directory"], d["definition"]["advanced_config"].get("tools"), d["definition"]["advanced_config"].get("maxTurns"), d["definition"]["auto_mode"]))'
+    create_body "$a" | json 'print("•   %-17s display=%r, provider %s, model %s, instructions %d chars, directory %s, tools %s, maxTurns %s, auto_mode %s" % (d["name"], d["display_name"], d["definition"]["provider"], d["definition"]["model"], len(d["definition"]["instructions"]), d["definition"]["directory"], d["definition"]["advanced_config"].get("tools"), d["definition"]["advanced_config"].get("maxTurns"), d["definition"]["auto_mode"]))'
   done
   say "would join ${#TEAM[@]} agents + d2c-observer to \"$ROOM_NAME\""
   say "would PUT /agents/<id>/addressing-policy on each team agent whose policy differs (rooms already named are kept):"
@@ -124,11 +125,11 @@ fi
 gw GET /collaborations | json '[print("•   bridge", b["bridge_type"], b["status"], "rooms:", b["room_count"]) for b in d if b["bridge_type"]=="telegram"]'
 
 # ---- 3. providers ----------------------------------------------------------------------------
-python3 - "$SWITCHDASH/agent-controller/provider-precheck.json" <<'PY' || todo "Switch Console → Settings → Agent providers: make Claude Code read Installed (run \`claude\` once to log in)."
-import json,sys
-try: p=[x for x in json.load(open(sys.argv[1]))["providers"] if x["status"]["provider"]=="claude"][0]
+python3 - "$SWITCHDASH/agent-controller/provider-precheck.json" <<'PY' || todo "Switch Console → Settings → Agent providers: make $TEAM_PROVIDER read Installed and logged in."
+import json,os,sys
+try: p=[x for x in json.load(open(sys.argv[1]))["providers"] if x["status"]["provider"]==os.environ["TEAM_PROVIDER"]][0]
 except Exception: sys.exit(1)
-s=p["status"]; print(f"• Claude Code installed={s['installed']} version={s.get('version')} auth={s.get('auth')} ({p.get('path')})")
+s=p["status"]; print(f"• {os.environ['TEAM_PROVIDER']} installed={s['installed']} version={s.get('version')} auth={s.get('auth')} ({p.get('path')})")
 sys.exit(0 if s["installed"] and s.get("auth")=="ok" else 1)
 PY
 

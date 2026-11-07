@@ -16,7 +16,8 @@ Set in `.env` (gitignored) or the environment. All are optional in development.
 | `PORT` | `8787` | Server port |
 | `DATA_DIR` | `.data` | Where `events.db` (SQLite) lives |
 | `OWNER_EMAIL` | first user | The host owner: sees tenant-wide ROI and can re-shelve the skills library |
-| `TEAM_MODEL` | `claude-haiku-5-5` | Model for the team and every hire |
+| `TEAM_PROVIDER` | `claude` | Switch agent provider for the team and every hire: `claude`, `codex` or `opencode` |
+| `TEAM_MODEL` | `claude-haiku-5-5` on Claude, provider default otherwise | Model for the team and every hire |
 | `HIRE_MAX` | `24` | Most employees in the office at once (plus 3 hires per 10 minutes per workspace) |
 | `ROI_BUDGETS` | off | `on` allows creating, editing and deleting Switch budgets (and enforcing caps) from the office |
 | `TRUST_OTLP_ENDPOINT` / `TRUST_API_KEY` | – | Export both before running `scripts/switch-up.sh` to send Claude Code usage telemetry to Switch Trust (written into the agents' local, gitignored settings). Usage only, never message content |

@@ -17,3 +17,5 @@ How agents, the toolkit and the server are locked down.
   owner (or `ADMIN_TOKEN`).
 - **Agent text is untrusted.** Chat bubbles use a small safe Markdown renderer, never `innerHTML`; the site sets a CSP.
 - **Secrets** live in `.env` (gitignored); production refuses to start without `OBSERVER_TOKEN` and `ADMIN_TOKEN`.
+- **Other providers.** The tool allowlist and `.claude/settings.json` rules are Claude Code features. With
+  `TEAM_PROVIDER=codex` or `opencode`, set the equivalent sandbox and approval rules in that agent's own config.

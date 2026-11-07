@@ -22,7 +22,8 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 MAIN=$(cd "$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)/.." && pwd) # main checkout
 AGENT_DIR=${AGENT_DIR:-$MAIN}             # where Console runs the agents (their .claude/settings.local.json)
 TEMPLATE_NAME="Kesar HQ D2C team"
-export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} # every team agent runs on Haiku
+export TEAM_PROVIDER=${TEAM_PROVIDER:-claude}   # same as scripts/switch-up.sh
+[ "$TEAM_PROVIDER" = claude ] && export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} || export TEAM_MODEL=${TEAM_MODEL:-}
 CORE_ENV="${SWITCHDASH:-$HOME/Library/Application Support/switchdash}/local-switch-server/native/run/switch-core.env"
 # shellcheck disable=SC2207 # ids have no spaces
 TEAM=($(python3 -c 'import json,sys; print(" ".join(p["id"] for p in json.load(open(sys.argv[1]))["people"] if p["kind"]=="agent" and p["id"]!="librarian"))' "$ROOT/contracts/roster.json"))
@@ -81,7 +82,7 @@ d = json.load(sys.stdin)
 body = open(sys.argv[1]).read().split("\n", 1)[1].strip()
 lock = json.load(open(sys.argv[2]))
 cur = d["definition"]
-want = {**cur, "instructions": body, "model": os.environ["TEAM_MODEL"],
+want = {**cur, "instructions": body, "model": (os.environ["TEAM_MODEL"] or None),
         "advanced_config": {**(cur.get("advanced_config") or {}), **lock["advanced_config"]},
         "auto_mode": lock["auto_mode"], "auto_approve": lock["auto_approve"]}
 if all(cur.get(k) == want[k] for k in ("model", "advanced_config", "auto_mode", "auto_approve")) and cur.get("instructions", "").strip() == body:
@@ -109,7 +110,7 @@ for a in d:
     body = open("%s/switch/agents/%s.md" % (sys.argv[1], a["name"])).read().split("\n", 1)[1].strip()
     lock = json.load(open("%s/switch/lockdown.json" % sys.argv[1]))
     df = a["definition"]
-    has = (df.get("instructions", "").strip() == body and df.get("model") == os.environ["TEAM_MODEL"]
+    has = (df.get("instructions", "").strip() == body and df.get("model") == (os.environ["TEAM_MODEL"] or None)
            and all(df.get("advanced_config", {}).get(k) == v for k, v in lock["advanced_config"].items())
            and df.get("auto_mode") == lock["auto_mode"] and df.get("auto_approve") == lock["auto_approve"])
     st = a.get("status") or {}

@@ -207,8 +207,10 @@ export async function postAsOffice(o: { credsFile: string; roomId: string; body:
 export type HireSpec = { id: string; displayName: string; description: string; instructions: string; directory: string };
 type Definition = { provider: string; model: string | null; advanced_config: Record<string, unknown>; auto_mode: boolean; auto_approve: boolean; isolation: string; directory: string | null; instructions: string };
 const TEAM_LEAD = "d2c-captain";
-/** Every team agent and hire runs on Haiku (cost). Switch passes `definition.model` verbatim to `claude --model`. */
-export const TEAM_MODEL = process.env.TEAM_MODEL || "claude-haiku-5-5";
+/** Coding agent behind every team agent and hire: any Switch provider (claude, codex, opencode). */
+export const TEAM_PROVIDER = process.env.TEAM_PROVIDER || "claude";
+/** Model for every agent and hire, passed verbatim to the provider. Claude defaults to Haiku (cost); other providers use their own default. */
+export const TEAM_MODEL: string | null = process.env.TEAM_MODEL || (TEAM_PROVIDER === "claude" ? "claude-haiku-5-5" : null);
 /** Hard tool limits for every team agent and hire (switch/lockdown.json): tool allowlist + auto mode off, so anything
  *  the repo's .claude/settings.json doesn't allow waits for a human. Applied on top of the lead's settings, never copied from them. */
 const LOCKDOWN: { advanced_config: Record<string, unknown>; auto_mode: boolean; auto_approve: boolean } =
@@ -229,7 +231,7 @@ export async function createManagedAgent(h: HireSpec): Promise<string> {
   const res = await gw("POST", "/management/agents", {
     name: h.id, description: h.description, display_name: h.displayName, icon_url: null, controller_id: ctl.id, desired_state: "running",
     definition: {
-      provider: base.provider, model: TEAM_MODEL, advanced_config: { ...base.advanced_config, ...LOCKDOWN.advanced_config },
+      provider: process.env.TEAM_PROVIDER || base.provider, model: TEAM_MODEL, advanced_config: { ...base.advanced_config, ...LOCKDOWN.advanced_config },
       auto_mode: LOCKDOWN.auto_mode, auto_approve: LOCKDOWN.auto_approve, isolation: base.isolation, directory: h.directory, instructions: h.instructions,
     },
   });
@@ -252,7 +254,7 @@ export async function storeHireTemplate(h: HireSpec, roomName: string): Promise<
   const content = JSON.stringify({
     version: 1,
     params: { directory: { type: "directory", default: h.directory }, team_room: { type: "room", default: [roomName] } },
-    agents: [{ name: h.id, description: h.description, addressing: "anyone" /* scoped by activate() once created (syncPending) */, provider: "claude", model: TEAM_MODEL, location: "local", directory: "{directory}", join: ["{team_room}"], instructions: h.instructions }],
+    agents: [{ name: h.id, description: h.description, addressing: "anyone" /* scoped by activate() once created (syncPending) */, provider: TEAM_PROVIDER, model: TEAM_MODEL, location: "local", directory: "{directory}", join: ["{team_room}"], instructions: h.instructions }],
   }, null, 2);
   const t = await gw("POST", "/templates", { name: `Hire: ${h.displayName} (${h.id})`, description: h.description, kind: "group", content });
   return t.id;
