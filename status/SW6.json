@@ -1,7 +1,0 @@
-{ "task": "SW6", "state": "done", "progress": 100,
-  "done": [
-    "Crawled all 225 docs.switchagents.ai pages (llms.txt: Rooms 60, Trust 50, Trust CLI 18, API ref 89, data handling). The docs describe Switch 0.31.0 / Console 0.40, the build we run. Trust and ROI are hosted (Trust 1.0).",
-    "docs/switch/15-docs-gap-audit.md: coverage table (about 60 features, each with docs URL, Kratos evidence file:line, gap, S/M/L effort, demo value), 8 ranked close-next sketches, deliberately-not-used list, 10 blog findings. Claims checked against the switch-core 0.31.0 source where cheap (PATCH rooms instructions, receives_join_events, media upload route, maxTurns field, trust fail-open, taken_over).",
-    "docs/diagrams/15-switch-coverage.{excalidraw,svg,png}: features by pillar (Rooms context / agents+protocol / Trust / ROI), colored used/partial/missing/n-a, Kratos component on each card. Same exc.py style as BL1 (generator kept out of the repo: SW6 owns only the diagram files)."
-  ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-07T22:30:00+05:30" }

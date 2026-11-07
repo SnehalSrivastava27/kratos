@@ -1,7 +1,0 @@
-{ "task": "T2", "state": "done", "progress": 100,
-  "done": [
-    "demo/feeds/sale-demo.json: 36 events over 44s, every story beat in order with PLAN §7 numbers",
-    "demo/validate.mjs: ajv schema + ordering + numbers + Telegram style; `node demo/validate.mjs demo/feeds/sale-demo.json` passes",
-    "demo/script.md: same story as a video script"
-  ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T12:45:00+05:30" }

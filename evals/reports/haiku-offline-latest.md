@@ -1,4 +1,4 @@
-> LV1, 7 Nov 02:05 IST. **Not the live path:** the live QA Lab run (`--live`) needs a linked workspace, and linking "Kratos D2C" to a stand-in account was refused by the permission system (it would bind the founder's group to a test account). So this is the same 16 agents' instructions on the same model the live agents now use (`claude -p --model haiku` = claude-haiku-5-5), 2 questions each, from a checkout with kit deps. Latency here is the model + tools only, without the Switch/Telegram hop. First pass was 31/32: d2c-forecaster#2 failed only because kit/node_modules was missing in the worktree (rerun: pass, 28s → 8s).
+> Spot check, 6 Nov 2026: the 16 agents' instructions on the live team's model (`claude -p --model haiku` = claude-haiku-5-5), 2 questions each. Offline, so latency is the model and tools only, without the Switch/Telegram hop. First pass was 31/32: d2c-forecaster#2 failed because the toolkit's dependencies were not installed (rerun: pass, 28 s → 8 s).
 
 # QA Lab evals — offline (haiku) — 2026-11-06T20:33:04.322Z
 

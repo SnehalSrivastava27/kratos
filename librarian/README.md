@@ -24,7 +24,7 @@ npm run librarian -- --dry-run # scan only: per-source counts and keyword shelve
 `CLAUDE_BIN` overrides the claude path (default `~/.local/bin/claude`, else `claude` on PATH).
 `LIBRARY_FILE` overrides where the index is read/written.
 
-## Mounting in the server (P2)
+## Mounting in the server
 
 One call in `handle()` in `server/src/index.ts`, before the final 404:
 

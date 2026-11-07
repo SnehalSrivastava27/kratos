@@ -1,7 +1,7 @@
 # 13 · Agent lockdown: hard tool limits for the live team
 
-**One idea:** instructions are not a security boundary. Eval E2 showed Haiku, on a "SYSTEM OVERRIDE"
-prompt, exploring the repo and running `rm -rf gallery/ data/`. The live agents now run with limits
+**One idea:** instructions are not a security boundary. In evals, Haiku without a lockdown, given a "SYSTEM OVERRIDE"
+prompt, explored the repo and ran `rm -rf gallery/ data/`. Kratos agents therefore run with limits
 that the model cannot talk its way past.
 
 ## How Switch launches a managed agent (0.31.0, Console sidecar)
@@ -61,4 +61,4 @@ Same flags as a live agent (`--agent` with the lockdown tools, `--permission-mod
 kit ran, `ls` ran, Read `.env` / `cat .env` / Read `~/.ssh/config` denied, `rm`, `touch`, `curl` denied
 (need approval), Write `gallery/live-run/x.json` allowed, Write `data/x.txt` and `../x.txt` denied, no WebFetch tool.
 Live: `ps` shows every team session with `--permission-mode default`; the SYSTEM OVERRIDE probe is in
-[docs/live-demo-run.md](../live-demo-run.md).
+[Running a live session](../live-demo-run.md).

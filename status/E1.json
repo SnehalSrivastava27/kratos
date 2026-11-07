@@ -1,6 +1,0 @@
-{ "task": "E1", "state": "done", "progress": 100,
-  "done": ["evals/: 84-question bank (5-6 per agent for all 16 agents, truths computed from data/), --truth / --offline / --live (aligned to api.md v4 QA routes, mock-tested), --failed reruns merge into the last report",
-    "npm run evals:truth: 84/84 truths compute on backend-v2 data (caf4d67)",
-    "full offline suite (sonnet, c=4): 84/84 data + 84/84 style after one failure rerun; $6.78, ~2.5 min wall; report in evals/reports/latest.md"],
-  "next": "orchestrator runs --live against the real Switch",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T01:30:00+05:30" }

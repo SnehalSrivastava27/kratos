@@ -1,7 +1,7 @@
 # Agent toolkit contract (`kit/`)
 
 A local Node CLI that every Switch agent (a Claude Code session in this repo) can run.
-Owner: task K2. Agents call it from the repo root:
+Agents call it from the repo root:
 
 ```
 node kit/bin/kit.mjs <command> [args]        # or: npm run kit -- <command> ...
@@ -30,4 +30,4 @@ Specs are JSON files or inline JSON; inputs are validated; nothing touches the n
 
 Data is cached read-only in `data/.cache/kratos.db` (gitignored, rebuilt when a CSV changes); marts such as `m_lines`, `m_orders`, `channel_daily`, `ads_daily_all` are queryable with `kit sql`.
 
-Full library list and examples: `switch/TOOLKIT.md` (written by K2, read by every agent).
+Full library list and examples: `switch/TOOLKIT.md` (read by every agent).

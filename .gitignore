@@ -15,3 +15,20 @@ evals/reports/*.json
 data/.cache/
 __pycache__/
 demo/script.md
+
+# Internal build/process notes (kept locally, not part of the product repo)
+AGENTS.md
+tasks/
+status/
+orchestrator/
+docs/PLAN.md
+docs/ORCHESTRATION.md
+docs/overnight-log.md
+docs/blog/
+docs/blog-draft.md
+docs/build-notes.md
+docs/switch/blog-outline.md
+docs/SWITCH_SETUP.md
+docs/architecture.md
+docs/diagrams/build-swarm.*
+docs/diagrams/overnight-swarm.*

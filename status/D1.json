@@ -1,7 +1,0 @@
-{ "task": "D1", "state": "done", "progress": 100,
-  "done": [
-    "docs/switch/: README index + 10 feature pages (Console, Telegram bridge, templates, agent protocol, topics/threads, hiring, observer/office, workspaces, skills library, gotchas) + blog-outline.md, every claim cited to repo or Switch source lines",
-    "docs/diagrams/: 7 Excalidraw diagrams (.excalidraw + .svg + .png): architecture, message lifecycle, Telegram-Switch mapping, agent protocol, hiring flow, workspace linking, build swarm; each PNG checked for overlaps",
-    "README.md: 'How Kratos uses Switch' link section to docs/switch/"
-  ],
-  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-06T23:30:00+05:30" }

@@ -1,6 +1,6 @@
-"""BL2 diagrams (ROI + Trust, office floor plan, system architecture). Run: python3 docs/diagrams/gen/bl2.py, then
+"""Numbered diagrams (ROI + Trust, office floor plan, system architecture). Run: python3 docs/diagrams/gen/bl2.py, then
 bash docs/diagrams/gen/render.sh docs/diagrams 16-roi-trust 17-office-floor-plan 18-architecture
-Exits 1 if any box label would overflow its box. (15 is SW6's switch-coverage diagram.)"""
+Exits 1 if any box label would overflow its box."""
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from exc import Scene

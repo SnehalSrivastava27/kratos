@@ -1,6 +1,0 @@
-{ "task": "O2", "state": "done", "progress": 100,
-  "done": ["agent-office toon office (MIT, credited): chibi people sit/type/walk/jump, GLB props, outlines, warm daylight",
-           "Telegram-centred live UI: Kratos D2C forum topics list, topic thread with bot bubbles, inline Approve keyboard, link previews, typing presence, replay",
-           "Telegram Hub wall + founder phone show the live group; autoplay stays chrome-less; ?demo forces local replay"],
-  "next": "landing HeroOffice can now mount <Office mode=\"autoplay\" />",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-06T23:30:00+05:30" }

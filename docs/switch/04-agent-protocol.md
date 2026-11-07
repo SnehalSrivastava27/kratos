@@ -170,4 +170,4 @@ prevents it (`contracts/switch-protocol-notes.md:44`).
 
 The server source says the live transport is now a WebSocket at `/connection/ws` and SSE is kept for
 compatibility (`switch:core/.../agent/api/handlers.py:773-781`). If the stream ever answers **410**,
-the observer needs a WebSocket transport (`docs/SWITCH_SETUP.md:111`).
+the observer needs a WebSocket transport.

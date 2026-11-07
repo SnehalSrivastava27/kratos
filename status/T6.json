@@ -1,9 +1,0 @@
-{ "task": "T6", "state": "done", "progress": 100,
-  "done": ["contracts/switch-protocol-notes.md: listen-only works (scope=all&filter=all gets every room message incl. other agents); one Telegram bot fronts all agents; no Docker; Telegram rooms must pre-exist",
-           "switch/d2c-team.template.yaml fixed to Switch v1 schema (params, location/directory, join pre-made Telegram rooms); finance+analyst whole-rupee/whole-order rounding",
-           "observer/ (zero runtime deps, node src/index.ts) + npm run mock verified against server on :8797; docs/SWITCH_SETUP.md runbook. Telethon fallback NOT built (not needed)"],
-  "next": "HUMAN: docs/SWITCH_SETUP.md steps 1-21",
-  "blockers": [],
-  "contract_requests": ["root .gitignore: add `.switch/` and `.claude/settings.local.json` (Switch Console writes agent API keys into the repo root when agents use it as directory)",
-                        "tasks/HUMAN.md: Docker no longer needed; one bot total, not per agent"],
-  "updated": "2026-11-06T19:30:00+05:30" }

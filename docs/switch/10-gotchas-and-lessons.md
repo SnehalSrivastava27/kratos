@@ -1,7 +1,7 @@
-# 10 · Gotchas and lessons
+# 10 · Troubleshooting and design notes
 
-Every real problem we hit while wiring Kratos to Switch and Telegram, and the fix. Commit ids
-are from `git log` on `main`; "(risk)" marks things we guarded against without seeing them fail.
+Known Switch and Telegram behaviours that affect a Kratos install, and how Kratos handles each one. Commit ids
+are from `git log` on `main`; "(risk)" marks behaviours Kratos guards against that have not been seen failing.
 
 ## Telegram and Switch
 
@@ -10,8 +10,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
 - **Cause:** BotFather's Group Privacy is on by default, and Telegram reads it **when the bot
   joins** a group (`switch:…/telegram/adapter.py:819-827`).
 - **Fix:** turn privacy off **before** adding the bot, or remove and re-add it, or make it an
-  admin. Kratos makes the bot admin anyway (for Manage topics), which settles it per group
-  (`docs/SWITCH_SETUP.md:36,108`).
+  admin. Kratos makes the bot admin anyway (for Manage topics), which settles it per group.
 
 ### 2. A template can't create Telegram groups
 - **Problem:** the first template used `room:` + `kickoff:`, which asks Switch to create a channel.
@@ -20,7 +19,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
 - **Fix:** make the group by hand, add the bot (Switch adopts it), and have every agent `join` a
   `room`-typed param (commit `4f0be1f`, [03](03-agents-and-templates.md)).
 
-### 3. The chat id changed under us
+### 3. The chat id changes when Topics are turned on
 - **Symptom:** Bot API calls on the stored chat id fail after turning Topics on.
 - **Cause:** converting to a forum makes a **supergroup with a new chat id**.
 - **Fix:** Switch re-points its room by itself. Our own code follows `migrate_to_chat_id` from
@@ -88,7 +87,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
 - The Switch source calls SSE a compatibility transport; the live one is a WebSocket at
   `/connection/ws` (`switch:…/agent/api/handlers.py:773-781`). A 410 on stream open is the signal.
 
-## Our server: loopback, CSRF and secrets
+## The office server: loopback, CSRF and secrets
 
 ### 15. "Only this Mac" is not a security model by itself
 - **Cause:** office writes (command, hire) were trusted from loopback. A malicious web page in the
@@ -98,7 +97,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
   only if every forwarded hop is loopback; `TRUST_LOOPBACK=0` behind a reverse proxy
   (commits `d47a9ce`, `91484d0`). v3 adds sessions that own the workspace.
 
-### 16. The write guard broke our own buttons
+### 16. The write guard and the office's own buttons
 - **Symptom:** logout, connect and some office POSTs answered 415.
 - **Cause:** they sent no body, and the guard requires `content-type: application/json`.
 - **Fix:** send `{}` on every POST (commits `c682d6c`, `d27c5ae`). The same commit makes a 409
@@ -134,7 +133,7 @@ are from `git log` on `main`; "(risk)" marks things we guarded against without s
 - **Fix:** open the WebSocket first, buffer, load history, then replay both deduped
   (commit `21d4f68`); fall back to a local replay if live stays down for 5 s (commit `5f238ab`).
 
-## Lessons
+## Design principles
 
 1. **Read the source, cite the line.** `contracts/switch-protocol-notes.md` answered the
    make-or-break question (does a silent agent see everything?) before any code was written.

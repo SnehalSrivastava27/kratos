@@ -7,9 +7,9 @@ pick its skills from those shelves.
 > Not a Switch feature itself, but it feeds Switch agents: Console runs agents as Claude Code
 > sessions on this Mac, so the skills installed here are the skills they can use.
 
-## Real run
+## Performance
 
-**316 skills shelved by Claude Code in 45.5 seconds** (`status/P3.json`).
+A sample library of **316 skills is shelved by Claude Code in about 45 seconds**.
 
 ## 1. Scan (read-only)
 
@@ -73,6 +73,3 @@ if (unknown !== undefined) bad(`skills: "${unknown.slice(0, 60)}" is not in the 
 `Skills from the office library to use when relevant: ${e.skills.join(", ")}.`
 ```
 (`server/src/office.ts:174-179,97`)
-
-> Suggested blog line: "My laptop had 316 agent skills I'd forgotten about. One Claude Code call
-> per 40 of them turned that into a library the hire dialog can use."

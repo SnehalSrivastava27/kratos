@@ -86,9 +86,9 @@ ShelfId     = "war_room" | "analytics" | "ads" | "creators" | "ops" | "design" |
 ```
 Event types gain `hired` (a new employee joined) and `command` (reserved: the office console sent a command; the echo from Telegram arrives as a normal `message`).
 
-## v3: accounts, workspaces, private office (decided with the user 2026-11-06)
+## v3: accounts, workspaces, private office
 
-**Rule:** the public site (`/`) shows ONLY the scripted demo (made-up Kesar & Co. data, replayed in
+**Rule:** the public site (`/`) shows ONLY the product tour (made-up Kesar & Co. data, replayed in
 the browser from demo/feeds/sale-demo.json). Every real Telegram message, the live office, people,
 hires and commands require a signed-in user and are scoped to that user's workspace.
 
@@ -129,7 +129,7 @@ Workspace { id, name /* Telegram group title */, switchRoomId, chatId: string | 
 OfficeEvent.ws?: string   // server-assigned workspace id
 ```
 
-### v3 details (A1, as implemented)
+### v3 details
 - **Write guard on auth too:** `POST /api/auth/signup|login|logout` and `POST /api/workspaces/connect` follow the
   v2 write rules: `content-type: application/json` (logout/connect: send `{}`) else 415, a foreign `Origin` → 403,
   `Host` must be local or the host of an `OFFICE_ORIGINS` entry (a public deployment sets
@@ -170,7 +170,7 @@ OfficeEvent.ws?: string   // server-assigned workspace id
   chat id is the one in `observer/topics.json` (or `LEGACY_CHAT_ID`) is linked; then they, and its topics, join that
   workspace (once).
 
-## v4: multi-agent team, QA Lab, KPIs, robustness (B3)
+## v4: multi-agent team, QA Lab, KPIs, robustness
 
 **Roster-driven setup.** A linked workspace gets one forum topic per `roster.json` room (8 today: the 6 departments,
 Finance, QA Lab) and every roster Switch agent (16: all `kind: "agent"` except `librarian`) + `d2c-observer` joined

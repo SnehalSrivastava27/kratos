@@ -1,8 +1,8 @@
 # How an Indian D2C skincare brand actually works (2025-26 primer)
 
-A short field guide for the Kesar & Co. agents, and raw material for the blog. Plain numbers, simple words.
+A short field guide for the Kesar & Co. agents and anyone configuring Kratos for a D2C brand. Plain numbers, simple words.
 Figures are typical ranges from public sources (listed at the end). They move every few months, so treat them
-as "what a founder would say in a meeting", not as a rate card. The demo data in `data/` is built on these ranges.
+as "what a founder would say in a meeting", not as a rate card. The sample data in `data/` is built on these ranges.
 
 ## 1. The shape of the business
 
