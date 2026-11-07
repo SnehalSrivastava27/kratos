@@ -7,7 +7,8 @@ import type { SceneState } from '../officeState';
 import type { OfficeEvent } from '../../shared/types';
 import { C, DESKS, deskById, isPrivate, plain, personById, sitterAt, zoneById } from '../data';
 import { DESK_SIZE, MONITOR, PAL, WALL, monitorXs, wallBoard } from './world';
-import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, indiaTex, paint, repaint, screenTex, uv } from '../tex';
+import { CITIES, FONT, bannerTex, drawTelegramWall, drawWarScreen, imageTex, indiaTex, paint, repaint, screenTex, uv } from '../tex';
+import { HACKATHON_URL, HACK_SCREEN } from './layout';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 
 const GW = 5.2, GH = 2.0;
@@ -39,9 +40,16 @@ export class LiveProps {
   private gallery = new THREE.Group();
   private frames = new Map<string, { obj: THREE.Group; born: number; x: number }>();
   private t = 0;
+  /** The Town Hall screen: the hackathon page (it refuses iframes, so a screenshot); click or E opens the real one. */
+  private hack: THREE.Mesh;
 
   constructor() {
     const g = this.group;
+    const H = HACK_SCREEN;
+    this.hack = new THREE.Mesh(new THREE.PlaneGeometry(H.w, H.h), new THREE.MeshBasicMaterial({ map: hackTex(), toneMapped: false }));
+    this.hack.position.set(H.x, H.y, H.z + 0.03);
+    this.hack.userData = { url: HACKATHON_URL, reach: 5 };
+    g.add(this.hack);
     // Monitor faces: dim when idle, lit while working, mint when done, pink while blocked. Colours ease.
     const stex = screenTex();
     const sgeo = new THREE.PlaneGeometry(MONITOR.w, MONITOR.h);
@@ -173,6 +181,7 @@ export class LiveProps {
       f.x = (i - (keep.length - 1) / 2) * 1.35;
     });
     this.clickables.length = 0;
+    this.clickables.push(this.hack);
     for (const f of this.frames.values()) this.clickables.push(f.obj.children[1]);
   }
 
@@ -195,6 +204,24 @@ export class LiveProps {
     disposeTree(this.group); // every geometry, and every textured material with its canvas
     (this.arc.material as THREE.Material).dispose();
   }
+}
+
+/** 1600 × 1000: a label bar (what this is, where it goes) over the page's 16:9 screenshot. */
+function hackTex() {
+  return imageTex(1600, 1000, '/brand/hackathon-switch.jpg', (g, W, H, img) => {
+    g.fillStyle = '#0b0f14';
+    g.fillRect(0, 0, W, H);
+    if (img) g.drawImage(img, 0, 100, W, H - 100);
+    g.fillStyle = '#22D3EE';
+    g.fillRect(0, 0, W, 100);
+    g.fillStyle = '#0b0f14';
+    g.font = `900 46px ${FONT}`;
+    g.textBaseline = 'middle';
+    g.fillText('HACKATHON · Flip the Switch', 34, 52);
+    g.textAlign = 'right';
+    g.font = `800 34px ${FONT}`;
+    g.fillText('wemakedevs.org/hackathons/switch  ↗', W - 34, 52);
+  });
 }
 
 function drawPhone(g: CanvasRenderingContext2D, W: number, H: number, war: OfficeEvent[]) {

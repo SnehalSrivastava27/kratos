@@ -1,3 +1,8 @@
+Code in web/src/office (engine/*.ts, toon.ts, tex.ts) is adapted from AgentSystemLabs/agent-office under the
+license below. That includes the founder's third-person follow camera in engine/Engine.ts (eye-level orbit behind
+the character, drag / two-finger scroll to orbit, pinch or wheel notches to zoom, kept on your side of the walls),
+ported from agent-office src/client/player.ts (updateCamera and its wheel handler).
+
 MIT License
 
 Copyright (c) 2026 AgentSystemLabs

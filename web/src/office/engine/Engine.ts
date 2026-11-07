@@ -26,7 +26,7 @@ import { NavGrid } from './nav';
 import { LiveProps, type GalleryItem } from './props';
 import { DOOR, FLOOR, buildWorld, loadFont } from './world';
 import { SwitchHub } from './switchHub';
-import { stations, type StationId } from './layout';
+import { CORE, WALL, stations, type StationId } from './layout';
 
 /** What pressing E would use: the nearest thing you face. */
 export type Target =
@@ -62,14 +62,35 @@ export const shelfLabel = (s: ShelfId) => SHELF_LABEL[s];
 const DEG = Math.PI / 180;
 const JUKEBOX: [number, number] = [zoneById.telegram_hub.x + 4.2, zoneById.telegram_hub.z + 1.2];
 const STATIONS = stations(zoneById);
-const FOLLOW_PITCH = 0.8;
+// The founder's camera (agent-office player.ts, third person): behind and a little above you at eye level, a wide
+// lens, orbit by drag / two-finger scroll, zoom by wheel / pinch (out far enough for an aerial look round).
+const FOLLOW = { pitch: 0.36, dist: 7.0, y: 1.3, fov: 55, maxZoom: 4 };
+const WIDE_FOV = 32; // the overview's long lens
+/**
+ * Walls the follow camera must stay on your side of, doorways filled in (a camera backed through a doorway would
+ * look at the lintel), grown a little so the near plane never pokes through.
+ */
+const CAM_WALLS = [
+  { minX: FLOOR.minX - 1, maxX: WALL.backEnd, minZ: WALL.backZ - WALL.t / 2, maxZ: WALL.backZ + WALL.t / 2 },
+  { minX: WALL.leftX - WALL.t / 2, maxX: WALL.leftX + WALL.t / 2, minZ: CORE.minZ, maxZ: FLOOR.maxZ + 1 },
+  { minX: WALL.outerX - 1, maxX: WALL.outerX + WALL.t / 2, minZ: FLOOR.minZ - 1, maxZ: FLOOR.maxZ + 1 },
+  { minX: FLOOR.minX - 1, maxX: FLOOR.maxX + 1, minZ: WALL.outerBackZ - 1, maxZ: WALL.outerBackZ + WALL.t / 2 }].map((r) => ({ minX: r.minX - 0.25, maxX: r.maxX + 0.25, minZ: r.minZ - 0.25, maxZ: r.maxZ + 0.25 }));
+const inWall = (x: number, z: number) => CAM_WALLS.some((r) => x > r.minX && x < r.maxX && z > r.minZ && z < r.maxZ);
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
 const AZ = 0.12;
 const elevation = (aspect: number) => THREE.MathUtils.clamp(1.25 - 0.3 * aspect, 0.86, 1.02); // portrait panes look down more
-const [X0, X1, Z0, Z1] = [FLOOR.minX - 0.4, FLOOR.maxX + 0.2, FLOOR.minZ - 0.2, FLOOR.maxZ + 0.3];
-const FIT_PTS = [
-  [X0, 0, Z1], [X1, 0, Z1], [X1, 0, Z0], [X0, 2.6, Z0], [X1, 2.6, Z0], [X0, 2.6, Z1],
-].map(([x, y, z]) => new THREE.Vector3(x, y, z));
+// The overview frames where the people are (every department zone, the moved ones too), not the whole 88 m floor:
+// the empty far corners of the wings would only make everyone smaller. Wheel out to see the rest.
+const [X0, X1, Z0, Z1] = [
+  Math.min(...zones.map((z) => z.x - z.w / 2)) - 0.4, Math.max(...zones.map((z) => z.x + z.w / 2)) + 0.6,
+  Math.min(...zones.map((z) => z.z - z.d / 2)) - 0.6, FLOOR.maxZ + 0.3,
+];
+const fitPts = (x0: number, x1: number, z0: number, z1: number) =>
+  [[x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 2.6, z0], [x1, 2.6, z0], [x0, 2.6, z1]].map(([x, y, z]) => new THREE.Vector3(x, y, z));
+const FIT_PTS = fitPts(X0, X1, Z0, Z1);
+// A portrait phone frames just the original block: the whole department area would put the camera ~150 m back and
+// pile every name tag into one column at the edge. The wings are a pinch / walk away.
+const FIT_PTS_NARROW = fitPts(CORE.minX - 0.4, CORE.maxX + 0.6, CORE.minZ - 0.6, CORE.maxZ + 0.3);
 const ZOOM_OFF = new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1);
 
 const v3 = new THREE.Vector3();
@@ -92,7 +113,7 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
     c.lookAt(tgt);
     c.updateMatrixWorld();
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-    for (const q of FIT_PTS) {
+    for (const q of aspect < 1 ? FIT_PTS_NARROW : FIT_PTS) {
       p.copy(q).project(c);
       x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y);
     }
@@ -251,7 +272,7 @@ export class OfficeEngine {
     if (opts.interactive) {
       this.player = new Player(() => this.world?.solids ?? [], FLOOR);
       // The office dog wanders the main floor; the jukebox stands in the Telegram Hub lounge (both live office only).
-      this.dog = new Dog(-2.5, 3.6, { minX: FLOOR.minX + 8.5, maxX: FLOOR.maxX - 1, minZ: FLOOR.minZ + 1.2, maxZ: FLOOR.maxZ - 0.6 });
+      this.dog = new Dog(-2.5, 3.6, { minX: CORE.minX + 8.5, maxX: CORE.maxX + 6, minZ: CORE.minZ + 1.2, maxZ: CORE.maxZ - 0.6 }); // the main floor and the boulevard
       this.dog.onBark = () => (this.woofT = this.t);
       this.woof.className = 'hq-anchor';
       this.woof.innerHTML = '<div class="hq-over"><span class="hq-tag-name hq-woof">Woof!</span></div>'; // static markup, no data
@@ -311,7 +332,7 @@ export class OfficeEngine {
         return { frames: this.frames, meshes, calls: i.render.calls, geometries: i.memory.geometries, textures: i.memory.textures, programs: i.programs?.length, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1e6) : null };
       };
       w.__hqBooks = () => this.shelves.shown;
-      w.__hqGo = (x: number, z: number, facing = Math.PI) => this.player?.place(x, z, facing); // QA: stand somewhere
+      w.__hqGo = (x: number, z: number, facing = Math.PI) => { this.player?.place(x, z, facing); this.lastMove = this.t; }; // QA: stand somewhere
       w.__hqPlayer = () => (this.player ? { x: +this.player.x.toFixed(2), z: +this.player.z.toFixed(2), view: this.view, target: this.targetK } : null);
       w.__hqAgents = () => Object.fromEntries(this.agents.map((a) => [a.info.id, [+a.pos.x.toFixed(3), +a.pos.z.toFixed(3)]]));
       w.__hqSolids = () => this.world?.solids ?? [];
@@ -351,6 +372,7 @@ export class OfficeEngine {
       if (arriving.has(p.id)) a.walkIn(DOOR, this.nav);
       this.scene.add(a.person.root);
       this.overlay.append(a.el);
+      a.person.root.scale.setScalar(this.farK);
       this.agents.push(a);
       if (p.id === 'founder') this.founder = a;
     }
@@ -377,6 +399,9 @@ export class OfficeEngine {
     }
   }
   private sitNext = false;
+  private lastMove = -99;
+  private farK = 1;
+  private camLift = 0;
   /** The next switch to spectator seats the founder at their own desk (rather than where the feed puts them). */
   sitDown() {
     this.sitNext = true;
@@ -425,9 +450,9 @@ export class OfficeEngine {
   /** The whole-office shot, fitted to the part of the canvas the side panels leave visible. */
   private homeFor(): Pose {
     const { w, h } = this.size, { left: L, right: R } = this.inset;
-    if (w < 760 || L + R === 0) return fitHome(this.camera.fov, w / h, w < 520);
-    const p = fitHome(this.camera.fov, (w - L - R) / h, false);
-    const s = ((R - L) / w) * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * p.dist * (w / h);
+    if (w < 760 || L + R === 0) return fitHome(WIDE_FOV, w / h, w < 520);
+    const p = fitHome(WIDE_FOV, (w - L - R) / h, false);
+    const s = ((R - L) / w) * Math.tan(THREE.MathUtils.degToRad(WIDE_FOV / 2)) * p.dist * (w / h);
     p.tx += Math.cos(p.yaw) * s;
     p.tz -= Math.sin(p.yaw) * s;
     return p;
@@ -522,6 +547,7 @@ export class OfficeEngine {
     const pl = this.player, f = this.founder;
     if (pl && f && this.view === 'player') {
       pl.update(dt, (this.cur?.yaw ?? AZ) + this.userShown.yaw);
+      if (pl.moving || pl.walking) this.lastMove = t;
       f.pos.set(pl.x, f.pos.y, pl.z);
       f.drive = { moving: pl.moving, speed: pl.speed, facing: pl.facing };
       if (this.frames % 4 === 0) this.findTarget();
@@ -551,6 +577,14 @@ export class OfficeEngine {
     }
     this.confetti.update(dt);
     this.updateCamera(dt, t);
+    // Seen from far off (the overview), people and their tags grow so they still read; the walking view and the
+    // landing hero keep them life-size. Quantised, so it only touches them when the zoom really changes.
+    const far = this.view === 'player' || this.opts.hero || !this.cur ? 1 : Math.round(THREE.MathUtils.clamp(this.cur.dist * this.userShown.zoom / 30, 1, 2.2) * 10) / 10;
+    if (far !== this.farK) {
+      this.farK = far;
+      for (const a of this.agents) a.person.root.scale.setScalar(far);
+      this.overlay.classList.toggle('hq-far', far > 1.3);
+    }
     this.scene.updateMatrixWorld();
     this.hub?.update(dt, t, this.camera, this.size.w, this.size.h);
     for (const a of this.agents) a.project(this.camera, this.size.w, this.size.h);
@@ -578,7 +612,16 @@ export class OfficeEngine {
     const elD = 22 + day * 26 + Math.sin(t * 0.021) * 4;
     const az = -0.65 + Math.sin(t * 0.013) * 0.25;
     const lightEl = (25 + Math.max(0, elD) * 0.6) * DEG;
-    this.sun.position.set(Math.cos(lightEl) * Math.sin(az), Math.sin(lightEl), Math.cos(lightEl) * Math.cos(az)).multiplyScalar(45);
+    // The shadow box: round you while you walk (crisp), the whole 88 m floor in the overview.
+    const near = this.view === 'player' && !!this.cur;
+    const [cx, cz] = near ? [this.cur!.tx, this.cur!.tz] : [(FLOOR.minX + FLOOR.maxX) / 2, (FLOOR.minZ + FLOOR.maxZ) / 2];
+    const sc = this.sun.shadow.camera, hw = near ? 22 : 50, hd = near ? 22 : 30;
+    if (sc.right !== hw || sc.top !== hd) {
+      Object.assign(sc, { left: -hw, right: hw, top: hd, bottom: -hd, far: 160 });
+      sc.updateProjectionMatrix();
+    }
+    this.sun.target.position.set(cx, 0, cz);
+    this.sun.position.set(Math.cos(lightEl) * Math.sin(az), Math.sin(lightEl), Math.cos(lightEl) * Math.cos(az)).multiplyScalar(60).add(this.sun.target.position);
   }
 
   private updateCamera(dt: number, t: number) {
@@ -586,15 +629,19 @@ export class OfficeEngine {
     let goal: Pose;
     let lag = 0.85;
     if (this.view === 'player' && this.player) {
-      // Third person: behind and above you, the same heading as the overview so the office reads the same way.
+      // Third person at eye level (agent-office player.ts updateCamera), the overview's heading so the office reads
+      // the same way. Stood still while the story plays, it glides to whoever is talking (and back when you move).
       const aspect = this.size.w / this.size.h;
-      // Near the open front and side edges the camera stops short, so the frame stays on the office, not the void past it.
-      const dist = aspect < 1 ? 28 : 20.5;
+      const dist = FOLLOW.dist * (aspect < 1 ? 1.25 : 1);
+      const s = this.speaker;
+      const watch = s && s !== this.founder && s.talking && t - this.lastMove > 3.5 ? s.pos : null;
       // Panels over the canvas (topics left, chat right): keep you in the middle of what's still visible.
       const halfW = Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * dist * aspect;
       const shift = ((this.inset.right - this.inset.left) / 2 / this.size.w) * 2 * halfW;
-      goal = { tx: THREE.MathUtils.clamp(this.player.x, FLOOR.minX + 3, FLOOR.maxX - 3) + shift, ty: 0.7, tz: Math.min(this.player.z, FLOOR.maxZ - 4.5), yaw: AZ, pitch: FOLLOW_PITCH, dist };
-      lag = this.cur && Math.hypot(this.cur.tx - goal.tx, this.cur.tz - goal.tz) > 6 ? 0.6 : 0.28; // long jumps glide, walking stays tight
+      goal = watch
+        ? { tx: watch.x, ty: FOLLOW.y, tz: watch.z + 0.5, yaw: AZ, pitch: FOLLOW.pitch + 0.15, dist: dist * 1.35 }
+        : { tx: this.player.x + shift * 0.3, ty: FOLLOW.y, tz: this.player.z, yaw: AZ, pitch: FOLLOW.pitch, dist };
+      lag = watch ? 1.1 : this.cur && Math.hypot(this.cur.tx - goal.tx, this.cur.tz - goal.tz) > 6 ? 0.6 : 0.12; // long jumps glide, walking stays tight
     } else if (this.opts.hero === 'hero' && !z) {
       // The hero: a slow cinematic orbit and a gentle push in, never wider than the shot that fits.
       const h = this.heroShot, drift = this.calm.matches ? 0 : 1;
@@ -622,8 +669,38 @@ export class OfficeEngine {
     u.zoom += (this.user.zoom - u.zoom) * e;
     const c = this.cur;
     const yaw = c.yaw + u.yaw;
-    const pitch = THREE.MathUtils.clamp(c.pitch + u.pitch, 0.22, 1.4);
-    const dist = c.dist * u.zoom;
+    const near = this.view === 'player' && !!this.player;
+    let pitch = THREE.MathUtils.clamp(c.pitch + u.pitch, near ? 0.06 : 0.22, 1.4);
+    let dist = c.dist * u.zoom;
+    const fov = near ? THREE.MathUtils.lerp(FOLLOW.fov, WIDE_FOV, THREE.MathUtils.clamp((u.zoom - 1.5) / 2.5, 0, 1)) : WIDE_FOV;
+    if (Math.abs(this.camera.fov - fov) > 0.01 || this.camera.near !== (near ? 0.1 : 0.5)) {
+      this.camera.near = near ? 0.1 : 0.5; // close behind you by a wall, the near plane must not cut into your head
+      this.camera.fov += (fov - this.camera.fov) * Math.min(1, dt * 6);
+      this.camera.updateProjectionMatrix();
+    }
+    if (near) {
+      // Stay on your side of the walls (agent-office clamps the camera inside the room): walk the line out from you and
+      // treat the first wall it meets below the wall's top as in the way.
+      const hit = (p: number, d: number) => {
+        const dx = Math.sin(yaw) * Math.cos(p), dz = Math.cos(yaw) * Math.cos(p), dy = Math.sin(p);
+        for (let k = 1; k <= 40; k++) {
+          const f = (d * k) / 40;
+          if (c.ty + dy * f < WALL.h + 0.4 && inWall(c.tx + dx * f, c.tz + dz * f)) return (k - 1) / 40;
+        }
+        return -1;
+      };
+      // Blocked: rise (eased) until the view clears the wall's top, the open-plan way (there is no ceiling); only if
+      // even a steep look can't clear it, pull in, never closer than an arm's length behind you.
+      let lift = 0;
+      if (hit(pitch, dist) >= 0) {
+        lift = 1.15 - pitch;
+        for (let p = pitch + 0.05; p < 1.15; p += 0.05) if (hit(p, dist) < 0) { lift = Math.min(1.2, p + 0.1) - pitch; break; } // a margin: the ease approaches it from below
+      }
+      this.camLift += (lift - this.camLift) * Math.min(1, dt * 4);
+      pitch += this.camLift;
+      const f = hit(pitch, dist);
+      if (f >= 0) dist = Math.max(2.2, dist * f);
+    }
     this.camera.position.set(c.tx + Math.sin(yaw) * Math.cos(pitch) * dist, c.ty + Math.sin(pitch) * dist, c.tz + Math.cos(yaw) * Math.cos(pitch) * dist);
     this.camera.lookAt(c.tx, c.ty, c.tz);
   }
@@ -636,7 +713,7 @@ export class OfficeEngine {
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
     this.home = this.homeFor();
-    this.heroShot = heroPose(this.camera.fov, w / h);
+    this.heroShot = heroPose(WIDE_FOV, w / h);
     if (this.opts.hero === 'hero') this.cur = null; // a resize re-frames at once, no swoop
   }
 
@@ -683,7 +760,7 @@ export class OfficeEngine {
       drag.y = e.clientY;
       drag.moved += Math.abs(dx) + Math.abs(dy);
       this.user.yaw -= dx * 0.006;
-      this.user.pitch = THREE.MathUtils.clamp(this.user.pitch + dy * 0.004, -0.6, 0.45);
+      this.user.pitch = THREE.MathUtils.clamp(this.user.pitch + dy * 0.004, -0.6, this.view === 'player' ? 0.6 : 0.45);
     };
     const up = (e: PointerEvent) => {
       pointers.delete(e.pointerId);
@@ -699,6 +776,15 @@ export class OfficeEngine {
     };
     const wheel = (e: WheelEvent) => {
       e.preventDefault();
+      // agent-office player.ts: a trackpad's two-finger scroll orbits (walking view); a pinch (ctrl+wheel) or a
+      // mouse wheel's notches zoom. ponytail: a notch is guessed from wheelDelta being a multiple of 120.
+      const legacy = (e as WheelEvent & { wheelDeltaY?: number }).wheelDeltaY;
+      const notch = e.deltaMode !== 0 || (!e.deltaX && !!legacy && legacy % 120 === 0);
+      if (this.view === 'player' && !e.ctrlKey && !notch) {
+        this.user.yaw -= e.deltaX * 0.006;
+        this.user.pitch = THREE.MathUtils.clamp(this.user.pitch + e.deltaY * 0.004, -0.6, 0.6);
+        return;
+      }
       this.zoomBy(Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0015)));
     };
     canvas.addEventListener('pointerdown', down);
@@ -716,7 +802,7 @@ export class OfficeEngine {
   }
 
   private zoomBy(f: number) {
-    this.user.zoom = THREE.MathUtils.clamp(this.user.zoom * f, 0.4, 1.5);
+    this.user.zoom = THREE.MathUtils.clamp(this.user.zoom * f, 0.4, this.view === 'player' ? FOLLOW.maxZoom : 1.5);
   }
 
   private ray(e: PointerEvent) {
@@ -776,7 +862,7 @@ export class OfficeEngine {
     if (own) consider({ kind: 'seat' }, own.x, own.z + 0.85, 1.3);
     for (const fr of this.props?.clickables ?? []) {
       const w = fr.getWorldPosition(new THREE.Vector3());
-      consider({ kind: 'frame', url: fr.userData.url as string }, w.x, w.z + 0.4, 2.0);
+      consider({ kind: 'frame', url: fr.userData.url as string }, w.x, w.z + 0.4, (fr.userData.reach as number) ?? 2.0);
     }
     this.setTarget(best);
   }

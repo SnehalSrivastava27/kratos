@@ -11,7 +11,10 @@
 @keyframes sw-ping { 70% { box-shadow: 0 0 0 7px rgba(60,203,139,0) } 100% { box-shadow: 0 0 0 0 rgba(60,203,139,0) } }
 
 /* Panel */
-.sw-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: #1E1328; color: #F4A300 }
+/* The real Switch mark and wordmark (switchagents.ai, web/public/brand/switch-*). */
+.sw-mark { display: block; width: 28px; height: 28px; border-radius: 9px; flex: none }
+.sw-wordmark { display: block; height: 22px; width: auto }
+.hq-switch-logo { width: 18px; height: 18px; border-radius: 5px; flex: none }
 .sw-lede { margin: 0 0 14px; font-weight: 700; font-size: 14.5px; line-height: 1.45 }
 .sw-flow { display: flex; align-items: center; gap: 6px; margin-bottom: 14px }
 .sw-flow i { flex: 1; height: 3px; border-radius: 2px; background: repeating-linear-gradient(90deg, #3390EC 0 8px, transparent 8px 13px); background-size: 26px 3px; animation: sw-dash 0.9s linear infinite }
