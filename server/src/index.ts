@@ -498,7 +498,8 @@ roomWatch.unref();
 // SW4: the Captain's 9 AM IST morning brief, asked through Switch (brief.ts). MORNING_BRIEF=off disables it.
 const briefs = startBriefs(ROOT);
 
-server.listen(PORT, () => {
+// Only this machine by default: a live office drives your agents. HOST=0.0.0.0 (Docker) to serve a network.
+server.listen(PORT, process.env.HOST || "127.0.0.1", () => {
   const port = (server.address() as { port: number }).port;
   log.info("listening", { port, version: VERSION, root: ROOT, web: SERVE_WEB, observerAuth: !!OBSERVER_TOKEN, adminAuth: !!ADMIN_TOKEN });
   // Workspaces linked under an older roster get its new topics and agents (also retried on their next message).

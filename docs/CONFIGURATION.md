@@ -14,6 +14,7 @@ Set in `.env` (gitignored) or the environment. All are optional in development.
 | `ADMIN_TOKEN` | – | Bearer token for admin routes (replay, QA Lab, ROI). Required in production |
 | `ALLOW_OPEN` | – | `1` lets production start without the two tokens (throwaway instances only) |
 | `PORT` | `8787` | Server port |
+| `HOST` | `127.0.0.1` | Address the server listens on. Only this machine by default; `0.0.0.0` serves your network (the Docker image sets it) |
 | `DATA_DIR` | `.data` | Where `events.db` (SQLite) lives |
 | `OWNER_EMAIL` | first user | The host owner: sees tenant-wide ROI and can re-shelve the skills library |
 | `TEAM_PROVIDER` | `claude` | Switch agent provider for the team and every hire: `claude`, `codex` or `opencode` |
