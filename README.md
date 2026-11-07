@@ -181,34 +181,61 @@ open the coin button for ROI and Trust, and click the Switch core to see routed 
 
 ## Quickstart
 
+The hosted demo is read-only and has no live agents. To run the team for real, set Kratos up on your own
+computer with **your own Switch Console, Claude Code and Telegram bot**. The agents run on your machine and
+use your Claude account; nothing depends on anyone else's Switch.
+
 ### Requirements
 
 - **Node 24+** (the toolkit's read-only SQL guard needs `node:sqlite`'s authorizer) and **Python 3**
-- **[Switch Console](https://github.com/sandbox-quantum/switch)** with its local server running, and Claude Code installed
-- **A Telegram bot** from [@BotFather](https://t.me/BotFather) with privacy mode off (`/setprivacy` → **Disable**)
+- **[Claude Code](https://claude.com/claude-code)**, installed and logged in
+- **[Switch Console](https://github.com/sandbox-quantum/switch)**, installed and signed in to your Switch account
+- **Your own Telegram bot** from [@BotFather](https://t.me/BotFather), with privacy mode off (`/setprivacy` → **Disable**)
 
-### Set up
+### 1. Connect your Switch Console
 
-1. `npm install`, then put the bot token in `.env` as `TELEGRAM_BOT_TOKEN`.
-2. Run `scripts/switch-up.sh`. It connects the bot, stores the team template, creates all 16 agents on Haiku
-   with the lockdown, registers the observer, and starts the office server and the observer. It is safe to
-   rerun and prints anything still left to do. `DRY_RUN=1 scripts/switch-up.sh` shows the plan without calling anything.
-3. Create a Telegram group, turn **Topics** on, and add the bot as an admin with **Manage topics**.
-4. Open <http://localhost:8787/signup>, then **/connect**, and send the 6-digit code in the group. The server
-   creates the topics and adds the agents.
-5. In the **War Room** topic, send:
+1. Open Switch Console and sign in.
+2. Turn on **Run a server on this computer**, and check that **Claude Code** is listed as an agent provider.
+3. Keep Switch Console open while you use Kratos: the agents run only while it is running.
 
-   ```
-   @d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L marketing budget
-   ```
+`scripts/switch-up.sh` finds the local server's credentials on its own. If Switch Console is installed
+somewhere unusual, point `SWITCH_CORE_ENV` at its credentials file.
 
-6. Optional: send these two lines once so you can talk to the Captain without tagging it (the connect page
-   shows them with copy buttons):
+### 2. Install Kratos and bring up the team
+
+```bash
+git clone https://github.com/SnehalSrivastava27/kratos && cd kratos
+cp .env.example .env     # put your bot's token in .env as TELEGRAM_BOT_TOKEN
+npm install
+export BOT_USERNAME=your_bot_username    # without the @
+scripts/switch-up.sh     # DRY_RUN=1 scripts/switch-up.sh shows the plan first
+```
+
+The script connects your bot to your Switch, stores the team template, creates all 16 agents on Haiku with the
+lockdown, registers the observer, and starts the office server (<http://localhost:8787>) and the observer.
+It is safe to rerun and ends by printing anything still left for you.
+
+### 3. Link your Telegram group
+
+1. Create a Telegram group. Edit → turn **Topics** on, then add your bot as an admin with **Manage topics**.
+2. Open <http://localhost:8787/signup>, create your account, then go to **/connect**.
+3. Send the 6-digit code as a message in the group. The server creates the topics and adds the agents.
+   If the page says the bot still needs admin rights, fix that in Telegram and press **Check again**.
+4. Send these two lines once in the group, so you can talk to the Captain without tagging it (the connect
+   page shows both with copy buttons):
 
    ```
    !assign-agent @d2c-captain
-   !set-alias @d2c-captain @kratosd2c_bot
+   !set-alias @d2c-captain @<your_bot_username>
    ```
+
+### 4. Start a session
+
+In the **War Room** topic, send:
+
+```
+@d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L marketing budget
+```
 
 Full guide: [Go live](docs/GO_LIVE.md). What a session looks like end to end: [Running a live session](docs/live-demo-run.md).
 
