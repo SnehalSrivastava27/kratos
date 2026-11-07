@@ -1,0 +1,10 @@
+{ "task": "SW5", "state": "done", "progress": 100,
+  "done": [
+    "Switch ROI: GET /api/roi (server/src/roi.ts) reads Switch tenant usage/budgets/trust-settings read-only, groups per d2c agent, prices tokens as an estimate (Haiku/Sonnet/Opus 5.5 list prices), joins posts + pinned docs, 1-2 recommendations; fails soft (source unavailable, never 500); host owner only; POST /api/roi/budgets behind ROI_BUDGETS=on",
+    "Office: RoiPanel.tsx (coin button in the HUD): per-agent table, totals, recommendations, budgets, Switch Trust card (hosted status + lockdown, approval gate, SAFETY 16/16, injection evals 4/4); demo numbers modelled on the live War Room run, labelled demo; screenshots at 1440 and 390",
+    "Tests: server/test/sw5.test.mjs (fake Switch in front of helpers' fake: grouping+pricing, Switch down, 403 admin, non-owner, budgets off/on); docs/switch/14-roi-trust.md with live findings (24h: $9.08 est., $8.75 of it Opus from pre-Haiku runs, Captain 40% of turns)"
+  ],
+  "next": "orchestrator: adversarial review + merge",
+  "blockers": [],
+  "contract_requests": ["contracts/api.md: document GET /api/roi and POST /api/roi/budgets (shape in docs/switch/14-roi-trust.md)"],
+  "updated": "2026-11-07T09:50:00+05:30" }
