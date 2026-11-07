@@ -10,7 +10,7 @@ work and what every agent costs.
 ![The Kratos office](web/public/hero/office-poster@2x.webp)
 
 **[Try the demo](#try-the-demo)** · [Features](#features) · [How it works](#how-it-works) ·
-[Quickstart](#quickstart) · [Configuration](#configuration) · [Docs](docs/switch/README.md)
+[Install](#quickstart) · [Documentation](#documentation)
 
 ---
 
@@ -202,6 +202,14 @@ open the coin button for ROI and Trust, and click the Switch core to see routed 
    @d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L marketing budget
    ```
 
+6. Optional: send these two lines once so you can talk to the Captain without tagging it (the connect page
+   shows them with copy buttons):
+
+   ```
+   !assign-agent @d2c-captain
+   !set-alias @d2c-captain @kratosd2c_bot
+   ```
+
 Full guide: [Go live](docs/GO_LIVE.md). What a session looks like end to end: [Running a live session](docs/live-demo-run.md).
 
 ### Commands
@@ -220,106 +228,22 @@ Full guide: [Go live](docs/GO_LIVE.md). What a session looks like end to end: [R
 | `python3 scripts/tg-render.py - < reply.md` | Preview how a reply renders in Telegram |
 | `python3 switch/check_numbers.py` | Reference numbers for the festive-sale plan |
 
-## Configuration
+## Documentation
 
-Set in `.env` (gitignored) or the environment. All are optional in development.
-
-| Variable | Default | What |
-|---|---|---|
-| `TELEGRAM_BOT_TOKEN` | – | Bot token, read by `scripts/switch-up.sh` and the server |
-| `BOT_USERNAME` | `kratosd2c_bot` | The bot's username, shown in setup instructions |
-| `OBSERVER_TOKEN` | – | Bearer token the observer sends on `POST /api/events`. Required in production |
-| `ADMIN_TOKEN` | – | Bearer token for admin routes (replay, QA Lab, ROI). Required in production |
-| `ALLOW_OPEN` | – | `1` lets production start without the two tokens (throwaway instances only) |
-| `PORT` | `8787` | Server port |
-| `DATA_DIR` | `.data` | Where `events.db` (SQLite) lives |
-| `OWNER_EMAIL` | first user | The host owner: sees tenant-wide ROI and can re-shelve the skills library |
-| `TEAM_MODEL` | `claude-haiku-5-5` | Model for the team and every hire |
-| `HIRE_MAX` | `24` | Most employees in the office at once (plus 3 hires per 10 minutes per workspace) |
-| `ROI_BUDGETS` | off | `on` allows creating, editing and deleting Switch budgets (and enforcing caps) from the office |
-| `TRUST_OTLP_ENDPOINT` / `TRUST_API_KEY` | – | Export both before running `scripts/switch-up.sh` to send Claude Code usage telemetry to Switch Trust (written into the agents' local, gitignored settings). Usage only, never message content |
-| `MORNING_BRIEF` / `MORNING_BRIEF_AT` | on / `09:00` | `off` disables the daily brief; time is HH:MM IST |
-| `OFFICE_ORIGINS` | – | Extra allowed origins/hosts for write requests, comma-separated |
-| `TRUST_LOOPBACK` | on in dev | `0` when behind a reverse proxy on the same host |
-| `TRUST_PROXY` | – | `1` to trust `X-Forwarded-Proto` from a remote proxy |
-| `RATE_LIMIT_PER_MIN` / `MAX_WS_CLIENTS` / `QA_PER_MIN` | `120` / `400` / `30` | Request, socket and QA Lab limits |
-| `KPI_DATA_DIR` | `data/` | Where the Data Wall reads its CSVs |
-| `SERVER_URL` | `http://localhost:8787` | Office server the observer and live evals talk to |
-| `SWITCH_CORE_ENV` | Switch Console's path | Local Switch server credentials file |
-
-Self-hosting and Docker: [docs/DEPLOY.md](docs/DEPLOY.md).
-
-## Data and toolkit
-
-**Dataset.** Everything in `data/` is made-up but realistic: Kesar & Co., an Indian skincare D2C brand at about ₹4.4 Cr a year, selling through 18 channels: its Shopify website (Razorpay, COD via Shiprocket), Amazon, Flipkart, Myntra, Meesho, JioMart, AJIO, Nykaa, Purplle and Tata CLiQ, quick commerce on Blinkit, Zepto, Instamart, BB Now and Flipkart Minutes, Health & Glow and Apollo Pharmacy stores, and Amazon Global exports. Three months of order lines (Aug–Oct 2026) cover 55 cities across tiers 1–3 with pincodes, courier zones and 8 couriers, COD and RTO by tier, UPI/BNPL/COD payments, and GST on every line. Around them sit ads (Meta, Google, marketplace and quick-commerce ads), regional-language creators, WhatsApp campaigns, dark-store stock, ratings, support tickets, platform settlements with TCS/TDS, GST per GSTIN, payroll with PF/ESI/PT/TDS, MSME vendors and a compliance calendar. A seeded generator (`npm run data`) rebuilds it byte-for-byte, and `npm run data:check` runs 250 consistency checks, from the P&L down to every GST rupee. See [data/README.md](data/README.md) and [docs/d2c-primer.md](docs/d2c-primer.md).
-
-Agents run `node kit/bin/kit.mjs <command>`, which prints one JSON object. Guide:
-[`switch/TOOLKIT.md`](switch/TOOLKIT.md); 50 built-in D2C metrics: [`switch/METRICS.md`](switch/METRICS.md).
-
-| Command | What it does | Library |
-|---|---|---|
-| `tables`, `sql` | Read-only SQL over every `data/*.csv` | `node:sqlite`, csv-parse |
-| `stats`, `forecast`, `metric`, `brief` | Group stats, trend × day-of-week forecast, D2C metrics | simple-statistics |
-| `chart` | Vega-Lite chart → `.svg` + `.png` | vega, vega-lite, sharp |
-| `deck`, `xlsx`, `docx`, `pdf`, `banner` | Slides, sheets, Word, PDF, sale banners | pptxgenjs, exceljs, docx, pdfkit, sharp |
-
-The bundled sample brand is **Kesar & Co.**, a fictional Indian skincare D2C brand (₹3–4 Cr a year, 5 SKUs,
-3 warehouses, 7 channels, 25 people) with three months of data: orders, customers, returns, Meta, Google and
-marketplace ads, creators, suppliers, POs, couriers, P&L and payroll. Details: [`data/README.md`](data/README.md);
-schema: [`contracts/data-catalog.md`](contracts/data-catalog.md); background: [D2C primer](docs/d2c-primer.md).
-
-## Quality
-
-Every agent is tested with questions whose answers are **computed from the data by code**, never typed in, and
-scored as number (within 1%), text, refusal, safety or style. Guide: [`evals/README.md`](evals/README.md).
-
-| Tier | Questions | Covers | Result (Haiku) |
-|---|---|---|---|
-| 1 | 84 | Facts and reply style, all 16 agents | **84/84** |
-| 2 | 77 | Joins, date windows, ranks, refusals, prompt injections, GST, settlements, quick commerce | **77/77** |
-| 3 | 17 | Vague asks, two-part asks, quoted follow-ups, made-up names | **16/17** |
-| **All** | **178** | 1.0 tool calls per question, p50 6 s, p90 8 s, injection probes refused 4/4 | **177/178 for $0.22** |
-
-On the same rules Sonnet scored 148/149 (tiers 1–2) at about 15× the cost, so the team runs on Haiku.
-Latest report: [`evals/reports/latest.md`](evals/reports/latest.md); changelog: [`evals/reports/HISTORY.md`](evals/reports/HISTORY.md).
-
-<!-- EVAL:latest -->
-_Latest full offline run (7 Nov, 08:17 UTC, Haiku, India-first dataset): **177/178** (tier 1 84/84, tier 2 77/77, tier 3 16/17) · p50 6 s, p90 8 s · 1.0 tool calls/question · $0.22. The one miss found no "Diwali Retargeting" campaign and said so, but led with the closest campaign's ROAS instead of a refusal. Report: [evals/reports/latest.md](evals/reports/latest.md)._
-
-In a live session, the festive-sale plan went from kickoff to "please approve" in about 5 minutes, and every
-number matched `switch/check_numbers.py` ([details](docs/live-demo-run.md)).
-
-## Security
-
-- **Agents are locked down.** Each agent and every hire gets a fixed tool list (`Bash, Read, Grep, Glob, Write`
-  plus Switch tools) with auto mode off ([`switch/lockdown.json`](switch/lockdown.json)). Repo rules in
-  `.claude/settings.json` allow the kit and writes under `gallery/live-run/`, deny reading `.env*`, `.switch/`
-  and `~/.ssh`, and everything else waits for a human. See [Agent lockdown](docs/switch/13-agent-lockdown.md).
-- **The toolkit is read-only.** One `SELECT`/`WITH` per query, `PRAGMA query_only` plus a SQLite authorizer, no
-  network, files only in `gallery/live-run/`.
-- **The server trusts nothing from the browser.** Writes need JSON, an allowed Origin/Host and a session cookie
-  or admin token. Every read and write is scoped to the signed-in workspace. WebSocket frames are validated.
-  Link codes are single-use with brute-force limits. Hires are capped.
-- **Tenant-wide data stays with the owner.** Switch usage is tenant-wide, so live ROI goes only to the host
-  owner (or `ADMIN_TOKEN`).
-- **Agent text is untrusted.** Chat bubbles use a small safe Markdown renderer, never `innerHTML`; the site sets a CSP.
-- **Secrets** live in `.env` (gitignored); production refuses to start without `OBSERVER_TOKEN` and `ADMIN_TOKEN`.
-
-## Project layout
-
-| Path | What |
+| Guide | What's in it |
 |---|---|
-| `switch/` | Team template, one rules file per agent, lockdown, Telegram style, toolkit guide, number check |
-| `scripts/` | `switch-up.sh`, `switch-sync-agents.sh`, `build-template.mjs`, `tg-render.py` |
-| `observer/` | Silent Switch agent that forwards room messages to the office |
-| `server/` | Accounts, workspaces, events (SQLite), WebSocket, hiring, commands, QA Lab, documents, roles, ROI |
-| `web/` | Landing page, sign-in and connect pages, 3D office |
-| `kit/` | The agents' toolkit: SQL, stats, forecast, charts, decks, sheets, docs, PDFs |
-| `librarian/` | Shelves installed skills by department |
-| `evals/` | Eval questions, scoring and reports |
-| `contracts/` | Shared shapes: roster, zones, event schema, API |
-| `data/`, `demo/` | Sample brand data and the recorded product-tour feed |
-| `docs/` | Switch feature docs, diagrams, go-live and deploy guides |
+| [Go live](docs/GO_LIVE.md) | Full setup with Switch and your Telegram group |
+| [Running a live session](docs/live-demo-run.md) | A festive-sale planning session, end to end |
+| [Configuration](docs/CONFIGURATION.md) | Every environment variable |
+| [Self-hosting and Docker](docs/DEPLOY.md) · [Hosted demo](docs/HOSTING.md) | Deploying the server, or a static demo on Vercel |
+| [Switch features](docs/switch/README.md) | Every Switch feature Kratos uses: Rooms, ROI, Trust, agent protocol, with diagrams |
+| [Data and toolkit](docs/DATA-AND-TOOLKIT.md) | The sample brand's dataset and the agents' toolkit commands |
+| [Toolkit guide](switch/TOOLKIT.md) · [Metrics](switch/METRICS.md) | The 50 built-in D2C metrics and how agents call them |
+| [Quality](docs/QUALITY.md) · [Evals guide](evals/README.md) | How agents are tested; latest result 177/178 on Haiku |
+| [Security](docs/SECURITY.md) · [Agent lockdown](docs/switch/13-agent-lockdown.md) | Agent lockdown, read-only toolkit, server hardening |
+| [Project layout](docs/PROJECT-LAYOUT.md) | What lives where |
+| [D2C primer](docs/d2c-primer.md) | D2C terms (ROAS, RTO, COD, EBITDA) for newcomers |
+| [API](contracts/api.md) · [Data catalog](contracts/data-catalog.md) | Server API and table schemas |
 
 ## Roadmap
 
