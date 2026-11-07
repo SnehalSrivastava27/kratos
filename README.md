@@ -2,6 +2,33 @@
 
 **An AI operations team for D2C brands that works in your Telegram, powered by [Switch](https://github.com/sandbox-quantum/switch).**
 
+> [!IMPORTANT]
+> **Live demo: <https://kratos-mauve.vercel.app>** (sign in with `demo@kratos.app` / `kratos-demo`, or press **Sign in as demo**)
+>
+> The hosted site is a **demo only**. It shows a read-only office filled with sample data. You can walk the
+> office and open the topics, chat, ROI, Switch panel and agent cards, but no real agents run behind it.
+> Sending messages, approving plans, hiring and linking a Telegram group do **not** work there.
+>
+> **To use Kratos for real, install it on your own computer** with your own Switch Console, coding agent
+> (Claude Code, Codex or OpenCode) and Telegram bot:
+>
+> 1. Install Node 24+, Python 3, [Switch Console](https://github.com/sandbox-quantum/switch) and a coding agent,
+>    and get a bot from [@BotFather](https://t.me/BotFather) with privacy mode off.
+> 2. In Switch Console, sign in and turn on **Run a server on this computer**.
+> 3. Clone and start:
+>    ```bash
+>    git clone https://github.com/SnehalSrivastava27/kratos && cd kratos
+>    cp .env.example .env                  # put your bot's token in .env as TELEGRAM_BOT_TOKEN
+>    npm install
+>    export BOT_USERNAME=your_bot_username # without the @
+>    scripts/switch-up.sh                  # creates the 16 agents and starts the office on :8787
+>    ```
+> 4. Make a Telegram group with **Topics** on and your bot as an admin with **Manage topics**.
+> 5. Open <http://localhost:8787/signup>, then **/connect**, and send the 6-digit code in the group.
+> 6. In the **War Room** topic, send `@d2c-captain Plan our festive sale: 30% off, 5 days, ₹5L marketing budget`.
+>
+> Full steps: [Quickstart](#quickstart) · [Go live guide](docs/GO_LIVE.md)
+
 Sixteen AI teammates, one per department of a D2C brand, live in the forum topics of your team's Telegram
 group. You send one message; the Captain briefs the department leads, the leads pull in their specialists,
 Finance checks the money, and one plan comes back for your approval. A walkable 3D office shows the team at
@@ -162,7 +189,7 @@ Sign in at `/login` with the demo account to look around a full office (or press
 All 16 agents are at their desks, every Telegram topic has a day of chat, and sale day one keeps playing. Open the
 topics, chat, Data Wall numbers, Switch ROI, the Switch panel, the skills library, agent cards and the hire form. The
 demo account is read-only: sending, approving and hiring need Kratos running with your own Telegram group.
-It works on a hosted copy with no server behind it ([docs/HOSTING.md](docs/HOSTING.md)) and on a local install.
+It works on the hosted demo at <https://kratos-mauve.vercel.app>, which has no server behind it ([docs/HOSTING.md](docs/HOSTING.md)) and on a local install.
 
 ### Product tour
 
