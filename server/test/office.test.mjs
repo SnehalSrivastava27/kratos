@@ -208,11 +208,12 @@ test("hiring: managed agent on Console's controller, unique ids, desks, hired ev
     assert.equal(create.json.controller_id, "c1", "the team lead's controller");
     assert.equal(create.json.desired_state, "running");
     const { instructions: _, ...def } = create.json.definition;
-    assert.deepEqual(def, { provider: "claude", model: "claude-haiku-5-5", advanced_config: { effort: "high", tools: ["Bash", "Read", "Grep", "Glob", "Write"] }, auto_mode: false, auto_approve: false, isolation: "shared", directory: "/repo" },
+    assert.deepEqual(def, { provider: "claude", model: "claude-haiku-5-5", advanced_config: { effort: "high", tools: ["Bash", "Read", "Grep", "Glob", "Write"], maxTurns: 40 }, auto_mode: false, auto_approve: false, isolation: "shared", directory: "/repo" },
       "the team's provider settings + switch/lockdown.json (tool allowlist, auto mode off); directory is the repo, not the lead's or the request's");
     assert.match(create.json.definition.instructions, /Win back lapsed buyers[\s\S]*gstack:qa[\s\S]*HOW YOU WRITE IN TELEGRAM[\s\S]*yours is Ads/);
     assert.ok(create.json.definition.instructions.includes(STYLE), "exact team Telegram style block");
-    assert.deepEqual(calls.find((c) => c.path === "/gateway/agents/sw-d2c-priya-shah/addressing-policy").json, { policy: null }, "addressing: anyone");
+    assert.deepEqual(calls.find((c) => c.path === "/gateway/agents/sw-d2c-priya-shah/addressing-policy").json.policy.rules.map((r) => [r.rooms, r.users, r.agents]),
+      [[["room-1"], "*", "*"], ["*", [], "*"]], "addressing (SW7): anyone in its room, only agents elsewhere");
     assert.deepEqual(calls.find((c) => c.path === "/gateway/rooms/room-1/agents").json, { agent_ids: ["sw-d2c-priya-shah"] });
 
     const b = await (await post(s, "/api/employees", hire())).json();

@@ -35,6 +35,13 @@ Type in **War Room**:
 Point at: a blue pulse runs Telegram → Switch → Captain. The Captain walks to the War Room table and
 briefs the leads by name. The Analyst posts the forecast: **3,340** units, about **₹20.4L**.
 
+*Optional, before recording (Switch 0.31 follow-ups):* as the founder, send `!assign-agent @d2c-captain` in the
+group once. The Captain becomes the room's main agent, so a follow-up like "now make it 30% off" reaches it
+without the `@`. An `@` still wins; `!unassign-agent` undoes it. Caveat: every untagged founder message then wakes
+the Captain, which is already ~40% of team turns, so compare Captain turns in `/api/roi` before and after; if they
+jump, `!follow-ups off` keeps the main agent but drops thread follow-ups. Not automated on purpose: Switch accepts
+the command only from someone the agent takes instructions from (docs `using/work-in-a-room`).
+
 ## 0:45 Specialists and the private Finance nudge (35 s)
 
 Say: "Leads do the work, and they pull in their specialists."

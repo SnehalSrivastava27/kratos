@@ -196,6 +196,11 @@ async function* sse(body: ReadableStream<Uint8Array>, onData: () => void = () =>
 }
 
 // ---- run ----
+/** `taken_over` is final (docs internals/agent-connection): another open took our connection id, and reopening would
+ * take it back, so two clients would trade it forever. Seen as an `evicted {code}` frame or a beat 409 `{detail:{code}}`. */
+export class TakenOver extends Error {}
+export const isTakenOver = (x: any) => x?.code === "taken_over" || x?.detail?.code === "taken_over";
+
 export async function run(creds: Creds, cfg: Config): Promise<never> {
   const base = `${creds.apiEndpoint.replace(/\/$/, "")}/agents/${creds.agentId}`;
   const auth = { Authorization: `Bearer ${creds.token}` };
@@ -225,12 +230,13 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     }
   }
 
-  // Heartbeat every 2 s (TTL 6 s). 404/409 = reopen the stream, not back off.
-  setInterval(async () => {
+  // Heartbeat every 2 s (TTL 6 s). 404/409 = reopen the stream, not back off; 409 taken_over = stop.
+  const beat = setInterval(async () => {
     if (!stream) return;
     try {
       const res = await call("connection/beat", { connection_id: connectionId, cursor });
-      if (res.status === 404 || res.status === 409) stream?.abort();
+      if (res.status === 409 && isTakenOver(await res.json().catch(() => null))) stream?.abort(new TakenOver("beat refused: taken_over"));
+      else if (res.status === 404 || res.status === 409) stream?.abort();
     } catch {}
   }, 2000);
 
@@ -272,7 +278,7 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
   // keeps failing, and reset once a stream has stayed up for a minute. A stream silent for longer than IDLE_MS
   // (Switch sends a keepalive every 15 s) is presumed dead and reopened.
   const IDLE_MS = Number(process.env.OBSERVER_IDLE_MS) || 45_000;
-  for (let attempt = 0; ; ) {
+  try { for (let attempt = 0; ; ) {
     const ac = (stream = new AbortController());
     const opened = Date.now();
     let idle: NodeJS.Timeout | undefined;
@@ -297,12 +303,14 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
           console.log(`[observer] connected ${data.connection_id} scope=${data.scope} filter=${data.filter} rooms=${(data.rooms ?? []).length}`);
           await refreshRooms();
         } else if (f.event === "subscription_changed") await refreshRooms();
-        else if (f.event === "evicted") throw new Error(`evicted: ${data.reason}`);
+        else if (f.event === "evicted") throw new (isTakenOver(data) ? TakenOver : Error)(`evicted ${data.code}: ${data.reason}`);
         else if (f.event === "gap") console.warn("[observer] gap", data.reason);
         else if (f.event === "message") await onMessage(data);
       }
       throw new Error("stream ended");
     } catch (e) {
+      const fatal = e instanceof TakenOver ? e : ac.signal.reason instanceof TakenOver ? ac.signal.reason : null;
+      if (fatal) throw fatal;
       const why = ac.signal.aborted ? String(ac.signal.reason ?? "aborted") : String(e);
       console.warn("[observer]", why, "— reconnecting");
     } finally {
@@ -311,6 +319,8 @@ export async function run(creds: Creds, cfg: Config): Promise<never> {
     stream = null;
     if (Date.now() - opened > 60_000) attempt = 0;
     await new Promise((r) => setTimeout(r, backoffMs(attempt++)));
+  } } finally {
+    clearInterval(beat);
   }
 }
 
@@ -318,5 +328,9 @@ if (import.meta.main) {
   // Nothing in here may kill the observer: log and keep going (the stream loop reconnects on its own).
   process.on("unhandledRejection", (e) => console.error("[observer] unhandled rejection:", e));
   const cfg = loadConfig();
-  run(loadCreds(cfg), cfg);
+  // …except taken_over: another observer holds our connection. Exit non-zero so a supervisor notices; don't retry.
+  run(loadCreds(cfg), cfg).catch((e) => {
+    console.error(`[observer] FATAL ${e instanceof Error ? e.message : e} — another client holds this connection; not reconnecting`);
+    process.exit(3);
+  });
 }

@@ -34,7 +34,7 @@ Conventions:
 | Library documents, packages | `administer/shared-material#make-a-package-and-add-to-it` | n/a | – | One room, so nothing needs to be shared across rooms. See "Deliberately not used". | M | 1 |
 | Room roles (shared / exclusive, written *to the agent*) | `building/payments-room#set-up-roles-any-agent-can-take`, `administer/rooms#set-up-a-rooms-jobs` | done | `server/src/roles.ts:10-33` (gateway `POST /rooms/{id}/roles`), `d2c-finance.md:41-44`, `d2c-ops.md` | partial: the docs warn "an agent holds one role at a time, across all its rooms", so Finance can't also hold a desk role. Editing a role reaches the next holder only. We never edit after creating, so that's fine. | – | 4 |
 | Aliases (`!set-alias @d2c-finance @finance`) | `using/work-in-a-room#use-room-shortcuts`, `resources/room-commands` | missing | Only a suggestion in [12](12-feature-survey.md):178 | The founder types `@d2c-captain`. An alias `@captain` is one command. Templates can carry aliases, but ours is an agent group template and the room is adopted. | S | 3 |
-| **Follow-ups + main agent** (`!assign-agent @d2c-captain`, `!follow-ups on/off`) | `using/work-in-a-room#keep-talking-without-tagging-the-agent` (Switch 0.31) | **missing** | not referenced anywhere. The flag is on for Console-run servers (`core:config.py:237-240`, 300 s window) | The founder must `@`-tag every message. With the Captain as main agent, "make it 30% off" reaches him untagged. The catch: thread follow-ups also wake the last agent that spoke, which adds Captain turns (14: the Captain is already 40% of turns). | S | 5 |
+| **Follow-ups + main agent** (`!assign-agent @d2c-captain`, `!follow-ups on/off`) | `using/work-in-a-room#keep-talking-without-tagging-the-agent` (Switch 0.31) | **doc'd** (SW7) | Optional founder step in `demo/script.md` and `docs/live-demo-run.md`, with the ROI caveat; not automated. The flag is on for Console-run servers (`core:config.py:237-240`, 300 s window) | The founder must `@`-tag every message. With the Captain as main agent, "make it 30% off" reaches him untagged. The catch: thread follow-ups also wake the last agent that spoke, which adds Captain turns (14: the Captain is already 40% of turns). | S | 5 |
 | Room greeting (Notify on join) | `getting-started/create-a-room#have-an-agent-welcome-people-who-join` | missing | Gateway route `PATCH /gateway/rooms/{id}/agents/{agent_id} {receives_join_events}` (`core:gateway/rooms.py:1077-1100`) | When a co-founder joins the group, nobody greets them. The Captain could, from room instructions, but only while it has a live session. | S | 3 |
 | Linked rooms (one-way, labelled) | `building/grow-into-an-organization#point-rooms-at-each-other` | missing | Finance desk is a second room (`d2c-finance.md:126`) with no link | Docs: "a link tells agents in one room that another room exists and why". A `team room → Finance desk ("finance sign-off")` link would replace the prose in Finance's instructions. | S | 2 |
 | Room groups, archive | `administer/rooms#link-and-group-rooms`, `#retire-a-room` | n/a | – | Only pays off with several brands. | – | 1 |
@@ -51,14 +51,14 @@ Conventions:
 | Managed agents on Console's controller | `getting-started/what-keeps-your-agent-running`, `getting-started/agent-settings` | done | `server/src/switch.ts:221-237`, `scripts/switch-up.sh` | none. Matches 0.40's "your agents move to a managed machine". | – | 3 |
 | Model in Advanced configuration | `getting-started/agent-settings#change-the-model-or-tools` | done | `definition.model = claude-haiku-5-5` (`switch.ts:211`) | none | – | 3 |
 | Tools allowlist + Auto mode off | `agent-settings#let-the-agent-act-without-asking`, `resources/working-safely-with-agents#a-three-factor-test` | done | `switch/lockdown.json`, [13](13-agent-lockdown.md) | Matches the docs' advice: "if it has to take in outside content, take away any tools it doesn't need". | – | 4 |
-| Max turns / Effort (Advanced configuration) | `agent-settings#change-the-model-or-tools`; `core:providers/advanced_fields.py:152-165` | missing | `lockdown.json` sets `tools` only | `maxTurns` caps a runaway session, a free cost guard that never silences an agent the way budgets do. | S | 2 |
-| Permission requests (Allow once / for session / Decline; a bare `yes` or `no`) | `using/work-in-a-room#approve-or-decline-a-request`, `using/agent-not-answering#the-agent-is-waiting-for-a-response` | partial | Auto mode off makes every non-allowlisted tool post a request in Telegram | **Docs: "Anyone the agent takes messages from can answer its requests."** With open addressing, *any member of the group* can approve a tool call. The runbook should also say "✋ awaiting input in `!agents-status` = scroll up and answer". | S | 3 |
-| **Addressing policy** ("Who can talk to your agent") | `agent-settings#choose-who-can-instruct-the-agent`, `internals/identity-and-access#addressing-policy` | deviation | Team: `addressing: anyone` (template) and `policy: null` (`switch-up.sh:147`, `switch.ts:263`). d2c-office and observer: owner-only (`switch.ts:150`, `switch-up.sh:163`), as recommended | Docs: "No rules at all means open", a legacy permissive state. They recommend "permit the room, not just the person" with custom rules. A rule `{rooms: [<team room>, <finance desk>], users: "*", agents: "*"}` keeps today's behaviour inside our rooms and refuses everywhere else. Why open: the founder talks from Telegram without a linked Switch account, and agents must address each other. | S | 2 |
+| Max turns / Effort (Advanced configuration) | `agent-settings#change-the-model-or-tools`; `core:providers/advanced_fields.py:152-165` | **done** (SW7) | `lockdown.json` `advanced_config.maxTurns: 40` (Console's `agent-controller.mjs` `CLAUDE_ADVANCED_SETTINGS` passes it into the Claude Code agent definition). Applied by `createManagedAgent`, `switch-up.sh` and `switch-sync-agents.sh`. The live War Room run peaked at 10 model round-trips per prompt (Claude Code transcripts), so 40 has 4× headroom. Effort is left to the lead's settings | `maxTurns` caps a runaway session, a free cost guard that never silences an agent the way budgets do. | S | 2 |
+| Permission requests (Allow once / for session / Decline; a bare `yes` or `no`) | `using/work-in-a-room#approve-or-decline-a-request`, `using/agent-not-answering#the-agent-is-waiting-for-a-response` | partial | Auto mode off makes every non-allowlisted tool post a request in Telegram | **Docs: "Anyone the agent takes messages from can answer its requests."** With open addressing, *any member of the group* can approve a tool call. SW7 scoped addressing to our rooms, so it is now any member of *our* groups; narrowing to the founder needs his Telegram linked (then `users: []` + `owner`). The runbook should also say "✋ awaiting input in `!agents-status` = scroll up and answer". | S | 3 |
+| **Addressing policy** ("Who can talk to your agent") | `agent-settings#choose-who-can-instruct-the-agent`, `internals/identity-and-access#addressing-policy` | **done** (SW7) | Team: `switch.ts teamPolicy` / `switch-up.sh team_policy`: rule 1 anyone (people + agents) in our team rooms, rule 2 only agents + owner anywhere (the Finance desk is created at run time, so its id can't be listed). Platform stays denied, as under the open policy (the sketch below said `platform: true`, which would have widened it). Applied by `switch-up.sh` step 5, `activate` (hires) and `workspaces.ts` on every link/start; rooms only grow. Was: `addressing: anyone` (template) and `policy: null` (`switch-up.sh:147`, `switch.ts:263`). d2c-office and observer: owner-only (`switch.ts:150`, `switch-up.sh:163`), as recommended | Docs: "No rules at all means open", a legacy permissive state. They recommend "permit the room, not just the person" with custom rules. A rule `{rooms: [<team room>, <finance desk>], users: "*", agents: "*"}` keeps today's behaviour inside our rooms and refuses everywhere else. Why open: the founder talks from Telegram without a linked Switch account, and agents must address each other. | S | 2 |
 | Link your Telegram account (identity claim) | `deploy/messaging-apps/telegram#link-your-telegram-account-after-posting`, `identity-and-access#identity-claims` | partial | GO_LIVE asks the host to link; open addressing makes it optional | Needed the moment any agent goes owner-only. Otherwise the agent says "I only take instructions from my owner" to its own owner. | S | 1 |
 | Hand-offs with `send_targeted_message` / mentions (task tools removed in 0.31) | `resources/changelog` (0.31.0 Removed: Task tools) | done | `d2c-captain.md:137`, `d2c-finance.md:129` | none. We never used `delegate_task`. | – | 2 |
 | `read_context` catch-up for new hires | `internals/agent-protocol` (operation catalog), `using/shared-context#check-that-the-briefing-works` | done | `server/src/office.ts:88-93`, [06](06-hiring-agents-from-the-office.md) | Room Instructions (above) would brief a hire *before* its first turn, not inside it. | – | 3 |
 | Agent connection: **WebSocket** `/agents/{id}/connection/ws` (SSE is "for clients built before the WebSocket … for a compatibility window, then removes it") | `internals/agent-connection#clients-built-before-the-websocket` | partial | `observer/src/index.ts:284-300` (SSE + `connection/beat`), `server/src/switch.ts:173-191` (SSE per threaded post) | Works on 0.31.0. It breaks when SSE is removed: the observer logs a 410 hint but has no WebSocket path. | M | 1 |
-| `taken_over` is final ("don't reconnect after it") | `internals/agent-connection#connections` (warning), `core:bridges/agent/api/handlers.py:1113-1133` | **wrong** | `observer/src/index.ts:300` throws on any `evicted` and the loop reconnects. `:233` aborts on any 409. | If a second observer (a worktree, `bun --watch`) starts with the same `connection_id`, the two take the connection from each other forever. The docs describe exactly this loop. Stop on `reason == "taken_over"`, and on beat `409 {code: "taken_over"}`. | S | 1 |
+| `taken_over` is final ("don't reconnect after it") | `internals/agent-connection#connections` (warning), `core:bridges/agent/api/handlers.py:1113-1133` | **done** (SW7) | `observer/src/index.ts` stops on `evicted {code: "taken_over"}` (the code is in `code`; `reason` is prose) and on beat `409 {detail: {code: "taken_over"}}`, logs FATAL and exits 3; other closes still reconnect. Test: `observer/src/taken-over.test.ts`. Was: any `evicted` / any 409 reconnected. Note: each observer process picks a random `connection_id`, so the trigger is rarer than the gap text says (only a client reusing our id). | If a second observer (a worktree, `bun --watch`) starts with the same `connection_id`, the two take the connection from each other forever. The docs describe exactly this loop. Stop on `reason == "taken_over"`, and on beat `409 {code: "taken_over"}`. | S | 1 |
 | Declare rooms on the open URL, not after | `internals/agent-connection#claiming-a-room` | done (n/a) | Observer uses `scope=all` (covers every room without claiming) | none | – | – |
 | Session activity (👀 + "Working…" status message) | `deploy/messaging-apps/telegram#see-when-an-agent-is-working` | done | free with Console | none | – | 3 |
 | Attachments (images as photos, files as documents, albums) | `deploy/messaging-apps/telegram` (Attachments), `internals/agent-events#multi-file-attachments` | missing | Files go out as links (`kratos_file` reference, `/gallery/...`) | The deck could land in Telegram as a real `.pptx` document through `POST /agents/{id}/rooms/{room_id}/media` (`core:bridges/agent/api/handlers.py:509-560`, multipart, `caption`, `thread_id`). This is an HTTP route, **not an MCP op**: the office server would post it. | M | 4 |
@@ -108,7 +108,8 @@ Conventions:
 
 ## Close next (ranked)
 
-1. **Make the Captain the room's main agent (follow-ups).** Demo 5, effort S.
+1. **Make the Captain the room's main agent (follow-ups).** Demo 5, effort S. **Status: doc'd (SW7)** as an optional
+   founder step in `demo/script.md` and `docs/live-demo-run.md`; not automated.
    - In the group, as the founder: `!assign-agent @d2c-captain`. Then "now make it 30% off" reaches the Captain
      untagged. An `@` still wins, and `!unassign-agent` undoes it.
    - Code: add the command to `docs/GO_LIVE.md` and the demo script.
@@ -116,7 +117,8 @@ Conventions:
      founder, since the docs say "You can assign only an agent that takes instructions from you".
    - Watch the cost: thread follow-ups also reach the last agent that spoke in a topic. Measure Captain turns in
      `/api/roi` before and after. If they jump, `!follow-ups off` keeps the main agent and drops thread follow-ups.
-2. **Room Instructions for the team room.** Demo 4, effort S.
+2. **Room Instructions for the team room.** Demo 4, effort S. **Status: deliberately skipped (SW7)**, see
+   "Deliberately not used".
    - Move the 81 shared lines (SAFETY, Telegram style, topic map, "Next:" line rule) out of `switch/agents/*.md` into one
      `switch/ROOM_INSTRUCTIONS.md`.
    - In `server/src/workspaces.ts` `joinTeam` (next to `rolesFor`, `:381-392`), call
@@ -127,12 +129,15 @@ Conventions:
    - Verify with the docs' own test: hire a fresh agent and ask "what is this room for?".
    - Caveat from the docs: an agent already in the room keeps its old briefing "until it reconnects", so restart the
      sessions once.
-3. **Stop the observer on `taken_over`.** Demo 1, effort S, but it's a correctness bug.
+3. **Stop the observer on `taken_over`.** Demo 1, effort S, but it's a correctness bug. **Status: done (SW7).** The
+   frame carries the code in `data.code`, not `data.reason`.
    - `observer/src/index.ts:300`: when `data.reason === "taken_over"` (or the code), log it and exit the loop instead
      of throwing.
    - `:233`: read the beat body. On `409 {code:"taken_over"}`, stop. On anything else, abort and reopen.
    - Add a test in `observer/src/docs.test.ts` with a fake frame.
-4. **Scope addressing to our rooms.** Demo 2, effort S.
+4. **Scope addressing to our rooms.** Demo 2, effort S. **Status: done (SW7)**, with two changes to this sketch: the
+   Finance desk is covered by an agents-only rule for every room (it is created at run time), and `platform` stays
+   false (it was denied under the open policy too).
    - Replace `policy: null` in `switch-up.sh:147` and `switch.ts:263` (`activate`) with
      `{rules:[{rooms:[<team room id>, <finance desk id>], room_groups:"*", users:"*", agents:"*", owner:true, owner_agents:true, platform:true}]}`.
    - Behaviour in the Kratos rooms is unchanged. Elsewhere they're refused, visibly.
@@ -161,13 +166,16 @@ Conventions:
      subdirectory with its own `.claude/settings.local.json` (changes `definition.directory`), or accept one "kratos-team"
      agent in Trust and keep the per-agent split in our `/api/roi`.
    - Don't also wrap with the SDK, or the cost is counted twice.
-8. **`maxTurns` in the lockdown + the runbook commands.** Demo 2, effort S.
+8. **`maxTurns` in the lockdown + the runbook commands.** Demo 2, effort S. **Status: `maxTurns: 40` done (SW7)**;
+   the GO_LIVE runbook commands are still open.
    - Add `"maxTurns": 40` to `switch/lockdown.json` `advanced_config`. It flows through `createManagedAgent` and
      `switch-up.sh` unchanged.
    - Add `!agents-status`, `!roles`, `!list-documents` and `!set-alias @d2c-captain @captain` to GO_LIVE.
 
 ## Deliberately not used
 
+- **Room Instructions (close-next 2).** The offline evals read the per-agent prompts in `switch/agents/*.md`; moving
+  the shared blocks into the room would make the evaluated prompt differ from what runs live.
 - **Packages, library documents, room groups, archive.** These share material across rooms. Kratos is one room plus a
   private desk, so there's nothing to share. Revisit at brand two, together with "Capture as template".
 - **Switch workspaces per brand.** Switch's per-workspace row-level security is better isolation than our link codes.
