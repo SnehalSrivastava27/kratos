@@ -1,5 +1,5 @@
 // The Switch hub's panel: what Switch does, live counters, and the last few messages it carried.
-import { ArrowRight, FileText, Lock, Network, Sunrise, Theater } from 'lucide-react';
+import { ArrowRight, FileText, Lock, Sunrise, Theater } from 'lucide-react';
 import type { OfficeEvent } from '../shared/types';
 import { ROOMS, firstLine, personById, roster, swMeta } from './data';
 import { Modal } from './Hud';
@@ -23,7 +23,7 @@ export function hop(e: OfficeEvent): { from: string; to: string } {
 export function SwitchChip({ routed, onOpen }: { routed: number; onOpen: () => void }) {
   return (
     <button type="button" className="ao-panel sw-chip" onClick={onOpen} title="Switch routes every message between Telegram and your agents">
-      <span className="sw-mark"><Network className="size-4" strokeWidth={2.75} /></span>
+      <img className="sw-mark" src="/brand/switch-webclip.png" alt="" />
       <span className="sw-chip-text"><b>Switch</b><span key={routed} className="sw-chip-n">{routed} routed</span></span>
       <span className="hq-switch-dot" />
     </button>
@@ -50,7 +50,7 @@ export function SwitchPanel({ events, onClose }: { events: OfficeEvent[]; onClos
   const brief = [...events].reverse().find((e) => swMeta(e).kind === 'morning_brief');
   return (
     <Modal label="Switch" onClose={onClose} className="sw-panel"
-      title={<span className="inline-flex items-center gap-2"><span className="sw-mark"><Network className="size-4" strokeWidth={2.75} /></span> Switch</span>}>
+      title={<img className="sw-wordmark" src="/brand/switch-logo.svg" alt="Switch" />}>
       <div className="ao-body">
         <p className="sw-lede">Routes every message between Telegram and your {agents} agents. One bot, one group, a topic per team.</p>
         <div className="sw-flow" aria-hidden="true">

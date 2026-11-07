@@ -18,13 +18,14 @@ import { AgentCard } from './AgentCard';
 import { toast } from 'sonner';
 import { ChatList, ChatPane, ROOMS } from './Telegram';
 import { Coach, HelpDialog, Hint } from './Hud';
-import { Armchair, BarChart3, ClipboardList, Coffee, IndianRupee, UserPlus, Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, User, X } from 'lucide-react';
+import { Armchair, BarChart3, ClipboardList, Coffee, IndianRupee, UserPlus, Command, Network, Expand, Eye, Music, PawPrint, VolumeX, HelpCircle, MessageCircle, PanelLeft, Pin, PinOff, RotateCcw, Shrink, Trophy, User, X } from 'lucide-react';
 import { reduce, type SceneState } from './officeState';
 import { useEventFeed } from './useEventFeed';
 import { useDemoDirector } from './demoDirector';
 import { DemoPrompt, PlanCard } from './ApprovalPrompt';
 import { SwitchChip, SwitchPanel } from './SwitchPanel';
 import { OfficeEngine, shelfLabel, type Target } from './engine/Engine';
+import { HACKATHON_URL } from './engine/layout';
 import type { GalleryItem } from './engine/props';
 import { Logo } from '@/brand/Logo';
 import './office.css';
@@ -355,6 +356,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     if (t.kind === 'dog') return { text: 'Pet the office dog', title: <HintIcon dept={{ ...DEPT.general, Icon: PawPrint }} /> };
     if (t.kind === 'switch') return { text: 'Open Switch · see every message it routes', title: <HintIcon dept={{ ...DEPT.general, Icon: Network }} /> };
     if (t.kind === 'jukebox') return { text: music ? 'Stop the music' : 'Play some lo-fi', title: <HintIcon dept={{ ...DEPT.general, Icon: Music }} /> };
+    if (t.url === HACKATHON_URL) return { text: 'Open the Flip the Switch hackathon page ↗', title: <HintIcon dept={{ ...DEPT.general, Icon: Trophy }} /> };
     return { text: 'Open this banner', title: <HintIcon dept={DEPT.design} /> };
   };
 

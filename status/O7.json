@@ -1,0 +1,8 @@
+{ "task": "O7", "state": "done", "progress": 100,
+  "done": [
+    "Floor 44x22 -> 88x44 m: original office kept intact as the front-left block; new north + east wings are open walking space (boulevard, corridors, 2 atriums, 2 lounges, cafe, 3 glass meeting rooms, Town Hall), no new desks; nav grid rasterised + binary-heap A*",
+    "Founder camera ported from agent-office player.ts: eye-level third-person follow, drag / two-finger scroll orbits, pinch / wheel notch zooms, stays on your side of walls; glides to the speaking agent when you stand still; spectator overview kept",
+    "Real Switch logo (switchagents.ai nav SVG + webclip) on the hub core, an overhead hub sign, the hub tag, Switch chip and panel; hackathon page (X-Frame-Options DENY, so a screenshot texture) on the Town Hall screen, labelled, click / E opens it in a new tab"
+  ],
+  "next": "",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:05:00+05:30" }

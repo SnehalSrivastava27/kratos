@@ -18,6 +18,15 @@ export function paint(w: number, h: number, draw: (g: G, w: number, h: number) =
   return t;
 }
 /** Re-paint an existing canvas texture in place. */
+/** A canvas texture painted once without the image, then again once `src` (same-origin) has loaded. */
+export function imageTex(w: number, h: number, src: string, draw: (g: G, w: number, h: number, img: HTMLImageElement | null) => void) {
+  const t = paint(w, h, (g, W, H) => draw(g, W, H, null));
+  const img = new Image();
+  img.onload = () => repaint(t, (g, W, H) => draw(g, W, H, img));
+  img.src = src;
+  return t;
+}
+
 export function repaint(t: CanvasTexture, draw: (g: G, w: number, h: number) => void) {
   const c = t.image as HTMLCanvasElement;
   const g = c.getContext('2d')!;

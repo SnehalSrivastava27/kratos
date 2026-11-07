@@ -24,7 +24,7 @@ console.log('nav ok');
 // fixed pieces (war-room glass + table, huddle room, reception counter + sample wall, the Switch core, finance cabinet
 // and safe). The live office runs the same check on its exact furniture: window.__hqReach() (dev).
 import { readFileSync } from 'node:fs';
-import { BOOK_ROWS, BOOK_DEPTH, DOOR, FLOOR, WALL, bookcaseSolids, corePos, innerWall, stations } from './layout.ts';
+import { ANNEX, BOOK_ROWS, BOOK_DEPTH, CORE, DOOR, FLOOR, HACK_SCREEN, WALL, backWall, bookcaseSolids, corePos, innerWall, stations } from './layout.ts';
 const { zones } = JSON.parse(readFileSync(new URL('../../../../contracts/zones.json', import.meta.url)));
 const Z = Object.fromEntries(zones.map((z) => [z.id, z]));
 const roster = JSON.parse(readFileSync(new URL('../../../../contracts/roster.json', import.meta.url))).people;
@@ -34,14 +34,17 @@ const desks = zones.flatMap((z) => (z.desks ?? []).map(([dx, dz], i) => ({ id: `
 const inZone = {};
 for (const p of roster) inZone[p.zone] = (inZone[p.zone] ?? 0) + 1;
 for (const [zone, n] of Object.entries(inZone)) if (zone !== 'war_room') assert.ok((Z[zone]?.desks?.length ?? 0) >= n, `${zone}: ${n} people, ${Z[zone]?.desks?.length ?? 0} desks`);
-// every zone is on the floor, and zones don't overlap
-for (const z of zones) {
-  assert.ok(z.x - z.w / 2 >= FLOOR.minX - 0.01 && z.x + z.w / 2 <= FLOOR.maxX + 0.01 && z.z - z.d / 2 >= FLOOR.minZ - 0.01 && z.z + z.d / 2 <= FLOOR.maxZ + 0.01, `${z.id} off the floor`);
-  for (const o of zones) if (o !== z) assert.ok(Math.abs(o.x - z.x) >= (o.w + z.w) / 2 - 0.01 || Math.abs(o.z - z.z) >= (o.d + z.d) / 2 - 0.01, `${z.id} overlaps ${o.id}`);
+// every contract zone is in the original block, every annex room on the new floor, and no two rooms overlap
+const inside = (z, b) => z.x - z.w / 2 >= b.minX - 0.01 && z.x + z.w / 2 <= b.maxX + 0.01 && z.z - z.d / 2 >= b.minZ - 0.01 && z.z + z.d / 2 <= b.maxZ + 0.01;
+for (const z of zones) assert.ok(inside(z, CORE), `${z.id} off the original floor`);
+for (const z of ANNEX) assert.ok(inside(z, FLOOR) && !(z.x > CORE.minX && z.x < CORE.maxX && z.z > CORE.minZ && z.z < CORE.maxZ), `${z.id} off the new wings`);
+for (const z of [...zones, ...ANNEX]) {
+  for (const o of [...zones, ...ANNEX]) if (o !== z) assert.ok(Math.abs(o.x - z.x) >= (o.w + z.w) / 2 - 0.01 || Math.abs(o.z - z.z) >= (o.d + z.d) / 2 - 0.01, `${z.id} overlaps ${o.id}`);
 }
 const solids = desks.map((d) => ({ minX: d.x - DESK.w / 2, maxX: d.x + DESK.w / 2, minZ: d.z - DESK.d / 2, maxZ: d.z + DESK.d / 2 }));
 const r = (x, z, w, d) => ({ minX: x - w / 2, maxX: x + w / 2, minZ: z - d / 2, maxZ: z + d / 2 });
-solids.push(...innerWall(), ...bookcaseSolids());
+solids.push(...innerWall(), ...backWall(), ...bookcaseSolids());
+solids.push(r(HACK_SCREEN.x, HACK_SCREEN.z, HACK_SCREEN.w + 0.4, 0.5)); // the hackathon screen's stand
 const fin = Z.finance_cabin, war = Z.war_room, mr = Z.meeting_room, rc = Z.reception;
 const wallX = WALL.outerX + WALL.t / 2;
 solids.push(r(wallX + 0.32, fin.z - 1.0, 0.62, 0.65), r(wallX + 0.36, fin.z + 0.4, 0.7, 0.75)); // cabinet, safe
@@ -81,4 +84,9 @@ for (const row of BOOK_ROWS) row.shelves.forEach((id, i) => {
   const x = row.x + (i - (row.shelves.length - 1) / 2) * row.w;
   reach(`shelf ${id}`, x, row.z + BOOK_DEPTH / 2 + 0.75, 0.01);
 });
-console.log(`floor ok: ${FLOOR.maxX - FLOOR.minX} x ${FLOOR.maxZ - FLOOR.minZ} m, ${desks.length} desks, ${Object.keys(st).length} stations and 8 shelves reachable`);
+// the hackathon screen (Town Hall) and the far corners of both wings
+for (const [id, x, z] of [['hackathon screen', HACK_SCREEN.x, HACK_SCREEN.z + 1.8], ['north-west corner', FLOOR.minX + 1, FLOOR.minZ + 1], ['east wing far corner', FLOOR.maxX - 1, FLOOR.minZ + 1]]) {
+  assert.ok(floor.free(x, z), `${id}: blocked`);
+  reach(id, x, z, 0.01);
+}
+console.log(`floor ok: ${FLOOR.maxX - FLOOR.minX} x ${FLOOR.maxZ - FLOOR.minZ} m, ${desks.length} desks, ${ANNEX.length} new rooms, ${Object.keys(st).length} stations and 8 shelves reachable`);

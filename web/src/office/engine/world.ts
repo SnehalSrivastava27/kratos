@@ -23,7 +23,7 @@ function stickyTex() {
   });
 }
 import type { Rect } from './nav';
-import { DOOR, DOORS, FLOOR, WALL, stations } from './layout';
+import { ANNEX, BACK_DOORS, CORE, DOOR, DOORS, FLOOR, HACK_SCREEN, WALL, stations, type Annex } from './layout';
 
 export { DOOR, FLOOR, WALL };
 
@@ -79,14 +79,14 @@ export const monitorXs = (deskId: string) => MONITORS[deskId] ?? [0];
 export const MONITOR = { y: DESK_SIZE.h + 0.42, z: -0.2, w: 0.78, h: 0.46 };
 
 /** seats.ts buildDesk(): top, legs, a modesty panel in the team colour, a knick-knack, monitor frame(s) and a chair. */
-function desk(m: Models, zoneId: string, i: number, deskId: string) {
+function desk(m: Models, color: string, i: number, monitors: number[]) {
   const g = new THREE.Group();
   const { w, d, h } = DESK_SIZE;
   g.add(mesh(roundedBox(w - 0.06, 0.08, d - 0.04, 0.08), toon(PAL.desk), 0, h - 0.04, 0));
   const leg = toon(PAL.deskLeg);
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) g.add(mesh(new THREE.CylinderGeometry(0.035, 0.035, h - 0.08, 8), leg, sx * (w / 2 - 0.14), (h - 0.08) / 2, sz * (d / 2 - 0.12)));
-  g.add(mesh(box(w - 0.3, 0.32, 0.03), toon(zoneColor(zoneId)), 0, h - 0.26, -d / 2 + 0.06));
-  for (const x of monitorXs(deskId)) {
+  g.add(mesh(box(w - 0.3, 0.32, 0.03), toon(color), 0, h - 0.26, -d / 2 + 0.06));
+  for (const x of monitors) {
     g.add(mesh(roundedBox(MONITOR.w + 0.08, MONITOR.h + 0.08, 0.06, 0.04).rotateX(Math.PI / 2), toon(PAL.ink), x, MONITOR.y, MONITOR.z - 0.04));
     g.add(mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.2, 8), toon(PAL.ink), x, h + 0.1, MONITOR.z - 0.06));
     g.add(mesh(roundedBox(0.3, 0.03, 0.18, 0.06), toon(PAL.ink), x, h + 0.015, MONITOR.z - 0.06));
@@ -179,9 +179,23 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   const BW = east - (WALL.outerX - WALL.t / 2), BX = (east + WALL.outerX - WALL.t / 2) / 2; // back wall spans the whole width
   const FD = FLOOR.maxZ - FLOOR.minZ, FZ = (FLOOR.maxZ + FLOOR.minZ) / 2;
   add(mesh(roundedBox(BW + 0.2, 0.4, FD + 0.5, 0.25), toon(PAL.trim)), BX, -0.21, FZ);
-  add(mesh(box(BW, WALL.h, WALL.t), toon(PAL.wall)), BX, WALL.h / 2, WALL.backZ);
-  add(mesh(box(BW, 0.18, WALL.t + 0.04), toon(PAL.trim)), BX, 0.09, WALL.backZ);
-  add(mesh(box(BW, 0.1, WALL.t + 0.06), toon(PAL.trim)), BX, WALL.h, WALL.backZ);
+  /** A north-facing wall run from x0 to x1 at z (solid). */
+  const runWall = (x0: number, x1: number, z: number) => {
+    const len = x1 - x0, mid = (x0 + x1) / 2;
+    add(mesh(box(len, WALL.h, WALL.t), toon(PAL.wall)), mid, WALL.h / 2, z, 0, true);
+    add(mesh(box(len, 0.18, WALL.t + 0.04), toon(PAL.trim)), mid, 0.09, z);
+    add(mesh(box(len, 0.1, WALL.t + 0.06), toon(PAL.trim)), mid, WALL.h, z);
+  };
+  runWall(BX - BW / 2, BX + BW / 2, WALL.outerBackZ);
+  // The original office's back wall: now an inner wall into the north wing, a doorway on each aisle, open past its east end.
+  let x0 = WALL.outerX - WALL.t / 2;
+  for (const [a, b] of BACK_DOORS) {
+    runWall(x0, a, WALL.backZ);
+    add(mesh(box(b - a, 0.5, WALL.t + 0.06), toon(PAL.wall)), (a + b) / 2, WALL.h - 0.25, WALL.backZ);
+    add(mesh(box(b - a + 0.1, 0.1, WALL.t + 0.1), toon(PAL.trim)), (a + b) / 2, WALL.h - 0.5, WALL.backZ);
+    x0 = b;
+  }
+  runWall(x0, WALL.backEnd, WALL.backZ);
   /** A west-east wall from z0 to z1 at x (solid, so people go round it). */
   const sideWall = (x: number, z0: number, z1: number) => {
     const len = z1 - z0, mid = (z0 + z1) / 2;
@@ -191,7 +205,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   };
   sideWall(WALL.outerX, FLOOR.minZ - 0.3, FLOOR.maxZ + 0.3);
   // The inner wall: solid between its doorways, each doorway with a lintel over it.
-  let z0 = FLOOR.minZ;
+  let z0 = CORE.minZ;
   for (const [a, b] of DOORS) {
     sideWall(WALL.leftX, z0, a);
     add(mesh(box(WALL.t + 0.06, 0.5, b - a), toon(PAL.wall)), WALL.leftX, WALL.h - 0.25, (a + b) / 2);
@@ -208,9 +222,10 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
     return g;
   };
   // Windows: between the back row's wall screens, down the west wing, and one on the inner wall by the design studio.
-  for (const x of [-4.6, 8.25, 19.0]) add(win(x > 18 ? 1.4 : 2.4), x, 1.55, WALL.backZ + WALL.t / 2 + 0.01);
+  add(win(1.4), 19.0, 1.55, WALL.backZ + WALL.t / 2 + 0.01);
+  for (const x of [-20, -9.5, -4.6, 8.25, 21.5, 26, 39, 43, 47, 62]) add(win(2.4), x, 1.55, WALL.outerBackZ + WALL.t / 2 + 0.01);
   for (const z of [-8.3]) add(win(2.2), WALL.leftX + WALL.t / 2 + 0.01, 1.55, z, Math.PI / 2);
-  for (const z of [-4.6, 1.6, 4.6, 8.6]) add(win(2.0), WALL.outerX + WALL.t / 2 + 0.01, 1.55, z, Math.PI / 2);
+  for (const z of [-22, -4.6, 1.6, 4.6, 8.6]) add(win(2.0), WALL.outerX + WALL.t / 2 + 0.01, 1.55, z, Math.PI / 2);
 
   // Zone rugs: soft rounded mats in a pastel of the team colour.
   for (const z of zones) {
@@ -224,7 +239,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
 
   // Every desk slot (zones.json): owners' desks and the free ones hires can take (the captain runs the war-room table).
   DESKS.forEach((d, i) => {
-    add(desk(m, d.zone, i, d.id), d.x, 0, d.z, 0, true);
+    add(desk(m, zoneColor(d.zone), i, monitorXs(d.id)), d.x, 0, d.z, 0, true);
     add(chair(PAL.chairs[i % PAL.chairs.length]), d.x, 0, d.z + 0.85); // the seat itself is walked into
   });
   // The library's bookcases are built live (engine/library.ts); their footprints are solid here.
@@ -395,9 +410,15 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
     add(shelf, rc.x - 1.65, 0, rc.z - 0.2, Math.PI / 2 - 0.55, true); // angled to the door and the room
   }
 
+  // The new wings (layout.ts ANNEX): department bays, glass rooms, the café, the lounge and the Town Hall.
+  for (const a of ANNEX) buildAnnex(m, a, add, root, signs, pouf, sofa);
+
   // Plants in the corners and along the walls.
   const plants: [number, number, 'monstera' | 'snake_plant' | 'ficus'][] = [
-    [-15.4, -10.4, 'monstera'], [-6.0, -10.5, 'snake_plant'], [10.0, -10.5, 'ficus'], [19.4, -10.4, 'monstera'],
+    [-15.4, -10.4, 'monstera'], [-7.0, -10.5, 'snake_plant'], [10.9, -10.5, 'ficus'], [19.4, -10.4, 'monstera'],
+    [-23.4, -32.4, 'monstera'], [-6.9, -32.4, 'ficus'], [-3.0, -32.4, 'snake_plant'], [6.4, -32.4, 'monstera'], [20.6, -32.4, 'ficus'],
+    [23.6, -32.4, 'snake_plant'], [40.6, -32.4, 'monstera'], [44.6, -32.4, 'ficus'], [63.3, -32.4, 'monstera'],
+    [-23.4, -11.9, 'ficus'], [20.6, -11.9, 'snake_plant'], [20.6, 10.4, 'monstera'], [23.4, -1.0, 'ficus'], [63.3, -0.6, 'snake_plant'],
     [-15.4, 2.9, 'snake_plant'], [19.4, 3.0, 'ficus'], [-15.4, 10.4, 'ficus'], [19.4, 10.4, 'monstera'], [-3.6, 4.6, 'snake_plant'],
     [-23.5, 10.5, 'monstera'], [-16.8, 10.5, 'snake_plant'], [-23.5, -3.2, 'ficus'], [6.9, 10.5, 'snake_plant'], [10.6, 10.5, 'snake_plant'],
   ];
@@ -407,6 +428,100 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   return root;
 }
 
+type Add = (o: THREE.Object3D, x: number, y: number, z: number, ry?: number, solid?: boolean, inset?: number) => THREE.Object3D;
+
+/** One room of the new wings: its rug and floor sign, then the furniture its kind calls for (all merged with the rest). */
+function buildAnnex(m: Models, a: Annex, add: Add, root: THREE.Group, signs: boolean, pouf: (c: string) => THREE.Object3D, sofa: (s: number) => THREE.Object3D) {
+  const { x, z, w, d } = a;
+  const back = z - d / 2, front = z + d / 2;
+  const col = '#' + new THREE.Color(a.color).lerp(new THREE.Color('#ffffff'), 0.62).getHexString();
+  add(mesh(roundedBox(w - 0.4, 0.04, d - 0.4, 0.35), toon(col)), x, 0.02, z);
+  if (signs) {
+    const sign = floorSign(a.label.toUpperCase());
+    sign.position.set(x - w / 2 + 0.35 + sign.userData.w / 2, 0.05, front - 0.5);
+    root.add(sign);
+  }
+  const roundTable = (r: number) => {
+    const t = new THREE.Group();
+    t.add(mesh(new THREE.CylinderGeometry(r, r, 0.08, 24), toon('#ffffff'), 0, 0.74, 0));
+    t.add(mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.7, 10), toon(PAL.ink), 0, 0.36, 0));
+    t.add(mesh(new THREE.CylinderGeometry(r * 0.45, r * 0.45, 0.04, 20), toon(PAL.ink), 0, 0.02, 0));
+    return t;
+  };
+  if (a.kind === 'meeting') {
+    // A glass room: back and sides, open to the corridor in front; a long table, chairs down both sides, a board.
+    add(glassWall(w - 0.8, 2.0), x, 0, back + 0.4, 0, true);
+    for (const sx of [-1, 1]) add(glassWall(d * 0.62, 2.0), x + sx * (w / 2 - 0.4), 0, back + 0.4 + (d * 0.62) / 2, Math.PI / 2, true);
+    const tw = Math.min(w - 4.4, 8), tz = z - 0.3;
+    const tbl = new THREE.Group();
+    tbl.add(mesh(roundedBox(tw, 0.1, 1.5, 0.4), toon(PAL.wood), 0, 0.76, 0));
+    tbl.add(mesh(roundedBox(Math.max(0.6, tw - 1.6), 0.7, 0.5, 0.2), toon(PAL.ink), 0, 0.36, 0));
+    add(tbl, x, 0, tz, 0, true);
+    const n = Math.max(2, Math.floor(tw / 1.15));
+    for (let k = 0; k < n; k++) {
+      const cx = x + (k - (n - 1) / 2) * (tw / n);
+      add(chair(PAL.chairs[k % 6]), cx, 0, tz - 1.15, Math.PI, true);
+      add(chair(PAL.chairs[(k + 3) % 6]), cx, 0, tz + 1.15, 0, true);
+    }
+    add(wallBoard(Math.min(3.2, w - 3), 1.1, PAL.ink, stickyTex()), x, 1.45, back + 0.52);
+  } else if (a.kind === 'lounge') {
+    // Three sofa nooks round coffee tables, poufs on the open side.
+    for (const k of [-1, 0, 1]) {
+      const nx = x + k * (w / 3.2);
+      add(sofa(0.66), nx, 0, z - 1.6, 0, true);
+      const ct = piece(m.lounge, 'coffee_table');
+      ct.scale.setScalar(0.7);
+      add(ct, nx, 0, z - 0.1, Math.PI / 2, true);
+      add(pouf(['#ef476f', '#06d6a0', '#ffd166'][k + 1]), nx - 0.7, 0, z + 1.2, 0, true);
+      add(pouf(['#9d4edd', '#5bc0eb', '#ff8a5b'][k + 1]), nx + 0.7, 0, z + 1.2, 0, true);
+    }
+    for (const sx of [-1, 1]) add(plant(m, 'monstera', 1.2), x + sx * (w / 2 - 0.8), 0, back + 0.8, 0, true, 0.2);
+  } else if (a.kind === 'pantry') {
+    // Two kitchen runs along the back under a café sign, round tables with chairs in front.
+    for (const sx of [-1, 1]) {
+      const k = piece(m.kitchen);
+      k.scale.setScalar(0.7);
+      add(k, x + sx * (w / 4), 0, back + 1.0, 0, true);
+    }
+    add(wallBoard(2.6, 0.5, PAL.ink, neonTex('☕ CAFÉ', C.saffron)), x, 2.15, back + 0.5);
+    for (const dx of [-w / 3.4, 0, w / 3.4])
+      for (const dz of [0.9, 3.3]) {
+        add(roundTable(0.55), x + dx, 0, z + dz - 1.2, 0, true);
+        add(chair(PAL.chairs[Math.abs(Math.round(dx + dz)) % 6]), x + dx - 0.95, 0, z + dz - 1.2, -Math.PI / 2, true);
+        add(chair(PAL.chairs[Math.abs(Math.round(dx - dz)) % 6]), x + dx + 0.95, 0, z + dz - 1.2, Math.PI / 2, true);
+      }
+  } else if (a.kind === 'atrium') {
+    // A raised round planter with trees, ringed by benches facing out; open floor all round.
+    const r = Math.min(w, d) * 0.22;
+    add(mesh(new THREE.CylinderGeometry(r, r + 0.1, 0.5, 32), toon('#d9c3a5'), 0, 0.25, 0), x, 0, z, 0, true, r * 0.3);
+    add(mesh(new THREE.CylinderGeometry(r - 0.15, r - 0.15, 0.06, 32), toon('#6b4226'), 0, 0.5, 0), x, 0, z);
+    add(plant(m, 'monstera', 1.6), x - r * 0.4, 0.5, z - r * 0.3);
+    add(plant(m, 'ficus', 1.9), x + r * 0.35, 0.5, z + r * 0.1);
+    add(plant(m, 'snake_plant', 1.4), x - r * 0.1, 0.5, z + r * 0.5);
+    for (let k = 0; k < 6; k++) {
+      const ang = (k / 6) * Math.PI * 2 + Math.PI / 6, br = r + 1.5;
+      const bench = new THREE.Group();
+      bench.add(mesh(roundedBox(1.8, 0.12, 0.55, 0.06), toon(PAL.wood), 0, 0.46, 0));
+      for (const lx of [-0.75, 0.75]) bench.add(mesh(box(0.1, 0.42, 0.45), toon(PAL.ink), lx, 0.21, 0));
+      add(bench, x + Math.sin(ang) * br, 0, z + Math.cos(ang) * br, ang, true);
+    }
+    for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) add(plant(m, 'ficus', 1.1), x + sx * (w / 2 - 0.8), 0, z + sz * (d / 2 - 0.8), 0, true, 0.2);
+  } else if (a.kind === 'townhall') {
+    // The hackathon screen's frame and stand (its face is live in props.ts), benches in two blocks either side of an aisle.
+    const S = HACK_SCREEN;
+    add(mesh(roundedBox(S.w + 0.4, S.h + 0.4, 0.2, 0.1), toon(PAL.ink)), S.x, S.y, S.z - 0.08);
+    for (const sx of [-1, 1]) add(mesh(box(0.2, S.y - S.h / 2, 0.2), toon(PAL.ink)), S.x + sx * (S.w / 2 - 0.6), (S.y - S.h / 2) / 2, S.z - 0.08);
+    add(mesh(roundedBox(S.w + 0.4, 0.12, 0.5, 0.05), toon(PAL.ink)), S.x, 0.06, S.z - 0.08, 0, true);
+    for (let r = 0; r < 3; r++)
+      for (const sx of [-1, 1]) {
+        const bench = new THREE.Group();
+        bench.add(mesh(roundedBox(4.6, 0.12, 0.6, 0.06), toon(PAL.wood), 0, 0.46, 0));
+        for (const lx of [-2, 2]) bench.add(mesh(box(0.1, 0.42, 0.5), toon(PAL.ink), lx, 0.21, 0));
+        add(bench, x + sx * 3.4, 0, S.z + 4.2 + r * 1.9, 0, true);
+      }
+  }
+}
+
 
 /**
  * The world outside the office (agent-office's world/outside.ts, much reduced): a lawn running to the horizon
@@ -414,9 +529,10 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
  */
 function outside() {
   const g = new THREE.Group();
-  const lawn = new THREE.Mesh(new THREE.CircleGeometry(140, 48), toon('#a7d98b'));
+  const CX = (FLOOR.minX + FLOOR.maxX) / 2, CZ = (FLOOR.minZ + FLOOR.maxZ) / 2;
+  const lawn = new THREE.Mesh(new THREE.CircleGeometry(170, 48), toon('#a7d98b'));
   lawn.rotation.x = -Math.PI / 2;
-  lawn.position.set(-2, -0.42, 0);
+  lawn.position.set(CX, -0.42, CZ);
   lawn.receiveShadow = true;
   g.add(lawn);
   const path = mesh(new THREE.BoxGeometry(2.4, 0.02, 14), toon('#e9d8b4'), DOOR[0], -0.4, FLOOR.maxZ + 7.2, false); // the walk up to the front door
@@ -426,10 +542,11 @@ function outside() {
   let seed = 11;
   const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
   const leaf = [toon('#5fb760'), toon('#3f8f45'), toon('#78c26b')], bark = toon('#8a5a3b');
-  for (let i = 0; i < 46; i++) {
-    const a = rand() * Math.PI * 2, r = 28 + rand() * 30;
-    const x = -2 + Math.cos(a) * r * 1.25, z = Math.sin(a) * r;
-    if (z < -12 && Math.abs(x + 2) < 30) continue; // keep the view behind the back wall open
+  for (let i = 0; i < 70; i++) {
+    const a = rand() * Math.PI * 2, r = 1 + rand() * 0.6;
+    const x = CX + Math.cos(a) * r * 54, z = CZ + Math.sin(a) * r * 30;
+    if (z < FLOOR.minZ && Math.abs(x - CX) < 50) continue; // keep the view behind the back wall open
+    if (x > FLOOR.minX - 3 && x < FLOOR.maxX + 3 && z > FLOOR.minZ - 3 && z < FLOOR.maxZ + 3) continue; // never on the floor
     const s = 0.8 + rand() * 0.9;
     trees.add(mesh(new THREE.CylinderGeometry(0.18 * s, 0.24 * s, 1.4 * s, 7), bark, x, -0.42 + 0.7 * s, z));
     trees.add(mesh(new THREE.IcosahedronGeometry(1.15 * s, 0), leaf[i % 3], x, -0.42 + 2.1 * s, z));

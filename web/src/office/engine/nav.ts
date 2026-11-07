@@ -20,9 +20,18 @@ export class NavGrid {
     for (let j = 0; j < this.nz; j++)
       for (let i = 0; i < this.nx; i++) {
         const [x, z] = this.center(i, j);
-        const edge = x - bounds.minX < radius || bounds.maxX - x < radius || z - bounds.minZ < radius || bounds.maxZ - z < radius;
-        if (edge || solids.some((r) => x > r.minX - radius && x < r.maxX + radius && z > r.minZ - radius && z < r.maxZ + radius)) this.blocked[j * this.nx + i] = 1;
+        if (x - bounds.minX < radius || bounds.maxX - x < radius || z - bounds.minZ < radius || bounds.maxZ - z < radius) this.blocked[j * this.nx + i] = 1;
       }
+    // Each grown rect marks only the cells under it (the floor is ~100k cells, the furniture a few hundred rects).
+    for (const r of solids) {
+      const i0 = Math.max(0, Math.floor((r.minX - radius - bounds.minX) / CELL)), i1 = Math.min(this.nx - 1, Math.ceil((r.maxX + radius - bounds.minX) / CELL));
+      const j0 = Math.max(0, Math.floor((r.minZ - radius - bounds.minZ) / CELL)), j1 = Math.min(this.nz - 1, Math.ceil((r.maxZ + radius - bounds.minZ) / CELL));
+      for (let j = j0; j <= j1; j++)
+        for (let i = i0; i <= i1; i++) {
+          const [x, z] = this.center(i, j);
+          if (x > r.minX - radius && x < r.maxX + radius && z > r.minZ - radius && z < r.maxZ + radius) this.blocked[j * this.nx + i] = 1;
+        }
+    }
   }
 
   private center(i: number, j: number): [number, number] {
@@ -72,11 +81,12 @@ export class NavGrid {
     const closed = new Uint8Array(N);
     const gi = goal % this.nx, gj = Math.floor(goal / this.nx);
     const h = (c: number) => Math.hypot((c % this.nx) - gi, Math.floor(c / this.nx) - gj);
-    // ponytail: binary heap would beat this sorted-insert open list; the grid is ~10k cells, paths are rare.
-    const open: { c: number; f: number }[] = [{ c: start, f: h(start) }];
+    // A binary min-heap on f: the floor is ~100k cells, so a sorted-insert list would crawl on long walks.
+    const open = new Heap();
+    open.push(start, h(start));
     g[start] = 0;
-    while (open.length) {
-      const { c } = open.shift()!;
+    while (open.size) {
+      const c = open.pop();
       if (c === goal) break;
       if (closed[c]) continue;
       closed[c] = 1;
@@ -93,10 +103,7 @@ export class NavGrid {
           if (ng >= g[n]) continue;
           g[n] = ng;
           from[n] = c;
-          const f = ng + h(n);
-          let k = open.findIndex((o) => o.f > f);
-          if (k < 0) k = open.length;
-          open.splice(k, 0, { c: n, f });
+          open.push(n, ng + h(n));
         }
     }
     if (from[goal] < 0 && goal !== start) return [[bx, bz]]; // unreachable: walk straight (never happens on this floor)
@@ -121,5 +128,50 @@ export class NavGrid {
       i = far + 1;
     }
     return out;
+  }
+}
+
+/** Min-heap of (cell, f): stale duplicates are fine, the closed set skips them. */
+class Heap {
+  private c: number[] = [];
+  private f: number[] = [];
+  get size() {
+    return this.c.length;
+  }
+  push(cell: number, f: number) {
+    const { c, f: fs } = this;
+    let i = c.length;
+    c.push(cell);
+    fs.push(f);
+    while (i > 0) {
+      const p = (i - 1) >> 1;
+      if (fs[p] <= f) break;
+      c[i] = c[p];
+      fs[i] = fs[p];
+      i = p;
+    }
+    c[i] = cell;
+    fs[i] = f;
+  }
+  pop(): number {
+    const { c, f: fs } = this;
+    const top = c[0];
+    const lc = c.pop()!, lf = fs.pop()!;
+    const n = c.length;
+    if (n) {
+      let i = 0;
+      for (;;) {
+        let k = 2 * i + 1;
+        if (k >= n) break;
+        if (k + 1 < n && fs[k + 1] < fs[k]) k++;
+        if (fs[k] >= lf) break;
+        c[i] = c[k];
+        fs[i] = fs[k];
+        i = k;
+      }
+      c[i] = lc;
+      fs[i] = lf;
+    }
+    return top;
   }
 }

@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { OfficeEvent } from '../../shared/types';
 import { DESKS, deskById, deskOf, personById, roomZone, roster, swMeta, zoneById, zones } from '../data';
-import { FONT, paint } from '../tex';
+import { FONT, imageTex, paint } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { WALL } from './world';
 import { LANES, corePos } from './layout';
@@ -146,6 +146,13 @@ export class SwitchHub {
     const label = new THREE.Mesh(new THREE.PlaneGeometry(0.66, 0.235), new THREE.MeshBasicMaterial({ map: labelTex(), toneMapped: false, transparent: true }));
     label.position.set(0, 0.5, 0.635); // just proud of the front face (apothem ~0.6 at this height)
     c.add(label);
+    // The Switch wordmark hung over the core, high enough to read across the floor and from the founder's eye level.
+    const sign = new THREE.Group();
+    sign.position.set(0, 3.35, 0.2);
+    sign.add(mesh(roundedBox(2.9, 0.62, 0.1, 0.08), toon('#1E1328'), 0, 0, -0.06));
+    sign.add(new THREE.Mesh(new THREE.PlaneGeometry(2.7, 0.44), new THREE.MeshBasicMaterial({ map: logoTex(1080, 176, '#1E1328'), toneMapped: false })));
+    for (const sx of [-1, 1]) sign.add(mesh(new THREE.CylinderGeometry(0.015, 0.015, 1.2, 6), toon('#2b2d42'), sx * 1.2, 0.9, -0.06));
+    c.add(sign);
     this.orb.position.y = ORB_Y;
     this.orb.add(mesh(new THREE.IcosahedronGeometry(0.27, 0), this.orbMat, 0, 0, 0, false));
     // A soft column of light over the orb, so the hub reads from across the floor.
@@ -187,7 +194,7 @@ export class SwitchHub {
       tag.type = 'button';
       tag.className = 'hq-anchor hq-switch-tag';
       tag.setAttribute('aria-label', 'Switch: open the router panel');
-      tag.innerHTML = '<span class="hq-switch-dot"></span><b>Switch</b><span class="hq-switch-n">0 routed</span>'; // static markup; the count is set as text
+      tag.innerHTML = '<img class="hq-switch-logo" src="/brand/switch-webclip.png" alt=""><span class="hq-switch-dot"></span><b>Switch</b><span class="hq-switch-n">0 routed</span>'; // static markup; the count is set as text
       this.tagCount = tag.querySelector('.hq-switch-n');
       tag.addEventListener('click', onOpen);
       overlay.append(tag);
@@ -351,8 +358,9 @@ export class SwitchHub {
 
 const WHITE = new THREE.Color('#ffffff');
 
+/** The core's front plate: the real Switch wordmark (switchagents.ai), white on the hub's plum. */
 function labelTex() {
-  return paint(560, 200, (g, W, H) => {
+  return imageTex(560, 200, '/brand/switch-logo-white.svg', (g, W, H, img) => {
     g.fillStyle = '#1E1328';
     g.beginPath();
     g.roundRect(4, 4, W - 8, H - 8, 40);
@@ -360,12 +368,23 @@ function labelTex() {
     g.strokeStyle = '#F4A300';
     g.lineWidth = 8;
     g.stroke();
-    g.fillStyle = '#ffffff';
-    g.font = `900 104px ${FONT}`;
-    g.textAlign = 'center';
-    g.textBaseline = 'middle';
-    g.fillText('SWITCH', W / 2, H / 2 + 6);
+    if (img) drawLogo(g, img, W, H, 0.84);
   });
+}
+
+/** A flat sign face: the white wordmark on `bg`. */
+function logoTex(w: number, h: number, bg: string) {
+  return imageTex(w, h, '/brand/switch-logo-white.svg', (g, W, H, img) => {
+    g.fillStyle = bg;
+    g.fillRect(0, 0, W, H);
+    if (img) drawLogo(g, img, W, H, 0.86);
+  });
+}
+
+/** The 624 x 102 wordmark, centred and as wide as `k` of the canvas allows. */
+function drawLogo(g: CanvasRenderingContext2D, img: HTMLImageElement, W: number, H: number, k: number) {
+  const s = Math.min((W * k) / 624, (H * k) / 102);
+  g.drawImage(img, (W - 624 * s) / 2, (H - 102 * s) / 2, 624 * s, 102 * s);
 }
 
 /** The lock that rides a private note: a white padlock on a violet disc. */
