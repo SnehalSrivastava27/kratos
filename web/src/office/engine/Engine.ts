@@ -26,7 +26,7 @@ import { NavGrid } from './nav';
 import { LiveProps, type GalleryItem } from './props';
 import { DOOR, FLOOR, buildWorld, loadFont } from './world';
 import { SwitchHub } from './switchHub';
-import { CORE, WALL, stations, type StationId } from './layout';
+import { CORE, HACK_SCREEN, WALL, stations, type StationId } from './layout';
 
 /** What pressing E would use: the nearest thing you face. */
 export type Target =
@@ -196,6 +196,8 @@ export class OfficeEngine {
   private player: Player | null = null;
   private founder: Agent | null = null;
   private view: 'player' | 'spectator' = 'spectator';
+  /** The first walk starts in the Town Hall, facing the hackathon screen (then wherever the founder is). */
+  private openAtScreen = true;
   private targetK = '';
   private shelves = new Bookcases();
   private tip = document.createElement('div');
@@ -386,8 +388,15 @@ export class OfficeEngine {
     if (view === 'player') {
       this.focusZone = null;
       const f = this.founder;
-      this.player.place(f.pos.x, f.pos.z, f.person.root.rotation.y);
-      if (!this.nav.free(f.pos.x, f.pos.z)) this.placeNear(f.pos.x, f.pos.z + 0.6);
+      if (this.openAtScreen && !this.opts.hero) {
+        // Facing -z (atan2(0, -1) = PI): the screen is at the back of the Town Hall and faces +z.
+        const x = HACK_SCREEN.x, z = HACK_SCREEN.z + 6.5;
+        f.pos.set(x, f.pos.y, z);
+        this.player.place(x, z, Math.PI);
+        this.user = { yaw: 0, pitch: -0.2, zoom: 1.15 }; // a flatter, slightly wider look so the whole screen is in frame
+      } else this.player.place(f.pos.x, f.pos.z, f.person.root.rotation.y);
+      this.openAtScreen = false;
+      if (!this.nav.free(this.player.x, this.player.z)) this.placeNear(this.player.x, this.player.z + 0.6);
       f.drive = { moving: false, speed: 0, facing: this.player.facing };
     } else {
       this.player.stop();
