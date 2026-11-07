@@ -1,26 +1,29 @@
-emp_id,name,dept,role,level,city,join_date,ctc_annual,basic_monthly,hra_monthly,special_monthly,pf_employer_monthly,variable_pct,gender,state
-E001,Ananya Kapoor,Founders,Co-founder and CEO,L7,Mumbai,2023-06-01,960000,40000,20000,18200,1800,0,F,Maharashtra
-E002,Rohit Malhotra,Founders,Co-founder and COO,L7,Mumbai,2023-06-01,960000,40000,20000,18200,1800,0,M,Maharashtra
-E003,Ishaan Verma,Growth,Head of Growth,L5,Mumbai,2024-04-01,1500000,50625,25313,34762,1800,10,M,Maharashtra
-E004,Sana Qureshi,Growth,Performance Marketing Manager,L4,Mumbai,2024-08-01,840000,28350,14175,18675,1800,10,F,Maharashtra
-E005,Karan Bhatia,Growth,Marketplaces Manager,L4,Delhi,2024-11-01,840000,28350,14175,18675,1800,10,M,Delhi
-E006,Pooja Nair,Growth,Marketplaces Executive,L2,Delhi,2025-07-01,420000,14963,7482,9009,1796,5,F,Delhi
-E007,Tara Menon,Growth,Creator Partnerships Manager,L3,Bangalore,2025-01-01,660000,22275,8910,16515,1800,10,F,Karnataka
-E008,Aditi Rao,Growth,Social Media Executive,L2,Mumbai,2025-09-01,390000,14625,7313,8807,1755,0,F,Maharashtra
-E009,Neel Shah,Growth,CRM and Retention Executive,L2,Mumbai,2025-04-01,450000,16031,8016,9778,1800,5,M,Maharashtra
-E010,Vikram Sethi,Ops,Operations Manager,L4,Mumbai,2024-02-01,840000,28350,14175,18675,1800,10,M,Maharashtra
-E011,Meghna Iyer,Ops,Procurement Executive,L2,Mumbai,2025-03-01,480000,17100,8550,10550,1800,5,F,Maharashtra
-E012,Dr. Farah Siddiqui,Ops,Formulation Chemist,L3,Mumbai,2024-06-01,720000,25650,12825,16725,1800,5,F,Maharashtra
-E013,Arjun Yadav,Ops,Warehouse Coordinator (Delhi),L1,Delhi,2025-02-01,330000,12375,6188,7452,1485,0,M,Delhi
-E014,Manjunath Gowda,Ops,Warehouse Coordinator (Bangalore),L1,Bangalore,2025-05-01,330000,12375,4950,8690,1485,0,M,Karnataka
-E015,Rhea D'Souza,Design,Design Lead,L4,Mumbai,2024-03-01,780000,27788,13894,18268,1800,5,F,Maharashtra
-E016,Kunal Joshi,Design,Graphic Designer,L2,Mumbai,2025-01-01,420000,15750,7875,9575,1800,0,M,Maharashtra
-E017,Simran Gill,Design,Video Editor,L2,Delhi,2025-10-01,390000,14625,7313,8807,1755,0,F,Delhi
-E018,Nikhil Agarwal,Finance,Finance Manager,L4,Mumbai,2024-05-01,780000,27788,13894,18268,1800,5,M,Maharashtra
-E019,Priya Kulkarni,Finance,Accounts Executive,L2,Mumbai,2025-02-01,360000,13500,6750,8130,1620,0,F,Maharashtra
-E020,Divya Pillai,CX,CX Lead,L3,Bangalore,2024-09-01,540000,19238,7695,14017,1800,5,F,Karnataka
-E021,Rahul Mishra,CX,CX Executive,L1,Delhi,2025-06-01,330000,12375,6188,7452,1485,0,M,Delhi
-E022,Lavanya Reddy,CX,CX Executive,L1,Bangalore,2026-10-01,330000,12375,4950,8690,1485,0,F,Karnataka
-E023,Aakash Jain,Tech,Shopify Developer,L3,Bangalore,2024-10-01,840000,31500,12600,24100,1800,0,M,Karnataka
-E024,Zoya Khan,Tech,Data Analyst,L3,Mumbai,2026-09-01,660000,23513,11757,15180,1800,5,F,Maharashtra
-E025,Siddharth Rao,Tech,Automation Engineer (AI agents),L3,Bangalore,2026-08-01,660000,24750,9900,18550,1800,0,M,Karnataka
+emp_id,name,dept,role,level,city,join_date,ctc_annual,basic_monthly,hra_monthly,special_monthly,pf_employer_monthly,variable_pct,gender,state,esi_employer_monthly
+E001,Ananya Kapoor,Founders,Co-founder and CEO,L7,Mumbai,2023-06-01,960000,40000,20000,18200,1800,0,F,Maharashtra,0
+E002,Rohit Malhotra,Founders,Co-founder and COO,L7,Mumbai,2023-06-01,960000,40000,20000,18200,1800,0,M,Maharashtra,0
+E003,Ishaan Verma,Growth,Head of Growth,L5,Mumbai,2024-04-01,1500000,50625,25313,34762,1800,10,M,Maharashtra,0
+E004,Sana Qureshi,Growth,Performance Marketing Manager,L4,Mumbai,2024-08-01,840000,28350,14175,18675,1800,10,F,Maharashtra,0
+E005,Karan Bhatia,Growth,Marketplaces Manager,L4,Delhi,2024-11-01,840000,28350,14175,18675,1800,10,M,Delhi,0
+E006,Pooja Nair,Growth,Marketplaces Executive,L2,Delhi,2025-07-01,420000,14963,7482,9009,1796,5,F,Delhi,0
+E007,Tara Menon,Growth,Creator Partnerships Manager,L3,Bangalore,2025-01-01,660000,22275,8910,16515,1800,10,F,Karnataka,0
+E008,Aditi Rao,Growth,Social Media Executive,L2,Mumbai,2025-09-01,390000,14625,7313,8807,1755,0,F,Maharashtra,0
+E009,Neel Shah,Growth,CRM and Retention Executive,L2,Mumbai,2025-04-01,450000,16031,8016,9778,1800,5,M,Maharashtra,0
+E010,Vikram Sethi,Ops,Operations Manager,L4,Mumbai,2024-02-01,840000,28350,14175,18675,1800,10,M,Maharashtra,0
+E011,Meghna Iyer,Ops,Procurement Executive,L2,Mumbai,2025-03-01,480000,17100,8550,10550,1800,5,F,Maharashtra,0
+E012,Dr. Farah Siddiqui,Ops,Formulation Chemist,L3,Mumbai,2024-06-01,720000,25650,12825,16725,1800,5,F,Maharashtra,0
+E013,Arjun Yadav,Ops,Warehouse Coordinator (Delhi),L1,Delhi,2025-02-01,330000,12375,6188,7452,1485,0,M,Delhi,0
+E014,Manjunath Gowda,Ops,Warehouse Coordinator (Bangalore),L1,Bangalore,2025-05-01,330000,12375,4950,8690,1485,0,M,Karnataka,0
+E015,Rhea D'Souza,Design,Design Lead,L4,Mumbai,2024-03-01,780000,27788,13894,18268,1800,5,F,Maharashtra,0
+E016,Kunal Joshi,Design,Graphic Designer,L2,Mumbai,2025-01-01,420000,15750,7875,9575,1800,0,M,Maharashtra,0
+E017,Simran Gill,Design,Video Editor,L2,Delhi,2025-10-01,390000,14625,7313,8807,1755,0,F,Delhi,0
+E018,Nikhil Agarwal,Finance,Finance Manager,L4,Mumbai,2024-05-01,780000,27788,13894,18268,1800,5,M,Maharashtra,0
+E019,Priya Kulkarni,Finance,Accounts Executive,L2,Mumbai,2025-02-01,360000,13500,6750,8130,1620,0,F,Maharashtra,0
+E020,Divya Pillai,CX,CX Lead,L3,Bangalore,2024-09-01,540000,19238,7695,14017,1800,5,F,Karnataka,0
+E021,Rahul Mishra,CX,CX Executive,L1,Delhi,2025-06-01,330000,12375,6188,7452,1485,0,M,Delhi,0
+E022,Lavanya Reddy,CX,CX Executive,L1,Bangalore,2026-10-01,330000,12375,4950,8690,1485,0,F,Karnataka,0
+E023,Aakash Jain,Tech,Shopify Developer,L3,Bangalore,2024-10-01,840000,31500,12600,24100,1800,0,M,Karnataka,0
+E024,Zoya Khan,Tech,Data Analyst,L3,Mumbai,2026-09-01,660000,23513,11757,15180,1800,5,F,Maharashtra,0
+E025,Siddharth Rao,Tech,Automation Engineer (AI agents),L3,Bangalore,2026-08-01,660000,24750,9900,18550,1800,0,M,Karnataka,0
+E026,Ramesh Kumar,Ops,Warehouse Associate (Delhi),L0,Delhi,2025-08-01,240000,9000,4500,4824,1080,0,M,Delhi,596
+E027,Sunita Patil,Ops,Warehouse Associate (Mumbai),L0,Mumbai,2025-11-01,240000,9000,4500,4824,1080,0,F,Maharashtra,596
+E028,Venkatesh Murthy,Ops,Warehouse Associate (Bangalore),L0,Bangalore,2026-02-01,240000,9000,3600,5724,1080,0,M,Karnataka,596

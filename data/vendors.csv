@@ -1,0 +1,33 @@
+vendor_id,name,type,category,city,state,gstin,msme_category,payment_terms_days,tds_section,tds_rate_pct
+S01,Ankur Formulations Pvt Ltd,supplier,Contract manufacturer,Baddi,Himachal Pradesh,02AAFFA2719M1Z0,Small,45,194C,2
+S02,Vasant Chemicals,supplier,Actives and chemicals,Mumbai,Maharashtra,27AAFJV9767A1Z4,Medium,30,none,0
+S03,Nilgiri Botanicals,supplier,Oils and botanicals,Coimbatore,Tamil Nadu,33AAFTN4603Z1Z6,Micro,30,none,0
+S04,Pampore Kesar Traders,supplier,Saffron,Srinagar,Jammu and Kashmir,01AACSP7582J1Z3,Micro,0,none,0
+S05,Glassline Packaging,supplier,Glass bottles and droppers,Vapi,Gujarat,24AACRG1802D1Z3,Small,30,none,0
+S06,Polytube India,supplier,Tubes and jars,Daman,Dadra and Nagar Haveli and Daman and Diu,26AACRP8790F1Z9,Small,30,none,0
+S07,PrintCraft Cartons,supplier,"Cartons, labels, gift boxes",Bhiwandi,Maharashtra,27AACUP5746T1Z4,Micro,15,none,0
+S08,Sunshield Ingredients,supplier,UV filters and minerals,Ahmedabad,Gujarat,24AACZS8512H1Z2,Small,45,none,0
+V01,"Office lease - Andheri East, Mumbai",service,Rent,Mumbai,Maharashtra,27AAFPO9511W1Z0,Not MSME,0,194I,10
+V02,StackBox 3PL - Mumbai,service,Warehousing (3PL),Bhiwandi,Maharashtra,27AAFKS8809H1Z7,Medium,30,194C,2
+V03,NCR Fulfil 3PL - Delhi,service,Warehousing (3PL),Delhi,Delhi,07AACZN2738L1Z7,Small,30,194C,2
+V04,Southline 3PL - Bangalore,service,Warehousing (3PL),Bangalore,Karnataka,29AAFAS9339C1Z9,Small,30,194C,2
+V05,Shopify (plan and apps),service,Software,Ottawa,Foreign (Canada),,Not MSME,0,none,0
+V06,Shiprocket platform,service,Software,Delhi,Delhi,07AACAS9146L1Z2,Not MSME,0,194J,2
+V07,GoKwik (checkout and COD verification),service,Software,Gurugram,Haryana,06AACXG4684Y1Z8,Not MSME,15,194J,2
+V08,Interakt (WhatsApp marketing: plan + message charges),service,Software,Mumbai,Maharashtra,27AACSI6950C1Z2,Not MSME,0,194J,2
+V09,WATI (WhatsApp COD confirmation and NDR flows),service,Software,Bangalore,Karnataka,29AACGW8038U1Z3,Small,0,194J,2
+V10,Email and SMS,service,Software,Bangalore,Karnataka,29AAFSE9491D1Z2,Small,15,194J,2
+V11,Google Workspace,service,Software,Gurugram,Haryana,06AAFZG2867N1Z8,Not MSME,0,none,0
+V12,"Freshdesk (helpdesk, WhatsApp inbox, IVR)",service,Software,Chennai,Tamil Nadu,33AACTF5348Z1Z9,Not MSME,0,194J,2
+V13,Accounting and payroll software,service,Software,Pune,Maharashtra,27AAFRA2061C1Z2,Small,0,194J,2
+V14,Product shoot and UGC edits,service,Creative production,Mumbai,Maharashtra,27AACPP2946T1Z3,Micro,15,194J,10
+V15,"CA firm (books, GST, TDS filing)",service,Professional fees,Mumbai,Maharashtra,27AACHC5400W1Z2,Micro,15,194J,10
+V16,Legal and trademark,service,Professional fees,Mumbai,Maharashtra,27AACXL9492M1Z2,Micro,15,194J,10
+V17,"Electricity, internet, housekeeping",service,Utilities,Mumbai,Maharashtra,27AACXE9124B1Z5,Micro,15,194C,2
+V18,Team travel,service,Travel,Mumbai,Maharashtra,27AACFT4528X1Z2,Not MSME,0,none,0
+V19,PR boxes and creator seeding,service,Samples and gifting,Mumbai,Maharashtra,27AACHP7556L1Z5,Micro,15,194C,2
+V20,"Bank charges, ROC, stamp duty",service,Bank and compliance,Mumbai,Maharashtra,27AAFZB7467M1Z7,Not MSME,0,none,0
+V21,Job portal subscription,service,Recruitment,Noida,Uttar Pradesh,09AAFLJ9307L1Z5,Not MSME,0,194J,2
+V22,Group health insurance (quarterly),service,Insurance,Mumbai,Maharashtra,27AACAG5760L1Z9,Not MSME,0,none,0
+V23,Health & Glow and Apollo shelf visibility,service,Trade marketing,Bangalore,Karnataka,29AACAH9046X1Z0,Not MSME,30,194C,2
+V24,"Export compliance (IEC, LUT, FDA listing)",service,Professional fees,Mumbai,Maharashtra,27AACVE9850W1Z6,Micro,15,194J,10

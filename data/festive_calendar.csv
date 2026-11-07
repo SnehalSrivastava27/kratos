@@ -1,0 +1,25 @@
+event,start_date,end_date,type,focus_states,platforms,status,observed_uplift_x,expected_uplift_x,note
+Independence Day sale,2026-08-14,2026-08-16,sale,,,past,1,,Site-wide 15-20% off
+Onam,2026-08-20,2026-08-26,festival,Kerala,,past,1.94,,Thiruvonam 26 Aug; Malayalam creators + WhatsApp
+Raksha Bandhan,2026-08-24,2026-08-28,festival,,,past,1.06,,Gifting: Glow Kit (SKU05) sells ~2x
+Ganesh Chaturthi,2026-09-12,2026-09-16,festival,Maharashtra,,past,1.26,,Ganesh Chaturthi 14 Sep
+Flipkart Big Billion Days,2026-10-03,2026-10-09,platform sale,,Flipkart; Flipkart Minutes,past,1.57,,Deepest marketplace discounts of the year (20-30%)
+Amazon Great Indian Festival (opening week),2026-10-03,2026-10-09,platform sale,,Amazon,past,1.41,,Prime early access then open sale
+Myntra Big Fashion Festival,2026-10-03,2026-10-09,platform sale,,Myntra,past,0.77,,
+Meesho Mega Blockbuster Sale,2026-10-03,2026-10-09,platform sale,,Meesho,past,1.31,,"Tier 2-3, heavy COD"
+Navratri,2026-10-11,2026-10-19,festival,Gujarat; Maharashtra; Uttar Pradesh; Delhi; Rajasthan,,past,0.94,,
+Durga Puja,2026-10-15,2026-10-20,festival,West Bengal; Assam; Odisha,,past,2.13,,Pujo 17-20 Oct; Bengali creatives
+Dussehra week sale,2026-10-19,2026-10-25,sale,,,past,1.71,,Dussehra 20 Oct; peak days of the quarter
+Karva Chauth,2026-10-29,2026-10-29,festival,Delhi; Punjab; Haryana; Rajasthan; Uttar Pradesh,,past,1.17,,
+Diwali sale (Dhanteras to Diwali),2026-11-01,2026-11-08,sale,,,upcoming,,3,"Dhanteras 6 Nov, Diwali 8 Nov: the planned festive sale"
+Bhai Dooj,2026-11-11,2026-11-11,festival,,,upcoming,,1.4,Gifting
+Chhath Puja,2026-11-14,2026-11-15,festival,Bihar; Jharkhand; Uttar Pradesh,,upcoming,,1.2,
+Wedding season,2026-11-20,2027-02-28,season,,,upcoming,,1.25,"Dev Uthani Ekadashi 20 Nov opens the season; bridal skincare, Kesar Face Oil"
+Nykaa Pink Friday Sale,2026-11-20,2026-11-30,platform sale,,Nykaa,upcoming,,2.2,Nykaa's biggest sale; funds part of the discount
+Black Friday (exports),2026-11-26,2026-11-30,platform sale,,Amazon Global,upcoming,,2.5,US/UK/Canada buyers
+Myntra End of Reason Sale (EORS),2026-12-06,2026-12-12,platform sale,,Myntra,upcoming,,2.4,
+Christmas and New Year,2026-12-20,2026-12-31,festival,,,upcoming,,1.3,Gift sets
+Pongal / Makar Sankranti,2027-01-13,2027-01-16,festival,Tamil Nadu; Andhra Pradesh; Telangana; Karnataka; Gujarat,,upcoming,,1.4,Tamil and Telugu creatives
+Republic Day sale,2027-01-17,2027-01-26,platform sale,,Amazon; Flipkart,upcoming,,1.8,Amazon Great Republic Day + Flipkart Republic Day sale
+Eid ul-Fitr,2027-03-09,2027-03-10,festival,,,upcoming,,1.2,Date depends on the moon
+Holi,2027-03-18,2027-03-22,festival,Uttar Pradesh; Delhi; Bihar; Rajasthan; Haryana,,upcoming,,1.3,Holi 22 Mar: pre- and post-Holi skin care

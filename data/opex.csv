@@ -1,60 +1,69 @@
 month,category,vendor,amount
 2026-08,Rent,"Office lease - Andheri East, Mumbai",78000
-2026-08,Warehousing (3PL),StackBox 3PL - Mumbai,22179
-2026-08,Warehousing (3PL),NCR Fulfil 3PL - Delhi,23943
-2026-08,Warehousing (3PL),Southline 3PL - Bangalore,20487
+2026-08,Warehousing (3PL),StackBox 3PL - Mumbai,21099
+2026-08,Warehousing (3PL),NCR Fulfil 3PL - Delhi,24339
+2026-08,Warehousing (3PL),Southline 3PL - Bangalore,21900
 2026-08,Software,Shopify (plan and apps),14500
 2026-08,Software,Shiprocket platform,2999
-2026-08,Software,Checkout and COD verification app,6765
-2026-08,Software,WhatsApp marketing (BSP),10617
+2026-08,Software,GoKwik (checkout and COD verification),6765
+2026-08,Software,Interakt (WhatsApp marketing: plan + message charges),25127
+2026-08,Software,WATI (WhatsApp COD confirmation and NDR flows),2161
 2026-08,Software,Email and SMS,7200
-2026-08,Software,Google Workspace,4375
-2026-08,Software,Helpdesk,4800
+2026-08,Software,Google Workspace,4550
+2026-08,Software,"Freshdesk (helpdesk, WhatsApp inbox, IVR)",6300
 2026-08,Software,Accounting and payroll software,3800
 2026-08,Creative production,Product shoot and UGC edits,38000
 2026-08,Professional fees,"CA firm (books, GST, TDS filing)",22000
 2026-08,Professional fees,Legal and trademark,6000
-2026-08,Utilities,"Electricity, internet, housekeeping",14119
-2026-08,Travel,Team travel,9270
+2026-08,Utilities,"Electricity, internet, housekeeping",14578
+2026-08,Travel,Team travel,10858
 2026-08,Samples and gifting,PR boxes and creator seeding,18000
 2026-08,Bank and compliance,"Bank charges, ROC, stamp duty",3200
+2026-08,Trade marketing,Health & Glow and Apollo shelf visibility,15000
+2026-08,Professional fees,"Export compliance (IEC, LUT, FDA listing)",6000
 2026-08,Insurance,Group health insurance (quarterly),52000
 2026-09,Rent,"Office lease - Andheri East, Mumbai",78000
-2026-09,Warehousing (3PL),StackBox 3PL - Mumbai,22287
-2026-09,Warehousing (3PL),NCR Fulfil 3PL - Delhi,23403
-2026-09,Warehousing (3PL),Southline 3PL - Bangalore,21396
+2026-09,Warehousing (3PL),StackBox 3PL - Mumbai,20910
+2026-09,Warehousing (3PL),NCR Fulfil 3PL - Delhi,23052
+2026-09,Warehousing (3PL),Southline 3PL - Bangalore,20955
 2026-09,Software,Shopify (plan and apps),14500
 2026-09,Software,Shiprocket platform,2999
-2026-09,Software,Checkout and COD verification app,7242
-2026-09,Software,WhatsApp marketing (BSP),9422
+2026-09,Software,GoKwik (checkout and COD verification),6567
+2026-09,Software,Interakt (WhatsApp marketing: plan + message charges),21568
+2026-09,Software,WATI (WhatsApp COD confirmation and NDR flows),2124
 2026-09,Software,Email and SMS,7200
-2026-09,Software,Google Workspace,4375
-2026-09,Software,Helpdesk,4800
+2026-09,Software,Google Workspace,4725
+2026-09,Software,"Freshdesk (helpdesk, WhatsApp inbox, IVR)",6300
 2026-09,Software,Accounting and payroll software,3800
 2026-09,Creative production,Product shoot and UGC edits,42000
 2026-09,Professional fees,"CA firm (books, GST, TDS filing)",22000
 2026-09,Professional fees,Legal and trademark,22000
-2026-09,Utilities,"Electricity, internet, housekeeping",14496
-2026-09,Travel,Team travel,12125
+2026-09,Utilities,"Electricity, internet, housekeeping",14490
+2026-09,Travel,Team travel,9845
 2026-09,Samples and gifting,PR boxes and creator seeding,21000
 2026-09,Bank and compliance,"Bank charges, ROC, stamp duty",3200
+2026-09,Trade marketing,Health & Glow and Apollo shelf visibility,15000
+2026-09,Professional fees,"Export compliance (IEC, LUT, FDA listing)",6000
 2026-10,Rent,"Office lease - Andheri East, Mumbai",78000
-2026-10,Warehousing (3PL),StackBox 3PL - Mumbai,25266
-2026-10,Warehousing (3PL),NCR Fulfil 3PL - Delhi,27111
-2026-10,Warehousing (3PL),Southline 3PL - Bangalore,22584
+2026-10,Warehousing (3PL),StackBox 3PL - Mumbai,23763
+2026-10,Warehousing (3PL),NCR Fulfil 3PL - Delhi,29226
+2026-10,Warehousing (3PL),Southline 3PL - Bangalore,22917
 2026-10,Software,Shopify (plan and apps),14500
 2026-10,Software,Shiprocket platform,2999
-2026-10,Software,Checkout and COD verification app,7291
-2026-10,Software,WhatsApp marketing (BSP),9523
+2026-10,Software,GoKwik (checkout and COD verification),7247
+2026-10,Software,Interakt (WhatsApp marketing: plan + message charges),52929
+2026-10,Software,WATI (WhatsApp COD confirmation and NDR flows),2162
 2026-10,Software,Email and SMS,7200
-2026-10,Software,Google Workspace,4375
-2026-10,Software,Helpdesk,4800
+2026-10,Software,Google Workspace,4900
+2026-10,Software,"Freshdesk (helpdesk, WhatsApp inbox, IVR)",6300
 2026-10,Software,Accounting and payroll software,3800
 2026-10,Creative production,Product shoot and UGC edits,64000
 2026-10,Professional fees,"CA firm (books, GST, TDS filing)",22000
 2026-10,Professional fees,Legal and trademark,6000
-2026-10,Utilities,"Electricity, internet, housekeeping",13673
-2026-10,Travel,Team travel,10994
+2026-10,Utilities,"Electricity, internet, housekeeping",14542
+2026-10,Travel,Team travel,12164
 2026-10,Samples and gifting,PR boxes and creator seeding,34000
 2026-10,Bank and compliance,"Bank charges, ROC, stamp duty",3200
+2026-10,Trade marketing,Health & Glow and Apollo shelf visibility,15000
+2026-10,Professional fees,"Export compliance (IEC, LUT, FDA listing)",6000
 2026-10,Recruitment,Job portal subscription,14000

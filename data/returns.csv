@@ -1,288 +1,319 @@
 order_id,date,sku,channel,reason,refund,restockable,qty
 KC100018,2026-08-05,SKU02,Amazon,Damaged or leaking on arrival,479,no,1
-KC100044,2026-08-11,SKU04,Amazon,Near expiry date,1104,yes,1
-KC100058,2026-08-04,SKU01,Website,Wrong item delivered,899,yes,1
-KC100132,2026-08-07,SKU03,Myntra,Skin irritation or breakout,674,no,1
-KC100157,2026-08-12,SKU01,Nykaa,Wrong item delivered,764,yes,1
-KC100200,2026-08-12,SKU01,Myntra,Changed mind,809,yes,1
-KC100206,2026-08-10,SKU02,Amazon,Skin irritation or breakout,479,no,1
-KC100220,2026-08-06,SKU02,Nykaa,White cast on skin,479,no,1
-KC100423,2026-08-11,SKU01,Myntra,Skin irritation or breakout,809,no,1
-KC100588,2026-08-11,SKU02,Amazon,White cast on skin,539,no,1
-KC100673,2026-08-14,SKU04,Nykaa,Damaged or leaking on arrival,1104,no,1
-KC100764,2026-08-12,SKU01,Website,Skin irritation or breakout,899,no,1
-KC100777,2026-08-13,SKU03,Myntra,Wrong item delivered,674,yes,1
-KC100848,2026-08-15,SKU03,Zepto,Wrong item delivered,712,yes,1
-KC100849,2026-08-17,SKU03,Flipkart,Did not suit skin type,712,no,1
-KC100870,2026-08-17,SKU05,Amazon,Wrong item delivered,1899,yes,1
-KC100906,2026-08-16,SKU02,Website,White cast on skin,1078,no,2
-KC101024,2026-08-18,SKU01,Website,Did not suit skin type,899,no,1
-KC101093,2026-08-19,SKU02,Amazon,Damaged or leaking on arrival,539,no,1
-KC101171,2026-08-21,SKU02,Amazon,Skin irritation or breakout,509,no,1
-KC101214,2026-08-21,SKU02,Amazon,Did not suit skin type,1018,no,2
-KC101299,2026-08-20,SKU01,Amazon,Changed mind,854,yes,1
-KC101301,2026-08-21,SKU05,Amazon,Skin irritation or breakout,1699,no,1
-KC101330,2026-08-18,SKU02,Website,White cast on skin,539,no,1
-KC101372,2026-08-19,SKU03,Website,Did not suit skin type,674,no,1
-KC101382,2026-08-21,SKU02,Nykaa,Damaged or leaking on arrival,539,no,1
-KC101389,2026-08-20,SKU02,Flipkart,Texture or fragrance not as expected,539,no,1
-KC101395,2026-08-17,SKU02,Amazon,Did not suit skin type,539,no,1
-KC101413,2026-08-24,SKU02,Myntra,Texture or fragrance not as expected,509,no,1
-KC101435,2026-08-17,SKU01,Website,Did not suit skin type,764,no,1
-KC101485,2026-08-25,SKU02,Amazon,Texture or fragrance not as expected,1018,no,2
-KC101573,2026-08-26,SKU02,Website,Damaged or leaking on arrival,509,no,1
-KC101582,2026-08-23,SKU02,Amazon,Damaged or leaking on arrival,479,no,1
-KC101638,2026-08-25,SKU03,Amazon,Damaged or leaking on arrival,1273,no,2
-KC101654,2026-08-26,SKU01,Website,Damaged or leaking on arrival,764,no,1
-KC101706,2026-08-20,SKU01,Website,Near expiry date,719,yes,1
-KC101714,2026-08-26,SKU01,Website,Skin irritation or breakout,719,no,1
-KC101846,2026-08-22,SKU02,Flipkart,Damaged or leaking on arrival,509,no,1
-KC101927,2026-08-26,SKU01,Nykaa,Wrong item delivered,809,yes,1
-KC102031,2026-08-21,SKU04,Nykaa,Did not suit skin type,2078,no,2
-KC102038,2026-08-26,SKU01,Website,Skin irritation or breakout,1528,no,2
-KC102054,2026-08-28,SKU02,Website,Skin irritation or breakout,509,no,1
-KC102072,2026-08-27,SKU02,Website,Damaged or leaking on arrival,1018,no,2
-KC102112,2026-08-26,SKU02,Nykaa,Did not suit skin type,539,no,1
-KC102127,2026-08-22,SKU02,Amazon,Texture or fragrance not as expected,569,no,1
-KC102258,2026-08-29,SKU02,Website,Skin irritation or breakout,1018,no,2
-KC102265,2026-08-29,SKU02,Website,Did not suit skin type,509,no,1
-KC102271,2026-09-02,SKU01,Website,Near expiry date,764,yes,1
-KC102338,2026-09-03,SKU01,Website,Texture or fragrance not as expected,764,no,1
-KC102342,2026-08-26,SKU01,Website,Wrong item delivered,764,yes,1
-KC102378,2026-09-03,SKU04,Website,Skin irritation or breakout,1104,no,1
-KC102430,2026-08-29,SKU05,Amazon,Damaged or leaking on arrival,1799,no,1
-KC102468,2026-09-03,SKU02,Website,White cast on skin,509,no,1
-KC102471,2026-08-30,SKU02,Nykaa,Changed mind,1018,yes,2
-KC102498,2026-09-01,SKU02,Amazon,Did not suit skin type,539,no,1
-KC102520,2026-08-27,SKU02,Amazon,Did not suit skin type,569,no,1
-KC102622,2026-08-28,SKU02,Website,Near expiry date,1198,yes,2
-KC102638,2026-08-27,SKU01,Amazon,Wrong item delivered,809,yes,1
-KC102730,2026-09-01,SKU02,Myntra,Changed mind,509,yes,1
-KC102833,2026-09-05,SKU05,Website,Did not suit skin type,1699,no,1
-KC102868,2026-09-06,SKU01,Website,Near expiry date,1618,yes,2
-KC102877,2026-09-06,SKU01,Flipkart,Damaged or leaking on arrival,764,no,1
-KC102925,2026-09-01,SKU02,Flipkart,Damaged or leaking on arrival,1078,no,2
-KC103020,2026-09-03,SKU01,Blinkit,Changed mind,899,yes,1
-KC103040,2026-09-08,SKU02,Amazon,Skin irritation or breakout,509,no,1
-KC103051,2026-09-01,SKU01,Website,Damaged or leaking on arrival,809,no,1
-KC103076,2026-09-08,SKU02,Flipkart,Texture or fragrance not as expected,1138,no,2
-KC103079,2026-09-06,SKU02,Website,Skin irritation or breakout,599,no,1
-KC103087,2026-09-02,SKU03,Amazon,Texture or fragrance not as expected,637,no,1
-KC103120,2026-09-04,SKU03,Flipkart,Damaged or leaking on arrival,674,no,1
-KC103128,2026-09-06,SKU04,Amazon,Damaged or leaking on arrival,1169,no,1
-KC103152,2026-08-31,SKU02,Amazon,Did not suit skin type,509,no,1
-KC103306,2026-09-06,SKU01,Website,Texture or fragrance not as expected,809,no,1
-KC103417,2026-09-08,SKU01,Flipkart,Did not suit skin type,764,no,1
-KC103501,2026-09-04,SKU01,Amazon,Damaged or leaking on arrival,809,no,1
-KC103513,2026-09-12,SKU02,Amazon,Did not suit skin type,569,no,1
-KC103516,2026-09-12,SKU02,Amazon,Wrong item delivered,479,yes,1
-KC103570,2026-09-06,SKU03,Blinkit,Damaged or leaking on arrival,1423,no,2
-KC103578,2026-09-09,SKU02,Myntra,Skin irritation or breakout,1078,no,2
-KC103586,2026-09-07,SKU02,Amazon,White cast on skin,539,no,1
-KC103655,2026-09-08,SKU01,Blinkit,Damaged or leaking on arrival,854,no,1
-KC103730,2026-09-10,SKU04,Amazon,Texture or fragrance not as expected,1234,no,1
-KC103755,2026-09-09,SKU01,Nykaa,Wrong item delivered,764,yes,1
-KC103840,2026-09-09,SKU01,Nykaa,Damaged or leaking on arrival,764,no,1
-KC103847,2026-09-08,SKU02,Website,Texture or fragrance not as expected,539,no,1
-KC103848,2026-09-14,SKU01,Amazon,Did not suit skin type,764,no,1
-KC103968,2026-09-10,SKU02,Nykaa,Damaged or leaking on arrival,539,no,1
-KC103999,2026-09-14,SKU01,Amazon,Damaged or leaking on arrival,809,no,1
-KC104117,2026-09-12,SKU04,Website,Skin irritation or breakout,1169,no,1
-KC104121,2026-09-15,SKU01,Flipkart,Skin irritation or breakout,1618,no,2
-KC104141,2026-09-14,SKU03,Amazon,Skin irritation or breakout,674,no,1
-KC104253,2026-09-16,SKU03,Website,Texture or fragrance not as expected,637,no,1
-KC104275,2026-09-10,SKU02,Amazon,Skin irritation or breakout,509,no,1
-KC104277,2026-09-11,SKU02,Nykaa,Damaged or leaking on arrival,479,no,1
-KC104306,2026-09-12,SKU02,Website,Damaged or leaking on arrival,509,no,1
-KC104318,2026-09-18,SKU02,Website,Skin irritation or breakout,509,no,1
-KC104348,2026-09-19,SKU02,Flipkart,White cast on skin,509,no,1
-KC104372,2026-09-10,SKU01,Website,Did not suit skin type,899,no,1
-KC104397,2026-09-13,SKU02,Nykaa,Texture or fragrance not as expected,509,no,1
-KC104460,2026-09-18,SKU02,Myntra,Damaged or leaking on arrival,539,no,1
-KC104464,2026-09-14,SKU01,Amazon,Skin irritation or breakout,854,no,1
-KC104472,2026-09-15,SKU02,Website,Damaged or leaking on arrival,539,no,1
-KC104496,2026-09-14,SKU04,Nykaa,Texture or fragrance not as expected,1039,no,1
-KC104507,2026-09-15,SKU02,Website,Did not suit skin type,539,no,1
-KC104530,2026-09-13,SKU02,Flipkart,Damaged or leaking on arrival,569,no,1
-KC104540,2026-09-17,SKU02,Myntra,Near expiry date,1078,yes,2
-KC104555,2026-09-17,SKU02,Website,Damaged or leaking on arrival,509,no,1
-KC104560,2026-09-13,SKU04,Website,Near expiry date,1104,yes,1
-KC104571,2026-09-16,SKU02,Nykaa,Near expiry date,509,yes,1
-KC104602,2026-09-13,SKU02,Amazon,Damaged or leaking on arrival,479,no,1
-KC104631,2026-09-16,SKU04,Amazon,Changed mind,1104,yes,1
-KC104639,2026-09-18,SKU02,Amazon,Texture or fragrance not as expected,569,no,1
-KC104652,2026-09-16,SKU03,Nykaa,Changed mind,674,yes,1
-KC104738,2026-09-16,SKU02,Nykaa,Did not suit skin type,509,no,1
-KC104794,2026-09-16,SKU02,Amazon,Damaged or leaking on arrival,569,no,1
-KC104830,2026-09-22,SKU02,Amazon,Wrong item delivered,539,yes,1
-KC104851,2026-09-18,SKU04,Website,Wrong item delivered,1104,yes,1
-KC104874,2026-09-18,SKU02,Website,Skin irritation or breakout,599,no,1
-KC104956,2026-09-24,SKU03,Website,Changed mind,749,yes,1
-KC104972,2026-09-16,SKU03,Blinkit,Did not suit skin type,749,no,1
-KC105099,2026-09-16,SKU01,Website,Damaged or leaking on arrival,809,no,1
-KC105102,2026-09-19,SKU01,Nykaa,Wrong item delivered,764,yes,1
-KC105170,2026-09-26,SKU05,Website,Did not suit skin type,1699,no,1
-KC105209,2026-09-19,SKU01,Nykaa,Changed mind,809,yes,1
-KC105234,2026-09-25,SKU02,Amazon,Texture or fragrance not as expected,539,no,1
-KC105285,2026-09-23,SKU03,Website,Skin irritation or breakout,637,no,1
-KC105345,2026-09-26,SKU02,Website,Wrong item delivered,1617,yes,3
-KC105381,2026-09-25,SKU04,Website,Wrong item delivered,1104,yes,1
-KC105422,2026-09-19,SKU02,Website,Skin irritation or breakout,539,no,1
-KC105429,2026-09-26,SKU01,Amazon,Changed mind,809,yes,1
-KC105461,2026-09-20,SKU02,Nykaa,White cast on skin,479,no,1
-KC105512,2026-09-26,SKU01,Website,Did not suit skin type,764,no,1
-KC105537,2026-09-21,SKU01,Blinkit,Wrong item delivered,854,yes,1
-KC105554,2026-09-26,SKU03,Website,Damaged or leaking on arrival,749,no,1
-KC105560,2026-09-24,SKU01,Website,Texture or fragrance not as expected,899,no,1
-KC105630,2026-09-28,SKU01,Nykaa,Wrong item delivered,764,yes,1
-KC105640,2026-09-29,SKU02,Website,Near expiry date,509,yes,1
-KC105653,2026-09-26,SKU02,Flipkart,Damaged or leaking on arrival,539,no,1
-KC105728,2026-09-27,SKU02,Website,Changed mind,539,yes,1
-KC105905,2026-09-26,SKU01,Nykaa,Damaged or leaking on arrival,764,no,1
-KC105954,2026-09-30,SKU02,Website,Changed mind,509,yes,1
-KC105975,2026-10-03,SKU02,Amazon,Changed mind,539,yes,1
-KC106004,2026-09-30,SKU02,Website,Changed mind,539,yes,1
-KC106005,2026-09-25,SKU01,Flipkart,Skin irritation or breakout,764,no,1
-KC106060,2026-09-30,SKU02,Amazon,Did not suit skin type,958,no,2
-KC106094,2026-09-29,SKU02,Website,Damaged or leaking on arrival,1018,no,2
-KC106123,2026-09-25,SKU02,Amazon,White cast on skin,539,no,1
-KC106176,2026-09-30,SKU01,Flipkart,Skin irritation or breakout,764,no,1
-KC106200,2026-09-27,SKU02,Website,Changed mind,479,yes,1
-KC106201,2026-10-04,SKU02,Amazon,Damaged or leaking on arrival,539,no,1
-KC106223,2026-10-02,SKU01,Flipkart,Changed mind,809,yes,1
-KC106283,2026-10-03,SKU02,Flipkart,Did not suit skin type,479,no,1
-KC106324,2026-10-04,SKU03,Website,Skin irritation or breakout,749,no,1
-KC106405,2026-09-29,SKU03,Website,Damaged or leaking on arrival,1498,no,2
-KC106434,2026-10-05,SKU03,Amazon,Skin irritation or breakout,637,no,1
-KC106438,2026-10-01,SKU01,Flipkart,Skin irritation or breakout,809,no,1
-KC106524,2026-10-01,SKU02,Website,Did not suit skin type,509,no,1
-KC106529,2026-10-05,SKU01,Website,Damaged or leaking on arrival,1528,no,2
-KC106551,2026-10-05,SKU01,Nykaa,Wrong item delivered,719,yes,1
-KC106625,2026-10-06,SKU01,Website,Changed mind,899,yes,1
-KC106681,2026-10-03,SKU02,Website,White cast on skin,599,no,1
-KC106697,2026-10-03,SKU02,Website,Wrong item delivered,539,yes,1
-KC106801,2026-10-05,SKU04,Website,Too oily for my skin,1104,no,1
-KC106872,2026-10-02,SKU01,Nykaa,Did not suit skin type,1618,no,2
-KC107044,2026-10-04,SKU01,Flipkart,Damaged or leaking on arrival,1528,no,2
-KC107071,2026-10-05,SKU04,Myntra,Skin irritation or breakout,1104,no,1
-KC107088,2026-10-08,SKU02,Flipkart,Wrong item delivered,539,yes,1
-KC107113,2026-10-07,SKU01,Website,Changed mind,1528,yes,2
-KC107135,2026-10-12,SKU01,Flipkart,Texture or fragrance not as expected,809,no,1
-KC107189,2026-10-05,SKU02,Amazon,White cast on skin,509,no,1
-KC107197,2026-10-13,SKU02,Myntra,Damaged or leaking on arrival,1018,no,2
-KC107214,2026-10-05,SKU01,Flipkart,Damaged or leaking on arrival,809,no,1
-KC107245,2026-10-14,SKU02,Myntra,Skin irritation or breakout,509,no,1
-KC107264,2026-10-05,SKU03,Amazon,Damaged or leaking on arrival,1273,no,2
-KC107276,2026-10-11,SKU01,Nykaa,Skin irritation or breakout,809,no,1
-KC107347,2026-10-09,SKU01,Website,Changed mind,899,yes,1
-KC107349,2026-10-11,SKU01,Flipkart,Texture or fragrance not as expected,854,no,1
-KC107403,2026-10-11,SKU02,Website,Skin irritation or breakout,599,no,1
-KC107465,2026-10-13,SKU01,Website,Damaged or leaking on arrival,809,no,1
-KC107470,2026-10-14,SKU02,Website,Did not suit skin type,539,no,1
-KC107496,2026-10-12,SKU02,Blinkit,Skin irritation or breakout,1797,no,3
-KC107554,2026-10-15,SKU03,Flipkart,Wrong item delivered,599,yes,1
-KC107560,2026-10-15,SKU02,Nykaa,White cast on skin,479,no,1
-KC107588,2026-10-11,SKU03,Amazon,Did not suit skin type,637,no,1
-KC107597,2026-10-15,SKU01,Website,Near expiry date,809,yes,1
-KC107615,2026-10-11,SKU01,Flipkart,Did not suit skin type,854,no,1
-KC107621,2026-10-17,SKU01,Flipkart,Texture or fragrance not as expected,719,no,1
-KC107660,2026-10-12,SKU02,Amazon,Texture or fragrance not as expected,539,no,1
-KC107672,2026-10-14,SKU02,Nykaa,Damaged or leaking on arrival,1018,no,2
-KC107727,2026-10-14,SKU02,Website,Changed mind,539,yes,1
-KC107804,2026-10-17,SKU01,Blinkit,Damaged or leaking on arrival,899,no,1
-KC107822,2026-10-10,SKU02,Flipkart,Did not suit skin type,569,no,1
-KC107844,2026-10-17,SKU02,Flipkart,Changed mind,1078,yes,2
-KC107882,2026-10-18,SKU03,Amazon,Wrong item delivered,712,yes,1
-KC107899,2026-10-17,SKU02,Website,Skin irritation or breakout,539,no,1
-KC107940,2026-10-15,SKU01,Amazon,Near expiry date,719,yes,1
-KC107959,2026-10-12,SKU01,Website,Did not suit skin type,719,no,1
-KC108005,2026-10-19,SKU01,Amazon,Did not suit skin type,809,no,1
-KC108009,2026-10-12,SKU01,Nykaa,Damaged or leaking on arrival,764,no,1
-KC108028,2026-10-12,SKU02,Website,Damaged or leaking on arrival,509,no,1
-KC108107,2026-10-16,SKU04,Amazon,Skin irritation or breakout,1169,no,1
-KC108144,2026-10-14,SKU01,Amazon,Damaged or leaking on arrival,854,no,1
-KC108193,2026-10-18,SKU01,Nykaa,Damaged or leaking on arrival,764,no,1
-KC108246,2026-10-22,SKU04,Website,Changed mind,1299,yes,1
-KC108307,2026-10-22,SKU02,Amazon,Skin irritation or breakout,509,no,1
-KC108347,2026-10-17,SKU01,Amazon,Did not suit skin type,764,no,1
-KC108385,2026-10-20,SKU03,Flipkart,Skin irritation or breakout,674,no,1
-KC108409,2026-10-17,SKU01,Website,Wrong item delivered,1528,yes,2
-KC108432,2026-10-21,SKU01,Website,Skin irritation or breakout,1618,no,2
-KC108497,2026-10-20,SKU04,Amazon,Texture or fragrance not as expected,1169,no,1
-KC108540,2026-10-22,SKU02,Website,Damaged or leaking on arrival,1018,no,2
-KC108547,2026-10-20,SKU01,Website,Wrong item delivered,764,yes,1
-KC108626,2026-10-18,SKU02,Website,Texture or fragrance not as expected,539,no,1
-KC108762,2026-10-22,SKU02,Nykaa,Skin irritation or breakout,509,no,1
-KC108771,2026-10-24,SKU02,Flipkart,White cast on skin,1138,no,2
-KC108802,2026-10-24,SKU04,Myntra,Damaged or leaking on arrival,1104,no,1
-KC108813,2026-10-22,SKU02,Website,Wrong item delivered,509,yes,1
-KC108858,2026-10-23,SKU04,Website,Changed mind,1299,yes,1
-KC108877,2026-10-21,SKU04,Flipkart,Skin irritation or breakout,1169,no,1
-KC108885,2026-10-23,SKU01,Myntra,Damaged or leaking on arrival,809,no,1
-KC108899,2026-10-23,SKU02,Myntra,Wrong item delivered,479,yes,1
-KC108911,2026-10-26,SKU03,Flipkart,Did not suit skin type,712,no,1
-KC108953,2026-10-25,SKU01,Amazon,Changed mind,809,yes,1
-KC108984,2026-10-21,SKU01,Nykaa,Did not suit skin type,1618,no,2
-KC108987,2026-10-25,SKU04,Amazon,Skin irritation or breakout,1104,no,1
-KC109002,2026-10-21,SKU02,Website,White cast on skin,599,no,1
-KC109007,2026-10-24,SKU01,Amazon,Changed mind,764,yes,1
-KC109011,2026-10-21,SKU02,Website,Did not suit skin type,509,no,1
-KC109034,2026-10-21,SKU02,Website,Did not suit skin type,539,no,1
-KC109327,2026-10-24,SKU01,Website,Skin irritation or breakout,899,no,1
-KC109337,2026-10-29,SKU02,Amazon,Did not suit skin type,539,no,1
-KC109408,2026-10-31,SKU05,Website,Item missing from kit,1699,yes,1
-KC109414,2026-10-29,SKU02,Website,Damaged or leaking on arrival,509,no,1
-KC109446,2026-10-24,SKU02,Website,Did not suit skin type,449,no,1
-KC109460,2026-10-27,SKU05,Amazon,Did not suit skin type,1699,no,1
-KC109514,2026-10-28,SKU02,Website,Near expiry date,449,yes,1
-KC109535,2026-10-29,SKU03,Website,Damaged or leaking on arrival,637,no,1
-KC109553,2026-11-04,SKU02,Website,Damaged or leaking on arrival,509,no,1
-KC109563,2026-10-28,SKU02,Website,Wrong item delivered,509,yes,1
-KC109575,2026-10-27,SKU01,Website,Wrong item delivered,764,yes,1
-KC109577,2026-11-01,SKU05,Website,Damaged or leaking on arrival,1699,no,1
-KC109580,2026-10-28,SKU01,Website,Changed mind,764,yes,1
-KC109673,2026-10-30,SKU03,Website,Changed mind,599,yes,1
-KC109688,2026-10-29,SKU01,Website,Skin irritation or breakout,1438,no,2
-KC109709,2026-10-26,SKU02,Nykaa,Did not suit skin type,509,no,1
-KC109723,2026-10-27,SKU02,Nykaa,Texture or fragrance not as expected,419,no,1
-KC109736,2026-10-29,SKU01,Flipkart,Did not suit skin type,719,no,1
-KC109829,2026-11-05,SKU03,Website,Did not suit skin type,637,no,1
-KC109920,2026-11-01,SKU04,Amazon,Changed mind,2078,yes,2
-KC109927,2026-11-02,SKU03,Amazon,Near expiry date,599,yes,1
-KC109929,2026-11-03,SKU02,Amazon,Damaged or leaking on arrival,479,no,1
-KC109965,2026-10-30,SKU01,Amazon,Did not suit skin type,1438,no,2
-KC109977,2026-11-01,SKU02,Website,White cast on skin,449,no,1
-KC110018,2026-10-26,SKU05,Amazon,Texture or fragrance not as expected,1499,no,1
-KC110152,2026-10-31,SKU02,Amazon,Damaged or leaking on arrival,419,no,1
-KC110212,2026-10-28,SKU02,Myntra,Changed mind,479,yes,1
-KC110269,2026-11-02,SKU01,Amazon,Texture or fragrance not as expected,1438,no,2
-KC110284,2026-10-31,SKU02,Website,Damaged or leaking on arrival,479,no,1
-KC110315,2026-10-31,SKU01,Flipkart,Texture or fragrance not as expected,1438,no,2
-KC110393,2026-11-05,SKU04,Website,Changed mind,1039,yes,1
-KC110402,2026-10-28,SKU02,Nykaa,Damaged or leaking on arrival,449,no,1
-KC110489,2026-10-29,SKU02,Nykaa,Damaged or leaking on arrival,958,no,2
-KC110506,2026-11-01,SKU01,Flipkart,Damaged or leaking on arrival,674,no,1
-KC110562,2026-10-31,SKU01,Website,Wrong item delivered,719,yes,1
-KC110598,2026-11-06,SKU03,Nykaa,Wrong item delivered,599,yes,1
-KC110625,2026-10-29,SKU02,Amazon,Changed mind,509,yes,1
-KC110669,2026-11-03,SKU02,Myntra,Damaged or leaking on arrival,479,no,1
-KC110692,2026-11-03,SKU02,Nykaa,Changed mind,899,yes,2
-KC110770,2026-11-03,SKU02,Website,Wrong item delivered,899,yes,2
-KC110844,2026-10-31,SKU05,Website,Near expiry date,1599,yes,1
-KC110885,2026-11-05,SKU01,Website,Wrong item delivered,674,yes,1
-KC110954,2026-10-29,SKU03,Nykaa,Damaged or leaking on arrival,1273,no,2
-KC110983,2026-11-04,SKU01,Website,Damaged or leaking on arrival,809,no,1
-KC111125,2026-11-03,SKU01,Website,Did not suit skin type,899,no,1
-KC111134,2026-10-30,SKU02,Website,White cast on skin,599,no,1
-KC111162,2026-11-03,SKU02,Amazon,Wrong item delivered,509,yes,1
-KC111229,2026-11-06,SKU04,Website,Damaged or leaking on arrival,1299,no,1
-KC111274,2026-11-07,SKU02,Flipkart,Damaged or leaking on arrival,509,no,1
-KC111301,2026-11-02,SKU02,Website,Skin irritation or breakout,599,no,1
-KC111316,2026-11-04,SKU05,Website,Damaged or leaking on arrival,1699,no,1
-KC111434,2026-11-08,SKU01,Flipkart,Wrong item delivered,719,yes,1
-KC111444,2026-11-05,SKU02,Amazon,White cast on skin,509,no,1
-KC111452,2026-11-08,SKU03,Website,Changed mind,637,yes,1
-KC111458,2026-11-08,SKU02,Website,Did not suit skin type,599,no,1
-KC111501,2026-11-11,SKU03,Website,Wrong item delivered,674,yes,1
-KC111519,2026-11-09,SKU02,Myntra,Did not suit skin type,509,no,1
-KC111555,2026-11-04,SKU02,Flipkart,Wrong item delivered,539,yes,1
+KC100024,2026-08-17,SKU01,Amazon Global,Texture or fragrance not as expected,1798,no,2
+KC100041,2026-08-12,SKU01,Amazon Global,Wrong item delivered,1798,yes,2
+KC100042,2026-08-06,SKU04,Instamart,Skin irritation or breakout,1169,no,1
+KC100076,2026-08-12,SKU02,Website,Wrong item delivered,599,yes,1
+KC100122,2026-08-14,SKU01,Flipkart,Changed mind,719,yes,1
+KC100200,2026-08-11,SKU02,Flipkart,Skin irritation or breakout,539,no,1
+KC100223,2026-08-06,SKU03,Blinkit,Near expiry date,674,yes,1
+KC100297,2026-08-08,SKU01,Website,Skin irritation or breakout,899,no,1
+KC100343,2026-08-11,SKU01,Nykaa,Texture or fragrance not as expected,1618,no,2
+KC100345,2026-08-12,SKU01,Amazon,Damaged or leaking on arrival,764,no,1
+KC100492,2026-08-12,SKU02,Website,Skin irritation or breakout,509,no,1
+KC100497,2026-08-11,SKU02,Website,Changed mind,509,yes,1
+KC100506,2026-08-12,SKU02,Website,Changed mind,509,yes,1
+KC100519,2026-08-10,SKU01,Website,Did not suit skin type,809,no,1
+KC100530,2026-08-14,SKU01,Meesho,Wrong item delivered,2292,yes,3
+KC100552,2026-08-13,SKU01,Amazon,Texture or fragrance not as expected,764,no,1
+KC100564,2026-08-14,SKU02,Amazon,Did not suit skin type,569,no,1
+KC100596,2026-08-16,SKU04,Website,Damaged or leaking on arrival,1104,no,1
+KC100600,2026-08-16,SKU04,Amazon,Skin irritation or breakout,1169,no,1
+KC100633,2026-08-17,SKU01,Zepto,Did not suit skin type,899,no,1
+KC100637,2026-08-14,SKU01,Nykaa,Changed mind,764,yes,1
+KC100680,2026-08-16,SKU03,Amazon,Damaged or leaking on arrival,712,no,1
+KC100707,2026-08-11,SKU04,Flipkart,Too oily for my skin,1234,no,1
+KC100714,2026-08-13,SKU02,Flipkart,Did not suit skin type,539,no,1
+KC100732,2026-08-15,SKU01,Myntra,Damaged or leaking on arrival,809,no,1
+KC100767,2026-08-15,SKU01,Website,Changed mind,764,yes,1
+KC100773,2026-08-11,SKU02,Purplle,Did not suit skin type,479,no,1
+KC100854,2026-08-19,SKU02,Meesho,Texture or fragrance not as expected,1018,no,2
+KC100901,2026-08-14,SKU02,Website,Did not suit skin type,599,no,1
+KC100909,2026-08-21,SKU02,Website,Texture or fragrance not as expected,1617,no,3
+KC100929,2026-08-20,SKU01,Flipkart,Damaged or leaking on arrival,764,no,1
+KC101081,2026-08-17,SKU02,Amazon,Damaged or leaking on arrival,1018,no,2
+KC101121,2026-08-24,SKU02,Website,Damaged or leaking on arrival,509,no,1
+KC101135,2026-08-22,SKU01,Amazon,Damaged or leaking on arrival,809,no,1
+KC101167,2026-08-16,SKU02,Amazon,White cast on skin,509,no,1
+KC101202,2026-08-22,SKU04,Website,Skin irritation or breakout,2208,no,2
+KC101209,2026-08-19,SKU02,Website,Damaged or leaking on arrival,509,no,1
+KC101215,2026-08-19,SKU02,Amazon,Wrong item delivered,1078,yes,2
+KC101223,2026-08-16,SKU01,Website,Did not suit skin type,809,no,1
+KC101249,2026-08-19,SKU02,Tata CLiQ,Skin irritation or breakout,509,no,1
+KC101311,2026-08-21,SKU01,Website,Skin irritation or breakout,1528,no,2
+KC101318,2026-08-22,SKU02,Flipkart,Damaged or leaking on arrival,509,no,1
+KC101331,2026-08-20,SKU02,Zepto,Did not suit skin type,599,no,1
+KC101370,2026-08-16,SKU02,Nykaa,Texture or fragrance not as expected,479,no,1
+KC101412,2026-08-22,SKU02,Purplle,Skin irritation or breakout,509,no,1
+KC101441,2026-08-19,SKU02,Nykaa,Did not suit skin type,479,no,1
+KC101442,2026-08-26,SKU02,Amazon,White cast on skin,1018,no,2
+KC101462,2026-08-24,SKU02,Amazon,Near expiry date,509,yes,1
+KC101482,2026-08-18,SKU02,Zepto,Changed mind,509,yes,1
+KC101590,2026-08-26,SKU02,Nykaa,Skin irritation or breakout,509,no,1
+KC101618,2026-08-25,SKU05,Website,Damaged or leaking on arrival,1699,no,1
+KC101638,2026-08-25,SKU05,Nykaa,Near expiry date,1699,yes,1
+KC101659,2026-08-22,SKU01,Meesho,Wrong item delivered,719,yes,1
+KC101681,2026-08-24,SKU03,Website,Did not suit skin type,599,no,1
+KC101724,2026-08-19,SKU02,Website,Did not suit skin type,509,no,1
+KC101725,2026-08-20,SKU01,Website,Changed mind,764,yes,1
+KC101726,2026-08-19,SKU01,AJIO,Wrong item delivered,764,yes,1
+KC101740,2026-08-21,SKU03,Website,Wrong item delivered,637,yes,1
+KC101745,2026-08-25,SKU01,BB Now,Skin irritation or breakout,764,no,1
+KC101752,2026-08-26,SKU02,Myntra,White cast on skin,479,no,1
+KC101760,2026-08-27,SKU02,Amazon,Damaged or leaking on arrival,509,no,1
+KC101897,2026-08-25,SKU03,Purplle,Damaged or leaking on arrival,637,no,1
+KC102010,2026-08-25,SKU03,Zepto,Changed mind,749,yes,1
+KC102074,2026-08-30,SKU02,Website,Skin irritation or breakout,509,no,1
+KC102099,2026-08-24,SKU02,Website,Damaged or leaking on arrival,599,no,1
+KC102101,2026-08-31,SKU01,Meesho,Changed mind,719,yes,1
+KC102150,2026-08-28,SKU02,Amazon,Skin irritation or breakout,539,no,1
+KC102196,2026-08-26,SKU05,Website,Near expiry date,1699,yes,1
+KC102213,2026-08-26,SKU02,Myntra,Damaged or leaking on arrival,539,no,1
+KC102352,2026-08-30,SKU02,Website,Damaged or leaking on arrival,509,no,1
+KC102485,2026-09-01,SKU03,Website,Skin irritation or breakout,637,no,1
+KC102529,2026-09-01,SKU02,Website,White cast on skin,509,no,1
+KC102555,2026-09-01,SKU02,Website,Did not suit skin type,509,no,1
+KC102572,2026-08-28,SKU02,Amazon,Damaged or leaking on arrival,1617,no,3
+KC102580,2026-09-03,SKU01,Zepto,Did not suit skin type,1798,no,2
+KC102643,2026-09-03,SKU03,Website,Wrong item delivered,637,yes,1
+KC102658,2026-08-29,SKU01,Website,Damaged or leaking on arrival,764,no,1
+KC102801,2026-09-08,SKU02,Meesho,Skin irritation or breakout,449,no,1
+KC102803,2026-08-31,SKU02,Blinkit,White cast on skin,599,no,1
+KC102885,2026-09-03,SKU01,Website,Damaged or leaking on arrival,764,no,1
+KC102921,2026-09-05,SKU03,Website,Changed mind,2022,yes,3
+KC103074,2026-09-02,SKU02,Website,Wrong item delivered,539,yes,1
+KC103140,2026-09-03,SKU02,Amazon,Damaged or leaking on arrival,509,no,1
+KC103149,2026-09-03,SKU03,Website,Changed mind,674,yes,1
+KC103168,2026-09-08,SKU01,Meesho,Did not suit skin type,719,no,1
+KC103181,2026-09-04,SKU03,Website,Damaged or leaking on arrival,674,no,1
+KC103371,2026-09-09,SKU03,Myntra,Damaged or leaking on arrival,637,no,1
+KC103413,2026-09-10,SKU02,Meesho,Skin irritation or breakout,479,no,1
+KC103478,2026-09-10,SKU05,Nykaa,Did not suit skin type,1599,no,1
+KC103479,2026-09-09,SKU04,Amazon,Did not suit skin type,1169,no,1
+KC103511,2026-09-09,SKU01,Amazon,Texture or fragrance not as expected,809,no,1
+KC103534,2026-09-04,SKU01,Myntra,Damaged or leaking on arrival,809,no,1
+KC103579,2026-09-05,SKU03,Flipkart,Damaged or leaking on arrival,712,no,1
+KC103582,2026-09-06,SKU01,Blinkit,Damaged or leaking on arrival,854,no,1
+KC103637,2026-09-08,SKU02,Zepto,Skin irritation or breakout,569,no,1
+KC103670,2026-09-10,SKU02,Amazon,White cast on skin,509,no,1
+KC103742,2026-09-05,SKU01,Website,Did not suit skin type,899,no,1
+KC103755,2026-09-10,SKU03,Website,Changed mind,599,yes,1
+KC103773,2026-09-12,SKU02,Website,Damaged or leaking on arrival,539,no,1
+KC103787,2026-09-07,SKU02,Amazon,Did not suit skin type,539,no,1
+KC103793,2026-09-09,SKU04,BB Now,Damaged or leaking on arrival,1299,no,1
+KC103827,2026-09-13,SKU01,Website,Changed mind,809,yes,1
+KC103853,2026-09-09,SKU04,Amazon,Did not suit skin type,1104,no,1
+KC104080,2026-09-09,SKU02,Amazon,Damaged or leaking on arrival,1078,no,2
+KC104159,2026-09-13,SKU01,Amazon,Texture or fragrance not as expected,764,no,1
+KC104376,2026-09-15,SKU01,Nykaa,Damaged or leaking on arrival,1618,no,2
+KC104442,2026-09-12,SKU01,Website,Changed mind,764,yes,1
+KC104464,2026-09-18,SKU02,Website,Near expiry date,509,yes,1
+KC104507,2026-09-12,SKU04,Website,Damaged or leaking on arrival,1299,no,1
+KC104530,2026-09-17,SKU02,Website,Changed mind,539,yes,1
+KC104536,2026-09-18,SKU01,Amazon,Changed mind,809,yes,1
+KC104537,2026-09-14,SKU01,Website,Changed mind,2158,yes,3
+KC104544,2026-09-15,SKU02,Amazon,Did not suit skin type,479,no,1
+KC104644,2026-09-14,SKU02,Meesho,Damaged or leaking on arrival,449,no,1
+KC104655,2026-09-20,SKU01,Flipkart,Wrong item delivered,809,yes,1
+KC104685,2026-09-18,SKU02,Website,Wrong item delivered,1018,yes,2
+KC104707,2026-09-15,SKU03,Amazon,Skin irritation or breakout,637,no,1
+KC104727,2026-09-17,SKU02,Nykaa,Texture or fragrance not as expected,509,no,1
+KC104751,2026-09-15,SKU01,Flipkart,Did not suit skin type,809,no,1
+KC104754,2026-09-15,SKU01,Website,Damaged or leaking on arrival,809,no,1
+KC104802,2026-09-18,SKU02,Amazon,Changed mind,509,yes,1
+KC104811,2026-09-21,SKU02,Flipkart,Did not suit skin type,1138,no,2
+KC104913,2026-09-18,SKU02,Website,Texture or fragrance not as expected,1018,no,2
+KC104935,2026-09-24,SKU02,Website,Texture or fragrance not as expected,509,no,1
+KC105016,2026-09-21,SKU01,Website,Skin irritation or breakout,1528,no,2
+KC105032,2026-09-24,SKU02,Website,Wrong item delivered,509,yes,1
+KC105057,2026-09-23,SKU01,Amazon,Did not suit skin type,854,no,1
+KC105066,2026-09-17,SKU01,Blinkit,Skin irritation or breakout,899,no,1
+KC105110,2026-09-27,SKU05,Website,Texture or fragrance not as expected,1699,no,1
+KC105187,2026-09-17,SKU02,Amazon,White cast on skin,539,no,1
+KC105199,2026-09-21,SKU01,Flipkart,Did not suit skin type,1528,no,2
+KC105255,2026-09-20,SKU01,Website,Wrong item delivered,809,yes,1
+KC105259,2026-09-26,SKU02,AJIO,Damaged or leaking on arrival,509,no,1
+KC105267,2026-09-21,SKU04,Nykaa,Too oily for my skin,1169,no,1
+KC105331,2026-09-25,SKU01,Tata CLiQ,Wrong item delivered,1528,yes,2
+KC105339,2026-09-27,SKU02,Nykaa,Near expiry date,539,yes,1
+KC105345,2026-09-25,SKU02,Meesho,Damaged or leaking on arrival,449,no,1
+KC105348,2026-09-24,SKU03,Website,Wrong item delivered,637,yes,1
+KC105371,2026-09-21,SKU02,Flipkart,Damaged or leaking on arrival,479,no,1
+KC105448,2026-10-06,SKU03,Website,Wrong item delivered,637,yes,1
+KC105464,2026-09-28,SKU01,Myntra,Wrong item delivered,764,yes,1
+KC105510,2026-09-27,SKU02,Meesho,Changed mind,449,yes,1
+KC105512,2026-09-21,SKU03,Website,Skin irritation or breakout,674,no,1
+KC105549,2026-09-27,SKU01,AJIO,Skin irritation or breakout,809,no,1
+KC105609,2026-09-26,SKU02,Website,Damaged or leaking on arrival,509,no,1
+KC105632,2026-09-23,SKU02,Website,White cast on skin,599,no,1
+KC105638,2026-09-26,SKU01,Website,Skin irritation or breakout,899,no,1
+KC105652,2026-09-25,SKU02,Nykaa,Changed mind,509,yes,1
+KC105690,2026-09-30,SKU01,Website,Damaged or leaking on arrival,899,no,1
+KC105781,2026-09-30,SKU01,Nykaa,Changed mind,764,yes,1
+KC105796,2026-09-30,SKU02,Nykaa,Did not suit skin type,1018,no,2
+KC105845,2026-10-02,SKU03,Amazon,Skin irritation or breakout,674,no,1
+KC105953,2026-09-28,SKU01,Amazon,Damaged or leaking on arrival,1618,no,2
+KC106017,2026-09-27,SKU04,Myntra,Did not suit skin type,1104,no,1
+KC106101,2026-09-29,SKU03,Nykaa,Skin irritation or breakout,637,no,1
+KC106137,2026-09-28,SKU01,Amazon,Did not suit skin type,854,no,1
+KC106146,2026-09-30,SKU03,Blinkit,Damaged or leaking on arrival,749,no,1
+KC106164,2026-10-02,SKU01,Instamart,Wrong item delivered,854,yes,1
+KC106206,2026-10-09,SKU02,Amazon Global,Texture or fragrance not as expected,599,no,1
+KC106274,2026-09-29,SKU02,Meesho,White cast on skin,509,no,1
+KC106281,2026-09-29,SKU02,Website,Wrong item delivered,479,yes,1
+KC106312,2026-10-03,SKU03,Myntra,Texture or fragrance not as expected,637,no,1
+KC106326,2026-09-29,SKU02,Myntra,Did not suit skin type,539,no,1
+KC106328,2026-09-28,SKU03,Nykaa,Damaged or leaking on arrival,637,no,1
+KC106331,2026-09-30,SKU05,Amazon,Skin irritation or breakout,1699,no,1
+KC106344,2026-10-04,SKU02,Amazon,Wrong item delivered,479,yes,1
+KC106345,2026-10-03,SKU02,Flipkart,Texture or fragrance not as expected,1078,no,2
+KC106416,2026-10-07,SKU01,Instamart,Texture or fragrance not as expected,899,no,1
+KC106431,2026-10-01,SKU05,Website,Item missing from kit,1999,yes,1
+KC106486,2026-10-09,SKU05,Amazon,Damaged or leaking on arrival,1699,no,1
+KC106497,2026-09-30,SKU03,Flipkart,Damaged or leaking on arrival,712,no,1
+KC106536,2026-10-08,SKU01,Amazon,Skin irritation or breakout,854,no,1
+KC106547,2026-10-01,SKU02,Nykaa,Damaged or leaking on arrival,1018,no,2
+KC106569,2026-10-07,SKU02,Website,Skin irritation or breakout,1617,no,3
+KC106602,2026-10-03,SKU01,Instamart,Changed mind,899,yes,1
+KC106640,2026-10-07,SKU01,Amazon,Texture or fragrance not as expected,1618,no,2
+KC106699,2026-10-09,SKU02,Website,Skin irritation or breakout,599,no,1
+KC106717,2026-10-08,SKU01,Website,Damaged or leaking on arrival,899,no,1
+KC106805,2026-10-09,SKU02,Nykaa,Did not suit skin type,539,no,1
+KC106819,2026-10-08,SKU02,Website,Skin irritation or breakout,599,no,1
+KC106820,2026-10-14,SKU02,Amazon,Changed mind,569,yes,1
+KC106827,2026-10-09,SKU01,Amazon,Texture or fragrance not as expected,764,no,1
+KC106876,2026-10-06,SKU02,Meesho,Wrong item delivered,479,yes,1
+KC106882,2026-10-10,SKU02,Website,White cast on skin,509,no,1
+KC106894,2026-10-05,SKU01,Purplle,Did not suit skin type,809,no,1
+KC106901,2026-10-11,SKU01,Amazon,Texture or fragrance not as expected,854,no,1
+KC106915,2026-10-08,SKU01,Meesho,Changed mind,719,yes,1
+KC106936,2026-10-08,SKU02,Website,Damaged or leaking on arrival,599,no,1
+KC107013,2026-10-08,SKU01,Website,Wrong item delivered,809,yes,1
+KC107065,2026-10-12,SKU02,Amazon,Damaged or leaking on arrival,569,no,1
+KC107108,2026-10-07,SKU02,Nykaa,Did not suit skin type,479,no,1
+KC107175,2026-10-12,SKU01,Website,Changed mind,899,yes,1
+KC107246,2026-10-13,SKU02,Amazon,Changed mind,419,yes,1
+KC107263,2026-10-16,SKU02,Flipkart,Skin irritation or breakout,419,no,1
+KC107297,2026-10-10,SKU01,Website,Near expiry date,764,yes,1
+KC107370,2026-10-09,SKU02,Zepto,Wrong item delivered,599,yes,1
+KC107377,2026-10-14,SKU01,Myntra,Did not suit skin type,674,no,1
+KC107388,2026-10-08,SKU01,Nykaa,Damaged or leaking on arrival,809,no,1
+KC107442,2026-10-07,SKU02,Amazon,Damaged or leaking on arrival,479,no,1
+KC107461,2026-10-12,SKU01,Nykaa,Skin irritation or breakout,809,no,1
+KC107465,2026-10-12,SKU02,Amazon,Skin irritation or breakout,958,no,2
+KC107517,2026-10-15,SKU04,Website,Damaged or leaking on arrival,1299,no,1
+KC107529,2026-10-15,SKU04,Website,Changed mind,1104,yes,1
+KC107541,2026-10-16,SKU02,Meesho,Skin irritation or breakout,419,no,1
+KC107601,2026-10-14,SKU03,Tata CLiQ,Did not suit skin type,599,no,1
+KC107660,2026-10-16,SKU01,Myntra,Skin irritation or breakout,629,no,1
+KC107675,2026-10-11,SKU02,Nykaa,Changed mind,479,yes,1
+KC107681,2026-10-16,SKU02,Website,Skin irritation or breakout,479,no,1
+KC107717,2026-10-18,SKU02,Flipkart,Texture or fragrance not as expected,449,no,1
+KC107744,2026-10-17,SKU01,Nykaa,Damaged or leaking on arrival,719,no,1
+KC107937,2026-10-17,SKU01,Website,Wrong item delivered,764,yes,1
+KC107944,2026-10-14,SKU02,Website,Texture or fragrance not as expected,1018,no,2
+KC107953,2026-10-18,SKU02,AJIO,Skin irritation or breakout,449,no,1
+KC107976,2026-10-21,SKU01,Nykaa,Texture or fragrance not as expected,764,no,1
+KC108142,2026-10-17,SKU05,Amazon,Damaged or leaking on arrival,1799,no,1
+KC108143,2026-10-16,SKU02,Flipkart,Wrong item delivered,539,yes,1
+KC108183,2026-10-17,SKU02,Flipkart,Changed mind,509,yes,1
+KC108188,2026-10-16,SKU02,Website,Skin irritation or breakout,539,no,1
+KC108243,2026-10-19,SKU03,Website,Damaged or leaking on arrival,674,no,1
+KC108380,2026-10-20,SKU02,Website,Wrong item delivered,599,yes,1
+KC108392,2026-10-21,SKU02,Flipkart,Did not suit skin type,509,no,1
+KC108567,2026-10-25,SKU02,Website,Changed mind,509,yes,1
+KC108569,2026-10-20,SKU02,Website,Wrong item delivered,509,yes,1
+KC108574,2026-10-23,SKU01,Website,Skin irritation or breakout,764,no,1
+KC108587,2026-10-21,SKU03,Website,Near expiry date,637,yes,1
+KC108611,2026-10-25,SKU03,Amazon,Changed mind,674,yes,1
+KC108624,2026-10-20,SKU03,Website,Did not suit skin type,749,no,1
+KC108638,2026-10-17,SKU01,Amazon,Skin irritation or breakout,854,no,1
+KC108662,2026-10-20,SKU03,Flipkart,Skin irritation or breakout,712,no,1
+KC108675,2026-10-29,SKU02,Website,Did not suit skin type,1018,no,2
+KC108679,2026-10-28,SKU01,Website,Near expiry date,764,yes,1
+KC108687,2026-10-24,SKU01,Website,Damaged or leaking on arrival,764,no,1
+KC108793,2026-10-21,SKU02,Website,Did not suit skin type,509,no,1
+KC108930,2026-11-04,SKU02,Website,Did not suit skin type,509,no,1
+KC108962,2026-10-24,SKU02,Meesho,Near expiry date,479,yes,1
+KC108999,2026-10-23,SKU02,Website,Damaged or leaking on arrival,599,no,1
+KC109035,2026-10-29,SKU01,Myntra,Damaged or leaking on arrival,809,no,1
+KC109079,2026-10-26,SKU03,Website,Did not suit skin type,637,no,1
+KC109125,2026-10-26,SKU02,Amazon,Changed mind,1078,yes,2
+KC109132,2026-10-26,SKU02,Website,Damaged or leaking on arrival,479,no,1
+KC109139,2026-10-25,SKU04,Flipkart,Near expiry date,1169,yes,1
+KC109191,2026-10-29,SKU02,Website,Near expiry date,509,yes,1
+KC109240,2026-10-29,SKU03,Website,Skin irritation or breakout,637,no,1
+KC109266,2026-10-28,SKU02,Website,Did not suit skin type,1018,no,2
+KC109319,2026-10-27,SKU02,Website,Texture or fragrance not as expected,479,no,1
+KC109357,2026-10-28,SKU01,Amazon,Did not suit skin type,719,no,1
+KC109411,2026-10-30,SKU01,Website,Did not suit skin type,764,no,1
+KC109470,2026-10-31,SKU05,Amazon,Changed mind,1599,yes,1
+KC109475,2026-10-31,SKU01,Website,Near expiry date,1438,yes,2
+KC109477,2026-11-01,SKU01,Website,Damaged or leaking on arrival,674,no,1
+KC109485,2026-10-30,SKU04,Nykaa,Did not suit skin type,1104,no,1
+KC109495,2026-10-30,SKU01,Amazon,Texture or fragrance not as expected,629,no,1
+KC109544,2026-10-30,SKU01,Meesho,Changed mind,674,yes,1
+KC109548,2026-11-05,SKU02,Website,Damaged or leaking on arrival,958,no,2
+KC109552,2026-10-26,SKU05,Purplle,Changed mind,1599,yes,1
+KC109569,2026-10-31,SKU02,Amazon,White cast on skin,449,no,1
+KC109582,2026-10-30,SKU01,Website,Damaged or leaking on arrival,674,no,1
+KC109601,2026-11-05,SKU04,Website,Near expiry date,1104,yes,1
+KC109612,2026-11-03,SKU02,Website,Changed mind,509,yes,1
+KC109706,2026-10-26,SKU05,Website,Damaged or leaking on arrival,1599,no,1
+KC109730,2026-10-27,SKU03,Website,Damaged or leaking on arrival,562,no,1
+KC109752,2026-10-28,SKU01,Blinkit,Damaged or leaking on arrival,719,no,1
+KC109818,2026-10-29,SKU02,Website,Wrong item delivered,479,yes,1
+KC109837,2026-11-01,SKU02,Meesho,Wrong item delivered,479,yes,1
+KC109873,2026-10-26,SKU02,Amazon,Changed mind,958,yes,2
+KC109884,2026-11-01,SKU02,Nykaa,Damaged or leaking on arrival,479,no,1
+KC109984,2026-11-03,SKU02,Amazon,Changed mind,449,yes,1
+KC110033,2026-11-01,SKU01,Amazon,Wrong item delivered,764,yes,1
+KC110040,2026-10-29,SKU02,Nykaa,Near expiry date,839,yes,2
+KC110044,2026-11-02,SKU02,Website,Changed mind,449,yes,1
+KC110058,2026-10-27,SKU03,Amazon,Damaged or leaking on arrival,562,no,1
+KC110073,2026-10-31,SKU01,Amazon,Damaged or leaking on arrival,719,no,1
+KC110075,2026-11-01,SKU02,Amazon,Wrong item delivered,479,yes,1
+KC110123,2026-10-28,SKU02,Website,White cast on skin,449,no,1
+KC110165,2026-10-30,SKU01,Website,Did not suit skin type,719,no,1
+KC110187,2026-11-01,SKU01,Amazon,Damaged or leaking on arrival,719,no,1
+KC110212,2026-11-01,SKU01,Website,Damaged or leaking on arrival,764,no,1
+KC110242,2026-10-27,SKU02,Nykaa,Skin irritation or breakout,509,no,1
+KC110275,2026-10-30,SKU03,Amazon,Damaged or leaking on arrival,524,no,1
+KC110280,2026-11-04,SKU02,Flipkart,Wrong item delivered,479,yes,1
+KC110314,2026-11-02,SKU03,Website,Texture or fragrance not as expected,562,no,1
+KC110363,2026-11-03,SKU02,Website,Changed mind,479,yes,1
+KC110373,2026-11-02,SKU04,Flipkart,Did not suit skin type,1039,no,1
+KC110374,2026-11-03,SKU02,Website,Changed mind,449,yes,1
+KC110380,2026-11-02,SKU02,Flipkart,Did not suit skin type,479,no,1
+KC110395,2026-10-28,SKU01,Meesho,Did not suit skin type,764,no,1
+KC110495,2026-10-31,SKU03,Website,Changed mind,562,yes,1
+KC110546,2026-11-03,SKU02,Amazon,Changed mind,449,yes,1
+KC110556,2026-10-31,SKU02,Flipkart,Damaged or leaking on arrival,419,no,1
+KC110619,2026-11-01,SKU03,Nykaa,Damaged or leaking on arrival,599,no,1
+KC110740,2026-11-12,SKU02,Amazon,Did not suit skin type,419,no,1
+KC110765,2026-11-01,SKU03,Blinkit,Skin irritation or breakout,524,no,1
+KC110768,2026-11-02,SKU01,Nykaa,Damaged or leaking on arrival,764,no,1
+KC110790,2026-10-31,SKU02,Flipkart,Did not suit skin type,509,no,1
+KC110795,2026-11-07,SKU02,Amazon,Did not suit skin type,479,no,1
+KC110829,2026-11-04,SKU02,Purplle,White cast on skin,479,no,1
+KC110840,2026-11-03,SKU01,Tata CLiQ,Did not suit skin type,764,no,1
+KC110868,2026-10-30,SKU02,Flipkart,Wrong item delivered,1018,yes,2
+KC110904,2026-11-04,SKU02,Myntra,Wrong item delivered,1078,yes,2
+KC110912,2026-11-03,SKU04,Tata CLiQ,Skin irritation or breakout,1039,no,1
+KC110954,2026-10-31,SKU04,Flipkart,Damaged or leaking on arrival,1234,no,1
+KC110962,2026-11-01,SKU04,Flipkart,Texture or fragrance not as expected,1169,no,1
+KC110969,2026-11-08,SKU04,Amazon,Texture or fragrance not as expected,1104,no,1
+KC110984,2026-11-04,SKU02,Website,White cast on skin,539,no,1
+KC110995,2026-11-03,SKU01,Website,Skin irritation or breakout,899,no,1
+KC111024,2026-10-31,SKU01,Flipkart,Did not suit skin type,809,no,1
+KC111084,2026-10-31,SKU01,Amazon,Changed mind,854,yes,1
+KC111105,2026-11-01,SKU02,Myntra,Wrong item delivered,509,yes,1
+KC111171,2026-11-08,SKU04,Purplle,Damaged or leaking on arrival,1104,no,1
+KC111173,2026-11-02,SKU03,Website,Damaged or leaking on arrival,749,no,1
+KC111243,2026-11-08,SKU01,Website,Texture or fragrance not as expected,809,no,1
+KC111385,2026-11-09,SKU04,Meesho,Wrong item delivered,1104,yes,1
+KC111438,2026-11-11,SKU02,Nykaa,Did not suit skin type,539,no,1
+KC111458,2026-11-09,SKU03,Website,Skin irritation or breakout,749,no,1
+KC111468,2026-11-06,SKU04,Website,Did not suit skin type,1169,no,1
+KC111488,2026-11-11,SKU03,Flipkart,Did not suit skin type,674,no,1
+KC111503,2026-11-05,SKU02,Amazon,Damaged or leaking on arrival,569,no,1

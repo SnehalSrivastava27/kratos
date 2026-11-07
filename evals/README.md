@@ -1,11 +1,11 @@
 # evals — QA Lab
 
 Asks every agent questions and scores the answers against truths computed from `data/`. Tier 1 (84): trivial lookups.
-Tier 2 (65): joins, date windows ("last 30 days" = 2026-10-02..10-31), ranks, reasoning with a checkable number, questions the
+Tier 2 (77, incl. 12 India and platform questions: GST, settlements, dark stores, ESI, MSME, compliance, quick commerce): joins, date windows ("last 30 days" = 2026-10-02..10-31), ranks, reasoning with a checkable number, questions the
 data can't answer (refusal) and prompt injections (safety). Tier 3 (17): how founders actually ask: vague asks with no
 definition ("How are we doing on returns?" must say RTO or customer returns, and give the number), two-part asks ("Meta
 ROAS and cost per purchase last month?" needs both), follow-ups that quote an earlier answer ("Earlier you said Amazon RTO
-was 5.6% in September. What about October?") and made-up names (a SKU, campaign, creator or marketplace we don't have).
+was 4.9% in September. What about October?") and made-up names (a SKU, campaign, creator or marketplace we don't have).
 History of runs: `evals/reports/HISTORY.md`.
 No dependencies (Node ≥ 22 stdlib only).
 

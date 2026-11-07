@@ -1,0 +1,1382 @@
+ticket_id,date,channel,order_id,sales_channel,category,language,first_response_mins,resolution_hours,status,csat,handled_by
+TK00001,2026-08-01,Instagram DM,KC100003,Website,Cancel order,English,31,11.3,resolved,3,Divya Pillai
+TK00002,2026-08-01,WhatsApp,,,Product question (pre-sale),English,17,7,resolved,,Rahul Mishra
+TK00003,2026-08-01,Instagram DM,,,Product question (pre-sale),Tamil,42,1.6,resolved,,Rahul Mishra
+TK00004,2026-08-01,WhatsApp,,,Product question (pre-sale),English,37,8.2,resolved,4,Rahul Mishra
+TK00005,2026-08-01,WhatsApp,,,Product question (pre-sale),English,45,12,resolved,4,Divya Pillai
+TK00006,2026-08-01,WhatsApp,,,Product question (pre-sale),Hinglish,38,4.5,resolved,4,Rahul Mishra
+TK00007,2026-08-01,WhatsApp,,,Product question (pre-sale),Bengali,37,6.2,resolved,5,Divya Pillai
+TK00008,2026-08-01,WhatsApp,,,Product question (pre-sale),Bengali,34,9.5,resolved,,Divya Pillai
+TK00009,2026-08-01,Instagram DM,,,Product question (pre-sale),Bengali,16,7.4,resolved,5,Divya Pillai
+TK00010,2026-08-02,WhatsApp,KC100058,Website,Where is my order (WISMO),Hindi,2,0.1,resolved,,WhatsApp bot
+TK00011,2026-08-02,WhatsApp,KC100062,Website,Where is my order (WISMO),English,22,10.9,resolved,,Divya Pillai
+TK00012,2026-08-02,Email,KC100107,Website,Cancel order,English,55,7.7,resolved,,Rahul Mishra
+TK00013,2026-08-02,WhatsApp,,,Product question (pre-sale),Bengali,39,6.7,resolved,,Divya Pillai
+TK00014,2026-08-02,Instagram DM,,,Product question (pre-sale),Bengali,33,10.1,resolved,5,Divya Pillai
+TK00015,2026-08-02,WhatsApp,,,Product question (pre-sale),English,49,15.5,resolved,2,Divya Pillai
+TK00016,2026-08-02,WhatsApp,,,Product question (pre-sale),Hinglish,52,5.7,resolved,,Rahul Mishra
+TK00017,2026-08-03,Email,KC100001,Website,Where is my order (WISMO),Hindi,219,9.2,resolved,4,Rahul Mishra
+TK00018,2026-08-03,IVR,KC100063,Website,Where is my order (WISMO),English,2,8.2,resolved,,Rahul Mishra
+TK00019,2026-08-03,IVR,KC100118,Website,Where is my order (WISMO),English,2,2.7,resolved,4,Divya Pillai
+TK00020,2026-08-03,IVR,KC100141,Website,Where is my order (WISMO),Hindi,1,10.4,resolved,4,Divya Pillai
+TK00021,2026-08-03,Email,KC100290,Website,Change COD to prepaid,English,218,7.3,resolved,4,Rahul Mishra
+TK00022,2026-08-03,Instagram DM,,,Product question (pre-sale),Hindi,51,12.5,resolved,4,Rahul Mishra
+TK00023,2026-08-04,WhatsApp,KC100047,Website,Where is my order (WISMO),English,17,10.3,resolved,5,Rahul Mishra
+TK00024,2026-08-04,WhatsApp,KC100304,Website,Where is my order (WISMO),Hindi,2,0.2,resolved,,WhatsApp bot
+TK00025,2026-08-04,Instagram DM,,,Product question (pre-sale),Hindi,47,6,resolved,,Divya Pillai
+TK00026,2026-08-04,Instagram DM,,,Product question (pre-sale),English,34,11.1,resolved,,Rahul Mishra
+TK00027,2026-08-04,WhatsApp,,,Product question (pre-sale),Hindi,46,6.6,resolved,4,Divya Pillai
+TK00028,2026-08-04,WhatsApp,,,Product question (pre-sale),English,29,5.1,resolved,3,Divya Pillai
+TK00029,2026-08-04,WhatsApp,,,Product question (pre-sale),Tamil,31,6.6,resolved,4,Rahul Mishra
+TK00030,2026-08-04,Instagram DM,,,Product question (pre-sale),Hindi,38,2,resolved,,Rahul Mishra
+TK00031,2026-08-04,WhatsApp,,,Product question (pre-sale),Bengali,49,11,resolved,,Rahul Mishra
+TK00032,2026-08-05,IVR,KC100307,Website,Where is my order (WISMO),English,3,9,resolved,5,Divya Pillai
+TK00033,2026-08-05,WhatsApp,KC100325,Website,Where is my order (WISMO),Hindi,29,10.1,resolved,5,Divya Pillai
+TK00034,2026-08-05,WhatsApp,KC100407,Website,Where is my order (WISMO),English,1,0.2,resolved,,WhatsApp bot
+TK00035,2026-08-05,Email,KC100475,Website,Where is my order (WISMO),Hindi,302,13.7,resolved,,Rahul Mishra
+TK00036,2026-08-05,WhatsApp,KC100542,Website,Cancel order,English,22,6,resolved,,Rahul Mishra
+TK00037,2026-08-05,WhatsApp,,,Product question (pre-sale),Hindi,31,11.9,resolved,,Divya Pillai
+TK00038,2026-08-05,Instagram DM,,,Product question (pre-sale),English,50,11.3,resolved,,Rahul Mishra
+TK00039,2026-08-05,WhatsApp,,,Product question (pre-sale),Hinglish,30,6.8,resolved,,Divya Pillai
+TK00040,2026-08-05,WhatsApp,,,Product question (pre-sale),Hinglish,47,6.5,resolved,4,Divya Pillai
+TK00041,2026-08-06,IVR,KC100087,Website,Failed delivery (NDR),English,1,16.7,resolved,5,Divya Pillai
+TK00042,2026-08-06,WhatsApp,KC100223,Blinkit,Return or refund request,English,40,27,resolved,,Rahul Mishra
+TK00043,2026-08-06,WhatsApp,KC100423,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,,WhatsApp bot
+TK00044,2026-08-06,IVR,KC100452,Website,Where is my order (WISMO),English,4,7.2,resolved,,Divya Pillai
+TK00045,2026-08-06,Email,KC100469,Website,Failed delivery (NDR),English,106,19.4,resolved,4,Divya Pillai
+TK00046,2026-08-06,IVR,KC100486,Website,Where is my order (WISMO),English,1,4.9,resolved,3,Rahul Mishra
+TK00047,2026-08-06,Email,KC100647,Website,Cancel order,English,276,3.2,resolved,5,Divya Pillai
+TK00048,2026-08-06,WhatsApp,KC100661,Website,Cancel order,English,60,5.1,resolved,4,Rahul Mishra
+TK00049,2026-08-06,Email,KC100674,Website,Change COD to prepaid,English,122,7.4,resolved,,Rahul Mishra
+TK00050,2026-08-06,WhatsApp,,,Product question (pre-sale),Tamil,47,5,resolved,2,Rahul Mishra
+TK00051,2026-08-06,WhatsApp,,,Product question (pre-sale),English,16,12.2,resolved,4,Divya Pillai
+TK00052,2026-08-06,Instagram DM,,,Product question (pre-sale),Tamil,15,12,resolved,,Rahul Mishra
+TK00053,2026-08-06,WhatsApp,,,Product question (pre-sale),Hindi,63,8.1,resolved,,Rahul Mishra
+TK00054,2026-08-06,Email,,,Product question (pre-sale),English,71,4.7,resolved,4,Rahul Mishra
+TK00055,2026-08-06,Instagram DM,,,Product question (pre-sale),Hindi,42,8.1,resolved,,Rahul Mishra
+TK00056,2026-08-06,WhatsApp,,,Product question (pre-sale),Tamil,41,4.9,resolved,,Rahul Mishra
+TK00057,2026-08-06,Instagram DM,,,Product question (pre-sale),English,27,9.3,resolved,,Divya Pillai
+TK00058,2026-08-07,WhatsApp,KC100138,Website,Product usage question,Marathi,33,8.3,resolved,,Divya Pillai
+TK00059,2026-08-07,Instagram DM,KC100373,Website,Where is my order (WISMO),English,20,8.7,resolved,,Rahul Mishra
+TK00060,2026-08-07,WhatsApp,KC100401,Website,Failed delivery (NDR),Hindi,47,14,resolved,,Divya Pillai
+TK00061,2026-08-07,WhatsApp,KC100541,Website,Failed delivery (NDR),English,25,16.3,resolved,3,Rahul Mishra
+TK00062,2026-08-07,Email,KC100763,Website,Cancel order,Hindi,234,2.3,resolved,,Rahul Mishra
+TK00063,2026-08-07,WhatsApp,,,Product question (pre-sale),Tamil,22,4.4,resolved,,Divya Pillai
+TK00064,2026-08-07,WhatsApp,,,Product question (pre-sale),Tamil,71,9.2,resolved,5,Rahul Mishra
+TK00065,2026-08-07,WhatsApp,,,Product question (pre-sale),Bengali,56,5.4,resolved,5,Rahul Mishra
+TK00066,2026-08-07,WhatsApp,,,Product question (pre-sale),Tamil,31,7.1,resolved,,Rahul Mishra
+TK00067,2026-08-07,WhatsApp,,,Product question (pre-sale),English,48,9.8,resolved,,Divya Pillai
+TK00068,2026-08-07,Instagram DM,,,Product question (pre-sale),Hindi,34,11.8,resolved,,Divya Pillai
+TK00069,2026-08-08,WhatsApp,KC100262,Website,Failed delivery (NDR),Hindi,42,13.1,resolved,,Rahul Mishra
+TK00070,2026-08-08,IVR,KC100297,Website,Return or refund request,English,4,8,resolved,5,Rahul Mishra
+TK00071,2026-08-08,Email,KC100556,Website,Failed delivery (NDR),English,66,11.6,resolved,,Divya Pillai
+TK00072,2026-08-08,WhatsApp,KC100621,Website,Where is my order (WISMO),English,0,0.3,resolved,,WhatsApp bot
+TK00073,2026-08-08,WhatsApp,KC100660,Website,Where is my order (WISMO),English,2,0.1,resolved,,WhatsApp bot
+TK00074,2026-08-08,WhatsApp,KC100667,Website,Where is my order (WISMO),Hindi,33,7,resolved,,Divya Pillai
+TK00075,2026-08-08,WhatsApp,KC100700,Website,Where is my order (WISMO),Hindi,0,0.1,resolved,,WhatsApp bot
+TK00076,2026-08-08,WhatsApp,KC100784,Website,Cancel order,English,16,4,resolved,,Divya Pillai
+TK00077,2026-08-08,WhatsApp,KC100836,Website,Cancel order,Hindi,53,3.2,resolved,,Divya Pillai
+TK00078,2026-08-08,WhatsApp,,,Product question (pre-sale),Bengali,14,5.3,resolved,,Rahul Mishra
+TK00079,2026-08-08,Instagram DM,,,Product question (pre-sale),Bengali,21,6.2,resolved,,Rahul Mishra
+TK00080,2026-08-08,WhatsApp,,,Product question (pre-sale),Bengali,31,11.7,resolved,,Rahul Mishra
+TK00081,2026-08-09,WhatsApp,KC100227,Website,Product usage question,Hindi,35,7.4,resolved,5,Rahul Mishra
+TK00082,2026-08-09,Email,KC100607,Website,Where is my order (WISMO),English,116,12.2,resolved,,Rahul Mishra
+TK00083,2026-08-09,Email,KC100724,Website,Failed delivery (NDR),English,133,11.7,resolved,,Divya Pillai
+TK00084,2026-08-09,WhatsApp,KC100762,Website,Where is my order (WISMO),Gujarati,27,1.6,resolved,5,Divya Pillai
+TK00085,2026-08-09,Instagram DM,KC100822,Website,Where is my order (WISMO),English,12,8,resolved,,Divya Pillai
+TK00086,2026-08-09,WhatsApp,,,Product question (pre-sale),Tamil,42,9.7,resolved,5,Rahul Mishra
+TK00087,2026-08-09,WhatsApp,,,Product question (pre-sale),Hindi,30,8.2,resolved,4,Rahul Mishra
+TK00088,2026-08-09,Instagram DM,,,Product question (pre-sale),English,55,3.4,resolved,,Divya Pillai
+TK00089,2026-08-09,WhatsApp,,,Product question (pre-sale),Bengali,54,10.7,resolved,4,Divya Pillai
+TK00090,2026-08-10,IVR,KC100519,Website,Return or refund request,Hindi,4,44.7,resolved,5,Rahul Mishra
+TK00091,2026-08-10,IVR,KC100525,Website,Failed delivery (NDR),Hindi,1,24.7,resolved,3,Rahul Mishra
+TK00092,2026-08-10,WhatsApp,KC100740,Website,Failed delivery (NDR),English,49,16.9,resolved,,Rahul Mishra
+TK00093,2026-08-10,WhatsApp,KC100845,Website,Where is my order (WISMO),English,2,0.1,resolved,,WhatsApp bot
+TK00094,2026-08-10,Instagram DM,,,Product question (pre-sale),Hinglish,24,11.4,resolved,5,Divya Pillai
+TK00095,2026-08-10,WhatsApp,,,Product question (pre-sale),Hindi,38,7,resolved,,Rahul Mishra
+TK00096,2026-08-10,WhatsApp,,,Product question (pre-sale),Hindi,36,10.1,resolved,5,Divya Pillai
+TK00097,2026-08-10,Instagram DM,,,Product question (pre-sale),Bengali,16,12.1,resolved,4,Rahul Mishra
+TK00098,2026-08-10,Instagram DM,,,Product question (pre-sale),English,17,10.6,resolved,5,Divya Pillai
+TK00099,2026-08-11,IVR,KC100497,Website,Return or refund request,Marathi,4,47.3,resolved,2,Rahul Mishra
+TK00100,2026-08-11,Email,KC100537,Website,Product usage question,English,38,3.6,resolved,5,Divya Pillai
+TK00101,2026-08-11,Email,KC100733,Website,Failed delivery (NDR),Hindi,197,28.1,resolved,,Rahul Mishra
+TK00102,2026-08-11,WhatsApp,KC100750,Website,Failed delivery (NDR),Hindi,86,8.1,resolved,4,Divya Pillai
+TK00103,2026-08-11,IVR,KC100773,Purplle,Return or refund request,Hindi,1,27,resolved,5,Rahul Mishra
+TK00104,2026-08-11,Email,KC100808,Website,Where is my order (WISMO),Hindi,248,8.8,resolved,,Rahul Mishra
+TK00105,2026-08-11,WhatsApp,KC100888,Website,Failed delivery (NDR),Marathi,15,21.6,resolved,,Rahul Mishra
+TK00106,2026-08-11,Email,KC100994,Website,Where is my order (WISMO),English,326,4.3,resolved,,Rahul Mishra
+TK00107,2026-08-11,Instagram DM,,,Product question (pre-sale),Bengali,7,8.7,resolved,5,Divya Pillai
+TK00108,2026-08-11,WhatsApp,,,Product question (pre-sale),Bengali,44,9.2,resolved,,Divya Pillai
+TK00109,2026-08-11,WhatsApp,,,Product question (pre-sale),Bengali,50,6.3,resolved,,Divya Pillai
+TK00110,2026-08-11,Instagram DM,,,Product question (pre-sale),Bengali,26,14.8,resolved,,Divya Pillai
+TK00111,2026-08-11,Instagram DM,,,Product question (pre-sale),Tamil,34,6.2,resolved,,Rahul Mishra
+TK00112,2026-08-12,WhatsApp,KC100041,Amazon Global,Damaged or leaking on arrival,Hindi,22,16,resolved,,Rahul Mishra
+TK00113,2026-08-12,IVR,KC100076,Website,Damaged or leaking on arrival,Telugu,3,44.7,resolved,4,Rahul Mishra
+TK00114,2026-08-12,WhatsApp,KC100152,Website,Product usage question,English,50,7.4,resolved,,Divya Pillai
+TK00115,2026-08-12,IVR,KC100220,Website,Product usage question,English,1,9.1,resolved,4,Divya Pillai
+TK00116,2026-08-12,Instagram DM,KC100492,Website,Return or refund request,Hindi,44,38.8,resolved,3,Divya Pillai
+TK00117,2026-08-12,IVR,KC100506,Website,Return or refund request,Hindi,1,76.7,resolved,4,Rahul Mishra
+TK00118,2026-08-12,Email,KC100828,Website,Failed delivery (NDR),Hindi,276,32.2,resolved,,Divya Pillai
+TK00119,2026-08-12,Email,KC100842,Website,Failed delivery (NDR),English,36,7.4,resolved,,Divya Pillai
+TK00120,2026-08-12,WhatsApp,KC101036,Website,Failed delivery (NDR),English,74,27.9,resolved,,Divya Pillai
+TK00121,2026-08-12,Email,KC101126,Website,Where is my order (WISMO),English,284,10.5,resolved,3,Divya Pillai
+TK00122,2026-08-12,IVR,KC101158,Website,Where is my order (WISMO),Hindi,3,4.7,resolved,,Rahul Mishra
+TK00123,2026-08-12,WhatsApp,KC101224,Website,Cancel order,English,38,6.9,resolved,5,Rahul Mishra
+TK00124,2026-08-12,Instagram DM,,,Product question (pre-sale),Bengali,26,6.1,resolved,4,Divya Pillai
+TK00125,2026-08-12,WhatsApp,,,Product question (pre-sale),Tamil,37,4.7,resolved,,Rahul Mishra
+TK00126,2026-08-12,Instagram DM,,,Product question (pre-sale),Hindi,64,7,resolved,,Divya Pillai
+TK00127,2026-08-12,WhatsApp,,,Product question (pre-sale),Bengali,48,13.5,resolved,,Rahul Mishra
+TK00128,2026-08-12,WhatsApp,,,Product question (pre-sale),Tamil,49,6.7,resolved,,Rahul Mishra
+TK00129,2026-08-12,WhatsApp,,,Product question (pre-sale),Hindi,53,3.6,resolved,,Divya Pillai
+TK00130,2026-08-12,WhatsApp,,,Product question (pre-sale),English,23,7.3,resolved,4,Divya Pillai
+TK00131,2026-08-12,Instagram DM,,,Product question (pre-sale),Bengali,28,13.4,resolved,4,Divya Pillai
+TK00132,2026-08-12,WhatsApp,,,Product question (pre-sale),Hindi,54,8.2,resolved,,Rahul Mishra
+TK00133,2026-08-13,Instagram DM,KC100714,Flipkart,Return or refund request,English,19,46.1,resolved,,Divya Pillai
+TK00134,2026-08-13,WhatsApp,KC100849,Website,Failed delivery (NDR),Hindi,29,23.1,resolved,2,Divya Pillai
+TK00135,2026-08-13,WhatsApp,KC100898,Website,Failed delivery (NDR),English,12,21.8,resolved,,Rahul Mishra
+TK00136,2026-08-13,WhatsApp,KC100957,Website,Failed delivery (NDR),English,32,16.7,resolved,3,Divya Pillai
+TK00137,2026-08-13,Email,KC100989,Website,Failed delivery (NDR),Hindi,178,13.6,resolved,4,Divya Pillai
+TK00138,2026-08-13,WhatsApp,KC101039,Website,Where is my order (WISMO),Hindi,2,0.2,resolved,5,WhatsApp bot
+TK00139,2026-08-13,IVR,KC101095,Website,Where is my order (WISMO),English,3,4.4,resolved,5,Divya Pillai
+TK00140,2026-08-13,Email,KC101103,Website,Failed delivery (NDR),English,186,21.7,resolved,4,Divya Pillai
+TK00141,2026-08-13,WhatsApp,KC101258,Website,Where is my order (WISMO),Hindi,69,5.3,resolved,4,Rahul Mishra
+TK00142,2026-08-13,WhatsApp,KC101329,Website,Change COD to prepaid,English,50,6.5,resolved,4,Divya Pillai
+TK00143,2026-08-13,WhatsApp,,,Product question (pre-sale),English,48,5.4,resolved,,Rahul Mishra
+TK00144,2026-08-13,WhatsApp,,,Product question (pre-sale),English,34,8.7,resolved,,Rahul Mishra
+TK00145,2026-08-13,Email,,,Product question (pre-sale),Tamil,221,8.2,resolved,4,Divya Pillai
+TK00146,2026-08-13,WhatsApp,,,Product question (pre-sale),Hinglish,56,4.2,resolved,,Rahul Mishra
+TK00147,2026-08-13,Instagram DM,,,Product question (pre-sale),Hindi,17,6.7,resolved,,Divya Pillai
+TK00148,2026-08-13,WhatsApp,,,Product question (pre-sale),Hindi,44,11.5,resolved,,Rahul Mishra
+TK00149,2026-08-13,Email,,,Product question (pre-sale),Bengali,278,5.7,resolved,,Divya Pillai
+TK00150,2026-08-13,WhatsApp,,,Product question (pre-sale),Bengali,16,8.7,resolved,4,Rahul Mishra
+TK00151,2026-08-14,Instagram DM,KC100122,Flipkart,Return or refund request,Hindi,44,68.8,resolved,,Rahul Mishra
+TK00152,2026-08-14,WhatsApp,KC100901,Website,Return or refund request,English,40,45.7,resolved,,Rahul Mishra
+TK00153,2026-08-14,WhatsApp,KC101147,Website,Failed delivery (NDR),Tamil,52,29.6,resolved,,Rahul Mishra
+TK00154,2026-08-14,Email,KC101198,Website,Failed delivery (NDR),English,212,31.9,resolved,,Divya Pillai
+TK00155,2026-08-14,WhatsApp,KC101230,Website,Where is my order (WISMO),Hindi,0,0.3,resolved,,WhatsApp bot
+TK00156,2026-08-14,WhatsApp,KC101455,Website,Cancel order,Hindi,31,6.2,resolved,,Divya Pillai
+TK00157,2026-08-14,Email,KC101473,Website,Cancel order,English,158,5.6,resolved,3,Divya Pillai
+TK00158,2026-08-14,Email,,,Product question (pre-sale),Tamil,263,10.7,resolved,,Divya Pillai
+TK00159,2026-08-14,WhatsApp,,,Product question (pre-sale),Tamil,17,9.5,resolved,,Rahul Mishra
+TK00160,2026-08-14,WhatsApp,,,Product question (pre-sale),English,57,3.8,resolved,,Rahul Mishra
+TK00161,2026-08-15,WhatsApp,KC100732,Myntra,Damaged or leaking on arrival,Hindi,57,31.8,resolved,1,Divya Pillai
+TK00162,2026-08-15,WhatsApp,KC100767,Website,Return or refund request,English,45,50.1,resolved,,Divya Pillai
+TK00163,2026-08-15,Instagram DM,KC101270,Website,Where is my order (WISMO),Marathi,7,13.5,resolved,,Rahul Mishra
+TK00164,2026-08-15,WhatsApp,KC101301,Website,Where is my order (WISMO),English,22,2.6,resolved,4,Divya Pillai
+TK00165,2026-08-15,WhatsApp,KC101302,Website,Failed delivery (NDR),English,25,15.2,resolved,,Divya Pillai
+TK00166,2026-08-15,Email,KC101309,Website,Where is my order (WISMO),English,165,1.6,resolved,4,Rahul Mishra
+TK00167,2026-08-15,IVR,KC101326,Website,Where is my order (WISMO),Telugu,2,9.4,resolved,3,Rahul Mishra
+TK00168,2026-08-15,WhatsApp,KC101373,Website,Where is my order (WISMO),Hindi,0,0.1,resolved,,WhatsApp bot
+TK00169,2026-08-15,WhatsApp,KC101389,Website,Where is my order (WISMO),English,1,0.3,resolved,2,WhatsApp bot
+TK00170,2026-08-15,WhatsApp,KC101466,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,,WhatsApp bot
+TK00171,2026-08-15,IVR,KC101594,Website,Cancel order,English,4,7.6,resolved,,Divya Pillai
+TK00172,2026-08-15,Instagram DM,,,Product question (pre-sale),Hinglish,9,12.4,resolved,,Rahul Mishra
+TK00173,2026-08-15,WhatsApp,,,Product question (pre-sale),Hinglish,30,9.6,resolved,4,Divya Pillai
+TK00174,2026-08-15,WhatsApp,,,Product question (pre-sale),Hinglish,54,8.5,resolved,,Divya Pillai
+TK00175,2026-08-15,WhatsApp,,,Product question (pre-sale),Hinglish,55,10.4,resolved,,Rahul Mishra
+TK00176,2026-08-16,WhatsApp,KC100596,Website,Damaged or leaking on arrival,English,41,30.7,resolved,,Divya Pillai
+TK00177,2026-08-16,IVR,KC100900,Website,Product usage question,English,2,14.4,resolved,4,Divya Pillai
+TK00178,2026-08-16,Instagram DM,KC101212,Website,Failed delivery (NDR),English,37,12.3,resolved,,Divya Pillai
+TK00179,2026-08-16,IVR,KC101223,Website,Return or refund request,English,1,51.6,resolved,5,Rahul Mishra
+TK00180,2026-08-16,IVR,KC101315,Website,Where is my order (WISMO),Kannada,2,9,resolved,,Divya Pillai
+TK00181,2026-08-16,Email,KC101316,Website,Failed delivery (NDR),English,122,20.2,resolved,,Divya Pillai
+TK00182,2026-08-16,WhatsApp,KC101329,Website,Failed delivery (NDR),English,36,22.2,resolved,,Rahul Mishra
+TK00183,2026-08-16,Email,KC101334,Website,Where is my order (WISMO),Hindi,147,8.6,resolved,5,Rahul Mishra
+TK00184,2026-08-16,WhatsApp,KC101415,Website,Failed delivery (NDR),Hindi,50,19.7,resolved,,Rahul Mishra
+TK00185,2026-08-16,WhatsApp,KC101419,Website,Where is my order (WISMO),Marathi,31,3,resolved,,Divya Pillai
+TK00186,2026-08-16,Email,KC101618,Website,Where is my order (WISMO),English,224,1.6,resolved,4,Divya Pillai
+TK00187,2026-08-16,WhatsApp,,,Product question (pre-sale),English,60,11.4,resolved,,Divya Pillai
+TK00188,2026-08-16,Instagram DM,,,Product question (pre-sale),Hindi,40,10.7,resolved,,Divya Pillai
+TK00189,2026-08-16,WhatsApp,,,Product question (pre-sale),Tamil,26,9,resolved,,Rahul Mishra
+TK00190,2026-08-16,WhatsApp,,,Product question (pre-sale),Bengali,42,11.5,resolved,,Divya Pillai
+TK00191,2026-08-16,Instagram DM,,,Product question (pre-sale),Hindi,42,13.4,resolved,,Divya Pillai
+TK00192,2026-08-16,WhatsApp,,,Product question (pre-sale),Tamil,28,10,resolved,,Rahul Mishra
+TK00193,2026-08-17,Instagram DM,KC100024,Amazon Global,Return or refund request,Hindi,47,57.3,resolved,5,Divya Pillai
+TK00194,2026-08-17,Email,KC100758,Website,Product usage question,English,207,2.1,resolved,,Divya Pillai
+TK00195,2026-08-17,WhatsApp,KC101201,Website,Failed delivery (NDR),Hindi,26,10.6,resolved,,Rahul Mishra
+TK00196,2026-08-17,WhatsApp,KC101407,Website,Failed delivery (NDR),English,57,9.7,resolved,,Rahul Mishra
+TK00197,2026-08-17,WhatsApp,KC101424,Website,Failed delivery (NDR),Hindi,38,21.9,resolved,,Rahul Mishra
+TK00198,2026-08-17,Instagram DM,KC101477,Website,Failed delivery (NDR),English,7,14.8,resolved,,Divya Pillai
+TK00199,2026-08-17,WhatsApp,KC101775,Website,Where is my order (WISMO),Gujarati,0,0.1,resolved,5,WhatsApp bot
+TK00200,2026-08-17,WhatsApp,KC101839,Website,Change COD to prepaid,Kannada,0,0.2,resolved,,WhatsApp bot
+TK00201,2026-08-17,WhatsApp,,,Product question (pre-sale),Hinglish,36,8.2,resolved,,Divya Pillai
+TK00202,2026-08-17,WhatsApp,,,Product question (pre-sale),Tamil,39,6.5,resolved,,Rahul Mishra
+TK00203,2026-08-17,WhatsApp,,,Product question (pre-sale),Hinglish,42,10.3,resolved,,Divya Pillai
+TK00204,2026-08-17,WhatsApp,,,Product question (pre-sale),Hindi,17,6.6,resolved,5,Divya Pillai
+TK00205,2026-08-17,WhatsApp,,,Product question (pre-sale),English,29,11.6,resolved,,Divya Pillai
+TK00206,2026-08-17,WhatsApp,,,Product question (pre-sale),Tamil,23,2.3,resolved,,Rahul Mishra
+TK00207,2026-08-17,Instagram DM,,,Product question (pre-sale),Bengali,20,9.7,resolved,4,Divya Pillai
+TK00208,2026-08-17,WhatsApp,,,Product question (pre-sale),Bengali,66,6.6,resolved,,Rahul Mishra
+TK00209,2026-08-18,WhatsApp,KC101026,JioMart,Marketplace order escalation,Hindi,10,6.4,resolved,4,Rahul Mishra
+TK00210,2026-08-18,WhatsApp,KC101804,Website,Where is my order (WISMO),English,2,0.2,resolved,,WhatsApp bot
+TK00211,2026-08-18,IVR,KC101866,Website,Where is my order (WISMO),English,4,9.6,resolved,,Rahul Mishra
+TK00212,2026-08-18,Email,KC101947,Website,Cancel order,English,178,10.7,resolved,5,Rahul Mishra
+TK00213,2026-08-18,Email,KC101948,Website,Change COD to prepaid,Hindi,243,7,resolved,2,Divya Pillai
+TK00214,2026-08-18,IVR,KC102014,Website,Change COD to prepaid,English,2,5.2,resolved,4,Rahul Mishra
+TK00215,2026-08-18,WhatsApp,,,Product question (pre-sale),Hindi,37,4.6,resolved,3,Rahul Mishra
+TK00216,2026-08-18,WhatsApp,,,Product question (pre-sale),Hinglish,16,4.4,resolved,4,Rahul Mishra
+TK00217,2026-08-18,WhatsApp,,,Product question (pre-sale),English,20,6,resolved,4,Rahul Mishra
+TK00218,2026-08-18,WhatsApp,,,Product question (pre-sale),English,22,10.9,resolved,4,Rahul Mishra
+TK00219,2026-08-18,WhatsApp,,,Product question (pre-sale),Hinglish,18,9,resolved,,Rahul Mishra
+TK00220,2026-08-18,Instagram DM,,,Product question (pre-sale),Hinglish,19,8.7,resolved,,Rahul Mishra
+TK00221,2026-08-19,WhatsApp,KC101209,Website,Damaged or leaking on arrival,Hindi,39,43.5,resolved,,Rahul Mishra
+TK00222,2026-08-19,WhatsApp,KC101441,Nykaa,Return or refund request,English,82,59.3,resolved,5,Rahul Mishra
+TK00223,2026-08-19,WhatsApp,KC101724,Website,Return or refund request,English,32,31,resolved,4,Rahul Mishra
+TK00224,2026-08-19,IVR,KC101878,Website,Failed delivery (NDR),English,3,15,resolved,,Rahul Mishra
+TK00225,2026-08-19,IVR,KC102063,Website,Cancel order,Hindi,3,9.3,resolved,,Rahul Mishra
+TK00226,2026-08-19,Instagram DM,,,Product question (pre-sale),Hindi,46,13.2,resolved,4,Divya Pillai
+TK00227,2026-08-19,WhatsApp,,,Product question (pre-sale),Tamil,19,8.8,resolved,3,Divya Pillai
+TK00228,2026-08-19,Email,,,Product question (pre-sale),Hindi,73,8,resolved,,Rahul Mishra
+TK00229,2026-08-19,Instagram DM,,,Product question (pre-sale),English,52,7.5,resolved,,Divya Pillai
+TK00230,2026-08-19,WhatsApp,,,Product question (pre-sale),Hindi,55,6.7,resolved,,Rahul Mishra
+TK00231,2026-08-19,WhatsApp,,,Product question (pre-sale),English,28,8.9,resolved,,Divya Pillai
+TK00232,2026-08-19,WhatsApp,,,Product question (pre-sale),English,30,7,resolved,4,Rahul Mishra
+TK00233,2026-08-20,WhatsApp,KC101331,Zepto,Return or refund request,English,36,32.5,resolved,4,Rahul Mishra
+TK00234,2026-08-20,Email,KC101725,Website,Return or refund request,English,120,51.7,resolved,3,Rahul Mishra
+TK00235,2026-08-20,IVR,KC101835,Website,Where is my order (WISMO),Hindi,3,6.9,resolved,,Divya Pillai
+TK00236,2026-08-20,Email,KC101849,JioMart,Marketplace order escalation,Hindi,227,9.4,resolved,5,Divya Pillai
+TK00237,2026-08-20,WhatsApp,KC101851,Website,Failed delivery (NDR),Hindi,7,23.1,resolved,4,Rahul Mishra
+TK00238,2026-08-20,IVR,KC101942,Website,Where is my order (WISMO),English,3,5.5,resolved,,Divya Pillai
+TK00239,2026-08-20,IVR,KC101989,Website,Failed delivery (NDR),English,2,20.8,resolved,,Rahul Mishra
+TK00240,2026-08-20,IVR,KC102014,Website,Failed delivery (NDR),English,2,33.8,resolved,,Rahul Mishra
+TK00241,2026-08-20,IVR,KC102030,Website,Where is my order (WISMO),Marathi,3,11.9,escalated,,Rahul Mishra
+TK00242,2026-08-20,Email,KC102097,Website,Where is my order (WISMO),Hindi,159,7.4,resolved,5,Divya Pillai
+TK00243,2026-08-20,Instagram DM,,,Product question (pre-sale),Hindi,21,10.7,resolved,,Rahul Mishra
+TK00244,2026-08-20,WhatsApp,,,Product question (pre-sale),English,7,9.8,resolved,,Divya Pillai
+TK00245,2026-08-20,Instagram DM,,,Product question (pre-sale),Hindi,69,10.2,resolved,,Divya Pillai
+TK00246,2026-08-20,Instagram DM,,,Product question (pre-sale),Hindi,30,10.6,resolved,,Rahul Mishra
+TK00247,2026-08-20,Instagram DM,,,Product question (pre-sale),Tamil,55,4.1,resolved,,Divya Pillai
+TK00248,2026-08-20,Email,,,Product question (pre-sale),Hinglish,276,1.6,resolved,,Rahul Mishra
+TK00249,2026-08-21,Email,KC100909,Website,Return or refund request,English,75,42.7,resolved,3,Divya Pillai
+TK00250,2026-08-21,Instagram DM,KC101151,Website,Product usage question,English,16,6.8,resolved,5,Rahul Mishra
+TK00251,2026-08-21,WhatsApp,KC101311,Website,Return or refund request,English,31,34.6,resolved,5,Rahul Mishra
+TK00252,2026-08-21,IVR,KC101328,Zepto,Marketplace order escalation,Marathi,1,11.1,resolved,,Rahul Mishra
+TK00253,2026-08-21,WhatsApp,KC101740,Website,Damaged or leaking on arrival,English,18,26.9,resolved,4,Divya Pillai
+TK00254,2026-08-21,Email,KC101772,Website,Failed delivery (NDR),English,131,26.5,resolved,,Divya Pillai
+TK00255,2026-08-21,IVR,KC101822,Website,Failed delivery (NDR),English,4,19.7,resolved,,Divya Pillai
+TK00256,2026-08-21,WhatsApp,KC102062,Website,Failed delivery (NDR),Hindi,7,18.9,resolved,,Divya Pillai
+TK00257,2026-08-21,WhatsApp,KC102078,Website,Where is my order (WISMO),English,49,9.1,resolved,,Divya Pillai
+TK00258,2026-08-21,IVR,KC102194,Website,Where is my order (WISMO),English,1,10.9,resolved,,Divya Pillai
+TK00259,2026-08-21,Email,,,Product question (pre-sale),English,160,11.9,resolved,,Divya Pillai
+TK00260,2026-08-21,Instagram DM,,,Product question (pre-sale),English,47,9.8,resolved,,Rahul Mishra
+TK00261,2026-08-21,WhatsApp,,,Product question (pre-sale),Bengali,7,5,resolved,4,Rahul Mishra
+TK00262,2026-08-21,WhatsApp,,,Product question (pre-sale),Hindi,25,9.6,resolved,4,Divya Pillai
+TK00263,2026-08-21,WhatsApp,,,Product question (pre-sale),English,7,10.6,resolved,5,Divya Pillai
+TK00264,2026-08-21,Instagram DM,,,Product question (pre-sale),Hinglish,43,6.6,resolved,5,Rahul Mishra
+TK00265,2026-08-21,Instagram DM,,,Product question (pre-sale),Hinglish,11,10.7,resolved,,Divya Pillai
+TK00266,2026-08-22,WhatsApp,KC101202,Website,Return or refund request,English,66,36.9,resolved,,Rahul Mishra
+TK00267,2026-08-22,WhatsApp,KC101362,Website,Product usage question,Hindi,52,8.7,resolved,,Rahul Mishra
+TK00268,2026-08-22,Email,KC101659,Meesho,Damaged or leaking on arrival,Hindi,309,29.3,resolved,4,Rahul Mishra
+TK00269,2026-08-22,Email,KC102076,Website,Where is my order (WISMO),Hindi,187,4.6,resolved,3,Rahul Mishra
+TK00270,2026-08-22,WhatsApp,KC102089,Website,Where is my order (WISMO),English,37,8.9,resolved,3,Rahul Mishra
+TK00271,2026-08-22,WhatsApp,KC102132,Website,Failed delivery (NDR),English,37,4.8,resolved,5,Divya Pillai
+TK00272,2026-08-22,WhatsApp,KC102217,Website,Where is my order (WISMO),Tamil,59,6.7,resolved,,Rahul Mishra
+TK00273,2026-08-22,WhatsApp,KC102319,Website,Where is my order (WISMO),Marathi,2,0.2,resolved,,WhatsApp bot
+TK00274,2026-08-22,Email,,,Product question (pre-sale),Hindi,313,4.7,resolved,5,Divya Pillai
+TK00275,2026-08-22,WhatsApp,,,Product question (pre-sale),Hinglish,20,9.9,resolved,,Divya Pillai
+TK00276,2026-08-22,WhatsApp,,,Product question (pre-sale),Tamil,40,9.7,resolved,,Rahul Mishra
+TK00277,2026-08-23,Email,KC102137,Website,Failed delivery (NDR),English,281,22.4,resolved,5,Divya Pillai
+TK00278,2026-08-23,Email,KC102202,Website,Failed delivery (NDR),English,193,28.2,resolved,,Rahul Mishra
+TK00279,2026-08-23,IVR,KC102370,Website,Where is my order (WISMO),Hindi,3,8.8,resolved,,Divya Pillai
+TK00280,2026-08-23,WhatsApp,KC102403,Website,Where is my order (WISMO),Malayalam,2,0.1,resolved,,WhatsApp bot
+TK00281,2026-08-23,IVR,KC102436,Website,Where is my order (WISMO),English,2,7.1,resolved,4,Rahul Mishra
+TK00282,2026-08-23,WhatsApp,KC102514,Website,Change COD to prepaid,English,1,0.1,resolved,3,WhatsApp bot
+TK00283,2026-08-23,IVR,KC102564,Website,Cancel order,English,1,6.3,resolved,,Rahul Mishra
+TK00284,2026-08-23,WhatsApp,,,Product question (pre-sale),Hinglish,29,5.9,resolved,,Divya Pillai
+TK00285,2026-08-23,WhatsApp,,,Product question (pre-sale),Tamil,41,10.9,resolved,,Divya Pillai
+TK00286,2026-08-23,WhatsApp,,,Product question (pre-sale),Tamil,41,10.9,resolved,,Rahul Mishra
+TK00287,2026-08-23,WhatsApp,,,Product question (pre-sale),Tamil,20,7.5,resolved,4,Divya Pillai
+TK00288,2026-08-23,WhatsApp,,,Product question (pre-sale),Hinglish,32,7.3,resolved,,Rahul Mishra
+TK00289,2026-08-23,WhatsApp,,,Product question (pre-sale),Hindi,7,11.3,resolved,,Divya Pillai
+TK00290,2026-08-24,Email,KC101121,Website,Damaged or leaking on arrival,English,209,52.6,resolved,,Divya Pillai
+TK00291,2026-08-24,WhatsApp,KC101681,Website,Return or refund request,English,54,43.7,resolved,,Rahul Mishra
+TK00292,2026-08-24,Email,KC102099,Website,Damaged or leaking on arrival,English,280,36,resolved,,Rahul Mishra
+TK00293,2026-08-24,WhatsApp,KC102286,Website,Failed delivery (NDR),English,27,15.7,resolved,4,Rahul Mishra
+TK00294,2026-08-24,Instagram DM,KC102396,Website,Failed delivery (NDR),English,33,15.1,resolved,,Rahul Mishra
+TK00295,2026-08-24,WhatsApp,KC102426,Website,Where is my order (WISMO),English,2,0.1,resolved,,WhatsApp bot
+TK00296,2026-08-24,WhatsApp,KC102437,Website,Failed delivery (NDR),Telugu,28,19.3,resolved,,Rahul Mishra
+TK00297,2026-08-24,WhatsApp,KC102483,Website,Where is my order (WISMO),English,1,0.1,resolved,5,WhatsApp bot
+TK00298,2026-08-24,Instagram DM,,,Product question (pre-sale),English,20,13.7,resolved,4,Divya Pillai
+TK00299,2026-08-24,WhatsApp,,,Product question (pre-sale),Hinglish,40,1.6,resolved,,Divya Pillai
+TK00300,2026-08-24,Instagram DM,,,Product question (pre-sale),Tamil,60,7.8,resolved,,Divya Pillai
+TK00301,2026-08-24,Instagram DM,,,Product question (pre-sale),Hindi,45,4.1,resolved,4,Divya Pillai
+TK00302,2026-08-24,WhatsApp,,,Product question (pre-sale),Hinglish,28,6,resolved,5,Rahul Mishra
+TK00303,2026-08-25,IVR,KC101618,Website,Damaged or leaking on arrival,English,3,40,resolved,,Rahul Mishra
+TK00304,2026-08-25,WhatsApp,KC101638,Nykaa,Return or refund request,English,51,27.4,resolved,,Divya Pillai
+TK00305,2026-08-25,WhatsApp,KC101745,BB Now,Return or refund request,Tamil,34,54.8,resolved,4,Divya Pillai
+TK00306,2026-08-25,WhatsApp,KC102243,Website,Failed delivery (NDR),Hindi,17,17.5,resolved,,Divya Pillai
+TK00307,2026-08-25,WhatsApp,KC102257,Website,Failed delivery (NDR),Hindi,16,32.2,resolved,,Rahul Mishra
+TK00308,2026-08-25,Email,KC102276,Website,Failed delivery (NDR),Hindi,258,25.9,resolved,4,Divya Pillai
+TK00309,2026-08-25,Email,KC102405,Website,Where is my order (WISMO),Hindi,214,5.3,resolved,,Rahul Mishra
+TK00310,2026-08-25,Instagram DM,KC102410,Website,Where is my order (WISMO),English,29,6,resolved,,Rahul Mishra
+TK00311,2026-08-25,WhatsApp,KC102435,Website,Where is my order (WISMO),English,58,10.3,resolved,5,Rahul Mishra
+TK00312,2026-08-25,WhatsApp,KC102463,Website,Where is my order (WISMO),Hindi,2,0,resolved,4,WhatsApp bot
+TK00313,2026-08-25,IVR,KC102551,Website,Where is my order (WISMO),English,3,3.4,resolved,,Rahul Mishra
+TK00314,2026-08-25,IVR,KC102581,Website,Where is my order (WISMO),English,1,6.6,resolved,4,Divya Pillai
+TK00315,2026-08-25,Instagram DM,,,Product question (pre-sale),Bengali,63,8.1,resolved,,Rahul Mishra
+TK00316,2026-08-25,Email,,,Product question (pre-sale),English,132,10.7,resolved,4,Divya Pillai
+TK00317,2026-08-25,Instagram DM,,,Product question (pre-sale),Tamil,15,4.4,resolved,4,Divya Pillai
+TK00318,2026-08-25,Instagram DM,,,Product question (pre-sale),Tamil,7,3.7,resolved,,Rahul Mishra
+TK00319,2026-08-25,WhatsApp,,,Product question (pre-sale),Hindi,25,7.8,resolved,,Divya Pillai
+TK00320,2026-08-25,Instagram DM,,,Product question (pre-sale),Bengali,54,3.6,escalated,,Rahul Mishra
+TK00321,2026-08-25,Email,,,Product question (pre-sale),English,154,10.2,resolved,,Divya Pillai
+TK00322,2026-08-25,WhatsApp,,,Product question (pre-sale),English,54,10.2,resolved,,Rahul Mishra
+TK00323,2026-08-25,WhatsApp,,,Product question (pre-sale),Hinglish,22,10.3,escalated,,Rahul Mishra
+TK00324,2026-08-26,WhatsApp,KC101442,Amazon,Return or refund request,English,28,8.7,resolved,5,Rahul Mishra
+TK00325,2026-08-26,WhatsApp,KC101752,Myntra,Return or refund request,English,72,61.2,resolved,,Divya Pillai
+TK00326,2026-08-26,WhatsApp,KC102196,Website,Return or refund request,English,25,44.8,resolved,3,Rahul Mishra
+TK00327,2026-08-26,WhatsApp,KC102386,Website,Failed delivery (NDR),English,32,18.9,resolved,4,Divya Pillai
+TK00328,2026-08-26,WhatsApp,KC102418,Website,Product usage question,English,65,7.6,resolved,,Rahul Mishra
+TK00329,2026-08-26,WhatsApp,KC102476,Website,Where is my order (WISMO),English,2,0.2,resolved,,WhatsApp bot
+TK00330,2026-08-26,Instagram DM,KC102485,Website,Where is my order (WISMO),English,54,10.5,resolved,,Rahul Mishra
+TK00331,2026-08-26,IVR,KC102531,Website,Failed delivery (NDR),English,3,20.9,resolved,4,Rahul Mishra
+TK00332,2026-08-26,IVR,KC102545,Website,Where is my order (WISMO),English,3,7.6,resolved,4,Rahul Mishra
+TK00333,2026-08-26,WhatsApp,KC102598,Website,Where is my order (WISMO),English,2,0.3,resolved,3,WhatsApp bot
+TK00334,2026-08-26,WhatsApp,KC102772,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,4,WhatsApp bot
+TK00335,2026-08-26,WhatsApp,,,Product question (pre-sale),Hindi,30,15,resolved,,Divya Pillai
+TK00336,2026-08-26,WhatsApp,,,Product question (pre-sale),Hinglish,25,5.6,resolved,4,Divya Pillai
+TK00337,2026-08-26,WhatsApp,,,Product question (pre-sale),English,43,7.7,resolved,,Divya Pillai
+TK00338,2026-08-26,WhatsApp,,,Product question (pre-sale),Hinglish,14,5.4,resolved,,Divya Pillai
+TK00339,2026-08-26,WhatsApp,,,Product question (pre-sale),English,9,11.6,resolved,,Rahul Mishra
+TK00340,2026-08-26,WhatsApp,,,Product question (pre-sale),English,42,5.3,resolved,,Divya Pillai
+TK00341,2026-08-26,WhatsApp,,,Product question (pre-sale),English,15,7,resolved,5,Rahul Mishra
+TK00342,2026-08-27,IVR,KC101760,Amazon,Damaged or leaking on arrival,English,4,21.1,resolved,3,Rahul Mishra
+TK00343,2026-08-27,WhatsApp,KC102446,Website,Failed delivery (NDR),English,54,19.1,resolved,,Divya Pillai
+TK00344,2026-08-27,IVR,KC102469,Website,Product usage question,English,3,5,resolved,,Divya Pillai
+TK00345,2026-08-27,WhatsApp,KC102471,Website,Failed delivery (NDR),English,29,17.8,resolved,,Divya Pillai
+TK00346,2026-08-27,WhatsApp,KC102486,Website,Failed delivery (NDR),English,52,17.6,resolved,5,Divya Pillai
+TK00347,2026-08-27,WhatsApp,KC102502,Website,Failed delivery (NDR),English,34,13.8,resolved,5,Rahul Mishra
+TK00348,2026-08-27,WhatsApp,KC102579,Website,Failed delivery (NDR),English,22,15.9,resolved,3,Divya Pillai
+TK00349,2026-08-27,Email,KC102638,Website,Where is my order (WISMO),English,269,9.7,resolved,4,Divya Pillai
+TK00350,2026-08-27,WhatsApp,KC102648,Website,Where is my order (WISMO),Hindi,0,0.3,resolved,4,WhatsApp bot
+TK00351,2026-08-27,WhatsApp,KC102747,Website,Where is my order (WISMO),Hindi,0,0.3,resolved,,WhatsApp bot
+TK00352,2026-08-27,WhatsApp,KC102748,Website,Where is my order (WISMO),English,12,13.8,resolved,,Rahul Mishra
+TK00353,2026-08-27,Email,KC102754,Website,Where is my order (WISMO),English,55,9.7,resolved,,Divya Pillai
+TK00354,2026-08-27,IVR,KC102763,Website,Where is my order (WISMO),English,2,7.1,resolved,,Rahul Mishra
+TK00355,2026-08-27,Instagram DM,KC102768,Website,Where is my order (WISMO),Hindi,36,7,resolved,,Rahul Mishra
+TK00356,2026-08-27,WhatsApp,KC102790,Website,Failed delivery (NDR),Kannada,9,23.7,resolved,,Rahul Mishra
+TK00357,2026-08-27,WhatsApp,KC102820,Website,Failed delivery (NDR),English,30,4,resolved,2,Divya Pillai
+TK00358,2026-08-27,WhatsApp,,,Product question (pre-sale),Bengali,43,3.4,resolved,5,Rahul Mishra
+TK00359,2026-08-27,Instagram DM,,,Product question (pre-sale),Hindi,53,6.4,resolved,4,Rahul Mishra
+TK00360,2026-08-28,WhatsApp,KC102150,Amazon,Return or refund request,English,42,79.2,resolved,3,Rahul Mishra
+TK00361,2026-08-28,WhatsApp,KC102787,Website,Failed delivery (NDR),Hindi,23,11.3,resolved,,Rahul Mishra
+TK00362,2026-08-28,IVR,KC102847,Website,Where is my order (WISMO),English,3,10.9,resolved,,Rahul Mishra
+TK00363,2026-08-28,WhatsApp,KC102954,Website,Failed delivery (NDR),Hindi,39,14.4,resolved,4,Rahul Mishra
+TK00364,2026-08-28,IVR,KC103017,Website,Where is my order (WISMO),English,2,3.2,resolved,,Rahul Mishra
+TK00365,2026-08-28,WhatsApp,KC103189,Website,Cancel order,Hindi,50,2.4,resolved,,Divya Pillai
+TK00366,2026-08-28,Email,,,Product question (pre-sale),Hinglish,221,3.9,resolved,,Divya Pillai
+TK00367,2026-08-28,WhatsApp,,,Product question (pre-sale),Bengali,35,8.2,resolved,,Rahul Mishra
+TK00368,2026-08-28,Instagram DM,,,Product question (pre-sale),Tamil,49,6.4,resolved,,Rahul Mishra
+TK00369,2026-08-28,WhatsApp,,,Product question (pre-sale),Hinglish,24,4.1,resolved,,Rahul Mishra
+TK00370,2026-08-28,WhatsApp,,,Product question (pre-sale),Bengali,26,5.4,resolved,4,Divya Pillai
+TK00371,2026-08-28,WhatsApp,,,Product question (pre-sale),English,30,8.5,resolved,,Divya Pillai
+TK00372,2026-08-28,Email,,,Product question (pre-sale),Tamil,285,8.2,resolved,5,Divya Pillai
+TK00373,2026-08-28,WhatsApp,,,Product question (pre-sale),Bengali,27,8.9,resolved,5,Rahul Mishra
+TK00374,2026-08-28,Email,,,Product question (pre-sale),Hinglish,277,6.9,resolved,,Divya Pillai
+TK00375,2026-08-28,WhatsApp,,,Product question (pre-sale),Hindi,20,12.1,resolved,,Divya Pillai
+TK00376,2026-08-29,WhatsApp,KC102631,Website,Failed delivery (NDR),English,39,20,resolved,,Rahul Mishra
+TK00377,2026-08-29,Email,KC102632,Website,Failed delivery (NDR),English,294,25.5,resolved,,Rahul Mishra
+TK00378,2026-08-29,Instagram DM,KC102658,Website,Damaged or leaking on arrival,English,51,32.6,resolved,3,Divya Pillai
+TK00379,2026-08-29,WhatsApp,KC102762,Website,Failed delivery (NDR),Hindi,22,7.3,resolved,,Rahul Mishra
+TK00380,2026-08-29,WhatsApp,KC102964,Website,Failed delivery (NDR),Hindi,33,32.3,resolved,,Rahul Mishra
+TK00381,2026-08-29,Email,KC103082,Website,Where is my order (WISMO),Hindi,282,5.6,resolved,,Rahul Mishra
+TK00382,2026-08-29,WhatsApp,KC103161,Website,Where is my order (WISMO),Tamil,0,0.2,resolved,,WhatsApp bot
+TK00383,2026-08-29,WhatsApp,,,Product question (pre-sale),Tamil,33,11.8,resolved,,Divya Pillai
+TK00384,2026-08-29,WhatsApp,,,Product question (pre-sale),Hindi,28,10.8,resolved,,Rahul Mishra
+TK00385,2026-08-30,Email,KC102074,Website,Return or refund request,English,325,28.7,resolved,3,Rahul Mishra
+TK00386,2026-08-30,Instagram DM,KC102352,Website,Damaged or leaking on arrival,English,50,33.8,resolved,,Rahul Mishra
+TK00387,2026-08-30,WhatsApp,KC102899,Website,Failed delivery (NDR),English,36,31.4,resolved,3,Rahul Mishra
+TK00388,2026-08-30,IVR,KC102985,Website,Failed delivery (NDR),English,3,12.9,resolved,,Divya Pillai
+TK00389,2026-08-30,IVR,KC102991,Website,Where is my order (WISMO),English,4,4.4,resolved,,Divya Pillai
+TK00390,2026-08-30,Email,KC103031,Website,Where is my order (WISMO),English,164,7.3,resolved,,Divya Pillai
+TK00391,2026-08-30,WhatsApp,KC103294,Website,Where is my order (WISMO),English,39,8.3,resolved,,Divya Pillai
+TK00392,2026-08-30,WhatsApp,,,Product question (pre-sale),Bengali,21,7.6,resolved,3,Rahul Mishra
+TK00393,2026-08-30,WhatsApp,,,Product question (pre-sale),Hindi,17,5,resolved,4,Divya Pillai
+TK00394,2026-08-30,WhatsApp,,,Product question (pre-sale),Tamil,30,5.8,resolved,5,Divya Pillai
+TK00395,2026-08-30,WhatsApp,,,Product question (pre-sale),English,37,12.5,resolved,,Divya Pillai
+TK00396,2026-08-30,WhatsApp,,,Product question (pre-sale),Tamil,24,7.6,resolved,,Divya Pillai
+TK00397,2026-08-30,WhatsApp,,,Product question (pre-sale),Bengali,40,11.5,resolved,,Rahul Mishra
+TK00398,2026-08-31,WhatsApp,KC102598,Website,Product usage question,English,29,14.5,resolved,5,Rahul Mishra
+TK00399,2026-08-31,Email,KC103063,Website,Product usage question,Hindi,259,7.2,resolved,4,Rahul Mishra
+TK00400,2026-08-31,WhatsApp,KC103153,Website,Failed delivery (NDR),English,29,4,resolved,4,Rahul Mishra
+TK00401,2026-08-31,WhatsApp,KC103184,Nykaa,Marketplace order escalation,English,43,6.1,resolved,4,Rahul Mishra
+TK00402,2026-08-31,Email,KC103214,Website,Where is my order (WISMO),English,200,2.7,resolved,3,Rahul Mishra
+TK00403,2026-08-31,WhatsApp,KC103423,Website,Where is my order (WISMO),Malayalam,2,0.2,resolved,,WhatsApp bot
+TK00404,2026-08-31,WhatsApp,KC103557,Website,Cancel order,Hindi,42,10.6,resolved,,Rahul Mishra
+TK00405,2026-08-31,WhatsApp,,,Product question (pre-sale),Tamil,33,8.2,resolved,4,Divya Pillai
+TK00406,2026-08-31,Instagram DM,,,Product question (pre-sale),Hinglish,37,6.3,resolved,5,Rahul Mishra
+TK00407,2026-08-31,Instagram DM,,,Product question (pre-sale),Tamil,45,6.9,escalated,,Divya Pillai
+TK00408,2026-08-31,Instagram DM,,,Product question (pre-sale),Hindi,39,9.7,resolved,4,Rahul Mishra
+TK00409,2026-08-31,WhatsApp,,,Product question (pre-sale),English,49,13,resolved,5,Rahul Mishra
+TK00410,2026-08-31,WhatsApp,,,Product question (pre-sale),Hindi,63,11.9,resolved,5,Divya Pillai
+TK00411,2026-09-01,WhatsApp,KC102485,Website,Return or refund request,English,65,13.1,resolved,3,Divya Pillai
+TK00412,2026-09-01,WhatsApp,KC102555,Website,Return or refund request,Hindi,30,34.9,resolved,,Rahul Mishra
+TK00413,2026-09-01,WhatsApp,KC103008,Website,Failed delivery (NDR),Gujarati,68,18.4,resolved,,Rahul Mishra
+TK00414,2026-09-01,Instagram DM,KC103133,Website,Failed delivery (NDR),English,19,32.2,resolved,5,Rahul Mishra
+TK00415,2026-09-01,WhatsApp,KC103198,Website,Failed delivery (NDR),English,11,28,resolved,,Divya Pillai
+TK00416,2026-09-01,Email,KC103285,Website,Where is my order (WISMO),English,197,14.9,resolved,4,Divya Pillai
+TK00417,2026-09-01,WhatsApp,KC103297,Website,Where is my order (WISMO),English,30,1.6,escalated,,Divya Pillai
+TK00418,2026-09-01,IVR,KC103422,Website,Where is my order (WISMO),Hindi,4,7.1,resolved,,Rahul Mishra
+TK00419,2026-09-01,IVR,KC103698,Website,Change COD to prepaid,English,2,7.2,resolved,,Rahul Mishra
+TK00420,2026-09-01,WhatsApp,KC103703,Website,Cancel order,English,80,6.4,resolved,5,Divya Pillai
+TK00421,2026-09-01,Instagram DM,,,Product question (pre-sale),Bengali,78,6.6,resolved,,Rahul Mishra
+TK00422,2026-09-01,WhatsApp,,,Product question (pre-sale),Hinglish,12,9.7,resolved,,Rahul Mishra
+TK00423,2026-09-01,Instagram DM,,,Product question (pre-sale),Tamil,50,4.9,resolved,4,Divya Pillai
+TK00424,2026-09-01,WhatsApp,,,Product question (pre-sale),Hindi,39,8.5,resolved,5,Rahul Mishra
+TK00425,2026-09-01,Instagram DM,,,Product question (pre-sale),Bengali,16,10.1,resolved,3,Divya Pillai
+TK00426,2026-09-02,WhatsApp,KC102775,Website,Product usage question,English,9,13.5,resolved,,Rahul Mishra
+TK00427,2026-09-02,WhatsApp,KC103074,Website,Damaged or leaking on arrival,English,50,34.2,escalated,,Divya Pillai
+TK00428,2026-09-02,WhatsApp,KC103366,Website,Failed delivery (NDR),English,37,6.3,resolved,4,Rahul Mishra
+TK00429,2026-09-02,WhatsApp,KC103551,Website,Failed delivery (NDR),Hindi,24,29.3,resolved,5,Divya Pillai
+TK00430,2026-09-02,WhatsApp,KC103607,Website,Where is my order (WISMO),Hindi,0,0.2,resolved,,WhatsApp bot
+TK00431,2026-09-02,WhatsApp,KC103799,Website,Cancel order,English,7,8.5,resolved,,Divya Pillai
+TK00432,2026-09-02,Email,,,Product question (pre-sale),Tamil,258,6.1,resolved,,Rahul Mishra
+TK00433,2026-09-02,Instagram DM,,,Product question (pre-sale),Bengali,40,5,resolved,3,Rahul Mishra
+TK00434,2026-09-02,WhatsApp,,,Product question (pre-sale),English,33,1.6,resolved,,Divya Pillai
+TK00435,2026-09-02,WhatsApp,,,Product question (pre-sale),Hinglish,35,8,resolved,5,Rahul Mishra
+TK00436,2026-09-03,WhatsApp,KC102643,Website,Damaged or leaking on arrival,English,43,14.5,escalated,,Rahul Mishra
+TK00437,2026-09-03,Instagram DM,KC102885,Website,Damaged or leaking on arrival,Marathi,17,6,resolved,,Divya Pillai
+TK00438,2026-09-03,Email,KC103149,Website,Return or refund request,Telugu,344,58.7,resolved,,Rahul Mishra
+TK00439,2026-09-03,WhatsApp,KC103350,Website,Failed delivery (NDR),English,15,39.6,resolved,,Divya Pillai
+TK00440,2026-09-03,WhatsApp,KC103647,Website,Where is my order (WISMO),Hindi,37,9,resolved,4,Divya Pillai
+TK00441,2026-09-03,IVR,KC103741,Website,Where is my order (WISMO),Hindi,3,11.1,resolved,3,Divya Pillai
+TK00442,2026-09-03,WhatsApp,KC103930,Website,Change COD to prepaid,English,2,0.2,resolved,,WhatsApp bot
+TK00443,2026-09-03,WhatsApp,KC103947,Website,Cancel order,Hindi,28,8.6,resolved,,Divya Pillai
+TK00444,2026-09-03,WhatsApp,,,Product question (pre-sale),English,43,8,resolved,,Divya Pillai
+TK00445,2026-09-03,Email,,,Product question (pre-sale),Tamil,227,10.7,resolved,5,Rahul Mishra
+TK00446,2026-09-03,Instagram DM,,,Product question (pre-sale),Tamil,42,13.1,resolved,,Divya Pillai
+TK00447,2026-09-03,Instagram DM,,,Product question (pre-sale),Hindi,54,10.4,resolved,4,Rahul Mishra
+TK00448,2026-09-04,WhatsApp,KC103118,Website,Product usage question,Bengali,45,11.2,resolved,5,Divya Pillai
+TK00449,2026-09-04,WhatsApp,KC103181,Website,Damaged or leaking on arrival,English,53,44.2,escalated,,Rahul Mishra
+TK00450,2026-09-04,WhatsApp,KC103661,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,,WhatsApp bot
+TK00451,2026-09-04,WhatsApp,KC103687,Website,Product usage question,English,16,6.2,resolved,4,Divya Pillai
+TK00452,2026-09-04,WhatsApp,KC103717,Website,Failed delivery (NDR),Bengali,31,13.6,resolved,5,Rahul Mishra
+TK00453,2026-09-04,WhatsApp,KC103742,Website,Where is my order (WISMO),English,2,0.1,resolved,4,WhatsApp bot
+TK00454,2026-09-04,WhatsApp,KC103827,Website,Where is my order (WISMO),Malayalam,1,0.1,resolved,5,WhatsApp bot
+TK00455,2026-09-04,WhatsApp,KC103966,Website,Cancel order,English,59,2.8,resolved,3,Divya Pillai
+TK00456,2026-09-04,WhatsApp,,,Product question (pre-sale),Tamil,16,7.7,resolved,5,Divya Pillai
+TK00457,2026-09-04,Instagram DM,,,Product question (pre-sale),Bengali,17,9.2,resolved,,Divya Pillai
+TK00458,2026-09-04,Instagram DM,,,Product question (pre-sale),English,37,10.3,resolved,,Divya Pillai
+TK00459,2026-09-04,Email,,,Product question (pre-sale),English,121,9.7,resolved,5,Rahul Mishra
+TK00460,2026-09-05,Email,KC102921,Website,Return or refund request,English,122,61.8,resolved,5,Divya Pillai
+TK00461,2026-09-05,WhatsApp,KC103568,Website,Failed delivery (NDR),English,16,22.4,resolved,4,Divya Pillai
+TK00462,2026-09-05,IVR,KC103711,Website,Product usage question,English,3,8.5,resolved,4,Divya Pillai
+TK00463,2026-09-05,WhatsApp,KC103724,Website,Where is my order (WISMO),English,42,6.6,resolved,,Divya Pillai
+TK00464,2026-09-05,Email,KC103742,Website,Return or refund request,English,133,22.9,resolved,3,Divya Pillai
+TK00465,2026-09-05,Email,KC103777,Website,Product usage question,English,215,8.4,resolved,,Rahul Mishra
+TK00466,2026-09-05,WhatsApp,KC103790,Website,Where is my order (WISMO),English,0,0.3,resolved,,WhatsApp bot
+TK00467,2026-09-05,WhatsApp,KC103807,Website,Where is my order (WISMO),English,2,0.1,resolved,4,WhatsApp bot
+TK00468,2026-09-05,WhatsApp,KC103822,Website,Failed delivery (NDR),English,37,9.3,resolved,2,Divya Pillai
+TK00469,2026-09-05,WhatsApp,KC103929,Website,Where is my order (WISMO),English,0,0.3,resolved,5,WhatsApp bot
+TK00470,2026-09-05,Email,KC103953,Website,Failed delivery (NDR),Bengali,109,25.2,resolved,,Rahul Mishra
+TK00471,2026-09-05,WhatsApp,KC104067,Website,Where is my order (WISMO),English,1,0,resolved,3,WhatsApp bot
+TK00472,2026-09-05,WhatsApp,KC104098,Website,Cancel order,English,26,1.6,resolved,,Rahul Mishra
+TK00473,2026-09-05,IVR,KC104122,Website,Change COD to prepaid,Hindi,3,11.1,escalated,,Divya Pillai
+TK00474,2026-09-05,WhatsApp,KC104124,Website,Cancel order,Telugu,40,2,resolved,,Divya Pillai
+TK00475,2026-09-05,WhatsApp,,,Product question (pre-sale),Hinglish,27,8.7,resolved,,Rahul Mishra
+TK00476,2026-09-05,WhatsApp,,,Product question (pre-sale),Hinglish,42,7.3,resolved,5,Divya Pillai
+TK00477,2026-09-05,WhatsApp,,,Product question (pre-sale),Tamil,40,7.1,resolved,,Divya Pillai
+TK00478,2026-09-05,WhatsApp,,,Product question (pre-sale),Hindi,23,14,resolved,,Divya Pillai
+TK00479,2026-09-05,WhatsApp,,,Product question (pre-sale),Bengali,32,15.6,resolved,,Rahul Mishra
+TK00480,2026-09-05,Instagram DM,,,Product question (pre-sale),Hindi,39,10.9,resolved,5,Rahul Mishra
+TK00481,2026-09-05,WhatsApp,,,Product question (pre-sale),Bengali,29,6,resolved,,Rahul Mishra
+TK00482,2026-09-06,WhatsApp,KC103224,BB Now,Marketplace order escalation,Hindi,11,9.4,resolved,,Divya Pillai
+TK00483,2026-09-06,WhatsApp,KC103626,Website,Failed delivery (NDR),Hindi,33,10,resolved,,Rahul Mishra
+TK00484,2026-09-06,WhatsApp,KC103698,Website,Failed delivery (NDR),Hindi,35,29.6,resolved,4,Divya Pillai
+TK00485,2026-09-06,Email,KC103795,Website,Failed delivery (NDR),English,116,31,resolved,5,Rahul Mishra
+TK00486,2026-09-06,WhatsApp,KC103998,Website,Failed delivery (NDR),Telugu,44,18.8,escalated,,Rahul Mishra
+TK00487,2026-09-06,WhatsApp,KC104090,Website,Where is my order (WISMO),Hindi,1,0.3,resolved,,WhatsApp bot
+TK00488,2026-09-06,IVR,KC104240,Website,Change COD to prepaid,English,2,7,resolved,,Rahul Mishra
+TK00489,2026-09-06,WhatsApp,,,Product question (pre-sale),Hinglish,7,8.8,resolved,,Divya Pillai
+TK00490,2026-09-06,WhatsApp,,,Product question (pre-sale),Hindi,43,3.6,resolved,,Divya Pillai
+TK00491,2026-09-06,WhatsApp,,,Product question (pre-sale),Tamil,50,10.6,resolved,,Divya Pillai
+TK00492,2026-09-07,Instagram DM,KC103192,Website,Product usage question,Marathi,59,9.6,resolved,,Rahul Mishra
+TK00493,2026-09-07,WhatsApp,KC103969,Website,Where is my order (WISMO),English,1,0.2,resolved,,WhatsApp bot
+TK00494,2026-09-07,WhatsApp,KC104009,Website,Failed delivery (NDR),English,44,25.2,resolved,,Rahul Mishra
+TK00495,2026-09-07,WhatsApp,KC104055,Website,Failed delivery (NDR),Hindi,21,7.1,resolved,4,Divya Pillai
+TK00496,2026-09-07,IVR,KC104069,Website,Failed delivery (NDR),English,2,33,resolved,,Rahul Mishra
+TK00497,2026-09-07,WhatsApp,KC104113,Website,Where is my order (WISMO),English,2,0.2,resolved,,WhatsApp bot
+TK00498,2026-09-07,WhatsApp,KC104154,Website,Failed delivery (NDR),English,29,27,resolved,,Rahul Mishra
+TK00499,2026-09-07,WhatsApp,KC104327,Website,Cancel order,English,51,7.9,resolved,,Rahul Mishra
+TK00500,2026-09-07,Instagram DM,KC104392,Website,Cancel order,Hindi,93,6.9,resolved,3,Divya Pillai
+TK00501,2026-09-07,Instagram DM,,,Product question (pre-sale),English,43,9,resolved,5,Divya Pillai
+TK00502,2026-09-07,Instagram DM,,,Product question (pre-sale),Hindi,10,10.1,resolved,,Divya Pillai
+TK00503,2026-09-07,WhatsApp,,,Product question (pre-sale),Bengali,42,10.6,resolved,,Rahul Mishra
+TK00504,2026-09-07,WhatsApp,,,Product question (pre-sale),Bengali,53,10.3,resolved,4,Rahul Mishra
+TK00505,2026-09-08,WhatsApp,KC103168,Meesho,Return or refund request,Hindi,22,50.2,resolved,,Divya Pillai
+TK00506,2026-09-08,WhatsApp,KC104248,Website,Where is my order (WISMO),English,2,0.3,resolved,,WhatsApp bot
+TK00507,2026-09-08,Instagram DM,KC104310,Website,Where is my order (WISMO),English,25,5.8,resolved,3,Rahul Mishra
+TK00508,2026-09-08,Email,KC104450,Website,Cancel order,Hindi,318,8.9,resolved,4,Rahul Mishra
+TK00509,2026-09-08,WhatsApp,KC104459,Website,Change COD to prepaid,English,2,0.2,resolved,4,WhatsApp bot
+TK00510,2026-09-08,Instagram DM,,,Product question (pre-sale),Tamil,34,10,resolved,,Divya Pillai
+TK00511,2026-09-08,WhatsApp,,,Product question (pre-sale),English,10,5.5,resolved,4,Rahul Mishra
+TK00512,2026-09-08,Instagram DM,,,Product question (pre-sale),Tamil,64,6.9,resolved,4,Divya Pillai
+TK00513,2026-09-08,WhatsApp,,,Product question (pre-sale),Hindi,18,4.5,resolved,4,Rahul Mishra
+TK00514,2026-09-09,IVR,KC103730,Website,Product usage question,English,3,4.6,resolved,,Divya Pillai
+TK00515,2026-09-09,WhatsApp,KC104036,Website,Failed delivery (NDR),English,61,38,resolved,,Divya Pillai
+TK00516,2026-09-09,WhatsApp,KC104080,Amazon,Damaged or leaking on arrival,English,90,15.3,resolved,3,Rahul Mishra
+TK00517,2026-09-09,WhatsApp,KC104118,Website,Failed delivery (NDR),Hindi,20,16.9,resolved,,Divya Pillai
+TK00518,2026-09-09,Email,KC104244,Website,Where is my order (WISMO),English,185,8.3,resolved,,Divya Pillai
+TK00519,2026-09-09,WhatsApp,KC104309,Website,Where is my order (WISMO),Hindi,46,9.6,resolved,,Divya Pillai
+TK00520,2026-09-09,WhatsApp,KC104326,Website,Failed delivery (NDR),English,45,14.6,resolved,,Rahul Mishra
+TK00521,2026-09-09,WhatsApp,KC104347,Website,Where is my order (WISMO),English,30,7.9,resolved,4,Divya Pillai
+TK00522,2026-09-09,WhatsApp,KC104372,Website,Failed delivery (NDR),English,56,20.1,resolved,4,Divya Pillai
+TK00523,2026-09-09,WhatsApp,KC104388,Website,Where is my order (WISMO),Assamese,0,0.3,resolved,5,WhatsApp bot
+TK00524,2026-09-09,IVR,KC104512,Website,Where is my order (WISMO),Hindi,1,11.8,resolved,,Rahul Mishra
+TK00525,2026-09-09,WhatsApp,KC104553,Website,Change COD to prepaid,English,1,0.1,resolved,,WhatsApp bot
+TK00526,2026-09-09,WhatsApp,KC104606,Website,Change COD to prepaid,English,0,0.2,resolved,3,WhatsApp bot
+TK00527,2026-09-09,Instagram DM,,,Product question (pre-sale),English,46,5.5,resolved,,Divya Pillai
+TK00528,2026-09-09,Instagram DM,,,Product question (pre-sale),Hindi,49,7.4,resolved,,Divya Pillai
+TK00529,2026-09-09,WhatsApp,,,Product question (pre-sale),Bengali,16,13.8,resolved,4,Rahul Mishra
+TK00530,2026-09-09,Instagram DM,,,Product question (pre-sale),Hinglish,62,6.8,resolved,,Rahul Mishra
+TK00531,2026-09-10,IVR,KC103755,Website,Return or refund request,English,4,64.9,resolved,,Divya Pillai
+TK00532,2026-09-10,WhatsApp,KC104132,Website,Failed delivery (NDR),English,25,23.8,resolved,3,Divya Pillai
+TK00533,2026-09-10,WhatsApp,KC104308,Website,Where is my order (WISMO),English,1,0.1,resolved,4,WhatsApp bot
+TK00534,2026-09-10,Email,KC104338,Website,Where is my order (WISMO),Malayalam,182,8.9,resolved,,Rahul Mishra
+TK00535,2026-09-10,Email,KC104339,Website,Where is my order (WISMO),Hindi,189,5.7,resolved,,Rahul Mishra
+TK00536,2026-09-10,IVR,KC104342,Website,Where is my order (WISMO),English,2,6.3,resolved,,Divya Pillai
+TK00537,2026-09-10,Email,KC104345,Website,Where is my order (WISMO),Kannada,285,13,resolved,,Rahul Mishra
+TK00538,2026-09-10,WhatsApp,KC104421,Website,Failed delivery (NDR),English,29,17.7,resolved,4,Divya Pillai
+TK00539,2026-09-10,WhatsApp,KC104438,Website,Where is my order (WISMO),Kannada,2,0.2,resolved,4,WhatsApp bot
+TK00540,2026-09-10,IVR,KC104451,Website,Failed delivery (NDR),English,2,30.1,resolved,,Divya Pillai
+TK00541,2026-09-10,WhatsApp,,,Product question (pre-sale),Hindi,58,5.9,resolved,4,Rahul Mishra
+TK00542,2026-09-10,Instagram DM,,,Product question (pre-sale),Tamil,69,9.2,resolved,4,Rahul Mishra
+TK00543,2026-09-10,Instagram DM,,,Product question (pre-sale),English,59,10.9,resolved,,Rahul Mishra
+TK00544,2026-09-10,WhatsApp,,,Product question (pre-sale),English,27,8.7,resolved,3,Divya Pillai
+TK00545,2026-09-10,WhatsApp,,,Product question (pre-sale),Bengali,34,14.4,resolved,,Divya Pillai
+TK00546,2026-09-11,Email,KC103930,Website,Product usage question,English,175,7.2,resolved,,Divya Pillai
+TK00547,2026-09-11,Email,KC104296,Website,Failed delivery (NDR),Hindi,204,12.9,resolved,,Rahul Mishra
+TK00548,2026-09-11,WhatsApp,KC104470,Website,Failed delivery (NDR),English,42,15.5,resolved,,Rahul Mishra
+TK00549,2026-09-11,WhatsApp,KC104683,Website,Where is my order (WISMO),Tamil,0,0.2,resolved,,WhatsApp bot
+TK00550,2026-09-11,Email,KC104764,Website,Where is my order (WISMO),Hindi,345,12.6,resolved,,Divya Pillai
+TK00551,2026-09-11,WhatsApp,KC104779,Website,Cancel order,English,49,7.5,resolved,,Divya Pillai
+TK00552,2026-09-11,Email,KC104801,Website,Cancel order,English,163,9.2,escalated,,Rahul Mishra
+TK00553,2026-09-11,WhatsApp,,,Product question (pre-sale),Hinglish,54,6.7,resolved,,Divya Pillai
+TK00554,2026-09-11,Instagram DM,,,Product question (pre-sale),Bengali,43,1.6,resolved,,Divya Pillai
+TK00555,2026-09-11,Instagram DM,,,Product question (pre-sale),Hindi,9,6.2,resolved,5,Divya Pillai
+TK00556,2026-09-11,WhatsApp,,,Product question (pre-sale),Hinglish,36,1.6,resolved,3,Rahul Mishra
+TK00557,2026-09-11,Instagram DM,,,Product question (pre-sale),Hinglish,38,9.5,resolved,,Rahul Mishra
+TK00558,2026-09-11,Instagram DM,,,Product question (pre-sale),Bengali,50,11.7,resolved,,Divya Pillai
+TK00559,2026-09-11,WhatsApp,,,Product question (pre-sale),Hindi,27,16.3,resolved,,Divya Pillai
+TK00560,2026-09-11,Instagram DM,,,Product question (pre-sale),Bengali,46,2.9,resolved,3,Rahul Mishra
+TK00561,2026-09-12,WhatsApp,KC103773,Website,Damaged or leaking on arrival,Hindi,9,35.5,resolved,,Rahul Mishra
+TK00562,2026-09-12,WhatsApp,KC104447,Website,Failed delivery (NDR),Hindi,38,12.5,resolved,3,Divya Pillai
+TK00563,2026-09-12,WhatsApp,KC104448,Website,Failed delivery (NDR),English,15,17.1,resolved,,Divya Pillai
+TK00564,2026-09-12,Instagram DM,KC104507,Website,Damaged or leaking on arrival,English,21,26.9,resolved,3,Divya Pillai
+TK00565,2026-09-12,Instagram DM,KC104576,Website,Where is my order (WISMO),English,45,10.5,resolved,,Rahul Mishra
+TK00566,2026-09-12,WhatsApp,KC104688,Website,Where is my order (WISMO),English,0,0.1,resolved,5,WhatsApp bot
+TK00567,2026-09-12,WhatsApp,KC104747,Website,Where is my order (WISMO),English,1,0.2,resolved,,WhatsApp bot
+TK00568,2026-09-12,WhatsApp,KC104847,Website,Where is my order (WISMO),English,27,11.2,resolved,,Divya Pillai
+TK00569,2026-09-12,WhatsApp,KC104875,Website,Cancel order,English,23,3.8,resolved,,Rahul Mishra
+TK00570,2026-09-12,WhatsApp,,,Product question (pre-sale),Hindi,42,11,resolved,4,Divya Pillai
+TK00571,2026-09-12,Instagram DM,,,Product question (pre-sale),Hinglish,41,2.9,resolved,,Divya Pillai
+TK00572,2026-09-12,WhatsApp,,,Product question (pre-sale),Tamil,55,7.4,resolved,5,Rahul Mishra
+TK00573,2026-09-13,WhatsApp,KC103827,Website,Return or refund request,Hindi,72,53.7,resolved,4,Rahul Mishra
+TK00574,2026-09-13,WhatsApp,KC104159,Amazon,Return or refund request,Marathi,52,62.7,resolved,,Rahul Mishra
+TK00575,2026-09-13,WhatsApp,KC104568,Website,Product usage question,Hindi,60,15.4,escalated,,Rahul Mishra
+TK00576,2026-09-13,IVR,KC104678,Website,Where is my order (WISMO),Malayalam,2,4.3,resolved,5,Divya Pillai
+TK00577,2026-09-13,WhatsApp,KC104808,Website,Failed delivery (NDR),English,35,20.9,resolved,,Rahul Mishra
+TK00578,2026-09-13,Email,KC104845,Website,Failed delivery (NDR),English,234,36,resolved,,Divya Pillai
+TK00579,2026-09-13,WhatsApp,KC104966,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,,WhatsApp bot
+TK00580,2026-09-13,IVR,KC104991,Website,Cancel order,Hindi,4,4.7,resolved,,Rahul Mishra
+TK00581,2026-09-13,Email,KC105054,Website,Change COD to prepaid,English,216,6.9,resolved,3,Divya Pillai
+TK00582,2026-09-13,Instagram DM,,,Product question (pre-sale),Hinglish,10,9.2,resolved,,Divya Pillai
+TK00583,2026-09-13,Email,,,Product question (pre-sale),Bengali,142,10.9,resolved,,Rahul Mishra
+TK00584,2026-09-13,WhatsApp,,,Product question (pre-sale),Tamil,37,6.6,resolved,,Rahul Mishra
+TK00585,2026-09-13,Instagram DM,,,Product question (pre-sale),Hinglish,41,3.5,resolved,,Rahul Mishra
+TK00586,2026-09-13,Email,,,Product question (pre-sale),Bengali,170,9.7,resolved,4,Divya Pillai
+TK00587,2026-09-13,Instagram DM,,,Product question (pre-sale),Hindi,60,12.1,resolved,5,Divya Pillai
+TK00588,2026-09-13,WhatsApp,,,Product question (pre-sale),English,14,6,resolved,,Rahul Mishra
+TK00589,2026-09-13,Instagram DM,,,Product question (pre-sale),Hinglish,54,8.7,resolved,,Divya Pillai
+TK00590,2026-09-13,Instagram DM,,,Product question (pre-sale),Hindi,16,10.7,resolved,,Divya Pillai
+TK00591,2026-09-14,WhatsApp,KC104432,Website,Product usage question,English,57,7.2,resolved,5,Rahul Mishra
+TK00592,2026-09-14,IVR,KC104537,Website,Return or refund request,English,2,18.4,resolved,5,Divya Pillai
+TK00593,2026-09-14,Instagram DM,KC104869,Website,Where is my order (WISMO),Marathi,50,10.6,resolved,,Rahul Mishra
+TK00594,2026-09-14,IVR,KC104902,Website,Where is my order (WISMO),Telugu,1,7.6,resolved,,Divya Pillai
+TK00595,2026-09-14,IVR,KC104909,Website,Where is my order (WISMO),English,1,9.2,resolved,,Rahul Mishra
+TK00596,2026-09-14,WhatsApp,KC104962,Website,Where is my order (WISMO),English,0,0.3,resolved,5,WhatsApp bot
+TK00597,2026-09-14,Instagram DM,,,Product question (pre-sale),English,7,8.1,resolved,3,Divya Pillai
+TK00598,2026-09-14,Instagram DM,,,Product question (pre-sale),Hinglish,31,8.1,resolved,5,Divya Pillai
+TK00599,2026-09-14,Instagram DM,,,Product question (pre-sale),Tamil,53,14.4,resolved,4,Rahul Mishra
+TK00600,2026-09-15,Instagram DM,KC104424,Website,Product usage question,English,21,9,resolved,,Rahul Mishra
+TK00601,2026-09-15,Email,KC104754,Website,Damaged or leaking on arrival,English,97,31.9,resolved,,Rahul Mishra
+TK00602,2026-09-15,Instagram DM,KC105010,Website,Where is my order (WISMO),English,39,3.9,resolved,3,Divya Pillai
+TK00603,2026-09-15,Email,,,Product question (pre-sale),Tamil,201,4.3,resolved,5,Rahul Mishra
+TK00604,2026-09-15,WhatsApp,,,Product question (pre-sale),English,51,5.1,resolved,,Rahul Mishra
+TK00605,2026-09-15,Instagram DM,,,Product question (pre-sale),Hinglish,40,8.8,resolved,,Divya Pillai
+TK00606,2026-09-15,Email,,,Product question (pre-sale),Hindi,159,6.8,resolved,,Rahul Mishra
+TK00607,2026-09-15,WhatsApp,,,Product question (pre-sale),Hindi,39,7.2,resolved,,Divya Pillai
+TK00608,2026-09-15,WhatsApp,,,Product question (pre-sale),Hindi,53,10.9,resolved,,Divya Pillai
+TK00609,2026-09-16,IVR,KC104363,Website,Product usage question,Marathi,1,10.9,resolved,,Divya Pillai
+TK00610,2026-09-16,WhatsApp,KC105055,Website,Where is my order (WISMO),English,10,7.6,resolved,,Rahul Mishra
+TK00611,2026-09-16,Instagram DM,KC105062,Website,Product usage question,English,43,10.1,escalated,,Rahul Mishra
+TK00612,2026-09-16,WhatsApp,KC105089,Website,Where is my order (WISMO),Malayalam,2,0.2,resolved,,WhatsApp bot
+TK00613,2026-09-16,WhatsApp,KC105093,Website,Failed delivery (NDR),Tamil,22,9.7,resolved,,Divya Pillai
+TK00614,2026-09-16,WhatsApp,KC105153,Website,Where is my order (WISMO),English,59,15.8,resolved,,Divya Pillai
+TK00615,2026-09-16,Email,KC105206,Website,Where is my order (WISMO),Hindi,265,6.6,resolved,,Divya Pillai
+TK00616,2026-09-16,WhatsApp,KC105410,Website,Cancel order,Gujarati,47,7.8,resolved,5,Rahul Mishra
+TK00617,2026-09-16,WhatsApp,,,Product question (pre-sale),English,38,5.7,resolved,4,Divya Pillai
+TK00618,2026-09-16,WhatsApp,,,Product question (pre-sale),Tamil,34,6.9,resolved,4,Rahul Mishra
+TK00619,2026-09-16,WhatsApp,,,Product question (pre-sale),English,7,8.1,resolved,,Rahul Mishra
+TK00620,2026-09-17,WhatsApp,KC104530,Website,Return or refund request,Hindi,21,29.3,resolved,5,Rahul Mishra
+TK00621,2026-09-17,WhatsApp,KC104870,Website,Product usage question,Hindi,28,4.8,escalated,,Divya Pillai
+TK00622,2026-09-17,WhatsApp,KC105021,Website,Failed delivery (NDR),English,40,28.8,resolved,3,Divya Pillai
+TK00623,2026-09-17,WhatsApp,KC105086,Website,Product usage question,Hindi,44,5.4,resolved,,Divya Pillai
+TK00624,2026-09-17,IVR,KC105164,Website,Where is my order (WISMO),English,1,5.4,resolved,5,Divya Pillai
+TK00625,2026-09-17,IVR,KC105187,Amazon,Return or refund request,Hindi,1,15,resolved,3,Rahul Mishra
+TK00626,2026-09-17,Email,KC105430,Website,Where is my order (WISMO),English,105,8.1,resolved,,Divya Pillai
+TK00627,2026-09-17,WhatsApp,KC105460,Website,Change COD to prepaid,Hindi,0,0,resolved,,WhatsApp bot
+TK00628,2026-09-17,WhatsApp,KC105461,Website,Cancel order,English,36,8.4,resolved,3,Rahul Mishra
+TK00629,2026-09-17,WhatsApp,,,Product question (pre-sale),English,44,11.9,resolved,,Rahul Mishra
+TK00630,2026-09-17,Instagram DM,,,Product question (pre-sale),English,33,4.7,resolved,3,Divya Pillai
+TK00631,2026-09-17,Instagram DM,,,Product question (pre-sale),English,45,10.5,resolved,5,Rahul Mishra
+TK00632,2026-09-17,WhatsApp,,,Product question (pre-sale),Tamil,34,7.3,resolved,5,Rahul Mishra
+TK00633,2026-09-17,WhatsApp,,,Product question (pre-sale),Bengali,47,10.1,resolved,,Divya Pillai
+TK00634,2026-09-18,IVR,KC104464,Website,Return or refund request,Hindi,1,52.9,resolved,,Divya Pillai
+TK00635,2026-09-18,WhatsApp,KC104685,Website,Damaged or leaking on arrival,Hindi,26,24.6,resolved,3,Rahul Mishra
+TK00636,2026-09-18,WhatsApp,KC104802,Amazon,Return or refund request,Marathi,35,36.9,resolved,,Rahul Mishra
+TK00637,2026-09-18,IVR,KC104913,Website,Return or refund request,Hindi,3,51.5,resolved,,Rahul Mishra
+TK00638,2026-09-18,WhatsApp,KC104974,Website,Failed delivery (NDR),English,45,28.8,resolved,,Divya Pillai
+TK00639,2026-09-18,Email,KC104997,Website,Failed delivery (NDR),Marathi,132,14.8,resolved,,Divya Pillai
+TK00640,2026-09-18,Instagram DM,KC105074,Website,Failed delivery (NDR),English,23,4,resolved,,Rahul Mishra
+TK00641,2026-09-18,WhatsApp,KC105109,Website,Product usage question,English,63,9,resolved,,Rahul Mishra
+TK00642,2026-09-18,Email,KC105118,Website,Failed delivery (NDR),English,121,12.6,resolved,,Divya Pillai
+TK00643,2026-09-18,WhatsApp,KC105218,Website,Failed delivery (NDR),English,60,4,resolved,,Rahul Mishra
+TK00644,2026-09-18,Email,KC105320,Website,Failed delivery (NDR),Hindi,130,33.3,resolved,4,Divya Pillai
+TK00645,2026-09-18,Email,KC105534,Website,Cancel order,Kannada,36,3.8,resolved,,Divya Pillai
+TK00646,2026-09-18,Email,KC105564,Website,Change COD to prepaid,Hindi,137,11.4,resolved,5,Rahul Mishra
+TK00647,2026-09-18,WhatsApp,KC105573,Website,Cancel order,English,55,4.7,resolved,4,Rahul Mishra
+TK00648,2026-09-18,WhatsApp,,,Product question (pre-sale),Tamil,41,10.5,resolved,5,Divya Pillai
+TK00649,2026-09-18,Email,,,Product question (pre-sale),English,176,7.8,escalated,,Rahul Mishra
+TK00650,2026-09-18,WhatsApp,,,Product question (pre-sale),Hindi,32,8.8,resolved,,Rahul Mishra
+TK00651,2026-09-18,WhatsApp,,,Product question (pre-sale),Tamil,18,9,resolved,5,Divya Pillai
+TK00652,2026-09-18,WhatsApp,,,Product question (pre-sale),Hindi,39,9.6,resolved,3,Rahul Mishra
+TK00653,2026-09-19,WhatsApp,KC105026,Website,Product usage question,Marathi,32,10.5,resolved,,Rahul Mishra
+TK00654,2026-09-19,WhatsApp,KC105191,Website,Product usage question,Hindi,56,13,resolved,3,Divya Pillai
+TK00655,2026-09-19,WhatsApp,KC105385,Website,Where is my order (WISMO),English,45,6.3,resolved,,Divya Pillai
+TK00656,2026-09-19,WhatsApp,KC105448,Website,Where is my order (WISMO),Hindi,0,0.2,resolved,,WhatsApp bot
+TK00657,2026-09-19,Email,KC105528,Website,Failed delivery (NDR),English,165,10.1,resolved,,Divya Pillai
+TK00658,2026-09-19,Email,KC105689,Website,Cancel order,English,197,1.6,resolved,5,Rahul Mishra
+TK00659,2026-09-19,WhatsApp,,,Product question (pre-sale),Hinglish,32,6.6,resolved,3,Rahul Mishra
+TK00660,2026-09-19,Instagram DM,,,Product question (pre-sale),Bengali,25,8.1,resolved,4,Rahul Mishra
+TK00661,2026-09-19,Email,,,Product question (pre-sale),Tamil,180,6.7,resolved,,Rahul Mishra
+TK00662,2026-09-19,WhatsApp,,,Product question (pre-sale),Bengali,35,10,resolved,5,Divya Pillai
+TK00663,2026-09-19,WhatsApp,,,Product question (pre-sale),Hinglish,20,11.9,resolved,5,Rahul Mishra
+TK00664,2026-09-19,Instagram DM,,,Product question (pre-sale),Tamil,12,7.4,resolved,,Rahul Mishra
+TK00665,2026-09-19,WhatsApp,,,Product question (pre-sale),Tamil,21,1.6,resolved,,Divya Pillai
+TK00666,2026-09-19,Email,,,Product question (pre-sale),Hinglish,287,17.8,resolved,,Divya Pillai
+TK00667,2026-09-19,WhatsApp,,,Product question (pre-sale),Bengali,34,6.1,resolved,,Divya Pillai
+TK00668,2026-09-19,Instagram DM,,,Product question (pre-sale),Hinglish,34,7.3,resolved,,Divya Pillai
+TK00669,2026-09-20,WhatsApp,KC105237,Website,Failed delivery (NDR),Kannada,34,8.9,resolved,,Rahul Mishra
+TK00670,2026-09-20,IVR,KC105255,Website,Damaged or leaking on arrival,English,4,46.1,resolved,,Rahul Mishra
+TK00671,2026-09-20,Email,KC105453,Website,Where is my order (WISMO),Gujarati,45,9.9,resolved,,Divya Pillai
+TK00672,2026-09-20,IVR,KC105500,Website,Failed delivery (NDR),Hindi,4,24.6,resolved,5,Rahul Mishra
+TK00673,2026-09-20,WhatsApp,KC105526,Website,Where is my order (WISMO),Hindi,2,0.1,resolved,5,WhatsApp bot
+TK00674,2026-09-20,WhatsApp,KC105580,Website,Failed delivery (NDR),English,63,20.7,resolved,,Divya Pillai
+TK00675,2026-09-20,Email,KC105696,Website,Where is my order (WISMO),Telugu,141,4.9,resolved,,Rahul Mishra
+TK00676,2026-09-20,Email,KC105739,Website,Change COD to prepaid,Kannada,290,5.6,resolved,,Rahul Mishra
+TK00677,2026-09-20,IVR,KC105749,Website,Cancel order,Hindi,3,1.6,resolved,,Divya Pillai
+TK00678,2026-09-20,WhatsApp,KC105768,Website,Cancel order,English,55,11.6,resolved,5,Rahul Mishra
+TK00679,2026-09-20,Instagram DM,,,Product question (pre-sale),Bengali,52,13.8,resolved,3,Rahul Mishra
+TK00680,2026-09-20,WhatsApp,,,Product question (pre-sale),Hinglish,36,10,resolved,,Rahul Mishra
+TK00681,2026-09-20,Instagram DM,,,Product question (pre-sale),English,21,8.8,resolved,5,Divya Pillai
+TK00682,2026-09-20,Email,,,Product question (pre-sale),Hindi,351,9.5,resolved,,Rahul Mishra
+TK00683,2026-09-20,WhatsApp,,,Product question (pre-sale),Hinglish,17,13.2,resolved,5,Divya Pillai
+TK00684,2026-09-20,WhatsApp,,,Product question (pre-sale),Tamil,43,1.6,resolved,,Divya Pillai
+TK00685,2026-09-21,Email,KC104966,Website,Product usage question,English,170,9.9,resolved,,Divya Pillai
+TK00686,2026-09-21,WhatsApp,KC105094,Website,Product usage question,Bengali,48,5.2,resolved,4,Divya Pillai
+TK00687,2026-09-21,IVR,KC105199,Flipkart,Return or refund request,Hindi,3,47.4,resolved,3,Divya Pillai
+TK00688,2026-09-21,Email,KC105512,Website,Return or refund request,English,97,13,resolved,,Divya Pillai
+TK00689,2026-09-21,WhatsApp,KC105597,Website,Failed delivery (NDR),English,46,16,resolved,,Rahul Mishra
+TK00690,2026-09-21,WhatsApp,KC105601,Website,Where is my order (WISMO),English,39,3.7,resolved,,Rahul Mishra
+TK00691,2026-09-21,Email,KC105663,Website,Where is my order (WISMO),English,209,13.7,resolved,5,Divya Pillai
+TK00692,2026-09-21,WhatsApp,KC105727,Website,Failed delivery (NDR),Hindi,21,26.9,resolved,2,Rahul Mishra
+TK00693,2026-09-21,IVR,KC105761,Website,Where is my order (WISMO),Hindi,4,12.3,resolved,3,Divya Pillai
+TK00694,2026-09-21,WhatsApp,KC105772,Website,Where is my order (WISMO),English,53,7.9,resolved,3,Divya Pillai
+TK00695,2026-09-21,Email,KC105863,Website,Cancel order,English,339,8.6,resolved,3,Divya Pillai
+TK00696,2026-09-21,Instagram DM,,,Product question (pre-sale),English,25,7.1,resolved,,Divya Pillai
+TK00697,2026-09-21,Instagram DM,,,Product question (pre-sale),Tamil,29,8,resolved,,Rahul Mishra
+TK00698,2026-09-21,WhatsApp,,,Product question (pre-sale),Hindi,60,9.3,resolved,,Rahul Mishra
+TK00699,2026-09-21,WhatsApp,,,Product question (pre-sale),Bengali,36,12.5,resolved,4,Rahul Mishra
+TK00700,2026-09-22,WhatsApp,KC104930,Website,Product usage question,English,57,10,resolved,5,Rahul Mishra
+TK00701,2026-09-22,IVR,KC105497,Website,Failed delivery (NDR),English,3,34.6,resolved,,Divya Pillai
+TK00702,2026-09-22,Email,KC105635,Website,Where is my order (WISMO),Malayalam,126,11,resolved,,Rahul Mishra
+TK00703,2026-09-22,Instagram DM,KC105679,Website,Where is my order (WISMO),English,31,11,resolved,,Rahul Mishra
+TK00704,2026-09-22,Email,KC105732,Website,Where is my order (WISMO),English,177,12.2,resolved,,Divya Pillai
+TK00705,2026-09-22,WhatsApp,KC105805,Website,Where is my order (WISMO),Marathi,0,0.2,resolved,,WhatsApp bot
+TK00706,2026-09-22,WhatsApp,KC106038,Website,Cancel order,English,42,5.5,resolved,4,Divya Pillai
+TK00707,2026-09-22,IVR,KC106056,Website,Cancel order,Gujarati,2,7.7,resolved,4,Rahul Mishra
+TK00708,2026-09-22,WhatsApp,,,Product question (pre-sale),English,41,5,resolved,4,Rahul Mishra
+TK00709,2026-09-22,WhatsApp,,,Product question (pre-sale),Tamil,39,8.9,resolved,,Rahul Mishra
+TK00710,2026-09-22,WhatsApp,,,Product question (pre-sale),Tamil,49,5.6,resolved,4,Divya Pillai
+TK00711,2026-09-22,Email,,,Product question (pre-sale),Hinglish,188,9.2,resolved,,Rahul Mishra
+TK00712,2026-09-22,Instagram DM,,,Product question (pre-sale),English,27,8.6,resolved,,Rahul Mishra
+TK00713,2026-09-23,WhatsApp,KC105565,Website,Failed delivery (NDR),English,56,13.4,resolved,3,Divya Pillai
+TK00714,2026-09-23,Email,KC105632,Website,Return or refund request,Marathi,216,49.6,resolved,3,Rahul Mishra
+TK00715,2026-09-23,IVR,KC105655,Website,Failed delivery (NDR),English,3,20.9,resolved,4,Divya Pillai
+TK00716,2026-09-23,WhatsApp,KC105718,Website,Failed delivery (NDR),English,22,18.1,resolved,,Divya Pillai
+TK00717,2026-09-23,Email,KC105776,Website,Where is my order (WISMO),English,137,16.4,resolved,4,Rahul Mishra
+TK00718,2026-09-23,Instagram DM,KC105818,Website,Failed delivery (NDR),English,63,21.2,resolved,4,Divya Pillai
+TK00719,2026-09-23,Email,KC105858,Website,Where is my order (WISMO),English,391,2.7,resolved,,Rahul Mishra
+TK00720,2026-09-23,Email,KC105933,Website,Where is my order (WISMO),English,36,9.2,resolved,,Divya Pillai
+TK00721,2026-09-23,WhatsApp,KC106163,Website,Cancel order,English,44,11.3,resolved,,Divya Pillai
+TK00722,2026-09-23,Email,,,Product question (pre-sale),Hindi,94,7.3,resolved,5,Divya Pillai
+TK00723,2026-09-23,WhatsApp,,,Product question (pre-sale),Bengali,25,4.9,resolved,,Rahul Mishra
+TK00724,2026-09-23,WhatsApp,,,Product question (pre-sale),English,43,3.1,resolved,,Divya Pillai
+TK00725,2026-09-23,WhatsApp,,,Product question (pre-sale),English,11,4.4,resolved,,Divya Pillai
+TK00726,2026-09-23,Email,,,Product question (pre-sale),Tamil,337,11.7,resolved,,Rahul Mishra
+TK00727,2026-09-23,WhatsApp,,,Product question (pre-sale),Tamil,35,9.4,resolved,4,Divya Pillai
+TK00728,2026-09-24,IVR,KC104935,Website,Return or refund request,Hindi,4,43.2,resolved,,Divya Pillai
+TK00729,2026-09-24,WhatsApp,KC105032,Website,Damaged or leaking on arrival,English,42,6,resolved,4,Rahul Mishra
+TK00730,2026-09-24,Instagram DM,KC105348,Website,Damaged or leaking on arrival,English,28,41.7,resolved,,Divya Pillai
+TK00731,2026-09-24,WhatsApp,KC105831,Website,Failed delivery (NDR),Telugu,7,20.1,resolved,4,Divya Pillai
+TK00732,2026-09-24,Email,KC105904,Website,Failed delivery (NDR),Hindi,130,11.9,resolved,,Divya Pillai
+TK00733,2026-09-24,Email,KC106032,Website,Failed delivery (NDR),English,196,27.1,resolved,,Rahul Mishra
+TK00734,2026-09-24,WhatsApp,KC106110,Website,Where is my order (WISMO),Hindi,27,7.3,resolved,4,Rahul Mishra
+TK00735,2026-09-24,WhatsApp,KC106166,Website,Where is my order (WISMO),Odia,0,0.2,resolved,5,WhatsApp bot
+TK00736,2026-09-24,WhatsApp,KC106196,Website,Cancel order,English,32,8.8,resolved,4,Rahul Mishra
+TK00737,2026-09-24,Instagram DM,,,Product question (pre-sale),English,25,6,resolved,5,Divya Pillai
+TK00738,2026-09-24,Instagram DM,,,Product question (pre-sale),Hindi,68,10.8,resolved,3,Divya Pillai
+TK00739,2026-09-24,Instagram DM,,,Product question (pre-sale),Hinglish,42,7.6,resolved,,Rahul Mishra
+TK00740,2026-09-24,WhatsApp,,,Product question (pre-sale),Hindi,35,4.8,resolved,,Divya Pillai
+TK00741,2026-09-25,WhatsApp,KC105758,Website,Product usage question,Tamil,47,6,resolved,4,Divya Pillai
+TK00742,2026-09-25,Instagram DM,KC105840,Website,Failed delivery (NDR),English,18,15.2,resolved,3,Rahul Mishra
+TK00743,2026-09-25,Email,KC105860,Website,Failed delivery (NDR),English,180,26.4,resolved,,Rahul Mishra
+TK00744,2026-09-25,Email,KC106024,Website,Where is my order (WISMO),English,187,4.6,resolved,,Divya Pillai
+TK00745,2026-09-25,Email,KC106200,Website,Where is my order (WISMO),English,117,9.1,resolved,3,Divya Pillai
+TK00746,2026-09-25,WhatsApp,KC106340,Website,Change COD to prepaid,English,35,3.1,resolved,5,Divya Pillai
+TK00747,2026-09-25,WhatsApp,,,Product question (pre-sale),Tamil,42,7.1,resolved,3,Divya Pillai
+TK00748,2026-09-25,WhatsApp,,,Product question (pre-sale),Hinglish,35,7.9,resolved,4,Rahul Mishra
+TK00749,2026-09-25,WhatsApp,,,Product question (pre-sale),Tamil,74,7.5,resolved,4,Rahul Mishra
+TK00750,2026-09-25,Instagram DM,,,Product question (pre-sale),Bengali,51,7.7,resolved,,Rahul Mishra
+TK00751,2026-09-26,Instagram DM,KC105609,Website,Damaged or leaking on arrival,Hindi,44,11.8,resolved,3,Rahul Mishra
+TK00752,2026-09-26,WhatsApp,KC105617,Tata CLiQ,Marketplace order escalation,Gujarati,43,7.1,resolved,4,Divya Pillai
+TK00753,2026-09-26,Email,KC105638,Website,Return or refund request,Hindi,189,23.1,resolved,,Divya Pillai
+TK00754,2026-09-26,IVR,KC105856,Website,Failed delivery (NDR),Marathi,3,30.7,resolved,,Rahul Mishra
+TK00755,2026-09-26,WhatsApp,KC106044,Meesho,Marketplace order escalation,English,58,6.1,resolved,,Rahul Mishra
+TK00756,2026-09-26,IVR,KC106094,Website,Failed delivery (NDR),English,4,26.2,resolved,,Divya Pillai
+TK00757,2026-09-26,WhatsApp,KC106175,Website,Failed delivery (NDR),Hindi,51,15.5,resolved,,Rahul Mishra
+TK00758,2026-09-26,WhatsApp,KC106230,Website,Failed delivery (NDR),English,38,21.9,escalated,,Divya Pillai
+TK00759,2026-09-26,WhatsApp,KC106300,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,,WhatsApp bot
+TK00760,2026-09-26,WhatsApp,,,Product question (pre-sale),Bengali,15,9,resolved,,Divya Pillai
+TK00761,2026-09-26,Instagram DM,,,Product question (pre-sale),Bengali,20,6.7,resolved,,Divya Pillai
+TK00762,2026-09-26,WhatsApp,,,Product question (pre-sale),Hindi,41,2.9,resolved,,Rahul Mishra
+TK00763,2026-09-26,WhatsApp,,,Product question (pre-sale),Tamil,18,1.9,resolved,3,Divya Pillai
+TK00764,2026-09-26,Email,,,Product question (pre-sale),English,193,11.2,resolved,4,Divya Pillai
+TK00765,2026-09-27,WhatsApp,KC105110,Website,Return or refund request,English,39,36.4,resolved,,Divya Pillai
+TK00766,2026-09-27,Instagram DM,KC105339,Nykaa,Return or refund request,English,18,49.1,resolved,,Divya Pillai
+TK00767,2026-09-27,WhatsApp,KC106097,Website,Failed delivery (NDR),Hindi,39,8.8,resolved,3,Divya Pillai
+TK00768,2026-09-27,Email,KC106259,Website,Product usage question,Hindi,247,8,resolved,,Divya Pillai
+TK00769,2026-09-27,Instagram DM,KC106296,Website,Where is my order (WISMO),English,46,5.4,resolved,4,Rahul Mishra
+TK00770,2026-09-27,WhatsApp,KC106340,Website,Failed delivery (NDR),English,51,4,resolved,,Divya Pillai
+TK00771,2026-09-27,WhatsApp,KC106386,Website,Where is my order (WISMO),English,1,0.1,resolved,5,WhatsApp bot
+TK00772,2026-09-27,IVR,KC106471,Website,Cancel order,Hindi,4,8.2,resolved,4,Divya Pillai
+TK00773,2026-09-27,Email,,,Product question (pre-sale),English,151,12.7,resolved,,Divya Pillai
+TK00774,2026-09-27,Email,,,Product question (pre-sale),Bengali,347,10.3,resolved,5,Rahul Mishra
+TK00775,2026-09-27,Email,,,Product question (pre-sale),English,105,6.5,resolved,3,Divya Pillai
+TK00776,2026-09-27,WhatsApp,,,Product question (pre-sale),English,23,9.7,resolved,,Divya Pillai
+TK00777,2026-09-27,Instagram DM,,,Product question (pre-sale),Hinglish,27,4.8,resolved,4,Rahul Mishra
+TK00778,2026-09-28,WhatsApp,KC105864,Website,Product usage question,Hindi,29,14.1,resolved,,Rahul Mishra
+TK00779,2026-09-28,IVR,KC106020,Website,Product usage question,English,1,9.1,resolved,,Divya Pillai
+TK00780,2026-09-28,Email,KC106095,Website,Failed delivery (NDR),English,36,21.1,resolved,,Rahul Mishra
+TK00781,2026-09-28,WhatsApp,KC106192,Website,Failed delivery (NDR),English,23,35.8,resolved,,Divya Pillai
+TK00782,2026-09-28,Instagram DM,KC106299,Website,Failed delivery (NDR),English,39,6.4,resolved,,Rahul Mishra
+TK00783,2026-09-28,WhatsApp,KC106329,Website,Where is my order (WISMO),Hindi,44,3.5,resolved,,Divya Pillai
+TK00784,2026-09-28,WhatsApp,KC106415,Website,Where is my order (WISMO),Hindi,0,0.1,resolved,4,WhatsApp bot
+TK00785,2026-09-28,WhatsApp,KC106485,Website,Where is my order (WISMO),Bengali,0,0.1,resolved,3,WhatsApp bot
+TK00786,2026-09-28,WhatsApp,KC106599,Website,Cancel order,English,50,5.3,resolved,,Rahul Mishra
+TK00787,2026-09-28,WhatsApp,,,Product question (pre-sale),Hinglish,45,9.7,escalated,,Divya Pillai
+TK00788,2026-09-28,Instagram DM,,,Product question (pre-sale),English,47,9.7,resolved,4,Rahul Mishra
+TK00789,2026-09-28,Instagram DM,,,Product question (pre-sale),Tamil,62,6,escalated,,Divya Pillai
+TK00790,2026-09-28,Email,,,Product question (pre-sale),Bengali,138,6.6,resolved,5,Divya Pillai
+TK00791,2026-09-28,WhatsApp,,,Product question (pre-sale),Bengali,39,8.3,resolved,3,Rahul Mishra
+TK00792,2026-09-28,Instagram DM,,,Product question (pre-sale),Bengali,42,8.5,resolved,4,Divya Pillai
+TK00793,2026-09-29,IVR,KC106049,Website,Product usage question,Tamil,3,9.6,resolved,,Rahul Mishra
+TK00794,2026-09-29,WhatsApp,KC106281,Website,Damaged or leaking on arrival,Hindi,20,33.5,escalated,,Rahul Mishra
+TK00795,2026-09-29,WhatsApp,KC106376,Website,Failed delivery (NDR),Hindi,39,17.5,resolved,,Divya Pillai
+TK00796,2026-09-29,Email,KC106607,Website,Where is my order (WISMO),Malayalam,223,6.7,resolved,,Rahul Mishra
+TK00797,2026-09-29,Instagram DM,KC106798,Website,Cancel order,Marathi,26,5.4,resolved,4,Divya Pillai
+TK00798,2026-09-29,WhatsApp,,,Product question (pre-sale),Bengali,87,7.3,resolved,,Divya Pillai
+TK00799,2026-09-29,WhatsApp,,,Product question (pre-sale),Hindi,47,7.4,resolved,,Rahul Mishra
+TK00800,2026-09-30,Email,KC105690,Website,Damaged or leaking on arrival,Marathi,108,10.5,resolved,,Rahul Mishra
+TK00801,2026-09-30,WhatsApp,KC106385,Website,Failed delivery (NDR),Kannada,14,30.3,resolved,3,Rahul Mishra
+TK00802,2026-09-30,Instagram DM,KC106593,Blinkit,Marketplace order escalation,English,31,8.6,resolved,3,Rahul Mishra
+TK00803,2026-09-30,WhatsApp,KC106664,Website,Where is my order (WISMO),English,18,6.9,resolved,,Divya Pillai
+TK00804,2026-09-30,WhatsApp,KC106719,Website,Where is my order (WISMO),Malayalam,0,0.2,resolved,,WhatsApp bot
+TK00805,2026-09-30,Instagram DM,,,Product question (pre-sale),English,64,12.1,resolved,,Divya Pillai
+TK00806,2026-09-30,WhatsApp,,,Product question (pre-sale),Tamil,43,12.2,resolved,5,Rahul Mishra
+TK00807,2026-09-30,Instagram DM,,,Product question (pre-sale),Bengali,16,9.8,resolved,,Rahul Mishra
+TK00808,2026-10-01,IVR,KC106431,Website,Damaged or leaking on arrival,Hindi,3,30.3,resolved,3,Lavanya Reddy
+TK00809,2026-10-01,WhatsApp,KC106601,Amazon,Marketplace order escalation,English,24,10.5,resolved,4,Divya Pillai
+TK00810,2026-10-01,IVR,KC106613,Website,Failed delivery (NDR),English,4,22.3,resolved,,Divya Pillai
+TK00811,2026-10-01,WhatsApp,KC106725,Website,Failed delivery (NDR),Hindi,7,14.7,resolved,4,Rahul Mishra
+TK00812,2026-10-01,WhatsApp,KC106728,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,4,WhatsApp bot
+TK00813,2026-10-01,WhatsApp,KC106757,Website,Failed delivery (NDR),English,20,26.3,resolved,4,Rahul Mishra
+TK00814,2026-10-01,Email,KC106761,Website,Where is my order (WISMO),English,36,5.4,resolved,,Lavanya Reddy
+TK00815,2026-10-01,IVR,KC106825,Website,Where is my order (WISMO),Hindi,3,5.1,resolved,,Divya Pillai
+TK00816,2026-10-01,WhatsApp,KC106926,Website,Where is my order (WISMO),English,2,0.1,resolved,,WhatsApp bot
+TK00817,2026-10-01,Instagram DM,,,Product question (pre-sale),English,19,3.2,resolved,,Lavanya Reddy
+TK00818,2026-10-01,Instagram DM,,,Product question (pre-sale),Tamil,33,7.6,resolved,,Lavanya Reddy
+TK00819,2026-10-01,WhatsApp,,,Product question (pre-sale),English,26,9.3,resolved,,Lavanya Reddy
+TK00820,2026-10-01,WhatsApp,,,Product question (pre-sale),Bengali,41,11.8,resolved,3,Rahul Mishra
+TK00821,2026-10-01,WhatsApp,,,Product question (pre-sale),Tamil,24,9.2,resolved,4,Rahul Mishra
+TK00822,2026-10-01,WhatsApp,,,Product question (pre-sale),English,39,7.1,resolved,4,Lavanya Reddy
+TK00823,2026-10-01,Instagram DM,,,Product question (pre-sale),English,22,9.8,resolved,,Divya Pillai
+TK00824,2026-10-01,Instagram DM,,,Product question (pre-sale),English,31,5.4,resolved,,Divya Pillai
+TK00825,2026-10-01,Instagram DM,,,Product question (pre-sale),English,35,10,resolved,3,Rahul Mishra
+TK00826,2026-10-02,Email,KC105845,Amazon,Return or refund request,English,183,21.1,resolved,,Lavanya Reddy
+TK00827,2026-10-02,WhatsApp,KC106215,Website,Product usage question,Telugu,7,8.3,resolved,4,Lavanya Reddy
+TK00828,2026-10-02,WhatsApp,KC106685,Amazon,Marketplace order escalation,Hindi,33,5.4,resolved,2,Rahul Mishra
+TK00829,2026-10-02,Email,KC106701,Website,Failed delivery (NDR),English,39,27.1,resolved,3,Lavanya Reddy
+TK00830,2026-10-02,WhatsApp,KC106758,Website,Where is my order (WISMO),Hindi,2,0.1,resolved,,WhatsApp bot
+TK00831,2026-10-02,WhatsApp,KC106863,Website,Failed delivery (NDR),English,77,17.1,resolved,2,Rahul Mishra
+TK00832,2026-10-02,Instagram DM,KC106869,Website,Failed delivery (NDR),English,36,24.2,resolved,,Lavanya Reddy
+TK00833,2026-10-02,WhatsApp,KC106880,Website,Failed delivery (NDR),English,46,34.4,resolved,,Rahul Mishra
+TK00834,2026-10-02,WhatsApp,KC107029,Website,Where is my order (WISMO),English,1,0.2,resolved,,WhatsApp bot
+TK00835,2026-10-02,WhatsApp,KC107042,Website,Where is my order (WISMO),Kannada,0,0.2,resolved,,WhatsApp bot
+TK00836,2026-10-02,Email,KC107062,Website,Cancel order,Hindi,98,7.1,resolved,,Divya Pillai
+TK00837,2026-10-02,WhatsApp,,,Product question (pre-sale),Hinglish,52,9.6,resolved,5,Lavanya Reddy
+TK00838,2026-10-02,WhatsApp,,,Product question (pre-sale),English,27,7,resolved,,Lavanya Reddy
+TK00839,2026-10-02,Instagram DM,,,Product question (pre-sale),Tamil,35,9.7,resolved,,Lavanya Reddy
+TK00840,2026-10-02,WhatsApp,,,Product question (pre-sale),English,19,9.8,resolved,,Divya Pillai
+TK00841,2026-10-02,Instagram DM,,,Product question (pre-sale),Hindi,7,10,resolved,3,Rahul Mishra
+TK00842,2026-10-02,WhatsApp,,,Product question (pre-sale),English,32,10.7,resolved,,Divya Pillai
+TK00843,2026-10-02,WhatsApp,,,Product question (pre-sale),Hindi,59,7.4,resolved,,Rahul Mishra
+TK00844,2026-10-02,WhatsApp,,,Product question (pre-sale),English,34,8.9,resolved,4,Rahul Mishra
+TK00845,2026-10-03,WhatsApp,KC106253,Website,Product usage question,English,44,8.4,resolved,5,Lavanya Reddy
+TK00846,2026-10-03,Email,KC106584,Website,Product usage question,Hindi,243,5.4,resolved,,Rahul Mishra
+TK00847,2026-10-03,WhatsApp,KC106666,Website,Failed delivery (NDR),Marathi,38,22.9,resolved,4,Rahul Mishra
+TK00848,2026-10-03,WhatsApp,KC106695,Website,Failed delivery (NDR),English,43,22.6,resolved,,Lavanya Reddy
+TK00849,2026-10-03,WhatsApp,KC106785,Website,Failed delivery (NDR),English,29,18.4,resolved,,Divya Pillai
+TK00850,2026-10-03,WhatsApp,KC106890,Website,Where is my order (WISMO),English,0,0.2,resolved,,WhatsApp bot
+TK00851,2026-10-03,WhatsApp,KC106899,Website,Where is my order (WISMO),Assamese,34,4.6,resolved,,Lavanya Reddy
+TK00852,2026-10-03,WhatsApp,KC106946,Website,Failed delivery (NDR),Hindi,54,20.8,resolved,,Rahul Mishra
+TK00853,2026-10-03,WhatsApp,,,Product question (pre-sale),Bengali,10,11.8,resolved,5,Lavanya Reddy
+TK00854,2026-10-03,Email,,,Product question (pre-sale),Hinglish,235,11.4,resolved,,Lavanya Reddy
+TK00855,2026-10-03,WhatsApp,,,Product question (pre-sale),English,37,2.6,resolved,,Divya Pillai
+TK00856,2026-10-03,WhatsApp,,,Product question (pre-sale),Bengali,46,11.2,resolved,,Lavanya Reddy
+TK00857,2026-10-03,WhatsApp,,,Product question (pre-sale),Hinglish,51,10.9,resolved,4,Divya Pillai
+TK00858,2026-10-04,Instagram DM,KC106344,Amazon,Damaged or leaking on arrival,English,59,32.8,resolved,5,Lavanya Reddy
+TK00859,2026-10-04,IVR,KC106420,Website,Product usage question,Marathi,1,9.1,resolved,5,Lavanya Reddy
+TK00860,2026-10-04,WhatsApp,KC106841,Website,Product usage question,Hindi,12,6.4,resolved,5,Lavanya Reddy
+TK00861,2026-10-04,WhatsApp,KC106851,Website,Product usage question,Hindi,10,13.9,resolved,,Lavanya Reddy
+TK00862,2026-10-04,Email,KC106956,Website,Where is my order (WISMO),English,381,2.3,resolved,,Divya Pillai
+TK00863,2026-10-04,WhatsApp,KC106978,Website,Failed delivery (NDR),Hindi,46,27.3,resolved,,Divya Pillai
+TK00864,2026-10-04,WhatsApp,KC107031,Website,Where is my order (WISMO),English,1,0.1,resolved,,WhatsApp bot
+TK00865,2026-10-04,WhatsApp,KC107063,Website,Where is my order (WISMO),English,50,6.8,resolved,4,Rahul Mishra
+TK00866,2026-10-04,IVR,KC107148,Website,Where is my order (WISMO),Hindi,2,7.5,resolved,,Lavanya Reddy
+TK00867,2026-10-04,IVR,KC107287,Website,Where is my order (WISMO),English,4,6.2,resolved,,Lavanya Reddy
+TK00868,2026-10-04,Instagram DM,,,Product question (pre-sale),Bengali,11,10.7,resolved,,Lavanya Reddy
+TK00869,2026-10-04,WhatsApp,,,Product question (pre-sale),Hinglish,36,10.3,resolved,4,Lavanya Reddy
+TK00870,2026-10-04,Instagram DM,,,Product question (pre-sale),English,7,12.6,resolved,,Rahul Mishra
+TK00871,2026-10-05,Email,KC106838,Website,Failed delivery (NDR),Hindi,143,17.2,resolved,,Lavanya Reddy
+TK00872,2026-10-05,WhatsApp,KC106942,Website,Product usage question,English,44,3.7,resolved,5,Divya Pillai
+TK00873,2026-10-05,IVR,KC107023,Website,Failed delivery (NDR),English,2,13.3,resolved,,Lavanya Reddy
+TK00874,2026-10-05,WhatsApp,KC107134,Website,Failed delivery (NDR),Hindi,43,27.1,resolved,,Rahul Mishra
+TK00875,2026-10-05,WhatsApp,KC107270,Website,Failed delivery (NDR),English,41,15.7,resolved,3,Rahul Mishra
+TK00876,2026-10-05,WhatsApp,KC107319,Website,Where is my order (WISMO),English,1,0.2,resolved,,WhatsApp bot
+TK00877,2026-10-05,IVR,KC107456,Website,Where is my order (WISMO),Hindi,3,10,resolved,,Lavanya Reddy
+TK00878,2026-10-05,WhatsApp,,,Product question (pre-sale),Tamil,51,10.3,resolved,,Lavanya Reddy
+TK00879,2026-10-05,WhatsApp,,,Product question (pre-sale),English,35,6.6,resolved,5,Divya Pillai
+TK00880,2026-10-05,WhatsApp,,,Product question (pre-sale),English,88,13,resolved,5,Rahul Mishra
+TK00881,2026-10-05,WhatsApp,,,Product question (pre-sale),English,7,9.2,resolved,5,Lavanya Reddy
+TK00882,2026-10-05,Instagram DM,,,Product question (pre-sale),Bengali,37,12.2,resolved,,Lavanya Reddy
+TK00883,2026-10-06,Email,KC105448,Website,Damaged or leaking on arrival,Assamese,324,38.9,escalated,,Divya Pillai
+TK00884,2026-10-06,Instagram DM,KC106690,Website,Product usage question,English,36,9.5,resolved,4,Divya Pillai
+TK00885,2026-10-06,WhatsApp,KC106917,Website,Product usage question,English,24,6.2,resolved,,Rahul Mishra
+TK00886,2026-10-06,WhatsApp,KC107113,Website,Failed delivery (NDR),English,37,23.7,resolved,,Lavanya Reddy
+TK00887,2026-10-06,Email,KC107262,Website,Where is my order (WISMO),English,257,3.8,resolved,,Lavanya Reddy
+TK00888,2026-10-06,IVR,KC107278,Website,Failed delivery (NDR),English,4,27.7,resolved,,Lavanya Reddy
+TK00889,2026-10-06,IVR,KC107325,Website,Failed delivery (NDR),English,2,8.6,resolved,2,Divya Pillai
+TK00890,2026-10-06,Email,KC107414,Website,Where is my order (WISMO),Hindi,218,9.6,resolved,4,Rahul Mishra
+TK00891,2026-10-06,IVR,KC107658,Website,Cancel order,English,4,6.5,resolved,5,Lavanya Reddy
+TK00892,2026-10-06,WhatsApp,,,Product question (pre-sale),Hindi,41,7.9,resolved,4,Divya Pillai
+TK00893,2026-10-06,WhatsApp,,,Product question (pre-sale),English,41,9.5,resolved,,Divya Pillai
+TK00894,2026-10-07,IVR,KC106569,Website,Return or refund request,English,3,73.3,escalated,,Rahul Mishra
+TK00895,2026-10-07,Email,KC106833,Website,Product usage question,Gujarati,188,5.1,resolved,,Rahul Mishra
+TK00896,2026-10-07,WhatsApp,KC107057,Nykaa,Marketplace order escalation,English,37,10,resolved,3,Divya Pillai
+TK00897,2026-10-07,IVR,KC107080,Website,Failed delivery (NDR),Hindi,4,12,resolved,,Rahul Mishra
+TK00898,2026-10-07,WhatsApp,KC107118,Website,Failed delivery (NDR),Hindi,38,22.5,resolved,3,Divya Pillai
+TK00899,2026-10-07,WhatsApp,KC107321,Website,Failed delivery (NDR),Hindi,7,21.6,resolved,,Lavanya Reddy
+TK00900,2026-10-07,WhatsApp,KC107437,Website,Failed delivery (NDR),English,53,24.6,resolved,2,Rahul Mishra
+TK00901,2026-10-07,Email,KC107769,Website,Cancel order,English,372,5.7,resolved,4,Divya Pillai
+TK00902,2026-10-07,WhatsApp,,,Product question (pre-sale),Hinglish,52,4.3,resolved,,Lavanya Reddy
+TK00903,2026-10-07,WhatsApp,,,Product question (pre-sale),Hinglish,30,5.7,resolved,,Lavanya Reddy
+TK00904,2026-10-07,Email,,,Product question (pre-sale),Hindi,183,13.6,resolved,,Lavanya Reddy
+TK00905,2026-10-07,WhatsApp,,,Product question (pre-sale),Hindi,29,7.1,resolved,5,Lavanya Reddy
+TK00906,2026-10-07,WhatsApp,,,Product question (pre-sale),Hinglish,44,1.6,resolved,,Divya Pillai
+TK00907,2026-10-07,WhatsApp,,,Product question (pre-sale),English,30,8.2,resolved,,Lavanya Reddy
+TK00908,2026-10-07,Instagram DM,,,Product question (pre-sale),Hinglish,17,7.4,resolved,4,Lavanya Reddy
+TK00909,2026-10-08,Instagram DM,KC106717,Website,Damaged or leaking on arrival,Hindi,28,11.2,resolved,,Lavanya Reddy
+TK00910,2026-10-08,WhatsApp,KC106819,Website,Return or refund request,English,7,8,escalated,,Lavanya Reddy
+TK00911,2026-10-08,WhatsApp,KC106936,Website,Damaged or leaking on arrival,Marathi,22,33.6,resolved,4,Divya Pillai
+TK00912,2026-10-08,WhatsApp,KC107013,Website,Damaged or leaking on arrival,English,46,18,resolved,3,Lavanya Reddy
+TK00913,2026-10-08,WhatsApp,KC107536,Website,Where is my order (WISMO),Malayalam,0,0.3,resolved,4,WhatsApp bot
+TK00914,2026-10-08,Instagram DM,KC107602,Website,Where is my order (WISMO),Malayalam,44,6,resolved,,Divya Pillai
+TK00915,2026-10-08,WhatsApp,KC107791,Website,Where is my order (WISMO),English,1,0.1,resolved,,WhatsApp bot
+TK00916,2026-10-08,WhatsApp,,,Product question (pre-sale),Hinglish,42,8.8,resolved,,Rahul Mishra
+TK00917,2026-10-08,WhatsApp,,,Product question (pre-sale),Bengali,41,10.6,resolved,,Divya Pillai
+TK00918,2026-10-08,Email,,,Product question (pre-sale),Hinglish,95,11,resolved,,Divya Pillai
+TK00919,2026-10-09,IVR,KC106699,Website,Return or refund request,English,3,77.7,resolved,,Rahul Mishra
+TK00920,2026-10-09,IVR,KC106827,Amazon,Return or refund request,Marathi,2,22.1,resolved,,Rahul Mishra
+TK00921,2026-10-09,WhatsApp,KC106949,Nykaa,Marketplace order escalation,English,30,5.7,resolved,,Lavanya Reddy
+TK00922,2026-10-09,WhatsApp,KC107335,Website,Failed delivery (NDR),English,10,24.3,resolved,,Lavanya Reddy
+TK00923,2026-10-09,WhatsApp,KC107370,Zepto,Damaged or leaking on arrival,English,24,32.3,resolved,,Rahul Mishra
+TK00924,2026-10-09,Email,KC107789,Website,Where is my order (WISMO),English,101,9.1,resolved,5,Lavanya Reddy
+TK00925,2026-10-09,IVR,KC107936,Website,Cancel order,Punjabi,3,7.8,resolved,,Lavanya Reddy
+TK00926,2026-10-09,WhatsApp,,,Product question (pre-sale),Hinglish,31,8.3,resolved,,Lavanya Reddy
+TK00927,2026-10-09,WhatsApp,,,Product question (pre-sale),Hindi,65,8,resolved,3,Rahul Mishra
+TK00928,2026-10-09,Email,,,Product question (pre-sale),Tamil,227,4.2,resolved,4,Rahul Mishra
+TK00929,2026-10-09,Instagram DM,,,Product question (pre-sale),Tamil,36,7.3,resolved,5,Divya Pillai
+TK00930,2026-10-09,WhatsApp,,,Product question (pre-sale),Tamil,34,11.9,resolved,4,Rahul Mishra
+TK00931,2026-10-10,Email,KC106882,Website,Return or refund request,English,191,44.9,resolved,,Rahul Mishra
+TK00932,2026-10-10,Email,KC107297,Website,Return or refund request,English,91,37.4,resolved,4,Lavanya Reddy
+TK00933,2026-10-10,WhatsApp,KC107359,Blinkit,Marketplace order escalation,Hindi,52,12.1,resolved,3,Rahul Mishra
+TK00934,2026-10-10,WhatsApp,KC107886,Website,Failed delivery (NDR),English,18,5.1,resolved,4,Rahul Mishra
+TK00935,2026-10-10,Instagram DM,KC108001,Website,Where is my order (WISMO),Marathi,20,3.4,resolved,5,Divya Pillai
+TK00936,2026-10-10,WhatsApp,,,Product question (pre-sale),Hinglish,27,8.3,resolved,,Divya Pillai
+TK00937,2026-10-10,WhatsApp,,,Product question (pre-sale),English,29,8.7,resolved,4,Divya Pillai
+TK00938,2026-10-10,WhatsApp,,,Product question (pre-sale),Hinglish,7,3.2,resolved,,Rahul Mishra
+TK00939,2026-10-10,WhatsApp,,,Product question (pre-sale),Bengali,7,8,resolved,,Divya Pillai
+TK00940,2026-10-10,Instagram DM,,,Product question (pre-sale),English,36,5.9,resolved,,Rahul Mishra
+TK00941,2026-10-10,Email,,,Product question (pre-sale),Bengali,198,9.1,resolved,,Lavanya Reddy
+TK00942,2026-10-10,Instagram DM,,,Product question (pre-sale),Hinglish,33,5.8,resolved,,Rahul Mishra
+TK00943,2026-10-10,WhatsApp,,,Product question (pre-sale),English,27,6.5,resolved,4,Divya Pillai
+TK00944,2026-10-10,WhatsApp,,,Product question (pre-sale),Hinglish,31,9.5,resolved,,Lavanya Reddy
+TK00945,2026-10-10,Instagram DM,,,Product question (pre-sale),Tamil,26,7.3,resolved,,Rahul Mishra
+TK00946,2026-10-10,Instagram DM,,,Product question (pre-sale),Bengali,23,11.1,resolved,4,Divya Pillai
+TK00947,2026-10-11,IVR,KC106901,Amazon,Return or refund request,English,1,28.1,resolved,,Divya Pillai
+TK00948,2026-10-11,IVR,KC107032,Website,Product usage question,Hindi,1,6,resolved,,Divya Pillai
+TK00949,2026-10-11,WhatsApp,KC107678,Website,Failed delivery (NDR),English,11,26.6,resolved,5,Divya Pillai
+TK00950,2026-10-11,WhatsApp,KC107837,Website,Where is my order (WISMO),English,0,0.2,resolved,5,WhatsApp bot
+TK00951,2026-10-11,Email,KC107850,Website,Where is my order (WISMO),Kannada,235,8.5,resolved,,Lavanya Reddy
+TK00952,2026-10-11,WhatsApp,KC107934,Website,Failed delivery (NDR),English,22,20.6,resolved,3,Lavanya Reddy
+TK00953,2026-10-11,Email,KC107997,Website,Where is my order (WISMO),English,149,7.9,resolved,,Divya Pillai
+TK00954,2026-10-11,WhatsApp,KC108004,Website,Failed delivery (NDR),Hindi,48,20.2,resolved,,Lavanya Reddy
+TK00955,2026-10-11,Instagram DM,KC108074,Website,Where is my order (WISMO),English,59,9.1,resolved,4,Rahul Mishra
+TK00956,2026-10-11,WhatsApp,KC108176,Website,Cancel order,English,49,9.5,resolved,,Rahul Mishra
+TK00957,2026-10-11,Email,KC108279,Website,Cancel order,Hindi,188,5.6,resolved,4,Rahul Mishra
+TK00958,2026-10-11,WhatsApp,,,Product question (pre-sale),Hindi,49,11.6,resolved,,Lavanya Reddy
+TK00959,2026-10-11,WhatsApp,,,Product question (pre-sale),Tamil,39,11.8,resolved,3,Divya Pillai
+TK00960,2026-10-11,WhatsApp,,,Product question (pre-sale),English,28,9.3,resolved,,Divya Pillai
+TK00961,2026-10-11,WhatsApp,,,Product question (pre-sale),Tamil,40,1.8,resolved,,Rahul Mishra
+TK00962,2026-10-11,WhatsApp,,,Product question (pre-sale),Hinglish,54,12.1,resolved,,Rahul Mishra
+TK00963,2026-10-12,Instagram DM,KC107465,Amazon,Return or refund request,English,58,68.2,resolved,,Lavanya Reddy
+TK00964,2026-10-12,WhatsApp,KC107945,Website,Where is my order (WISMO),English,2,0.3,resolved,,WhatsApp bot
+TK00965,2026-10-12,WhatsApp,KC107954,Website,Failed delivery (NDR),English,33,10.9,resolved,4,Rahul Mishra
+TK00966,2026-10-12,WhatsApp,KC107955,Website,Failed delivery (NDR),English,58,8.6,resolved,,Lavanya Reddy
+TK00967,2026-10-12,WhatsApp,KC108063,Website,Where is my order (WISMO),English,0,0.2,resolved,4,WhatsApp bot
+TK00968,2026-10-12,Instagram DM,KC108377,Website,Change COD to prepaid,Hindi,29,14.6,resolved,4,Rahul Mishra
+TK00969,2026-10-12,Instagram DM,,,Product question (pre-sale),Bengali,7,9,resolved,4,Rahul Mishra
+TK00970,2026-10-12,WhatsApp,,,Product question (pre-sale),Hindi,68,13.6,resolved,,Lavanya Reddy
+TK00971,2026-10-12,WhatsApp,,,Product question (pre-sale),Hindi,21,4.5,resolved,5,Lavanya Reddy
+TK00972,2026-10-12,WhatsApp,,,Product question (pre-sale),Hindi,48,6.7,resolved,5,Rahul Mishra
+TK00973,2026-10-12,WhatsApp,,,Product question (pre-sale),Tamil,14,6.1,resolved,,Lavanya Reddy
+TK00974,2026-10-13,WhatsApp,KC107246,Amazon,Return or refund request,Hindi,25,14.3,resolved,4,Lavanya Reddy
+TK00975,2026-10-13,Email,KC107803,Instamart,Marketplace order escalation,English,273,8.3,resolved,4,Divya Pillai
+TK00976,2026-10-13,Email,KC107871,Website,Failed delivery (NDR),Marathi,231,24.5,resolved,,Lavanya Reddy
+TK00977,2026-10-13,Email,KC108012,Website,Failed delivery (NDR),English,36,24.4,resolved,,Divya Pillai
+TK00978,2026-10-13,WhatsApp,KC108038,Website,Where is my order (WISMO),Odia,2,0.2,resolved,,WhatsApp bot
+TK00979,2026-10-13,WhatsApp,KC108049,Website,Failed delivery (NDR),Hindi,33,24.2,resolved,,Rahul Mishra
+TK00980,2026-10-13,WhatsApp,KC108151,Website,Failed delivery (NDR),Gujarati,51,23.9,resolved,,Divya Pillai
+TK00981,2026-10-13,WhatsApp,KC108158,Website,Failed delivery (NDR),Tamil,36,14.7,resolved,4,Divya Pillai
+TK00982,2026-10-13,WhatsApp,KC108162,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,5,WhatsApp bot
+TK00983,2026-10-13,Instagram DM,KC108172,Website,Where is my order (WISMO),English,22,9.7,resolved,4,Rahul Mishra
+TK00984,2026-10-13,WhatsApp,KC108227,Website,Where is my order (WISMO),Hindi,0,0.2,resolved,,WhatsApp bot
+TK00985,2026-10-13,IVR,KC108287,Purplle,Marketplace order escalation,Hindi,4,12.4,resolved,5,Rahul Mishra
+TK00986,2026-10-13,WhatsApp,KC108345,Website,Where is my order (WISMO),English,42,5.4,resolved,,Lavanya Reddy
+TK00987,2026-10-13,IVR,KC108347,Website,Where is my order (WISMO),Hindi,1,4.9,resolved,,Rahul Mishra
+TK00988,2026-10-13,IVR,KC108349,Website,Where is my order (WISMO),English,4,3.5,resolved,,Rahul Mishra
+TK00989,2026-10-13,WhatsApp,KC108438,Website,Change COD to prepaid,Hindi,66,9.8,resolved,5,Divya Pillai
+TK00990,2026-10-13,WhatsApp,KC108459,Website,Change COD to prepaid,Gujarati,44,11.4,resolved,4,Divya Pillai
+TK00991,2026-10-13,Email,KC108490,Website,Cancel order,English,210,12.9,resolved,5,Lavanya Reddy
+TK00992,2026-10-13,WhatsApp,,,Product question (pre-sale),Tamil,51,6.6,resolved,4,Rahul Mishra
+TK00993,2026-10-13,WhatsApp,,,Product question (pre-sale),Tamil,37,2.8,escalated,,Divya Pillai
+TK00994,2026-10-13,WhatsApp,,,Product question (pre-sale),Hindi,63,6.6,resolved,,Rahul Mishra
+TK00995,2026-10-13,Instagram DM,,,Product question (pre-sale),Hindi,11,10,resolved,4,Divya Pillai
+TK00996,2026-10-13,Instagram DM,,,Product question (pre-sale),Hinglish,40,2.8,resolved,,Divya Pillai
+TK00997,2026-10-13,Instagram DM,,,Product question (pre-sale),Tamil,39,7.9,resolved,,Divya Pillai
+TK00998,2026-10-14,IVR,KC107944,Website,Return or refund request,Kannada,3,32.2,resolved,,Lavanya Reddy
+TK00999,2026-10-14,IVR,KC108093,Website,Failed delivery (NDR),English,1,8.2,resolved,,Divya Pillai
+TK01000,2026-10-14,WhatsApp,KC108149,Website,Product usage question,English,22,3.9,resolved,,Divya Pillai
+TK01001,2026-10-14,WhatsApp,KC108171,Website,Where is my order (WISMO),Hindi,0,0.2,resolved,5,WhatsApp bot
+TK01002,2026-10-14,WhatsApp,KC108235,Website,Where is my order (WISMO),Bengali,52,12.9,resolved,4,Divya Pillai
+TK01003,2026-10-14,WhatsApp,KC108333,Website,Where is my order (WISMO),English,1,0.2,resolved,3,WhatsApp bot
+TK01004,2026-10-14,WhatsApp,KC108426,Website,Where is my order (WISMO),English,2,0.3,resolved,,WhatsApp bot
+TK01005,2026-10-14,WhatsApp,KC108601,Website,Cancel order,English,33,5,resolved,5,Rahul Mishra
+TK01006,2026-10-14,Instagram DM,,,Product question (pre-sale),Hindi,38,6,resolved,,Lavanya Reddy
+TK01007,2026-10-14,Instagram DM,,,Product question (pre-sale),English,49,2.9,resolved,,Rahul Mishra
+TK01008,2026-10-14,Instagram DM,,,Product question (pre-sale),Tamil,47,10.8,resolved,5,Divya Pillai
+TK01009,2026-10-15,IVR,KC107517,Website,Damaged or leaking on arrival,English,2,7.7,resolved,,Lavanya Reddy
+TK01010,2026-10-15,Instagram DM,KC107529,Website,Return or refund request,Kannada,7,32.4,resolved,,Rahul Mishra
+TK01011,2026-10-15,WhatsApp,KC107965,Website,Product usage question,Hindi,43,12.3,resolved,5,Divya Pillai
+TK01012,2026-10-15,WhatsApp,KC108051,Website,Failed delivery (NDR),Bengali,7,18.9,resolved,,Rahul Mishra
+TK01013,2026-10-15,WhatsApp,KC108242,Website,Failed delivery (NDR),English,15,19.6,resolved,,Lavanya Reddy
+TK01014,2026-10-15,WhatsApp,KC108337,Website,Where is my order (WISMO),Hindi,0,0.3,resolved,5,WhatsApp bot
+TK01015,2026-10-15,IVR,KC108348,Website,Where is my order (WISMO),Hindi,3,9.7,resolved,,Divya Pillai
+TK01016,2026-10-15,WhatsApp,KC108351,Website,Failed delivery (NDR),English,27,20,resolved,4,Rahul Mishra
+TK01017,2026-10-15,WhatsApp,KC108419,Website,Where is my order (WISMO),Hindi,1,0.2,resolved,5,WhatsApp bot
+TK01018,2026-10-15,IVR,KC108433,Website,Failed delivery (NDR),English,4,24.1,resolved,4,Divya Pillai
+TK01019,2026-10-15,Instagram DM,,,Product question (pre-sale),Tamil,42,8.2,escalated,,Lavanya Reddy
+TK01020,2026-10-15,WhatsApp,,,Product question (pre-sale),Bengali,64,3.9,resolved,4,Rahul Mishra
+TK01021,2026-10-16,IVR,KC107681,Website,Return or refund request,Hindi,4,38.9,resolved,,Lavanya Reddy
+TK01022,2026-10-16,Instagram DM,KC108221,Website,Failed delivery (NDR),Telugu,26,10.3,resolved,3,Lavanya Reddy
+TK01023,2026-10-16,WhatsApp,KC108336,Website,Product usage question,Hindi,30,10.9,resolved,,Lavanya Reddy
+TK01024,2026-10-16,IVR,KC108418,Website,Failed delivery (NDR),English,1,38.3,resolved,,Lavanya Reddy
+TK01025,2026-10-16,WhatsApp,KC108441,Website,Where is my order (WISMO),English,1,0.2,resolved,5,WhatsApp bot
+TK01026,2026-10-16,Instagram DM,KC108459,Website,Failed delivery (NDR),English,43,10.4,resolved,3,Lavanya Reddy
+TK01027,2026-10-16,WhatsApp,KC108464,Website,Where is my order (WISMO),Malayalam,39,9.8,resolved,5,Divya Pillai
+TK01028,2026-10-16,Instagram DM,KC108474,Website,Failed delivery (NDR),English,55,37.4,resolved,,Divya Pillai
+TK01029,2026-10-16,WhatsApp,KC108635,Website,Failed delivery (NDR),Hindi,58,12.9,resolved,3,Divya Pillai
+TK01030,2026-10-16,WhatsApp,KC108877,Website,Change COD to prepaid,Hindi,0,0.2,resolved,3,WhatsApp bot
+TK01031,2026-10-16,WhatsApp,,,Product question (pre-sale),Tamil,34,7.4,resolved,5,Rahul Mishra
+TK01032,2026-10-16,WhatsApp,,,Product question (pre-sale),Tamil,56,11.5,resolved,4,Lavanya Reddy
+TK01033,2026-10-16,Instagram DM,,,Product question (pre-sale),Hinglish,37,9.7,resolved,,Rahul Mishra
+TK01034,2026-10-16,WhatsApp,,,Product question (pre-sale),Tamil,43,14,escalated,,Lavanya Reddy
+TK01035,2026-10-16,WhatsApp,,,Product question (pre-sale),Hindi,39,11.2,resolved,,Rahul Mishra
+TK01036,2026-10-17,Email,KC108086,Website,Product usage question,Bengali,149,1.9,resolved,3,Rahul Mishra
+TK01037,2026-10-17,WhatsApp,KC108183,Flipkart,Return or refund request,English,36,40.5,resolved,,Lavanya Reddy
+TK01038,2026-10-17,WhatsApp,KC108453,Website,Product usage question,English,60,6.4,resolved,4,Rahul Mishra
+TK01039,2026-10-17,WhatsApp,KC108498,Website,Failed delivery (NDR),English,65,22.5,resolved,,Lavanya Reddy
+TK01040,2026-10-17,IVR,KC108509,Website,Failed delivery (NDR),Kannada,3,10.2,resolved,,Lavanya Reddy
+TK01041,2026-10-17,Email,KC108557,Website,Failed delivery (NDR),Telugu,369,14.5,resolved,3,Rahul Mishra
+TK01042,2026-10-17,WhatsApp,KC108645,Website,Product usage question,Hindi,41,9.9,resolved,,Rahul Mishra
+TK01043,2026-10-17,WhatsApp,KC108680,Website,Where is my order (WISMO),Hindi,1,0.1,resolved,,WhatsApp bot
+TK01044,2026-10-17,Instagram DM,KC108731,Website,Where is my order (WISMO),English,36,7,resolved,5,Rahul Mishra
+TK01045,2026-10-17,IVR,KC108953,Website,Change COD to prepaid,Marathi,4,9.8,resolved,5,Rahul Mishra
+TK01046,2026-10-17,WhatsApp,,,Product question (pre-sale),Hinglish,7,4.3,resolved,,Divya Pillai
+TK01047,2026-10-17,Email,,,Product question (pre-sale),Hindi,111,1.6,resolved,,Rahul Mishra
+TK01048,2026-10-17,WhatsApp,,,Product question (pre-sale),Tamil,27,10.6,resolved,,Rahul Mishra
+TK01049,2026-10-17,WhatsApp,,,Product question (pre-sale),English,26,6,resolved,4,Rahul Mishra
+TK01050,2026-10-17,Instagram DM,,,Product question (pre-sale),Hinglish,12,10.9,resolved,,Rahul Mishra
+TK01051,2026-10-18,WhatsApp,KC108268,Website,Product usage question,English,17,6.4,resolved,,Lavanya Reddy
+TK01052,2026-10-18,WhatsApp,KC108455,Website,Product usage question,English,68,7.5,resolved,,Rahul Mishra
+TK01053,2026-10-18,Email,KC108572,Website,Failed delivery (NDR),Kannada,59,24.1,resolved,5,Lavanya Reddy
+TK01054,2026-10-18,WhatsApp,KC108746,Website,Product usage question,English,51,10.6,resolved,4,Divya Pillai
+TK01055,2026-10-18,WhatsApp,KC108829,Website,Where is my order (WISMO),Hindi,2,0,resolved,,WhatsApp bot
+TK01056,2026-10-18,IVR,KC108897,Website,Failed delivery (NDR),Marathi,3,26.7,resolved,,Lavanya Reddy
+TK01057,2026-10-18,WhatsApp,KC108910,Website,Where is my order (WISMO),English,0,0.2,resolved,5,WhatsApp bot
+TK01058,2026-10-18,Email,KC109030,Website,Where is my order (WISMO),English,162,7.3,escalated,,Rahul Mishra
+TK01059,2026-10-18,IVR,KC109056,Website,Cancel order,Hindi,3,6.7,resolved,5,Rahul Mishra
+TK01060,2026-10-18,WhatsApp,KC109101,Website,Cancel order,English,16,8.3,resolved,5,Divya Pillai
+TK01061,2026-10-18,IVR,KC109165,Website,Cancel order,Hindi,3,2,resolved,5,Rahul Mishra
+TK01062,2026-10-18,Instagram DM,,,Product question (pre-sale),English,32,12.1,resolved,,Lavanya Reddy
+TK01063,2026-10-18,WhatsApp,,,Product question (pre-sale),Tamil,7,1.6,resolved,,Divya Pillai
+TK01064,2026-10-18,Instagram DM,,,Product question (pre-sale),Tamil,36,10.2,resolved,,Lavanya Reddy
+TK01065,2026-10-18,WhatsApp,,,Product question (pre-sale),Hindi,32,5,resolved,,Lavanya Reddy
+TK01066,2026-10-18,WhatsApp,,,Product question (pre-sale),English,21,3.3,resolved,4,Rahul Mishra
+TK01067,2026-10-19,WhatsApp,KC108243,Website,Damaged or leaking on arrival,Marathi,85,63.4,resolved,4,Divya Pillai
+TK01068,2026-10-19,WhatsApp,KC108744,Website,Failed delivery (NDR),English,96,41.1,resolved,,Rahul Mishra
+TK01069,2026-10-19,IVR,KC108907,Website,Failed delivery (NDR),English,1,54.9,resolved,,Divya Pillai
+TK01070,2026-10-19,WhatsApp,KC108938,Website,Failed delivery (NDR),English,133,57.2,resolved,,Divya Pillai
+TK01071,2026-10-19,Email,KC109004,Website,Failed delivery (NDR),English,255,62.5,resolved,,Rahul Mishra
+TK01072,2026-10-19,WhatsApp,KC109069,Website,Where is my order (WISMO),English,2,0.5,resolved,,WhatsApp bot
+TK01073,2026-10-19,Email,KC109102,Website,Where is my order (WISMO),English,340,5,resolved,,Rahul Mishra
+TK01074,2026-10-19,Email,KC109230,Website,Cancel order,English,414,25.3,resolved,3,Rahul Mishra
+TK01075,2026-10-19,IVR,KC109317,Website,Cancel order,Hindi,1,31.2,resolved,,Divya Pillai
+TK01076,2026-10-19,WhatsApp,,,Product question (pre-sale),Hindi,62,20.5,resolved,,Divya Pillai
+TK01077,2026-10-19,WhatsApp,,,Product question (pre-sale),Tamil,110,5.3,resolved,5,Rahul Mishra
+TK01078,2026-10-19,Instagram DM,,,Product question (pre-sale),Tamil,72,5.8,resolved,4,Rahul Mishra
+TK01079,2026-10-19,WhatsApp,,,Product question (pre-sale),Bengali,57,13.5,resolved,4,Divya Pillai
+TK01080,2026-10-19,Instagram DM,,,Product question (pre-sale),Hindi,52,10.9,resolved,,Lavanya Reddy
+TK01081,2026-10-19,WhatsApp,,,Product question (pre-sale),Hindi,78,17.9,resolved,4,Divya Pillai
+TK01082,2026-10-19,WhatsApp,,,Product question (pre-sale),English,106,14.4,resolved,,Lavanya Reddy
+TK01083,2026-10-19,Instagram DM,,,Product question (pre-sale),English,15,15.5,resolved,,Lavanya Reddy
+TK01084,2026-10-19,WhatsApp,,,Product question (pre-sale),Hindi,107,22.2,resolved,,Rahul Mishra
+TK01085,2026-10-19,WhatsApp,,,Product question (pre-sale),Tamil,62,23.5,resolved,3,Divya Pillai
+TK01086,2026-10-19,WhatsApp,,,Product question (pre-sale),Bengali,70,9.7,resolved,,Rahul Mishra
+TK01087,2026-10-19,WhatsApp,,,Product question (pre-sale),Hinglish,56,20.1,resolved,3,Lavanya Reddy
+TK01088,2026-10-19,Instagram DM,,,Product question (pre-sale),Tamil,121,33.8,resolved,5,Lavanya Reddy
+TK01089,2026-10-20,Email,KC108284,Website,Product usage question,Hindi,499,20.8,resolved,4,Divya Pillai
+TK01090,2026-10-20,IVR,KC108380,Website,Damaged or leaking on arrival,English,1,94,resolved,,Divya Pillai
+TK01091,2026-10-20,WhatsApp,KC108569,Website,Damaged or leaking on arrival,English,165,96.4,resolved,3,Lavanya Reddy
+TK01092,2026-10-20,IVR,KC108624,Website,Return or refund request,Telugu,2,78,resolved,,Lavanya Reddy
+TK01093,2026-10-20,WhatsApp,KC108783,Website,Failed delivery (NDR),English,142,37.8,resolved,2,Lavanya Reddy
+TK01094,2026-10-20,IVR,KC108792,Website,Failed delivery (NDR),English,4,66,resolved,4,Lavanya Reddy
+TK01095,2026-10-20,Email,KC108917,Website,Failed delivery (NDR),Hindi,314,88.6,resolved,4,Rahul Mishra
+TK01096,2026-10-20,WhatsApp,KC108960,Website,Where is my order (WISMO),Hindi,1,0.6,resolved,4,WhatsApp bot
+TK01097,2026-10-20,IVR,KC109057,Website,Failed delivery (NDR),Hindi,1,45.8,resolved,3,Lavanya Reddy
+TK01098,2026-10-20,WhatsApp,KC109238,Website,Where is my order (WISMO),Hindi,0,0.4,resolved,5,WhatsApp bot
+TK01099,2026-10-20,WhatsApp,KC109277,Website,Where is my order (WISMO),English,2,0.4,resolved,,WhatsApp bot
+TK01100,2026-10-20,Email,KC109391,Website,Cancel order,Hindi,469,28,resolved,4,Divya Pillai
+TK01101,2026-10-20,Email,KC109518,Website,Cancel order,English,185,13.7,resolved,,Lavanya Reddy
+TK01102,2026-10-20,WhatsApp,,,Product question (pre-sale),Hindi,30,21.1,resolved,,Lavanya Reddy
+TK01103,2026-10-20,Instagram DM,,,Product question (pre-sale),English,121,13.8,resolved,,Rahul Mishra
+TK01104,2026-10-20,Instagram DM,,,Product question (pre-sale),Tamil,139,23.9,resolved,,Rahul Mishra
+TK01105,2026-10-20,WhatsApp,,,Product question (pre-sale),Hindi,60,16.4,resolved,,Lavanya Reddy
+TK01106,2026-10-20,Instagram DM,,,Product question (pre-sale),Tamil,108,16,resolved,5,Divya Pillai
+TK01107,2026-10-20,Email,,,Product question (pre-sale),Hinglish,605,22.1,resolved,3,Divya Pillai
+TK01108,2026-10-21,Email,KC107976,Nykaa,Return or refund request,Marathi,157,112.7,resolved,3,Rahul Mishra
+TK01109,2026-10-21,WhatsApp,KC108587,Website,Return or refund request,English,45,126.1,resolved,,Lavanya Reddy
+TK01110,2026-10-21,WhatsApp,KC108793,Website,Return or refund request,Bengali,120,57.6,resolved,3,Lavanya Reddy
+TK01111,2026-10-21,IVR,KC108992,Website,Failed delivery (NDR),English,2,33.1,resolved,1,Rahul Mishra
+TK01112,2026-10-21,Instagram DM,KC109052,Website,Where is my order (WISMO),Odia,98,17.2,resolved,,Lavanya Reddy
+TK01113,2026-10-21,Email,KC109169,Website,Where is my order (WISMO),Malayalam,121,20.1,resolved,,Rahul Mishra
+TK01114,2026-10-21,WhatsApp,KC109212,Website,Where is my order (WISMO),English,1,0.4,resolved,,WhatsApp bot
+TK01115,2026-10-21,Email,KC109240,Website,Where is my order (WISMO),English,473,12.8,resolved,4,Lavanya Reddy
+TK01116,2026-10-21,WhatsApp,KC109245,Website,Where is my order (WISMO),Hindi,52,25.9,resolved,4,Divya Pillai
+TK01117,2026-10-21,WhatsApp,KC109249,Website,Where is my order (WISMO),English,76,15.9,resolved,,Lavanya Reddy
+TK01118,2026-10-21,IVR,KC109287,Website,Failed delivery (NDR),English,2,34.3,resolved,3,Lavanya Reddy
+TK01119,2026-10-21,WhatsApp,KC109418,Website,Where is my order (WISMO),English,0,0.2,resolved,,WhatsApp bot
+TK01120,2026-10-21,WhatsApp,KC109426,Website,Where is my order (WISMO),English,0,0.2,resolved,,WhatsApp bot
+TK01121,2026-10-21,Instagram DM,KC109722,Website,Change COD to prepaid,Bengali,105,18.8,resolved,,Rahul Mishra
+TK01122,2026-10-21,WhatsApp,KC109729,Website,Cancel order,English,15,17.4,resolved,,Rahul Mishra
+TK01123,2026-10-21,WhatsApp,KC109785,Website,Cancel order,English,62,15.6,resolved,,Rahul Mishra
+TK01124,2026-10-21,WhatsApp,KC109829,Website,Change COD to prepaid,English,1,0.6,resolved,4,WhatsApp bot
+TK01125,2026-10-21,WhatsApp,,,Product question (pre-sale),English,117,12,resolved,,Rahul Mishra
+TK01126,2026-10-21,Instagram DM,,,Product question (pre-sale),Tamil,29,20.1,resolved,,Divya Pillai
+TK01127,2026-10-21,Instagram DM,,,Product question (pre-sale),Hinglish,99,19.8,resolved,,Rahul Mishra
+TK01128,2026-10-21,WhatsApp,,,Product question (pre-sale),English,53,18.9,resolved,5,Divya Pillai
+TK01129,2026-10-22,WhatsApp,KC108799,Website,Product usage question,Hindi,65,25.1,resolved,5,Rahul Mishra
+TK01130,2026-10-22,WhatsApp,KC109076,Website,Failed delivery (NDR),English,43,29.1,resolved,1,Lavanya Reddy
+TK01131,2026-10-22,IVR,KC109190,Website,Where is my order (WISMO),English,1,14.2,resolved,3,Divya Pillai
+TK01132,2026-10-22,WhatsApp,KC109255,Website,Where is my order (WISMO),Hindi,1,0.3,resolved,4,WhatsApp bot
+TK01133,2026-10-22,Email,KC109270,Website,Where is my order (WISMO),English,499,15.4,resolved,,Rahul Mishra
+TK01134,2026-10-22,WhatsApp,KC109312,Website,Where is my order (WISMO),Hindi,102,22.2,resolved,4,Divya Pillai
+TK01135,2026-10-22,WhatsApp,KC109338,Website,Failed delivery (NDR),English,51,33.3,resolved,4,Lavanya Reddy
+TK01136,2026-10-22,WhatsApp,KC109401,Website,Where is my order (WISMO),English,62,24.5,resolved,5,Lavanya Reddy
+TK01137,2026-10-22,Email,KC109435,Website,Where is my order (WISMO),English,221,4.4,resolved,,Rahul Mishra
+TK01138,2026-10-22,IVR,KC109474,Website,Failed delivery (NDR),English,4,33.5,resolved,3,Rahul Mishra
+TK01139,2026-10-22,IVR,KC109483,Website,Failed delivery (NDR),English,3,60.4,resolved,,Rahul Mishra
+TK01140,2026-10-22,Email,KC109548,Website,Where is my order (WISMO),English,421,27.1,resolved,,Lavanya Reddy
+TK01141,2026-10-22,IVR,KC109594,Website,Where is my order (WISMO),Hindi,1,20.5,resolved,,Lavanya Reddy
+TK01142,2026-10-22,WhatsApp,KC109712,Website,Where is my order (WISMO),English,46,22.4,resolved,3,Rahul Mishra
+TK01143,2026-10-22,Email,KC109841,Website,Where is my order (WISMO),Hindi,323,23.3,resolved,,Rahul Mishra
+TK01144,2026-10-22,WhatsApp,KC109954,Website,Cancel order,English,79,17.6,resolved,,Rahul Mishra
+TK01145,2026-10-22,WhatsApp,KC109956,Website,Cancel order,Tamil,71,23.7,resolved,,Rahul Mishra
+TK01146,2026-10-22,WhatsApp,,,Product question (pre-sale),Tamil,132,17.2,resolved,,Rahul Mishra
+TK01147,2026-10-22,WhatsApp,,,Product question (pre-sale),Hindi,82,14.2,resolved,5,Rahul Mishra
+TK01148,2026-10-22,Instagram DM,,,Product question (pre-sale),Hinglish,70,14.2,resolved,,Lavanya Reddy
+TK01149,2026-10-22,Instagram DM,,,Product question (pre-sale),Tamil,93,19.8,resolved,4,Lavanya Reddy
+TK01150,2026-10-22,WhatsApp,,,Product question (pre-sale),Hindi,66,33.9,resolved,5,Divya Pillai
+TK01151,2026-10-22,Instagram DM,,,Product question (pre-sale),Bengali,98,26.4,resolved,,Divya Pillai
+TK01152,2026-10-22,Instagram DM,,,Product question (pre-sale),English,74,11.4,resolved,5,Rahul Mishra
+TK01153,2026-10-22,Instagram DM,,,Product question (pre-sale),Tamil,132,18.6,resolved,,Rahul Mishra
+TK01154,2026-10-23,IVR,KC108574,Website,Return or refund request,Hindi,2,42.6,resolved,3,Rahul Mishra
+TK01155,2026-10-23,WhatsApp,KC108999,Website,Damaged or leaking on arrival,English,39,16.7,resolved,1,Divya Pillai
+TK01156,2026-10-23,WhatsApp,KC109193,Website,Failed delivery (NDR),English,109,57.8,resolved,2,Divya Pillai
+TK01157,2026-10-23,WhatsApp,KC109399,Website,Where is my order (WISMO),Malayalam,2,0.5,resolved,4,WhatsApp bot
+TK01158,2026-10-23,WhatsApp,KC109428,Website,Where is my order (WISMO),Hindi,0,0.6,resolved,3,WhatsApp bot
+TK01159,2026-10-23,WhatsApp,KC109471,Website,Where is my order (WISMO),English,2,0.1,resolved,4,WhatsApp bot
+TK01160,2026-10-23,WhatsApp,KC109476,Website,Where is my order (WISMO),English,26,15.3,resolved,,Divya Pillai
+TK01161,2026-10-23,WhatsApp,KC109481,Website,Where is my order (WISMO),Hindi,0,0.7,resolved,3,WhatsApp bot
+TK01162,2026-10-23,Email,KC109489,Website,Failed delivery (NDR),English,79,41.1,resolved,,Rahul Mishra
+TK01163,2026-10-23,WhatsApp,KC109507,Website,Where is my order (WISMO),Hindi,1,0.5,resolved,5,WhatsApp bot
+TK01164,2026-10-23,Email,KC109511,Website,Where is my order (WISMO),Odia,355,15,resolved,,Divya Pillai
+TK01165,2026-10-23,WhatsApp,KC109526,Website,Failed delivery (NDR),English,128,63.9,resolved,4,Rahul Mishra
+TK01166,2026-10-23,Instagram DM,KC109598,Website,Where is my order (WISMO),English,56,29.5,resolved,,Lavanya Reddy
+TK01167,2026-10-23,Instagram DM,KC109601,Website,Where is my order (WISMO),English,112,14.7,resolved,,Lavanya Reddy
+TK01168,2026-10-23,WhatsApp,KC109605,Website,Where is my order (WISMO),English,73,21.7,resolved,4,Divya Pillai
+TK01169,2026-10-23,WhatsApp,KC109615,Website,Where is my order (WISMO),English,1,0.6,resolved,,WhatsApp bot
+TK01170,2026-10-23,WhatsApp,KC109628,Website,Where is my order (WISMO),English,97,19.9,resolved,4,Lavanya Reddy
+TK01171,2026-10-23,IVR,KC109630,Website,Where is my order (WISMO),English,3,22.5,resolved,,Rahul Mishra
+TK01172,2026-10-23,WhatsApp,KC109772,Website,Where is my order (WISMO),Hindi,2,0.5,resolved,,WhatsApp bot
+TK01173,2026-10-23,IVR,KC109833,Website,Failed delivery (NDR),English,2,44.3,resolved,,Lavanya Reddy
+TK01174,2026-10-23,WhatsApp,KC109928,Website,Where is my order (WISMO),Tamil,0,0.2,resolved,,WhatsApp bot
+TK01175,2026-10-23,WhatsApp,KC109979,Website,Where is my order (WISMO),Hindi,1,0.5,resolved,4,WhatsApp bot
+TK01176,2026-10-23,IVR,KC110097,Website,Where is my order (WISMO),English,3,15.2,resolved,4,Divya Pillai
+TK01177,2026-10-23,Email,KC110213,Website,Cancel order,English,375,25.3,resolved,4,Rahul Mishra
+TK01178,2026-10-23,WhatsApp,KC110257,Website,Cancel order,English,26,21.1,resolved,2,Rahul Mishra
+TK01179,2026-10-23,Email,KC110393,Website,Change COD to prepaid,Gujarati,453,13.8,resolved,,Lavanya Reddy
+TK01180,2026-10-23,Instagram DM,,,Product question (pre-sale),English,117,17.5,resolved,,Lavanya Reddy
+TK01181,2026-10-23,WhatsApp,,,Product question (pre-sale),Hindi,141,22.5,resolved,,Divya Pillai
+TK01182,2026-10-23,Email,,,Product question (pre-sale),Hindi,583,22.8,resolved,5,Divya Pillai
+TK01183,2026-10-23,Instagram DM,,,Product question (pre-sale),Tamil,63,18.8,resolved,4,Divya Pillai
+TK01184,2026-10-23,Instagram DM,,,Product question (pre-sale),Hinglish,159,41.4,resolved,,Rahul Mishra
+TK01185,2026-10-23,WhatsApp,,,Product question (pre-sale),Hindi,15,17.6,resolved,,Lavanya Reddy
+TK01186,2026-10-23,WhatsApp,,,Product question (pre-sale),Tamil,108,19.1,resolved,4,Rahul Mishra
+TK01187,2026-10-23,WhatsApp,,,Product question (pre-sale),English,146,20.7,resolved,4,Divya Pillai
+TK01188,2026-10-23,WhatsApp,,,Product question (pre-sale),English,38,19.6,resolved,4,Rahul Mishra
+TK01189,2026-10-23,Instagram DM,,,Product question (pre-sale),Tamil,148,22.8,resolved,,Lavanya Reddy
+TK01190,2026-10-23,WhatsApp,,,Product question (pre-sale),English,87,24.6,escalated,,Lavanya Reddy
+TK01191,2026-10-23,WhatsApp,,,Product question (pre-sale),English,44,15.2,resolved,4,Lavanya Reddy
+TK01192,2026-10-23,WhatsApp,,,Product question (pre-sale),Hindi,47,16.5,resolved,5,Lavanya Reddy
+TK01193,2026-10-23,WhatsApp,,,Product question (pre-sale),Hindi,68,10,resolved,5,Rahul Mishra
+TK01194,2026-10-24,WhatsApp,KC108687,Website,Damaged or leaking on arrival,English,107,75.2,escalated,,Divya Pillai
+TK01195,2026-10-24,Instagram DM,KC109202,Website,Failed delivery (NDR),Bengali,43,41.2,resolved,3,Divya Pillai
+TK01196,2026-10-24,WhatsApp,KC109564,Website,Failed delivery (NDR),English,115,48.6,resolved,,Divya Pillai
+TK01197,2026-10-24,IVR,KC109626,Website,Failed delivery (NDR),Hindi,4,21.1,resolved,3,Divya Pillai
+TK01198,2026-10-24,Email,KC109637,Website,Where is my order (WISMO),English,457,18.5,resolved,,Lavanya Reddy
+TK01199,2026-10-24,WhatsApp,KC109699,Website,Where is my order (WISMO),English,155,29,resolved,,Divya Pillai
+TK01200,2026-10-24,IVR,KC109719,Website,Where is my order (WISMO),Hindi,1,9.4,resolved,,Lavanya Reddy
+TK01201,2026-10-24,IVR,KC109727,Website,Where is my order (WISMO),Marathi,3,8.3,resolved,3,Divya Pillai
+TK01202,2026-10-24,Email,KC109739,Website,Where is my order (WISMO),English,361,25.5,resolved,5,Divya Pillai
+TK01203,2026-10-24,WhatsApp,KC109750,Website,Where is my order (WISMO),English,0,0.1,resolved,2,WhatsApp bot
+TK01204,2026-10-24,WhatsApp,KC109773,Website,Where is my order (WISMO),English,0,0.3,resolved,,WhatsApp bot
+TK01205,2026-10-24,WhatsApp,KC109826,Website,Failed delivery (NDR),Telugu,54,38.7,resolved,,Lavanya Reddy
+TK01206,2026-10-24,WhatsApp,KC109853,Website,Where is my order (WISMO),Telugu,17,28.2,resolved,,Divya Pillai
+TK01207,2026-10-24,Email,KC109874,Website,Failed delivery (NDR),Hindi,508,54.3,resolved,,Lavanya Reddy
+TK01208,2026-10-24,Email,KC109878,Website,Failed delivery (NDR),Hindi,481,63,resolved,,Divya Pillai
+TK01209,2026-10-24,Email,KC109915,Website,Failed delivery (NDR),English,751,64.1,resolved,,Divya Pillai
+TK01210,2026-10-24,WhatsApp,KC109919,Website,Where is my order (WISMO),English,209,27,resolved,,Divya Pillai
+TK01211,2026-10-24,WhatsApp,KC109937,Website,Where is my order (WISMO),Hindi,2,0.6,resolved,4,WhatsApp bot
+TK01212,2026-10-24,Email,KC109941,Website,Where is my order (WISMO),Bengali,430,7.9,resolved,4,Lavanya Reddy
+TK01213,2026-10-24,WhatsApp,KC109944,Website,Where is my order (WISMO),Hindi,86,10.6,resolved,,Divya Pillai
+TK01214,2026-10-24,WhatsApp,KC109949,Website,Where is my order (WISMO),English,1,0.4,resolved,4,WhatsApp bot
+TK01215,2026-10-24,Email,KC109969,Website,Failed delivery (NDR),English,388,47.9,resolved,,Rahul Mishra
+TK01216,2026-10-24,WhatsApp,KC110111,Website,Failed delivery (NDR),Tamil,157,28.4,resolved,,Lavanya Reddy
+TK01217,2026-10-24,Email,KC110191,Website,Failed delivery (NDR),English,242,33.6,resolved,,Rahul Mishra
+TK01218,2026-10-24,WhatsApp,KC110230,Website,Where is my order (WISMO),English,1,0.4,resolved,,WhatsApp bot
+TK01219,2026-10-24,WhatsApp,KC110232,Website,Where is my order (WISMO),English,1,0.4,resolved,,WhatsApp bot
+TK01220,2026-10-24,WhatsApp,KC110240,Website,Where is my order (WISMO),Hindi,0,0.2,resolved,,WhatsApp bot
+TK01221,2026-10-24,WhatsApp,KC110289,Website,Where is my order (WISMO),English,1,0.3,resolved,,WhatsApp bot
+TK01222,2026-10-24,IVR,KC110582,Website,Cancel order,English,1,10.6,resolved,4,Divya Pillai
+TK01223,2026-10-24,WhatsApp,,,Product question (pre-sale),English,71,23.8,resolved,3,Lavanya Reddy
+TK01224,2026-10-24,Instagram DM,,,Product question (pre-sale),Hinglish,49,16.1,resolved,,Divya Pillai
+TK01225,2026-10-24,WhatsApp,,,Product question (pre-sale),Tamil,40,31.1,resolved,4,Rahul Mishra
+TK01226,2026-10-24,WhatsApp,,,Product question (pre-sale),Bengali,15,5.8,resolved,,Divya Pillai
+TK01227,2026-10-24,WhatsApp,,,Product question (pre-sale),Bengali,99,14.5,resolved,,Lavanya Reddy
+TK01228,2026-10-24,WhatsApp,,,Product question (pre-sale),Hindi,140,16.2,resolved,,Divya Pillai
+TK01229,2026-10-24,Email,,,Product question (pre-sale),Tamil,104,7.6,resolved,,Divya Pillai
+TK01230,2026-10-24,WhatsApp,,,Product question (pre-sale),Hinglish,92,25.1,resolved,4,Divya Pillai
+TK01231,2026-10-24,WhatsApp,,,Product question (pre-sale),Bengali,147,17,resolved,4,Rahul Mishra
+TK01232,2026-10-24,WhatsApp,,,Product question (pre-sale),Hinglish,64,16.2,resolved,,Lavanya Reddy
+TK01233,2026-10-25,WhatsApp,KC108567,Website,Return or refund request,English,127,112.5,resolved,,Rahul Mishra
+TK01234,2026-10-25,WhatsApp,KC109680,Website,Failed delivery (NDR),English,77,58.2,resolved,,Divya Pillai
+TK01235,2026-10-25,WhatsApp,KC109764,Website,Failed delivery (NDR),English,69,38.8,resolved,,Divya Pillai
+TK01236,2026-10-25,WhatsApp,KC109914,Website,Where is my order (WISMO),Marathi,2,0.6,resolved,,WhatsApp bot
+TK01237,2026-10-25,WhatsApp,KC109922,Website,Where is my order (WISMO),English,1,0.3,resolved,3,WhatsApp bot
+TK01238,2026-10-25,WhatsApp,KC110007,Website,Where is my order (WISMO),English,42,12.1,resolved,4,Lavanya Reddy
+TK01239,2026-10-25,IVR,KC110011,Website,Failed delivery (NDR),Hindi,1,36,resolved,,Divya Pillai
+TK01240,2026-10-25,IVR,KC110156,Website,Product usage question,English,1,13.1,resolved,3,Lavanya Reddy
+TK01241,2026-10-25,WhatsApp,KC110161,Website,Failed delivery (NDR),English,99,40.2,resolved,3,Rahul Mishra
+TK01242,2026-10-25,Instagram DM,KC110179,Website,Where is my order (WISMO),English,48,20.3,resolved,,Divya Pillai
+TK01243,2026-10-25,WhatsApp,KC110197,Website,Failed delivery (NDR),English,130,44,resolved,,Lavanya Reddy
+TK01244,2026-10-25,WhatsApp,KC110254,Website,Failed delivery (NDR),Hindi,26,59.8,resolved,3,Lavanya Reddy
+TK01245,2026-10-25,WhatsApp,KC110417,Website,Where is my order (WISMO),English,75,32.9,resolved,,Divya Pillai
+TK01246,2026-10-25,WhatsApp,KC110443,Website,Where is my order (WISMO),English,2,0.2,resolved,,WhatsApp bot
+TK01247,2026-10-25,WhatsApp,KC110777,Website,Cancel order,English,15,18.3,resolved,,Rahul Mishra
+TK01248,2026-10-25,Instagram DM,,,Product question (pre-sale),Hinglish,110,13.1,resolved,,Rahul Mishra
+TK01249,2026-10-25,WhatsApp,,,Product question (pre-sale),English,58,18.7,resolved,3,Rahul Mishra
+TK01250,2026-10-25,Instagram DM,,,Product question (pre-sale),English,39,13.6,resolved,5,Rahul Mishra
+TK01251,2026-10-25,WhatsApp,,,Product question (pre-sale),Bengali,87,32,resolved,4,Lavanya Reddy
+TK01252,2026-10-26,WhatsApp,KC109079,Website,Return or refund request,English,30,37.4,resolved,,Rahul Mishra
+TK01253,2026-10-26,WhatsApp,KC109132,Website,Damaged or leaking on arrival,English,22,23.1,resolved,4,Divya Pillai
+TK01254,2026-10-26,WhatsApp,KC109683,Website,Failed delivery (NDR),Hindi,52,11.6,resolved,,Lavanya Reddy
+TK01255,2026-10-26,Instagram DM,KC109706,Website,Damaged or leaking on arrival,English,31,33.2,resolved,,Divya Pillai
+TK01256,2026-10-26,Email,KC109782,Website,Failed delivery (NDR),Hindi,244,24.4,resolved,,Lavanya Reddy
+TK01257,2026-10-26,WhatsApp,KC110215,Website,Where is my order (WISMO),Hindi,2,0.4,resolved,3,WhatsApp bot
+TK01258,2026-10-26,WhatsApp,KC110298,Website,Failed delivery (NDR),Telugu,29,19.5,resolved,,Divya Pillai
+TK01259,2026-10-26,IVR,KC110308,Website,Where is my order (WISMO),English,2,11.9,resolved,,Divya Pillai
+TK01260,2026-10-26,WhatsApp,KC110317,Website,Where is my order (WISMO),English,2,0.3,resolved,,WhatsApp bot
+TK01261,2026-10-26,WhatsApp,KC110393,Website,Where is my order (WISMO),English,2,0.2,resolved,,WhatsApp bot
+TK01262,2026-10-26,WhatsApp,KC110440,Website,Failed delivery (NDR),Hindi,34,27.1,escalated,,Divya Pillai
+TK01263,2026-10-26,WhatsApp,KC110473,Website,Where is my order (WISMO),English,51,13.9,resolved,,Divya Pillai
+TK01264,2026-10-26,Instagram DM,KC110530,Website,Where is my order (WISMO),English,39,11,resolved,5,Divya Pillai
+TK01265,2026-10-26,IVR,KC110594,Website,Where is my order (WISMO),English,2,7.2,resolved,4,Lavanya Reddy
+TK01266,2026-10-26,Instagram DM,KC110751,Website,Where is my order (WISMO),English,61,11,resolved,,Rahul Mishra
+TK01267,2026-10-26,IVR,KC110816,Website,Where is my order (WISMO),Bengali,1,11.4,resolved,,Rahul Mishra
+TK01268,2026-10-26,IVR,KC110869,Website,Change COD to prepaid,English,3,5.1,escalated,,Rahul Mishra
+TK01269,2026-10-26,WhatsApp,,,Product question (pre-sale),Bengali,12,7.8,resolved,,Divya Pillai
+TK01270,2026-10-26,Instagram DM,,,Product question (pre-sale),Hinglish,24,6.2,resolved,,Rahul Mishra
+TK01271,2026-10-26,WhatsApp,,,Product question (pre-sale),Bengali,7,9.5,resolved,4,Lavanya Reddy
+TK01272,2026-10-26,WhatsApp,,,Product question (pre-sale),Hindi,58,10.2,escalated,,Lavanya Reddy
+TK01273,2026-10-26,Instagram DM,,,Product question (pre-sale),Bengali,47,7.7,resolved,,Lavanya Reddy
+TK01274,2026-10-26,Instagram DM,,,Product question (pre-sale),Hindi,29,2.7,resolved,4,Rahul Mishra
+TK01275,2026-10-27,WhatsApp,KC108920,Website,Product usage question,English,42,8.1,resolved,,Rahul Mishra
+TK01276,2026-10-27,WhatsApp,KC109080,Website,Product usage question,English,39,2.6,resolved,4,Rahul Mishra
+TK01277,2026-10-27,WhatsApp,KC109912,Website,Failed delivery (NDR),Hindi,35,13.7,resolved,,Lavanya Reddy
+TK01278,2026-10-27,Email,KC110035,Website,Failed delivery (NDR),English,225,14.6,resolved,,Lavanya Reddy
+TK01279,2026-10-27,Instagram DM,KC110242,Nykaa,Return or refund request,Hindi,56,28.8,resolved,2,Lavanya Reddy
+TK01280,2026-10-27,Email,KC110339,Website,Failed delivery (NDR),Hindi,186,26,resolved,4,Rahul Mishra
+TK01281,2026-10-27,WhatsApp,KC110367,Website,Failed delivery (NDR),English,11,24.3,resolved,,Rahul Mishra
+TK01282,2026-10-27,WhatsApp,KC110533,Website,Where is my order (WISMO),English,2,0.2,resolved,5,WhatsApp bot
+TK01283,2026-10-27,IVR,KC110745,Website,Failed delivery (NDR),Marathi,3,16.3,resolved,,Rahul Mishra
+TK01284,2026-10-27,Email,KC110934,Website,Cancel order,English,65,5.9,resolved,,Lavanya Reddy
+TK01285,2026-10-27,WhatsApp,KC110973,Website,Change COD to prepaid,English,54,12.1,resolved,5,Lavanya Reddy
+TK01286,2026-10-27,WhatsApp,,,Product question (pre-sale),English,45,9.6,resolved,,Rahul Mishra
+TK01287,2026-10-27,Instagram DM,,,Product question (pre-sale),Hinglish,42,8,resolved,,Rahul Mishra
+TK01288,2026-10-27,Instagram DM,,,Product question (pre-sale),English,60,5.3,resolved,,Rahul Mishra
+TK01289,2026-10-27,WhatsApp,,,Product question (pre-sale),English,34,3.4,resolved,5,Divya Pillai
+TK01290,2026-10-27,WhatsApp,,,Product question (pre-sale),Hinglish,7,11.5,resolved,,Lavanya Reddy
+TK01291,2026-10-27,Instagram DM,,,Product question (pre-sale),Hinglish,29,8.6,resolved,,Lavanya Reddy
+TK01292,2026-10-27,Instagram DM,,,Product question (pre-sale),Bengali,13,9.8,resolved,,Rahul Mishra
+TK01293,2026-10-27,WhatsApp,,,Product question (pre-sale),English,29,5.2,resolved,,Divya Pillai
+TK01294,2026-10-28,IVR,KC109357,Amazon,Return or refund request,English,4,49.3,resolved,,Rahul Mishra
+TK01295,2026-10-28,WhatsApp,KC109724,Flipkart,Marketplace order escalation,Hindi,25,9.1,resolved,,Lavanya Reddy
+TK01296,2026-10-28,Email,KC110123,Website,Return or refund request,Hindi,186,44.2,resolved,,Divya Pillai
+TK01297,2026-10-28,WhatsApp,KC110260,Website,Failed delivery (NDR),English,25,15.6,resolved,,Lavanya Reddy
+TK01298,2026-10-28,WhatsApp,KC110283,Website,Failed delivery (NDR),Hindi,21,30.4,resolved,3,Lavanya Reddy
+TK01299,2026-10-28,WhatsApp,KC110331,Website,Failed delivery (NDR),English,40,22,resolved,,Rahul Mishra
+TK01300,2026-10-28,WhatsApp,KC110453,Website,Failed delivery (NDR),Hindi,21,24.8,resolved,,Lavanya Reddy
+TK01301,2026-10-28,WhatsApp,KC110508,Website,Failed delivery (NDR),Telugu,31,4.6,resolved,,Lavanya Reddy
+TK01302,2026-10-28,WhatsApp,KC110662,Website,Where is my order (WISMO),Hindi,0,0.3,resolved,,WhatsApp bot
+TK01303,2026-10-28,IVR,KC110714,Website,Failed delivery (NDR),English,3,15.5,resolved,4,Divya Pillai
+TK01304,2026-10-28,Instagram DM,KC110846,Website,Where is my order (WISMO),English,24,7.4,resolved,,Rahul Mishra
+TK01305,2026-10-28,IVR,KC110911,Website,Where is my order (WISMO),English,3,6.5,resolved,2,Rahul Mishra
+TK01306,2026-10-28,Email,KC111094,Website,Cancel order,Hindi,70,11.3,resolved,5,Divya Pillai
+TK01307,2026-10-28,Instagram DM,,,Product question (pre-sale),Bengali,72,4.9,resolved,,Divya Pillai
+TK01308,2026-10-28,Email,,,Product question (pre-sale),Hinglish,190,5.9,resolved,5,Lavanya Reddy
+TK01309,2026-10-28,Instagram DM,,,Product question (pre-sale),Bengali,22,7.1,resolved,,Rahul Mishra
+TK01310,2026-10-28,WhatsApp,,,Product question (pre-sale),Hindi,30,9.8,resolved,,Rahul Mishra
+TK01311,2026-10-29,IVR,KC109191,Website,Return or refund request,English,3,,open,,Divya Pillai
+TK01312,2026-10-29,WhatsApp,KC109240,Website,Return or refund request,Tamil,40,,open,,Divya Pillai
+TK01313,2026-10-29,Instagram DM,KC109818,Website,Damaged or leaking on arrival,Bengali,48,,open,,Lavanya Reddy
+TK01314,2026-10-29,Instagram DM,KC110819,Website,Failed delivery (NDR),English,9,14.2,resolved,3,Lavanya Reddy
+TK01315,2026-10-29,WhatsApp,KC111089,Website,Where is my order (WISMO),English,15,7.4,resolved,,Divya Pillai
+TK01316,2026-10-29,IVR,KC111137,Website,Where is my order (WISMO),English,2,5.4,resolved,4,Rahul Mishra
+TK01317,2026-10-29,WhatsApp,,,Product question (pre-sale),English,7,11,resolved,,Divya Pillai
+TK01318,2026-10-29,Instagram DM,,,Product question (pre-sale),English,46,,open,,Lavanya Reddy
+TK01319,2026-10-29,WhatsApp,,,Product question (pre-sale),English,48,,open,,Divya Pillai
+TK01320,2026-10-29,Instagram DM,,,Product question (pre-sale),Hindi,41,9.2,resolved,4,Rahul Mishra
+TK01321,2026-10-29,WhatsApp,,,Product question (pre-sale),English,38,9.7,resolved,,Divya Pillai
+TK01322,2026-10-29,Email,,,Product question (pre-sale),Bengali,80,6.5,resolved,,Rahul Mishra
+TK01323,2026-10-30,Instagram DM,KC109411,Website,Return or refund request,English,33,30.2,resolved,,Rahul Mishra
+TK01324,2026-10-30,WhatsApp,KC109485,Nykaa,Return or refund request,Hindi,40,11.8,resolved,5,Divya Pillai
+TK01325,2026-10-30,WhatsApp,KC109582,Website,Damaged or leaking on arrival,Marathi,72,,open,,Rahul Mishra
+TK01326,2026-10-30,WhatsApp,KC110165,Website,Return or refund request,English,55,,open,,Divya Pillai
+TK01327,2026-10-30,WhatsApp,KC110677,Purplle,Marketplace order escalation,Marathi,74,,open,,Lavanya Reddy
+TK01328,2026-10-30,Email,KC110914,Website,Failed delivery (NDR),Telugu,74,,open,,Rahul Mishra
+TK01329,2026-10-30,WhatsApp,KC111006,Website,Where is my order (WISMO),English,2,0.1,resolved,3,WhatsApp bot
+TK01330,2026-10-30,IVR,KC111217,Website,Where is my order (WISMO),English,1,11.7,resolved,5,Rahul Mishra
+TK01331,2026-10-30,WhatsApp,,,Product question (pre-sale),Hindi,44,,open,,Rahul Mishra
+TK01332,2026-10-30,Instagram DM,,,Product question (pre-sale),Hinglish,7,7.9,resolved,4,Divya Pillai
+TK01333,2026-10-30,WhatsApp,,,Product question (pre-sale),Bengali,36,15.1,resolved,5,Lavanya Reddy
+TK01334,2026-10-30,WhatsApp,,,Product question (pre-sale),Hindi,43,,open,,Rahul Mishra
+TK01335,2026-10-31,IVR,KC109470,Amazon,Return or refund request,Bengali,3,,open,,Rahul Mishra
+TK01336,2026-10-31,WhatsApp,KC109475,Website,Return or refund request,English,22,39.3,resolved,,Lavanya Reddy
+TK01337,2026-10-31,WhatsApp,KC110495,Website,Return or refund request,English,45,44.5,resolved,,Divya Pillai
+TK01338,2026-10-31,IVR,KC110696,Website,Product usage question,English,1,1.9,resolved,5,Rahul Mishra
+TK01339,2026-10-31,WhatsApp,KC110954,Flipkart,Damaged or leaking on arrival,Kannada,80,,open,,Lavanya Reddy
+TK01340,2026-10-31,WhatsApp,KC111074,Website,Where is my order (WISMO),Hindi,41,,open,,Lavanya Reddy
+TK01341,2026-10-31,WhatsApp,KC111115,Website,Failed delivery (NDR),Hindi,50,16.3,resolved,,Rahul Mishra
+TK01342,2026-10-31,WhatsApp,KC111160,Website,Where is my order (WISMO),Hindi,0,0.2,resolved,4,WhatsApp bot
+TK01343,2026-10-31,WhatsApp,,,Product question (pre-sale),English,51,4.9,resolved,4,Lavanya Reddy
+TK01344,2026-10-31,Instagram DM,,,Product question (pre-sale),Bengali,45,10.4,resolved,,Lavanya Reddy
+TK01345,2026-10-31,WhatsApp,,,Product question (pre-sale),Hindi,38,5.7,resolved,3,Rahul Mishra
+TK01346,2026-10-31,WhatsApp,,,Product question (pre-sale),English,35,6.1,resolved,,Lavanya Reddy
+TK01347,2026-10-31,WhatsApp,,,Product question (pre-sale),Hinglish,29,9.2,resolved,,Divya Pillai
+TK01348,2026-10-31,WhatsApp,,,Product question (pre-sale),Tamil,10,4,resolved,,Rahul Mishra
+TK01349,2026-11-01,IVR,KC109477,Website,Damaged or leaking on arrival,English,2,,open,,Rahul Mishra
+TK01350,2026-11-01,Instagram DM,KC109884,Nykaa,Damaged or leaking on arrival,Hindi,27,,open,,Rahul Mishra
+TK01351,2026-11-01,WhatsApp,KC110212,Website,Damaged or leaking on arrival,Kannada,7,,open,,Divya Pillai
+TK01352,2026-11-01,WhatsApp,KC110326,Website,Product usage question,Tamil,7,6.2,resolved,,Divya Pillai
+TK01353,2026-11-01,Instagram DM,KC110945,Website,Failed delivery (NDR),English,20,,open,,Divya Pillai
+TK01354,2026-11-01,WhatsApp,KC110982,Website,Failed delivery (NDR),English,39,17.6,resolved,,Divya Pillai
+TK01355,2026-11-01,WhatsApp,KC111187,Website,Failed delivery (NDR),English,45,24.9,resolved,,Divya Pillai
+TK01356,2026-11-01,Instagram DM,KC111270,Website,Failed delivery (NDR),English,32,,open,,Divya Pillai
+TK01357,2026-11-01,Email,KC111309,Website,Where is my order (WISMO),English,209,,open,,Divya Pillai
+TK01358,2026-11-01,WhatsApp,KC111337,Website,Failed delivery (NDR),English,30,13.5,resolved,3,Rahul Mishra
+TK01359,2026-11-02,WhatsApp,KC110044,Website,Return or refund request,Bengali,33,,open,,Rahul Mishra
+TK01360,2026-11-02,WhatsApp,KC110350,Website,Product usage question,English,25,,open,,Lavanya Reddy
+TK01361,2026-11-02,WhatsApp,KC111173,Website,Damaged or leaking on arrival,Punjabi,51,,open,,Lavanya Reddy
+TK01362,2026-11-02,IVR,KC111213,Website,Failed delivery (NDR),English,1,20.7,resolved,2,Rahul Mishra
+TK01363,2026-11-02,WhatsApp,KC111393,Website,Where is my order (WISMO),Malayalam,21,8.7,resolved,,Rahul Mishra
+TK01364,2026-11-02,WhatsApp,KC111420,Website,Where is my order (WISMO),English,7,7.7,resolved,,Rahul Mishra
+TK01365,2026-11-02,WhatsApp,KC111426,Website,Failed delivery (NDR),English,17,22.9,resolved,,Divya Pillai
+TK01366,2026-11-02,WhatsApp,KC111434,Website,Failed delivery (NDR),Hindi,39,,open,,Lavanya Reddy
+TK01367,2026-11-03,WhatsApp,KC109612,Website,Return or refund request,English,51,25.5,resolved,2,Divya Pillai
+TK01368,2026-11-03,Email,KC110363,Website,Return or refund request,English,163,52.6,resolved,,Lavanya Reddy
+TK01369,2026-11-03,Email,KC110374,Website,Return or refund request,English,132,,open,,Rahul Mishra
+TK01370,2026-11-03,Email,KC110840,Tata CLiQ,Return or refund request,English,105,43.2,escalated,,Rahul Mishra
+TK01371,2026-11-03,Email,KC111341,Website,Failed delivery (NDR),Marathi,245,21.8,resolved,,Rahul Mishra
+TK01372,2026-11-03,Email,KC111416,Website,Product usage question,English,139,,open,,Rahul Mishra
+TK01373,2026-11-03,Email,KC111525,Website,Where is my order (WISMO),Odia,191,9.6,resolved,4,Divya Pillai
+TK01374,2026-11-04,WhatsApp,KC108930,Website,Return or refund request,English,50,59.1,resolved,5,Divya Pillai
+TK01375,2026-11-04,WhatsApp,KC110984,Website,Return or refund request,English,8,,open,,Divya Pillai
+TK01376,2026-11-04,WhatsApp,KC111377,Website,Failed delivery (NDR),English,19,,open,,Lavanya Reddy
+TK01377,2026-11-05,WhatsApp,KC109548,Website,Damaged or leaking on arrival,Hindi,67,,open,,Divya Pillai
+TK01378,2026-11-05,Email,KC109601,Website,Return or refund request,English,259,,open,,Lavanya Reddy
+TK01379,2026-11-06,WhatsApp,KC110944,Website,Product usage question,Marathi,29,5.5,resolved,4,Lavanya Reddy
+TK01380,2026-11-06,Email,KC111468,Website,Return or refund request,Kannada,228,,open,,Lavanya Reddy
+TK01381,2026-11-09,Email,KC111458,Website,Return or refund request,Hindi,148,22,resolved,,Rahul Mishra

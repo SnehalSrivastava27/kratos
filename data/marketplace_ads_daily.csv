@@ -1,645 +1,1197 @@
-date,platform,campaign,spend,clicks,orders,revenue
-2026-08-01,Amazon,SP - Sunscreen auto,636,79,4,2134
-2026-08-01,Amazon,SP - Vitamin C exact,486,39,2,1158
-2026-08-01,Amazon,SB - Kesar brand video,223,31,1,536
-2026-08-01,Flipkart,PLA - Sunscreen,379,59,1,818
-2026-08-01,Nykaa,Nykaa Sponsored - Serum,381,44,2,1117
-2026-08-01,Blinkit,Blinkit Search - Sunscreen,323,60,1,865
-2026-08-01,Zepto,Zepto Ads - Sunscreen,188,31,0,315
-2026-08-02,Amazon,SP - Sunscreen auto,343,45,1,869
-2026-08-02,Amazon,SP - Vitamin C exact,458,43,3,1742
-2026-08-02,Amazon,SB - Kesar brand video,313,44,1,742
-2026-08-02,Flipkart,PLA - Sunscreen,217,38,1,724
-2026-08-02,Nykaa,Nykaa Sponsored - Serum,548,56,3,2023
-2026-08-02,Blinkit,Blinkit Search - Sunscreen,214,36,1,578
-2026-08-02,Zepto,Zepto Ads - Sunscreen,174,36,0,157
-2026-08-03,Amazon,SP - Sunscreen auto,436,57,1,859
-2026-08-03,Amazon,SP - Vitamin C exact,358,30,1,966
-2026-08-03,Amazon,SB - Kesar brand video,292,44,1,534
-2026-08-03,Flipkart,PLA - Sunscreen,367,62,1,632
-2026-08-03,Nykaa,Nykaa Sponsored - Serum,440,57,1,937
-2026-08-03,Blinkit,Blinkit Search - Sunscreen,315,72,1,740
-2026-08-03,Zepto,Zepto Ads - Sunscreen,209,41,0,349
-2026-08-04,Amazon,SP - Sunscreen auto,911,107,7,4378
-2026-08-04,Amazon,SP - Vitamin C exact,502,36,3,1771
-2026-08-04,Amazon,SB - Kesar brand video,197,22,1,478
-2026-08-04,Flipkart,PLA - Sunscreen,321,53,3,1455
-2026-08-04,Nykaa,Nykaa Sponsored - Serum,389,45,3,1962
-2026-08-04,Blinkit,Blinkit Search - Sunscreen,297,60,2,875
-2026-08-04,Zepto,Zepto Ads - Sunscreen,124,28,1,350
-2026-08-05,Amazon,SP - Sunscreen auto,497,56,3,1698
-2026-08-05,Amazon,SP - Vitamin C exact,295,26,2,1373
-2026-08-05,Amazon,SB - Kesar brand video,279,37,1,755
-2026-08-05,Flipkart,PLA - Sunscreen,253,38,1,629
-2026-08-05,Nykaa,Nykaa Sponsored - Serum,443,48,2,1487
-2026-08-05,Blinkit,Blinkit Search - Sunscreen,326,63,2,1258
-2026-08-05,Zepto,Zepto Ads - Sunscreen,235,44,1,841
-2026-08-06,Amazon,SP - Sunscreen auto,549,56,3,1642
-2026-08-06,Amazon,SP - Vitamin C exact,516,50,3,1692
-2026-08-06,Amazon,SB - Kesar brand video,238,33,1,502
-2026-08-06,Flipkart,PLA - Sunscreen,252,47,1,643
-2026-08-06,Nykaa,Nykaa Sponsored - Serum,367,46,2,1358
-2026-08-06,Blinkit,Blinkit Search - Sunscreen,208,33,1,465
-2026-08-06,Zepto,Zepto Ads - Sunscreen,208,39,1,467
-2026-08-07,Amazon,SP - Sunscreen auto,538,75,3,2070
-2026-08-07,Amazon,SP - Vitamin C exact,551,43,5,3347
-2026-08-07,Amazon,SB - Kesar brand video,219,31,1,556
-2026-08-07,Flipkart,PLA - Sunscreen,312,55,2,1178
-2026-08-07,Nykaa,Nykaa Sponsored - Serum,274,34,2,1293
-2026-08-07,Blinkit,Blinkit Search - Sunscreen,347,58,1,437
-2026-08-07,Zepto,Zepto Ads - Sunscreen,176,33,1,642
-2026-08-08,Amazon,SP - Sunscreen auto,534,50,3,2368
-2026-08-08,Amazon,SP - Vitamin C exact,495,49,4,2324
-2026-08-08,Amazon,SB - Kesar brand video,178,25,0,288
-2026-08-08,Flipkart,PLA - Sunscreen,338,47,2,1241
-2026-08-08,Nykaa,Nykaa Sponsored - Serum,381,40,2,1370
-2026-08-08,Blinkit,Blinkit Search - Sunscreen,329,84,2,1324
-2026-08-08,Zepto,Zepto Ads - Sunscreen,224,47,1,593
-2026-08-09,Amazon,SP - Sunscreen auto,469,47,1,983
-2026-08-09,Amazon,SP - Vitamin C exact,261,21,2,946
-2026-08-09,Amazon,SB - Kesar brand video,143,24,0,271
-2026-08-09,Flipkart,PLA - Sunscreen,196,33,1,469
-2026-08-09,Nykaa,Nykaa Sponsored - Serum,514,58,2,1282
-2026-08-09,Blinkit,Blinkit Search - Sunscreen,498,108,1,802
-2026-08-09,Zepto,Zepto Ads - Sunscreen,285,49,1,760
-2026-08-10,Amazon,SP - Sunscreen auto,804,90,1,675
-2026-08-10,Amazon,SP - Vitamin C exact,347,32,2,1016
-2026-08-10,Amazon,SB - Kesar brand video,289,44,1,405
-2026-08-10,Flipkart,PLA - Sunscreen,313,65,1,936
-2026-08-10,Nykaa,Nykaa Sponsored - Serum,469,48,3,1678
-2026-08-10,Blinkit,Blinkit Search - Sunscreen,394,77,2,1343
-2026-08-10,Zepto,Zepto Ads - Sunscreen,259,57,0,279
-2026-08-11,Amazon,SP - Sunscreen auto,786,96,5,3475
-2026-08-11,Amazon,SP - Vitamin C exact,370,28,2,1273
-2026-08-11,Amazon,SB - Kesar brand video,257,36,1,773
-2026-08-11,Flipkart,PLA - Sunscreen,315,66,2,984
-2026-08-11,Nykaa,Nykaa Sponsored - Serum,340,31,1,665
-2026-08-11,Blinkit,Blinkit Search - Sunscreen,306,49,2,1200
-2026-08-11,Zepto,Zepto Ads - Sunscreen,197,35,0,241
-2026-08-12,Amazon,SP - Sunscreen auto,630,83,5,2936
-2026-08-12,Amazon,SP - Vitamin C exact,479,46,1,452
-2026-08-12,Amazon,SB - Kesar brand video,237,33,1,787
-2026-08-12,Flipkart,PLA - Sunscreen,354,51,2,991
-2026-08-12,Nykaa,Nykaa Sponsored - Serum,483,47,4,2207
-2026-08-12,Blinkit,Blinkit Search - Sunscreen,335,84,2,1364
-2026-08-12,Zepto,Zepto Ads - Sunscreen,217,43,1,696
-2026-08-13,Amazon,SP - Sunscreen auto,642,79,5,3305
-2026-08-13,Amazon,SP - Vitamin C exact,376,36,2,1310
-2026-08-13,Amazon,SB - Kesar brand video,247,27,1,369
-2026-08-13,Flipkart,PLA - Sunscreen,299,50,1,870
-2026-08-13,Nykaa,Nykaa Sponsored - Serum,650,73,4,2468
-2026-08-13,Blinkit,Blinkit Search - Sunscreen,174,34,1,642
-2026-08-13,Zepto,Zepto Ads - Sunscreen,216,42,1,440
-2026-08-14,Amazon,SP - Sunscreen auto,355,39,4,1994
-2026-08-14,Amazon,SP - Vitamin C exact,259,24,2,1126
-2026-08-14,Amazon,SB - Kesar brand video,238,29,1,475
-2026-08-14,Flipkart,PLA - Sunscreen,177,23,2,805
-2026-08-14,Nykaa,Nykaa Sponsored - Serum,497,56,3,1746
-2026-08-14,Blinkit,Blinkit Search - Sunscreen,281,59,1,769
-2026-08-14,Zepto,Zepto Ads - Sunscreen,232,52,1,638
-2026-08-15,Amazon,SP - Sunscreen auto,553,50,3,2179
-2026-08-15,Amazon,SP - Vitamin C exact,517,37,3,1503
-2026-08-15,Amazon,SB - Kesar brand video,259,32,1,338
-2026-08-15,Flipkart,PLA - Sunscreen,192,27,1,274
-2026-08-15,Nykaa,Nykaa Sponsored - Serum,453,50,2,1023
-2026-08-15,Blinkit,Blinkit Search - Sunscreen,300,61,1,524
-2026-08-15,Zepto,Zepto Ads - Sunscreen,238,45,1,735
-2026-08-16,Amazon,SP - Sunscreen auto,282,25,2,1203
-2026-08-16,Amazon,SP - Vitamin C exact,426,33,3,1595
-2026-08-16,Amazon,SB - Kesar brand video,267,36,1,732
-2026-08-16,Flipkart,PLA - Sunscreen,203,32,0,281
-2026-08-16,Nykaa,Nykaa Sponsored - Serum,439,62,2,1220
-2026-08-16,Blinkit,Blinkit Search - Sunscreen,382,82,2,1246
-2026-08-16,Zepto,Zepto Ads - Sunscreen,142,26,1,382
-2026-08-17,Amazon,SP - Sunscreen auto,416,57,2,1656
-2026-08-17,Amazon,SP - Vitamin C exact,367,29,3,1932
-2026-08-17,Amazon,SB - Kesar brand video,268,43,2,940
-2026-08-17,Flipkart,PLA - Sunscreen,337,58,2,842
-2026-08-17,Nykaa,Nykaa Sponsored - Serum,394,40,3,1722
-2026-08-17,Blinkit,Blinkit Search - Sunscreen,431,84,1,818
-2026-08-17,Zepto,Zepto Ads - Sunscreen,265,50,1,436
-2026-08-18,Amazon,SP - Sunscreen auto,528,55,3,1854
-2026-08-18,Amazon,SP - Vitamin C exact,576,47,3,2254
-2026-08-18,Amazon,SB - Kesar brand video,191,29,0,110
-2026-08-18,Flipkart,PLA - Sunscreen,265,48,1,730
-2026-08-18,Nykaa,Nykaa Sponsored - Serum,467,69,3,2259
-2026-08-18,Blinkit,Blinkit Search - Sunscreen,224,45,1,669
-2026-08-18,Zepto,Zepto Ads - Sunscreen,210,40,1,437
-2026-08-19,Amazon,SP - Sunscreen auto,460,59,2,1615
-2026-08-19,Amazon,SP - Vitamin C exact,520,43,3,2247
-2026-08-19,Amazon,SB - Kesar brand video,145,19,1,384
-2026-08-19,Flipkart,PLA - Sunscreen,285,51,2,998
-2026-08-19,Nykaa,Nykaa Sponsored - Serum,413,44,2,1066
-2026-08-19,Blinkit,Blinkit Search - Sunscreen,366,85,2,1298
-2026-08-19,Zepto,Zepto Ads - Sunscreen,176,45,1,381
-2026-08-20,Amazon,SP - Sunscreen auto,391,46,3,2387
-2026-08-20,Amazon,SP - Vitamin C exact,335,28,3,1758
-2026-08-20,Amazon,SB - Kesar brand video,277,40,0,239
-2026-08-20,Flipkart,PLA - Sunscreen,300,49,1,604
-2026-08-20,Nykaa,Nykaa Sponsored - Serum,389,48,1,888
-2026-08-20,Blinkit,Blinkit Search - Sunscreen,283,53,2,1022
-2026-08-20,Zepto,Zepto Ads - Sunscreen,274,63,2,835
-2026-08-21,Amazon,SP - Sunscreen auto,623,60,5,2925
-2026-08-21,Amazon,SP - Vitamin C exact,482,41,2,1352
-2026-08-21,Amazon,SB - Kesar brand video,117,16,0,288
-2026-08-21,Flipkart,PLA - Sunscreen,170,29,1,607
-2026-08-21,Nykaa,Nykaa Sponsored - Serum,405,47,2,1190
-2026-08-21,Blinkit,Blinkit Search - Sunscreen,354,62,2,1017
-2026-08-21,Zepto,Zepto Ads - Sunscreen,205,34,1,432
-2026-08-22,Amazon,SP - Sunscreen auto,757,83,5,3537
-2026-08-22,Amazon,SP - Vitamin C exact,461,39,3,1758
-2026-08-22,Amazon,SB - Kesar brand video,247,37,1,519
-2026-08-22,Flipkart,PLA - Sunscreen,265,57,1,813
-2026-08-22,Nykaa,Nykaa Sponsored - Serum,677,70,2,807
-2026-08-22,Blinkit,Blinkit Search - Sunscreen,351,70,1,807
-2026-08-22,Zepto,Zepto Ads - Sunscreen,256,57,1,495
-2026-08-23,Amazon,SP - Sunscreen auto,800,110,5,3451
-2026-08-23,Amazon,SP - Vitamin C exact,422,35,3,1492
-2026-08-23,Amazon,SB - Kesar brand video,220,32,1,594
-2026-08-23,Flipkart,PLA - Sunscreen,216,34,1,637
-2026-08-23,Nykaa,Nykaa Sponsored - Serum,760,95,4,2532
-2026-08-23,Blinkit,Blinkit Search - Sunscreen,491,110,2,1382
-2026-08-23,Zepto,Zepto Ads - Sunscreen,196,39,1,427
-2026-08-24,Amazon,SP - Sunscreen auto,697,67,5,3399
-2026-08-24,Amazon,SP - Vitamin C exact,540,41,3,2127
-2026-08-24,Amazon,SB - Kesar brand video,198,28,0,301
-2026-08-24,Flipkart,PLA - Sunscreen,328,56,1,557
-2026-08-24,Nykaa,Nykaa Sponsored - Serum,619,71,6,3194
-2026-08-24,Blinkit,Blinkit Search - Sunscreen,317,70,1,836
-2026-08-24,Zepto,Zepto Ads - Sunscreen,173,28,1,459
-2026-08-25,Amazon,SP - Sunscreen auto,731,93,2,919
-2026-08-25,Amazon,SP - Vitamin C exact,454,43,3,1566
-2026-08-25,Amazon,SB - Kesar brand video,252,38,1,374
-2026-08-25,Flipkart,PLA - Sunscreen,185,28,1,648
-2026-08-25,Nykaa,Nykaa Sponsored - Serum,421,37,2,1885
-2026-08-25,Blinkit,Blinkit Search - Sunscreen,287,58,2,1039
-2026-08-25,Zepto,Zepto Ads - Sunscreen,227,49,1,669
-2026-08-26,Amazon,SP - Sunscreen auto,356,42,1,802
-2026-08-26,Amazon,SP - Vitamin C exact,441,36,2,1513
-2026-08-26,Amazon,SB - Kesar brand video,205,27,1,544
-2026-08-26,Flipkart,PLA - Sunscreen,295,45,2,939
-2026-08-26,Nykaa,Nykaa Sponsored - Serum,519,57,2,827
-2026-08-26,Blinkit,Blinkit Search - Sunscreen,412,72,1,748
-2026-08-26,Zepto,Zepto Ads - Sunscreen,196,40,1,499
-2026-08-27,Amazon,SP - Sunscreen auto,544,55,5,3541
-2026-08-27,Amazon,SP - Vitamin C exact,367,30,2,1258
-2026-08-27,Amazon,SB - Kesar brand video,245,35,1,414
-2026-08-27,Flipkart,PLA - Sunscreen,259,36,1,637
-2026-08-27,Nykaa,Nykaa Sponsored - Serum,334,36,1,1176
-2026-08-27,Blinkit,Blinkit Search - Sunscreen,314,62,1,844
-2026-08-27,Zepto,Zepto Ads - Sunscreen,239,41,1,494
-2026-08-28,Amazon,SP - Sunscreen auto,671,77,3,1783
-2026-08-28,Amazon,SP - Vitamin C exact,496,40,4,2353
-2026-08-28,Amazon,SB - Kesar brand video,338,52,1,570
-2026-08-28,Flipkart,PLA - Sunscreen,268,52,1,582
-2026-08-28,Nykaa,Nykaa Sponsored - Serum,471,46,2,1722
-2026-08-28,Blinkit,Blinkit Search - Sunscreen,355,71,1,534
-2026-08-28,Zepto,Zepto Ads - Sunscreen,242,50,1,603
-2026-08-29,Amazon,SP - Sunscreen auto,570,59,2,1770
-2026-08-29,Amazon,SP - Vitamin C exact,558,48,2,1423
-2026-08-29,Amazon,SB - Kesar brand video,217,32,1,481
-2026-08-29,Flipkart,PLA - Sunscreen,372,58,1,711
-2026-08-29,Nykaa,Nykaa Sponsored - Serum,403,48,2,828
-2026-08-29,Blinkit,Blinkit Search - Sunscreen,213,36,1,655
-2026-08-29,Zepto,Zepto Ads - Sunscreen,237,63,1,685
-2026-08-30,Amazon,SP - Sunscreen auto,599,73,3,1758
-2026-08-30,Amazon,SP - Vitamin C exact,453,47,4,2321
-2026-08-30,Amazon,SB - Kesar brand video,171,23,1,754
-2026-08-30,Flipkart,PLA - Sunscreen,285,55,1,652
-2026-08-30,Nykaa,Nykaa Sponsored - Serum,474,63,2,1523
-2026-08-30,Blinkit,Blinkit Search - Sunscreen,353,68,1,709
-2026-08-30,Zepto,Zepto Ads - Sunscreen,203,40,1,435
-2026-08-31,Amazon,SP - Sunscreen auto,676,77,3,2440
-2026-08-31,Amazon,SP - Vitamin C exact,427,31,3,2190
-2026-08-31,Amazon,SB - Kesar brand video,204,37,1,459
-2026-08-31,Flipkart,PLA - Sunscreen,225,39,0,161
-2026-08-31,Nykaa,Nykaa Sponsored - Serum,447,51,2,1220
-2026-08-31,Blinkit,Blinkit Search - Sunscreen,369,67,2,1177
-2026-08-31,Zepto,Zepto Ads - Sunscreen,218,50,1,522
-2026-09-01,Amazon,SP - Sunscreen auto,645,68,7,4060
-2026-09-01,Amazon,SP - Vitamin C exact,428,33,3,1918
-2026-09-01,Amazon,SB - Kesar brand video,348,46,1,548
-2026-09-01,Flipkart,PLA - Sunscreen,286,47,1,924
-2026-09-01,Nykaa,Nykaa Sponsored - Serum,378,47,2,1501
-2026-09-01,Blinkit,Blinkit Search - Sunscreen,404,75,2,1138
-2026-09-01,Zepto,Zepto Ads - Sunscreen,134,22,0,224
-2026-09-02,Amazon,SP - Sunscreen auto,860,100,5,2959
-2026-09-02,Amazon,SP - Vitamin C exact,326,26,2,1162
-2026-09-02,Amazon,SB - Kesar brand video,271,41,1,699
-2026-09-02,Flipkart,PLA - Sunscreen,233,38,1,440
-2026-09-02,Nykaa,Nykaa Sponsored - Serum,533,71,2,1825
-2026-09-02,Blinkit,Blinkit Search - Sunscreen,310,81,2,1035
-2026-09-02,Zepto,Zepto Ads - Sunscreen,274,46,1,551
-2026-09-03,Amazon,SP - Sunscreen auto,516,60,4,2190
-2026-09-03,Amazon,SP - Vitamin C exact,389,33,3,1998
-2026-09-03,Amazon,SB - Kesar brand video,213,32,1,422
-2026-09-03,Flipkart,PLA - Sunscreen,364,59,1,447
-2026-09-03,Nykaa,Nykaa Sponsored - Serum,620,76,3,2009
-2026-09-03,Blinkit,Blinkit Search - Sunscreen,312,61,2,917
-2026-09-03,Zepto,Zepto Ads - Sunscreen,236,48,1,823
-2026-09-04,Amazon,SP - Sunscreen auto,550,52,4,2465
-2026-09-04,Amazon,SP - Vitamin C exact,642,54,2,1342
-2026-09-04,Amazon,SB - Kesar brand video,279,37,1,616
-2026-09-04,Flipkart,PLA - Sunscreen,290,47,1,501
-2026-09-04,Nykaa,Nykaa Sponsored - Serum,429,51,2,978
-2026-09-04,Blinkit,Blinkit Search - Sunscreen,490,100,1,1052
-2026-09-04,Zepto,Zepto Ads - Sunscreen,173,33,1,470
-2026-09-05,Amazon,SP - Sunscreen auto,634,72,4,2820
-2026-09-05,Amazon,SP - Vitamin C exact,190,13,1,351
-2026-09-05,Amazon,SB - Kesar brand video,193,28,1,529
-2026-09-05,Flipkart,PLA - Sunscreen,314,48,3,1681
-2026-09-05,Nykaa,Nykaa Sponsored - Serum,352,39,2,1169
-2026-09-05,Blinkit,Blinkit Search - Sunscreen,319,59,2,977
-2026-09-05,Zepto,Zepto Ads - Sunscreen,263,62,1,620
-2026-09-06,Amazon,SP - Sunscreen auto,492,60,2,1438
-2026-09-06,Amazon,SP - Vitamin C exact,389,40,1,882
-2026-09-06,Amazon,SB - Kesar brand video,237,35,1,848
-2026-09-06,Flipkart,PLA - Sunscreen,414,88,2,1614
-2026-09-06,Nykaa,Nykaa Sponsored - Serum,434,51,0,278
-2026-09-06,Blinkit,Blinkit Search - Sunscreen,365,66,1,784
-2026-09-06,Zepto,Zepto Ads - Sunscreen,275,57,1,732
-2026-09-07,Amazon,SP - Sunscreen auto,540,61,3,1705
-2026-09-07,Amazon,SP - Vitamin C exact,473,33,2,1515
-2026-09-07,Amazon,SB - Kesar brand video,178,31,0,255
-2026-09-07,Flipkart,PLA - Sunscreen,278,51,2,1015
-2026-09-07,Nykaa,Nykaa Sponsored - Serum,330,36,1,382
-2026-09-07,Blinkit,Blinkit Search - Sunscreen,259,64,1,406
-2026-09-07,Zepto,Zepto Ads - Sunscreen,197,41,0,257
-2026-09-08,Amazon,SP - Sunscreen auto,565,78,6,3154
-2026-09-08,Amazon,SP - Vitamin C exact,278,20,2,1260
-2026-09-08,Amazon,SB - Kesar brand video,321,41,2,872
-2026-09-08,Flipkart,PLA - Sunscreen,313,54,1,963
-2026-09-08,Nykaa,Nykaa Sponsored - Serum,368,43,1,415
-2026-09-08,Blinkit,Blinkit Search - Sunscreen,344,65,1,684
-2026-09-08,Zepto,Zepto Ads - Sunscreen,202,42,1,415
-2026-09-09,Amazon,SP - Sunscreen auto,610,62,4,2882
-2026-09-09,Amazon,SP - Vitamin C exact,472,43,3,2064
-2026-09-09,Amazon,SB - Kesar brand video,184,24,0,276
-2026-09-09,Flipkart,PLA - Sunscreen,304,48,1,931
-2026-09-09,Nykaa,Nykaa Sponsored - Serum,575,65,4,2403
-2026-09-09,Blinkit,Blinkit Search - Sunscreen,379,81,1,636
-2026-09-09,Zepto,Zepto Ads - Sunscreen,212,57,0,320
-2026-09-10,Amazon,SP - Sunscreen auto,599,72,5,2777
-2026-09-10,Amazon,SP - Vitamin C exact,408,38,3,1769
-2026-09-10,Amazon,SB - Kesar brand video,295,35,1,526
-2026-09-10,Flipkart,PLA - Sunscreen,257,40,1,813
-2026-09-10,Nykaa,Nykaa Sponsored - Serum,327,31,1,611
-2026-09-10,Blinkit,Blinkit Search - Sunscreen,452,104,2,1081
-2026-09-10,Zepto,Zepto Ads - Sunscreen,224,44,1,676
-2026-09-11,Amazon,SP - Sunscreen auto,583,56,3,1978
-2026-09-11,Amazon,SP - Vitamin C exact,478,47,4,2653
-2026-09-11,Amazon,SB - Kesar brand video,232,30,0,342
-2026-09-11,Flipkart,PLA - Sunscreen,362,55,2,1425
-2026-09-11,Nykaa,Nykaa Sponsored - Serum,555,59,4,2185
-2026-09-11,Blinkit,Blinkit Search - Sunscreen,514,93,3,1718
-2026-09-11,Zepto,Zepto Ads - Sunscreen,259,53,1,401
-2026-09-12,Amazon,SP - Sunscreen auto,740,70,4,2355
-2026-09-12,Amazon,SP - Vitamin C exact,389,36,2,1586
-2026-09-12,Amazon,SB - Kesar brand video,214,28,1,591
-2026-09-12,Flipkart,PLA - Sunscreen,233,37,1,803
-2026-09-12,Nykaa,Nykaa Sponsored - Serum,443,41,3,1844
-2026-09-12,Blinkit,Blinkit Search - Sunscreen,461,85,2,1362
-2026-09-12,Zepto,Zepto Ads - Sunscreen,277,60,1,708
-2026-09-13,Amazon,SP - Sunscreen auto,509,50,3,2210
-2026-09-13,Amazon,SP - Vitamin C exact,577,45,3,1580
-2026-09-13,Amazon,SB - Kesar brand video,277,44,1,501
-2026-09-13,Flipkart,PLA - Sunscreen,401,66,3,1551
-2026-09-13,Nykaa,Nykaa Sponsored - Serum,552,68,2,928
-2026-09-13,Blinkit,Blinkit Search - Sunscreen,334,62,1,947
-2026-09-13,Zepto,Zepto Ads - Sunscreen,178,34,1,416
-2026-09-14,Amazon,SP - Sunscreen auto,588,79,3,2086
-2026-09-14,Amazon,SP - Vitamin C exact,536,66,7,3772
-2026-09-14,Amazon,SB - Kesar brand video,286,40,1,884
-2026-09-14,Flipkart,PLA - Sunscreen,249,37,1,619
-2026-09-14,Nykaa,Nykaa Sponsored - Serum,443,49,2,1377
-2026-09-14,Blinkit,Blinkit Search - Sunscreen,393,91,1,784
-2026-09-14,Zepto,Zepto Ads - Sunscreen,280,52,1,804
-2026-09-15,Amazon,SP - Sunscreen auto,617,77,1,685
-2026-09-15,Amazon,SP - Vitamin C exact,454,46,2,901
-2026-09-15,Amazon,SB - Kesar brand video,242,39,1,778
-2026-09-15,Flipkart,PLA - Sunscreen,287,45,2,1267
-2026-09-15,Nykaa,Nykaa Sponsored - Serum,316,30,2,957
-2026-09-15,Blinkit,Blinkit Search - Sunscreen,273,54,1,821
-2026-09-15,Zepto,Zepto Ads - Sunscreen,197,39,1,490
-2026-09-16,Amazon,SP - Sunscreen auto,515,64,3,2148
-2026-09-16,Amazon,SP - Vitamin C exact,390,33,2,1314
-2026-09-16,Amazon,SB - Kesar brand video,294,39,2,898
-2026-09-16,Flipkart,PLA - Sunscreen,253,42,2,1050
-2026-09-16,Nykaa,Nykaa Sponsored - Serum,611,59,4,1977
-2026-09-16,Blinkit,Blinkit Search - Sunscreen,405,89,1,909
-2026-09-16,Zepto,Zepto Ads - Sunscreen,190,35,1,493
-2026-09-17,Amazon,SP - Sunscreen auto,628,61,4,2342
-2026-09-17,Amazon,SP - Vitamin C exact,388,29,1,1092
-2026-09-17,Amazon,SB - Kesar brand video,260,43,2,939
-2026-09-17,Flipkart,PLA - Sunscreen,327,51,1,958
-2026-09-17,Nykaa,Nykaa Sponsored - Serum,558,61,3,2087
-2026-09-17,Blinkit,Blinkit Search - Sunscreen,349,63,1,806
-2026-09-17,Zepto,Zepto Ads - Sunscreen,330,70,1,825
-2026-09-18,Amazon,SP - Sunscreen auto,705,87,3,1574
-2026-09-18,Amazon,SP - Vitamin C exact,445,44,3,1469
-2026-09-18,Amazon,SB - Kesar brand video,277,40,0,268
-2026-09-18,Flipkart,PLA - Sunscreen,187,30,2,1008
-2026-09-18,Nykaa,Nykaa Sponsored - Serum,518,48,4,2169
-2026-09-18,Blinkit,Blinkit Search - Sunscreen,334,55,2,1231
-2026-09-18,Zepto,Zepto Ads - Sunscreen,231,47,1,369
-2026-09-19,Amazon,SP - Sunscreen auto,510,51,3,1607
-2026-09-19,Amazon,SP - Vitamin C exact,273,22,1,504
-2026-09-19,Amazon,SB - Kesar brand video,204,31,1,515
-2026-09-19,Flipkart,PLA - Sunscreen,296,52,1,924
-2026-09-19,Nykaa,Nykaa Sponsored - Serum,397,50,2,1348
-2026-09-19,Blinkit,Blinkit Search - Sunscreen,393,73,2,1064
-2026-09-19,Zepto,Zepto Ads - Sunscreen,224,45,1,445
-2026-09-20,Amazon,SP - Sunscreen auto,643,78,4,2360
-2026-09-20,Amazon,SP - Vitamin C exact,268,27,1,764
-2026-09-20,Amazon,SB - Kesar brand video,264,36,1,614
-2026-09-20,Flipkart,PLA - Sunscreen,285,39,1,762
-2026-09-20,Nykaa,Nykaa Sponsored - Serum,570,79,3,1853
-2026-09-20,Blinkit,Blinkit Search - Sunscreen,253,46,1,535
-2026-09-20,Zepto,Zepto Ads - Sunscreen,235,41,1,884
-2026-09-21,Amazon,SP - Sunscreen auto,768,103,4,2255
-2026-09-21,Amazon,SP - Vitamin C exact,418,38,3,1680
-2026-09-21,Amazon,SB - Kesar brand video,277,44,1,657
-2026-09-21,Flipkart,PLA - Sunscreen,278,44,2,1147
-2026-09-21,Nykaa,Nykaa Sponsored - Serum,516,61,2,1562
-2026-09-21,Blinkit,Blinkit Search - Sunscreen,446,78,3,1753
-2026-09-21,Zepto,Zepto Ads - Sunscreen,248,46,1,666
-2026-09-22,Amazon,SP - Sunscreen auto,440,40,3,1954
-2026-09-22,Amazon,SP - Vitamin C exact,497,47,3,1923
-2026-09-22,Amazon,SB - Kesar brand video,290,38,1,847
-2026-09-22,Flipkart,PLA - Sunscreen,277,43,1,744
-2026-09-22,Nykaa,Nykaa Sponsored - Serum,553,61,3,1840
-2026-09-22,Blinkit,Blinkit Search - Sunscreen,262,47,1,936
-2026-09-22,Zepto,Zepto Ads - Sunscreen,200,39,0,235
-2026-09-23,Amazon,SP - Sunscreen auto,567,61,2,1353
-2026-09-23,Amazon,SP - Vitamin C exact,549,45,4,2640
-2026-09-23,Amazon,SB - Kesar brand video,252,37,1,510
-2026-09-23,Flipkart,PLA - Sunscreen,317,50,2,1333
-2026-09-23,Nykaa,Nykaa Sponsored - Serum,485,53,2,1296
-2026-09-23,Blinkit,Blinkit Search - Sunscreen,354,75,2,984
-2026-09-23,Zepto,Zepto Ads - Sunscreen,218,45,1,688
-2026-09-24,Amazon,SP - Sunscreen auto,456,54,2,1332
-2026-09-24,Amazon,SP - Vitamin C exact,422,38,3,1771
-2026-09-24,Amazon,SB - Kesar brand video,225,41,0,210
-2026-09-24,Flipkart,PLA - Sunscreen,263,39,1,790
-2026-09-24,Nykaa,Nykaa Sponsored - Serum,428,48,2,1448
-2026-09-24,Blinkit,Blinkit Search - Sunscreen,401,78,1,528
-2026-09-24,Zepto,Zepto Ads - Sunscreen,158,29,1,423
-2026-09-25,Amazon,SP - Sunscreen auto,632,64,6,4281
-2026-09-25,Amazon,SP - Vitamin C exact,546,45,2,1709
-2026-09-25,Amazon,SB - Kesar brand video,284,33,1,518
-2026-09-25,Flipkart,PLA - Sunscreen,341,58,1,663
-2026-09-25,Nykaa,Nykaa Sponsored - Serum,548,54,3,1948
-2026-09-25,Blinkit,Blinkit Search - Sunscreen,483,84,2,1165
-2026-09-25,Zepto,Zepto Ads - Sunscreen,259,65,1,829
-2026-09-26,Amazon,SP - Sunscreen auto,684,91,6,3313
-2026-09-26,Amazon,SP - Vitamin C exact,418,43,2,1206
-2026-09-26,Amazon,SB - Kesar brand video,167,23,1,383
-2026-09-26,Flipkart,PLA - Sunscreen,324,40,1,932
-2026-09-26,Nykaa,Nykaa Sponsored - Serum,442,51,1,582
-2026-09-26,Blinkit,Blinkit Search - Sunscreen,423,77,2,1556
-2026-09-26,Zepto,Zepto Ads - Sunscreen,157,26,1,447
-2026-09-27,Amazon,SP - Sunscreen auto,394,55,3,1987
-2026-09-27,Amazon,SP - Vitamin C exact,365,31,2,1138
-2026-09-27,Amazon,SB - Kesar brand video,231,34,1,449
-2026-09-27,Flipkart,PLA - Sunscreen,289,65,2,1207
-2026-09-27,Nykaa,Nykaa Sponsored - Serum,538,69,3,1358
-2026-09-27,Blinkit,Blinkit Search - Sunscreen,390,69,2,1043
-2026-09-27,Zepto,Zepto Ads - Sunscreen,242,51,1,646
-2026-09-28,Amazon,SP - Sunscreen auto,437,42,2,1021
-2026-09-28,Amazon,SP - Vitamin C exact,438,37,3,1605
-2026-09-28,Amazon,SB - Kesar brand video,233,49,0,196
-2026-09-28,Flipkart,PLA - Sunscreen,385,67,2,974
-2026-09-28,Nykaa,Nykaa Sponsored - Serum,520,48,3,1929
-2026-09-28,Blinkit,Blinkit Search - Sunscreen,391,82,2,1373
-2026-09-28,Zepto,Zepto Ads - Sunscreen,264,54,1,417
-2026-09-29,Amazon,SP - Sunscreen auto,320,33,1,641
-2026-09-29,Amazon,SP - Vitamin C exact,360,30,2,1264
-2026-09-29,Amazon,SB - Kesar brand video,249,33,1,694
-2026-09-29,Flipkart,PLA - Sunscreen,308,52,2,1235
-2026-09-29,Nykaa,Nykaa Sponsored - Serum,657,80,3,2083
-2026-09-29,Blinkit,Blinkit Search - Sunscreen,330,55,1,915
-2026-09-29,Zepto,Zepto Ads - Sunscreen,246,55,1,497
-2026-09-30,Amazon,SP - Sunscreen auto,736,93,4,2771
-2026-09-30,Amazon,SP - Vitamin C exact,398,29,2,1164
-2026-09-30,Amazon,SB - Kesar brand video,255,48,1,733
-2026-09-30,Flipkart,PLA - Sunscreen,255,51,1,776
-2026-09-30,Nykaa,Nykaa Sponsored - Serum,364,43,1,606
-2026-09-30,Blinkit,Blinkit Search - Sunscreen,416,83,2,1304
-2026-09-30,Zepto,Zepto Ads - Sunscreen,199,49,1,535
-2026-10-01,Amazon,SP - Sunscreen auto,632,70,4,2364
-2026-10-01,Amazon,SP - Vitamin C exact,300,24,1,701
-2026-10-01,Amazon,SB - Kesar brand video,299,38,2,971
-2026-10-01,Flipkart,PLA - Sunscreen,347,62,2,1086
-2026-10-01,Nykaa,Nykaa Sponsored - Serum,484,45,2,1295
-2026-10-01,Blinkit,Blinkit Search - Sunscreen,333,77,1,518
-2026-10-01,Zepto,Zepto Ads - Sunscreen,314,62,1,859
-2026-10-02,Amazon,SP - Sunscreen auto,774,103,3,2327
-2026-10-02,Amazon,SP - Vitamin C exact,391,33,1,975
-2026-10-02,Amazon,SB - Kesar brand video,308,36,1,697
-2026-10-02,Flipkart,PLA - Sunscreen,239,39,1,551
-2026-10-02,Nykaa,Nykaa Sponsored - Serum,615,61,4,2338
-2026-10-02,Blinkit,Blinkit Search - Sunscreen,372,70,2,1092
-2026-10-02,Zepto,Zepto Ads - Sunscreen,304,61,1,959
-2026-10-03,Amazon,SP - Sunscreen auto,462,55,2,1041
-2026-10-03,Amazon,SP - Vitamin C exact,500,39,3,1879
-2026-10-03,Amazon,SB - Kesar brand video,406,57,1,642
-2026-10-03,Flipkart,PLA - Sunscreen,338,53,2,1020
-2026-10-03,Nykaa,Nykaa Sponsored - Serum,530,53,5,2779
-2026-10-03,Blinkit,Blinkit Search - Sunscreen,418,75,1,979
-2026-10-03,Zepto,Zepto Ads - Sunscreen,242,59,1,521
-2026-10-04,Amazon,SP - Sunscreen auto,597,58,3,1958
-2026-10-04,Amazon,SP - Vitamin C exact,702,58,6,3879
-2026-10-04,Amazon,SB - Kesar brand video,271,44,2,862
-2026-10-04,Flipkart,PLA - Sunscreen,282,45,1,667
-2026-10-04,Nykaa,Nykaa Sponsored - Serum,633,67,3,1939
-2026-10-04,Blinkit,Blinkit Search - Sunscreen,480,118,2,1408
-2026-10-04,Zepto,Zepto Ads - Sunscreen,223,42,1,521
-2026-10-05,Amazon,SP - Sunscreen auto,432,40,4,2671
-2026-10-05,Amazon,SP - Vitamin C exact,374,32,2,1530
-2026-10-05,Amazon,SB - Kesar brand video,294,35,1,747
-2026-10-05,Flipkart,PLA - Sunscreen,368,63,2,1517
-2026-10-05,Nykaa,Nykaa Sponsored - Serum,617,78,3,1814
-2026-10-05,Blinkit,Blinkit Search - Sunscreen,447,110,2,1223
-2026-10-05,Zepto,Zepto Ads - Sunscreen,293,60,1,679
-2026-10-06,Amazon,SP - Sunscreen auto,702,79,6,3517
-2026-10-06,Amazon,SP - Vitamin C exact,357,36,2,1722
-2026-10-06,Amazon,SB - Kesar brand video,226,44,1,681
-2026-10-06,Flipkart,PLA - Sunscreen,298,57,1,682
-2026-10-06,Nykaa,Nykaa Sponsored - Serum,479,57,2,1141
-2026-10-06,Blinkit,Blinkit Search - Sunscreen,293,59,1,831
-2026-10-06,Zepto,Zepto Ads - Sunscreen,183,43,1,341
-2026-10-07,Amazon,SP - Sunscreen auto,636,80,3,2164
-2026-10-07,Amazon,SP - Vitamin C exact,387,31,1,835
-2026-10-07,Amazon,SB - Kesar brand video,203,33,1,437
-2026-10-07,Flipkart,PLA - Sunscreen,332,70,2,996
-2026-10-07,Nykaa,Nykaa Sponsored - Serum,589,76,2,1162
-2026-10-07,Blinkit,Blinkit Search - Sunscreen,308,53,1,882
-2026-10-07,Zepto,Zepto Ads - Sunscreen,250,43,1,565
-2026-10-08,Amazon,SP - Sunscreen auto,767,91,5,4191
-2026-10-08,Amazon,SP - Vitamin C exact,618,45,5,2719
-2026-10-08,Amazon,SB - Kesar brand video,208,27,1,695
-2026-10-08,Flipkart,PLA - Sunscreen,260,42,1,484
-2026-10-08,Nykaa,Nykaa Sponsored - Serum,589,57,2,1234
-2026-10-08,Blinkit,Blinkit Search - Sunscreen,410,72,2,1153
-2026-10-08,Zepto,Zepto Ads - Sunscreen,301,62,1,734
-2026-10-09,Amazon,SP - Sunscreen auto,800,116,4,3081
-2026-10-09,Amazon,SP - Vitamin C exact,565,42,3,2285
-2026-10-09,Amazon,SB - Kesar brand video,334,47,2,1176
-2026-10-09,Flipkart,PLA - Sunscreen,350,61,1,722
-2026-10-09,Nykaa,Nykaa Sponsored - Serum,737,81,2,1746
-2026-10-09,Blinkit,Blinkit Search - Sunscreen,412,69,2,1354
-2026-10-09,Zepto,Zepto Ads - Sunscreen,327,73,1,407
-2026-10-10,Amazon,SP - Sunscreen auto,794,82,6,3802
-2026-10-10,Amazon,SP - Vitamin C exact,457,32,4,2343
-2026-10-10,Amazon,SB - Kesar brand video,340,40,2,1086
-2026-10-10,Flipkart,PLA - Sunscreen,369,50,2,1302
-2026-10-10,Nykaa,Nykaa Sponsored - Serum,695,77,6,3215
-2026-10-10,Blinkit,Blinkit Search - Sunscreen,407,87,1,868
-2026-10-10,Zepto,Zepto Ads - Sunscreen,285,63,1,687
-2026-10-11,Amazon,SP - Sunscreen auto,610,77,4,2785
-2026-10-11,Amazon,SP - Vitamin C exact,668,64,5,3273
-2026-10-11,Amazon,SB - Kesar brand video,283,40,1,691
-2026-10-11,Flipkart,PLA - Sunscreen,280,46,1,844
-2026-10-11,Nykaa,Nykaa Sponsored - Serum,470,46,4,2335
-2026-10-11,Blinkit,Blinkit Search - Sunscreen,291,45,1,806
-2026-10-11,Zepto,Zepto Ads - Sunscreen,232,49,1,896
-2026-10-12,Amazon,SP - Sunscreen auto,565,62,3,1996
-2026-10-12,Amazon,SP - Vitamin C exact,359,26,3,1928
-2026-10-12,Amazon,SB - Kesar brand video,181,25,1,600
-2026-10-12,Flipkart,PLA - Sunscreen,292,47,1,434
-2026-10-12,Nykaa,Nykaa Sponsored - Serum,533,73,5,2405
-2026-10-12,Blinkit,Blinkit Search - Sunscreen,489,95,2,1275
-2026-10-12,Zepto,Zepto Ads - Sunscreen,219,45,1,619
-2026-10-13,Amazon,SP - Sunscreen auto,255,24,2,1218
-2026-10-13,Amazon,SP - Vitamin C exact,509,38,2,1094
-2026-10-13,Amazon,SB - Kesar brand video,156,25,1,562
-2026-10-13,Flipkart,PLA - Sunscreen,350,55,2,1614
-2026-10-13,Nykaa,Nykaa Sponsored - Serum,603,87,4,2311
-2026-10-13,Blinkit,Blinkit Search - Sunscreen,452,93,0,279
-2026-10-13,Zepto,Zepto Ads - Sunscreen,311,56,0,164
-2026-10-14,Amazon,SP - Sunscreen auto,816,85,5,3337
-2026-10-14,Amazon,SP - Vitamin C exact,402,33,1,332
-2026-10-14,Amazon,SB - Kesar brand video,285,36,1,640
-2026-10-14,Flipkart,PLA - Sunscreen,343,55,2,1053
-2026-10-14,Nykaa,Nykaa Sponsored - Serum,613,79,4,2630
-2026-10-14,Blinkit,Blinkit Search - Sunscreen,474,93,2,972
-2026-10-14,Zepto,Zepto Ads - Sunscreen,262,46,2,989
-2026-10-15,Amazon,SP - Sunscreen auto,633,63,4,3001
-2026-10-15,Amazon,SP - Vitamin C exact,520,43,3,1426
-2026-10-15,Amazon,SB - Kesar brand video,294,42,0,314
-2026-10-15,Flipkart,PLA - Sunscreen,375,52,2,1260
-2026-10-15,Nykaa,Nykaa Sponsored - Serum,537,62,4,1783
-2026-10-15,Blinkit,Blinkit Search - Sunscreen,298,60,1,631
-2026-10-15,Zepto,Zepto Ads - Sunscreen,286,57,1,768
-2026-10-16,Amazon,SP - Sunscreen auto,822,116,6,3251
-2026-10-16,Amazon,SP - Vitamin C exact,504,50,2,1340
-2026-10-16,Amazon,SB - Kesar brand video,278,48,1,319
-2026-10-16,Flipkart,PLA - Sunscreen,420,79,1,961
-2026-10-16,Nykaa,Nykaa Sponsored - Serum,679,57,3,2254
-2026-10-16,Blinkit,Blinkit Search - Sunscreen,425,75,2,1248
-2026-10-16,Zepto,Zepto Ads - Sunscreen,114,20,0,104
-2026-10-17,Amazon,SP - Sunscreen auto,597,63,4,2198
-2026-10-17,Amazon,SP - Vitamin C exact,636,60,4,2121
-2026-10-17,Amazon,SB - Kesar brand video,241,31,1,675
-2026-10-17,Flipkart,PLA - Sunscreen,215,43,1,586
-2026-10-17,Nykaa,Nykaa Sponsored - Serum,480,52,4,2079
-2026-10-17,Blinkit,Blinkit Search - Sunscreen,407,79,1,761
-2026-10-17,Zepto,Zepto Ads - Sunscreen,332,90,2,1149
-2026-10-18,Amazon,SP - Sunscreen auto,626,62,5,2945
-2026-10-18,Amazon,SP - Vitamin C exact,468,43,3,1891
-2026-10-18,Amazon,SB - Kesar brand video,338,48,1,753
-2026-10-18,Flipkart,PLA - Sunscreen,330,51,2,1014
-2026-10-18,Nykaa,Nykaa Sponsored - Serum,458,49,2,1792
-2026-10-18,Blinkit,Blinkit Search - Sunscreen,425,91,1,813
-2026-10-18,Zepto,Zepto Ads - Sunscreen,192,40,1,497
-2026-10-19,Amazon,SP - Sunscreen auto,1649,189,10,6283
-2026-10-19,Amazon,SP - Vitamin C exact,847,79,5,3554
-2026-10-19,Amazon,SB - Kesar brand video,351,53,1,958
-2026-10-19,Flipkart,PLA - Sunscreen,590,94,3,1668
-2026-10-19,Nykaa,Nykaa Sponsored - Serum,749,79,6,3982
-2026-10-19,Blinkit,Blinkit Search - Sunscreen,759,160,2,1638
-2026-10-19,Zepto,Zepto Ads - Sunscreen,459,81,2,1391
-2026-10-20,Amazon,SP - Sunscreen auto,903,94,9,6133
-2026-10-20,Amazon,SP - Vitamin C exact,680,54,4,2409
-2026-10-20,Amazon,SB - Kesar brand video,731,100,2,1063
-2026-10-20,Flipkart,PLA - Sunscreen,543,96,4,2453
-2026-10-20,Nykaa,Nykaa Sponsored - Serum,970,113,8,4744
-2026-10-20,Blinkit,Blinkit Search - Sunscreen,987,235,5,3641
-2026-10-20,Zepto,Zepto Ads - Sunscreen,204,50,1,327
-2026-10-21,Amazon,SP - Sunscreen auto,1119,120,6,3686
-2026-10-21,Amazon,SP - Vitamin C exact,582,57,6,3575
-2026-10-21,Amazon,SB - Kesar brand video,389,52,2,1329
-2026-10-21,Flipkart,PLA - Sunscreen,545,95,2,1216
-2026-10-21,Nykaa,Nykaa Sponsored - Serum,1089,102,7,4948
-2026-10-21,Blinkit,Blinkit Search - Sunscreen,726,118,3,2149
-2026-10-21,Zepto,Zepto Ads - Sunscreen,580,100,2,1147
-2026-10-22,Amazon,SP - Sunscreen auto,949,100,6,3885
-2026-10-22,Amazon,SP - Vitamin C exact,1065,86,7,4384
-2026-10-22,Amazon,SB - Kesar brand video,472,78,1,643
-2026-10-22,Flipkart,PLA - Sunscreen,783,129,4,2732
-2026-10-22,Nykaa,Nykaa Sponsored - Serum,749,82,3,2009
-2026-10-22,Blinkit,Blinkit Search - Sunscreen,811,155,5,3054
-2026-10-22,Zepto,Zepto Ads - Sunscreen,348,68,1,912
-2026-10-23,Amazon,SP - Sunscreen auto,1313,130,10,6467
-2026-10-23,Amazon,SP - Vitamin C exact,824,73,3,1393
-2026-10-23,Amazon,SB - Kesar brand video,374,58,1,901
-2026-10-23,Flipkart,PLA - Sunscreen,427,73,3,2214
-2026-10-23,Nykaa,Nykaa Sponsored - Serum,1058,122,5,3136
-2026-10-23,Blinkit,Blinkit Search - Sunscreen,565,118,3,2197
-2026-10-23,Zepto,Zepto Ads - Sunscreen,531,100,2,1269
-2026-10-24,Amazon,SP - Sunscreen auto,1370,184,6,4225
-2026-10-24,Amazon,SP - Vitamin C exact,834,70,4,2237
-2026-10-24,Amazon,SB - Kesar brand video,594,95,1,1064
-2026-10-24,Flipkart,PLA - Sunscreen,521,87,2,1085
-2026-10-24,Nykaa,Nykaa Sponsored - Serum,893,112,6,4105
-2026-10-24,Blinkit,Blinkit Search - Sunscreen,557,123,4,2341
-2026-10-24,Zepto,Zepto Ads - Sunscreen,564,102,1,1017
-2026-10-25,Amazon,SP - Sunscreen auto,1036,129,13,6229
-2026-10-25,Amazon,SP - Vitamin C exact,695,49,5,3055
-2026-10-25,Amazon,SB - Kesar brand video,367,49,1,417
-2026-10-25,Flipkart,PLA - Sunscreen,613,123,2,1560
-2026-10-25,Nykaa,Nykaa Sponsored - Serum,988,114,4,2616
-2026-10-25,Blinkit,Blinkit Search - Sunscreen,960,201,4,2880
-2026-10-25,Zepto,Zepto Ads - Sunscreen,455,97,2,1138
-2026-10-26,Amazon,SP - Sunscreen auto,684,75,4,2778
-2026-10-26,Amazon,SP - Vitamin C exact,468,35,2,1221
-2026-10-26,Amazon,SB - Kesar brand video,241,37,1,684
-2026-10-26,Flipkart,PLA - Sunscreen,314,49,1,761
-2026-10-26,Nykaa,Nykaa Sponsored - Serum,649,75,4,2643
-2026-10-26,Blinkit,Blinkit Search - Sunscreen,460,122,1,1068
-2026-10-26,Zepto,Zepto Ads - Sunscreen,263,54,1,726
-2026-10-27,Amazon,SP - Sunscreen auto,631,75,7,4018
-2026-10-27,Amazon,SP - Vitamin C exact,490,51,3,1749
-2026-10-27,Amazon,SB - Kesar brand video,318,46,2,1135
-2026-10-27,Flipkart,PLA - Sunscreen,261,53,2,925
-2026-10-27,Nykaa,Nykaa Sponsored - Serum,652,66,3,2135
-2026-10-27,Blinkit,Blinkit Search - Sunscreen,345,61,1,502
-2026-10-27,Zepto,Zepto Ads - Sunscreen,344,67,2,1168
-2026-10-28,Amazon,SP - Sunscreen auto,672,88,5,3015
-2026-10-28,Amazon,SP - Vitamin C exact,421,36,3,1836
-2026-10-28,Amazon,SB - Kesar brand video,288,40,2,976
-2026-10-28,Flipkart,PLA - Sunscreen,266,54,2,856
-2026-10-28,Nykaa,Nykaa Sponsored - Serum,344,30,2,1042
-2026-10-28,Blinkit,Blinkit Search - Sunscreen,470,77,2,1641
-2026-10-28,Zepto,Zepto Ads - Sunscreen,263,67,2,844
-2026-10-29,Amazon,SP - Sunscreen auto,881,95,6,3361
-2026-10-29,Amazon,SP - Vitamin C exact,411,39,2,1084
-2026-10-29,Amazon,SB - Kesar brand video,239,35,1,565
-2026-10-29,Flipkart,PLA - Sunscreen,314,52,1,1005
-2026-10-29,Nykaa,Nykaa Sponsored - Serum,399,54,2,1094
-2026-10-29,Blinkit,Blinkit Search - Sunscreen,387,74,2,1345
-2026-10-29,Zepto,Zepto Ads - Sunscreen,203,56,1,526
-2026-10-30,Amazon,SP - Sunscreen auto,743,74,5,3073
-2026-10-30,Amazon,SP - Vitamin C exact,519,38,3,1888
-2026-10-30,Amazon,SB - Kesar brand video,305,46,1,533
-2026-10-30,Flipkart,PLA - Sunscreen,241,42,1,715
-2026-10-30,Nykaa,Nykaa Sponsored - Serum,517,54,4,2746
-2026-10-30,Blinkit,Blinkit Search - Sunscreen,373,61,2,1132
-2026-10-30,Zepto,Zepto Ads - Sunscreen,256,51,1,512
-2026-10-31,Amazon,SP - Sunscreen auto,847,102,5,3569
-2026-10-31,Amazon,SP - Vitamin C exact,555,57,4,2233
-2026-10-31,Amazon,SB - Kesar brand video,292,34,1,604
-2026-10-31,Flipkart,PLA - Sunscreen,263,49,2,1064
-2026-10-31,Nykaa,Nykaa Sponsored - Serum,593,67,3,1801
-2026-10-31,Blinkit,Blinkit Search - Sunscreen,184,44,1,638
-2026-10-31,Zepto,Zepto Ads - Sunscreen,237,50,1,491
+date,platform,campaign,spend,clicks,orders,revenue,ad_type
+2026-08-01,Amazon,SP - Sunscreen auto,636,79,4,2134,Sponsored Products
+2026-08-01,Amazon,SP - Vitamin C exact,486,39,2,1158,Sponsored Products
+2026-08-01,Amazon,SB - Kesar brand video,223,31,1,536,Sponsored Brands
+2026-08-01,Amazon,SD - Retarget product viewers,126,15,0,181,Sponsored Display
+2026-08-01,Flipkart,PLA - Sunscreen,220,38,1,605,PLA
+2026-08-01,Flipkart,PCA - Festive brand banner,68,16,0,112,PCA
+2026-08-01,Nykaa,Nykaa Sponsored - Serum,407,38,1,948,Sponsored listing
+2026-08-01,Myntra,Myntra Ads - Serum,44,7,0,64,Sponsored listing
+2026-08-01,Purplle,Purplle Sponsored - Sunscreen,70,13,0,200,Sponsored listing
+2026-08-01,Meesho,Meesho Ads - Sunscreen,108,35,1,352,Sponsored listing
+2026-08-01,Blinkit,Blinkit Search - Sunscreen,275,57,2,796,Search
+2026-08-01,Zepto,Zepto Ads - Sunscreen,253,47,1,671,Search
+2026-08-01,Instamart,Instamart Ads - Sunscreen,67,11,0,174,Search
+2026-08-02,Amazon,SP - Sunscreen auto,449,52,1,739,Sponsored Products
+2026-08-02,Amazon,SP - Vitamin C exact,323,31,1,545,Sponsored Products
+2026-08-02,Amazon,SB - Kesar brand video,202,29,1,364,Sponsored Brands
+2026-08-02,Amazon,SD - Retarget product viewers,112,15,0,171,Sponsored Display
+2026-08-02,Flipkart,PLA - Sunscreen,367,62,1,632,PLA
+2026-08-02,Flipkart,PCA - Festive brand banner,68,20,0,72,PCA
+2026-08-02,Nykaa,Nykaa Sponsored - Serum,431,55,2,1246,Sponsored listing
+2026-08-02,Myntra,Myntra Ads - Serum,70,10,0,122,Sponsored listing
+2026-08-02,Purplle,Purplle Sponsored - Sunscreen,103,18,0,318,Sponsored listing
+2026-08-02,Meesho,Meesho Ads - Sunscreen,98,28,1,317,Sponsored listing
+2026-08-02,Blinkit,Blinkit Search - Sunscreen,288,46,1,757,Search
+2026-08-02,Zepto,Zepto Ads - Sunscreen,256,50,2,890,Search
+2026-08-02,Instamart,Instamart Ads - Sunscreen,90,19,1,355,Search
+2026-08-03,Amazon,SP - Sunscreen auto,485,54,4,2309,Sponsored Products
+2026-08-03,Amazon,SP - Vitamin C exact,237,22,2,1046,Sponsored Products
+2026-08-03,Amazon,SB - Kesar brand video,208,30,1,406,Sponsored Brands
+2026-08-03,Amazon,SD - Retarget product viewers,64,8,0,165,Sponsored Display
+2026-08-03,Flipkart,PLA - Sunscreen,322,50,1,1089,PLA
+2026-08-03,Flipkart,PCA - Festive brand banner,67,15,0,89,PCA
+2026-08-03,Nykaa,Nykaa Sponsored - Serum,443,48,2,1487,Sponsored listing
+2026-08-03,Myntra,Myntra Ads - Serum,69,10,0,246,Sponsored listing
+2026-08-03,Purplle,Purplle Sponsored - Sunscreen,68,11,0,286,Sponsored listing
+2026-08-03,Meesho,Meesho Ads - Sunscreen,80,24,0,188,Sponsored listing
+2026-08-03,Blinkit,Blinkit Search - Sunscreen,426,99,2,1009,Search
+2026-08-03,Zepto,Zepto Ads - Sunscreen,220,43,1,445,Search
+2026-08-03,Instamart,Instamart Ads - Sunscreen,101,23,0,215,Search
+2026-08-04,Amazon,SP - Sunscreen auto,438,55,3,2127,Sponsored Products
+2026-08-04,Amazon,SP - Vitamin C exact,252,17,1,780,Sponsored Products
+2026-08-04,Amazon,SB - Kesar brand video,225,30,1,527,Sponsored Brands
+2026-08-04,Amazon,SD - Retarget product viewers,87,14,0,159,Sponsored Display
+2026-08-04,Flipkart,PLA - Sunscreen,359,57,3,1817,PLA
+2026-08-04,Flipkart,PCA - Festive brand banner,67,17,0,113,PCA
+2026-08-04,Nykaa,Nykaa Sponsored - Serum,541,64,3,2180,Sponsored listing
+2026-08-04,Myntra,Myntra Ads - Serum,42,7,0,149,Sponsored listing
+2026-08-04,Purplle,Purplle Sponsored - Sunscreen,64,9,0,84,Sponsored listing
+2026-08-04,Meesho,Meesho Ads - Sunscreen,66,20,1,345,Sponsored listing
+2026-08-04,Blinkit,Blinkit Search - Sunscreen,327,55,1,898,Search
+2026-08-04,Zepto,Zepto Ads - Sunscreen,258,61,1,774,Search
+2026-08-04,Instamart,Instamart Ads - Sunscreen,82,16,0,138,Search
+2026-08-05,Amazon,SP - Sunscreen auto,699,65,5,3592,Sponsored Products
+2026-08-05,Amazon,SP - Vitamin C exact,337,27,2,1363,Sponsored Products
+2026-08-05,Amazon,SB - Kesar brand video,225,41,1,836,Sponsored Brands
+2026-08-05,Amazon,SD - Retarget product viewers,93,12,0,214,Sponsored Display
+2026-08-05,Flipkart,PLA - Sunscreen,227,34,0,340,PLA
+2026-08-05,Flipkart,PCA - Festive brand banner,45,11,0,73,PCA
+2026-08-05,Nykaa,Nykaa Sponsored - Serum,286,37,1,722,Sponsored listing
+2026-08-05,Myntra,Myntra Ads - Serum,52,8,0,100,Sponsored listing
+2026-08-05,Purplle,Purplle Sponsored - Sunscreen,69,12,0,145,Sponsored listing
+2026-08-05,Meesho,Meesho Ads - Sunscreen,118,43,0,241,Sponsored listing
+2026-08-05,Blinkit,Blinkit Search - Sunscreen,451,78,2,1360,Search
+2026-08-05,Zepto,Zepto Ads - Sunscreen,311,63,0,143,Search
+2026-08-05,Instamart,Instamart Ads - Sunscreen,91,20,0,185,Search
+2026-08-06,Amazon,SP - Sunscreen auto,689,82,3,1688,Sponsored Products
+2026-08-06,Amazon,SP - Vitamin C exact,480,49,3,1723,Sponsored Products
+2026-08-06,Amazon,SB - Kesar brand video,235,31,1,631,Sponsored Brands
+2026-08-06,Amazon,SD - Retarget product viewers,104,13,0,273,Sponsored Display
+2026-08-06,Flipkart,PLA - Sunscreen,324,60,1,456,PLA
+2026-08-06,Flipkart,PCA - Festive brand banner,101,28,0,170,PCA
+2026-08-06,Nykaa,Nykaa Sponsored - Serum,418,43,2,1278,Sponsored listing
+2026-08-06,Myntra,Myntra Ads - Serum,79,11,0,238,Sponsored listing
+2026-08-06,Purplle,Purplle Sponsored - Sunscreen,74,16,0,208,Sponsored listing
+2026-08-06,Meesho,Meesho Ads - Sunscreen,59,16,0,119,Sponsored listing
+2026-08-06,Blinkit,Blinkit Search - Sunscreen,306,49,2,1200,Search
+2026-08-06,Zepto,Zepto Ads - Sunscreen,197,35,0,241,Search
+2026-08-06,Instamart,Instamart Ads - Sunscreen,122,29,1,338,Search
+2026-08-07,Amazon,SP - Sunscreen auto,645,82,1,710,Sponsored Products
+2026-08-07,Amazon,SP - Vitamin C exact,419,34,3,2086,Sponsored Products
+2026-08-07,Amazon,SB - Kesar brand video,307,38,1,687,Sponsored Brands
+2026-08-07,Amazon,SD - Retarget product viewers,93,10,0,266,Sponsored Display
+2026-08-07,Flipkart,PLA - Sunscreen,264,55,2,1240,PLA
+2026-08-07,Flipkart,PCA - Festive brand banner,72,18,0,161,PCA
+2026-08-07,Nykaa,Nykaa Sponsored - Serum,539,66,3,2114,Sponsored listing
+2026-08-07,Myntra,Myntra Ads - Serum,65,11,0,151,Sponsored listing
+2026-08-07,Purplle,Purplle Sponsored - Sunscreen,66,8,0,111,Sponsored listing
+2026-08-07,Meesho,Meesho Ads - Sunscreen,90,30,0,288,Sponsored listing
+2026-08-07,Blinkit,Blinkit Search - Sunscreen,475,96,3,1465,Search
+2026-08-07,Zepto,Zepto Ads - Sunscreen,110,21,1,359,Search
+2026-08-07,Instamart,Instamart Ads - Sunscreen,108,21,0,239,Search
+2026-08-08,Amazon,SP - Sunscreen auto,355,39,4,1994,Sponsored Products
+2026-08-08,Amazon,SP - Vitamin C exact,259,24,2,1126,Sponsored Products
+2026-08-08,Amazon,SB - Kesar brand video,238,29,1,475,Sponsored Brands
+2026-08-08,Amazon,SD - Retarget product viewers,59,6,0,179,Sponsored Display
+2026-08-08,Flipkart,PLA - Sunscreen,287,49,2,945,PLA
+2026-08-08,Flipkart,PCA - Festive brand banner,59,16,0,99,PCA
+2026-08-08,Nykaa,Nykaa Sponsored - Serum,503,62,3,1926,Sponsored listing
+2026-08-08,Myntra,Myntra Ads - Serum,71,8,0,160,Sponsored listing
+2026-08-08,Purplle,Purplle Sponsored - Sunscreen,79,11,0,172,Sponsored listing
+2026-08-08,Meesho,Meesho Ads - Sunscreen,90,26,0,161,Sponsored listing
+2026-08-08,Blinkit,Blinkit Search - Sunscreen,243,41,1,301,Search
+2026-08-08,Zepto,Zepto Ads - Sunscreen,209,42,1,339,Search
+2026-08-08,Instamart,Instamart Ads - Sunscreen,95,19,0,160,Search
+2026-08-09,Amazon,SP - Sunscreen auto,616,65,5,3474,Sponsored Products
+2026-08-09,Amazon,SP - Vitamin C exact,209,14,1,764,Sponsored Products
+2026-08-09,Amazon,SB - Kesar brand video,241,32,1,601,Sponsored Brands
+2026-08-09,Amazon,SD - Retarget product viewers,103,12,0,235,Sponsored Display
+2026-08-09,Flipkart,PLA - Sunscreen,203,32,0,281,PLA
+2026-08-09,Flipkart,PCA - Festive brand banner,68,22,0,95,PCA
+2026-08-09,Nykaa,Nykaa Sponsored - Serum,523,62,3,2099,Sponsored listing
+2026-08-09,Myntra,Myntra Ads - Serum,47,6,0,132,Sponsored listing
+2026-08-09,Purplle,Purplle Sponsored - Sunscreen,47,10,0,120,Sponsored listing
+2026-08-09,Meesho,Meesho Ads - Sunscreen,72,23,0,347,Sponsored listing
+2026-08-09,Blinkit,Blinkit Search - Sunscreen,391,87,2,1486,Search
+2026-08-09,Zepto,Zepto Ads - Sunscreen,270,56,1,517,Search
+2026-08-09,Instamart,Instamart Ads - Sunscreen,91,17,0,311,Search
+2026-08-10,Amazon,SP - Sunscreen auto,703,76,3,2155,Sponsored Products
+2026-08-10,Amazon,SP - Vitamin C exact,508,40,2,1309,Sponsored Products
+2026-08-10,Amazon,SB - Kesar brand video,221,29,1,443,Sponsored Brands
+2026-08-10,Amazon,SD - Retarget product viewers,125,15,0,272,Sponsored Display
+2026-08-10,Flipkart,PLA - Sunscreen,221,39,0,158,PLA
+2026-08-10,Flipkart,PCA - Festive brand banner,71,19,0,104,PCA
+2026-08-10,Nykaa,Nykaa Sponsored - Serum,467,69,3,2259,Sponsored listing
+2026-08-10,Myntra,Myntra Ads - Serum,47,7,0,130,Sponsored listing
+2026-08-10,Purplle,Purplle Sponsored - Sunscreen,61,10,0,149,Sponsored listing
+2026-08-10,Meesho,Meesho Ads - Sunscreen,67,26,0,185,Sponsored listing
+2026-08-10,Blinkit,Blinkit Search - Sunscreen,430,86,2,1342,Search
+2026-08-10,Zepto,Zepto Ads - Sunscreen,134,25,1,340,Search
+2026-08-10,Instamart,Instamart Ads - Sunscreen,114,25,1,333,Search
+2026-08-11,Amazon,SP - Sunscreen auto,492,52,2,1667,Sponsored Products
+2026-08-11,Amazon,SP - Vitamin C exact,443,43,3,2175,Sponsored Products
+2026-08-11,Amazon,SB - Kesar brand video,190,35,1,429,Sponsored Brands
+2026-08-11,Amazon,SD - Retarget product viewers,63,8,0,183,Sponsored Display
+2026-08-11,Flipkart,PLA - Sunscreen,218,37,2,953,PLA
+2026-08-11,Flipkart,PCA - Festive brand banner,85,21,0,49,PCA
+2026-08-11,Nykaa,Nykaa Sponsored - Serum,520,56,2,1117,Sponsored listing
+2026-08-11,Myntra,Myntra Ads - Serum,60,10,0,103,Sponsored listing
+2026-08-11,Purplle,Purplle Sponsored - Sunscreen,52,8,0,195,Sponsored listing
+2026-08-11,Meesho,Meesho Ads - Sunscreen,103,39,1,450,Sponsored listing
+2026-08-11,Blinkit,Blinkit Search - Sunscreen,382,67,2,1110,Search
+2026-08-11,Zepto,Zepto Ads - Sunscreen,252,51,1,452,Search
+2026-08-11,Instamart,Instamart Ads - Sunscreen,54,10,0,139,Search
+2026-08-12,Amazon,SP - Sunscreen auto,351,40,2,1755,Sponsored Products
+2026-08-12,Amazon,SP - Vitamin C exact,359,31,2,1187,Sponsored Products
+2026-08-12,Amazon,SB - Kesar brand video,242,30,1,642,Sponsored Brands
+2026-08-12,Amazon,SD - Retarget product viewers,85,9,0,156,Sponsored Display
+2026-08-12,Flipkart,PLA - Sunscreen,366,60,2,1221,PLA
+2026-08-12,Flipkart,PCA - Festive brand banner,80,20,0,136,PCA
+2026-08-12,Nykaa,Nykaa Sponsored - Serum,494,57,2,1384,Sponsored listing
+2026-08-12,Myntra,Myntra Ads - Serum,71,13,0,174,Sponsored listing
+2026-08-12,Purplle,Purplle Sponsored - Sunscreen,91,14,0,92,Sponsored listing
+2026-08-12,Meesho,Meesho Ads - Sunscreen,83,28,0,242,Sponsored listing
+2026-08-12,Blinkit,Blinkit Search - Sunscreen,405,90,1,885,Search
+2026-08-12,Zepto,Zepto Ads - Sunscreen,309,77,1,730,Search
+2026-08-12,Instamart,Instamart Ads - Sunscreen,110,22,0,270,Search
+2026-08-13,Amazon,SP - Sunscreen auto,523,59,3,2470,Sponsored Products
+2026-08-13,Amazon,SP - Vitamin C exact,331,26,1,1172,Sponsored Products
+2026-08-13,Amazon,SB - Kesar brand video,380,61,1,950,Sponsored Brands
+2026-08-13,Amazon,SD - Retarget product viewers,129,18,0,279,Sponsored Display
+2026-08-13,Flipkart,PLA - Sunscreen,246,41,1,699,PLA
+2026-08-13,Flipkart,PCA - Festive brand banner,90,19,0,167,PCA
+2026-08-13,Nykaa,Nykaa Sponsored - Serum,611,62,3,2139,Sponsored listing
+2026-08-13,Myntra,Myntra Ads - Serum,61,9,0,93,Sponsored listing
+2026-08-13,Purplle,Purplle Sponsored - Sunscreen,77,13,0,118,Sponsored listing
+2026-08-13,Meesho,Meesho Ads - Sunscreen,107,37,1,569,Sponsored listing
+2026-08-13,Blinkit,Blinkit Search - Sunscreen,317,70,1,836,Search
+2026-08-13,Zepto,Zepto Ads - Sunscreen,173,28,1,459,Search
+2026-08-13,Instamart,Instamart Ads - Sunscreen,141,32,0,106,Search
+2026-08-14,Amazon,SP - Sunscreen auto,612,77,4,2464,Sponsored Products
+2026-08-14,Amazon,SP - Vitamin C exact,446,39,1,994,Sponsored Products
+2026-08-14,Amazon,SB - Kesar brand video,160,21,1,449,Sponsored Brands
+2026-08-14,Amazon,SD - Retarget product viewers,81,8,0,227,Sponsored Display
+2026-08-14,Flipkart,PLA - Sunscreen,227,38,1,948,PLA
+2026-08-14,Flipkart,PCA - Festive brand banner,76,21,0,156,PCA
+2026-08-14,Nykaa,Nykaa Sponsored - Serum,298,35,1,512,Sponsored listing
+2026-08-14,Myntra,Myntra Ads - Serum,77,11,0,176,Sponsored listing
+2026-08-14,Purplle,Purplle Sponsored - Sunscreen,55,9,0,164,Sponsored listing
+2026-08-14,Meesho,Meesho Ads - Sunscreen,89,27,1,312,Sponsored listing
+2026-08-14,Blinkit,Blinkit Search - Sunscreen,379,74,1,490,Search
+2026-08-14,Zepto,Zepto Ads - Sunscreen,260,45,1,417,Search
+2026-08-14,Instamart,Instamart Ads - Sunscreen,98,20,0,271,Search
+2026-08-15,Amazon,SP - Sunscreen auto,544,55,5,3541,Sponsored Products
+2026-08-15,Amazon,SP - Vitamin C exact,367,30,2,1258,Sponsored Products
+2026-08-15,Amazon,SB - Kesar brand video,245,35,1,414,Sponsored Brands
+2026-08-15,Amazon,SD - Retarget product viewers,86,9,0,141,Sponsored Display
+2026-08-15,Flipkart,PLA - Sunscreen,193,31,1,637,PLA
+2026-08-15,Flipkart,PCA - Festive brand banner,66,16,0,109,PCA
+2026-08-15,Nykaa,Nykaa Sponsored - Serum,518,49,2,1490,Sponsored listing
+2026-08-15,Myntra,Myntra Ads - Serum,87,13,0,132,Sponsored listing
+2026-08-15,Purplle,Purplle Sponsored - Sunscreen,75,12,0,267,Sponsored listing
+2026-08-15,Meesho,Meesho Ads - Sunscreen,117,42,0,271,Sponsored listing
+2026-08-15,Blinkit,Blinkit Search - Sunscreen,339,79,1,639,Search
+2026-08-15,Zepto,Zepto Ads - Sunscreen,218,39,1,573,Search
+2026-08-15,Instamart,Instamart Ads - Sunscreen,112,22,0,162,Search
+2026-08-16,Amazon,SP - Sunscreen auto,625,71,5,2842,Sponsored Products
+2026-08-16,Amazon,SP - Vitamin C exact,423,33,2,1126,Sponsored Products
+2026-08-16,Amazon,SB - Kesar brand video,316,47,1,537,Sponsored Brands
+2026-08-16,Amazon,SD - Retarget product viewers,84,11,0,155,Sponsored Display
+2026-08-16,Flipkart,PLA - Sunscreen,372,58,1,711,PLA
+2026-08-16,Flipkart,PCA - Festive brand banner,62,17,0,64,PCA
+2026-08-16,Nykaa,Nykaa Sponsored - Serum,292,27,2,1106,Sponsored listing
+2026-08-16,Myntra,Myntra Ads - Serum,79,15,0,238,Sponsored listing
+2026-08-16,Purplle,Purplle Sponsored - Sunscreen,68,12,0,128,Sponsored listing
+2026-08-16,Meesho,Meesho Ads - Sunscreen,89,37,1,418,Sponsored listing
+2026-08-16,Blinkit,Blinkit Search - Sunscreen,250,48,2,1195,Search
+2026-08-16,Zepto,Zepto Ads - Sunscreen,228,53,1,400,Search
+2026-08-16,Instamart,Instamart Ads - Sunscreen,109,26,0,274,Search
+2026-08-17,Amazon,SP - Sunscreen auto,577,61,3,1873,Sponsored Products
+2026-08-17,Amazon,SP - Vitamin C exact,389,32,2,1306,Sponsored Products
+2026-08-17,Amazon,SB - Kesar brand video,283,41,1,584,Sponsored Brands
+2026-08-17,Amazon,SD - Retarget product viewers,93,10,0,265,Sponsored Display
+2026-08-17,Flipkart,PLA - Sunscreen,235,49,1,661,PLA
+2026-08-17,Flipkart,PCA - Festive brand banner,60,16,0,23,PCA
+2026-08-17,Nykaa,Nykaa Sponsored - Serum,447,51,2,1220,Sponsored listing
+2026-08-17,Myntra,Myntra Ads - Serum,78,10,0,230,Sponsored listing
+2026-08-17,Purplle,Purplle Sponsored - Sunscreen,64,12,0,180,Sponsored listing
+2026-08-17,Meesho,Meesho Ads - Sunscreen,89,28,1,440,Sponsored listing
+2026-08-17,Blinkit,Blinkit Search - Sunscreen,335,63,2,1085,Search
+2026-08-17,Zepto,Zepto Ads - Sunscreen,305,56,1,461,Search
+2026-08-17,Instamart,Instamart Ads - Sunscreen,108,21,0,291,Search
+2026-08-18,Amazon,SP - Sunscreen auto,427,53,3,2225,Sponsored Products
+2026-08-18,Amazon,SP - Vitamin C exact,463,36,3,1806,Sponsored Products
+2026-08-18,Amazon,SB - Kesar brand video,137,16,0,238,Sponsored Brands
+2026-08-18,Amazon,SD - Retarget product viewers,131,17,0,215,Sponsored Display
+2026-08-18,Flipkart,PLA - Sunscreen,201,32,1,597,PLA
+2026-08-18,Flipkart,PCA - Festive brand banner,79,21,0,136,PCA
+2026-08-18,Nykaa,Nykaa Sponsored - Serum,383,42,1,771,Sponsored listing
+2026-08-18,Myntra,Myntra Ads - Serum,78,13,0,200,Sponsored listing
+2026-08-18,Purplle,Purplle Sponsored - Sunscreen,54,12,0,187,Sponsored listing
+2026-08-18,Meesho,Meesho Ads - Sunscreen,97,27,0,280,Sponsored listing
+2026-08-18,Blinkit,Blinkit Search - Sunscreen,300,63,1,788,Search
+2026-08-18,Zepto,Zepto Ads - Sunscreen,192,39,1,630,Search
+2026-08-18,Instamart,Instamart Ads - Sunscreen,93,20,0,192,Search
+2026-08-19,Amazon,SP - Sunscreen auto,713,77,2,1227,Sponsored Products
+2026-08-19,Amazon,SP - Vitamin C exact,520,48,3,1895,Sponsored Products
+2026-08-19,Amazon,SB - Kesar brand video,202,28,1,548,Sponsored Brands
+2026-08-19,Amazon,SD - Retarget product viewers,93,12,0,282,Sponsored Display
+2026-08-19,Flipkart,PLA - Sunscreen,252,35,1,807,PLA
+2026-08-19,Flipkart,PCA - Festive brand banner,106,27,0,99,PCA
+2026-08-19,Nykaa,Nykaa Sponsored - Serum,529,54,2,1556,Sponsored listing
+2026-08-19,Myntra,Myntra Ads - Serum,73,10,0,101,Sponsored listing
+2026-08-19,Purplle,Purplle Sponsored - Sunscreen,55,10,0,106,Sponsored listing
+2026-08-19,Meesho,Meesho Ads - Sunscreen,110,37,0,300,Sponsored listing
+2026-08-19,Blinkit,Blinkit Search - Sunscreen,259,49,1,795,Search
+2026-08-19,Zepto,Zepto Ads - Sunscreen,233,47,1,567,Search
+2026-08-19,Instamart,Instamart Ads - Sunscreen,47,8,0,60,Search
+2026-08-20,Amazon,SP - Sunscreen auto,436,49,4,2092,Sponsored Products
+2026-08-20,Amazon,SP - Vitamin C exact,456,35,5,2930,Sponsored Products
+2026-08-20,Amazon,SB - Kesar brand video,167,24,1,416,Sponsored Brands
+2026-08-20,Amazon,SD - Retarget product viewers,80,9,0,188,Sponsored Display
+2026-08-20,Flipkart,PLA - Sunscreen,311,61,2,956,PLA
+2026-08-20,Flipkart,PCA - Festive brand banner,60,16,0,67,PCA
+2026-08-20,Nykaa,Nykaa Sponsored - Serum,416,57,1,838,Sponsored listing
+2026-08-20,Myntra,Myntra Ads - Serum,69,10,0,247,Sponsored listing
+2026-08-20,Purplle,Purplle Sponsored - Sunscreen,92,20,0,323,Sponsored listing
+2026-08-20,Meesho,Meesho Ads - Sunscreen,71,25,0,47,Sponsored listing
+2026-08-20,Blinkit,Blinkit Search - Sunscreen,346,63,1,743,Search
+2026-08-20,Zepto,Zepto Ads - Sunscreen,260,54,1,692,Search
+2026-08-20,Instamart,Instamart Ads - Sunscreen,99,20,0,186,Search
+2026-08-21,Amazon,SP - Sunscreen auto,604,57,3,2257,Sponsored Products
+2026-08-21,Amazon,SP - Vitamin C exact,298,30,1,639,Sponsored Products
+2026-08-21,Amazon,SB - Kesar brand video,229,36,1,669,Sponsored Brands
+2026-08-21,Amazon,SD - Retarget product viewers,60,7,0,43,Sponsored Display
+2026-08-21,Flipkart,PLA - Sunscreen,194,40,1,351,PLA
+2026-08-21,Flipkart,PCA - Festive brand banner,62,16,0,56,PCA
+2026-08-21,Nykaa,Nykaa Sponsored - Serum,449,62,3,1910,Sponsored listing
+2026-08-21,Myntra,Myntra Ads - Serum,46,6,0,139,Sponsored listing
+2026-08-21,Purplle,Purplle Sponsored - Sunscreen,82,12,0,251,Sponsored listing
+2026-08-21,Meesho,Meesho Ads - Sunscreen,89,31,0,301,Sponsored listing
+2026-08-21,Blinkit,Blinkit Search - Sunscreen,255,53,0,234,Search
+2026-08-21,Zepto,Zepto Ads - Sunscreen,206,39,1,362,Search
+2026-08-21,Instamart,Instamart Ads - Sunscreen,96,20,0,214,Search
+2026-08-22,Amazon,SP - Sunscreen auto,578,59,4,2731,Sponsored Products
+2026-08-22,Amazon,SP - Vitamin C exact,447,40,3,1954,Sponsored Products
+2026-08-22,Amazon,SB - Kesar brand video,175,22,0,263,Sponsored Brands
+2026-08-22,Amazon,SD - Retarget product viewers,96,11,0,196,Sponsored Display
+2026-08-22,Flipkart,PLA - Sunscreen,314,53,2,1230,PLA
+2026-08-22,Flipkart,PCA - Festive brand banner,76,20,0,78,PCA
+2026-08-22,Nykaa,Nykaa Sponsored - Serum,435,65,1,914,Sponsored listing
+2026-08-22,Myntra,Myntra Ads - Serum,73,11,0,193,Sponsored listing
+2026-08-22,Purplle,Purplle Sponsored - Sunscreen,59,11,0,192,Sponsored listing
+2026-08-22,Meesho,Meesho Ads - Sunscreen,97,27,0,238,Sponsored listing
+2026-08-22,Blinkit,Blinkit Search - Sunscreen,309,58,1,847,Search
+2026-08-22,Zepto,Zepto Ads - Sunscreen,143,24,0,192,Search
+2026-08-22,Instamart,Instamart Ads - Sunscreen,135,31,1,311,Search
+2026-08-23,Amazon,SP - Sunscreen auto,549,60,5,3026,Sponsored Products
+2026-08-23,Amazon,SP - Vitamin C exact,410,30,2,1192,Sponsored Products
+2026-08-23,Amazon,SB - Kesar brand video,256,43,2,947,Sponsored Brands
+2026-08-23,Amazon,SD - Retarget product viewers,85,10,0,104,Sponsored Display
+2026-08-23,Flipkart,PLA - Sunscreen,343,53,2,1350,PLA
+2026-08-23,Flipkart,PCA - Festive brand banner,81,20,0,159,PCA
+2026-08-23,Nykaa,Nykaa Sponsored - Serum,667,67,4,2744,Sponsored listing
+2026-08-23,Myntra,Myntra Ads - Serum,82,12,0,133,Sponsored listing
+2026-08-23,Purplle,Purplle Sponsored - Sunscreen,79,11,0,162,Sponsored listing
+2026-08-23,Meesho,Meesho Ads - Sunscreen,72,26,0,269,Sponsored listing
+2026-08-23,Blinkit,Blinkit Search - Sunscreen,296,54,1,886,Search
+2026-08-23,Zepto,Zepto Ads - Sunscreen,177,34,1,468,Search
+2026-08-23,Instamart,Instamart Ads - Sunscreen,97,16,0,315,Search
+2026-08-24,Amazon,SP - Sunscreen auto,713,73,5,3403,Sponsored Products
+2026-08-24,Amazon,SP - Vitamin C exact,503,46,3,2012,Sponsored Products
+2026-08-24,Amazon,SB - Kesar brand video,202,26,1,501,Sponsored Brands
+2026-08-24,Amazon,SD - Retarget product viewers,119,14,0,181,Sponsored Display
+2026-08-24,Flipkart,PLA - Sunscreen,303,56,1,685,PLA
+2026-08-24,Flipkart,PCA - Festive brand banner,101,25,0,208,PCA
+2026-08-24,Nykaa,Nykaa Sponsored - Serum,523,64,2,879,Sponsored listing
+2026-08-24,Myntra,Myntra Ads - Serum,67,9,0,175,Sponsored listing
+2026-08-24,Purplle,Purplle Sponsored - Sunscreen,49,8,0,134,Sponsored listing
+2026-08-24,Meesho,Meesho Ads - Sunscreen,81,33,0,226,Sponsored listing
+2026-08-24,Blinkit,Blinkit Search - Sunscreen,420,124,4,2135,Search
+2026-08-24,Zepto,Zepto Ads - Sunscreen,250,48,1,740,Search
+2026-08-24,Instamart,Instamart Ads - Sunscreen,94,17,0,195,Search
+2026-08-25,Amazon,SP - Sunscreen auto,500,55,4,2040,Sponsored Products
+2026-08-25,Amazon,SP - Vitamin C exact,451,44,2,1246,Sponsored Products
+2026-08-25,Amazon,SB - Kesar brand video,287,38,1,860,Sponsored Brands
+2026-08-25,Amazon,SD - Retarget product viewers,94,13,0,50,Sponsored Display
+2026-08-25,Flipkart,PLA - Sunscreen,280,56,1,463,PLA
+2026-08-25,Flipkart,PCA - Festive brand banner,71,20,0,152,PCA
+2026-08-25,Nykaa,Nykaa Sponsored - Serum,471,49,4,2218,Sponsored listing
+2026-08-25,Myntra,Myntra Ads - Serum,46,6,0,104,Sponsored listing
+2026-08-25,Purplle,Purplle Sponsored - Sunscreen,48,8,0,150,Sponsored listing
+2026-08-25,Meesho,Meesho Ads - Sunscreen,70,23,0,250,Sponsored listing
+2026-08-25,Blinkit,Blinkit Search - Sunscreen,299,67,1,772,Search
+2026-08-25,Zepto,Zepto Ads - Sunscreen,193,39,1,415,Search
+2026-08-25,Instamart,Instamart Ads - Sunscreen,128,24,1,407,Search
+2026-08-26,Amazon,SP - Sunscreen auto,495,55,5,2875,Sponsored Products
+2026-08-26,Amazon,SP - Vitamin C exact,512,37,3,1864,Sponsored Products
+2026-08-26,Amazon,SB - Kesar brand video,263,41,1,545,Sponsored Brands
+2026-08-26,Amazon,SD - Retarget product viewers,75,9,0,169,Sponsored Display
+2026-08-26,Flipkart,PLA - Sunscreen,288,42,1,767,PLA
+2026-08-26,Flipkart,PCA - Festive brand banner,64,14,0,80,PCA
+2026-08-26,Nykaa,Nykaa Sponsored - Serum,492,63,4,2369,Sponsored listing
+2026-08-26,Myntra,Myntra Ads - Serum,83,11,0,194,Sponsored listing
+2026-08-26,Purplle,Purplle Sponsored - Sunscreen,71,12,0,224,Sponsored listing
+2026-08-26,Meesho,Meesho Ads - Sunscreen,78,23,0,229,Sponsored listing
+2026-08-26,Blinkit,Blinkit Search - Sunscreen,496,104,2,1402,Search
+2026-08-26,Zepto,Zepto Ads - Sunscreen,259,58,1,317,Search
+2026-08-26,Instamart,Instamart Ads - Sunscreen,110,26,0,252,Search
+2026-08-27,Amazon,SP - Sunscreen auto,625,70,1,1059,Sponsored Products
+2026-08-27,Amazon,SP - Vitamin C exact,272,22,3,1759,Sponsored Products
+2026-08-27,Amazon,SB - Kesar brand video,245,29,1,769,Sponsored Brands
+2026-08-27,Amazon,SD - Retarget product viewers,83,9,0,235,Sponsored Display
+2026-08-27,Flipkart,PLA - Sunscreen,273,46,1,568,PLA
+2026-08-27,Flipkart,PCA - Festive brand banner,62,14,0,74,PCA
+2026-08-27,Nykaa,Nykaa Sponsored - Serum,293,32,1,480,Sponsored listing
+2026-08-27,Myntra,Myntra Ads - Serum,59,9,0,149,Sponsored listing
+2026-08-27,Purplle,Purplle Sponsored - Sunscreen,66,12,0,185,Sponsored listing
+2026-08-27,Meesho,Meesho Ads - Sunscreen,65,24,0,228,Sponsored listing
+2026-08-27,Blinkit,Blinkit Search - Sunscreen,372,69,2,1007,Search
+2026-08-27,Zepto,Zepto Ads - Sunscreen,212,43,1,421,Search
+2026-08-27,Instamart,Instamart Ads - Sunscreen,118,26,0,258,Search
+2026-08-28,Amazon,SP - Sunscreen auto,342,46,2,1138,Sponsored Products
+2026-08-28,Amazon,SP - Vitamin C exact,442,35,2,1543,Sponsored Products
+2026-08-28,Amazon,SB - Kesar brand video,234,28,1,500,Sponsored Brands
+2026-08-28,Amazon,SD - Retarget product viewers,104,16,0,211,Sponsored Display
+2026-08-28,Flipkart,PLA - Sunscreen,189,28,1,461,PLA
+2026-08-28,Flipkart,PCA - Festive brand banner,74,16,0,194,PCA
+2026-08-28,Nykaa,Nykaa Sponsored - Serum,610,82,2,1364,Sponsored listing
+2026-08-28,Myntra,Myntra Ads - Serum,69,11,0,185,Sponsored listing
+2026-08-28,Purplle,Purplle Sponsored - Sunscreen,71,13,0,189,Sponsored listing
+2026-08-28,Meesho,Meesho Ads - Sunscreen,79,25,1,359,Sponsored listing
+2026-08-28,Blinkit,Blinkit Search - Sunscreen,358,76,1,881,Search
+2026-08-28,Zepto,Zepto Ads - Sunscreen,267,47,1,928,Search
+2026-08-28,Instamart,Instamart Ads - Sunscreen,117,22,1,341,Search
+2026-08-29,Amazon,SP - Sunscreen auto,417,38,3,1852,Sponsored Products
+2026-08-29,Amazon,SP - Vitamin C exact,471,45,3,1822,Sponsored Products
+2026-08-29,Amazon,SB - Kesar brand video,275,36,1,803,Sponsored Brands
+2026-08-29,Amazon,SD - Retarget product viewers,87,10,0,156,Sponsored Display
+2026-08-29,Flipkart,PLA - Sunscreen,302,50,1,942,PLA
+2026-08-29,Flipkart,PCA - Festive brand banner,52,12,0,114,PCA
+2026-08-29,Nykaa,Nykaa Sponsored - Serum,410,44,1,670,Sponsored listing
+2026-08-29,Myntra,Myntra Ads - Serum,69,9,0,94,Sponsored listing
+2026-08-29,Purplle,Purplle Sponsored - Sunscreen,79,13,0,285,Sponsored listing
+2026-08-29,Meesho,Meesho Ads - Sunscreen,83,28,0,231,Sponsored listing
+2026-08-29,Blinkit,Blinkit Search - Sunscreen,381,73,2,1389,Search
+2026-08-29,Zepto,Zepto Ads - Sunscreen,212,42,1,407,Search
+2026-08-29,Instamart,Instamart Ads - Sunscreen,106,22,0,283,Search
+2026-08-30,Amazon,SP - Sunscreen auto,533,61,5,3070,Sponsored Products
+2026-08-30,Amazon,SP - Vitamin C exact,321,28,1,804,Sponsored Products
+2026-08-30,Amazon,SB - Kesar brand video,226,35,1,632,Sponsored Brands
+2026-08-30,Amazon,SD - Retarget product viewers,82,13,0,64,Sponsored Display
+2026-08-30,Flipkart,PLA - Sunscreen,249,37,1,748,PLA
+2026-08-30,Flipkart,PCA - Festive brand banner,62,16,0,105,PCA
+2026-08-30,Nykaa,Nykaa Sponsored - Serum,520,56,1,843,Sponsored listing
+2026-08-30,Myntra,Myntra Ads - Serum,50,7,0,140,Sponsored listing
+2026-08-30,Purplle,Purplle Sponsored - Sunscreen,68,10,0,296,Sponsored listing
+2026-08-30,Meesho,Meesho Ads - Sunscreen,101,33,0,290,Sponsored listing
+2026-08-30,Blinkit,Blinkit Search - Sunscreen,394,64,1,778,Search
+2026-08-30,Zepto,Zepto Ads - Sunscreen,258,53,1,385,Search
+2026-08-30,Instamart,Instamart Ads - Sunscreen,120,21,0,333,Search
+2026-08-31,Amazon,SP - Sunscreen auto,746,72,4,2907,Sponsored Products
+2026-08-31,Amazon,SP - Vitamin C exact,469,49,4,2350,Sponsored Products
+2026-08-31,Amazon,SB - Kesar brand video,272,46,1,753,Sponsored Brands
+2026-08-31,Amazon,SD - Retarget product viewers,86,13,0,138,Sponsored Display
+2026-08-31,Flipkart,PLA - Sunscreen,183,29,1,524,PLA
+2026-08-31,Flipkart,PCA - Festive brand banner,82,15,0,126,PCA
+2026-08-31,Nykaa,Nykaa Sponsored - Serum,419,49,1,551,Sponsored listing
+2026-08-31,Myntra,Myntra Ads - Serum,84,11,0,285,Sponsored listing
+2026-08-31,Purplle,Purplle Sponsored - Sunscreen,43,6,0,144,Sponsored listing
+2026-08-31,Meesho,Meesho Ads - Sunscreen,54,23,0,214,Sponsored listing
+2026-08-31,Blinkit,Blinkit Search - Sunscreen,285,58,1,642,Search
+2026-08-31,Zepto,Zepto Ads - Sunscreen,202,42,1,376,Search
+2026-08-31,Instamart,Instamart Ads - Sunscreen,109,29,1,379,Search
+2026-09-01,Amazon,SP - Sunscreen auto,642,82,4,2127,Sponsored Products
+2026-09-01,Amazon,SP - Vitamin C exact,472,35,3,1748,Sponsored Products
+2026-09-01,Amazon,SB - Kesar brand video,262,39,1,730,Sponsored Brands
+2026-09-01,Amazon,SD - Retarget product viewers,70,7,0,78,Sponsored Display
+2026-09-01,Flipkart,PLA - Sunscreen,286,48,1,873,PLA
+2026-09-01,Flipkart,PCA - Festive brand banner,72,26,0,40,PCA
+2026-09-01,Nykaa,Nykaa Sponsored - Serum,667,77,3,1800,Sponsored listing
+2026-09-01,Myntra,Myntra Ads - Serum,80,10,0,223,Sponsored listing
+2026-09-01,Purplle,Purplle Sponsored - Sunscreen,72,13,0,263,Sponsored listing
+2026-09-01,Meesho,Meesho Ads - Sunscreen,99,34,0,224,Sponsored listing
+2026-09-01,Blinkit,Blinkit Search - Sunscreen,196,36,0,243,Search
+2026-09-01,Zepto,Zepto Ads - Sunscreen,188,37,1,422,Search
+2026-09-01,Instamart,Instamart Ads - Sunscreen,115,21,0,334,Search
+2026-09-02,Amazon,SP - Sunscreen auto,637,72,5,3574,Sponsored Products
+2026-09-02,Amazon,SP - Vitamin C exact,581,53,3,2072,Sponsored Products
+2026-09-02,Amazon,SB - Kesar brand video,226,27,1,579,Sponsored Brands
+2026-09-02,Amazon,SD - Retarget product viewers,102,14,0,179,Sponsored Display
+2026-09-02,Flipkart,PLA - Sunscreen,356,68,2,957,PLA
+2026-09-02,Flipkart,PCA - Festive brand banner,69,15,0,90,PCA
+2026-09-02,Nykaa,Nykaa Sponsored - Serum,510,74,3,1955,Sponsored listing
+2026-09-02,Myntra,Myntra Ads - Serum,68,12,0,166,Sponsored listing
+2026-09-02,Purplle,Purplle Sponsored - Sunscreen,49,9,0,69,Sponsored listing
+2026-09-02,Meesho,Meesho Ads - Sunscreen,99,33,1,394,Sponsored listing
+2026-09-02,Blinkit,Blinkit Search - Sunscreen,316,77,1,961,Search
+2026-09-02,Zepto,Zepto Ads - Sunscreen,221,44,1,453,Search
+2026-09-02,Instamart,Instamart Ads - Sunscreen,71,14,0,115,Search
+2026-09-03,Amazon,SP - Sunscreen auto,645,64,6,3664,Sponsored Products
+2026-09-03,Amazon,SP - Vitamin C exact,481,43,3,1806,Sponsored Products
+2026-09-03,Amazon,SB - Kesar brand video,219,26,1,439,Sponsored Brands
+2026-09-03,Amazon,SD - Retarget product viewers,79,11,0,95,Sponsored Display
+2026-09-03,Flipkart,PLA - Sunscreen,355,59,2,1266,PLA
+2026-09-03,Flipkart,PCA - Festive brand banner,90,27,0,103,PCA
+2026-09-03,Nykaa,Nykaa Sponsored - Serum,400,44,1,887,Sponsored listing
+2026-09-03,Myntra,Myntra Ads - Serum,86,10,0,195,Sponsored listing
+2026-09-03,Purplle,Purplle Sponsored - Sunscreen,51,8,0,106,Sponsored listing
+2026-09-03,Meesho,Meesho Ads - Sunscreen,96,28,1,376,Sponsored listing
+2026-09-03,Blinkit,Blinkit Search - Sunscreen,337,63,2,989,Search
+2026-09-03,Zepto,Zepto Ads - Sunscreen,275,56,1,868,Search
+2026-09-03,Instamart,Instamart Ads - Sunscreen,81,17,0,109,Search
+2026-09-04,Amazon,SP - Sunscreen auto,609,64,4,2671,Sponsored Products
+2026-09-04,Amazon,SP - Vitamin C exact,650,53,2,1541,Sponsored Products
+2026-09-04,Amazon,SB - Kesar brand video,265,36,1,639,Sponsored Brands
+2026-09-04,Amazon,SD - Retarget product viewers,92,10,0,301,Sponsored Display
+2026-09-04,Flipkart,PLA - Sunscreen,299,45,1,808,PLA
+2026-09-04,Flipkart,PCA - Festive brand banner,73,22,0,109,PCA
+2026-09-04,Nykaa,Nykaa Sponsored - Serum,453,44,2,1132,Sponsored listing
+2026-09-04,Myntra,Myntra Ads - Serum,110,16,1,405,Sponsored listing
+2026-09-04,Purplle,Purplle Sponsored - Sunscreen,66,12,0,236,Sponsored listing
+2026-09-04,Meesho,Meesho Ads - Sunscreen,76,24,0,198,Sponsored listing
+2026-09-04,Blinkit,Blinkit Search - Sunscreen,418,80,2,1040,Search
+2026-09-04,Zepto,Zepto Ads - Sunscreen,274,68,1,711,Search
+2026-09-04,Instamart,Instamart Ads - Sunscreen,101,19,0,257,Search
+2026-09-05,Amazon,SP - Sunscreen auto,391,37,4,2418,Sponsored Products
+2026-09-05,Amazon,SP - Vitamin C exact,339,29,2,1387,Sponsored Products
+2026-09-05,Amazon,SB - Kesar brand video,266,31,1,676,Sponsored Brands
+2026-09-05,Amazon,SD - Retarget product viewers,111,14,0,305,Sponsored Display
+2026-09-05,Flipkart,PLA - Sunscreen,322,61,1,887,PLA
+2026-09-05,Flipkart,PCA - Festive brand banner,85,26,0,143,PCA
+2026-09-05,Nykaa,Nykaa Sponsored - Serum,574,66,3,1851,Sponsored listing
+2026-09-05,Myntra,Myntra Ads - Serum,82,12,0,235,Sponsored listing
+2026-09-05,Purplle,Purplle Sponsored - Sunscreen,49,10,0,177,Sponsored listing
+2026-09-05,Meesho,Meesho Ads - Sunscreen,71,32,1,294,Sponsored listing
+2026-09-05,Blinkit,Blinkit Search - Sunscreen,341,78,1,676,Search
+2026-09-05,Zepto,Zepto Ads - Sunscreen,200,43,1,342,Search
+2026-09-05,Instamart,Instamart Ads - Sunscreen,84,17,0,229,Search
+2026-09-06,Amazon,SP - Sunscreen auto,428,56,3,1457,Sponsored Products
+2026-09-06,Amazon,SP - Vitamin C exact,427,40,2,1245,Sponsored Products
+2026-09-06,Amazon,SB - Kesar brand video,198,27,0,285,Sponsored Brands
+2026-09-06,Amazon,SD - Retarget product viewers,71,10,0,127,Sponsored Display
+2026-09-06,Flipkart,PLA - Sunscreen,300,63,2,900,PLA
+2026-09-06,Flipkart,PCA - Festive brand banner,82,24,0,81,PCA
+2026-09-06,Nykaa,Nykaa Sponsored - Serum,381,37,2,1343,Sponsored listing
+2026-09-06,Myntra,Myntra Ads - Serum,75,9,0,177,Sponsored listing
+2026-09-06,Purplle,Purplle Sponsored - Sunscreen,78,14,0,274,Sponsored listing
+2026-09-06,Meesho,Meesho Ads - Sunscreen,109,32,1,440,Sponsored listing
+2026-09-06,Blinkit,Blinkit Search - Sunscreen,276,51,2,1000,Search
+2026-09-06,Zepto,Zepto Ads - Sunscreen,188,36,0,268,Search
+2026-09-06,Instamart,Instamart Ads - Sunscreen,123,22,0,201,Search
+2026-09-07,Amazon,SP - Sunscreen auto,606,59,4,2753,Sponsored Products
+2026-09-07,Amazon,SP - Vitamin C exact,522,45,3,1992,Sponsored Products
+2026-09-07,Amazon,SB - Kesar brand video,304,57,1,669,Sponsored Brands
+2026-09-07,Amazon,SD - Retarget product viewers,111,12,0,249,Sponsored Display
+2026-09-07,Flipkart,PLA - Sunscreen,349,57,2,1536,PLA
+2026-09-07,Flipkart,PCA - Festive brand banner,84,22,0,92,PCA
+2026-09-07,Nykaa,Nykaa Sponsored - Serum,667,73,2,1580,Sponsored listing
+2026-09-07,Myntra,Myntra Ads - Serum,79,9,0,240,Sponsored listing
+2026-09-07,Purplle,Purplle Sponsored - Sunscreen,86,16,0,126,Sponsored listing
+2026-09-07,Meesho,Meesho Ads - Sunscreen,104,32,1,391,Sponsored listing
+2026-09-07,Blinkit,Blinkit Search - Sunscreen,342,58,2,1266,Search
+2026-09-07,Zepto,Zepto Ads - Sunscreen,284,47,1,869,Search
+2026-09-07,Instamart,Instamart Ads - Sunscreen,134,22,1,394,Search
+2026-09-08,Amazon,SP - Sunscreen auto,750,83,8,4553,Sponsored Products
+2026-09-08,Amazon,SP - Vitamin C exact,446,39,2,1317,Sponsored Products
+2026-09-08,Amazon,SB - Kesar brand video,280,44,1,704,Sponsored Brands
+2026-09-08,Amazon,SD - Retarget product viewers,89,13,0,193,Sponsored Display
+2026-09-08,Flipkart,PLA - Sunscreen,394,75,3,1609,PLA
+2026-09-08,Flipkart,PCA - Festive brand banner,79,19,0,129,PCA
+2026-09-08,Nykaa,Nykaa Sponsored - Serum,440,48,2,1414,Sponsored listing
+2026-09-08,Myntra,Myntra Ads - Serum,65,8,0,242,Sponsored listing
+2026-09-08,Purplle,Purplle Sponsored - Sunscreen,49,6,0,141,Sponsored listing
+2026-09-08,Meesho,Meesho Ads - Sunscreen,79,28,1,438,Sponsored listing
+2026-09-08,Blinkit,Blinkit Search - Sunscreen,313,62,1,685,Search
+2026-09-08,Zepto,Zepto Ads - Sunscreen,169,29,1,580,Search
+2026-09-08,Instamart,Instamart Ads - Sunscreen,76,15,0,262,Search
+2026-09-09,Amazon,SP - Sunscreen auto,546,59,2,1136,Sponsored Products
+2026-09-09,Amazon,SP - Vitamin C exact,426,44,5,2163,Sponsored Products
+2026-09-09,Amazon,SB - Kesar brand video,303,42,1,729,Sponsored Brands
+2026-09-09,Amazon,SD - Retarget product viewers,83,11,0,204,Sponsored Display
+2026-09-09,Flipkart,PLA - Sunscreen,112,16,1,382,PLA
+2026-09-09,Flipkart,PCA - Festive brand banner,80,18,0,76,PCA
+2026-09-09,Nykaa,Nykaa Sponsored - Serum,282,36,2,1354,Sponsored listing
+2026-09-09,Myntra,Myntra Ads - Serum,84,11,0,310,Sponsored listing
+2026-09-09,Purplle,Purplle Sponsored - Sunscreen,73,16,0,236,Sponsored listing
+2026-09-09,Meesho,Meesho Ads - Sunscreen,97,33,0,76,Sponsored listing
+2026-09-09,Blinkit,Blinkit Search - Sunscreen,446,80,0,266,Search
+2026-09-09,Zepto,Zepto Ads - Sunscreen,286,54,1,640,Search
+2026-09-09,Instamart,Instamart Ads - Sunscreen,95,19,0,55,Search
+2026-09-10,Amazon,SP - Sunscreen auto,615,60,3,2418,Sponsored Products
+2026-09-10,Amazon,SP - Vitamin C exact,476,38,3,1753,Sponsored Products
+2026-09-10,Amazon,SB - Kesar brand video,277,46,1,891,Sponsored Brands
+2026-09-10,Amazon,SD - Retarget product viewers,113,14,0,178,Sponsored Display
+2026-09-10,Flipkart,PLA - Sunscreen,297,44,2,1462,PLA
+2026-09-10,Flipkart,PCA - Festive brand banner,74,17,0,134,PCA
+2026-09-10,Nykaa,Nykaa Sponsored - Serum,532,59,2,1297,Sponsored listing
+2026-09-10,Myntra,Myntra Ads - Serum,82,12,0,88,Sponsored listing
+2026-09-10,Purplle,Purplle Sponsored - Sunscreen,79,11,0,239,Sponsored listing
+2026-09-10,Meesho,Meesho Ads - Sunscreen,84,29,1,288,Sponsored listing
+2026-09-10,Blinkit,Blinkit Search - Sunscreen,269,54,1,570,Search
+2026-09-10,Zepto,Zepto Ads - Sunscreen,259,52,1,696,Search
+2026-09-10,Instamart,Instamart Ads - Sunscreen,144,37,1,339,Search
+2026-09-11,Amazon,SP - Sunscreen auto,615,82,3,1907,Sponsored Products
+2026-09-11,Amazon,SP - Vitamin C exact,445,45,1,766,Sponsored Products
+2026-09-11,Amazon,SB - Kesar brand video,329,53,1,603,Sponsored Brands
+2026-09-11,Amazon,SD - Retarget product viewers,118,11,0,245,Sponsored Display
+2026-09-11,Flipkart,PLA - Sunscreen,303,44,1,1027,PLA
+2026-09-11,Flipkart,PCA - Festive brand banner,34,8,0,22,PCA
+2026-09-11,Nykaa,Nykaa Sponsored - Serum,453,48,2,1271,Sponsored listing
+2026-09-11,Myntra,Myntra Ads - Serum,100,16,0,222,Sponsored listing
+2026-09-11,Purplle,Purplle Sponsored - Sunscreen,59,9,0,186,Sponsored listing
+2026-09-11,Meesho,Meesho Ads - Sunscreen,58,23,0,174,Sponsored listing
+2026-09-11,Blinkit,Blinkit Search - Sunscreen,317,62,2,1115,Search
+2026-09-11,Zepto,Zepto Ads - Sunscreen,232,45,1,384,Search
+2026-09-11,Instamart,Instamart Ads - Sunscreen,150,41,1,564,Search
+2026-09-12,Amazon,SP - Sunscreen auto,567,56,5,2668,Sponsored Products
+2026-09-12,Amazon,SP - Vitamin C exact,423,39,3,1709,Sponsored Products
+2026-09-12,Amazon,SB - Kesar brand video,306,44,1,682,Sponsored Brands
+2026-09-12,Amazon,SD - Retarget product viewers,100,12,0,205,Sponsored Display
+2026-09-12,Flipkart,PLA - Sunscreen,239,38,1,877,PLA
+2026-09-12,Flipkart,PCA - Festive brand banner,81,22,0,95,PCA
+2026-09-12,Nykaa,Nykaa Sponsored - Serum,376,43,2,1354,Sponsored listing
+2026-09-12,Myntra,Myntra Ads - Serum,107,16,0,212,Sponsored listing
+2026-09-12,Purplle,Purplle Sponsored - Sunscreen,65,12,0,186,Sponsored listing
+2026-09-12,Meesho,Meesho Ads - Sunscreen,61,22,0,208,Sponsored listing
+2026-09-12,Blinkit,Blinkit Search - Sunscreen,376,72,1,838,Search
+2026-09-12,Zepto,Zepto Ads - Sunscreen,174,33,1,604,Search
+2026-09-12,Instamart,Instamart Ads - Sunscreen,121,25,0,228,Search
+2026-09-13,Amazon,SP - Sunscreen auto,596,59,5,2999,Sponsored Products
+2026-09-13,Amazon,SP - Vitamin C exact,337,26,3,1784,Sponsored Products
+2026-09-13,Amazon,SB - Kesar brand video,193,26,1,414,Sponsored Brands
+2026-09-13,Amazon,SD - Retarget product viewers,141,17,0,155,Sponsored Display
+2026-09-13,Flipkart,PLA - Sunscreen,273,48,2,1121,PLA
+2026-09-13,Flipkart,PCA - Festive brand banner,75,20,0,167,PCA
+2026-09-13,Nykaa,Nykaa Sponsored - Serum,679,90,4,2803,Sponsored listing
+2026-09-13,Myntra,Myntra Ads - Serum,34,6,0,52,Sponsored listing
+2026-09-13,Purplle,Purplle Sponsored - Sunscreen,63,10,0,121,Sponsored listing
+2026-09-13,Meesho,Meesho Ads - Sunscreen,57,22,0,292,Sponsored listing
+2026-09-13,Blinkit,Blinkit Search - Sunscreen,285,53,1,959,Search
+2026-09-13,Zepto,Zepto Ads - Sunscreen,219,46,1,341,Search
+2026-09-13,Instamart,Instamart Ads - Sunscreen,126,21,1,407,Search
+2026-09-14,Amazon,SP - Sunscreen auto,596,54,4,2591,Sponsored Products
+2026-09-14,Amazon,SP - Vitamin C exact,558,40,2,1570,Sponsored Products
+2026-09-14,Amazon,SB - Kesar brand video,200,27,1,425,Sponsored Brands
+2026-09-14,Amazon,SD - Retarget product viewers,116,14,0,241,Sponsored Display
+2026-09-14,Flipkart,PLA - Sunscreen,274,53,1,424,PLA
+2026-09-14,Flipkart,PCA - Festive brand banner,105,26,0,178,PCA
+2026-09-14,Nykaa,Nykaa Sponsored - Serum,377,41,2,919,Sponsored listing
+2026-09-14,Myntra,Myntra Ads - Serum,86,12,0,272,Sponsored listing
+2026-09-14,Purplle,Purplle Sponsored - Sunscreen,51,8,0,143,Sponsored listing
+2026-09-14,Meesho,Meesho Ads - Sunscreen,96,28,1,338,Sponsored listing
+2026-09-14,Blinkit,Blinkit Search - Sunscreen,342,73,1,380,Search
+2026-09-14,Zepto,Zepto Ads - Sunscreen,173,38,1,363,Search
+2026-09-14,Instamart,Instamart Ads - Sunscreen,86,18,0,338,Search
+2026-09-15,Amazon,SP - Sunscreen auto,634,73,3,2242,Sponsored Products
+2026-09-15,Amazon,SP - Vitamin C exact,344,30,2,1684,Sponsored Products
+2026-09-15,Amazon,SB - Kesar brand video,289,39,1,655,Sponsored Brands
+2026-09-15,Amazon,SD - Retarget product viewers,111,17,0,148,Sponsored Display
+2026-09-15,Flipkart,PLA - Sunscreen,273,46,1,555,PLA
+2026-09-15,Flipkart,PCA - Festive brand banner,92,26,0,100,PCA
+2026-09-15,Nykaa,Nykaa Sponsored - Serum,454,50,1,917,Sponsored listing
+2026-09-15,Myntra,Myntra Ads - Serum,69,11,0,216,Sponsored listing
+2026-09-15,Purplle,Purplle Sponsored - Sunscreen,52,10,0,206,Sponsored listing
+2026-09-15,Meesho,Meesho Ads - Sunscreen,106,32,0,249,Sponsored listing
+2026-09-15,Blinkit,Blinkit Search - Sunscreen,319,71,2,1079,Search
+2026-09-15,Zepto,Zepto Ads - Sunscreen,182,31,1,465,Search
+2026-09-15,Instamart,Instamart Ads - Sunscreen,85,16,0,91,Search
+2026-09-16,Amazon,SP - Sunscreen auto,637,85,3,2063,Sponsored Products
+2026-09-16,Amazon,SP - Vitamin C exact,439,38,2,1189,Sponsored Products
+2026-09-16,Amazon,SB - Kesar brand video,330,49,1,831,Sponsored Brands
+2026-09-16,Amazon,SD - Retarget product viewers,95,13,0,188,Sponsored Display
+2026-09-16,Flipkart,PLA - Sunscreen,299,49,1,867,PLA
+2026-09-16,Flipkart,PCA - Festive brand banner,74,17,0,86,PCA
+2026-09-16,Nykaa,Nykaa Sponsored - Serum,436,52,2,1649,Sponsored listing
+2026-09-16,Myntra,Myntra Ads - Serum,76,10,0,147,Sponsored listing
+2026-09-16,Purplle,Purplle Sponsored - Sunscreen,79,14,0,271,Sponsored listing
+2026-09-16,Meesho,Meesho Ads - Sunscreen,99,44,0,292,Sponsored listing
+2026-09-16,Blinkit,Blinkit Search - Sunscreen,377,77,2,1177,Search
+2026-09-16,Zepto,Zepto Ads - Sunscreen,221,47,1,771,Search
+2026-09-16,Instamart,Instamart Ads - Sunscreen,116,29,0,288,Search
+2026-09-17,Amazon,SP - Sunscreen auto,686,78,7,4284,Sponsored Products
+2026-09-17,Amazon,SP - Vitamin C exact,363,37,3,1543,Sponsored Products
+2026-09-17,Amazon,SB - Kesar brand video,295,38,1,725,Sponsored Brands
+2026-09-17,Amazon,SD - Retarget product viewers,82,9,0,92,Sponsored Display
+2026-09-17,Flipkart,PLA - Sunscreen,389,63,3,1722,PLA
+2026-09-17,Flipkart,PCA - Festive brand banner,78,23,0,133,PCA
+2026-09-17,Nykaa,Nykaa Sponsored - Serum,430,49,3,1667,Sponsored listing
+2026-09-17,Myntra,Myntra Ads - Serum,80,11,1,271,Sponsored listing
+2026-09-17,Purplle,Purplle Sponsored - Sunscreen,56,11,0,162,Sponsored listing
+2026-09-17,Meesho,Meesho Ads - Sunscreen,54,14,0,169,Sponsored listing
+2026-09-17,Blinkit,Blinkit Search - Sunscreen,426,70,2,1487,Search
+2026-09-17,Zepto,Zepto Ads - Sunscreen,238,60,1,764,Search
+2026-09-17,Instamart,Instamart Ads - Sunscreen,154,30,1,350,Search
+2026-09-18,Amazon,SP - Sunscreen auto,501,63,3,1542,Sponsored Products
+2026-09-18,Amazon,SP - Vitamin C exact,383,33,2,1358,Sponsored Products
+2026-09-18,Amazon,SB - Kesar brand video,247,35,1,633,Sponsored Brands
+2026-09-18,Amazon,SD - Retarget product viewers,69,10,0,118,Sponsored Display
+2026-09-18,Flipkart,PLA - Sunscreen,276,44,2,1107,PLA
+2026-09-18,Flipkart,PCA - Festive brand banner,61,21,0,110,PCA
+2026-09-18,Nykaa,Nykaa Sponsored - Serum,564,57,3,1777,Sponsored listing
+2026-09-18,Myntra,Myntra Ads - Serum,82,10,0,199,Sponsored listing
+2026-09-18,Purplle,Purplle Sponsored - Sunscreen,74,13,0,145,Sponsored listing
+2026-09-18,Meesho,Meesho Ads - Sunscreen,65,23,0,212,Sponsored listing
+2026-09-18,Blinkit,Blinkit Search - Sunscreen,342,65,2,1476,Search
+2026-09-18,Zepto,Zepto Ads - Sunscreen,213,35,1,572,Search
+2026-09-18,Instamart,Instamart Ads - Sunscreen,116,23,0,252,Search
+2026-09-19,Amazon,SP - Sunscreen auto,766,92,4,3227,Sponsored Products
+2026-09-19,Amazon,SP - Vitamin C exact,502,51,4,2020,Sponsored Products
+2026-09-19,Amazon,SB - Kesar brand video,264,30,1,546,Sponsored Brands
+2026-09-19,Amazon,SD - Retarget product viewers,79,11,0,213,Sponsored Display
+2026-09-19,Flipkart,PLA - Sunscreen,310,52,2,883,PLA
+2026-09-19,Flipkart,PCA - Festive brand banner,35,10,0,75,PCA
+2026-09-19,Nykaa,Nykaa Sponsored - Serum,465,55,2,1341,Sponsored listing
+2026-09-19,Myntra,Myntra Ads - Serum,94,16,0,284,Sponsored listing
+2026-09-19,Purplle,Purplle Sponsored - Sunscreen,55,8,0,131,Sponsored listing
+2026-09-19,Meesho,Meesho Ads - Sunscreen,78,22,0,195,Sponsored listing
+2026-09-19,Blinkit,Blinkit Search - Sunscreen,327,72,1,691,Search
+2026-09-19,Zepto,Zepto Ads - Sunscreen,210,33,1,484,Search
+2026-09-19,Instamart,Instamart Ads - Sunscreen,102,17,0,239,Search
+2026-09-20,Amazon,SP - Sunscreen auto,464,68,3,1673,Sponsored Products
+2026-09-20,Amazon,SP - Vitamin C exact,505,39,3,2106,Sponsored Products
+2026-09-20,Amazon,SB - Kesar brand video,246,35,1,551,Sponsored Brands
+2026-09-20,Amazon,SD - Retarget product viewers,96,13,0,236,Sponsored Display
+2026-09-20,Flipkart,PLA - Sunscreen,211,35,1,850,PLA
+2026-09-20,Flipkart,PCA - Festive brand banner,86,25,0,94,PCA
+2026-09-20,Nykaa,Nykaa Sponsored - Serum,353,35,2,1240,Sponsored listing
+2026-09-20,Myntra,Myntra Ads - Serum,100,13,0,223,Sponsored listing
+2026-09-20,Purplle,Purplle Sponsored - Sunscreen,71,13,0,79,Sponsored listing
+2026-09-20,Meesho,Meesho Ads - Sunscreen,78,29,1,397,Sponsored listing
+2026-09-20,Blinkit,Blinkit Search - Sunscreen,332,75,1,822,Search
+2026-09-20,Zepto,Zepto Ads - Sunscreen,250,41,1,751,Search
+2026-09-20,Instamart,Instamart Ads - Sunscreen,116,26,0,218,Search
+2026-09-21,Amazon,SP - Sunscreen auto,630,90,5,3158,Sponsored Products
+2026-09-21,Amazon,SP - Vitamin C exact,408,32,2,1578,Sponsored Products
+2026-09-21,Amazon,SB - Kesar brand video,250,36,1,905,Sponsored Brands
+2026-09-21,Amazon,SD - Retarget product viewers,100,10,0,254,Sponsored Display
+2026-09-21,Flipkart,PLA - Sunscreen,238,34,1,535,PLA
+2026-09-21,Flipkart,PCA - Festive brand banner,85,23,0,156,PCA
+2026-09-21,Nykaa,Nykaa Sponsored - Serum,416,49,3,2013,Sponsored listing
+2026-09-21,Myntra,Myntra Ads - Serum,87,19,0,216,Sponsored listing
+2026-09-21,Purplle,Purplle Sponsored - Sunscreen,43,7,0,142,Sponsored listing
+2026-09-21,Meesho,Meesho Ads - Sunscreen,89,25,1,339,Sponsored listing
+2026-09-21,Blinkit,Blinkit Search - Sunscreen,454,109,3,1563,Search
+2026-09-21,Zepto,Zepto Ads - Sunscreen,278,51,1,750,Search
+2026-09-21,Instamart,Instamart Ads - Sunscreen,137,28,0,231,Search
+2026-09-22,Amazon,SP - Sunscreen auto,669,86,2,1607,Sponsored Products
+2026-09-22,Amazon,SP - Vitamin C exact,406,46,2,1359,Sponsored Products
+2026-09-22,Amazon,SB - Kesar brand video,294,49,1,858,Sponsored Brands
+2026-09-22,Amazon,SD - Retarget product viewers,89,12,0,113,Sponsored Display
+2026-09-22,Flipkart,PLA - Sunscreen,288,42,2,1337,PLA
+2026-09-22,Flipkart,PCA - Festive brand banner,87,18,0,156,PCA
+2026-09-22,Nykaa,Nykaa Sponsored - Serum,499,57,3,2068,Sponsored listing
+2026-09-22,Myntra,Myntra Ads - Serum,84,13,0,250,Sponsored listing
+2026-09-22,Purplle,Purplle Sponsored - Sunscreen,76,13,0,299,Sponsored listing
+2026-09-22,Meesho,Meesho Ads - Sunscreen,75,27,0,294,Sponsored listing
+2026-09-22,Blinkit,Blinkit Search - Sunscreen,356,77,1,573,Search
+2026-09-22,Zepto,Zepto Ads - Sunscreen,193,35,1,449,Search
+2026-09-22,Instamart,Instamart Ads - Sunscreen,101,16,0,222,Search
+2026-09-23,Amazon,SP - Sunscreen auto,615,59,6,3854,Sponsored Products
+2026-09-23,Amazon,SP - Vitamin C exact,380,33,3,1627,Sponsored Products
+2026-09-23,Amazon,SB - Kesar brand video,259,37,1,736,Sponsored Brands
+2026-09-23,Amazon,SD - Retarget product viewers,103,12,0,180,Sponsored Display
+2026-09-23,Flipkart,PLA - Sunscreen,354,72,1,778,PLA
+2026-09-23,Flipkart,PCA - Festive brand banner,85,23,0,175,PCA
+2026-09-23,Nykaa,Nykaa Sponsored - Serum,580,55,3,2311,Sponsored listing
+2026-09-23,Myntra,Myntra Ads - Serum,70,12,0,196,Sponsored listing
+2026-09-23,Purplle,Purplle Sponsored - Sunscreen,89,15,0,246,Sponsored listing
+2026-09-23,Meesho,Meesho Ads - Sunscreen,108,31,1,404,Sponsored listing
+2026-09-23,Blinkit,Blinkit Search - Sunscreen,314,48,1,699,Search
+2026-09-23,Zepto,Zepto Ads - Sunscreen,237,42,1,719,Search
+2026-09-23,Instamart,Instamart Ads - Sunscreen,110,20,1,403,Search
+2026-09-24,Amazon,SP - Sunscreen auto,648,64,6,4002,Sponsored Products
+2026-09-24,Amazon,SP - Vitamin C exact,423,35,2,1169,Sponsored Products
+2026-09-24,Amazon,SB - Kesar brand video,195,34,1,560,Sponsored Brands
+2026-09-24,Amazon,SD - Retarget product viewers,66,8,0,123,Sponsored Display
+2026-09-24,Flipkart,PLA - Sunscreen,334,75,1,1244,PLA
+2026-09-24,Flipkart,PCA - Festive brand banner,89,25,0,78,PCA
+2026-09-24,Nykaa,Nykaa Sponsored - Serum,170,19,1,402,Sponsored listing
+2026-09-24,Myntra,Myntra Ads - Serum,73,11,1,308,Sponsored listing
+2026-09-24,Purplle,Purplle Sponsored - Sunscreen,82,12,0,173,Sponsored listing
+2026-09-24,Meesho,Meesho Ads - Sunscreen,94,31,0,156,Sponsored listing
+2026-09-24,Blinkit,Blinkit Search - Sunscreen,373,78,1,702,Search
+2026-09-24,Zepto,Zepto Ads - Sunscreen,234,57,1,637,Search
+2026-09-24,Instamart,Instamart Ads - Sunscreen,119,21,1,330,Search
+2026-09-25,Amazon,SP - Sunscreen auto,718,88,4,2745,Sponsored Products
+2026-09-25,Amazon,SP - Vitamin C exact,375,29,2,1407,Sponsored Products
+2026-09-25,Amazon,SB - Kesar brand video,199,25,1,402,Sponsored Brands
+2026-09-25,Amazon,SD - Retarget product viewers,98,16,0,204,Sponsored Display
+2026-09-25,Flipkart,PLA - Sunscreen,318,47,2,1108,PLA
+2026-09-25,Flipkart,PCA - Festive brand banner,45,11,0,76,PCA
+2026-09-25,Nykaa,Nykaa Sponsored - Serum,467,55,2,1202,Sponsored listing
+2026-09-25,Myntra,Myntra Ads - Serum,75,9,0,200,Sponsored listing
+2026-09-25,Purplle,Purplle Sponsored - Sunscreen,79,12,0,204,Sponsored listing
+2026-09-25,Meesho,Meesho Ads - Sunscreen,86,38,0,176,Sponsored listing
+2026-09-25,Blinkit,Blinkit Search - Sunscreen,321,65,1,709,Search
+2026-09-25,Zepto,Zepto Ads - Sunscreen,312,56,1,366,Search
+2026-09-25,Instamart,Instamart Ads - Sunscreen,125,27,0,347,Search
+2026-09-26,Amazon,SP - Sunscreen auto,615,63,5,3269,Sponsored Products
+2026-09-26,Amazon,SP - Vitamin C exact,507,35,2,1348,Sponsored Products
+2026-09-26,Amazon,SB - Kesar brand video,244,32,1,475,Sponsored Brands
+2026-09-26,Amazon,SD - Retarget product viewers,59,7,0,79,Sponsored Display
+2026-09-26,Flipkart,PLA - Sunscreen,341,74,1,772,PLA
+2026-09-26,Flipkart,PCA - Festive brand banner,48,12,0,114,PCA
+2026-09-26,Nykaa,Nykaa Sponsored - Serum,267,30,2,921,Sponsored listing
+2026-09-26,Myntra,Myntra Ads - Serum,99,15,0,339,Sponsored listing
+2026-09-26,Purplle,Purplle Sponsored - Sunscreen,55,9,0,154,Sponsored listing
+2026-09-26,Meesho,Meesho Ads - Sunscreen,95,33,0,267,Sponsored listing
+2026-09-26,Blinkit,Blinkit Search - Sunscreen,454,107,2,1275,Search
+2026-09-26,Zepto,Zepto Ads - Sunscreen,227,41,1,459,Search
+2026-09-26,Instamart,Instamart Ads - Sunscreen,115,24,1,318,Search
+2026-09-27,Amazon,SP - Sunscreen auto,487,70,5,2913,Sponsored Products
+2026-09-27,Amazon,SP - Vitamin C exact,385,26,2,1635,Sponsored Products
+2026-09-27,Amazon,SB - Kesar brand video,321,45,1,788,Sponsored Brands
+2026-09-27,Amazon,SD - Retarget product viewers,120,14,0,189,Sponsored Display
+2026-09-27,Flipkart,PLA - Sunscreen,390,69,2,1097,PLA
+2026-09-27,Flipkart,PCA - Festive brand banner,80,19,0,115,PCA
+2026-09-27,Nykaa,Nykaa Sponsored - Serum,427,53,2,1193,Sponsored listing
+2026-09-27,Myntra,Myntra Ads - Serum,59,8,0,115,Sponsored listing
+2026-09-27,Purplle,Purplle Sponsored - Sunscreen,75,11,0,130,Sponsored listing
+2026-09-27,Meesho,Meesho Ads - Sunscreen,64,19,0,154,Sponsored listing
+2026-09-27,Blinkit,Blinkit Search - Sunscreen,316,85,1,603,Search
+2026-09-27,Zepto,Zepto Ads - Sunscreen,224,41,1,404,Search
+2026-09-27,Instamart,Instamart Ads - Sunscreen,144,30,1,429,Search
+2026-09-28,Amazon,SP - Sunscreen auto,583,65,1,774,Sponsored Products
+2026-09-28,Amazon,SP - Vitamin C exact,415,37,2,1293,Sponsored Products
+2026-09-28,Amazon,SB - Kesar brand video,185,25,1,455,Sponsored Brands
+2026-09-28,Amazon,SD - Retarget product viewers,84,12,0,122,Sponsored Display
+2026-09-28,Flipkart,PLA - Sunscreen,209,40,1,620,PLA
+2026-09-28,Flipkart,PCA - Festive brand banner,94,25,0,119,PCA
+2026-09-28,Nykaa,Nykaa Sponsored - Serum,591,62,3,1893,Sponsored listing
+2026-09-28,Myntra,Myntra Ads - Serum,74,10,0,97,Sponsored listing
+2026-09-28,Purplle,Purplle Sponsored - Sunscreen,60,14,0,129,Sponsored listing
+2026-09-28,Meesho,Meesho Ads - Sunscreen,76,25,0,298,Sponsored listing
+2026-09-28,Blinkit,Blinkit Search - Sunscreen,476,108,2,1044,Search
+2026-09-28,Zepto,Zepto Ads - Sunscreen,188,40,0,268,Search
+2026-09-28,Instamart,Instamart Ads - Sunscreen,127,24,0,113,Search
+2026-09-29,Amazon,SP - Sunscreen auto,671,72,6,3525,Sponsored Products
+2026-09-29,Amazon,SP - Vitamin C exact,441,38,4,2251,Sponsored Products
+2026-09-29,Amazon,SB - Kesar brand video,284,47,1,385,Sponsored Brands
+2026-09-29,Amazon,SD - Retarget product viewers,93,12,0,109,Sponsored Display
+2026-09-29,Flipkart,PLA - Sunscreen,281,42,1,834,PLA
+2026-09-29,Flipkart,PCA - Festive brand banner,92,26,0,216,PCA
+2026-09-29,Nykaa,Nykaa Sponsored - Serum,361,38,2,1455,Sponsored listing
+2026-09-29,Myntra,Myntra Ads - Serum,59,9,0,89,Sponsored listing
+2026-09-29,Purplle,Purplle Sponsored - Sunscreen,71,17,0,173,Sponsored listing
+2026-09-29,Meesho,Meesho Ads - Sunscreen,95,30,0,219,Sponsored listing
+2026-09-29,Blinkit,Blinkit Search - Sunscreen,402,78,1,898,Search
+2026-09-29,Zepto,Zepto Ads - Sunscreen,221,47,1,503,Search
+2026-09-29,Instamart,Instamart Ads - Sunscreen,120,26,1,344,Search
+2026-09-30,Amazon,SP - Sunscreen auto,721,74,8,4372,Sponsored Products
+2026-09-30,Amazon,SP - Vitamin C exact,475,34,2,1480,Sponsored Products
+2026-09-30,Amazon,SB - Kesar brand video,218,33,1,671,Sponsored Brands
+2026-09-30,Amazon,SD - Retarget product viewers,95,11,0,195,Sponsored Display
+2026-09-30,Flipkart,PLA - Sunscreen,241,37,1,961,PLA
+2026-09-30,Flipkart,PCA - Festive brand banner,77,22,0,154,PCA
+2026-09-30,Nykaa,Nykaa Sponsored - Serum,622,67,3,2249,Sponsored listing
+2026-09-30,Myntra,Myntra Ads - Serum,81,11,0,218,Sponsored listing
+2026-09-30,Purplle,Purplle Sponsored - Sunscreen,68,11,0,215,Sponsored listing
+2026-09-30,Meesho,Meesho Ads - Sunscreen,120,35,1,477,Sponsored listing
+2026-09-30,Blinkit,Blinkit Search - Sunscreen,292,61,2,1070,Search
+2026-09-30,Zepto,Zepto Ads - Sunscreen,198,44,1,359,Search
+2026-09-30,Instamart,Instamart Ads - Sunscreen,162,29,1,462,Search
+2026-10-01,Amazon,SP - Sunscreen auto,869,79,6,4399,Sponsored Products
+2026-10-01,Amazon,SP - Vitamin C exact,499,40,4,2152,Sponsored Products
+2026-10-01,Amazon,SB - Kesar brand video,255,30,1,887,Sponsored Brands
+2026-10-01,Amazon,SD - Retarget product viewers,68,7,0,148,Sponsored Display
+2026-10-01,Flipkart,PLA - Sunscreen,202,28,1,786,PLA
+2026-10-01,Flipkart,PCA - Festive brand banner,102,24,0,68,PCA
+2026-10-01,Nykaa,Nykaa Sponsored - Serum,540,65,1,921,Sponsored listing
+2026-10-01,Myntra,Myntra Ads - Serum,89,15,0,253,Sponsored listing
+2026-10-01,Purplle,Purplle Sponsored - Sunscreen,92,12,0,248,Sponsored listing
+2026-10-01,Meesho,Meesho Ads - Sunscreen,72,24,0,211,Sponsored listing
+2026-10-01,Blinkit,Blinkit Search - Sunscreen,403,67,2,911,Search
+2026-10-01,Zepto,Zepto Ads - Sunscreen,219,61,1,396,Search
+2026-10-01,Instamart,Instamart Ads - Sunscreen,116,22,0,237,Search
+2026-10-02,Amazon,SP - Sunscreen auto,826,100,4,3137,Sponsored Products
+2026-10-02,Amazon,SP - Vitamin C exact,507,47,2,1115,Sponsored Products
+2026-10-02,Amazon,SB - Kesar brand video,254,39,1,454,Sponsored Brands
+2026-10-02,Amazon,SD - Retarget product viewers,124,15,0,214,Sponsored Display
+2026-10-02,Flipkart,PLA - Sunscreen,302,58,2,1140,PLA
+2026-10-02,Flipkart,PCA - Festive brand banner,74,18,0,136,PCA
+2026-10-02,Nykaa,Nykaa Sponsored - Serum,402,54,1,1088,Sponsored listing
+2026-10-02,Myntra,Myntra Ads - Serum,87,14,0,294,Sponsored listing
+2026-10-02,Purplle,Purplle Sponsored - Sunscreen,81,18,0,280,Sponsored listing
+2026-10-02,Meesho,Meesho Ads - Sunscreen,94,29,0,239,Sponsored listing
+2026-10-02,Blinkit,Blinkit Search - Sunscreen,475,126,0,247,Search
+2026-10-02,Zepto,Zepto Ads - Sunscreen,269,45,1,1019,Search
+2026-10-02,Instamart,Instamart Ads - Sunscreen,147,28,1,372,Search
+2026-10-03,Amazon,SP - Sunscreen auto,756,102,4,2551,Sponsored Products
+2026-10-03,Amazon,SP - Vitamin C exact,711,47,6,3281,Sponsored Products
+2026-10-03,Amazon,SB - Kesar brand video,389,50,1,894,Sponsored Brands
+2026-10-03,Amazon,SD - Retarget product viewers,206,23,0,313,Sponsored Display
+2026-10-03,Flipkart,PLA - Sunscreen,643,103,5,2819,PLA
+2026-10-03,Flipkart,PCA - Festive brand banner,150,37,0,243,PCA
+2026-10-03,Nykaa,Nykaa Sponsored - Serum,370,43,1,945,Sponsored listing
+2026-10-03,Myntra,Myntra Ads - Serum,177,26,1,549,Sponsored listing
+2026-10-03,Purplle,Purplle Sponsored - Sunscreen,73,10,0,120,Sponsored listing
+2026-10-03,Meesho,Meesho Ads - Sunscreen,81,27,1,337,Sponsored listing
+2026-10-03,Blinkit,Blinkit Search - Sunscreen,354,78,1,643,Search
+2026-10-03,Zepto,Zepto Ads - Sunscreen,249,58,1,632,Search
+2026-10-03,Instamart,Instamart Ads - Sunscreen,110,22,0,231,Search
+2026-10-04,Amazon,SP - Sunscreen auto,1015,104,5,3099,Sponsored Products
+2026-10-04,Amazon,SP - Vitamin C exact,993,74,7,5328,Sponsored Products
+2026-10-04,Amazon,SB - Kesar brand video,557,77,2,1129,Sponsored Brands
+2026-10-04,Amazon,SD - Retarget product viewers,202,24,1,644,Sponsored Display
+2026-10-04,Flipkart,PLA - Sunscreen,627,158,2,1204,PLA
+2026-10-04,Flipkart,PCA - Festive brand banner,137,34,0,272,PCA
+2026-10-04,Nykaa,Nykaa Sponsored - Serum,535,67,4,2386,Sponsored listing
+2026-10-04,Myntra,Myntra Ads - Serum,199,24,1,614,Sponsored listing
+2026-10-04,Purplle,Purplle Sponsored - Sunscreen,73,12,0,218,Sponsored listing
+2026-10-04,Meesho,Meesho Ads - Sunscreen,75,27,0,230,Sponsored listing
+2026-10-04,Blinkit,Blinkit Search - Sunscreen,497,96,2,1137,Search
+2026-10-04,Zepto,Zepto Ads - Sunscreen,146,30,1,286,Search
+2026-10-04,Instamart,Instamart Ads - Sunscreen,63,12,0,131,Search
+2026-10-05,Amazon,SP - Sunscreen auto,1194,154,5,3759,Sponsored Products
+2026-10-05,Amazon,SP - Vitamin C exact,772,56,2,1614,Sponsored Products
+2026-10-05,Amazon,SB - Kesar brand video,387,69,1,665,Sponsored Brands
+2026-10-05,Amazon,SD - Retarget product viewers,185,29,1,348,Sponsored Display
+2026-10-05,Flipkart,PLA - Sunscreen,353,64,1,470,PLA
+2026-10-05,Flipkart,PCA - Festive brand banner,127,30,0,208,PCA
+2026-10-05,Nykaa,Nykaa Sponsored - Serum,642,66,3,1956,Sponsored listing
+2026-10-05,Myntra,Myntra Ads - Serum,119,17,0,238,Sponsored listing
+2026-10-05,Purplle,Purplle Sponsored - Sunscreen,69,13,0,148,Sponsored listing
+2026-10-05,Meesho,Meesho Ads - Sunscreen,215,79,1,636,Sponsored listing
+2026-10-05,Blinkit,Blinkit Search - Sunscreen,431,67,1,871,Search
+2026-10-05,Zepto,Zepto Ads - Sunscreen,315,57,1,386,Search
+2026-10-05,Instamart,Instamart Ads - Sunscreen,90,19,0,242,Search
+2026-10-06,Amazon,SP - Sunscreen auto,1381,155,7,4430,Sponsored Products
+2026-10-06,Amazon,SP - Vitamin C exact,761,89,6,4078,Sponsored Products
+2026-10-06,Amazon,SB - Kesar brand video,506,64,1,444,Sponsored Brands
+2026-10-06,Amazon,SD - Retarget product viewers,164,18,0,276,Sponsored Display
+2026-10-06,Flipkart,PLA - Sunscreen,468,84,1,867,PLA
+2026-10-06,Flipkart,PCA - Festive brand banner,171,38,0,214,PCA
+2026-10-06,Nykaa,Nykaa Sponsored - Serum,564,54,4,2439,Sponsored listing
+2026-10-06,Myntra,Myntra Ads - Serum,119,17,1,305,Sponsored listing
+2026-10-06,Purplle,Purplle Sponsored - Sunscreen,60,9,0,108,Sponsored listing
+2026-10-06,Meesho,Meesho Ads - Sunscreen,74,23,0,204,Sponsored listing
+2026-10-06,Blinkit,Blinkit Search - Sunscreen,373,77,2,1180,Search
+2026-10-06,Zepto,Zepto Ads - Sunscreen,213,38,1,519,Search
+2026-10-06,Instamart,Instamart Ads - Sunscreen,132,30,1,582,Search
+2026-10-07,Amazon,SP - Sunscreen auto,829,99,7,4317,Sponsored Products
+2026-10-07,Amazon,SP - Vitamin C exact,928,79,7,4429,Sponsored Products
+2026-10-07,Amazon,SB - Kesar brand video,493,67,2,1516,Sponsored Brands
+2026-10-07,Amazon,SD - Retarget product viewers,179,21,0,258,Sponsored Display
+2026-10-07,Flipkart,PLA - Sunscreen,447,81,2,1292,PLA
+2026-10-07,Flipkart,PCA - Festive brand banner,170,46,0,187,PCA
+2026-10-07,Nykaa,Nykaa Sponsored - Serum,665,78,5,3012,Sponsored listing
+2026-10-07,Myntra,Myntra Ads - Serum,166,22,1,387,Sponsored listing
+2026-10-07,Purplle,Purplle Sponsored - Sunscreen,64,12,0,228,Sponsored listing
+2026-10-07,Meesho,Meesho Ads - Sunscreen,166,54,1,401,Sponsored listing
+2026-10-07,Blinkit,Blinkit Search - Sunscreen,318,67,2,809,Search
+2026-10-07,Zepto,Zepto Ads - Sunscreen,321,97,1,682,Search
+2026-10-07,Instamart,Instamart Ads - Sunscreen,167,37,1,435,Search
+2026-10-08,Amazon,SP - Sunscreen auto,1123,114,13,8089,Sponsored Products
+2026-10-08,Amazon,SP - Vitamin C exact,841,87,3,2281,Sponsored Products
+2026-10-08,Amazon,SB - Kesar brand video,338,42,1,939,Sponsored Brands
+2026-10-08,Amazon,SD - Retarget product viewers,164,18,0,233,Sponsored Display
+2026-10-08,Flipkart,PLA - Sunscreen,448,88,3,1810,PLA
+2026-10-08,Flipkart,PCA - Festive brand banner,102,27,0,105,PCA
+2026-10-08,Nykaa,Nykaa Sponsored - Serum,475,51,3,1688,Sponsored listing
+2026-10-08,Myntra,Myntra Ads - Serum,118,16,1,319,Sponsored listing
+2026-10-08,Purplle,Purplle Sponsored - Sunscreen,89,13,0,234,Sponsored listing
+2026-10-08,Meesho,Meesho Ads - Sunscreen,171,51,1,465,Sponsored listing
+2026-10-08,Blinkit,Blinkit Search - Sunscreen,430,97,3,1308,Search
+2026-10-08,Zepto,Zepto Ads - Sunscreen,306,57,1,792,Search
+2026-10-08,Instamart,Instamart Ads - Sunscreen,138,24,0,187,Search
+2026-10-09,Amazon,SP - Sunscreen auto,790,93,8,4606,Sponsored Products
+2026-10-09,Amazon,SP - Vitamin C exact,721,61,3,1654,Sponsored Products
+2026-10-09,Amazon,SB - Kesar brand video,452,63,2,1009,Sponsored Brands
+2026-10-09,Amazon,SD - Retarget product viewers,193,24,0,307,Sponsored Display
+2026-10-09,Flipkart,PLA - Sunscreen,624,121,3,1563,PLA
+2026-10-09,Flipkart,PCA - Festive brand banner,113,28,0,154,PCA
+2026-10-09,Nykaa,Nykaa Sponsored - Serum,394,68,2,1502,Sponsored listing
+2026-10-09,Myntra,Myntra Ads - Serum,138,19,0,196,Sponsored listing
+2026-10-09,Purplle,Purplle Sponsored - Sunscreen,68,10,0,228,Sponsored listing
+2026-10-09,Meesho,Meesho Ads - Sunscreen,159,44,1,613,Sponsored listing
+2026-10-09,Blinkit,Blinkit Search - Sunscreen,372,73,1,745,Search
+2026-10-09,Zepto,Zepto Ads - Sunscreen,293,56,1,558,Search
+2026-10-09,Instamart,Instamart Ads - Sunscreen,129,23,1,362,Search
+2026-10-10,Amazon,SP - Sunscreen auto,908,102,6,3478,Sponsored Products
+2026-10-10,Amazon,SP - Vitamin C exact,516,47,2,1093,Sponsored Products
+2026-10-10,Amazon,SB - Kesar brand video,290,38,1,686,Sponsored Brands
+2026-10-10,Amazon,SD - Retarget product viewers,112,15,0,212,Sponsored Display
+2026-10-10,Flipkart,PLA - Sunscreen,234,37,1,710,PLA
+2026-10-10,Flipkart,PCA - Festive brand banner,74,21,0,130,PCA
+2026-10-10,Nykaa,Nykaa Sponsored - Serum,423,47,2,940,Sponsored listing
+2026-10-10,Myntra,Myntra Ads - Serum,78,13,0,165,Sponsored listing
+2026-10-10,Purplle,Purplle Sponsored - Sunscreen,70,12,1,294,Sponsored listing
+2026-10-10,Meesho,Meesho Ads - Sunscreen,64,19,0,201,Sponsored listing
+2026-10-10,Blinkit,Blinkit Search - Sunscreen,264,55,2,884,Search
+2026-10-10,Zepto,Zepto Ads - Sunscreen,174,28,1,495,Search
+2026-10-10,Instamart,Instamart Ads - Sunscreen,113,28,0,200,Search
+2026-10-11,Amazon,SP - Sunscreen auto,776,84,4,2751,Sponsored Products
+2026-10-11,Amazon,SP - Vitamin C exact,491,49,1,989,Sponsored Products
+2026-10-11,Amazon,SB - Kesar brand video,248,39,1,730,Sponsored Brands
+2026-10-11,Amazon,SD - Retarget product viewers,109,16,0,129,Sponsored Display
+2026-10-11,Flipkart,PLA - Sunscreen,309,50,2,1239,PLA
+2026-10-11,Flipkart,PCA - Festive brand banner,67,19,0,123,PCA
+2026-10-11,Nykaa,Nykaa Sponsored - Serum,642,62,2,1612,Sponsored listing
+2026-10-11,Myntra,Myntra Ads - Serum,99,13,0,305,Sponsored listing
+2026-10-11,Purplle,Purplle Sponsored - Sunscreen,64,11,0,61,Sponsored listing
+2026-10-11,Meesho,Meesho Ads - Sunscreen,110,33,0,209,Sponsored listing
+2026-10-11,Blinkit,Blinkit Search - Sunscreen,361,67,1,678,Search
+2026-10-11,Zepto,Zepto Ads - Sunscreen,310,59,1,922,Search
+2026-10-11,Instamart,Instamart Ads - Sunscreen,127,28,1,367,Search
+2026-10-12,Amazon,SP - Sunscreen auto,495,54,5,3126,Sponsored Products
+2026-10-12,Amazon,SP - Vitamin C exact,275,22,2,1080,Sponsored Products
+2026-10-12,Amazon,SB - Kesar brand video,299,40,1,550,Sponsored Brands
+2026-10-12,Amazon,SD - Retarget product viewers,132,20,1,380,Sponsored Display
+2026-10-12,Flipkart,PLA - Sunscreen,192,31,1,684,PLA
+2026-10-12,Flipkart,PCA - Festive brand banner,96,28,0,157,PCA
+2026-10-12,Nykaa,Nykaa Sponsored - Serum,646,82,3,1842,Sponsored listing
+2026-10-12,Myntra,Myntra Ads - Serum,82,12,0,198,Sponsored listing
+2026-10-12,Purplle,Purplle Sponsored - Sunscreen,41,8,0,147,Sponsored listing
+2026-10-12,Meesho,Meesho Ads - Sunscreen,121,37,1,488,Sponsored listing
+2026-10-12,Blinkit,Blinkit Search - Sunscreen,369,75,1,496,Search
+2026-10-12,Zepto,Zepto Ads - Sunscreen,277,59,1,363,Search
+2026-10-12,Instamart,Instamart Ads - Sunscreen,95,19,0,300,Search
+2026-10-13,Amazon,SP - Sunscreen auto,721,84,3,2350,Sponsored Products
+2026-10-13,Amazon,SP - Vitamin C exact,436,31,2,1204,Sponsored Products
+2026-10-13,Amazon,SB - Kesar brand video,213,28,1,554,Sponsored Brands
+2026-10-13,Amazon,SD - Retarget product viewers,106,14,0,215,Sponsored Display
+2026-10-13,Flipkart,PLA - Sunscreen,340,48,2,1329,PLA
+2026-10-13,Flipkart,PCA - Festive brand banner,77,21,0,81,PCA
+2026-10-13,Nykaa,Nykaa Sponsored - Serum,453,47,3,2003,Sponsored listing
+2026-10-13,Myntra,Myntra Ads - Serum,86,12,0,236,Sponsored listing
+2026-10-13,Purplle,Purplle Sponsored - Sunscreen,95,13,1,377,Sponsored listing
+2026-10-13,Meesho,Meesho Ads - Sunscreen,71,26,0,201,Sponsored listing
+2026-10-13,Blinkit,Blinkit Search - Sunscreen,330,67,1,673,Search
+2026-10-13,Zepto,Zepto Ads - Sunscreen,289,51,1,581,Search
+2026-10-13,Instamart,Instamart Ads - Sunscreen,133,29,0,128,Search
+2026-10-14,Amazon,SP - Sunscreen auto,427,51,2,1315,Sponsored Products
+2026-10-14,Amazon,SP - Vitamin C exact,561,47,3,1899,Sponsored Products
+2026-10-14,Amazon,SB - Kesar brand video,308,50,1,334,Sponsored Brands
+2026-10-14,Amazon,SD - Retarget product viewers,122,15,0,254,Sponsored Display
+2026-10-14,Flipkart,PLA - Sunscreen,308,44,1,1027,PLA
+2026-10-14,Flipkart,PCA - Festive brand banner,83,20,0,111,PCA
+2026-10-14,Nykaa,Nykaa Sponsored - Serum,381,42,2,1049,Sponsored listing
+2026-10-14,Myntra,Myntra Ads - Serum,61,10,0,91,Sponsored listing
+2026-10-14,Purplle,Purplle Sponsored - Sunscreen,94,17,1,297,Sponsored listing
+2026-10-14,Meesho,Meesho Ads - Sunscreen,99,34,0,162,Sponsored listing
+2026-10-14,Blinkit,Blinkit Search - Sunscreen,405,81,1,959,Search
+2026-10-14,Zepto,Zepto Ads - Sunscreen,279,54,1,731,Search
+2026-10-14,Instamart,Instamart Ads - Sunscreen,120,31,0,315,Search
+2026-10-15,Amazon,SP - Sunscreen auto,711,89,6,3792,Sponsored Products
+2026-10-15,Amazon,SP - Vitamin C exact,424,37,2,1437,Sponsored Products
+2026-10-15,Amazon,SB - Kesar brand video,362,54,1,357,Sponsored Brands
+2026-10-15,Amazon,SD - Retarget product viewers,88,9,0,137,Sponsored Display
+2026-10-15,Flipkart,PLA - Sunscreen,326,52,2,1197,PLA
+2026-10-15,Flipkart,PCA - Festive brand banner,75,19,0,146,PCA
+2026-10-15,Nykaa,Nykaa Sponsored - Serum,479,47,2,1225,Sponsored listing
+2026-10-15,Myntra,Myntra Ads - Serum,92,12,0,180,Sponsored listing
+2026-10-15,Purplle,Purplle Sponsored - Sunscreen,95,17,1,322,Sponsored listing
+2026-10-15,Meesho,Meesho Ads - Sunscreen,110,34,1,514,Sponsored listing
+2026-10-15,Blinkit,Blinkit Search - Sunscreen,498,136,4,2370,Search
+2026-10-15,Zepto,Zepto Ads - Sunscreen,257,58,1,443,Search
+2026-10-15,Instamart,Instamart Ads - Sunscreen,126,29,1,398,Search
+2026-10-16,Amazon,SP - Sunscreen auto,452,52,3,1638,Sponsored Products
+2026-10-16,Amazon,SP - Vitamin C exact,522,40,4,2238,Sponsored Products
+2026-10-16,Amazon,SB - Kesar brand video,268,47,0,330,Sponsored Brands
+2026-10-16,Amazon,SD - Retarget product viewers,102,13,0,280,Sponsored Display
+2026-10-16,Flipkart,PLA - Sunscreen,230,41,1,811,PLA
+2026-10-16,Flipkart,PCA - Festive brand banner,66,16,0,76,PCA
+2026-10-16,Nykaa,Nykaa Sponsored - Serum,543,63,4,2385,Sponsored listing
+2026-10-16,Myntra,Myntra Ads - Serum,87,14,0,179,Sponsored listing
+2026-10-16,Purplle,Purplle Sponsored - Sunscreen,89,15,0,140,Sponsored listing
+2026-10-16,Meesho,Meesho Ads - Sunscreen,81,26,0,216,Sponsored listing
+2026-10-16,Blinkit,Blinkit Search - Sunscreen,468,96,2,1038,Search
+2026-10-16,Zepto,Zepto Ads - Sunscreen,314,59,1,576,Search
+2026-10-16,Instamart,Instamart Ads - Sunscreen,137,27,0,184,Search
+2026-10-17,Amazon,SP - Sunscreen auto,576,57,1,902,Sponsored Products
+2026-10-17,Amazon,SP - Vitamin C exact,456,33,3,2121,Sponsored Products
+2026-10-17,Amazon,SB - Kesar brand video,298,60,1,768,Sponsored Brands
+2026-10-17,Amazon,SD - Retarget product viewers,94,12,0,210,Sponsored Display
+2026-10-17,Flipkart,PLA - Sunscreen,337,58,1,811,PLA
+2026-10-17,Flipkart,PCA - Festive brand banner,59,14,0,108,PCA
+2026-10-17,Nykaa,Nykaa Sponsored - Serum,451,55,2,872,Sponsored listing
+2026-10-17,Myntra,Myntra Ads - Serum,55,7,0,189,Sponsored listing
+2026-10-17,Purplle,Purplle Sponsored - Sunscreen,73,14,0,273,Sponsored listing
+2026-10-17,Meesho,Meesho Ads - Sunscreen,102,39,1,428,Sponsored listing
+2026-10-17,Blinkit,Blinkit Search - Sunscreen,314,65,3,1393,Search
+2026-10-17,Zepto,Zepto Ads - Sunscreen,328,64,1,844,Search
+2026-10-17,Instamart,Instamart Ads - Sunscreen,125,29,0,323,Search
+2026-10-18,Amazon,SP - Sunscreen auto,688,60,5,3277,Sponsored Products
+2026-10-18,Amazon,SP - Vitamin C exact,403,35,2,1189,Sponsored Products
+2026-10-18,Amazon,SB - Kesar brand video,284,45,1,829,Sponsored Brands
+2026-10-18,Amazon,SD - Retarget product viewers,67,9,0,75,Sponsored Display
+2026-10-18,Flipkart,PLA - Sunscreen,225,38,1,647,PLA
+2026-10-18,Flipkart,PCA - Festive brand banner,77,20,0,104,PCA
+2026-10-18,Nykaa,Nykaa Sponsored - Serum,521,54,3,1678,Sponsored listing
+2026-10-18,Myntra,Myntra Ads - Serum,101,13,1,388,Sponsored listing
+2026-10-18,Purplle,Purplle Sponsored - Sunscreen,70,10,0,283,Sponsored listing
+2026-10-18,Meesho,Meesho Ads - Sunscreen,130,41,0,294,Sponsored listing
+2026-10-18,Blinkit,Blinkit Search - Sunscreen,378,78,1,1002,Search
+2026-10-18,Zepto,Zepto Ads - Sunscreen,343,58,2,1091,Search
+2026-10-18,Instamart,Instamart Ads - Sunscreen,148,32,1,569,Search
+2026-10-19,Amazon,SP - Sunscreen auto,1208,139,8,5116,Sponsored Products
+2026-10-19,Amazon,SP - Vitamin C exact,845,68,4,2968,Sponsored Products
+2026-10-19,Amazon,SB - Kesar brand video,473,61,2,1081,Sponsored Brands
+2026-10-19,Amazon,SD - Retarget product viewers,121,14,0,194,Sponsored Display
+2026-10-19,Flipkart,PLA - Sunscreen,579,94,2,1263,PLA
+2026-10-19,Flipkart,PCA - Festive brand banner,102,31,0,196,PCA
+2026-10-19,Nykaa,Nykaa Sponsored - Serum,1030,108,7,3856,Sponsored listing
+2026-10-19,Myntra,Myntra Ads - Serum,131,18,1,395,Sponsored listing
+2026-10-19,Purplle,Purplle Sponsored - Sunscreen,99,14,0,188,Sponsored listing
+2026-10-19,Meesho,Meesho Ads - Sunscreen,138,37,1,448,Sponsored listing
+2026-10-19,Blinkit,Blinkit Search - Sunscreen,472,91,1,1031,Search
+2026-10-19,Zepto,Zepto Ads - Sunscreen,456,89,1,891,Search
+2026-10-19,Instamart,Instamart Ads - Sunscreen,201,34,1,414,Search
+2026-10-20,Amazon,SP - Sunscreen auto,1710,174,9,5998,Sponsored Products
+2026-10-20,Amazon,SP - Vitamin C exact,807,74,8,4666,Sponsored Products
+2026-10-20,Amazon,SB - Kesar brand video,587,72,1,755,Sponsored Brands
+2026-10-20,Amazon,SD - Retarget product viewers,160,17,1,569,Sponsored Display
+2026-10-20,Flipkart,PLA - Sunscreen,629,118,2,1426,PLA
+2026-10-20,Flipkart,PCA - Festive brand banner,107,26,0,228,PCA
+2026-10-20,Nykaa,Nykaa Sponsored - Serum,712,73,4,3050,Sponsored listing
+2026-10-20,Myntra,Myntra Ads - Serum,175,21,0,137,Sponsored listing
+2026-10-20,Purplle,Purplle Sponsored - Sunscreen,78,12,0,187,Sponsored listing
+2026-10-20,Meesho,Meesho Ads - Sunscreen,176,63,1,676,Sponsored listing
+2026-10-20,Blinkit,Blinkit Search - Sunscreen,646,113,3,1602,Search
+2026-10-20,Zepto,Zepto Ads - Sunscreen,563,105,2,1382,Search
+2026-10-20,Instamart,Instamart Ads - Sunscreen,297,63,1,656,Search
+2026-10-21,Amazon,SP - Sunscreen auto,990,98,7,4281,Sponsored Products
+2026-10-21,Amazon,SP - Vitamin C exact,901,76,6,4198,Sponsored Products
+2026-10-21,Amazon,SB - Kesar brand video,691,102,4,1972,Sponsored Brands
+2026-10-21,Amazon,SD - Retarget product viewers,143,15,1,502,Sponsored Display
+2026-10-21,Flipkart,PLA - Sunscreen,600,97,4,2626,PLA
+2026-10-21,Flipkart,PCA - Festive brand banner,155,29,0,234,PCA
+2026-10-21,Nykaa,Nykaa Sponsored - Serum,1040,130,5,2489,Sponsored listing
+2026-10-21,Myntra,Myntra Ads - Serum,134,17,0,296,Sponsored listing
+2026-10-21,Purplle,Purplle Sponsored - Sunscreen,107,17,1,333,Sponsored listing
+2026-10-21,Meesho,Meesho Ads - Sunscreen,178,69,1,797,Sponsored listing
+2026-10-21,Blinkit,Blinkit Search - Sunscreen,707,158,2,1361,Search
+2026-10-21,Zepto,Zepto Ads - Sunscreen,340,87,1,768,Search
+2026-10-21,Instamart,Instamart Ads - Sunscreen,213,50,1,404,Search
+2026-10-22,Amazon,SP - Sunscreen auto,1458,157,8,4669,Sponsored Products
+2026-10-22,Amazon,SP - Vitamin C exact,1005,84,8,4487,Sponsored Products
+2026-10-22,Amazon,SB - Kesar brand video,325,47,2,940,Sponsored Brands
+2026-10-22,Amazon,SD - Retarget product viewers,195,21,1,686,Sponsored Display
+2026-10-22,Flipkart,PLA - Sunscreen,599,105,3,1843,PLA
+2026-10-22,Flipkart,PCA - Festive brand banner,162,37,0,220,PCA
+2026-10-22,Nykaa,Nykaa Sponsored - Serum,858,101,8,4659,Sponsored listing
+2026-10-22,Myntra,Myntra Ads - Serum,122,19,0,260,Sponsored listing
+2026-10-22,Purplle,Purplle Sponsored - Sunscreen,79,12,0,108,Sponsored listing
+2026-10-22,Meesho,Meesho Ads - Sunscreen,145,52,1,592,Sponsored listing
+2026-10-22,Blinkit,Blinkit Search - Sunscreen,716,136,2,1789,Search
+2026-10-22,Zepto,Zepto Ads - Sunscreen,371,83,1,804,Search
+2026-10-22,Instamart,Instamart Ads - Sunscreen,268,53,1,815,Search
+2026-10-23,Amazon,SP - Sunscreen auto,950,92,7,4834,Sponsored Products
+2026-10-23,Amazon,SP - Vitamin C exact,951,79,7,5563,Sponsored Products
+2026-10-23,Amazon,SB - Kesar brand video,421,65,2,1466,Sponsored Brands
+2026-10-23,Amazon,SD - Retarget product viewers,236,32,1,491,Sponsored Display
+2026-10-23,Flipkart,PLA - Sunscreen,735,126,6,3702,PLA
+2026-10-23,Flipkart,PCA - Festive brand banner,163,50,0,208,PCA
+2026-10-23,Nykaa,Nykaa Sponsored - Serum,1271,149,4,2869,Sponsored listing
+2026-10-23,Myntra,Myntra Ads - Serum,88,14,0,248,Sponsored listing
+2026-10-23,Purplle,Purplle Sponsored - Sunscreen,117,22,0,214,Sponsored listing
+2026-10-23,Meesho,Meesho Ads - Sunscreen,181,72,1,732,Sponsored listing
+2026-10-23,Blinkit,Blinkit Search - Sunscreen,722,154,4,2327,Search
+2026-10-23,Zepto,Zepto Ads - Sunscreen,535,99,3,1728,Search
+2026-10-23,Instamart,Instamart Ads - Sunscreen,242,47,1,497,Search
+2026-10-24,Amazon,SP - Sunscreen auto,1354,140,11,7029,Sponsored Products
+2026-10-24,Amazon,SP - Vitamin C exact,875,67,5,3442,Sponsored Products
+2026-10-24,Amazon,SB - Kesar brand video,474,72,3,1498,Sponsored Brands
+2026-10-24,Amazon,SD - Retarget product viewers,242,23,1,590,Sponsored Display
+2026-10-24,Flipkart,PLA - Sunscreen,451,73,2,1274,PLA
+2026-10-24,Flipkart,PCA - Festive brand banner,108,34,0,227,PCA
+2026-10-24,Nykaa,Nykaa Sponsored - Serum,700,86,3,1982,Sponsored listing
+2026-10-24,Myntra,Myntra Ads - Serum,128,15,1,360,Sponsored listing
+2026-10-24,Purplle,Purplle Sponsored - Sunscreen,180,31,1,472,Sponsored listing
+2026-10-24,Meesho,Meesho Ads - Sunscreen,185,68,1,600,Sponsored listing
+2026-10-24,Blinkit,Blinkit Search - Sunscreen,760,182,1,783,Search
+2026-10-24,Zepto,Zepto Ads - Sunscreen,456,88,2,1443,Search
+2026-10-24,Instamart,Instamart Ads - Sunscreen,268,61,1,750,Search
+2026-10-25,Amazon,SP - Sunscreen auto,1219,128,11,7030,Sponsored Products
+2026-10-25,Amazon,SP - Vitamin C exact,877,74,6,3375,Sponsored Products
+2026-10-25,Amazon,SB - Kesar brand video,664,96,2,1726,Sponsored Brands
+2026-10-25,Amazon,SD - Retarget product viewers,155,19,1,403,Sponsored Display
+2026-10-25,Flipkart,PLA - Sunscreen,577,91,3,2117,PLA
+2026-10-25,Flipkart,PCA - Festive brand banner,174,50,1,357,PCA
+2026-10-25,Nykaa,Nykaa Sponsored - Serum,1144,130,7,4883,Sponsored listing
+2026-10-25,Myntra,Myntra Ads - Serum,134,20,1,392,Sponsored listing
+2026-10-25,Purplle,Purplle Sponsored - Sunscreen,150,27,0,304,Sponsored listing
+2026-10-25,Meesho,Meesho Ads - Sunscreen,209,72,1,692,Sponsored listing
+2026-10-25,Blinkit,Blinkit Search - Sunscreen,837,171,3,1873,Search
+2026-10-25,Zepto,Zepto Ads - Sunscreen,559,118,2,1500,Search
+2026-10-25,Instamart,Instamart Ads - Sunscreen,162,38,1,514,Search
+2026-10-26,Amazon,SP - Sunscreen auto,510,52,4,2512,Sponsored Products
+2026-10-26,Amazon,SP - Vitamin C exact,623,57,5,2811,Sponsored Products
+2026-10-26,Amazon,SB - Kesar brand video,162,24,1,338,Sponsored Brands
+2026-10-26,Amazon,SD - Retarget product viewers,122,12,0,250,Sponsored Display
+2026-10-26,Flipkart,PLA - Sunscreen,364,55,1,625,PLA
+2026-10-26,Flipkart,PCA - Festive brand banner,57,15,0,103,PCA
+2026-10-26,Nykaa,Nykaa Sponsored - Serum,672,77,4,2354,Sponsored listing
+2026-10-26,Myntra,Myntra Ads - Serum,70,9,0,166,Sponsored listing
+2026-10-26,Purplle,Purplle Sponsored - Sunscreen,72,12,0,179,Sponsored listing
+2026-10-26,Meesho,Meesho Ads - Sunscreen,91,31,0,254,Sponsored listing
+2026-10-26,Blinkit,Blinkit Search - Sunscreen,402,86,2,1001,Search
+2026-10-26,Zepto,Zepto Ads - Sunscreen,256,62,1,399,Search
+2026-10-26,Instamart,Instamart Ads - Sunscreen,141,28,1,394,Search
+2026-10-27,Amazon,SP - Sunscreen auto,773,113,3,2070,Sponsored Products
+2026-10-27,Amazon,SP - Vitamin C exact,345,36,2,1323,Sponsored Products
+2026-10-27,Amazon,SB - Kesar brand video,291,66,1,441,Sponsored Brands
+2026-10-27,Amazon,SD - Retarget product viewers,148,16,1,308,Sponsored Display
+2026-10-27,Flipkart,PLA - Sunscreen,242,37,1,871,PLA
+2026-10-27,Flipkart,PCA - Festive brand banner,107,30,0,88,PCA
+2026-10-27,Nykaa,Nykaa Sponsored - Serum,632,62,3,1966,Sponsored listing
+2026-10-27,Myntra,Myntra Ads - Serum,98,13,0,326,Sponsored listing
+2026-10-27,Purplle,Purplle Sponsored - Sunscreen,90,14,0,287,Sponsored listing
+2026-10-27,Meesho,Meesho Ads - Sunscreen,105,37,1,534,Sponsored listing
+2026-10-27,Blinkit,Blinkit Search - Sunscreen,347,71,2,888,Search
+2026-10-27,Zepto,Zepto Ads - Sunscreen,249,45,1,793,Search
+2026-10-27,Instamart,Instamart Ads - Sunscreen,107,20,0,162,Search
+2026-10-28,Amazon,SP - Sunscreen auto,774,91,6,4020,Sponsored Products
+2026-10-28,Amazon,SP - Vitamin C exact,523,42,2,1098,Sponsored Products
+2026-10-28,Amazon,SB - Kesar brand video,289,45,2,1205,Sponsored Brands
+2026-10-28,Amazon,SD - Retarget product viewers,88,14,0,208,Sponsored Display
+2026-10-28,Flipkart,PLA - Sunscreen,346,62,2,995,PLA
+2026-10-28,Flipkart,PCA - Festive brand banner,87,21,0,143,PCA
+2026-10-28,Nykaa,Nykaa Sponsored - Serum,696,91,4,3008,Sponsored listing
+2026-10-28,Myntra,Myntra Ads - Serum,96,12,0,220,Sponsored listing
+2026-10-28,Purplle,Purplle Sponsored - Sunscreen,49,7,0,87,Sponsored listing
+2026-10-28,Meesho,Meesho Ads - Sunscreen,105,33,1,571,Sponsored listing
+2026-10-28,Blinkit,Blinkit Search - Sunscreen,420,96,3,1825,Search
+2026-10-28,Zepto,Zepto Ads - Sunscreen,276,53,1,721,Search
+2026-10-28,Instamart,Instamart Ads - Sunscreen,140,25,1,414,Search
+2026-10-29,Amazon,SP - Sunscreen auto,536,62,6,3378,Sponsored Products
+2026-10-29,Amazon,SP - Vitamin C exact,443,32,3,2067,Sponsored Products
+2026-10-29,Amazon,SB - Kesar brand video,332,49,2,1250,Sponsored Brands
+2026-10-29,Amazon,SD - Retarget product viewers,124,17,0,259,Sponsored Display
+2026-10-29,Flipkart,PLA - Sunscreen,277,42,1,577,PLA
+2026-10-29,Flipkart,PCA - Festive brand banner,69,16,0,173,PCA
+2026-10-29,Nykaa,Nykaa Sponsored - Serum,462,45,2,1781,Sponsored listing
+2026-10-29,Myntra,Myntra Ads - Serum,90,13,0,222,Sponsored listing
+2026-10-29,Purplle,Purplle Sponsored - Sunscreen,71,12,0,235,Sponsored listing
+2026-10-29,Meesho,Meesho Ads - Sunscreen,115,40,1,438,Sponsored listing
+2026-10-29,Blinkit,Blinkit Search - Sunscreen,387,71,1,694,Search
+2026-10-29,Zepto,Zepto Ads - Sunscreen,313,72,1,720,Search
+2026-10-29,Instamart,Instamart Ads - Sunscreen,130,25,1,342,Search
+2026-10-30,Amazon,SP - Sunscreen auto,604,73,3,1780,Sponsored Products
+2026-10-30,Amazon,SP - Vitamin C exact,612,51,4,2255,Sponsored Products
+2026-10-30,Amazon,SB - Kesar brand video,305,44,2,1069,Sponsored Brands
+2026-10-30,Amazon,SD - Retarget product viewers,122,14,0,235,Sponsored Display
+2026-10-30,Flipkart,PLA - Sunscreen,381,55,2,1218,PLA
+2026-10-30,Flipkart,PCA - Festive brand banner,72,19,0,108,PCA
+2026-10-30,Nykaa,Nykaa Sponsored - Serum,662,55,2,1351,Sponsored listing
+2026-10-30,Myntra,Myntra Ads - Serum,96,15,0,199,Sponsored listing
+2026-10-30,Purplle,Purplle Sponsored - Sunscreen,94,16,0,233,Sponsored listing
+2026-10-30,Meesho,Meesho Ads - Sunscreen,118,37,0,288,Sponsored listing
+2026-10-30,Blinkit,Blinkit Search - Sunscreen,409,99,1,1032,Search
+2026-10-30,Zepto,Zepto Ads - Sunscreen,265,54,1,461,Search
+2026-10-30,Instamart,Instamart Ads - Sunscreen,123,20,0,170,Search
+2026-10-31,Amazon,SP - Sunscreen auto,758,76,4,2806,Sponsored Products
+2026-10-31,Amazon,SP - Vitamin C exact,541,52,5,3101,Sponsored Products
+2026-10-31,Amazon,SB - Kesar brand video,204,25,1,374,Sponsored Brands
+2026-10-31,Amazon,SD - Retarget product viewers,124,17,0,309,Sponsored Display
+2026-10-31,Flipkart,PLA - Sunscreen,321,50,1,664,PLA
+2026-10-31,Flipkart,PCA - Festive brand banner,102,27,0,150,PCA
+2026-10-31,Nykaa,Nykaa Sponsored - Serum,657,80,2,1488,Sponsored listing
+2026-10-31,Myntra,Myntra Ads - Serum,83,12,0,224,Sponsored listing
+2026-10-31,Purplle,Purplle Sponsored - Sunscreen,57,12,0,129,Sponsored listing
+2026-10-31,Meesho,Meesho Ads - Sunscreen,138,42,1,467,Sponsored listing
+2026-10-31,Blinkit,Blinkit Search - Sunscreen,355,69,1,451,Search
+2026-10-31,Zepto,Zepto Ads - Sunscreen,267,52,1,657,Search
+2026-10-31,Instamart,Instamart Ads - Sunscreen,146,27,0,319,Search

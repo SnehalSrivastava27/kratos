@@ -238,7 +238,7 @@ test("KPIs: v1 fallback from data/, v2 files when present, cached until a file c
   try {
     const full = await getJson(real, "/api/kpis");
     assert.ok(full.net_revenue > 0 && full.orders > 0 && full.aov > 0 && full.blended_roas > 0 && full.ebitda_last_month !== null, JSON.stringify(full).slice(0, 200));
-    assert.equal(full.by_channel.length, 7);
+    assert.equal(full.by_channel.length, 18); // data/channel_fees.csv: website, 9 marketplaces, 5 quick commerce, 2 offline, export
     assert.equal(full.top_skus.length, 5);
     const v1 = await getJson(s1, "/api/kpis");
     assert.equal(v1.meta_roas, 3.12, "data/meta_campaigns.csv: 14.02L / 4.5L");

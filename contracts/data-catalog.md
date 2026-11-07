@@ -1,6 +1,7 @@
 # Data catalog (v2)
 
-Sample data for **Kesar & Co.**, an Indian skincare D2C brand. Everything lives flat in `data/`.
+Sample data for **Kesar & Co.**, an Indian skincare D2C brand selling on its website, 9 marketplaces, 5 quick-commerce
+apps, 2 offline chains and Amazon Global. Everything lives flat in `data/`.
 Agents (`switch/agents/*.md`), the toolkit (`kit/`) and the evals (`evals/`) build against
 these **file names and columns**. New columns are added only at the end of a file; none is ever renamed or removed.
 
@@ -38,10 +39,27 @@ Rules:
 | `payroll_2026_10.csv` | emp_id, month, gross, pf_employee, professional_tax, tds, net_pay |
 | `opex.csv` | month, category, vendor, amount |
 | `pnl_monthly.csv` | month, gross_revenue, discounts, returns, net_revenue, cogs, channel_fees, shipping, marketing, salaries, opex, ebitda |
+| `cities.csv` | city, state, region, tier, pincode, gst_state_code, is_metro, home_warehouse, zone_from_mumbai, zone_from_delhi, zone_from_bangalore, quick_commerce, offline_stores |
+| `festive_calendar.csv` | event, start_date, end_date, type, focus_states, platforms, status, observed_uplift_x, expected_uplift_x, note |
+| `gst_monthly.csv` | month, gstin, state, hsn, taxable_value, cgst, sgst, igst, output_gst, itc_on_fees, itc_on_marketing, itc_on_purchases, itc_on_opex, itc_total, itc_opening, itc_closing, tcs_credit, cash_payable, gstr1_due, gstr3b_due |
+| `settlements.csv` | settlement_id, channel, payer, cycle_start, cycle_end, settlement_date, orders, gross_sales, fees, shipping, gst_on_fees, tcs, tds, net_payout, status |
+| `qc_inventory.csv` | date, platform, city, sku, dark_stores, in_stock_stores, on_hand, units_sold_week, days_of_cover, availability_pct |
+| `reviews.csv` | month, platform, sku, ratings, avg_rating, five_star, four_star, three_star, two_star, one_star, reviews_with_text, top_praise, top_complaint |
+| `support_tickets.csv` | ticket_id, date, channel, order_id, sales_channel, category, language, first_response_mins, resolution_hours, status, csat, handled_by |
+| `whatsapp_campaigns.csv` | campaign_id, date, bsp, flow, category, audience, language, sent, delivered, read, clicked, orders, revenue, cost |
+| `cohort_retention.csv` | cohort_month, acquisition_channel, customers, m1_retained, m1_pct, m2_retained, m2_pct, repeat_customers, orders, revenue, revenue_per_customer |
+| `vendors.csv` | vendor_id, name, type, category, city, state, gstin, msme_category, payment_terms_days, tds_section, tds_rate_pct |
+| `compliance_calendar.csv` | due_date, filing, authority, period, gstin_state, amount, status, filed_on, late_fee, note |
 | `finance_policy.json` | rules Finance enforces: max marketing % of net revenue, min EBITDA, max CAC, cash floor |
 | `README.md` | data dictionary: every file, every column, how they tie together, and the "story" numbers |
 
-`channel` values everywhere: `Website`, `Amazon`, `Flipkart`, `Nykaa`, `Myntra`, `Blinkit`, `Zepto`.
+`channel` values everywhere (18): `Website`, `Amazon`, `Flipkart`, `Nykaa`, `Myntra`, `Purplle`, `Meesho`, `Tata CLiQ`, `JioMart`,
+`AJIO`, `Blinkit`, `Zepto`, `Instamart`, `BB Now`, `Flipkart Minutes`, `Health & Glow`, `Apollo Pharmacy`, `Amazon Global`.
+`channel_fees.channel_group`: `D2C`, `Marketplace`, `Beauty marketplace`, `Quick commerce`, `Offline retail`, `Export`.
+Columns added at the end since v2.0 (backward compatible): orders `state, pincode, payment_method, gst, tax_type`; channel_fees
+`channel_group, tcs_pct, tds_pct, gst_on_fees_pct`; customers `state, pincode`; meta_ads_daily and creator_posts `language`;
+marketplace_ads_daily `ad_type`; employees `esi_employer_monthly`; payroll_2026_10 `esi_employee, esi_employer`.
 `status` in orders: `delivered`, `rto`, `returned`, `cancelled`. `payment`: `prepaid`, `cod`.
 Ties that must hold: `pnl_monthly` is computed from orders, fees, ads, creator fees, payroll and opex; every
-`orders.sku` is in `products.csv`; every `returns.order_id` is in `orders.csv`; every BOM material exists.
+`orders.sku` is in `products.csv`; every `returns.order_id` is in `orders.csv`; every BOM material exists; `gst_monthly` ties to
+`orders.gst`; `settlements` settle every delivered rupee once; `compliance_calendar` amounts come from GST and payroll.

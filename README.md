@@ -251,6 +251,8 @@ Self-hosting and Docker: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Data and toolkit
 
+**Dataset.** Everything in `data/` is made-up but realistic: Kesar & Co., an Indian skincare D2C brand at about ₹4.4 Cr a year, selling through 18 channels: its Shopify website (Razorpay, COD via Shiprocket), Amazon, Flipkart, Myntra, Meesho, JioMart, AJIO, Nykaa, Purplle and Tata CLiQ, quick commerce on Blinkit, Zepto, Instamart, BB Now and Flipkart Minutes, Health & Glow and Apollo Pharmacy stores, and Amazon Global exports. Three months of order lines (Aug–Oct 2026) cover 55 cities across tiers 1–3 with pincodes, courier zones and 8 couriers, COD and RTO by tier, UPI/BNPL/COD payments, and GST on every line. Around them sit ads (Meta, Google, marketplace and quick-commerce ads), regional-language creators, WhatsApp campaigns, dark-store stock, ratings, support tickets, platform settlements with TCS/TDS, GST per GSTIN, payroll with PF/ESI/PT/TDS, MSME vendors and a compliance calendar. A seeded generator (`npm run data`) rebuilds it byte-for-byte, and `npm run data:check` runs 250 consistency checks, from the P&L down to every GST rupee. See [data/README.md](data/README.md) and [docs/d2c-primer.md](docs/d2c-primer.md).
+
 Agents run `node kit/bin/kit.mjs <command>`, which prints one JSON object. Guide:
 [`switch/TOOLKIT.md`](switch/TOOLKIT.md); 50 built-in D2C metrics: [`switch/METRICS.md`](switch/METRICS.md).
 
@@ -274,15 +276,15 @@ scored as number (within 1%), text, refusal, safety or style. Guide: [`evals/REA
 | Tier | Questions | Covers | Result (Haiku) |
 |---|---|---|---|
 | 1 | 84 | Facts and reply style, all 16 agents | **84/84** |
-| 2 | 65 | Joins, date windows, ranks, refusals, prompt injections | **65/65** |
-| 3 | 17 | Vague asks, two-part asks, quoted follow-ups, made-up names | **17/17** |
-| **All** | **166** | 1.0 tool calls per question, p50 6 s, p90 8 s, injection probes refused 4/4 | **166/166 for $0.21** |
+| 2 | 77 | Joins, date windows, ranks, refusals, prompt injections, GST, settlements, quick commerce | **77/77** |
+| 3 | 17 | Vague asks, two-part asks, quoted follow-ups, made-up names | **16/17** |
+| **All** | **178** | 1.0 tool calls per question, p50 6 s, p90 8 s, injection probes refused 4/4 | **177/178 for $0.22** |
 
 On the same rules Sonnet scored 148/149 (tiers 1–2) at about 15× the cost, so the team runs on Haiku.
 Latest report: [`evals/reports/latest.md`](evals/reports/latest.md); changelog: [`evals/reports/HISTORY.md`](evals/reports/HISTORY.md).
 
 <!-- EVAL:latest -->
-_Latest full offline run (7 Nov, 04:47 UTC, Haiku): **166/166** (tier 1 84/84, tier 2 65/65, tier 3 17/17) · p50 6 s, p90 8 s · 1.0 tool calls/question · $0.21. Report: [evals/reports/latest.md](evals/reports/latest.md)._
+_Latest full offline run (7 Nov, 08:17 UTC, Haiku, India-first dataset): **177/178** (tier 1 84/84, tier 2 77/77, tier 3 16/17) · p50 6 s, p90 8 s · 1.0 tool calls/question · $0.22. The one miss found no "Diwali Retargeting" campaign and said so, but led with the closest campaign's ROAS instead of a refusal. Report: [evals/reports/latest.md](evals/reports/latest.md)._
 
 In a live session, the festive-sale plan went from kickoff to "please approve" in about 5 minutes, and every
 number matched `switch/check_numbers.py` ([details](docs/live-demo-run.md)).

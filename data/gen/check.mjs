@@ -56,7 +56,8 @@ const creators = load('creators.csv'), posts = load('creator_posts.csv'), mats =
 const pos = load('purchase_orders.csv'), suppliers = load('suppliers.csv'), inv = load('inventory_snapshot.csv');
 const employees = load('employees.csv'), payroll = load('payroll_2026_10.csv'), opex = load('opex.csv'), pnl = load('pnl_monthly.csv');
 const FEE = Object.fromEntries(fees.map((f) => [f.channel, f]));
-const CHANNELS = ['Website', 'Amazon', 'Flipkart', 'Nykaa', 'Myntra', 'Blinkit', 'Zepto'];
+const CHANNELS = ['Website', 'Amazon', 'Flipkart', 'Nykaa', 'Myntra', 'Purplle', 'Meesho', 'Tata CLiQ', 'JioMart', 'AJIO',
+  'Blinkit', 'Zepto', 'Instamart', 'BB Now', 'Flipkart Minutes', 'Health & Glow', 'Apollo Pharmacy', 'Amazon Global'];
 
 // ---- 2. enums and referential ties ----
 ok(orders.every((o) => P[o.sku]), 'every orders.sku is in products.csv');
@@ -65,7 +66,8 @@ ok(orders.every((o) => ['delivered', 'rto', 'returned', 'cancelled'].includes(o.
 ok(orders.every((o) => ['prepaid', 'cod'].includes(o.payment)), 'orders.payment values');
 ok(orders.every((o) => o.date >= '2026-08-01' && o.date <= '2026-10-31'), 'orders inside history window');
 ok(orders.length >= 15000 && orders.length <= 25000, `orders.csv rows ${orders.length} in 15k-25k`);
-ok(CHANNELS.every((c) => FEE[c]), 'channel_fees has every channel');
+ok(CHANNELS.every((c) => FEE[c]) && fees.length === CHANNELS.length, 'channel_fees has every channel');
+ok(CHANNELS.every((c) => orders.some((o) => o.channel === c)), 'every channel has orders');
 const lineKey = new Map(orders.map((o) => [o.order_id + '|' + o.sku, o]));
 const orderIds = new Set(orders.map((o) => o.order_id));
 ok(returns.every((r) => orderIds.has(r.order_id)), 'every returns.order_id is in orders.csv');
@@ -168,12 +170,15 @@ for (const wh of Object.keys(WCOL)) for (const p of products) {
 let empBad = 0;
 for (const e of employees) {
   const fixed = round((+e.ctc_annual * (1 - +e.variable_pct / 100)) / 12);
-  if (+e.basic_monthly + +e.hra_monthly + +e.special_monthly + +e.pf_employer_monthly !== fixed) empBad++;
+  if (+e.basic_monthly + +e.hra_monthly + +e.special_monthly + +e.pf_employer_monthly + +e.esi_employer_monthly !== fixed) empBad++;
+  const g = +e.basic_monthly + +e.hra_monthly + +e.special_monthly;
+  if (+e.esi_employer_monthly !== (g <= 21000 ? Math.ceil(0.0325 * g) : 0)) empBad++;
   if (+e.pf_employer_monthly !== round(0.12 * Math.min(+e.basic_monthly, 15000))) empBad++;
   if (+e.basic_monthly < 0.4 * fixed || +e.basic_monthly > 0.5 * fixed) empBad++;
 }
-ok(empBad === 0, `employees: basic+HRA+special+employer PF = fixed CTC/12, PF 12% of min(basic,15000), basic 40-50% (${empBad} bad)`);
-ok(employees.length >= 23 && employees.length <= 27, `~25 employees (${employees.length})`);
+ok(empBad === 0, `employees: basic+HRA+special+employer PF+employer ESI = fixed CTC/12, PF 12% of min(basic,15000), ESI 3.25% if gross <= 21k, basic 40-50% (${empBad} bad)`);
+ok(employees.length >= 25 && employees.length <= 30, `~28 employees (${employees.length})`);
+ok(employees.some((e) => +e.esi_employer_monthly > 0), 'some employees are ESI-covered');
 function tax(t) {
   const sl = [[400000, 0], [800000, 0.05], [1200000, 0.1], [1600000, 0.15], [2000000, 0.2], [2400000, 0.25], [Infinity, 0.3]];
   let x = 0, lo = 0; for (const [hi, r] of sl) { if (t > lo) x += (Math.min(t, hi) - lo) * r; lo = hi; }
@@ -185,9 +190,11 @@ for (const p of payroll) {
   const e = E[p.emp_id], gross = +e.basic_monthly + +e.hra_monthly + +e.special_monthly;
   const pt = e.city === 'Mumbai' ? (e.gender === 'F' && gross <= 25000 ? 0 : gross <= 7500 ? 0 : gross <= 10000 ? 175 : 200) : e.city === 'Bangalore' ? (gross >= 25000 ? 200 : 0) : 0;
   const pf = round(0.12 * Math.min(+e.basic_monthly, 15000)), tds = round(tax(gross * 12 - 75000) / 12);
-  if (p.month !== '2026-10' || +p.gross !== gross || +p.pf_employee !== pf || +p.professional_tax !== pt || +p.tds !== tds || +p.net_pay !== gross - pf - pt - tds) payBad++;
+  const esiE = gross <= 21000 ? Math.ceil(0.0075 * gross) : 0, esiR = gross <= 21000 ? Math.ceil(0.0325 * gross) : 0;
+  if (p.month !== '2026-10' || +p.gross !== gross || +p.pf_employee !== pf || +p.professional_tax !== pt || +p.tds !== tds || +p.net_pay !== gross - pf - esiE - pt - tds) payBad++;
+  if (+p.esi_employee !== esiE || +p.esi_employer !== esiR || +p.employer_cost !== gross + pf + esiR) payBad++;
 }
-ok(payBad === 0, `payroll_2026_10 statutory math (${payBad} bad)`);
+ok(payBad === 0, `payroll_2026_10 statutory math: PF, ESI, PT, TDS, net pay, employer cost (${payBad} bad)`);
 ok(payroll.length === employees.filter((e) => e.join_date <= '2026-10-01').length, 'payroll covers everyone joined by 2026-10-01');
 
 // ---- 10. P&L recomputed from the files ----
@@ -201,7 +208,7 @@ for (const p of pnl) {
   const cf = sum(o, (x) => +x.channel_fee), ship = sum(o, (x) => +x.shipping_cost);
   const mk = sum(meta.filter((x) => x.date.startsWith(m)), (x) => +x.spend) + sum(google.filter((x) => x.date.startsWith(m)), (x) => +x.spend)
     + sum(mkt.filter((x) => x.date.startsWith(m)), (x) => +x.spend) + sum(posts.filter((x) => x.date.startsWith(m)), (x) => +x.fee_paid);
-  const sal = sum(employees.filter((e) => e.join_date <= m + '-01'), (e) => +e.basic_monthly + +e.hra_monthly + +e.special_monthly + +e.pf_employer_monthly);
+  const sal = sum(employees.filter((e) => e.join_date <= m + '-01'), (e) => +e.basic_monthly + +e.hra_monthly + +e.special_monthly + +e.pf_employer_monthly + +e.esi_employer_monthly);
   const ox = sum(opex.filter((x) => x.month === m), (x) => +x.amount);
   const want = { gross_revenue: gross, discounts: disc, returns: ret, net_revenue: net, cogs, channel_fees: cf, shipping: ship, marketing: mk, salaries: sal, opex: ox,
     ebitda: net - cogs - cf - ship - mk - sal - ox };
@@ -215,7 +222,88 @@ ok(pnl.map((p) => p.month).join() === '2026-08,2026-09,2026-10', 'pnl months');
 const pol = JSON.parse(fs.readFileSync(path.join(DATA, 'finance_policy.json'), 'utf8'));
 ok(['max_marketing_pct_of_net_revenue', 'min_monthly_ebitda', 'max_blended_cac', 'cash_floor'].every((k) => typeof pol[k] === 'number'), 'finance_policy has marketing cap, min EBITDA, max CAC, cash floor');
 
-// ---- 12. determinism and size ----
+// ---- 12. India layer: geography, GST, settlements, quick commerce, reviews, CX, WhatsApp, cohorts, vendors, compliance ----
+const cities = load('cities.csv'), CITY = Object.fromEntries(cities.map((c) => [c.city, c]));
+const dom = orders.filter((o) => o.channel !== 'Amazon Global');
+ok(dom.every((o) => CITY[o.city] && CITY[o.city].state === o.state && CITY[o.city].region === o.region), 'domestic orders: city in cities.csv with the same state and region');
+ok(orders.every((o) => o.channel !== 'Amazon Global' || (o.region === 'International' && o.zone !== 'A')), 'Amazon Global orders ship abroad');
+ok(customers.every((c) => !CITY[c.city] || +c.city_tier === +CITY[c.city].tier), 'customers.city_tier = cities.tier');
+ok(['1', '2', '3'].every((t) => cities.some((c) => c.tier === t)) && new Set(cities.map((c) => c.state)).size >= 20, 'cities span tier 1-3 and 20+ states');
+const WH_STATE = { Mumbai: 'Maharashtra', Delhi: 'Delhi', Bangalore: 'Karnataka' };
+let gstBad = 0;
+for (const o of orders) {
+  const exp = o.channel === 'Amazon Global';
+  if (+o.gst !== (o.status === 'delivered' && !exp ? round((+o.net_revenue * 18) / 118) : 0)) gstBad++;
+  const tt = o.status === 'cancelled' ? '' : exp ? 'Zero-rated export (LUT)' : o.state === WH_STATE[o.warehouse] ? 'CGST+SGST' : 'IGST';
+  if (o.tax_type !== tt) gstBad++;
+  if ((o.payment === 'cod') !== (o.payment_method === 'COD')) gstBad++;
+}
+ok(gstBad === 0, `orders.gst (18% inside delivered domestic net revenue), tax_type (intra vs inter state) and payment_method (${gstBad} bad)`);
+const gst = load('gst_monthly.csv');
+let gBad = 0;
+for (const g of gst) {
+  const ls = orders.filter((o) => o.date.startsWith(g.month) && WH_STATE[o.warehouse] === g.state && o.status === 'delivered' && o.channel !== 'Amazon Global');
+  if (+g.output_gst !== sum(ls, (o) => +o.gst) || +g.cgst + +g.sgst + +g.igst !== +g.output_gst || +g.igst !== sum(ls.filter((o) => o.tax_type === 'IGST'), (o) => +o.gst)) gBad++;
+  if (+g.taxable_value !== sum(ls, (o) => +o.net_revenue - +o.gst)) gBad++;
+  if (+g.itc_total !== +g.itc_on_fees + +g.itc_on_marketing + +g.itc_on_purchases + +g.itc_on_opex) gBad++;
+  const avail = +g.itc_opening + +g.itc_total, after = Math.max(0, +g.output_gst - avail);
+  if (+g.itc_closing !== Math.max(0, avail - +g.output_gst) || +g.cash_payable !== Math.max(0, after - +g.tcs_credit)) gBad++;
+  const prev = gst.filter((x) => x.state === g.state && x.month < g.month).at(-1);
+  if (+g.itc_opening !== (prev ? +prev.itc_closing : 0)) gBad++;
+  if (+g.tcs_credit !== round(0.005 * sum(ls.filter((o) => +FEE[o.channel].tcs_pct > 0), (o) => +o.net_revenue - +o.gst))) gBad++;
+}
+ok(gst.length === 9 && gBad === 0, `gst_monthly: output GST ties to orders, CGST+SGST+IGST, ITC roll-forward, TCS 0.5%, cash payable (${gBad} bad)`);
+const st = load('settlements.csv');
+let sBad = 0;
+for (const r of st) {
+  if (+r.net_payout !== +r.gross_sales - +r.fees - +r.shipping - +r.gst_on_fees - +r.tcs - +r.tds || +r.gst_on_fees !== round(0.18 * (+r.fees + +r.shipping))) sBad++;
+  if (r.status !== (r.settlement_date <= '2026-10-31' ? 'paid' : 'pending') || r.settlement_date < r.cycle_end) sBad++;
+}
+for (const c of CHANNELS) {
+  const d = sum(orders.filter((o) => o.channel === c && o.status === 'delivered'), (o) => +o.net_revenue);
+  if (sum(st.filter((r) => r.channel === c), (r) => +r.gross_sales) !== d) sBad++;
+  if (sum(st.filter((r) => r.channel === c), (r) => +r.fees) !== sum(orders.filter((o) => o.channel === c), (o) => +o.channel_fee)) sBad++;
+}
+ok(sBad === 0, `settlements: every channel's delivered revenue and fees settle once; net payout = gross - fees - shipping - GST on fees - TCS - TDS (${sBad} bad)`);
+const qci = load('qc_inventory.csv');
+const QCH = fees.filter((f) => f.channel_group === 'Quick commerce').map((f) => f.channel);
+let qBad = 0;
+const qSold = {};
+for (const o of orders) if (QCH.includes(o.channel) && o.status !== 'cancelled' && o.date > '2026-08-01') { const k = o.channel + '|' + o.city + '|' + o.sku; qSold[k] = (qSold[k] || 0) + +o.qty; }
+const qGot = {};
+for (const r of qci) {
+  const k = r.platform + '|' + r.city + '|' + r.sku; qGot[k] = (qGot[k] || 0) + +r.units_sold_week;
+  if (r.days_of_cover !== (+r.units_sold_week ? String(Math.round((10 * +r.on_hand) / (+r.units_sold_week / 7)) / 10) : '')) qBad++;
+  if (+r.in_stock_stores > +r.dark_stores) qBad++;
+}
+for (const [k, v] of Object.entries(qSold)) if (qGot[k] !== v) qBad++;
+ok(qBad === 0 && qci.length > 1000, `qc_inventory: weekly units sold tie to quick-commerce orders, cover = on_hand / daily sales (${qBad} bad)`);
+const rev = load('reviews.csv');
+ok(rev.every((r) => +r.ratings === +r.five_star + +r.four_star + +r.three_star + +r.two_star + +r.one_star
+  && Math.abs(+r.avg_rating - (5 * r.five_star + 4 * r.four_star + 3 * r.three_star + 2 * r.two_star + +r.one_star) / r.ratings) < 0.006), 'reviews: star counts add up to ratings, avg_rating recomputes');
+const tk = load('support_tickets.csv');
+const firstLine = new Map(); for (const o of orders) if (!firstLine.has(o.order_id)) firstLine.set(o.order_id, o);
+ok(tk.every((t) => !t.order_id || firstLine.get(t.order_id)?.channel === t.sales_channel) && tk.length > 500, `support_tickets: order ids exist, sales_channel matches (${tk.length} tickets)`);
+const wa = load('whatsapp_campaigns.csv');
+ok(wa.every((w) => +w.sent >= +w.delivered && +w.delivered >= +w.read && +w.read >= +w.clicked && +w.clicked >= +w.orders && +w.cost === round(+w.delivered * (w.category === 'marketing' ? 0.88 : 0.125))), 'whatsapp_campaigns: funnel narrows, cost = delivered x per-message rate');
+for (const [bsp, plan] of [['Interakt', 2499], ['WATI', 1999]]) for (const m of ['2026-08', '2026-09', '2026-10'])
+  ok(+opex.find((x) => x.month === m && x.vendor.startsWith(bsp)).amount === plan + sum(wa.filter((w) => w.bsp === bsp && w.date.startsWith(m)), (w) => +w.cost), `opex ${m} ${bsp} = plan + message charges`);
+const coh = load('cohort_retention.csv');
+const live = new Set(orders.filter((o) => o.status !== 'cancelled').map((o) => o.customer_id));
+ok(sum(coh, (c) => +c.customers) === live.size && sum(coh, (c) => +c.revenue) === sum(orders.filter((o) => o.status === 'delivered'), (o) => +o.net_revenue), 'cohort_retention: every customer with a live order once; revenue = delivered net revenue');
+const ven = load('vendors.csv'), VN = new Set(ven.map((v) => v.name));
+ok(opex.every((x) => VN.has(x.vendor)) && suppliers.every((s) => VN.has(s.name)), 'vendors.csv covers every opex vendor and supplier');
+ok(ven.every((v) => !['Micro', 'Small'].includes(v.msme_category) || +v.payment_terms_days <= 45), 'MSME (micro/small) vendors are on terms of 45 days or less (sec 43B(h))');
+const comp = load('compliance_calendar.csv');
+const due = (f, period, state = '') => comp.find((c) => c.filing.startsWith(f) && c.period === period && c.gstin_state === state);
+ok(gst.every((g) => +due('GSTR-3B', g.month, g.state)?.amount === +g.cash_payable), 'compliance: GSTR-3B amounts = gst_monthly cash_payable');
+ok(+due('TDS payment - salaries', '2026-10').amount === sum(payroll, (p) => +p.tds) && +due('PF ECR', '2026-10').amount === sum(payroll, (p) => +p.pf_employee + +p.pf_employer)
+  && +due('ESI', '2026-10').amount === sum(payroll, (p) => +p.esi_employee + +p.esi_employer), 'compliance: October TDS / PF / ESI = payroll');
+ok(comp.every((c) => (c.due_date <= '2026-10-31') === (c.status !== 'upcoming')), 'compliance: past dues filed, future upcoming');
+const fest = load('festive_calendar.csv');
+ok(fest.every((f) => f.start_date <= f.end_date && (f.status === 'past') === (f.end_date <= '2026-10-31')) && fest.some((f) => /Diwali/.test(f.event) && f.status === 'upcoming'), 'festive_calendar: dates valid, Diwali upcoming');
+
+// ---- 13. determinism and size ----
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'kesar-data-'));
 execFileSync(process.execPath, [path.join(HERE, 'generate.mjs'), tmp]);
 for (const f of v2) ok(fs.existsSync(path.join(tmp, f)) && fs.readFileSync(path.join(tmp, f)).equals(fs.readFileSync(path.join(DATA, f))), `${f} regenerates byte-for-byte`);
