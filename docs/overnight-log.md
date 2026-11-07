@@ -76,3 +76,22 @@ findings list. It feeds the blog.
 - Trimming instructions by 30% cut eval cost only ~7% and latency not at all: prompt caching already discounts repeated text, and the one kit call dominates wall time. (E3)
 - Compress lists, not rules: squeezing rule text broke three answers (a recomputed courier RTO, COD counted as delivered-only, a template sentence copied into a reply). (E3)
 - Haiku handles vague asks, two-part asks, quoted follow-ups and made-up names well; what it still slips on is format (exact rupees instead of lakhs, stray asterisks). (E3)
+
+## 7 Nov morning
+
+| Time (IST) | What happened |
+|---|---|
+| 09:34–09:45 | SW5 built the **Switch ROI + Trust** panel: `GET /api/roi` (`server/src/roi.ts`) joins Switch's usage counters with each agent's posts and pinned docs and prices tokens at list rates; budgets listed, creation behind `ROI_BUDGETS=on`; trust settings read only. Coin button in the HUD (`RoiPanel.tsx`), demo numbers on `/demo`. Review fixes: no 500 when `switch/` is missing in Docker, `allSettled` for usage + budgets. Doc: `docs/switch/14-roi-trust.md`. |
+| 09:51 | O7: office 44 × 22 → **88 × 44 m** (open north + east wings, boulevard, atriums, lounges, café, meeting rooms, Town Hall; no new desks; rasterised nav grid + heap A*), eye-level follow camera ported from agent-office (MIT, credited), camera glides to the speaker when you stand still, real Switch logo, hackathon page on the Town Hall screen (`X-Frame-Options: DENY`, so a screenshot; click / E opens it). |
+| 10:10 | SW5 merged into O7 after a trial merge (`trial/O7-SW5`): one conflict, both branches added an icon to the same one-line import in `Office.tsx`. |
+| 10:18 | O7 round 2: Finance, Creators and Growth moved into the wings (web-only `ZONE_MOVES`, contract ids unchanged), clickable landing floor plan, readable overview, hub tag above the Switch sign. |
+| morning | SW6 writing `docs/switch/15-docs-gap-audit.md` (docs.switchagents.ai vs what we use). BL2: README rewritten for judges (60-second demo, pillars table, evals, security), blog pack findings 58–68, diagrams 16 (ROI + Trust), 17 (floor plan), 18 (architecture). A new full offline eval run is in progress. |
+
+### Findings (morning)
+- Live, last 24 h: **96 team turns ≈ $9.08**, of which **$8.75** was early Opus runs and **$0.33** Haiku. The Captain took **40%** of turns; agents read ~**250 cache tokens per output token**. (SW5)
+- Switch counts tokens, not dollars; Haiku prompts over 100K tokens bill at 5×, so the estimate is a floor. (SW5)
+- **Switch Trust is hosted-only**: no policy id / key means a null client that allows everything; live `enabled: false`. Our guardrails (lockdown, SAFETY, Finance gate) are what runs. (SW5)
+- Switch budgets stop an agent once reached and can overshoot by a turn: kept off for demos. (SW5)
+- The hackathon site can't be framed (`X-Frame-Options: DENY`). (O7)
+- At eye level a follow camera needs its own wall list or it stares at door lintels; in a 4× floor the camera has to bring the story to you. (O7)
+- File ownership doesn't stop conflicts in shared HUD files; a trial merge on a throwaway branch caught it early. (orchestrator)
