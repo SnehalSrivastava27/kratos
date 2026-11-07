@@ -138,8 +138,8 @@ gives them shared context. The office watches what happens inside Switch and sen
 
 ![Architecture](docs/diagrams/18-architecture.png)
 
-- **Telegram → Switch.** One bot carries all 16 agents. Switch Console runs each agent as a Claude Code
-  session on Haiku, locked down.
+- **Telegram → Switch.** One bot carries all 16 agents. Switch Console runs each agent as a coding-agent
+  session (Claude Code on Haiku by default), locked down.
 - **Agents → data.** Agents run `node kit/bin/kit.mjs <command>` over `data/` and write files to `gallery/live-run/`.
 - **Switch → office.** `d2c-observer`, a silent Switch agent, reads every room over the agent protocol and posts
   to the office server (`server/`, SQLite), which pushes to the browser over `/ws`.
@@ -182,20 +182,21 @@ open the coin button for ROI and Trust, and click the Switch core to see routed 
 ## Quickstart
 
 The hosted demo is read-only and has no live agents. To run the team for real, set Kratos up on your own
-computer with **your own Switch Console, Claude Code and Telegram bot**. The agents run on your machine and
-use your Claude account; nothing depends on anyone else's Switch.
+computer with **your own Switch Console, coding agent and Telegram bot**. The agents run on your machine and
+use your own account with your agent provider; nothing depends on anyone else's Switch or anyone else's Claude.
 
 ### Requirements
 
 - **Node 24+** (the toolkit's read-only SQL guard needs `node:sqlite`'s authorizer) and **Python 3**
-- **[Claude Code](https://claude.com/claude-code)**, installed and logged in
+- **A coding agent Switch supports**, installed and logged in: [Claude Code](https://claude.com/claude-code)
+  (default), Codex or OpenCode
 - **[Switch Console](https://github.com/sandbox-quantum/switch)**, installed and signed in to your Switch account
 - **Your own Telegram bot** from [@BotFather](https://t.me/BotFather), with privacy mode off (`/setprivacy` → **Disable**)
 
 ### 1. Connect your Switch Console
 
 1. Open Switch Console and sign in.
-2. Turn on **Run a server on this computer**, and check that **Claude Code** is listed as an agent provider.
+2. Turn on **Run a server on this computer**, and check that your coding agent is listed as an agent provider.
 3. Keep Switch Console open while you use Kratos: the agents run only while it is running.
 
 `scripts/switch-up.sh` finds the local server's credentials on its own. If Switch Console is installed
@@ -208,6 +209,7 @@ git clone https://github.com/SnehalSrivastava27/kratos && cd kratos
 cp .env.example .env     # put your bot's token in .env as TELEGRAM_BOT_TOKEN
 npm install
 export BOT_USERNAME=your_bot_username    # without the @
+export TEAM_PROVIDER=claude              # or codex / opencode; optional TEAM_MODEL (default: Haiku on Claude)
 scripts/switch-up.sh     # DRY_RUN=1 scripts/switch-up.sh shows the plan first
 ```
 
