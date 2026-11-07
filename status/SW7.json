@@ -1,0 +1,7 @@
+{ "task": "SW7", "state": "done", "progress": 100,
+  "done": [
+    "Observer stops on taken_over (evicted frame code or beat 409 detail.code), logs FATAL and exits 3; other closes still reconnect. observer/src/taken-over.test.ts + npm test script.",
+    "Team addressing scoped (switch.ts teamPolicy / switch-up.sh team_policy): anyone in our team rooms, only agents + owner elsewhere (runtime Finance desk), platform denied as before. Applied on link/start (workspaces.ts), hires (activate) and switch-up.sh step 5; rooms only grow. server/test/sw7.test.mjs.",
+    "lockdown.json maxTurns 40 (live run peaked at 10/prompt), applied by createManagedAgent, switch-up.sh, switch-sync-agents.sh; !assign-agent @d2c-captain doc'd as optional; audit 15 statuses updated, Room Instructions recorded as deliberately not used."
+  ],
+  "next": "", "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:35:00+05:30" }

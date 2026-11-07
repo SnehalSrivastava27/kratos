@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { randomInt, randomUUID } from "node:crypto";
 import { sql, kvGet, kvSet, adoptLegacy, listEmployees, type OfficeEvent } from "./store.js";
 import { sha, AuthError, type User } from "./auth.js";
-import { roomChatId, joinAgents, joinRoom, gw, switchAgents, backoff, sleep, OFFICE_AGENT } from "./switch.js";
+import { roomChatId, joinAgents, joinRoom, gw, switchAgents, scopeAddressing, backoff, sleep, OFFICE_AGENT } from "./switch.js";
 import { log } from "./log.js";
 import { ensureRoles } from "./roles.js";
 
@@ -368,7 +368,10 @@ export async function upgradeAll() {
   for (const r of sql().prepare("SELECT * FROM workspaces WHERE status = 'ready'").all() as any[]) {
     const w = row2ws(r);
     if (needsUpgrade(w)) await setup(w.id, true);
-    else await rolesFor(w);
+    else {
+      await addressingFor(w);
+      await rolesFor(w);
+    }
   }
 }
 
@@ -378,11 +381,22 @@ async function joinTeam(w: Workspace, upgrade: boolean) {
   const missing = [...TEAM, "d2c-observer"].filter((n) => !joined.includes(n));
   if (missing.length) log.warn("some agents don't exist in Switch yet; joined on a later setup", { ws: w.id, missing });
   else kvSet(agentsKey(w.id), AGENTS_SIG);
+  await addressingFor(w);
   await rolesFor(w);
   w.status = "ready";
   w.detail = null;
   save(w);
   log.info(upgrade ? "workspace upgraded" : "workspace ready", { ws: w.id });
+}
+
+/** Team agents answer anyone in this room (switch.ts teamPolicy). Never blocks setup: a failure leaves the previous
+ *  policy in place, logged, and the next start or setup retries. */
+async function addressingFor(w: Workspace) {
+  try {
+    await scopeAddressing((await switchAgents()).filter((a) => TEAM.includes(a.name)).map((a) => a.id), [w.switchRoomId]);
+  } catch (e) {
+    log.warn("team addressing not scoped", { ws: w.id, error: String((e as Error)?.message ?? e) });
+  }
 }
 
 /** Switch room roles (roles.ts). Never blocks setup: a Switch without roles just means agents are addressed by name. */

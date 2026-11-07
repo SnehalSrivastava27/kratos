@@ -7,7 +7,8 @@
 #
 # The team and topics come from contracts/roster.json: every kind=agent person except the librarian, and every room.
 # What it does, as the Console's own admin (credentials read from Console's run dir, never printed):
-#   1. signs in to the local gateway        5. joins every team agent + d2c-observer to "Kratos D2C" if it exists
+#   1. signs in to the local gateway        5. joins every team agent + d2c-observer to "Kratos D2C" if it exists,
+#                                               and scopes the team's addressing to our rooms (team_policy)
 #   2. connects the Telegram bot             6. (v3) nothing: the office server creates the topics when a signed-in
 #   3. checks Claude Code is available          user links a group at /connect (docs/GO_LIVE.md)
 #   4. stores the team template, creates     7. starts the office server (:8787) and the observer
@@ -62,6 +63,15 @@ print(json.dumps({"name": aid, "description": p["role"], "display_name": p["name
 PY
 }
 
+# team_policy ROOMS_JSON → the team's addressing policy (same shape as server/src/switch.ts teamPolicy, docs
+# internals/identity-and-access#addressing-policy): anyone, people and agents, in our team rooms (the founder talks
+# from Telegram unclaimed: only users "*" admits him); elsewhere only agents and the owner (d2c-finance creates the
+# agents-only Finance desk at run time). Replaces the legacy open `policy: null`. Platform stays denied, as before.
+TEAM_POLICY_PY='lambda r: {"rules": [
+  {"rooms": r, "room_groups": "*", "users": "*", "agents": "*", "owner": True, "owner_agents": True, "platform": False},
+  {"rooms": "*", "room_groups": "*", "users": [], "agents": "*", "owner": True, "owner_agents": True, "platform": False}]}'
+team_policy() { python3 -c "import json,sys; print(json.dumps(($TEAM_POLICY_PY)(json.loads(sys.argv[1]))))" "$1"; }
+
 if [ "${DRY_RUN:-0}" = 1 ]; then
   echo "DRY RUN: no API calls, no .env read."
   say "roster: ${#TEAM[@]} team agents: ${TEAM[*]}"
@@ -69,11 +79,14 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   node "$ROOT/scripts/build-template.mjs" --check | sed 's/^/• /'
   say "would sign in to the local gateway, connect @$BOT_USERNAME, check Claude Code"
   say "would store template \"$TEMPLATE_NAME\" from switch/d2c-team.template.yaml"
-  say "each team agent missing on the server: POST /gateway/management/agents, then PUT /agents/<id>/addressing-policy {policy:null}"
+  say "each team agent missing on the server: POST /gateway/management/agents"
   for a in "${TEAM[@]}"; do
-    create_body "$a" | json 'print("•   %-17s display=%r, model %s, instructions %d chars, directory %s, tools %s, auto_mode %s" % (d["name"], d["display_name"], d["definition"]["model"], len(d["definition"]["instructions"]), d["definition"]["directory"], d["definition"]["advanced_config"].get("tools"), d["definition"]["auto_mode"]))'
+    create_body "$a" | json 'print("•   %-17s display=%r, model %s, instructions %d chars, directory %s, tools %s, maxTurns %s, auto_mode %s" % (d["name"], d["display_name"], d["definition"]["model"], len(d["definition"]["instructions"]), d["definition"]["directory"], d["definition"]["advanced_config"].get("tools"), d["definition"]["advanced_config"].get("maxTurns"), d["definition"]["auto_mode"]))'
   done
-  say "would join ${#TEAM[@]} agents + d2c-observer to \"$ROOM_NAME\", then start the office server (:8787) and the observer"
+  say "would join ${#TEAM[@]} agents + d2c-observer to \"$ROOM_NAME\""
+  say "would PUT /agents/<id>/addressing-policy on each team agent whose policy differs (rooms already named are kept):"
+  team_policy '["<'"$ROOM_NAME"' room id>"]' | sed 's/^/•   /'
+  say "then start the office server (:8787) and the observer"
   exit 0
 fi
 
@@ -144,8 +157,7 @@ else
     elif [ "$rc" != 0 ]; then todo "Building the create request for $a failed (exit $rc, see the error above): check contracts/roster.json and switch/agents/$a.md."; continue
     fi
     if NEW_ID=$(gw POST /management/agents "$(cat "$TMP/create")" | json 'print(d["agent_id"])'); then
-      gw PUT "/agents/$NEW_ID/addressing-policy" '{"policy":null}' >/dev/null || say "$a: addressing not set yet (rerun)"
-      say "created $a ($NEW_ID) on Console's controller"
+      say "created $a ($NEW_ID) on Console's controller (addressing is scoped once it is in the room, step 5)"
     else todo "Creating $a failed (POST /gateway/management/agents). Rerun, or create it from the template in Console."; fi
   done
   gw GET /agents > "$TMP/agents"
@@ -177,6 +189,21 @@ else
   gw GET "/rooms/$ROOM_ID" > "$TMP/room"
   CHAT_ID=$(json 'print(d["external_channel_id"])' < "$TMP/room")
   json 'print("• room", repr(d["name"]), "telegram chat", d["external_channel_id"], "members:", d["agent_count"], "agents")' < "$TMP/room"
+  # Team addressing scoped to our rooms: this one plus any the office server already added (rooms only grow).
+  gw GET /agents > "$TMP/agents"
+  N=0
+  while IFS=$'\t' read -r AID ROOMS; do
+    [ -n "$AID" ] || continue
+    if gw PUT "/agents/$AID/addressing-policy" "{\"policy\":$(team_policy "$ROOMS")}" >/dev/null; then N=$((N+1))
+    else todo "Setting the addressing policy of agent $AID failed. Rerun, or set Custom rules in Console (Who can talk to your agent)."; fi
+  done < <(json "want = $TEAM_POLICY_PY"'
+for a in d:
+    if a["name"] not in sys.argv[2:]: continue
+    cur = a.get("addressing_policy") or {}
+    had = ((cur.get("rules") or [{}])[0]).get("rooms")
+    rooms = sorted(set((had if isinstance(had, list) else []) + [sys.argv[1]]))
+    if cur != want(rooms): print(a["id"], json.dumps(rooms), sep="\t")' "$ROOM_ID" "${TEAM[@]}" < "$TMP/agents")
+  say "team addressing: scoped to our rooms ($N updated, the rest already were)"
 fi
 
 # ---- 6. workspaces (v3) -------------------------------------------------------------------------

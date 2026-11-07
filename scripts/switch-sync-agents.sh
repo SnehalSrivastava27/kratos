@@ -35,7 +35,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
     [ -f "$ROOT/switch/agents/$a.md" ] && say "$a: would PATCH /gateway/management/agents/<id> from switch/agents/$a.md ($(wc -c < "$ROOT/switch/agents/$a.md" | tr -d ' ') bytes)" \
       || say "$a: switch/agents/$a.md MISSING"
   done
-  say "each also gets switch/lockdown.json: $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("tools", d["advanced_config"]["tools"], "auto_mode", d["auto_mode"])' "$ROOT/switch/lockdown.json")"
+  say "each also gets switch/lockdown.json: $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("advanced_config", json.dumps(d["advanced_config"]), "auto_mode", d["auto_mode"])' "$ROOT/switch/lockdown.json")"
   say "would PATCH the stored \"$TEMPLATE_NAME\" template"
   exit 0
 fi
@@ -108,6 +108,6 @@ for a in d:
     st = a.get("status") or {}
     applied = st.get("applied_revision") == a["revision"]
     ok &= has and applied
-    print("•   %-16s current=%s  model %s, tools %s, auto_mode %s, revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", df.get("model"), df.get("advanced_config", {}).get("tools"), df.get("auto_mode"), a["revision"], st.get("applied_revision"), st.get("process")))
+    print("•   %-16s current=%s  model %s, tools %s, maxTurns %s, auto_mode %s, revision %s, running %s (%s)" % (a["name"], "yes" if has else "NO", df.get("model"), df.get("advanced_config", {}).get("tools"), df.get("advanced_config", {}).get("maxTurns"), df.get("auto_mode"), a["revision"], st.get("applied_revision"), st.get("process")))
 sys.exit(0 if ok else 1)' "$ROOT" "${TEAM[@]}" < "$TMP/managed" || FAIL=1
 [ "$FAIL" = 0 ] && echo "All team agents have the current rules." || { echo "Some agents are not in sync (see above)."; exit 1; }
