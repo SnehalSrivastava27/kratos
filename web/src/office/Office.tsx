@@ -5,6 +5,8 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Library, OfficeEvent, RoomId, ShelfId, Workspace, Zone } from '../shared/types';
 import saleDemo from '../../../demo/feeds/sale-demo.json';
 import { SWITCH_FIXTURE } from './switchFixture';
+import { DEMO_ACCOUNT_FEED } from './demoAccount';
+import { READ_ONLY } from '@/auth/demo';
 import { DEMO_GROUP, INTERNAL_ROOMS, isPrivate, roster, addPerson, caption, peopleSession, resetPeople, setGroup, type HiredPerson, ctx, deskById, firstLine, galleryUrl, personById, roomZone, zoneById } from './data';
 import * as api from './api';
 import { CommandBar } from './CommandBar';
@@ -68,25 +70,27 @@ export interface OfficeProps {
   framing?: 'wide' | 'hero';
   /** The world is built and has drawn its first frame (the landing crossfades from its poster). */
   onReady?: () => void;
+  /** The public demo account: the demo office already full (demoAccount.ts), no server; every write says it's read-only. */
+  readOnly?: boolean;
 }
 
-export default function Office({ mode, feed, workspace, onUnauthorized, demo, framing, onReady }: OfficeProps) {
+export default function Office({ mode, feed, workspace, onUnauthorized, demo, framing, onReady, readOnly }: OfficeProps) {
   // Dev only: /office?poster renders the hero shot at a fixed story moment, no bubbles, for capturing a poster PNG.
   const poster = import.meta.env.DEV && urlHas('poster');
   if (poster) mode = 'autoplay';
-  const isDemo = mode === 'autoplay' || !!demo || (!workspace && urlHas('demo'));
+  const isDemo = mode === 'autoplay' || !!demo || !!readOnly || (!workspace && urlHas('demo'));
   // Dev only: /demo?demo&fixture=switch loops the Switch extras (roles, morning brief, catch-up, a private note).
   const fixture = import.meta.env.DEV && isDemo && !feed && new URLSearchParams(location.search).get('fixture') === 'switch';
   const [run, setRun] = useState(0); // demo: Replay restarts the story (a fresh array restarts the feed hook)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const demoFeed = useMemo(() => [...(feed ?? (fixture ? SWITCH_FIXTURE : (saleDemo as OfficeEvent[])))], [run, feed, fixture]);
+  const demoFeed = useMemo(() => [...(feed ?? (readOnly ? DEMO_ACCOUNT_FEED : fixture ? SWITCH_FIXTURE : (saleDemo as OfficeEvent[])))], [run, feed, fixture, readOnly]);
   const unauth = useRef(onUnauthorized);
   unauth.current = onUnauthorized;
   const onUnauth = useCallback(() => unauth.current?.(), []);
   api.configureApi(!isDemo, workspace?.id, onUnauth);
   setGroup(isDemo ? DEMO_GROUP : workspace?.name ?? 'Your Telegram group');
   // /demo is playable: the viewer starts the story and makes the approval call (the landing hero keeps its loop).
-  const playable = isDemo && mode === 'live' && !poster && !fixture;
+  const playable = isDemo && mode === 'live' && !readOnly && !poster && !fixture;
   const director = useDemoDirector(demoFeed, playable);
   const streamed = useEventFeed(isDemo, isDemo ? (playable ? NO_FEED : demoFeed) : undefined, { ws: workspace?.id, onUnauthorized: onUnauth });
   const posterEvents = useMemo(() => (poster ? demoFeed.slice(0, POSTER_AT) : null), [poster, demoFeed]);
@@ -237,7 +241,13 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     const z = engine.current?.playerZone();
     return ROOMS.find((r) => r.zone === z)?.id ?? room;
   };
+  /** The demo account: say so, and refuse (the caller shows its own short error). */
+  const denied = (): never => {
+    toast(READ_ONLY, { id: 'read-only' });
+    throw new Error('the demo account is read-only');
+  };
   const sendCommand = async (to: RoomId, text: string) => {
+    if (readOnly) denied();
     // /demo: the director owns the story. Input it can't use right now is swallowed, never echoed as a stray message
     // (a stray "Approved ✅" would re-open the gate and stall the hub's pulses).
     if (playable) {
@@ -249,6 +259,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     return r;
   };
   const doHire = async (body: api.HireBody) => {
+    if (readOnly) denied();
     const r = await api.hire(body, hireAt?.desk);
     const e = 'action' in r.data ? r.data.employee : r.data;
     joinPeople([{ id: e.id, name: e.name, emoji: e.emoji, kind: 'agent', zone: deskById[e.desk]?.zone ?? roomZone[e.room], color: e.color, desk: e.desk, room: e.room, role: e.role, reports_to: body.reports_to }], true);
@@ -257,6 +268,7 @@ export default function Office({ mode, feed, workspace, onUnauthorized, demo, fr
     return r;
   };
   const recategorize = async () => {
+    if (readOnly) denied();
     const r = await api.categorize();
     if (r.mock) {
       // Act it out: the Librarian walks the shelves, then reports back.

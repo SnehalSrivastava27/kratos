@@ -37,6 +37,11 @@ export function GuestOnly() {
   return user ? <Navigate to={from ?? '/app'} replace /> : <Outlet />;
 }
 
+/** /connect links a real Telegram group: the read-only demo account goes back to its office. */
+export function RealOnly() {
+  return useAuth().demo ? <Navigate to="/app" replace /> : <Outlet />;
+}
+
 /** Needs a session; otherwise /login, coming back here afterwards. */
 export function RequireAuth() {
   const { loading, user } = useAuth();

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { BrowserRouter, Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
-import { AuthRoot, GuestOnly, RequireAuth } from './auth/guards';
+import { AuthRoot, GuestOnly, RealOnly, RequireAuth } from './auth/guards';
 
 // Routes are split so the landing page doesn't ship three.js unless it asks for it.
 // Public: / (landing) and /demo (scripted office). Everything real sits behind a session (contracts/api.md v3).
@@ -27,13 +27,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<Landing />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/office" element={<OfficeRedirect />} />
+          <Route path="/signin" element={<Navigate to="/login" replace />} />
           <Route element={<AuthRoot />}>
             <Route element={<GuestOnly />}>
               <Route path="/login" element={<AuthPage mode="login" />} />
               <Route path="/signup" element={<AuthPage mode="signup" />} />
             </Route>
             <Route element={<RequireAuth />}>
-              <Route path="/connect" element={<Connect />} />
+              <Route element={<RealOnly />}><Route path="/connect" element={<Connect />} /></Route>
               <Route path="/app" element={<AppShell />} />
               <Route path="/app/:ws" element={<AppShell />} />
             </Route>
