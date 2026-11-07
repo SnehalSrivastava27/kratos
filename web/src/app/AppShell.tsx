@@ -9,15 +9,17 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/brand/Logo';
+import { toast } from 'sonner';
+import { READ_ONLY } from '@/auth/demo';
 
 // P1 is adding `workspace` + `onUnauthorized` to <Office>. Until that lands the props are ignored;
 // this local type lets us pass them now without touching web/src/office/**.
-type LiveOfficeProps = { mode: 'live'; workspace: Workspace; onUnauthorized: () => void };
+type LiveOfficeProps = { mode: 'live'; workspace?: Workspace; onUnauthorized?: () => void; readOnly?: boolean };
 const Office = lazy(() => import('@/office/Office')) as unknown as LazyExoticComponent<ComponentType<LiveOfficeProps>>;
 
 /** /app and /app/:ws: the live office, full screen, for one of the user's ready workspaces. */
 export default function AppShell() {
-  const { user, workspaces, expire } = useAuth();
+  const { user, workspaces, expire, demo } = useAuth();
   const { ws: wsId } = useParams();
   const nav = useNavigate();
   const ready = workspaces.filter((w) => w.status === 'ready');
@@ -28,9 +30,11 @@ export default function AppShell() {
   return (
     <div className="fixed inset-0 overflow-hidden bg-[#F1F1F4]">
       <Suspense fallback={<FullSkeleton />}>
-        <Office key={ws.id} mode="live" workspace={ws} onUnauthorized={() => { expire(); nav('/login', { replace: true, state: { from: `/app/${ws.id}` } }); }} />
+        {demo ? <Office key={ws.id} mode="live" readOnly /> : (
+          <Office key={ws.id} mode="live" workspace={ws} onUnauthorized={() => { expire(); nav('/login', { replace: true, state: { from: `/app/${ws.id}` } }); }} />
+        )}
       </Suspense>
-      {user && <AccountMenu name={user.name} email={user.email} current={ws} all={ready} />}
+      {user && <AccountMenu name={user.name} email={user.email} current={ws} all={ready} demo={demo} />}
     </div>
   );
 }
@@ -41,11 +45,11 @@ const initials = (s: string) => s.split(/\s+/).filter(Boolean).slice(0, 2).map((
  * Small floating account button. Bottom-left: the office HUD owns the top bar (brand left, controls right)
  * and the chat panel docks right; bottom-left stays free unless the topics drawer is open.
  */
-function AccountMenu({ name, email, current, all }: { name: string; email: string; current: Workspace; all: Workspace[] }) {
+function AccountMenu({ name, email, current, all, demo }: { name: string; email: string; current: Workspace; all: Workspace[]; demo: boolean }) {
   const nav = useNavigate();
   const { logout } = useAuth();
   return (
-    <div className="pointer-events-none fixed bottom-3 left-3 z-[60] md:bottom-4 md:left-4">
+    <div className="pointer-events-none fixed bottom-3 left-3 z-[60] flex items-center gap-2 md:bottom-4 md:left-4">
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label={`Account: ${name}`}
@@ -59,6 +63,7 @@ function AccountMenu({ name, email, current, all }: { name: string; email: strin
             <DropdownMenuLabel className="px-2 py-1.5">
               <span className="block truncate text-[13.5px] font-medium text-foreground">{name}</span>
               <span className="block truncate text-[12px] font-normal text-neutral-500">{email}</span>
+              {demo && <span className="mt-1 block text-[12px] font-normal text-neutral-500">Demo account · read-only</span>}
             </DropdownMenuLabel>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
@@ -71,7 +76,7 @@ function AccountMenu({ name, email, current, all }: { name: string; email: strin
                 <Check className={cn('size-4', w.id === current.id ? 'opacity-100' : 'opacity-0')} />
               </DropdownMenuItem>
             ))}
-            <DropdownMenuItem onClick={() => nav('/connect')} className="gap-2.5 rounded-lg px-2 py-1.5 text-[13.5px]">
+            <DropdownMenuItem onClick={() => (demo ? toast(READ_ONLY, { id: 'read-only' }) : nav('/connect'))} className="gap-2.5 rounded-lg px-2 py-1.5 text-[13.5px]">
               <span className="grid size-6 place-items-center rounded-md border border-dashed border-black/20"><Plus className="size-3.5" /></span>
               Connect another group
             </DropdownMenuItem>
@@ -82,6 +87,11 @@ function AccountMenu({ name, email, current, all }: { name: string; email: strin
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      {demo && (
+        <span className="pointer-events-auto rounded-full bg-saffron px-2.5 py-1 text-[12px] font-semibold text-neutral-900 shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] ring-2 ring-white/90" title={READ_ONLY}>
+          Demo account
+        </span>
+      )}
     </div>
   );
 }

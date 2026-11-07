@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AlertCircle, ArrowRight, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { AlertCircle, ArrowRight, Eye, EyeOff, Info, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,7 @@ import { Logo, TwoTone } from '@/landing/ui';
 import { cn } from '@/lib/utils';
 import { ApiError } from './api';
 import { useAuth } from './AuthProvider';
+import { DEMO_EMAIL, DEMO_PASSWORD, HOSTED_NOTE, HostedDemoError, STATIC } from './demo';
 import Showcase from './Showcase';
 
 type Mode = 'login' | 'signup';
@@ -25,6 +26,7 @@ function validate(mode: Mode, v: { name: string; email: string; password: string
 }
 
 function serverMessage(mode: Mode, err: unknown) {
+  if (err instanceof HostedDemoError) return HOSTED_NOTE;
   const s = err instanceof ApiError ? err.status : 0;
   if (s === 401 || (mode === 'login' && s === 400)) return 'Email or password is wrong.';
   if (s === 409) return 'An account with this email already exists.';
@@ -47,6 +49,14 @@ export default function AuthPage({ mode }: { mode: Mode }) {
   const shown = (k: keyof typeof errors) => (tried || touched[k] ? errors[k] : undefined);
   const signup = mode === 'signup';
 
+  /** "Sign in as demo": straight in with the public credentials (checked in the browser, never sent). */
+  async function demoLogin() {
+    setV((s) => ({ ...s, email: DEMO_EMAIL, password: DEMO_PASSWORD }));
+    setBusy(true);
+    await auth.login(DEMO_EMAIL, DEMO_PASSWORD);
+    nav('/app', { replace: true });
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     setTried(true);
@@ -65,6 +75,20 @@ export default function AuthPage({ mode }: { mode: Mode }) {
       setBusy(false);
     }
   }
+
+  const demoCard = (
+    <div className={cn('rounded-2xl border border-saffron/30 bg-saffron/[0.06] p-4', STATIC ? 'mt-7' : 'mt-6')}>
+      <div className="flex items-center gap-2 text-[14px] font-medium text-foreground"><Sparkles className="size-4 text-saffron" />Try the demo account</div>
+      <dl className="mt-2.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[13.5px]">
+        <dt className="text-neutral-500">Email</dt><dd className="font-mono text-[13px] text-foreground select-all">{DEMO_EMAIL}</dd>
+        <dt className="text-neutral-500">Password</dt><dd className="font-mono text-[13px] text-foreground select-all">{DEMO_PASSWORD}</dd>
+      </dl>
+      <p className="mt-2 text-[13px] leading-relaxed text-neutral-500">{STATIC ? 'This hosted copy is a demo: the account opens a read-only office with a festive-sale team at work. Self-host Kratos to use your own team.' : 'A read-only office with a festive-sale team at work. No Telegram needed.'}</p>
+      <Button type="button" variant="outline" disabled={busy} onClick={() => void demoLogin()} className="mt-3 h-10 w-full rounded-full bg-white text-[14px]">
+        Sign in as demo <ArrowRight data-icon="inline-end" />
+      </Button>
+    </div>
+  );
 
   const field = (k: 'name' | 'email' | 'password', label: string, input: React.ComponentProps<'input'>, extra?: React.ReactNode) => (
     <div className="grid gap-2">
@@ -111,6 +135,14 @@ export default function AuthPage({ mode }: { mode: Mode }) {
             {signup ? 'Create an account, then link your Telegram group. Six AI teammates move in.' : 'Sign in to open your live office and your team’s Telegram topics.'}
           </p>
 
+          {STATIC && !signup && demoCard}
+          {STATIC && signup && (
+            <div role="note" className="mt-6 flex items-start gap-2.5 rounded-xl border border-black/[0.08] bg-white px-3.5 py-3 text-[14px] leading-relaxed text-neutral-600">
+              <Info className="mt-0.5 size-4 shrink-0 text-saffron" />
+              <span>{HOSTED_NOTE} <Link to="/login" className="font-medium text-foreground underline underline-offset-2">Use the demo account</Link></span>
+            </div>
+          )}
+
           <form noValidate onSubmit={submit} className="mt-9 grid gap-5" aria-describedby={err ? 'form-err' : undefined}>
             {signup && field('name', 'Your name', { autoComplete: 'name', placeholder: 'Asha Rao', autoFocus: true })}
             {field('email', 'Work email', { type: 'email', autoComplete: 'email', inputMode: 'email', placeholder: 'you@brand.com', autoFocus: !signup, spellCheck: false })}
@@ -141,6 +173,8 @@ export default function AuthPage({ mode }: { mode: Mode }) {
               {busy ? <><Loader2 className="animate-spin" />{signup ? 'Creating your account…' : 'Signing in…'}</> : <>{signup ? 'Create account' : 'Sign in'} <ArrowRight data-icon="inline-end" /></>}
             </Button>
           </form>
+
+          {!signup && !STATIC && demoCard}
 
           <p className="mt-8 text-[13px] leading-relaxed text-neutral-400">
             {signup ? <>Next, you’ll add <span className="text-neutral-600">@kratosd2c_bot</span> to a Telegram group. Nothing is posted until you send a code.</>

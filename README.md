@@ -150,6 +150,22 @@ Every Switch feature Kratos uses, with sources and diagrams: [docs/switch/](docs
 
 ## Try the demo
 
+### Demo account
+
+Sign in at `/login` with the demo account to look around a full office (or press **Sign in as demo**):
+
+| | |
+|---|---|
+| **Email** | `demo@kratos.app` |
+| **Password** | `kratos-demo` |
+
+All 16 agents are at their desks, every Telegram topic has a day of chat, and sale day one keeps playing. Open the
+topics, chat, Data Wall numbers, Switch ROI, the Switch panel, the skills library, agent cards and the hire form. The
+demo account is read-only: sending, approving and hiring need Kratos running with your own Telegram group.
+It works on a hosted copy with no server behind it ([docs/HOSTING.md](docs/HOSTING.md)) and on a local install.
+
+### Product tour
+
 The product tour replays a recorded festive-sale planning session. No Switch or Telegram needed.
 
 ```bash

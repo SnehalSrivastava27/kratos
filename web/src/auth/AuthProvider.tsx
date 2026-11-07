@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { User, Workspace } from '@/shared/types';
 import { api } from './api';
+import { DEMO_USER, DEMO_WS, HostedDemoError, STATIC, demoSession, isDemoLogin } from './demo';
 
 type Auth = {
   loading: boolean;
@@ -12,6 +13,8 @@ type Auth = {
   logout(): Promise<void>;
   /** The server said 401 somewhere else (e.g. the office): forget the session locally. */
   expire(): void;
+  /** Signed in as the public, read-only demo account (no server involved). */
+  demo: boolean;
 };
 
 const Ctx = createContext<Auth | null>(null);
@@ -22,6 +25,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   const refresh = useCallback(async () => {
+    // The demo account and the static build never ask the server.
+    if (demoSession.get() || STATIC) {
+      const demo = demoSession.get();
+      setUser(demo ? DEMO_USER : null);
+      setWorkspaces(demo ? [DEMO_WS] : []);
+      setLoading(false);
+      return;
+    }
     try {
       const me = await api.me();
       setUser(me?.user ?? null);
@@ -39,14 +50,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<Auth>(() => ({
     loading, user, workspaces, refresh,
-    login: async (email, password) => { await api.login({ email, password }); await refresh(); },
-    signup: async (name, email, password) => { await api.signup({ name, email, password }); await refresh(); },
+    login: async (email, password) => {
+      if (isDemoLogin(email, password)) demoSession.set(true); // checked here, never sent
+      else if (STATIC) throw new HostedDemoError();
+      else await api.login({ email, password });
+      await refresh();
+    },
+    signup: async (name, email, password) => {
+      if (STATIC) throw new HostedDemoError();
+      await api.signup({ name, email, password });
+      await refresh();
+    },
     logout: async () => {
-      await api.logout().catch(() => {});
+      if (demoSession.get()) demoSession.set(false);
+      else await api.logout().catch(() => {});
       setUser(null);
       setWorkspaces([]);
     },
     expire,
+    demo: user?.id === DEMO_USER.id,
   }), [loading, user, workspaces, refresh, expire]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

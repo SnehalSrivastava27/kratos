@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:static": "VITE_STATIC=1 npm run build && mkdir -p dist/gallery && cp ../gallery/*.html dist/gallery/",
     "preview": "vite preview"
   },
   "dependencies": {
