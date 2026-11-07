@@ -16,7 +16,7 @@ import { SwitchError, switchHealth } from "./switch.js";
 import { handleLibrary } from "./library/index.js";
 import { handleQa } from "./qa.js";
 import { kpis } from "./kpis.js";
-import { roi, createBudget } from "./roi.js";
+import { roi, createBudget, updateBudget, deleteBudget, setCap, clearCap } from "./roi.js";
 
 const ROOT = resolve(fileURLToPath(import.meta.url), "../../..");
 const env = process.env;
@@ -133,7 +133,7 @@ const localHops = (req: IncomingMessage) =>
 const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHops(req) && localHost(req);
 /** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
 const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
-const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|roi\/budgets|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
+const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|roi\/(budgets(\/[\w-]+)?|caps)|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
 /** Every state-changing office/admin/auth route: JSON only (a cross-site "simple" POST can't send it without a preflight
  *  we never answer), a foreign Origin is refused, and without the token the Host must be local or configured. */
 function checkWrite(req: IncomingMessage) {
@@ -245,8 +245,8 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
   const route = `${method} ${url.pathname}`;
 
   // Valid tokens skip the limit: an observer burst must not drop events. Bad/missing tokens are limited (brute force).
-  if ((method === "POST" || method === "DELETE") && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(ipKey(clientIp(req)));
-  if ((method === "POST" || method === "DELETE") && WRITE_ROUTE.test(url.pathname)) checkWrite(req);
+  if ((method === "POST" || method === "PUT" || method === "DELETE") && !hasToken(req, OBSERVER_TOKEN) && !hasToken(req, ADMIN_TOKEN)) rateLimit(ipKey(clientIp(req)));
+  if ((method === "POST" || method === "PUT" || method === "DELETE") && WRITE_ROUTE.test(url.pathname)) checkWrite(req);
 
   if (route === "GET /api/health")
     return send(res, 200, { ok: true, version: VERSION, uptime: process.uptime(), clients: wss.clients.size, history: eventCount(), db: dbStatus() });
@@ -360,12 +360,25 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     if (route === "GET /api/documents") return send(res, 200, documents(ws.id)); // SW2: room documents pinned in Switch
     // SW5: Switch ROI + Trust. Usage is tenant-wide, so live numbers only for the host owner (or ADMIN_TOKEN).
     const owner = hasToken(req, ADMIN_TOKEN) || (!!user && isHostOwner(user));
+    const budgetsOn = env.ROI_BUDGETS === "on";
     if (route === "GET /api/roi")
-      return send(res, 200, await roi({ root: ROOT, hours: Math.min(720, Math.max(1, Math.floor(Number(url.searchParams.get("hours") ?? 24)) || 24)), events: recent(ws.id, RING_MAX), docs: documents(ws.id), allowed: owner }));
-    if (route === "POST /api/roi/budgets") {
-      if (env.ROI_BUDGETS !== "on") return send(res, 404, { error: "not found" }); // off by default: a reached cap stops an agent mid-demo
+      return send(res, 200, await roi({ root: ROOT, agentDir: env.AGENT_DIR || ROOT, hours: Math.min(720, Math.max(1, Math.floor(Number(url.searchParams.get("hours") ?? 24)) || 24)), events: recent(ws.id, RING_MAX), docs: documents(ws.id), allowed: owner, budgetsOn }));
+    // Advisory monthly caps (kv), host owner only; `enforce` mirrors one to a Rooms budget (needs ROI_BUDGETS=on).
+    if (route === "POST /api/roi/caps" || route === "DELETE /api/roi/caps") {
       if (!owner) throw new HttpError(403, "only the host owner");
-      return send(res, 201, await createBudget(await readJson(req)));
+      const body = await readJson(req);
+      return send(res, 200, method === "POST" ? await setCap(body, budgetsOn, ROOT) : await clearCap(body, budgetsOn));
+    }
+    // Rooms budgets: enforced at delivery, so off by default (a reached cap stops an agent mid-demo).
+    const budgetRoute = url.pathname.match(/^\/api\/roi\/budgets(?:\/([\w-]+))?$/);
+    if (budgetRoute && method !== "GET") {
+      if (!budgetsOn) return send(res, 404, { error: "not found" });
+      if (!owner) throw new HttpError(403, "only the host owner");
+      const id = budgetRoute[1];
+      if (method === "POST" && !id) return send(res, 201, await createBudget(await readJson(req), ROOT));
+      if (method === "PUT" && id) return send(res, 200, await updateBudget(id, await readJson(req)));
+      if (method === "DELETE" && id) return send(res, 200, await deleteBudget(id));
+      return send(res, 405, { error: "method not allowed" });
     }
     if (route === "GET /api/agents") return send(res, 200, agents(liveRoster(ws), recent(ws.id, RING_MAX)));
     if (await handleOffice(req, url, { root: ROOT, roster, ws, readJson: () => readJson(req), send: (st, b) => send(res, st, b), emit: emitTo(ws.id) })) return;

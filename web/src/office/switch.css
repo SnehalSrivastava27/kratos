@@ -81,3 +81,25 @@
   .sw-chip .sw-mark { width: 26px; height: 26px } .sw-chip-text b { font-size: 13px } .sw-chip-n { font-size: 11px }
 }
 .sw-hops + .sw-h { margin-top: 16px }
+
+/* Switch ROI panel (RoiPanel): tabs, a 4-up stat row, compact inline forms. */
+.roi-tabs { display: flex; gap: 4px; padding: 8px 12px 0; border-bottom: 2px solid #e8dccb; background: var(--paper); overflow-x: auto; scrollbar-width: none; flex: none }
+.roi-tabs::-webkit-scrollbar { display: none }
+.roi-tab { flex: none; font: 800 13.5px var(--font); color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 6px 8px 7px; margin-bottom: -2px; cursor: pointer; white-space: nowrap }
+.roi-tab:hover { color: var(--ink) } .roi-tab.on { color: var(--ink); border-bottom-color: #F4A300 }
+.roi-tab:focus-visible { outline: 3px solid var(--info); outline-offset: -3px; border-radius: 8px }
+.roi-tabs + .ao-body { min-height: min(600px, calc(100svh - 160px)) } /* the window keeps its size between tabs */
+.sw-stats.roi-stats { grid-template-columns: repeat(4, 1fr) }
+.roi-stats b { font-size: 21px }
+.roi-form { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.roi-form .ao-input { width: auto; flex: 1 1 110px; min-width: 0; padding: 6px 9px; font-size: 14px; border-width: 2.5px; border-radius: 10px }
+.roi-form .ao-btn { height: 36px; flex: none }
+.roi-check { display: flex; align-items: center; gap: 6px; flex-basis: 100%; font-size: 12.5px; font-weight: 800 }
+.roi-icon { display: grid; place-items: center; width: 30px; height: 30px; flex: none; border: 2px solid #e8dccb; border-radius: 9px; background: #fff; color: var(--muted); cursor: pointer }
+.roi-icon:hover { color: #C8303A; border-color: #f2b8b8 } .roi-icon:disabled { opacity: .5; cursor: default }
+.sw-hops + .roi-form, .sw-empty + .roi-form { margin-top: 4px }
+@media (max-width: 560px) {
+  .sw-stats.roi-stats { grid-template-columns: repeat(2, 1fr) }
+  .roi-stats b { font-size: 19px }
+  .roi-tabs { padding: 6px 8px 0 }
+}

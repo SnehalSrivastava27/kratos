@@ -1,0 +1,12 @@
+{
+  "_about": "Model prices for Switch ROI (GET /api/roi), USD per million tokens, like Switch Trust's Model pricing page. Merged over the list prices in server/src/roi-calc.ts: change a row to set a negotiated rate, add a row to price a new model. A model with no row is flagged 'unpriced' (its tokens count, its dollars don't). Edits apply on the next request.",
+  "_source": "Anthropic list prices, claude-api skill (cached 2026-10-06). cache_write is the 5-minute rate (1.25x input).",
+  "models": {
+    "claude-haiku-5-5": {
+      "input": 0.1, "output": 0.5, "cache_read": 0.01, "cache_write": 0.125,
+      "_note": "Prompts up to 100K tokens. Over 100K the card is 5x: $0.50 in, $2.50 out, $0.05 cache read, $0.625 cache write. Switch's counters don't say which prompts crossed 100K, so a long-chat estimate is a floor."
+    },
+    "claude-sonnet-5-5": { "input": 2, "output": 10, "cache_read": 0.2, "cache_write": 2.5 },
+    "claude-opus-5-5": { "input": 4, "output": 20, "cache_read": 0.2, "cache_write": 5 }
+  }
+}

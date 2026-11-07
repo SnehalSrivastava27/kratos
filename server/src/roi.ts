@@ -1,110 +1,44 @@
-// SW5: Switch ROI (what every agent costs and delivers) and Switch Trust (guardrails), for GET /api/roi.
-// Cost comes from Switch's own usage counters (GET /gateway/tenants/{id}/usage, owner/admin only, hourly buckets;
-// switch-core 0.31.0 gateway/tenants.py:647), joined with what each agent posted in this workspace (our event store).
+// Switch ROI (what every agent costs and delivers) and Switch Trust (guardrails), for GET /api/roi and its write routes.
+// Cost comes from Switch's own usage counters (GET /gateway/tenants/{id}/usage, owner/admin only, summed over whole UTC
+// hours; switch-core 0.31.0 gateway/tenants.py:647), priced with switch/pricing.json, joined with what each agent
+// delivered in this workspace (our event store). The pure maths is in roi-calc.ts.
 // Everything fails soft: if Switch can't answer, the payload says source "unavailable" and why, never a 500.
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { gw, switchAgents, SwitchError, OFFICE_AGENT } from "./switch.js";
-import type { OfficeEvent } from "./store.js";
+import { gw, switchAgents, SwitchError } from "./switch.js";
+import { kvGet, kvSet, type OfficeEvent } from "./store.js";
+import { mergePrices, groupUsage, perAgent, teamTotal, forecast, improvements, sessionsIn, round, DEFAULT_PRICES, type Prices, type UsageRow } from "./roi-calc.js";
 
-/** Anthropic list prices, USD per million tokens (claude-api skill, cached 2026-10-06). Cache writes at the 5-minute
- *  rate (1.25x input); Haiku 5.5 at its <=100K-prompt card. An estimate: Switch counts tokens, not dollars. */
-export const PRICES: Record<string, { input: number; output: number; cache_read: number; cache_write: number }> = {
-  "claude-haiku-5-5": { input: 0.1, output: 0.5, cache_read: 0.01, cache_write: 0.125 },
-  "claude-sonnet-5-5": { input: 2, output: 10, cache_read: 0.2, cache_write: 2.5 },
-  "claude-opus-5-5": { input: 4, output: 20, cache_read: 0.2, cache_write: 5 },
-};
-const TOKEN_METRICS = { input_tokens: "input", output_tokens: "output", cache_read_tokens: "cache_read", cache_write_tokens: "cache_write" } as const;
-/** Not team agents: our own passive console and observer (they post, never take turns). */
-const NOT_TEAM = new Set([OFFICE_AGENT, "d2c-observer"]);
+export const PRICES = DEFAULT_PRICES;
+const HOUR = 3_600_000;
 
-export type UsageRow = { metric: string; client_id: string | null; client_name: string | null; client_type: string | null; model: string | null; amount: number };
-type Tokens = { input: number; output: number; cache_read: number; cache_write: number };
-export type RoiRow = {
-  agent: string; models: string[]; turns: number; switchMessages: number; tokens: Tokens;
-  costUsd: number; unpriced: boolean; posted: number; docs: number; deliverables: number; costPerDeliverable: number | null; turnShare: number;
-};
-
-const zero = (): Tokens => ({ input: 0, output: 0, cache_read: 0, cache_write: 0 });
-const round = (n: number, d = 4) => Math.round(n * 10 ** d) / 10 ** d;
-
-/** Groups Switch usage by team agent (d2c-*) and joins what each one posted/pinned in the window. */
-export function groupUsage(usage: UsageRow[], events: OfficeEvent[], docs: { by?: unknown; t?: unknown }[], since: number) {
-  const rows = new Map<string, RoiRow>();
-  const other = { turns: 0, costUsd: 0 };
-  const byModel: Record<string, number> = {}; // team cost per model
-  const row = (agent: string) => {
-    let r = rows.get(agent);
-    if (!r) rows.set(agent, (r = { agent, models: [], turns: 0, switchMessages: 0, tokens: zero(), costUsd: 0, unpriced: false, posted: 0, docs: 0, deliverables: 0, costPerDeliverable: null, turnShare: 0 }));
-    return r;
-  };
-  const team = (u: UsageRow) => u.client_type === "agent" && !!u.client_name?.startsWith("d2c-") && !NOT_TEAM.has(u.client_name);
-  for (const u of usage) {
-    const amount = Number(u.amount) || 0;
-    const kind = TOKEN_METRICS[u.metric as keyof typeof TOKEN_METRICS];
-    const price = u.model ? PRICES[u.model] : undefined;
-    const cost = kind && price ? (amount * price[kind]) / 1e6 : 0;
-    if (!team(u)) {
-      if (u.metric === "turns") other.turns += amount;
-      other.costUsd += cost;
-      continue;
-    }
-    const r = row(u.client_name!);
-    if (u.metric === "turns") r.turns += amount;
-    else if (u.metric === "messages") r.switchMessages += amount;
-    else if (kind) {
-      r.tokens[kind] += amount;
-      r.costUsd += cost;
-      if (u.model && cost) byModel[u.model] = (byModel[u.model] ?? 0) + cost;
-      if (!price && amount) r.unpriced = true;
-      if (u.model && amount && !r.models.includes(u.model)) r.models.push(u.model);
-    }
+// ---- pricing: switch/pricing.json over the list prices (read each time: it's small, and edits apply at once) ----
+export function loadPricing(root: string) {
+  try {
+    const m = mergePrices(JSON.parse(readFileSync(join(root, "switch/pricing.json"), "utf8")));
+    if (m.errors.length) console.warn("[roi] switch/pricing.json: skipped invalid entries:", m.errors.join(", "));
+    return { ...m, source: "switch/pricing.json" };
+  } catch {
+    return { prices: { ...DEFAULT_PRICES }, negotiated: [] as string[], errors: [] as string[], source: "list prices" };
   }
-  for (const e of events) {
-    if (e.t < since || !e.speaker.startsWith("d2c-") || NOT_TEAM.has(e.speaker) || e.type === "hired" || e.type === "working") continue;
-    row(e.speaker).posted++;
-  }
-  for (const d of docs) if (typeof d.by === "string" && rows.has(d.by) && Number(d.t) >= since) row(d.by).docs++;
-
-  const all = [...rows.values()];
-  const turns = all.reduce((s, r) => s + r.turns, 0);
-  for (const r of all) {
-    r.deliverables = r.posted + r.docs;
-    r.costUsd = round(r.costUsd);
-    r.costPerDeliverable = r.deliverables ? round(r.costUsd / r.deliverables) : null;
-    r.turnShare = turns ? round(r.turns / turns, 3) : 0;
-  }
-  all.sort((a, b) => b.costUsd - a.costUsd || b.turns - a.turns || a.agent.localeCompare(b.agent));
-  const totals = {
-    turns, costUsd: round(all.reduce((s, r) => s + r.costUsd, 0)), deliverables: all.reduce((s, r) => s + r.deliverables, 0),
-    tokens: all.reduce((t, r) => ({ input: t.input + r.tokens.input, output: t.output + r.tokens.output, cache_read: t.cache_read + r.tokens.cache_read, cache_write: t.cache_write + r.tokens.cache_write }), zero()),
-    byModel: Object.fromEntries(Object.entries(byModel).map(([m, v]) => [m, round(v)])),
-    other: { turns: other.turns, costUsd: round(other.costUsd) },
-  };
-  return { rows: all, totals, recommendations: recommend(all, byModel) };
 }
 
-const pct = (n: number) => `${Math.round(n * 100)}%`;
-/** One or two plain, data-backed suggestions. ponytail: three fixed rules; add more when someone acts on these. */
-export function recommend(rows: RoiRow[], byModel: Record<string, number>): string[] {
-  const out: string[] = [];
-  const top = [...rows].sort((a, b) => b.turns - a.turns)[0];
-  if (top && top.turnShare >= 0.3 && rows.length > 1) {
-    const t = top.tokens, tin = t.input + t.cache_read + t.cache_write;
-    const reread = tin ? t.cache_read / tin : 0;
-    out.push(`${top.agent} uses ${pct(top.turnShare)} of all turns (${top.turns})` +
-      (reread >= 0.8 ? `; ${pct(reread)} of what it reads is the cached chat it re-reads every turn. Fewer wake-ups (one ask per plan, no "confirmed" replies) cut it most.` : ". Check it isn't woken for messages that need no reply."));
+// ---- telemetry: is Claude Code OTel → Switch Trust wired into the agents' settings? (scripts/trust-otel.py) ----
+/** Reads the agents' `.claude/settings.local.json` env. Reports on/off, the endpoint host and agent name; never the key. */
+export function telemetry(agentDir: string) {
+  try {
+    const e = JSON.parse(readFileSync(join(agentDir, ".claude/settings.local.json"), "utf8"))?.env ?? {};
+    const endpoint = String(e.OTEL_EXPORTER_OTLP_ENDPOINT ?? "");
+    if (e.CLAUDE_CODE_ENABLE_TELEMETRY !== "1" || !endpoint) return { telemetry: "off" as const };
+    return {
+      telemetry: "on" as const, endpointHost: URL.parse(endpoint)?.host ?? "?",
+      agentName: /gen_ai\.agent\.name=([^,]+)/.exec(String(e.OTEL_RESOURCE_ATTRIBUTES ?? ""))?.[1] ?? null,
+      contentLogged: Object.keys(e).some((k) => k.startsWith("OTEL_LOG_") && e[k] && e[k] !== "0"),
+      keySet: /Authorization=ApiKey \S/.test(String(e.OTEL_EXPORTER_OTLP_HEADERS ?? "")),
+    };
+  } catch {
+    return { telemetry: "off" as const };
   }
-  const total = Object.values(byModel).reduce((a, b) => a + b, 0);
-  const big = Object.entries(byModel).filter(([m]) => m !== "claude-haiku-5-5").sort((a, b) => b[1] - a[1])[0];
-  if (big && total && big[1] / total >= 0.25) {
-    const who = rows.filter((r) => r.models.includes(big[0])).map((r) => r.agent);
-    out.push(`${pct(big[1] / total)} of the estimated cost is ${big[0]} (${who.slice(0, 3).join(", ")}${who.length > 3 ? ` +${who.length - 3}` : ""}), ` +
-      `about ${Math.round((PRICES[big[0]]?.input ?? 1) / PRICES["claude-haiku-5-5"].input)}x Haiku per token: keep every team agent on claude-haiku-5-5 in Console.`);
-  }
-  const idle = rows.find((r) => r.turns >= 3 && r.deliverables === 0);
-  if (out.length < 2 && idle) out.push(`${idle.agent} took ${idle.turns} turns and posted nothing here: check its addressing or retire it.`);
-  return out.slice(0, 2);
 }
 
 // ---- our own guardrails (read from the repo, once) ----
@@ -135,59 +69,223 @@ function why(e: unknown): string {
   return e.message;
 }
 
-export type RoiCtx = { root: string; hours: number; events: OfficeEvent[]; docs: { by?: unknown; t?: unknown }[]; allowed: boolean };
+// ---- usage reads: closed intervals are cached (Switch sums whole hours, so a past window never changes) ----
+const tenantId = async () => encodeURIComponent(String((await gw("GET", "/tenants/current"))?.id ?? ""));
+const usageCache = new Map<string, UsageRow[]>();
+async function usage(tid: string, since: Date, until: Date): Promise<UsageRow[]> {
+  const key = `${tid}|${since.toISOString()}|${until.toISOString()}`;
+  const hit = usageCache.get(key);
+  if (hit) return hit;
+  const q = new URLSearchParams({ since: since.toISOString(), until: until.toISOString() });
+  const rows = await gw("GET", `/tenants/${tid}/usage?${q}`);
+  const out = Array.isArray(rows) ? (rows as UsageRow[]) : [];
+  // a turn's tokens are counted when it ends: only cache windows that closed over 2 h ago
+  if (until.getTime() < Date.now() - 2 * HOUR) {
+    if (usageCache.size >= 500) usageCache.delete(usageCache.keys().next().value!);
+    usageCache.set(key, out);
+  }
+  return out;
+}
+/** Runs the reads at most 6 at a time (one local Switch; no need to hammer it). */
+async function pool<T>(jobs: (() => Promise<T>)[], n = 6): Promise<T[]> {
+  const out: T[] = new Array(jobs.length);
+  let i = 0;
+  await Promise.all(Array.from({ length: Math.min(n, jobs.length) }, async () => {
+    while (i < jobs.length) {
+      const j = i++;
+      try {
+        out[j] = await jobs[j]();
+      } catch (e) {
+        i = jobs.length; // one failed: stop the rest
+        throw e;
+      }
+    }
+  }));
+  return out;
+}
+const utcDay = (t: number) => new Date(Math.floor(t / 86_400_000) * 86_400_000);
+const monthStart = (d: Date, back = 0) => new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - back, 1));
+
+// ---- monthly caps (advisory, like Switch Trust's; kv "roi:caps") ----
+type Cap = { usd: number; setAt: string; budgetId?: string | null };
+export const readCaps = (): Record<string, Cap> => {
+  try {
+    return JSON.parse(kvGet("roi:caps") ?? "{}");
+  } catch {
+    return {};
+  }
+};
+const AGENT = /^d2c-[\w-]{1,40}$/;
+
+export type RoiCtx = { root: string; agentDir: string; hours: number; events: OfficeEvent[]; docs: { by?: unknown; t?: unknown }[]; allowed: boolean; budgetsOn: boolean; now?: Date };
 /** GET /api/roi. `allowed`: usage is tenant-wide (every workspace's agents), so only the host owner / admin sees it. */
 export async function roi(c: RoiCtx) {
-  const until = new Date();
-  const since = new Date(until.getTime() - c.hours * 3_600_000);
-  // switch/ and evals/ aren't in the Docker image: fall back instead of a 500 (and don't cache the fallback).
-  let g0 = guard;
+  const until = c.now ?? new Date();
+  const since = new Date(until.getTime() - c.hours * HOUR);
+  let g0 = guard; // switch/ and evals/ aren't in the Docker image: fall back instead of a 500 (and don't cache the fallback)
   if (!g0) {
     try { g0 = guard = readGuardrails(c.root); }
     catch { g0 = { lockdown: { tools: [], autoMode: false, autoApprove: false }, approvalRequired: true, safetyBlock: { agents: 0, of: 0 }, injectionRefusals: null }; }
   }
-  const base = { window: { since: since.toISOString(), until: until.toISOString(), hours: c.hours }, pricing: { estimate: true, perMTok: PRICES } };
-
+  const pricing = loadPricing(c.root);
+  const base = {
+    window: { since: since.toISOString(), until: until.toISOString(), hours: c.hours },
+    pricing: { estimate: true, source: pricing.source, perMTok: pricing.prices, negotiated: pricing.negotiated },
+    canEdit: c.allowed, budgetsEnabled: c.budgetsOn,
+  };
   const trust = c.allowed
     ? await gw("GET", "/trust-settings").then(
         (t) => ({ switchTrust: t?.enabled ? "enabled" : "disabled", endpoint: String(t?.endpoint ?? ""), policySet: !!t?.policy_id, keySet: !!t?.has_api_key }),
         (e) => ({ switchTrust: "unavailable", reason: why(e) }),
       )
     : { switchTrust: "unavailable", reason: "only the host owner sees Switch settings" };
-  const trustOut = { ...trust, ...g0 };
-  if (!c.allowed) return { source: "unavailable", reason: "Switch usage covers every workspace's agents: only the host owner sees it", ...base, rows: [], totals: null, recommendations: [], budgets: [], trust: trustOut };
+  const trustOut = { ...trust, ...g0, ...telemetry(c.agentDir) };
+  const empty = { rows: [], totals: null, recommendations: [], improvements: [], spend: null, budgets: [], trust: trustOut };
+  if (!c.allowed) return { source: "unavailable", reason: "Switch usage covers every workspace's agents: only the host owner sees it", ...base, ...empty };
 
   try {
-    const tenant = await gw("GET", "/tenants/current");
-    const id = encodeURIComponent(String(tenant?.id ?? ""));
-    const q = new URLSearchParams({ since: since.toISOString(), until: until.toISOString() });
-    // allSettled: wait for both, so a failed usage call never leaves the budgets request in flight.
-    const [u, b] = await Promise.allSettled([gw("GET", `/tenants/${id}/usage?${q}`), gw("GET", `/tenants/${id}/budgets`)]);
-    if (u.status === "rejected") throw u.reason;
-    const usage = u.value, budgets = b.status === "fulfilled" ? b.value : [];
-    const g = groupUsage(Array.isArray(usage) ? usage : [], c.events, c.docs, since.getTime());
-    return { source: "switch", ...base, ...g, budgets: Array.isArray(budgets) ? budgets : [], trust: trustOut };
+    const tid = await tenantId();
+    const prices = pricing.prices;
+    // trend: one call per UTC day (at least 7, the window's days, at most 30); retry bursts: one per hour, last 24 h.
+    const days = Math.min(30, Math.max(7, Math.ceil(c.hours / 24)));
+    const today = utcDay(until.getTime()).getTime();
+    const dayStarts = Array.from({ length: days }, (_, i) => today - (days - 1 - i) * 86_400_000);
+    const hourStart = Math.floor(until.getTime() / HOUR) * HOUR - 23 * HOUR;
+    const months = [2, 1].map((b) => [monthStart(until, b), monthStart(until, b - 1)] as const);
+    const jobs: (() => Promise<UsageRow[]>)[] = [
+      () => usage(tid, since, until),
+      () => usage(tid, monthStart(until), until),
+      ...months.map(([a, b]) => () => usage(tid, a, b)),
+      ...dayStarts.map((d) => () => usage(tid, new Date(d), new Date(Math.min(d + 86_400_000, until.getTime())))),
+      ...Array.from({ length: 24 }, (_, h) => () => usage(tid, new Date(hourStart + h * HOUR), new Date(hourStart + (h + 1) * HOUR))),
+    ];
+    // allSettled for budgets: a failed budgets call never fails the panel.
+    const [all, b] = await Promise.all([pool(jobs), gw("GET", `/tenants/${tid}/budgets`).catch(() => [])]);
+    const [win, mtd, m2, m1] = all;
+    const dayRows = all.slice(4, 4 + days), hourRows = all.slice(4 + days);
+    const g = groupUsage(win, c.events, c.docs, since.getTime(), prices);
+
+    const turnsByHour = new Map<string, number[]>();
+    hourRows.forEach((rows, h) => {
+      for (const [agent, s] of perAgent(rows, prices).agents) (turnsByHour.get(agent) ?? turnsByHour.set(agent, new Array(24).fill(0)).get(agent)!)[h] = s.turns;
+    });
+    const last24 = new Map<string, number>();
+    for (const rows of hourRows) for (const [agent, s] of perAgent(rows, prices).agents) last24.set(agent, (last24.get(agent) ?? 0) + s.costUsd);
+
+    // spend views: month to date (with cap + forecast), the two months before, $/turn, $/work session (last 24 h)
+    const caps = readCaps();
+    const mtdA = perAgent(mtd, prices).agents, m2A = perAgent(m2, prices).agents, m1A = perAgent(m1, prices).agents;
+    const names = [...new Set([...mtdA.keys(), ...m1A.keys(), ...m2A.keys(), ...g.rows.map((r) => r.agent), ...Object.keys(caps)])];
+    const agents = names.map((agent) => {
+      const s = mtdA.get(agent);
+      const spent = s?.costUsd ?? 0, sessions = sessionsIn(turnsByHour.get(agent) ?? []);
+      return {
+        agent, mtdUsd: round(spent), mtdTurns: s?.turns ?? 0, costPerTurn: s?.turns ? round(spent / s.turns, 5) : null,
+        months: [m2A.get(agent)?.costUsd ?? 0, m1A.get(agent)?.costUsd ?? 0, spent].map((v) => round(v)),
+        sessions24h: sessions, costPerSession: sessions ? round((last24.get(agent) ?? 0) / sessions) : null,
+        unpriced: s?.unpriced ?? [], cap: forecast(spent, until, caps[agent]?.usd ?? null), budgetId: caps[agent]?.budgetId ?? null,
+      };
+    }).sort((a, b) => b.mtdUsd - a.mtdUsd || a.agent.localeCompare(b.agent));
+    const capped = agents.filter((a) => a.cap.capUsd);
+    const mtdTotal = teamTotal(mtd, prices);
+    const spend = {
+      monthLabels: months.map(([a]) => a.toISOString().slice(0, 7)).concat(until.toISOString().slice(0, 7)),
+      months: [teamTotal(m2, prices), teamTotal(m1, prices), mtdTotal],
+      mtd: { ...mtdTotal, forecast: forecast(mtdTotal.costUsd, until, capped.length ? capped.reduce((s, a) => s + a.cap.capUsd!, 0) : null) },
+      trend: dayRows.map((rows, i) => ({ day: new Date(dayStarts[i]).toISOString().slice(0, 10), ...teamTotal(rows, prices) })),
+      capSummary: { ok: capped.filter((a) => a.cap.status === "ok").length, warn: capped.filter((a) => a.cap.status === "warn").length, over: capped.filter((a) => a.cap.status === "over").length, none: agents.length - capped.length },
+      agents,
+    };
+    const imp = improvements(g.rows, c.events, since.getTime(), c.hours, prices, { turnsByHour, hours: 24, hourStart });
+    return { source: "switch", ...base, ...g, improvements: imp, spend, budgets: Array.isArray(b) ? b : [], trust: trustOut };
   } catch (e) {
     console.warn("[roi] Switch usage unavailable:", e instanceof SwitchError ? `${e.status} ${e.message}` : String(e));
-    return { source: "unavailable", reason: why(e), ...base, rows: [], totals: null, recommendations: [], budgets: [], trust: trustOut };
+    return { source: "unavailable", reason: why(e), ...base, ...empty };
   }
 }
 
+// ---- Rooms budgets (switch-core, enforced at delivery; only with ROI_BUDGETS=on) ----
 const METRICS = ["messages", "turns", "input_tokens", "output_tokens", "cache_read_tokens", "cache_write_tokens"];
-/** POST /api/roi/budgets (only with ROI_BUDGETS=on): a per-agent cap. A reached cap stops the agent until the period
- *  turns over (switch-core budgets.py), so this is off by default. Body: { agent, metric, amount_limit, period_hours, model? }. */
-export async function createBudget(body: any) {
-  const agent = typeof body?.agent === "string" ? body.agent : "";
-  const metric = String(body?.metric ?? "");
+const limits = (body: any) => {
   const limit = Number(body?.amount_limit), period = Number(body?.period_hours);
-  if (!/^d2c-[\w-]{1,40}$/.test(agent)) throw new SwitchError(400, "agent: a d2c-* agent name");
-  if (!METRICS.includes(metric)) throw new SwitchError(400, `metric: one of ${METRICS.join(", ")}`);
-  if (!Number.isInteger(limit) || limit < 1) throw new SwitchError(400, "amount_limit: a whole number >= 1");
+  if (!Number.isInteger(limit) || limit < 1 || limit > Number.MAX_SAFE_INTEGER) throw new SwitchError(400, "amount_limit: a whole number >= 1");
   if (!Number.isInteger(period) || period < 1 || period > 24 * 366) throw new SwitchError(400, "period_hours: 1–8784");
-  const model = body?.model == null ? null : String(body.model);
-  if (model !== null && !PRICES[model]) throw new SwitchError(400, "model: a known model id, or omit it");
+  return { amount_limit: limit, period_hours: period };
+};
+const budgetId = (id: string) => {
+  if (!/^[\w-]{1,64}$/.test(id)) throw new SwitchError(400, "budget id");
+  return encodeURIComponent(id);
+};
+async function agentId(agent: string) {
   const found = (await switchAgents()).find((a) => a.name === agent);
   if (!found) throw new SwitchError(404, `no Switch agent named ${agent}`);
-  const tenant = await gw("GET", "/tenants/current");
-  return gw("POST", `/tenants/${encodeURIComponent(String(tenant?.id ?? ""))}/budgets`, { agent_id: found.id, metric, model, amount_limit: limit, period_hours: period });
+  return found.id;
+}
+/** POST /api/roi/budgets: a per-agent cap. A reached cap stops the agent until the period turns over (switch-core
+ *  budgets.py). Body: { agent, metric, amount_limit, period_hours, model? } (model only on token metrics). */
+export async function createBudget(body: any, root: string) {
+  const agent = typeof body?.agent === "string" ? body.agent : "";
+  const metric = String(body?.metric ?? "");
+  if (!AGENT.test(agent)) throw new SwitchError(400, "agent: a d2c-* agent name");
+  if (!METRICS.includes(metric)) throw new SwitchError(400, `metric: one of ${METRICS.join(", ")}`);
+  const lim = limits(body);
+  const model = body?.model == null || body.model === "" ? "" : String(body.model);
+  if (model && !loadPricing(root).prices[model]) throw new SwitchError(400, "model: a known model id, or omit it");
+  if (model && (metric === "turns" || metric === "messages")) throw new SwitchError(400, "model: only on token metrics");
+  const id = await agentId(agent);
+  return gw("POST", `/tenants/${await tenantId()}/budgets`, { agent_id: id, metric, model, ...lim }).catch((e) => {
+    throw e instanceof SwitchError && e.status === 409 ? new SwitchError(409, "a budget for this agent, metric and model already exists: edit that one") : e;
+  });
+}
+/** PUT /api/roi/budgets/{id}: new limit and period (what a budget covers is fixed in Switch). */
+export const updateBudget = async (id: string, body: any) => gw("PUT", `/tenants/${await tenantId()}/budgets/${budgetId(id)}`, limits(body));
+/** DELETE /api/roi/budgets/{id}. */
+export const deleteBudget = async (id: string) => (await gw("DELETE", `/tenants/${await tenantId()}/budgets/${budgetId(id)}`), { ok: true });
+
+// ---- caps: POST / DELETE /api/roi/caps (host owner) ----
+/** Sets an advisory monthly cap in USD. `enforce: true` (needs ROI_BUDGETS=on) also mirrors it to a Rooms `turns` budget
+ *  over 720 h: limit = cap / the agent's month-to-date $/turn, so the cap becomes something Switch can count. */
+export async function setCap(body: any, budgetsOn: boolean, root: string) {
+  const agent = typeof body?.agent === "string" ? body.agent : "";
+  const usd = Number(body?.usd);
+  if (!AGENT.test(agent)) throw new SwitchError(400, "agent: a d2c-* agent name");
+  if (!Number.isFinite(usd) || usd <= 0 || usd > 100_000) throw new SwitchError(400, "usd: a monthly cap above 0 (USD)");
+  const caps = readCaps();
+  const cap: Cap = { usd: round(usd, 2), setAt: new Date().toISOString(), budgetId: caps[agent]?.budgetId ?? null };
+  let mirrored: { budgetId: string; turns: number } | null = null;
+  if (body?.enforce === true) {
+    if (!budgetsOn) throw new SwitchError(400, "enforce: needs ROI_BUDGETS=on on the office server");
+    const tid = await tenantId();
+    const now = new Date();
+    const s = perAgent(await usage(tid, monthStart(now), now), loadPricing(root).prices).agents.get(agent);
+    if (!s?.turns || !s.costUsd) throw new SwitchError(400, "enforce: no priced turns this month to convert the cap into turns yet");
+    const turns = Math.max(1, Math.floor(usd / (s.costUsd / s.turns)));
+    const id = await agentId(agent);
+    const list: any[] = await gw("GET", `/tenants/${tid}/budgets`).catch(() => []);
+    const existing = (Array.isArray(list) ? list : []).find((x) => x.agent_id === id && x.metric === "turns" && !x.model);
+    const res = existing
+      ? await gw("PUT", `/tenants/${tid}/budgets/${budgetId(String(existing.id))}`, { amount_limit: turns, period_hours: 720 })
+      : await gw("POST", `/tenants/${tid}/budgets`, { agent_id: id, metric: "turns", model: "", amount_limit: turns, period_hours: 720 });
+    cap.budgetId = String(res?.id ?? existing?.id ?? "") || null;
+    mirrored = cap.budgetId ? { budgetId: cap.budgetId, turns } : null;
+  }
+  caps[agent] = cap;
+  kvSet("roi:caps", JSON.stringify(caps));
+  return { agent, cap, mirrored };
+}
+/** Removes a cap; with ROI_BUDGETS=on its mirrored Rooms budget goes too. */
+export async function clearCap(body: any, budgetsOn: boolean) {
+  const agent = typeof body?.agent === "string" ? body.agent : "";
+  if (!AGENT.test(agent)) throw new SwitchError(400, "agent: a d2c-* agent name");
+  const caps = readCaps();
+  const cap = caps[agent];
+  if (!cap) throw new SwitchError(404, `no cap for ${agent}`);
+  let budgetLeft: string | null = null;
+  if (cap.budgetId) {
+    if (budgetsOn) await deleteBudget(cap.budgetId).catch((e) => { if (!(e instanceof SwitchError && e.status === 404)) throw e; });
+    else budgetLeft = cap.budgetId; // can't touch budgets with the flag off: say so instead
+  }
+  delete caps[agent];
+  kvSet("roi:caps", JSON.stringify(caps));
+  return { agent, cleared: true, budgetLeft };
 }
