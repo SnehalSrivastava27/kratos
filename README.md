@@ -35,8 +35,7 @@ Open <http://localhost:5173/demo> and:
 5. **Walk** with WASD (Shift to sprint, E to use what you face) out the back doorways to the new wings
    and the **Town Hall**, whose screen shows the hackathon page (click or E opens it).
 
-The live version (real Switch, real Telegram group) is in [Setup](#setup). The 3-minute video script:
-[`demo/script.md`](demo/script.md). <!-- TODO(user): link the 3-minute video -->
+The live version (real Switch, real Telegram group) is in [Setup](#setup). <!-- TODO(user): link the 3-minute video -->
 
 ## The problem
 

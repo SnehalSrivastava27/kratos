@@ -14,3 +14,4 @@ data/*.tmp
 evals/reports/*.json
 data/.cache/
 __pycache__/
+demo/script.md
