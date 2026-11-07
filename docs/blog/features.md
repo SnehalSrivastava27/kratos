@@ -260,7 +260,7 @@ the approval and waits for you. "Ask for changes" plays a revision round.
 
 **How to use it.** `npm run demo`, open `http://localhost:5173/demo`.
 
-**Files.** `demo/feeds/sale-demo.json` · `demo/validate.mjs` (order, numbers, style) · `web/src/office/demoDirector.ts` · `demo/script.md`.
+**Files.** `demo/feeds/sale-demo.json` · `demo/validate.mjs` (order, numbers, style) · `web/src/office/demoDirector.ts`.
 
 **Switch.** None (that is the point).
 

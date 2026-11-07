@@ -34,7 +34,7 @@ Conventions:
 | Library documents, packages | `administer/shared-material#make-a-package-and-add-to-it` | n/a | – | One room, so nothing needs to be shared across rooms. See "Deliberately not used". | M | 1 |
 | Room roles (shared / exclusive, written *to the agent*) | `building/payments-room#set-up-roles-any-agent-can-take`, `administer/rooms#set-up-a-rooms-jobs` | done | `server/src/roles.ts:10-33` (gateway `POST /rooms/{id}/roles`), `d2c-finance.md:41-44`, `d2c-ops.md` | partial: the docs warn "an agent holds one role at a time, across all its rooms", so Finance can't also hold a desk role. Editing a role reaches the next holder only. We never edit after creating, so that's fine. | – | 4 |
 | Aliases (`!set-alias @d2c-finance @finance`) | `using/work-in-a-room#use-room-shortcuts`, `resources/room-commands` | missing | Only a suggestion in [12](12-feature-survey.md):178 | The founder types `@d2c-captain`. An alias `@captain` is one command. Templates can carry aliases, but ours is an agent group template and the room is adopted. | S | 3 |
-| **Follow-ups + main agent** (`!assign-agent @d2c-captain`, `!follow-ups on/off`) | `using/work-in-a-room#keep-talking-without-tagging-the-agent` (Switch 0.31) | **doc'd** (SW7) | Optional founder step in `demo/script.md` and `docs/live-demo-run.md`, with the ROI caveat; not automated. The flag is on for Console-run servers (`core:config.py:237-240`, 300 s window) | The founder must `@`-tag every message. With the Captain as main agent, "make it 30% off" reaches him untagged. The catch: thread follow-ups also wake the last agent that spoke, which adds Captain turns (14: the Captain is already 40% of turns). | S | 5 |
+| **Follow-ups + main agent** (`!assign-agent @d2c-captain`, `!follow-ups on/off`) | `using/work-in-a-room#keep-talking-without-tagging-the-agent` (Switch 0.31) | **doc'd** (SW7) | Optional founder step in `docs/live-demo-run.md`, with the ROI caveat; not automated. The flag is on for Console-run servers (`core:config.py:237-240`, 300 s window) | The founder must `@`-tag every message. With the Captain as main agent, "make it 30% off" reaches him untagged. The catch: thread follow-ups also wake the last agent that spoke, which adds Captain turns (14: the Captain is already 40% of turns). | S | 5 |
 | Room greeting (Notify on join) | `getting-started/create-a-room#have-an-agent-welcome-people-who-join` | missing | Gateway route `PATCH /gateway/rooms/{id}/agents/{agent_id} {receives_join_events}` (`core:gateway/rooms.py:1077-1100`) | When a co-founder joins the group, nobody greets them. The Captain could, from room instructions, but only while it has a live session. | S | 3 |
 | Linked rooms (one-way, labelled) | `building/grow-into-an-organization#point-rooms-at-each-other` | missing | Finance desk is a second room (`d2c-finance.md:126`) with no link | Docs: "a link tells agents in one room that another room exists and why". A `team room → Finance desk ("finance sign-off")` link would replace the prose in Finance's instructions. | S | 2 |
 | Room groups, archive | `administer/rooms#link-and-group-rooms`, `#retire-a-room` | n/a | – | Only pays off with several brands. | – | 1 |
@@ -109,10 +109,10 @@ Conventions:
 ## Close next (ranked)
 
 1. **Make the Captain the room's main agent (follow-ups).** Demo 5, effort S. **Status: doc'd (SW7)** as an optional
-   founder step in `demo/script.md` and `docs/live-demo-run.md`; not automated.
+   founder step in `docs/live-demo-run.md`; not automated.
    - In the group, as the founder: `!assign-agent @d2c-captain`. Then "now make it 30% off" reaches the Captain
      untagged. An `@` still wins, and `!unassign-agent` undoes it.
-   - Code: add the command to `docs/GO_LIVE.md` and the demo script.
+   - Code: add the command to `docs/GO_LIVE.md`.
    - Optional: d2c-office could post it, but commands are only accepted from senders the agent accepts. Prefer the
      founder, since the docs say "You can assign only an agent that takes instructions from you".
    - Watch the cost: thread follow-ups also reach the last agent that spoke in a topic. Measure Captain turns in
