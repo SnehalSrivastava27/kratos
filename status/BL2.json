@@ -1,4 +1,8 @@
-{ "task": "BL2", "state": "working", "progress": 30,
-  "done": ["diagrams 16-roi-trust, 17-office-floor-plan, 18-architecture (gen/bl2.py, rendered, viewed)"],
-  "next": "README, blog pack, switch index, overnight log, link check",
-  "blockers": [], "contract_requests": [], "updated": "2026-11-07T10:40:00+05:30" }
+{ "task": "BL2", "state": "done", "progress": 100,
+  "done": [
+    "README rewritten for judges: 60-second demo path, architecture (18-architecture), Rooms/ROI/Trust pillars table (ROI + Trust marked partial, Trust hosted and disabled), evals 166/166 Haiku $0.21 with <!-- EVAL:latest --> slot, office (88x44, follow camera, Town Hall, coin panel), Node 24+ setup, security notes, condensed challenges",
+    "Blog pack: post.md section 12 ROI + Trust, tier 3, bigger office + camera, merge-conflict lesson, lesson 7; features.md 16/17 updated + 28 ROI/Trust panel; findings 58-68; social post 6 + post 4 at 166/166; TODO(user) markers kept",
+    "Diagrams 16-roi-trust, 17-office-floor-plan (O7 round 2 incl. ZONE_MOVES), 18-architecture via docs/diagrams/gen/bl2.py; docs/switch/README index 13/14/15 + diagram rows; overnight-log '7 Nov morning'; link check 236 links 0 broken (15-docs-gap-audit.md pending SW6); secret scan clean"
+  ],
+  "next": "",
+  "blockers": [], "contract_requests": [], "updated": "2026-11-07T11:45:00+05:30" }

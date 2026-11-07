@@ -48,14 +48,14 @@ def roi_trust():
     return check(s, "16-roi-trust")
 
 
-# 17. Office floor plan (web/src/office/engine/layout.ts + contracts/zones.json on task/O7) ----------------
+# 17. Office floor plan (task/O7: contracts/zones.json placed by layout.ts ZONE_MOVES, wings from ANNEX) ----------------
 ZONES = [  # id, label, x, z, w, d, fill
     ("design_studio", "Design Studio", -10.75, -8, 9.5, 5, "violet"),
     ("telegram_hub", "Telegram Hub\n+ Switch core", 2, -8, 10, 5, "blue"),
     ("data_wall", "Data Wall", 14.5, -8, 9, 5, "green"),
-    ("creator_studio", "Creator Studio", -11, -0.5, 9, 5.5, "violet"),
+    ("creator_studio", "Creator Studio", 15.1, -16.4, 9, 5.5, "violet"),
     ("war_room", "War Room", 2, -0.5, 9, 6, "yellow"),
-    ("growth_pod", "Growth Pod", 14.75, -0.5, 9.5, 5.5, "green"),
+    ("growth_pod", "Growth Pod", 47.2, 4.4, 9.5, 5.5, "green"),
     ("dispatch_dock", "Dispatch\nDock", -12, 7.5, 7.5, 5.5, "orange"),
     ("dark_store", "Dark\nstore", -6.5, 7.5, 3.5, 4, "orange"),
     ("chai_pantry", "Chai\nCorner", -0.5, 7.5, 5, 5, "orange"),
@@ -63,20 +63,20 @@ ZONES = [  # id, label, x, z, w, d, fill
     ("reception", "Recep-\ntion", 8.75, 7.5, 4.5, 5, "gray"),
     ("founder_desk", "Founder's Desk", 15.25, 7.5, 8.5, 5, "yellow"),
     ("library", "Skills\nLibrary", -20, -7, 7.6, 7.6, "teal"),
-    ("finance_cabin", "Finance\nCabin", -20, -0.3, 7.6, 5, "red"),
+    ("finance_cabin", "Finance\nCabin", -20, -16.4, 7.6, 5, "red"),
     ("open_desks", "Open\nDesks", -20, 6.6, 7.6, 8, "gray"),
 ]
 ANNEX = [  # from layout.ts ANNEX
     ("briefing", "Captain's Briefing Room", -15.3, -28.2, 16, 8.6, "meeting"),
     ("focus_room", "Focus Room", 1.8, -28.2, 8.2, 8.6, "meeting"),
     ("reading_lounge", "Reading\nLounge", 15.1, -28.2, 9.2, 8.6, "lounge"),
-    ("garden", "Garden Atrium", -15.3, -16.4, 16, 8.2, "atrium"),
+    ("garden", "Garden\nAtrium", 1.8, -16.4, 8.2, 8.2, "atrium"),
     ("boardroom", "Boardroom", 32, -28.2, 15, 8.6, "meeting"),
     ("sky_lounge", "Sky Lounge", 54, -28.2, 18, 8.6, "lounge"),
     ("cafe", "Café & Pantry", 32, -13.2, 15, 10.4, "pantry"),
     ("atrium", "Atrium", 54, -13.2, 18, 10.4, "atrium"),
     ("town_hall", "Town Hall\nhackathon screen\n(click / E opens it)", 32, 4.4, 15, 12, "townhall"),
-    ("glass_room", "Glass Room", 54, 4.6, 10, 9.2, "meeting"),
+    ("glass_room", "Glass\nRoom", 59.75, 4.6, 7.5, 9.2, "meeting"),
 ]
 KIND_FILL = dict(meeting="#e5dbff", lounge="#ffe8cc", pantry="#fff3bf", atrium="#d3f9d8", townhall="#c5f6fa")
 
@@ -102,7 +102,7 @@ def floor_plan():
         px, py = P(x - w / 2, z - d / 2)
         s.box(k, px, py, w * S, d * S, lab, KIND_FILL[kind], fs=16 if kind != "townhall" else 15)
     s.text(P(20.4, -6)[0], P(20.4, -6)[1], "boule-\nvard\n(4 m)", 15, color=GRAY)
-    s.text(*P(-5.5, -19), "north wing: open walking space, no desks", 16, color=GRAY)
+    s.text(*P(-15, -20.5), "north wing:\nmostly open\nwalking space", 16, color=GRAY)
     s.text(*P(25.5, -22), "east wing", 16, color=GRAY)
     s.text(*P(-23.6, 11.4), "west wing", 15, color=GRAY)
     dx, dy = P(9.7, 11)
@@ -110,8 +110,8 @@ def floor_plan():
     s.text(dx + 10, dy + 18, "front door (new hires walk in)", 15, color="#2f9e44")
     nx = X0 + 88 * S + 30
     s.box("leg", nx, Y0, 330, 748,
-          "Core block (blue dashed)\n= contracts/zones.json:\n15 zones, all 21 desks,\nthe people, the Switch\ncables and pulses.\n\n"
-          "Wings (layout.ts ANNEX):\nweb-only, decorative,\nroom to walk: meeting\nrooms, lounges, café,\natriums, Town Hall.\n\n"
+          "Blue dashed: the original\n44 × 22 m office.\n\nDepartment zones come\nfrom contracts/zones.json\n(15 zones, 21 desks, no\nnew ones). Finance,\nCreators and Growth\nmoved into the wings\n(layout.ts ZONE_MOVES),\nSwitch cables follow.\n\n"
+          "Pastel rooms (ANNEX):\nweb-only, room to walk.\n\n"
           "Camera: eye-level third\nperson behind the founder\n(ported from agent-office,\nMIT). Stand still while the\nstory plays and it glides\nto whoever is talking.\nSpectator view: the eye\nbutton.\n\n1 grid unit = 1 m",
           "white", fs=16, stroke="#495057", valign="top")
     s.save(OUT + "17-office-floor-plan.excalidraw")
