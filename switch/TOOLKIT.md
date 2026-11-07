@@ -49,8 +49,14 @@ node kit/bin/kit.mjs brief <analytics|ads|creators|ops|design|finance|captain>  
 | Which SKU runs out first? | `metric days_of_cover` · `metric stockout_risk` |
 | Saffron price change? | `metric rm_cost_change` |
 | Payroll by dept? | `metric salary_bill --by dept` |
+| Quick-commerce share? Channel mix? | `metric qc_share --month 2026-10` · `metric channel_mix --month 2026-10` |
+| GST to pay? Platform money still owed? | `metric gst_payable --month 2026-10 --by state` · `metric receivables --by channel` |
+| Dark-store stock-outs? Ratings? | `metric qc_availability --by channel,city` · `metric rating --by channel` |
+| RTO by tier or state? UPI share? | `metric rto_pct --by tier` · `metric payment_mix --channel Website` |
+| What is due to the government next? | `metric compliance_due --by filing` |
 
-Rules: `--channel` is a sales channel (Website, Amazon, Flipkart, Nykaa, Myntra, Blinkit, Zepto); for ads metrics it is the
+Rules: `--channel` is a sales channel (Website, Amazon, Flipkart, Nykaa, Myntra, Purplle, Meesho, Tata CLiQ, JioMart, AJIO,
+Blinkit, Zepto, Instamart, BB Now, Flipkart Minutes, Health & Glow, Apollo Pharmacy, Amazon Global); for ads metrics it is the
 platform (Meta, Google, Amazon, ...). `--sku` takes SKU01 or part of a name. No window = all data (2026-08-01..2026-10-31);
 `--last N` ends on 2026-10-31. Unknown metric, filter or `--by` → an error that lists what is valid. Quote the `display` value.
 Meta/Google/marketplace revenue is platform-attributed and overlaps: never add them up.

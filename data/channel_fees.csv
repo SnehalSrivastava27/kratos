@@ -1,8 +1,19 @@
-channel,type,commission_pct,fixed_fee,shipping_fee,payment_gateway_pct,settlement_days,notes
-Website,D2C (Shopify + Razorpay),0,0,0,2,2,"Shipping billed by courier, see couriers.csv; gateway 2% on prepaid only"
-Amazon,Marketplace (Easy Ship),6,25,65,0,7,"Referral fee 0% under Rs 1000 since Mar 2026 and 8% above, blended 6%; closing fee Rs 25; weight handling Rs 65"
-Flipkart,Marketplace,9,20,70,0,10,"Commission 9% beauty, fixed fee Rs 20, shipping Rs 70 per shipment"
-Nykaa,Beauty marketplace,28,0,55,0,30,Nykaa takes 28% on selling price; long 30 day settlement
-Myntra,Marketplace (beauty),22,30,60,0,15,Commission 22% plus Rs 30 fixed fee
-Blinkit,Quick commerce,22,10,15,0,30,22% margin plus Rs 10 per order; Rs 15 dark-store inbound freight per order
-Zepto,Quick commerce,24,10,15,0,30,24% margin plus Rs 10 per order; Rs 15 dark-store inbound freight per order
+channel,type,commission_pct,fixed_fee,shipping_fee,payment_gateway_pct,settlement_days,notes,channel_group,tcs_pct,tds_pct,gst_on_fees_pct
+Website,"D2C (Shopify + Razorpay, Cashfree backup)",0,0,0,2,2,"Shipping billed by courier via Shiprocket, see couriers.csv; gateway 2% on prepaid only; Shiprocket remits COD 8 days after the week",D2C,0,0,18
+Amazon,Marketplace (Easy Ship),6,25,65,0,7,"Referral fee 0% under Rs 1000 since Mar 2026 and 8% above, blended 6%; closing fee Rs 25; weight handling Rs 65",Marketplace,0.5,0.1,18
+Flipkart,Marketplace,9,20,70,0,10,"Commission 9% beauty, fixed fee Rs 20, shipping Rs 70 per shipment",Marketplace,0.5,0.1,18
+Nykaa,Beauty marketplace,28,0,55,0,30,Nykaa takes 28% on selling price; long 30 day settlement,Beauty marketplace,0.5,0.1,18
+Myntra,Marketplace (beauty),22,30,60,0,15,Commission 22% plus Rs 30 fixed fee,Marketplace,0.5,0.1,18
+Purplle,Beauty marketplace,25,0,50,0,30,Purplle margin 25% on selling price; Rs 50 forward shipping; 30 day settlement,Beauty marketplace,0.5,0.1,18
+Meesho,"Marketplace (value, tier 2-3)",0,0,75,0,7,0% commission; seller pays forward shipping Rs 75 via Valmo; paid 7 days after delivery; heavy COD,Marketplace,0.5,0.1,18
+Tata CLiQ,"Marketplace (Tata CLiQ Palette, premium beauty)",20,25,60,0,15,Commission 20% plus Rs 25 fixed fee,Beauty marketplace,0.5,0.1,18
+JioMart,Marketplace,12,15,60,0,15,"Commission 12%, fixed fee Rs 15, shipping Rs 60",Marketplace,0.5,0.1,18
+AJIO,Marketplace (AJIO beauty),25,30,60,0,30,Commission 25% plus Rs 30; 30 day settlement,Marketplace,0.5,0.1,18
+Blinkit,Quick commerce,22,10,15,0,30,22% margin plus Rs 10 per order; Rs 15 dark-store inbound freight per order,Quick commerce,0.5,0.1,18
+Zepto,Quick commerce,24,10,15,0,30,24% margin plus Rs 10 per order; Rs 15 dark-store inbound freight per order,Quick commerce,0.5,0.1,18
+Instamart,Quick commerce (Swiggy Instamart),23,10,15,0,30,23% margin plus Rs 10 per order; Rs 15 dark-store inbound freight per order,Quick commerce,0.5,0.1,18
+BB Now,Quick commerce (BigBasket BB Now),20,10,15,0,45,"20% margin plus Rs 10 per order; buys outright, pays in 45 days",Quick commerce,0.5,0.1,18
+Flipkart Minutes,Quick commerce (Flipkart Minutes),18,10,15,0,15,Launch rate 18% plus Rs 10 per order; 15 day settlement,Quick commerce,0.5,0.1,18
+Health & Glow,Offline modern trade (beauty chain),32,0,12,0,60,Retailer 25% + distributor 7% margin on selling price; Rs 12 freight per bill; 60 day credit,Offline retail,0,0,18
+Apollo Pharmacy,Offline modern trade (pharmacy chain),30,0,12,0,45,Retailer 23% + distributor 7% margin; Rs 12 freight per bill; 45 day credit,Offline retail,0,0,18
+Amazon Global,Export (Amazon Global Selling),15,0,450,0,14,Referral 15%; Rs 450 international shipping per order (Amazon Global Logistics); zero-rated GST under LUT,Export,0,0,18

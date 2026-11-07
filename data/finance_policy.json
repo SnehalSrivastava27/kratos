@@ -3,7 +3,7 @@
   "as_of": "2026-10-31",
   "max_marketing_pct_of_net_revenue": 25,
   "max_marketing_pct_of_net_revenue_sale_period": 30,
-  "min_monthly_ebitda": -300000,
+  "min_monthly_ebitda": -500000,
   "min_ebitda_sale_period": 0,
   "max_blended_cac": 450,
   "max_creator_fee_without_founder_ok": 50000,

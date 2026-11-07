@@ -1,23 +1,24 @@
 // Precomputed marts, built once into the cached DB (see data.mjs). Order matters: later marts read earlier ones.
 // A mart whose source tables/columns are missing (e.g. test fixtures) is skipped. Bump MART_VERSION on any change.
-export const MART_VERSION = 2;
+export const MART_VERSION = 3;
 
 const notCancelled = "status <> 'cancelled'";
 
 export const MARTS = [
-  // One row per order line + month, city tier, first-line flag, P&L COGS, new/returning.
+  // One row per order line + month, city tier, channel group, first-line flag, P&L COGS, new/returning.
   ['m_lines', `
-    SELECT o.*, p.name AS product, substr(o.date, 1, 7) AS month, t.city_tier,
+    SELECT o.*, p.name AS product, substr(o.date, 1, 7) AS month, t.city_tier, cf.channel_group,
       CASE WHEN ROW_NUMBER() OVER (PARTITION BY o.order_id ORDER BY o.rowid) = 1 THEN 1 ELSE 0 END AS is_first,
       CASE WHEN o.status = 'delivered' OR (o.status = 'returned' AND r.restockable = 'no') THEN o.qty * p.cogs ELSE 0 END AS cogs,
       CASE WHEN o.order_id = f.first_order THEN 'new' ELSE 'returning' END AS customer_type
     FROM orders o JOIN products p ON p.sku = o.sku
+    LEFT JOIN channel_fees cf ON cf.channel = o.channel
     LEFT JOIN (SELECT city, MAX(city_tier) AS city_tier FROM customers GROUP BY city) t ON t.city = o.city
     LEFT JOIN returns r ON r.order_id = o.order_id AND r.sku = o.sku
     LEFT JOIN (SELECT customer_id, MIN(order_id) AS first_order FROM orders GROUP BY customer_id) f ON f.customer_id = o.customer_id`],
   // One row per order. status = the first line's status (RTO and cancel are whole-order).
   ['m_orders', `
-    SELECT order_id, MIN(date) AS date, month, channel, region, city, city_tier, warehouse, payment, courier, zone, customer_id, coupon,
+    SELECT order_id, MIN(date) AS date, month, channel, channel_group, region, state, city, city_tier, warehouse, payment, payment_method, courier, zone, customer_id, coupon,
       customer_type, MAX(CASE WHEN is_first = 1 THEN status END) AS status, COUNT(*) AS lines, SUM(qty) AS units,
       SUM(gross_revenue) AS gross, SUM(net_revenue) AS net
     FROM m_lines GROUP BY order_id`],
@@ -38,7 +39,7 @@ export const MARTS = [
   ['rto_by_payment', rto('payment')],
   ['rto_by_tier', rto('city_tier')],
   ['rto_by_courier', rto('courier')],
-  // Every paid-ads row in one shape. platform = Meta | Google | Amazon | Flipkart | Nykaa | Blinkit | Zepto.
+  // Every paid-ads row in one shape. platform = Meta | Google | a marketplace / quick-commerce channel (marketplace_ads_daily.platform).
   ['ads_daily_all', `
     SELECT date, substr(date, 1, 7) AS month, 'Meta' AS platform, 'meta' AS source, campaign, creative_type AS type,
       spend, impressions, clicks, purchases AS conversions, revenue FROM meta_ads_daily

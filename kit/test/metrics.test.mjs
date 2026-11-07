@@ -85,41 +85,41 @@ test('P&L ties: net revenue, COGS, orders, units, EBITDA; CM3 - salaries - opex 
 
 test('data/README.md story numbers', () => {
   const rto = (mo, ch) => m('rto_pct', '--channel', ch, '--month', mo).value;
-  assert.equal(rto('2026-09', 'Amazon'), 5.6);
-  assert.equal(rto('2026-09', 'Website'), 9.3);
-  assert.equal(rto('2026-09', 'Flipkart'), 8.4);
-  assert.equal(rto('2026-10', 'Website'), 9.9);
+  assert.equal(rto('2026-09', 'Amazon'), 4.9);
+  assert.equal(rto('2026-09', 'Website'), 9.4);
+  assert.equal(rto('2026-09', 'Flipkart'), 9.4);
+  assert.equal(rto('2026-10', 'Website'), 10.5);
   const pay = m('rto_pct', '--channel', 'Website', '--by', 'payment');
-  assert.equal(row(pay, 'payment', 'cod').value, 23.2);
-  assert.equal(row(pay, 'payment', 'prepaid').value, 1.3);
+  assert.equal(row(pay, 'payment', 'cod').value, 23.9);
+  assert.equal(row(pay, 'payment', 'prepaid').value, 1.4);
   assert.equal(Math.round(m('cod_share', '--channel', 'Website').value), 38);
   const tier = m('rto_pct', '--channel', 'Website', '--by', 'tier,payment').values.filter((x) => x.payment === 'cod');
-  assert.deepEqual([1, 2, 3].map((t) => tier.find((x) => x.tier === t).value), [18.3, 27.2, 36.7]);
+  assert.deepEqual([1, 2, 3].map((t) => tier.find((x) => x.tier === t).value), [17.3, 26.3, 34.6]);
   const cour = m('rto_pct', '--channel', 'Website', '--by', 'courier').values;
-  assert.deepEqual([cour[0].courier, cour[0].value, cour.at(-1).courier, cour.at(-1).value], ['Shadowfax', 11.4, 'Blue Dart', 6.7]);
+  assert.deepEqual([cour[0].courier, cour[0].value, cour.at(-1).courier, cour.at(-1).value], ['India Post', 15.7, 'Blue Dart', 6.4]);
   const ret = m('returns');
-  assert.deepEqual([ret.value, ret.refunds], [287, 235660]);
-  assert.deepEqual(m('return_reasons').values.slice(0, 2).map((x) => [x.reason, x.value]), [['Damaged or leaking on arrival', 68], ['Did not suit skin type', 47]]);
-  assert.deepEqual(m('creator_fees', '--by', 'month').values.map((x) => x.value), [122000, 231000, 275500]);
+  assert.deepEqual([ret.value, ret.refunds], [318, 253864]);
+  assert.deepEqual(m('return_reasons').values.slice(0, 2).map((x) => [x.reason, x.value]), [['Damaged or leaking on arrival', 76], ['Did not suit skin type', 55]]);
+  assert.deepEqual(m('creator_fees', '--by', 'month').values.map((x) => x.value), [156500, 279000, 300500]);
   const meta = m('meta_roas', '--by', 'campaign', '--last', '30');
   assert.deepEqual([meta.values.reduce((s, x) => s + x.spend, 0), meta.values.reduce((s, x) => s + x.revenue, 0)], [450000, 1402000]);
   assert.equal(row(meta, 'campaign', 'Retargeting - cart abandoners').value, 4.8);
   assert.equal(row(m('meta_roas', '--by', 'type', '--last', '30'), 'type', 'ugc_video').value, 4.02);
-  assert.equal(m('ad_spend', '--channel', 'Google', '--month', '2026-10').value, 93058);
-  assert.equal(row(m('google_roas', '--by', 'campaign', '--month', '2026-10'), 'campaign', 'Brand - Kesar & Co').value, 7.28);
+  assert.equal(m('ad_spend', '--channel', 'Google', '--month', '2026-10').value, 102298);
+  assert.equal(row(m('google_roas', '--by', 'campaign', '--month', '2026-10'), 'campaign', 'Brand - Kesar & Co').value, 7.19);
   const amz = m('marketplace_roas', '--channel', 'Amazon', '--month', '2026-10');
-  assert.deepEqual([amz.spend, amz.value], [51331, 3.72]);
+  assert.deepEqual([amz.spend, amz.value], [63362, 3.69]);
   const fees = m('fees_pct', '--by', 'channel');
-  assert.deepEqual([row(fees, 'channel', 'Nykaa').value, row(fees, 'channel', 'Website').value, row(fees, 'channel', 'Amazon').value], [33.1, 5.8, 15]);
-  assert.equal(m('repeat_rate').value, 21.2);
-  assert.equal(m('repeat_rate', '--channel', 'Website').value, 27.4);
-  assert.equal(m('cac', '--month', '2026-10').value, 280);
+  assert.deepEqual([row(fees, 'channel', 'Nykaa').value, row(fees, 'channel', 'Website').value, row(fees, 'channel', 'Amazon').value], [33.3, 5.7, 15.4]);
+  assert.equal(m('repeat_rate').value, 17.6);
+  assert.equal(m('repeat_rate', '--channel', 'Website').value, 25.4);
+  assert.equal(m('cac', '--month', '2026-10').value, 277);
   const pay10 = m('salary_bill');
-  assert.deepEqual([pay10.value, pay10.net_pay, pay10.employer_cost, pay10.tds, pay10.headcount], [1214909, 1162815, 1258375, 4628, 25]);
+  assert.deepEqual([pay10.value, pay10.net_pay, pay10.employer_cost, pay10.tds, pay10.headcount, pay10.esi_employee + pay10.esi_employer], [1269881, 1214133, 1318375, 4628, 28, 2202]);
   assert.equal(pay10.employer_cost, sql("SELECT salaries FROM pnl_monthly WHERE month = '2026-10'")[0].salaries);
   const cov = m('days_of_cover', '--last', '29').values; // README uses 29 days (10-03..10-31)
-  assert.deepEqual(cov.slice(0, 2).map((x) => [x.warehouse, x.sku, x.on_hand, x.value]), [['Delhi', 'SKU01', 250, 13.3], ['Delhi', 'SKU05', 80, 14.6]]);
-  assert.equal(row(m('days_of_cover', '--last', '29', '--sku', 'SKU02'), 'warehouse', 'Bangalore').value, 38);
+  assert.deepEqual(cov.slice(0, 2).map((x) => [x.warehouse, x.sku, x.on_hand, x.value]), [['Delhi', 'SKU01', 250, 10.7], ['Delhi', 'SKU05', 80, 13]]);
+  assert.equal(row(m('days_of_cover', '--last', '29', '--sku', 'SKU02'), 'warehouse', 'Bangalore').value, 36.3);
   assert.deepEqual(m('stockout_risk').values.map((x) => x.warehouse + x.sku), ['DelhiSKU01', 'DelhiSKU05']);
   const po = m('po_delays');
   assert.deepEqual([po.delayed_now, po.arrived_late, po.pos], [2, 18, 94]);
@@ -127,8 +127,48 @@ test('data/README.md story numbers', () => {
   const saf = m('rm_cost_change').values[0];
   assert.deepEqual([saf.material, saf.first_cost, saf.last_cost], ['Kashmiri saffron (kesar)', 257.75, 291.45]);
   const sku = m('net_revenue', '--by', 'sku').values;
-  assert.deepEqual(sku.map((x) => [x.sku, x.value]), [['SKU02', 3429699], ['SKU01', 2926823], ['SKU03', 1772655], ['SKU05', 1689645], ['SKU04', 1273738]]);
+  assert.deepEqual(sku.map((x) => [x.sku, x.value]), [['SKU02', 3377419], ['SKU01', 2860422], ['SKU03', 1814224], ['SKU05', 1594597], ['SKU04', 1257241]]);
   assert.equal(m('booked_revenue', '--by', 'day').values.reduce((a, b) => (b.value > a.value ? b : a)).day, '2026-10-21');
+});
+
+test('India layer: new metrics tie to the raw tables and the README story numbers', () => {
+  const one = (q) => sql(q)[0];
+  // quick commerce share and channel mix
+  const qc = one("SELECT SUM(CASE WHEN f.channel_group = 'Quick commerce' THEN o.net_revenue ELSE 0 END) AS qc, SUM(o.net_revenue) AS t FROM orders o JOIN channel_fees f ON f.channel = o.channel WHERE o.status = 'delivered' AND o.date LIKE '2026-10%'");
+  near(m('qc_share', '--month', '2026-10').value, Math.round((1000 * qc.qc) / qc.t) / 10, 0);
+  assert.equal(m('qc_share', '--month', '2026-10').value, 12.5);
+  const mix = m('channel_mix', '--month', '2026-10').values;
+  assert.equal(mix.reduce((a, x) => a + x.value, 0), m('net_revenue', '--month', '2026-10').value);
+  assert.equal(row(m('channel_mix', '--month', '2026-10'), 'channel_group', 'D2C').share_pct, 51.1);
+  // payments: UPI leads website prepaid
+  const pm = m('payment_mix', '--channel', 'Website').values;
+  assert.equal(pm.reduce((a, x) => a + x.value, 0), m('orders', '--channel', 'Website').value);
+  assert.equal(row({ values: pm }, 'payment_method', 'COD').value, m('cod_share', '--channel', 'Website').cod_orders);
+  // GST: cash payable per GSTIN, and the README October figures
+  const g = m('gst_payable', '--month', '2026-10', '--by', 'state');
+  assert.deepEqual(['Maharashtra', 'Delhi', 'Karnataka'].map((st) => row(g, 'state', st).value), [0, 219098, 136914]);
+  assert.equal(m('gst_payable', '--month', '2026-10').output_gst, one("SELECT SUM(gst) AS v FROM orders WHERE date LIKE '2026-10%'").v);
+  // settlements: payouts tie to the formula, receivables to pending rows
+  const pay = m('payouts', '--channel', 'Nykaa');
+  assert.equal(pay.value, pay.gross_sales - pay.fees - pay.shipping - pay.gst_on_fees - pay.tcs - pay.tds);
+  assert.equal(pay.gross_sales, one("SELECT SUM(net_revenue) AS v FROM orders WHERE channel = 'Nykaa' AND status = 'delivered'").v);
+  assert.equal(m('receivables').value, 1584468);
+  assert.equal(row(m('receivables', '--by', 'channel'), 'channel', 'Nykaa').value, 204223);
+  const lag = m('settlement_lag_days', '--by', 'channel');
+  assert.ok(row(lag, 'channel', 'Health & Glow').value > row(lag, 'channel', 'Amazon').value, 'offline credit is slower than Amazon');
+  // dark stores, ratings, support, WhatsApp, compliance, RTO by tier and state
+  const qa = m('qc_availability', '--by', 'channel,city', '--sku', 'SKU02').values[0];
+  assert.deepEqual([qa.channel, qa.city, qa.value], ['Zepto', 'Bangalore', 36.4]);
+  assert.equal(m('rating', '--channel', 'Meesho').value, 4.03);
+  assert.equal(m('rating').ratings, one('SELECT SUM(ratings) AS v FROM reviews').v);
+  const tk = m('tickets');
+  assert.deepEqual([tk.value, m('csat').value], [1381, 3.99]);
+  assert.equal(m('tickets', '--by', 'category').values[0].category, 'Product question (pre-sale)');
+  assert.equal(row(m('whatsapp_roas', '--by', 'flow'), 'flow', 'Abandoned cart recovery').value, 47.39);
+  assert.equal(m('compliance_due', '--month', '2026-11').value, 527303);
+  const tier = m('rto_pct', '--by', 'tier').values;
+  assert.deepEqual([1, 2, 3].map((t) => tier.find((x) => x.tier === t).value), [4.9, 9.8, 17]);
+  assert.ok(m('rto_pct', '--by', 'state').values.length >= 20);
 });
 
 test('evals/questions.mjs truths (computed from raw CSVs) match one-command metrics', () => {
@@ -171,7 +211,7 @@ test('brief: every dept, numbers carry the command behind them', () => {
   }
   const f = ok('brief', 'finance');
   assert.equal(f.month, '2026-10');
-  assert.equal(f.numbers.find((n) => n.label === 'EBITDA').value, -229795);
+  assert.equal(f.numbers.find((n) => n.label === 'EBITDA').value, -411749);
   assert.ok(f.policy_checks.every((c) => typeof c.ok === 'boolean'));
   assert.equal(ok('brief', 'analyst').dept, 'analytics');
   assert.match(run('brief', 'legal').error, /unknown dept/);

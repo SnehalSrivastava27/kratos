@@ -1,0 +1,63 @@
+campaign_id,date,bsp,flow,category,audience,language,sent,delivered,read,clicked,orders,revenue,cost
+WA001,2026-08-01,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,549,522,442,77,18,20737,459
+WA002,2026-08-01,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,148,144,127,127,0,0,18
+WA003,2026-08-01,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,77,73,59,19,0,0,9
+WA004,2026-08-08,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,590,570,415,78,20,25323,502
+WA005,2026-08-08,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,158,153,129,88,0,0,19
+WA006,2026-08-08,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,92,90,72,31,0,0,11
+WA007,2026-08-13,Interakt,Broadcast - Independence Day sale,marketing,All opted-in subscribers,Hinglish,11000,10354,7059,469,81,81747,9112
+WA008,2026-08-15,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,723,685,642,119,32,29726,603
+WA009,2026-08-15,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,167,160,143,107,0,0,20
+WA010,2026-08-15,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,104,100,78,32,0,0,13
+WA011,2026-08-21,Interakt,Broadcast - Onam gift sets,marketing,Kerala subscribers,Malayalam,950,931,723,62,11,13657,819
+WA012,2026-08-22,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,954,918,795,133,33,35440,808
+WA013,2026-08-22,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,213,206,187,139,0,0,26
+WA014,2026-08-22,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,118,113,89,30,0,0,14
+WA015,2026-08-24,Interakt,Broadcast - Raksha Bandhan Glow Kit,marketing,All opted-in subscribers,Hinglish,11750,11083,8560,502,80,79239,9753
+WA016,2026-08-29,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,664,650,526,107,27,29753,572
+WA017,2026-08-29,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,173,165,134,101,0,0,21
+WA018,2026-08-29,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,89,84,71,22,0,0,11
+WA019,2026-09-04,Interakt,Broadcast - Monsoon skincare routine,marketing,All opted-in subscribers,English,12000,11404,8247,426,75,86365,10036
+WA020,2026-09-05,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,806,770,623,120,27,33204,678
+WA021,2026-09-05,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,154,148,138,129,0,0,19
+WA022,2026-09-05,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,92,88,69,17,0,0,11
+WA023,2026-09-12,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,723,687,571,100,22,25344,605
+WA024,2026-09-12,Interakt,Broadcast - Ganesh Chaturthi offer,marketing,Maharashtra subscribers,Marathi,3100,2969,2315,126,27,31794,2613
+WA025,2026-09-12,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,161,151,133,88,0,0,19
+WA026,2026-09-12,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,94,91,70,25,0,0,11
+WA027,2026-09-12,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,290,282,210,25,7,7733,248
+WA028,2026-09-19,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,611,582,475,79,17,17008,512
+WA029,2026-09-19,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,162,155,141,102,0,0,19
+WA030,2026-09-19,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,104,98,85,24,0,0,12
+WA031,2026-09-19,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,305,290,220,32,12,14257,255
+WA032,2026-09-25,Interakt,Broadcast - Sunscreen restock,marketing,Past SKU02 buyers,English,3900,3771,2793,212,48,57075,3318
+WA033,2026-09-26,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,576,548,437,85,20,22508,482
+WA034,2026-09-26,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,163,158,148,92,0,0,20
+WA035,2026-09-26,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,116,110,80,31,0,0,14
+WA036,2026-09-26,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,381,366,279,38,8,9550,322
+WA037,2026-10-03,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,488,465,390,85,23,22557,409
+WA038,2026-10-03,Interakt,Broadcast - Festive early access (website),marketing,All opted-in subscribers,Hinglish,13250,12838,9957,817,129,136074,11297
+WA039,2026-10-03,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,124,120,115,89,0,0,15
+WA040,2026-10-03,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,87,82,65,20,0,0,10
+WA041,2026-10-03,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,530,511,386,55,16,18296,450
+WA042,2026-10-10,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,869,830,677,131,23,29627,730
+WA043,2026-10-10,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,188,177,161,121,0,0,22
+WA044,2026-10-10,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,125,121,91,37,0,0,15
+WA045,2026-10-10,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,356,337,258,33,9,9982,297
+WA046,2026-10-11,Interakt,Broadcast - Navratri glow edit,marketing,Gujarat + Hindi belt subscribers,Gujarati + Hindi,5900,5761,4314,278,47,56278,5070
+WA047,2026-10-15,Interakt,Broadcast - Durga Puja (Pujo) offer,marketing,"West Bengal, Assam, Odisha subscribers",Bengali,1300,1269,1002,65,9,11356,1117
+WA048,2026-10-17,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,1360,1304,1062,221,47,58067,1148
+WA049,2026-10-17,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,292,285,255,189,0,0,36
+WA050,2026-10-17,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,212,199,142,36,0,0,25
+WA051,2026-10-17,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,437,424,308,51,19,23785,373
+WA052,2026-10-19,Interakt,Broadcast - Dussehra sale live,marketing,All opted-in subscribers,Hindi,14250,13793,9921,699,131,149057,12138
+WA053,2026-10-22,Interakt,Broadcast - Last day Dussehra sale,marketing,Clicked but not bought,Hinglish,4600,4379,3366,243,50,62619,3854
+WA054,2026-10-24,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,714,672,543,127,34,35609,591
+WA055,2026-10-24,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,184,178,162,108,0,0,22
+WA056,2026-10-24,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,97,93,75,27,0,0,12
+WA057,2026-10-24,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,389,372,278,38,10,11154,327
+WA058,2026-10-28,Interakt,Broadcast - Diwali gifting preview,marketing,All opted-in subscribers,Hinglish,14800,13973,10433,527,91,93793,12296
+WA059,2026-10-31,Interakt,Abandoned cart recovery,marketing,Website carts abandoned with phone number,Hinglish,85,82,65,11,2,2305,72
+WA060,2026-10-31,WATI,COD order confirmation,utility,Every website COD order,English + Hindi,26,25,20,17,0,0,3
+WA061,2026-10-31,WATI,NDR reattempt (failed delivery),utility,Website orders with a failed delivery attempt,English + Hindi,20,20,16,5,0,0,3
+WA062,2026-10-31,Interakt,Reorder reminder (day 42),marketing,Website buyers 6 weeks after delivery,English,315,297,240,32,9,10232,261

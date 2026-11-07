@@ -1,0 +1,56 @@
+city,state,region,tier,pincode,gst_state_code,is_metro,home_warehouse,zone_from_mumbai,zone_from_delhi,zone_from_bangalore,quick_commerce,offline_stores
+Delhi,Delhi,North,1,110001,07,yes,Delhi,C,A,C,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,Apollo Pharmacy
+Gurugram,Haryana,North,1,122001,06,yes,Delhi,C,A,C,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,
+Noida,Uttar Pradesh,North,1,201301,09,yes,Delhi,C,A,C,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,
+Lucknow,Uttar Pradesh,North,2,226001,09,no,Delhi,D,B,D,Blinkit; Zepto,
+Jaipur,Rajasthan,North,2,302001,08,no,Delhi,D,B,D,Blinkit; Zepto,
+Chandigarh,Chandigarh,North,2,160017,04,no,Delhi,D,B,D,Blinkit,
+Kanpur,Uttar Pradesh,North,2,208001,09,no,Delhi,D,B,D,,
+Ludhiana,Punjab,North,2,141001,03,no,Delhi,D,B,D,,
+Dehradun,Uttarakhand,North,3,248001,05,no,Delhi,D,B,D,,
+Meerut,Uttar Pradesh,North,3,250001,09,no,Delhi,D,B,D,,
+Jammu,Jammu and Kashmir,North,3,180001,01,no,Delhi,E,E,E,,
+Amritsar,Punjab,North,3,143001,03,no,Delhi,D,B,D,,
+Varanasi,Uttar Pradesh,North,3,221001,09,no,Delhi,D,B,D,,
+Agra,Uttar Pradesh,North,3,282001,09,no,Delhi,D,B,D,,
+Gorakhpur,Uttar Pradesh,North,3,273001,09,no,Delhi,D,B,D,,
+Jodhpur,Rajasthan,North,3,342001,08,no,Delhi,D,B,D,,
+Mumbai,Maharashtra,West,1,400001,27,yes,Mumbai,A,C,C,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,Health & Glow
+Thane,Maharashtra,West,1,400601,27,yes,Mumbai,A,C,C,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,
+Pune,Maharashtra,West,1,411001,27,yes,Mumbai,B,C,C,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,Health & Glow
+Ahmedabad,Gujarat,West,1,380001,24,yes,Mumbai,B,C,C,Blinkit; Zepto; Instamart; BB Now,
+Surat,Gujarat,West,2,395003,24,no,Mumbai,B,D,D,,
+Vadodara,Gujarat,West,2,390001,24,no,Mumbai,B,D,D,,
+Nagpur,Maharashtra,West,2,440001,27,no,Mumbai,B,D,D,,
+Indore,Madhya Pradesh,West,2,452001,23,no,Mumbai,B,D,D,Blinkit,
+Bhopal,Madhya Pradesh,West,2,462001,23,no,Mumbai,B,D,D,,
+Nashik,Maharashtra,West,3,422001,27,no,Mumbai,B,D,D,,
+Rajkot,Gujarat,West,3,360001,24,no,Mumbai,B,D,D,,
+Aurangabad,Maharashtra,West,3,431001,27,no,Mumbai,B,D,D,,
+Panaji,Goa,West,3,403001,30,no,Mumbai,B,D,D,,
+Raipur,Chhattisgarh,West,3,492001,22,no,Mumbai,B,D,D,,
+Bangalore,Karnataka,South,1,560001,29,yes,Bangalore,C,C,A,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,Health & Glow; Apollo Pharmacy
+Hyderabad,Telangana,South,1,500001,36,yes,Bangalore,C,C,B,Blinkit; Zepto; Instamart; BB Now; Flipkart Minutes,Health & Glow; Apollo Pharmacy
+Chennai,Tamil Nadu,South,1,600001,33,yes,Bangalore,C,C,B,Blinkit; Zepto; Instamart; BB Now,Health & Glow; Apollo Pharmacy
+Kochi,Kerala,South,2,682001,32,no,Bangalore,E,E,E,Instamart,Health & Glow
+Coimbatore,Tamil Nadu,South,2,641001,33,no,Bangalore,D,D,B,Instamart,
+Visakhapatnam,Andhra Pradesh,South,2,530001,37,no,Bangalore,D,D,B,,Apollo Pharmacy
+Mysuru,Karnataka,South,3,570001,29,no,Bangalore,D,D,B,,Health & Glow
+Madurai,Tamil Nadu,South,3,625001,33,no,Bangalore,D,D,B,,Apollo Pharmacy
+Thiruvananthapuram,Kerala,South,3,695001,32,no,Bangalore,E,E,E,,
+Vijayawada,Andhra Pradesh,South,3,520001,37,no,Bangalore,D,D,B,,Apollo Pharmacy
+Mangaluru,Karnataka,South,3,575001,29,no,Bangalore,D,D,B,,Health & Glow
+Hubballi,Karnataka,South,3,580020,29,no,Bangalore,D,D,B,,
+Tiruchirappalli,Tamil Nadu,South,3,620001,33,no,Bangalore,D,D,B,,
+Kozhikode,Kerala,South,3,673001,32,no,Bangalore,E,E,E,,
+Warangal,Telangana,South,3,506002,36,no,Bangalore,D,D,B,,
+Kolkata,West Bengal,East,1,700001,19,yes,Delhi,C,C,C,Blinkit; Zepto; Instamart; BB Now,Health & Glow; Apollo Pharmacy
+Bhubaneswar,Odisha,East,2,751001,21,no,Delhi,D,D,D,,
+Patna,Bihar,East,2,800001,10,no,Delhi,D,D,D,,
+Ranchi,Jharkhand,East,2,834001,20,no,Delhi,D,D,D,,
+Guwahati,Assam,East,2,781001,18,no,Delhi,E,E,E,,
+Siliguri,West Bengal,East,3,734001,19,no,Delhi,D,D,D,,
+Durgapur,West Bengal,East,3,713201,19,no,Delhi,D,D,D,,
+Jamshedpur,Jharkhand,East,3,831001,20,no,Delhi,D,D,D,,
+Cuttack,Odisha,East,3,753001,21,no,Delhi,D,D,D,,
+Gaya,Bihar,East,3,823001,10,no,Delhi,D,D,D,,

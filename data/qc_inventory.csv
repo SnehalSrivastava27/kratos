@@ -1,0 +1,3901 @@
+date,platform,city,sku,dark_stores,in_stock_stores,on_hand,units_sold_week,days_of_cover,availability_pct
+2026-08-08,Blinkit,Delhi,SKU01,14,13,26,3,60.7,92.9
+2026-08-08,Blinkit,Delhi,SKU02,14,12,12,2,42,85.7
+2026-08-08,Blinkit,Delhi,SKU03,14,12,24,1,168,85.7
+2026-08-08,Blinkit,Delhi,SKU04,14,13,26,1,182,92.9
+2026-08-08,Blinkit,Delhi,SKU05,14,12,24,1,168,85.7
+2026-08-08,Blinkit,Gurugram,SKU01,5,4,8,1,56,80
+2026-08-08,Blinkit,Gurugram,SKU02,5,5,10,0,,100
+2026-08-08,Blinkit,Gurugram,SKU03,5,5,10,1,70,100
+2026-08-08,Blinkit,Gurugram,SKU04,5,4,4,0,,80
+2026-08-08,Blinkit,Gurugram,SKU05,5,5,10,1,70,100
+2026-08-08,Blinkit,Noida,SKU01,5,4,8,1,56,80
+2026-08-08,Blinkit,Noida,SKU02,5,5,10,0,,100
+2026-08-08,Blinkit,Noida,SKU03,5,4,4,0,,80
+2026-08-08,Blinkit,Noida,SKU04,5,4,4,0,,80
+2026-08-08,Blinkit,Noida,SKU05,5,4,4,0,,80
+2026-08-08,Blinkit,Mumbai,SKU01,14,12,12,0,,85.7
+2026-08-08,Blinkit,Mumbai,SKU02,14,12,12,4,21,85.7
+2026-08-08,Blinkit,Mumbai,SKU03,14,12,12,1,84,85.7
+2026-08-08,Blinkit,Mumbai,SKU04,14,12,12,1,84,85.7
+2026-08-08,Blinkit,Mumbai,SKU05,14,12,12,0,,85.7
+2026-08-08,Blinkit,Thane,SKU01,4,4,8,1,56,100
+2026-08-08,Blinkit,Thane,SKU02,4,3,6,1,42,75
+2026-08-08,Blinkit,Thane,SKU03,4,3,3,1,21,75
+2026-08-08,Blinkit,Thane,SKU04,4,4,4,0,,100
+2026-08-08,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-08-08,Blinkit,Pune,SKU01,8,7,14,0,,87.5
+2026-08-08,Blinkit,Pune,SKU02,8,8,16,0,,100
+2026-08-08,Blinkit,Pune,SKU03,8,7,14,0,,87.5
+2026-08-08,Blinkit,Pune,SKU04,8,7,7,0,,87.5
+2026-08-08,Blinkit,Pune,SKU05,8,7,7,0,,87.5
+2026-08-08,Blinkit,Ahmedabad,SKU01,5,4,8,0,,80
+2026-08-08,Blinkit,Ahmedabad,SKU02,5,5,5,0,,100
+2026-08-08,Blinkit,Ahmedabad,SKU03,5,4,4,0,,80
+2026-08-08,Blinkit,Ahmedabad,SKU04,5,5,10,0,,100
+2026-08-08,Blinkit,Ahmedabad,SKU05,5,5,5,1,35,100
+2026-08-08,Blinkit,Bangalore,SKU01,15,13,26,5,36.4,86.7
+2026-08-08,Blinkit,Bangalore,SKU02,15,14,28,8,24.5,93.3
+2026-08-08,Blinkit,Bangalore,SKU03,15,13,13,4,22.8,86.7
+2026-08-08,Blinkit,Bangalore,SKU04,15,13,26,0,,86.7
+2026-08-08,Blinkit,Bangalore,SKU05,15,15,30,0,,100
+2026-08-08,Blinkit,Hyderabad,SKU01,11,10,20,0,,90.9
+2026-08-08,Blinkit,Hyderabad,SKU02,11,11,22,1,154,100
+2026-08-08,Blinkit,Hyderabad,SKU03,11,10,10,1,70,90.9
+2026-08-08,Blinkit,Hyderabad,SKU04,11,10,20,0,,90.9
+2026-08-08,Blinkit,Hyderabad,SKU05,11,10,10,0,,90.9
+2026-08-08,Blinkit,Chennai,SKU01,9,8,16,3,37.3,88.9
+2026-08-08,Blinkit,Chennai,SKU02,9,8,16,4,28,88.9
+2026-08-08,Blinkit,Chennai,SKU03,9,8,8,2,28,88.9
+2026-08-08,Blinkit,Chennai,SKU04,9,8,16,0,,88.9
+2026-08-08,Blinkit,Chennai,SKU05,9,9,18,0,,100
+2026-08-08,Blinkit,Kolkata,SKU01,10,9,18,3,42,90
+2026-08-08,Blinkit,Kolkata,SKU02,10,9,9,4,15.8,90
+2026-08-08,Blinkit,Kolkata,SKU03,10,9,9,1,63,90
+2026-08-08,Blinkit,Kolkata,SKU04,10,9,9,0,,90
+2026-08-08,Blinkit,Kolkata,SKU05,10,9,18,0,,90
+2026-08-08,Blinkit,Jaipur,SKU01,4,4,4,1,28,100
+2026-08-08,Blinkit,Jaipur,SKU02,4,3,3,0,,75
+2026-08-08,Blinkit,Jaipur,SKU03,4,4,8,0,,100
+2026-08-08,Blinkit,Jaipur,SKU04,4,4,8,0,,100
+2026-08-08,Blinkit,Jaipur,SKU05,4,3,6,0,,75
+2026-08-08,Blinkit,Lucknow,SKU01,4,3,3,0,,75
+2026-08-08,Blinkit,Lucknow,SKU02,4,4,8,2,28,100
+2026-08-08,Blinkit,Lucknow,SKU03,4,4,8,1,56,100
+2026-08-08,Blinkit,Lucknow,SKU04,4,4,8,0,,100
+2026-08-08,Blinkit,Lucknow,SKU05,4,4,4,0,,100
+2026-08-08,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-08-08,Blinkit,Chandigarh,SKU02,3,3,3,0,,100
+2026-08-08,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-08-08,Blinkit,Chandigarh,SKU04,3,3,3,0,,100
+2026-08-08,Blinkit,Chandigarh,SKU05,3,3,3,0,,100
+2026-08-08,Blinkit,Indore,SKU01,3,3,6,1,42,100
+2026-08-08,Blinkit,Indore,SKU02,3,3,6,1,42,100
+2026-08-08,Blinkit,Indore,SKU03,3,3,6,0,,100
+2026-08-08,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-08-08,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-08-08,Zepto,Delhi,SKU01,10,9,18,1,126,90
+2026-08-08,Zepto,Delhi,SKU02,10,9,9,1,63,90
+2026-08-08,Zepto,Delhi,SKU03,10,9,18,0,,90
+2026-08-08,Zepto,Delhi,SKU04,10,10,10,0,,100
+2026-08-08,Zepto,Delhi,SKU05,10,9,9,0,,90
+2026-08-08,Zepto,Gurugram,SKU01,4,4,4,1,28,100
+2026-08-08,Zepto,Gurugram,SKU02,4,3,3,0,,75
+2026-08-08,Zepto,Gurugram,SKU03,4,4,4,1,28,100
+2026-08-08,Zepto,Gurugram,SKU04,4,4,4,0,,100
+2026-08-08,Zepto,Gurugram,SKU05,4,4,8,0,,100
+2026-08-08,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-08-08,Zepto,Noida,SKU02,3,3,6,1,42,100
+2026-08-08,Zepto,Noida,SKU03,3,3,3,2,10.5,100
+2026-08-08,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-08-08,Zepto,Noida,SKU05,3,3,6,0,,100
+2026-08-08,Zepto,Mumbai,SKU01,11,11,22,1,154,100
+2026-08-08,Zepto,Mumbai,SKU02,11,10,20,2,70,90.9
+2026-08-08,Zepto,Mumbai,SKU03,11,9,9,0,,81.8
+2026-08-08,Zepto,Mumbai,SKU04,11,10,20,0,,90.9
+2026-08-08,Zepto,Mumbai,SKU05,11,10,10,0,,90.9
+2026-08-08,Zepto,Thane,SKU01,3,3,3,0,,100
+2026-08-08,Zepto,Thane,SKU02,3,3,3,2,10.5,100
+2026-08-08,Zepto,Thane,SKU03,3,3,6,1,42,100
+2026-08-08,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-08-08,Zepto,Thane,SKU05,3,3,6,0,,100
+2026-08-08,Zepto,Pune,SKU01,6,6,12,0,,100
+2026-08-08,Zepto,Pune,SKU02,6,6,6,0,,100
+2026-08-08,Zepto,Pune,SKU03,6,5,5,1,35,83.3
+2026-08-08,Zepto,Pune,SKU04,6,5,10,1,70,83.3
+2026-08-08,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-08-08,Zepto,Ahmedabad,SKU01,4,3,3,1,21,75
+2026-08-08,Zepto,Ahmedabad,SKU02,4,3,3,2,10.5,75
+2026-08-08,Zepto,Ahmedabad,SKU03,4,4,8,0,,100
+2026-08-08,Zepto,Ahmedabad,SKU04,4,4,4,0,,100
+2026-08-08,Zepto,Ahmedabad,SKU05,4,3,3,0,,75
+2026-08-08,Zepto,Bangalore,SKU01,11,9,18,3,42,81.8
+2026-08-08,Zepto,Bangalore,SKU02,11,9,18,1,126,81.8
+2026-08-08,Zepto,Bangalore,SKU03,11,10,10,3,23.3,90.9
+2026-08-08,Zepto,Bangalore,SKU04,11,10,20,1,140,90.9
+2026-08-08,Zepto,Bangalore,SKU05,11,10,10,1,70,90.9
+2026-08-08,Zepto,Hyderabad,SKU01,8,8,16,0,,100
+2026-08-08,Zepto,Hyderabad,SKU02,8,8,8,0,,100
+2026-08-08,Zepto,Hyderabad,SKU03,8,7,7,0,,87.5
+2026-08-08,Zepto,Hyderabad,SKU04,8,8,8,0,,100
+2026-08-08,Zepto,Hyderabad,SKU05,8,8,8,0,,100
+2026-08-08,Zepto,Chennai,SKU01,7,6,12,1,84,85.7
+2026-08-08,Zepto,Chennai,SKU02,7,7,14,1,98,100
+2026-08-08,Zepto,Chennai,SKU03,7,7,7,3,16.3,100
+2026-08-08,Zepto,Chennai,SKU04,7,7,7,1,49,100
+2026-08-08,Zepto,Chennai,SKU05,7,6,6,1,42,85.7
+2026-08-08,Zepto,Kolkata,SKU01,7,7,14,1,98,100
+2026-08-08,Zepto,Kolkata,SKU02,7,6,6,2,21,85.7
+2026-08-08,Zepto,Kolkata,SKU03,7,7,7,0,,100
+2026-08-08,Zepto,Kolkata,SKU04,7,7,7,0,,100
+2026-08-08,Zepto,Kolkata,SKU05,7,6,12,0,,85.7
+2026-08-08,Zepto,Jaipur,SKU01,3,3,3,2,10.5,100
+2026-08-08,Zepto,Jaipur,SKU02,3,3,3,1,21,100
+2026-08-08,Zepto,Jaipur,SKU03,3,3,6,0,,100
+2026-08-08,Zepto,Jaipur,SKU04,3,3,6,0,,100
+2026-08-08,Zepto,Jaipur,SKU05,3,3,6,0,,100
+2026-08-08,Zepto,Lucknow,SKU01,3,3,6,0,,100
+2026-08-08,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-08-08,Zepto,Lucknow,SKU03,3,3,3,0,,100
+2026-08-08,Zepto,Lucknow,SKU04,3,3,6,0,,100
+2026-08-08,Zepto,Lucknow,SKU05,3,3,6,0,,100
+2026-08-08,Instamart,Delhi,SKU01,9,9,18,0,,100
+2026-08-08,Instamart,Delhi,SKU02,9,9,18,2,63,100
+2026-08-08,Instamart,Delhi,SKU03,9,9,9,0,,100
+2026-08-08,Instamart,Delhi,SKU04,9,8,8,0,,88.9
+2026-08-08,Instamart,Delhi,SKU05,9,8,8,0,,88.9
+2026-08-08,Instamart,Gurugram,SKU01,4,4,4,1,28,100
+2026-08-08,Instamart,Gurugram,SKU02,4,4,4,0,,100
+2026-08-08,Instamart,Gurugram,SKU03,4,4,8,1,56,100
+2026-08-08,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-08-08,Instamart,Gurugram,SKU05,4,4,8,0,,100
+2026-08-08,Instamart,Noida,SKU01,3,3,6,2,21,100
+2026-08-08,Instamart,Noida,SKU02,3,3,6,1,42,100
+2026-08-08,Instamart,Noida,SKU03,3,3,6,1,42,100
+2026-08-08,Instamart,Noida,SKU04,3,3,3,1,21,100
+2026-08-08,Instamart,Noida,SKU05,3,3,3,1,21,100
+2026-08-08,Instamart,Mumbai,SKU01,10,9,18,1,126,90
+2026-08-08,Instamart,Mumbai,SKU02,10,9,18,1,126,90
+2026-08-08,Instamart,Mumbai,SKU03,10,9,9,0,,90
+2026-08-08,Instamart,Mumbai,SKU04,10,9,9,0,,90
+2026-08-08,Instamart,Mumbai,SKU05,10,9,18,0,,90
+2026-08-08,Instamart,Thane,SKU01,3,3,3,0,,100
+2026-08-08,Instamart,Thane,SKU02,3,3,6,0,,100
+2026-08-08,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-08-08,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-08-08,Instamart,Thane,SKU05,3,3,6,1,42,100
+2026-08-08,Instamart,Pune,SKU01,6,6,6,3,14,100
+2026-08-08,Instamart,Pune,SKU02,6,6,6,2,21,100
+2026-08-08,Instamart,Pune,SKU03,6,5,10,0,,83.3
+2026-08-08,Instamart,Pune,SKU04,6,5,5,0,,83.3
+2026-08-08,Instamart,Pune,SKU05,6,5,10,1,70,83.3
+2026-08-08,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-08-08,Instamart,Ahmedabad,SKU02,3,3,6,0,,100
+2026-08-08,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-08-08,Instamart,Ahmedabad,SKU04,3,3,3,0,,100
+2026-08-08,Instamart,Ahmedabad,SKU05,3,3,6,1,42,100
+2026-08-08,Instamart,Bangalore,SKU01,11,11,11,1,77,100
+2026-08-08,Instamart,Bangalore,SKU02,11,10,20,2,70,90.9
+2026-08-08,Instamart,Bangalore,SKU03,11,10,20,4,35,90.9
+2026-08-08,Instamart,Bangalore,SKU04,11,11,22,0,,100
+2026-08-08,Instamart,Bangalore,SKU05,11,11,11,0,,100
+2026-08-08,Instamart,Hyderabad,SKU01,8,8,8,0,,100
+2026-08-08,Instamart,Hyderabad,SKU02,8,7,14,2,49,87.5
+2026-08-08,Instamart,Hyderabad,SKU03,8,8,8,0,,100
+2026-08-08,Instamart,Hyderabad,SKU04,8,7,7,1,49,87.5
+2026-08-08,Instamart,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-08-08,Instamart,Chennai,SKU01,6,6,12,1,84,100
+2026-08-08,Instamart,Chennai,SKU02,6,6,12,0,,100
+2026-08-08,Instamart,Chennai,SKU03,6,5,5,0,,83.3
+2026-08-08,Instamart,Chennai,SKU04,6,6,6,0,,100
+2026-08-08,Instamart,Chennai,SKU05,6,6,12,0,,100
+2026-08-08,Instamart,Kolkata,SKU01,7,7,7,1,49,100
+2026-08-08,Instamart,Kolkata,SKU02,7,6,6,3,14,85.7
+2026-08-08,Instamart,Kolkata,SKU03,7,7,14,2,49,100
+2026-08-08,Instamart,Kolkata,SKU04,7,7,7,0,,100
+2026-08-08,Instamart,Kolkata,SKU05,7,7,7,2,24.5,100
+2026-08-08,Instamart,Kochi,SKU01,2,2,4,1,28,100
+2026-08-08,Instamart,Kochi,SKU02,2,2,4,0,,100
+2026-08-08,Instamart,Kochi,SKU03,2,2,2,0,,100
+2026-08-08,Instamart,Kochi,SKU04,2,2,4,0,,100
+2026-08-08,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-08-08,Instamart,Coimbatore,SKU01,2,2,4,0,,100
+2026-08-08,Instamart,Coimbatore,SKU02,2,2,2,0,,100
+2026-08-08,Instamart,Coimbatore,SKU03,2,2,4,0,,100
+2026-08-08,Instamart,Coimbatore,SKU04,2,2,4,0,,100
+2026-08-08,Instamart,Coimbatore,SKU05,2,2,2,0,,100
+2026-08-08,BB Now,Delhi,SKU01,5,4,8,0,,80
+2026-08-08,BB Now,Delhi,SKU02,5,5,10,1,70,100
+2026-08-08,BB Now,Delhi,SKU03,5,5,10,0,,100
+2026-08-08,BB Now,Delhi,SKU04,5,5,10,0,,100
+2026-08-08,BB Now,Delhi,SKU05,5,4,8,0,,80
+2026-08-08,BB Now,Gurugram,SKU01,2,2,4,0,,100
+2026-08-08,BB Now,Gurugram,SKU02,2,2,2,0,,100
+2026-08-08,BB Now,Gurugram,SKU03,2,2,2,0,,100
+2026-08-08,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-08-08,BB Now,Gurugram,SKU05,2,2,4,0,,100
+2026-08-08,BB Now,Noida,SKU01,2,2,4,0,,100
+2026-08-08,BB Now,Noida,SKU02,2,2,4,0,,100
+2026-08-08,BB Now,Noida,SKU03,2,2,2,0,,100
+2026-08-08,BB Now,Noida,SKU04,2,2,2,0,,100
+2026-08-08,BB Now,Noida,SKU05,2,2,4,0,,100
+2026-08-08,BB Now,Mumbai,SKU01,5,5,5,1,35,100
+2026-08-08,BB Now,Mumbai,SKU02,5,4,4,0,,80
+2026-08-08,BB Now,Mumbai,SKU03,5,4,8,2,28,80
+2026-08-08,BB Now,Mumbai,SKU04,5,4,4,1,28,80
+2026-08-08,BB Now,Mumbai,SKU05,5,4,4,0,,80
+2026-08-08,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-08-08,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-08-08,BB Now,Thane,SKU03,2,2,2,0,,100
+2026-08-08,BB Now,Thane,SKU04,2,2,2,0,,100
+2026-08-08,BB Now,Thane,SKU05,2,2,2,0,,100
+2026-08-08,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-08-08,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-08-08,BB Now,Pune,SKU03,3,3,3,0,,100
+2026-08-08,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-08-08,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-08-08,BB Now,Ahmedabad,SKU01,2,2,2,0,,100
+2026-08-08,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-08-08,BB Now,Ahmedabad,SKU03,2,2,2,0,,100
+2026-08-08,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-08-08,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-08-08,BB Now,Bangalore,SKU01,5,5,10,1,70,100
+2026-08-08,BB Now,Bangalore,SKU02,5,5,10,1,70,100
+2026-08-08,BB Now,Bangalore,SKU03,5,5,10,0,,100
+2026-08-08,BB Now,Bangalore,SKU04,5,4,8,0,,80
+2026-08-08,BB Now,Bangalore,SKU05,5,5,10,0,,100
+2026-08-08,BB Now,Hyderabad,SKU01,4,4,8,0,,100
+2026-08-08,BB Now,Hyderabad,SKU02,4,4,8,2,28,100
+2026-08-08,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-08-08,BB Now,Hyderabad,SKU04,4,4,4,0,,100
+2026-08-08,BB Now,Hyderabad,SKU05,4,4,8,0,,100
+2026-08-08,BB Now,Chennai,SKU01,3,3,3,1,21,100
+2026-08-08,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-08-08,BB Now,Chennai,SKU03,3,3,6,0,,100
+2026-08-08,BB Now,Chennai,SKU04,3,3,6,0,,100
+2026-08-08,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-08-08,BB Now,Kolkata,SKU01,3,3,6,0,,100
+2026-08-08,BB Now,Kolkata,SKU02,3,3,3,1,21,100
+2026-08-08,BB Now,Kolkata,SKU03,3,3,3,0,,100
+2026-08-08,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-08-08,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-08-08,Flipkart Minutes,Delhi,SKU01,4,4,8,0,,100
+2026-08-08,Flipkart Minutes,Delhi,SKU02,4,4,8,0,,100
+2026-08-08,Flipkart Minutes,Delhi,SKU03,4,3,6,0,,75
+2026-08-08,Flipkart Minutes,Delhi,SKU04,4,4,4,0,,100
+2026-08-08,Flipkart Minutes,Delhi,SKU05,4,3,3,0,,75
+2026-08-08,Flipkart Minutes,Gurugram,SKU01,2,2,2,1,14,100
+2026-08-08,Flipkart Minutes,Gurugram,SKU02,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Gurugram,SKU03,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Noida,SKU02,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Noida,SKU04,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Mumbai,SKU01,4,3,6,0,,75
+2026-08-08,Flipkart Minutes,Mumbai,SKU02,4,4,4,0,,100
+2026-08-08,Flipkart Minutes,Mumbai,SKU03,4,4,4,0,,100
+2026-08-08,Flipkart Minutes,Mumbai,SKU04,4,4,4,0,,100
+2026-08-08,Flipkart Minutes,Mumbai,SKU05,4,4,4,0,,100
+2026-08-08,Flipkart Minutes,Thane,SKU01,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Thane,SKU02,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Thane,SKU04,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Pune,SKU01,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Pune,SKU02,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Pune,SKU03,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-08-08,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-08-08,Flipkart Minutes,Bangalore,SKU01,5,4,8,0,,80
+2026-08-08,Flipkart Minutes,Bangalore,SKU02,5,4,8,0,,80
+2026-08-08,Flipkart Minutes,Bangalore,SKU03,5,5,5,1,35,100
+2026-08-08,Flipkart Minutes,Bangalore,SKU04,5,4,8,0,,80
+2026-08-08,Flipkart Minutes,Bangalore,SKU05,5,5,5,0,,100
+2026-08-08,Flipkart Minutes,Hyderabad,SKU01,3,3,3,0,,100
+2026-08-08,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-08-08,Flipkart Minutes,Hyderabad,SKU03,3,3,6,0,,100
+2026-08-08,Flipkart Minutes,Hyderabad,SKU04,3,3,3,0,,100
+2026-08-08,Flipkart Minutes,Hyderabad,SKU05,3,3,3,0,,100
+2026-08-15,Blinkit,Delhi,SKU01,14,13,13,1,91,92.9
+2026-08-15,Blinkit,Delhi,SKU02,14,12,12,1,84,85.7
+2026-08-15,Blinkit,Delhi,SKU03,14,14,14,0,,100
+2026-08-15,Blinkit,Delhi,SKU04,14,12,12,0,,85.7
+2026-08-15,Blinkit,Delhi,SKU05,14,13,26,0,,92.9
+2026-08-15,Blinkit,Gurugram,SKU01,5,5,10,0,,100
+2026-08-15,Blinkit,Gurugram,SKU02,5,4,8,2,28,80
+2026-08-15,Blinkit,Gurugram,SKU03,5,5,5,0,,100
+2026-08-15,Blinkit,Gurugram,SKU04,5,5,5,0,,100
+2026-08-15,Blinkit,Gurugram,SKU05,5,4,8,1,56,80
+2026-08-15,Blinkit,Noida,SKU01,5,5,5,0,,100
+2026-08-15,Blinkit,Noida,SKU02,5,5,10,2,35,100
+2026-08-15,Blinkit,Noida,SKU03,5,5,5,1,35,100
+2026-08-15,Blinkit,Noida,SKU04,5,5,10,0,,100
+2026-08-15,Blinkit,Noida,SKU05,5,5,5,0,,100
+2026-08-15,Blinkit,Mumbai,SKU01,14,12,24,2,84,85.7
+2026-08-15,Blinkit,Mumbai,SKU02,14,13,13,2,45.5,92.9
+2026-08-15,Blinkit,Mumbai,SKU03,14,14,28,3,65.3,100
+2026-08-15,Blinkit,Mumbai,SKU04,14,14,14,2,49,100
+2026-08-15,Blinkit,Mumbai,SKU05,14,12,12,0,,85.7
+2026-08-15,Blinkit,Thane,SKU01,4,4,4,2,14,100
+2026-08-15,Blinkit,Thane,SKU02,4,4,4,1,28,100
+2026-08-15,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-08-15,Blinkit,Thane,SKU04,4,3,3,0,,75
+2026-08-15,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-08-15,Blinkit,Pune,SKU01,8,7,14,2,49,87.5
+2026-08-15,Blinkit,Pune,SKU02,8,7,14,2,49,87.5
+2026-08-15,Blinkit,Pune,SKU03,8,7,14,1,98,87.5
+2026-08-15,Blinkit,Pune,SKU04,8,8,8,1,56,100
+2026-08-15,Blinkit,Pune,SKU05,8,7,14,0,,87.5
+2026-08-15,Blinkit,Ahmedabad,SKU01,5,5,10,0,,100
+2026-08-15,Blinkit,Ahmedabad,SKU02,5,4,4,1,28,80
+2026-08-15,Blinkit,Ahmedabad,SKU03,5,4,8,0,,80
+2026-08-15,Blinkit,Ahmedabad,SKU04,5,4,8,0,,80
+2026-08-15,Blinkit,Ahmedabad,SKU05,5,5,5,0,,100
+2026-08-15,Blinkit,Bangalore,SKU01,15,13,13,4,22.8,86.7
+2026-08-15,Blinkit,Bangalore,SKU02,15,13,26,5,36.4,86.7
+2026-08-15,Blinkit,Bangalore,SKU03,15,14,14,0,,93.3
+2026-08-15,Blinkit,Bangalore,SKU04,15,13,26,0,,86.7
+2026-08-15,Blinkit,Bangalore,SKU05,15,14,28,0,,93.3
+2026-08-15,Blinkit,Hyderabad,SKU01,11,11,11,2,38.5,100
+2026-08-15,Blinkit,Hyderabad,SKU02,11,10,10,0,,90.9
+2026-08-15,Blinkit,Hyderabad,SKU03,11,10,10,0,,90.9
+2026-08-15,Blinkit,Hyderabad,SKU04,11,11,22,1,154,100
+2026-08-15,Blinkit,Hyderabad,SKU05,11,10,20,1,140,90.9
+2026-08-15,Blinkit,Chennai,SKU01,9,9,18,0,,100
+2026-08-15,Blinkit,Chennai,SKU02,9,8,16,0,,88.9
+2026-08-15,Blinkit,Chennai,SKU03,9,9,18,1,126,100
+2026-08-15,Blinkit,Chennai,SKU04,9,8,8,0,,88.9
+2026-08-15,Blinkit,Chennai,SKU05,9,8,16,0,,88.9
+2026-08-15,Blinkit,Kolkata,SKU01,10,10,10,2,35,100
+2026-08-15,Blinkit,Kolkata,SKU02,10,9,18,3,42,90
+2026-08-15,Blinkit,Kolkata,SKU03,10,10,10,1,70,100
+2026-08-15,Blinkit,Kolkata,SKU04,10,10,10,0,,100
+2026-08-15,Blinkit,Kolkata,SKU05,10,9,9,1,63,90
+2026-08-15,Blinkit,Jaipur,SKU01,4,4,8,0,,100
+2026-08-15,Blinkit,Jaipur,SKU02,4,4,4,2,14,100
+2026-08-15,Blinkit,Jaipur,SKU03,4,4,4,0,,100
+2026-08-15,Blinkit,Jaipur,SKU04,4,4,8,0,,100
+2026-08-15,Blinkit,Jaipur,SKU05,4,4,4,0,,100
+2026-08-15,Blinkit,Lucknow,SKU01,4,4,4,2,14,100
+2026-08-15,Blinkit,Lucknow,SKU02,4,4,4,2,14,100
+2026-08-15,Blinkit,Lucknow,SKU03,4,3,6,0,,75
+2026-08-15,Blinkit,Lucknow,SKU04,4,4,4,0,,100
+2026-08-15,Blinkit,Lucknow,SKU05,4,3,6,0,,75
+2026-08-15,Blinkit,Chandigarh,SKU01,3,3,3,0,,100
+2026-08-15,Blinkit,Chandigarh,SKU02,3,3,3,1,21,100
+2026-08-15,Blinkit,Chandigarh,SKU03,3,3,6,1,42,100
+2026-08-15,Blinkit,Chandigarh,SKU04,3,3,6,0,,100
+2026-08-15,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-08-15,Blinkit,Indore,SKU01,3,3,6,1,42,100
+2026-08-15,Blinkit,Indore,SKU02,3,3,6,1,42,100
+2026-08-15,Blinkit,Indore,SKU03,3,3,6,0,,100
+2026-08-15,Blinkit,Indore,SKU04,3,3,3,0,,100
+2026-08-15,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-08-15,Zepto,Delhi,SKU01,10,9,9,1,63,90
+2026-08-15,Zepto,Delhi,SKU02,10,9,9,0,,90
+2026-08-15,Zepto,Delhi,SKU03,10,9,9,0,,90
+2026-08-15,Zepto,Delhi,SKU04,10,9,18,0,,90
+2026-08-15,Zepto,Delhi,SKU05,10,9,18,1,126,90
+2026-08-15,Zepto,Gurugram,SKU01,4,4,4,1,28,100
+2026-08-15,Zepto,Gurugram,SKU02,4,3,6,1,42,75
+2026-08-15,Zepto,Gurugram,SKU03,4,4,4,1,28,100
+2026-08-15,Zepto,Gurugram,SKU04,4,4,4,1,28,100
+2026-08-15,Zepto,Gurugram,SKU05,4,3,6,0,,75
+2026-08-15,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-08-15,Zepto,Noida,SKU02,3,3,6,1,42,100
+2026-08-15,Zepto,Noida,SKU03,3,3,3,0,,100
+2026-08-15,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-08-15,Zepto,Noida,SKU05,3,3,3,0,,100
+2026-08-15,Zepto,Mumbai,SKU01,11,10,20,3,46.7,90.9
+2026-08-15,Zepto,Mumbai,SKU02,11,10,10,1,70,90.9
+2026-08-15,Zepto,Mumbai,SKU03,11,10,10,3,23.3,90.9
+2026-08-15,Zepto,Mumbai,SKU04,11,11,22,0,,100
+2026-08-15,Zepto,Mumbai,SKU05,11,9,9,0,,81.8
+2026-08-15,Zepto,Thane,SKU01,3,3,6,1,42,100
+2026-08-15,Zepto,Thane,SKU02,3,3,6,0,,100
+2026-08-15,Zepto,Thane,SKU03,3,3,6,0,,100
+2026-08-15,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-08-15,Zepto,Thane,SKU05,3,3,6,0,,100
+2026-08-15,Zepto,Pune,SKU01,6,6,12,0,,100
+2026-08-15,Zepto,Pune,SKU02,6,6,6,2,21,100
+2026-08-15,Zepto,Pune,SKU03,6,6,6,1,42,100
+2026-08-15,Zepto,Pune,SKU04,6,5,10,0,,83.3
+2026-08-15,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-08-15,Zepto,Ahmedabad,SKU01,4,4,8,0,,100
+2026-08-15,Zepto,Ahmedabad,SKU02,4,4,4,0,,100
+2026-08-15,Zepto,Ahmedabad,SKU03,4,3,6,0,,75
+2026-08-15,Zepto,Ahmedabad,SKU04,4,4,4,0,,100
+2026-08-15,Zepto,Ahmedabad,SKU05,4,3,6,0,,75
+2026-08-15,Zepto,Bangalore,SKU01,11,10,10,1,70,90.9
+2026-08-15,Zepto,Bangalore,SKU02,11,10,20,2,70,90.9
+2026-08-15,Zepto,Bangalore,SKU03,11,10,10,1,70,90.9
+2026-08-15,Zepto,Bangalore,SKU04,11,9,18,0,,81.8
+2026-08-15,Zepto,Bangalore,SKU05,11,10,10,0,,90.9
+2026-08-15,Zepto,Hyderabad,SKU01,8,7,7,0,,87.5
+2026-08-15,Zepto,Hyderabad,SKU02,8,8,8,0,,100
+2026-08-15,Zepto,Hyderabad,SKU03,8,7,7,1,49,87.5
+2026-08-15,Zepto,Hyderabad,SKU04,8,8,16,0,,100
+2026-08-15,Zepto,Hyderabad,SKU05,8,8,8,0,,100
+2026-08-15,Zepto,Chennai,SKU01,7,7,14,1,98,100
+2026-08-15,Zepto,Chennai,SKU02,7,6,12,3,28,85.7
+2026-08-15,Zepto,Chennai,SKU03,7,6,12,1,84,85.7
+2026-08-15,Zepto,Chennai,SKU04,7,7,7,2,24.5,100
+2026-08-15,Zepto,Chennai,SKU05,7,6,6,0,,85.7
+2026-08-15,Zepto,Kolkata,SKU01,7,6,6,1,42,85.7
+2026-08-15,Zepto,Kolkata,SKU02,7,7,7,1,49,100
+2026-08-15,Zepto,Kolkata,SKU03,7,6,12,1,84,85.7
+2026-08-15,Zepto,Kolkata,SKU04,7,6,6,1,42,85.7
+2026-08-15,Zepto,Kolkata,SKU05,7,7,7,0,,100
+2026-08-15,Zepto,Jaipur,SKU01,3,3,6,0,,100
+2026-08-15,Zepto,Jaipur,SKU02,3,3,6,0,,100
+2026-08-15,Zepto,Jaipur,SKU03,3,3,6,0,,100
+2026-08-15,Zepto,Jaipur,SKU04,3,3,3,1,21,100
+2026-08-15,Zepto,Jaipur,SKU05,3,3,6,0,,100
+2026-08-15,Zepto,Lucknow,SKU01,3,3,6,1,42,100
+2026-08-15,Zepto,Lucknow,SKU02,3,3,3,1,21,100
+2026-08-15,Zepto,Lucknow,SKU03,3,3,6,1,42,100
+2026-08-15,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-08-15,Zepto,Lucknow,SKU05,3,3,6,0,,100
+2026-08-15,Instamart,Delhi,SKU01,9,8,8,3,18.7,88.9
+2026-08-15,Instamart,Delhi,SKU02,9,8,8,5,11.2,88.9
+2026-08-15,Instamart,Delhi,SKU03,9,8,8,1,56,88.9
+2026-08-15,Instamart,Delhi,SKU04,9,8,16,1,112,88.9
+2026-08-15,Instamart,Delhi,SKU05,9,8,16,0,,88.9
+2026-08-15,Instamart,Gurugram,SKU01,4,4,8,0,,100
+2026-08-15,Instamart,Gurugram,SKU02,4,4,4,1,28,100
+2026-08-15,Instamart,Gurugram,SKU03,4,4,4,0,,100
+2026-08-15,Instamart,Gurugram,SKU04,4,3,6,0,,75
+2026-08-15,Instamart,Gurugram,SKU05,4,4,8,0,,100
+2026-08-15,Instamart,Noida,SKU01,3,3,6,0,,100
+2026-08-15,Instamart,Noida,SKU02,3,3,6,1,42,100
+2026-08-15,Instamart,Noida,SKU03,3,3,3,0,,100
+2026-08-15,Instamart,Noida,SKU04,3,3,6,0,,100
+2026-08-15,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-08-15,Instamart,Mumbai,SKU01,10,10,10,0,,100
+2026-08-15,Instamart,Mumbai,SKU02,10,9,18,1,126,90
+2026-08-15,Instamart,Mumbai,SKU03,10,10,20,0,,100
+2026-08-15,Instamart,Mumbai,SKU04,10,10,10,0,,100
+2026-08-15,Instamart,Mumbai,SKU05,10,9,18,0,,90
+2026-08-15,Instamart,Thane,SKU01,3,3,6,0,,100
+2026-08-15,Instamart,Thane,SKU02,3,3,6,0,,100
+2026-08-15,Instamart,Thane,SKU03,3,3,3,0,,100
+2026-08-15,Instamart,Thane,SKU04,3,3,3,0,,100
+2026-08-15,Instamart,Thane,SKU05,3,3,6,0,,100
+2026-08-15,Instamart,Pune,SKU01,6,6,12,1,84,100
+2026-08-15,Instamart,Pune,SKU02,6,5,5,0,,83.3
+2026-08-15,Instamart,Pune,SKU03,6,5,10,1,70,83.3
+2026-08-15,Instamart,Pune,SKU04,6,6,6,0,,100
+2026-08-15,Instamart,Pune,SKU05,6,5,10,1,70,83.3
+2026-08-15,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-08-15,Instamart,Ahmedabad,SKU02,3,3,6,0,,100
+2026-08-15,Instamart,Ahmedabad,SKU03,3,3,3,0,,100
+2026-08-15,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-08-15,Instamart,Ahmedabad,SKU05,3,3,6,0,,100
+2026-08-15,Instamart,Bangalore,SKU01,11,10,10,0,,90.9
+2026-08-15,Instamart,Bangalore,SKU02,11,10,20,5,28,90.9
+2026-08-15,Instamart,Bangalore,SKU03,11,10,10,0,,90.9
+2026-08-15,Instamart,Bangalore,SKU04,11,11,11,0,,100
+2026-08-15,Instamart,Bangalore,SKU05,11,10,10,0,,90.9
+2026-08-15,Instamart,Hyderabad,SKU01,8,7,7,1,49,87.5
+2026-08-15,Instamart,Hyderabad,SKU02,8,8,16,1,112,100
+2026-08-15,Instamart,Hyderabad,SKU03,8,7,7,1,49,87.5
+2026-08-15,Instamart,Hyderabad,SKU04,8,8,16,1,112,100
+2026-08-15,Instamart,Hyderabad,SKU05,8,8,8,1,56,100
+2026-08-15,Instamart,Chennai,SKU01,6,5,10,0,,83.3
+2026-08-15,Instamart,Chennai,SKU02,6,5,5,1,35,83.3
+2026-08-15,Instamart,Chennai,SKU03,6,5,5,0,,83.3
+2026-08-15,Instamart,Chennai,SKU04,6,5,5,0,,83.3
+2026-08-15,Instamart,Chennai,SKU05,6,6,6,0,,100
+2026-08-15,Instamart,Kolkata,SKU01,7,6,12,0,,85.7
+2026-08-15,Instamart,Kolkata,SKU02,7,7,7,1,49,100
+2026-08-15,Instamart,Kolkata,SKU03,7,6,12,0,,85.7
+2026-08-15,Instamart,Kolkata,SKU04,7,7,14,0,,100
+2026-08-15,Instamart,Kolkata,SKU05,7,7,7,0,,100
+2026-08-15,Instamart,Kochi,SKU01,2,2,4,0,,100
+2026-08-15,Instamart,Kochi,SKU02,2,2,2,0,,100
+2026-08-15,Instamart,Kochi,SKU03,2,2,2,1,14,100
+2026-08-15,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-08-15,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-08-15,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-08-15,Instamart,Coimbatore,SKU02,2,2,4,0,,100
+2026-08-15,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-08-15,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-08-15,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-08-15,BB Now,Delhi,SKU01,5,5,10,0,,100
+2026-08-15,BB Now,Delhi,SKU02,5,5,5,1,35,100
+2026-08-15,BB Now,Delhi,SKU03,5,4,8,0,,80
+2026-08-15,BB Now,Delhi,SKU04,5,4,4,0,,80
+2026-08-15,BB Now,Delhi,SKU05,5,4,8,0,,80
+2026-08-15,BB Now,Gurugram,SKU01,2,2,4,0,,100
+2026-08-15,BB Now,Gurugram,SKU02,2,2,4,0,,100
+2026-08-15,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-08-15,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-08-15,BB Now,Gurugram,SKU05,2,2,2,0,,100
+2026-08-15,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-08-15,BB Now,Noida,SKU02,2,2,2,0,,100
+2026-08-15,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-08-15,BB Now,Noida,SKU04,2,2,4,0,,100
+2026-08-15,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-08-15,BB Now,Mumbai,SKU01,5,5,5,1,35,100
+2026-08-15,BB Now,Mumbai,SKU02,5,4,8,2,28,80
+2026-08-15,BB Now,Mumbai,SKU03,5,4,8,2,28,80
+2026-08-15,BB Now,Mumbai,SKU04,5,5,5,1,35,100
+2026-08-15,BB Now,Mumbai,SKU05,5,5,10,0,,100
+2026-08-15,BB Now,Thane,SKU01,2,2,2,1,14,100
+2026-08-15,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-08-15,BB Now,Thane,SKU03,2,2,4,0,,100
+2026-08-15,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-08-15,BB Now,Thane,SKU05,2,2,2,0,,100
+2026-08-15,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-08-15,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-08-15,BB Now,Pune,SKU03,3,3,3,0,,100
+2026-08-15,BB Now,Pune,SKU04,3,3,3,0,,100
+2026-08-15,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-08-15,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-08-15,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-08-15,BB Now,Ahmedabad,SKU03,2,2,4,0,,100
+2026-08-15,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-08-15,BB Now,Ahmedabad,SKU05,2,2,4,0,,100
+2026-08-15,BB Now,Bangalore,SKU01,5,5,10,0,,100
+2026-08-15,BB Now,Bangalore,SKU02,5,5,10,2,35,100
+2026-08-15,BB Now,Bangalore,SKU03,5,5,10,0,,100
+2026-08-15,BB Now,Bangalore,SKU04,5,4,4,0,,80
+2026-08-15,BB Now,Bangalore,SKU05,5,4,4,0,,80
+2026-08-15,BB Now,Hyderabad,SKU01,4,4,8,0,,100
+2026-08-15,BB Now,Hyderabad,SKU02,4,4,4,0,,100
+2026-08-15,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-08-15,BB Now,Hyderabad,SKU04,4,3,6,0,,75
+2026-08-15,BB Now,Hyderabad,SKU05,4,4,4,0,,100
+2026-08-15,BB Now,Chennai,SKU01,3,3,3,0,,100
+2026-08-15,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-08-15,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-08-15,BB Now,Chennai,SKU04,3,3,6,0,,100
+2026-08-15,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-08-15,BB Now,Kolkata,SKU01,3,3,6,0,,100
+2026-08-15,BB Now,Kolkata,SKU02,3,3,3,0,,100
+2026-08-15,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-08-15,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-08-15,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-08-15,Flipkart Minutes,Delhi,SKU01,4,4,8,0,,100
+2026-08-15,Flipkart Minutes,Delhi,SKU02,4,4,8,0,,100
+2026-08-15,Flipkart Minutes,Delhi,SKU03,4,4,4,0,,100
+2026-08-15,Flipkart Minutes,Delhi,SKU04,4,4,4,0,,100
+2026-08-15,Flipkart Minutes,Delhi,SKU05,4,3,3,0,,75
+2026-08-15,Flipkart Minutes,Gurugram,SKU01,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Gurugram,SKU03,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Gurugram,SKU05,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Noida,SKU02,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Noida,SKU05,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Mumbai,SKU01,4,4,4,0,,100
+2026-08-15,Flipkart Minutes,Mumbai,SKU02,4,4,4,0,,100
+2026-08-15,Flipkart Minutes,Mumbai,SKU03,4,4,8,0,,100
+2026-08-15,Flipkart Minutes,Mumbai,SKU04,4,3,3,0,,75
+2026-08-15,Flipkart Minutes,Mumbai,SKU05,4,4,4,0,,100
+2026-08-15,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Thane,SKU02,2,2,2,1,14,100
+2026-08-15,Flipkart Minutes,Thane,SKU03,2,2,2,1,14,100
+2026-08-15,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-08-15,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Pune,SKU01,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Pune,SKU02,2,2,2,1,14,100
+2026-08-15,Flipkart Minutes,Pune,SKU03,2,2,4,1,28,100
+2026-08-15,Flipkart Minutes,Pune,SKU04,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-08-15,Flipkart Minutes,Bangalore,SKU01,5,5,5,0,,100
+2026-08-15,Flipkart Minutes,Bangalore,SKU02,5,5,5,0,,100
+2026-08-15,Flipkart Minutes,Bangalore,SKU03,5,4,8,0,,80
+2026-08-15,Flipkart Minutes,Bangalore,SKU04,5,5,5,0,,100
+2026-08-15,Flipkart Minutes,Bangalore,SKU05,5,4,8,0,,80
+2026-08-15,Flipkart Minutes,Hyderabad,SKU01,3,3,6,0,,100
+2026-08-15,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-08-15,Flipkart Minutes,Hyderabad,SKU03,3,3,6,0,,100
+2026-08-15,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-08-15,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-08-22,Blinkit,Delhi,SKU01,14,13,26,0,,92.9
+2026-08-22,Blinkit,Delhi,SKU02,14,14,14,2,49,100
+2026-08-22,Blinkit,Delhi,SKU03,14,13,13,0,,92.9
+2026-08-22,Blinkit,Delhi,SKU04,14,13,13,0,,92.9
+2026-08-22,Blinkit,Delhi,SKU05,14,13,13,0,,92.9
+2026-08-22,Blinkit,Gurugram,SKU01,5,4,4,0,,80
+2026-08-22,Blinkit,Gurugram,SKU02,5,5,5,0,,100
+2026-08-22,Blinkit,Gurugram,SKU03,5,5,5,0,,100
+2026-08-22,Blinkit,Gurugram,SKU04,5,4,4,0,,80
+2026-08-22,Blinkit,Gurugram,SKU05,5,5,10,0,,100
+2026-08-22,Blinkit,Noida,SKU01,5,4,4,1,28,80
+2026-08-22,Blinkit,Noida,SKU02,5,4,4,1,28,80
+2026-08-22,Blinkit,Noida,SKU03,5,5,10,0,,100
+2026-08-22,Blinkit,Noida,SKU04,5,4,4,0,,80
+2026-08-22,Blinkit,Noida,SKU05,5,4,8,0,,80
+2026-08-22,Blinkit,Mumbai,SKU01,14,13,13,0,,92.9
+2026-08-22,Blinkit,Mumbai,SKU02,14,12,12,0,,85.7
+2026-08-22,Blinkit,Mumbai,SKU03,14,14,14,0,,100
+2026-08-22,Blinkit,Mumbai,SKU04,14,13,13,1,91,92.9
+2026-08-22,Blinkit,Mumbai,SKU05,14,14,14,0,,100
+2026-08-22,Blinkit,Thane,SKU01,4,4,8,2,28,100
+2026-08-22,Blinkit,Thane,SKU02,4,4,4,1,28,100
+2026-08-22,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-08-22,Blinkit,Thane,SKU04,4,3,3,0,,75
+2026-08-22,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-08-22,Blinkit,Pune,SKU01,8,8,8,0,,100
+2026-08-22,Blinkit,Pune,SKU02,8,7,14,1,98,87.5
+2026-08-22,Blinkit,Pune,SKU03,8,7,7,0,,87.5
+2026-08-22,Blinkit,Pune,SKU04,8,8,8,0,,100
+2026-08-22,Blinkit,Pune,SKU05,8,8,16,0,,100
+2026-08-22,Blinkit,Ahmedabad,SKU01,5,5,10,0,,100
+2026-08-22,Blinkit,Ahmedabad,SKU02,5,4,8,0,,80
+2026-08-22,Blinkit,Ahmedabad,SKU03,5,5,5,0,,100
+2026-08-22,Blinkit,Ahmedabad,SKU04,5,5,10,0,,100
+2026-08-22,Blinkit,Ahmedabad,SKU05,5,4,8,0,,80
+2026-08-22,Blinkit,Bangalore,SKU01,15,15,30,0,,100
+2026-08-22,Blinkit,Bangalore,SKU02,15,13,26,4,45.5,86.7
+2026-08-22,Blinkit,Bangalore,SKU03,15,13,13,1,91,86.7
+2026-08-22,Blinkit,Bangalore,SKU04,15,13,13,0,,86.7
+2026-08-22,Blinkit,Bangalore,SKU05,15,14,28,0,,93.3
+2026-08-22,Blinkit,Hyderabad,SKU01,11,11,22,2,77,100
+2026-08-22,Blinkit,Hyderabad,SKU02,11,10,20,2,70,90.9
+2026-08-22,Blinkit,Hyderabad,SKU03,11,11,22,0,,100
+2026-08-22,Blinkit,Hyderabad,SKU04,11,10,20,0,,90.9
+2026-08-22,Blinkit,Hyderabad,SKU05,11,10,10,0,,90.9
+2026-08-22,Blinkit,Chennai,SKU01,9,8,16,1,112,88.9
+2026-08-22,Blinkit,Chennai,SKU02,9,8,16,0,,88.9
+2026-08-22,Blinkit,Chennai,SKU03,9,8,8,2,28,88.9
+2026-08-22,Blinkit,Chennai,SKU04,9,9,18,0,,100
+2026-08-22,Blinkit,Chennai,SKU05,9,8,8,1,56,88.9
+2026-08-22,Blinkit,Kolkata,SKU01,10,9,9,1,63,90
+2026-08-22,Blinkit,Kolkata,SKU02,10,9,18,0,,90
+2026-08-22,Blinkit,Kolkata,SKU03,10,10,10,0,,100
+2026-08-22,Blinkit,Kolkata,SKU04,10,9,9,0,,90
+2026-08-22,Blinkit,Kolkata,SKU05,10,10,20,1,140,100
+2026-08-22,Blinkit,Jaipur,SKU01,4,4,4,0,,100
+2026-08-22,Blinkit,Jaipur,SKU02,4,3,3,2,10.5,75
+2026-08-22,Blinkit,Jaipur,SKU03,4,4,8,1,56,100
+2026-08-22,Blinkit,Jaipur,SKU04,4,3,6,0,,75
+2026-08-22,Blinkit,Jaipur,SKU05,4,4,8,1,56,100
+2026-08-22,Blinkit,Lucknow,SKU01,4,4,4,0,,100
+2026-08-22,Blinkit,Lucknow,SKU02,4,4,4,0,,100
+2026-08-22,Blinkit,Lucknow,SKU03,4,4,8,0,,100
+2026-08-22,Blinkit,Lucknow,SKU04,4,4,4,0,,100
+2026-08-22,Blinkit,Lucknow,SKU05,4,3,6,0,,75
+2026-08-22,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-08-22,Blinkit,Chandigarh,SKU02,3,3,3,0,,100
+2026-08-22,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-08-22,Blinkit,Chandigarh,SKU04,3,3,3,0,,100
+2026-08-22,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-08-22,Blinkit,Indore,SKU01,3,3,6,1,42,100
+2026-08-22,Blinkit,Indore,SKU02,3,3,3,0,,100
+2026-08-22,Blinkit,Indore,SKU03,3,3,3,1,21,100
+2026-08-22,Blinkit,Indore,SKU04,3,3,3,0,,100
+2026-08-22,Blinkit,Indore,SKU05,3,3,6,0,,100
+2026-08-22,Zepto,Delhi,SKU01,10,9,18,2,63,90
+2026-08-22,Zepto,Delhi,SKU02,10,10,10,1,70,100
+2026-08-22,Zepto,Delhi,SKU03,10,10,20,1,140,100
+2026-08-22,Zepto,Delhi,SKU04,10,9,18,0,,90
+2026-08-22,Zepto,Delhi,SKU05,10,10,10,0,,100
+2026-08-22,Zepto,Gurugram,SKU01,4,4,8,0,,100
+2026-08-22,Zepto,Gurugram,SKU02,4,4,4,0,,100
+2026-08-22,Zepto,Gurugram,SKU03,4,4,4,0,,100
+2026-08-22,Zepto,Gurugram,SKU04,4,3,3,0,,75
+2026-08-22,Zepto,Gurugram,SKU05,4,4,8,0,,100
+2026-08-22,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-08-22,Zepto,Noida,SKU02,3,3,6,0,,100
+2026-08-22,Zepto,Noida,SKU03,3,3,3,0,,100
+2026-08-22,Zepto,Noida,SKU04,3,3,6,0,,100
+2026-08-22,Zepto,Noida,SKU05,3,3,6,0,,100
+2026-08-22,Zepto,Mumbai,SKU01,11,11,11,1,77,100
+2026-08-22,Zepto,Mumbai,SKU02,11,11,11,2,38.5,100
+2026-08-22,Zepto,Mumbai,SKU03,11,11,11,0,,100
+2026-08-22,Zepto,Mumbai,SKU04,11,9,18,0,,81.8
+2026-08-22,Zepto,Mumbai,SKU05,11,10,10,0,,90.9
+2026-08-22,Zepto,Thane,SKU01,3,3,3,0,,100
+2026-08-22,Zepto,Thane,SKU02,3,3,3,0,,100
+2026-08-22,Zepto,Thane,SKU03,3,3,3,1,21,100
+2026-08-22,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-08-22,Zepto,Thane,SKU05,3,3,3,0,,100
+2026-08-22,Zepto,Pune,SKU01,6,6,6,1,42,100
+2026-08-22,Zepto,Pune,SKU02,6,5,5,0,,83.3
+2026-08-22,Zepto,Pune,SKU03,6,6,6,1,42,100
+2026-08-22,Zepto,Pune,SKU04,6,6,6,0,,100
+2026-08-22,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-08-22,Zepto,Ahmedabad,SKU01,4,4,8,0,,100
+2026-08-22,Zepto,Ahmedabad,SKU02,4,4,8,2,28,100
+2026-08-22,Zepto,Ahmedabad,SKU03,4,4,4,1,28,100
+2026-08-22,Zepto,Ahmedabad,SKU04,4,4,4,0,,100
+2026-08-22,Zepto,Ahmedabad,SKU05,4,4,8,0,,100
+2026-08-22,Zepto,Bangalore,SKU01,11,10,20,0,,90.9
+2026-08-22,Zepto,Bangalore,SKU02,11,10,10,2,35,90.9
+2026-08-22,Zepto,Bangalore,SKU03,11,11,22,0,,100
+2026-08-22,Zepto,Bangalore,SKU04,11,10,10,0,,90.9
+2026-08-22,Zepto,Bangalore,SKU05,11,10,10,0,,90.9
+2026-08-22,Zepto,Hyderabad,SKU01,8,8,8,0,,100
+2026-08-22,Zepto,Hyderabad,SKU02,8,8,16,0,,100
+2026-08-22,Zepto,Hyderabad,SKU03,8,7,7,0,,87.5
+2026-08-22,Zepto,Hyderabad,SKU04,8,8,16,0,,100
+2026-08-22,Zepto,Hyderabad,SKU05,8,7,14,1,98,87.5
+2026-08-22,Zepto,Chennai,SKU01,7,6,6,0,,85.7
+2026-08-22,Zepto,Chennai,SKU02,7,6,12,2,42,85.7
+2026-08-22,Zepto,Chennai,SKU03,7,6,12,0,,85.7
+2026-08-22,Zepto,Chennai,SKU04,7,7,14,0,,100
+2026-08-22,Zepto,Chennai,SKU05,7,6,6,0,,85.7
+2026-08-22,Zepto,Kolkata,SKU01,7,6,6,1,42,85.7
+2026-08-22,Zepto,Kolkata,SKU02,7,6,6,0,,85.7
+2026-08-22,Zepto,Kolkata,SKU03,7,6,12,0,,85.7
+2026-08-22,Zepto,Kolkata,SKU04,7,6,6,1,42,85.7
+2026-08-22,Zepto,Kolkata,SKU05,7,7,7,0,,100
+2026-08-22,Zepto,Jaipur,SKU01,3,3,3,0,,100
+2026-08-22,Zepto,Jaipur,SKU02,3,3,3,0,,100
+2026-08-22,Zepto,Jaipur,SKU03,3,3,6,0,,100
+2026-08-22,Zepto,Jaipur,SKU04,3,3,3,0,,100
+2026-08-22,Zepto,Jaipur,SKU05,3,3,3,0,,100
+2026-08-22,Zepto,Lucknow,SKU01,3,3,3,0,,100
+2026-08-22,Zepto,Lucknow,SKU02,3,3,3,1,21,100
+2026-08-22,Zepto,Lucknow,SKU03,3,3,6,1,42,100
+2026-08-22,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-08-22,Zepto,Lucknow,SKU05,3,3,3,0,,100
+2026-08-22,Instamart,Delhi,SKU01,9,8,8,1,56,88.9
+2026-08-22,Instamart,Delhi,SKU02,9,8,16,4,28,88.9
+2026-08-22,Instamart,Delhi,SKU03,9,9,18,2,63,100
+2026-08-22,Instamart,Delhi,SKU04,9,8,8,1,56,88.9
+2026-08-22,Instamart,Delhi,SKU05,9,9,18,0,,100
+2026-08-22,Instamart,Gurugram,SKU01,4,4,8,0,,100
+2026-08-22,Instamart,Gurugram,SKU02,4,4,8,0,,100
+2026-08-22,Instamart,Gurugram,SKU03,4,4,8,0,,100
+2026-08-22,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-08-22,Instamart,Gurugram,SKU05,4,4,4,0,,100
+2026-08-22,Instamart,Noida,SKU01,3,3,3,1,21,100
+2026-08-22,Instamart,Noida,SKU02,3,3,6,2,21,100
+2026-08-22,Instamart,Noida,SKU03,3,3,6,1,42,100
+2026-08-22,Instamart,Noida,SKU04,3,3,3,0,,100
+2026-08-22,Instamart,Noida,SKU05,3,3,3,0,,100
+2026-08-22,Instamart,Mumbai,SKU01,10,9,9,1,63,90
+2026-08-22,Instamart,Mumbai,SKU02,10,9,18,0,,90
+2026-08-22,Instamart,Mumbai,SKU03,10,10,10,0,,100
+2026-08-22,Instamart,Mumbai,SKU04,10,9,18,0,,90
+2026-08-22,Instamart,Mumbai,SKU05,10,9,9,0,,90
+2026-08-22,Instamart,Thane,SKU01,3,3,3,1,21,100
+2026-08-22,Instamart,Thane,SKU02,3,3,3,1,21,100
+2026-08-22,Instamart,Thane,SKU03,3,3,3,0,,100
+2026-08-22,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-08-22,Instamart,Thane,SKU05,3,3,3,0,,100
+2026-08-22,Instamart,Pune,SKU01,6,5,5,0,,83.3
+2026-08-22,Instamart,Pune,SKU02,6,6,12,0,,100
+2026-08-22,Instamart,Pune,SKU03,6,5,10,0,,83.3
+2026-08-22,Instamart,Pune,SKU04,6,6,12,0,,100
+2026-08-22,Instamart,Pune,SKU05,6,6,12,0,,100
+2026-08-22,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-08-22,Instamart,Ahmedabad,SKU02,3,3,6,0,,100
+2026-08-22,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-08-22,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-08-22,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-08-22,Instamart,Bangalore,SKU01,11,10,20,1,140,90.9
+2026-08-22,Instamart,Bangalore,SKU02,11,10,10,2,35,90.9
+2026-08-22,Instamart,Bangalore,SKU03,11,10,10,2,35,90.9
+2026-08-22,Instamart,Bangalore,SKU04,11,10,10,0,,90.9
+2026-08-22,Instamart,Bangalore,SKU05,11,11,11,0,,100
+2026-08-22,Instamart,Hyderabad,SKU01,8,7,14,0,,87.5
+2026-08-22,Instamart,Hyderabad,SKU02,8,7,14,0,,87.5
+2026-08-22,Instamart,Hyderabad,SKU03,8,7,14,0,,87.5
+2026-08-22,Instamart,Hyderabad,SKU04,8,7,14,0,,87.5
+2026-08-22,Instamart,Hyderabad,SKU05,8,7,14,0,,87.5
+2026-08-22,Instamart,Chennai,SKU01,6,6,12,0,,100
+2026-08-22,Instamart,Chennai,SKU02,6,6,12,0,,100
+2026-08-22,Instamart,Chennai,SKU03,6,5,5,0,,83.3
+2026-08-22,Instamart,Chennai,SKU04,6,6,12,0,,100
+2026-08-22,Instamart,Chennai,SKU05,6,5,10,0,,83.3
+2026-08-22,Instamart,Kolkata,SKU01,7,6,6,0,,85.7
+2026-08-22,Instamart,Kolkata,SKU02,7,7,14,0,,100
+2026-08-22,Instamart,Kolkata,SKU03,7,7,14,0,,100
+2026-08-22,Instamart,Kolkata,SKU04,7,6,12,0,,85.7
+2026-08-22,Instamart,Kolkata,SKU05,7,6,6,0,,85.7
+2026-08-22,Instamart,Kochi,SKU01,2,2,4,1,28,100
+2026-08-22,Instamart,Kochi,SKU02,2,2,2,0,,100
+2026-08-22,Instamart,Kochi,SKU03,2,2,4,0,,100
+2026-08-22,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-08-22,Instamart,Kochi,SKU05,2,2,2,1,14,100
+2026-08-22,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-08-22,Instamart,Coimbatore,SKU02,2,2,4,0,,100
+2026-08-22,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-08-22,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-08-22,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-08-22,BB Now,Delhi,SKU01,5,5,10,0,,100
+2026-08-22,BB Now,Delhi,SKU02,5,4,4,0,,80
+2026-08-22,BB Now,Delhi,SKU03,5,4,8,0,,80
+2026-08-22,BB Now,Delhi,SKU04,5,4,4,0,,80
+2026-08-22,BB Now,Delhi,SKU05,5,4,4,0,,80
+2026-08-22,BB Now,Gurugram,SKU01,2,2,2,0,,100
+2026-08-22,BB Now,Gurugram,SKU02,2,2,4,0,,100
+2026-08-22,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-08-22,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-08-22,BB Now,Gurugram,SKU05,2,2,2,0,,100
+2026-08-22,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-08-22,BB Now,Noida,SKU02,2,2,4,0,,100
+2026-08-22,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-08-22,BB Now,Noida,SKU04,2,2,2,0,,100
+2026-08-22,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-08-22,BB Now,Mumbai,SKU01,5,5,5,0,,100
+2026-08-22,BB Now,Mumbai,SKU02,5,5,5,0,,100
+2026-08-22,BB Now,Mumbai,SKU03,5,5,5,0,,100
+2026-08-22,BB Now,Mumbai,SKU04,5,4,4,0,,80
+2026-08-22,BB Now,Mumbai,SKU05,5,4,4,0,,80
+2026-08-22,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-08-22,BB Now,Thane,SKU02,2,2,2,0,,100
+2026-08-22,BB Now,Thane,SKU03,2,2,2,1,14,100
+2026-08-22,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-08-22,BB Now,Thane,SKU05,2,2,2,2,7,100
+2026-08-22,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-08-22,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-08-22,BB Now,Pune,SKU03,3,3,3,0,,100
+2026-08-22,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-08-22,BB Now,Pune,SKU05,3,3,3,0,,100
+2026-08-22,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-08-22,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-08-22,BB Now,Ahmedabad,SKU03,2,2,4,0,,100
+2026-08-22,BB Now,Ahmedabad,SKU04,2,2,2,0,,100
+2026-08-22,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-08-22,BB Now,Bangalore,SKU01,5,5,10,0,,100
+2026-08-22,BB Now,Bangalore,SKU02,5,5,10,0,,100
+2026-08-22,BB Now,Bangalore,SKU03,5,5,5,0,,100
+2026-08-22,BB Now,Bangalore,SKU04,5,5,10,0,,100
+2026-08-22,BB Now,Bangalore,SKU05,5,5,10,0,,100
+2026-08-22,BB Now,Hyderabad,SKU01,4,4,8,0,,100
+2026-08-22,BB Now,Hyderabad,SKU02,4,4,4,0,,100
+2026-08-22,BB Now,Hyderabad,SKU03,4,3,6,0,,75
+2026-08-22,BB Now,Hyderabad,SKU04,4,4,4,0,,100
+2026-08-22,BB Now,Hyderabad,SKU05,4,3,6,0,,75
+2026-08-22,BB Now,Chennai,SKU01,3,3,3,1,21,100
+2026-08-22,BB Now,Chennai,SKU02,3,3,3,0,,100
+2026-08-22,BB Now,Chennai,SKU03,3,3,6,1,42,100
+2026-08-22,BB Now,Chennai,SKU04,3,3,6,0,,100
+2026-08-22,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-08-22,BB Now,Kolkata,SKU01,3,3,6,0,,100
+2026-08-22,BB Now,Kolkata,SKU02,3,3,6,1,42,100
+2026-08-22,BB Now,Kolkata,SKU03,3,3,3,0,,100
+2026-08-22,BB Now,Kolkata,SKU04,3,3,3,0,,100
+2026-08-22,BB Now,Kolkata,SKU05,3,3,3,0,,100
+2026-08-22,Flipkart Minutes,Delhi,SKU01,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Delhi,SKU02,4,4,8,2,28,100
+2026-08-22,Flipkart Minutes,Delhi,SKU03,4,4,4,0,,100
+2026-08-22,Flipkart Minutes,Delhi,SKU04,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Delhi,SKU05,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Gurugram,SKU01,2,2,4,0,,100
+2026-08-22,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Gurugram,SKU03,2,2,4,1,28,100
+2026-08-22,Flipkart Minutes,Gurugram,SKU04,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Gurugram,SKU05,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Noida,SKU02,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Noida,SKU03,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-08-22,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Mumbai,SKU01,4,3,6,0,,75
+2026-08-22,Flipkart Minutes,Mumbai,SKU02,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Mumbai,SKU03,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Mumbai,SKU04,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Mumbai,SKU05,4,4,8,0,,100
+2026-08-22,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-08-22,Flipkart Minutes,Thane,SKU02,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Thane,SKU03,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Thane,SKU04,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Pune,SKU01,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Pune,SKU02,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Pune,SKU03,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-08-22,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-08-22,Flipkart Minutes,Bangalore,SKU01,5,5,5,1,35,100
+2026-08-22,Flipkart Minutes,Bangalore,SKU02,5,5,5,0,,100
+2026-08-22,Flipkart Minutes,Bangalore,SKU03,5,5,5,0,,100
+2026-08-22,Flipkart Minutes,Bangalore,SKU04,5,4,8,0,,80
+2026-08-22,Flipkart Minutes,Bangalore,SKU05,5,5,10,1,70,100
+2026-08-22,Flipkart Minutes,Hyderabad,SKU01,3,3,6,2,21,100
+2026-08-22,Flipkart Minutes,Hyderabad,SKU02,3,3,3,1,21,100
+2026-08-22,Flipkart Minutes,Hyderabad,SKU03,3,3,6,1,42,100
+2026-08-22,Flipkart Minutes,Hyderabad,SKU04,3,3,3,0,,100
+2026-08-22,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-08-29,Blinkit,Delhi,SKU01,14,13,13,1,91,92.9
+2026-08-29,Blinkit,Delhi,SKU02,14,12,24,2,84,85.7
+2026-08-29,Blinkit,Delhi,SKU03,14,13,13,0,,92.9
+2026-08-29,Blinkit,Delhi,SKU04,14,12,24,0,,85.7
+2026-08-29,Blinkit,Delhi,SKU05,14,13,13,0,,92.9
+2026-08-29,Blinkit,Gurugram,SKU01,5,4,8,0,,80
+2026-08-29,Blinkit,Gurugram,SKU02,5,4,8,0,,80
+2026-08-29,Blinkit,Gurugram,SKU03,5,4,4,0,,80
+2026-08-29,Blinkit,Gurugram,SKU04,5,5,10,0,,100
+2026-08-29,Blinkit,Gurugram,SKU05,5,5,5,0,,100
+2026-08-29,Blinkit,Noida,SKU01,5,5,10,2,35,100
+2026-08-29,Blinkit,Noida,SKU02,5,4,8,4,14,80
+2026-08-29,Blinkit,Noida,SKU03,5,5,5,0,,100
+2026-08-29,Blinkit,Noida,SKU04,5,5,5,0,,100
+2026-08-29,Blinkit,Noida,SKU05,5,5,5,0,,100
+2026-08-29,Blinkit,Mumbai,SKU01,14,12,24,1,168,85.7
+2026-08-29,Blinkit,Mumbai,SKU02,14,13,13,0,,92.9
+2026-08-29,Blinkit,Mumbai,SKU03,14,12,24,0,,85.7
+2026-08-29,Blinkit,Mumbai,SKU04,14,12,12,0,,85.7
+2026-08-29,Blinkit,Mumbai,SKU05,14,13,26,0,,92.9
+2026-08-29,Blinkit,Thane,SKU01,4,4,4,0,,100
+2026-08-29,Blinkit,Thane,SKU02,4,4,4,2,14,100
+2026-08-29,Blinkit,Thane,SKU03,4,4,8,1,56,100
+2026-08-29,Blinkit,Thane,SKU04,4,4,8,0,,100
+2026-08-29,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-08-29,Blinkit,Pune,SKU01,8,7,14,0,,87.5
+2026-08-29,Blinkit,Pune,SKU02,8,7,7,3,16.3,87.5
+2026-08-29,Blinkit,Pune,SKU03,8,7,14,2,49,87.5
+2026-08-29,Blinkit,Pune,SKU04,8,8,8,2,28,100
+2026-08-29,Blinkit,Pune,SKU05,8,8,16,0,,100
+2026-08-29,Blinkit,Ahmedabad,SKU01,5,5,5,1,35,100
+2026-08-29,Blinkit,Ahmedabad,SKU02,5,4,4,1,28,80
+2026-08-29,Blinkit,Ahmedabad,SKU03,5,5,10,0,,100
+2026-08-29,Blinkit,Ahmedabad,SKU04,5,4,8,0,,80
+2026-08-29,Blinkit,Ahmedabad,SKU05,5,5,5,0,,100
+2026-08-29,Blinkit,Bangalore,SKU01,15,13,13,0,,86.7
+2026-08-29,Blinkit,Bangalore,SKU02,15,15,15,4,26.3,100
+2026-08-29,Blinkit,Bangalore,SKU03,15,13,26,1,182,86.7
+2026-08-29,Blinkit,Bangalore,SKU04,15,14,28,0,,93.3
+2026-08-29,Blinkit,Bangalore,SKU05,15,13,26,1,182,86.7
+2026-08-29,Blinkit,Hyderabad,SKU01,11,10,10,0,,90.9
+2026-08-29,Blinkit,Hyderabad,SKU02,11,10,10,0,,90.9
+2026-08-29,Blinkit,Hyderabad,SKU03,11,11,11,0,,100
+2026-08-29,Blinkit,Hyderabad,SKU04,11,10,20,0,,90.9
+2026-08-29,Blinkit,Hyderabad,SKU05,11,10,10,0,,90.9
+2026-08-29,Blinkit,Chennai,SKU01,9,9,9,0,,100
+2026-08-29,Blinkit,Chennai,SKU02,9,8,8,0,,88.9
+2026-08-29,Blinkit,Chennai,SKU03,9,8,16,0,,88.9
+2026-08-29,Blinkit,Chennai,SKU04,9,8,8,0,,88.9
+2026-08-29,Blinkit,Chennai,SKU05,9,8,16,1,112,88.9
+2026-08-29,Blinkit,Kolkata,SKU01,10,9,18,0,,90
+2026-08-29,Blinkit,Kolkata,SKU02,10,9,9,0,,90
+2026-08-29,Blinkit,Kolkata,SKU03,10,8,8,0,,80
+2026-08-29,Blinkit,Kolkata,SKU04,10,9,18,0,,90
+2026-08-29,Blinkit,Kolkata,SKU05,10,9,18,0,,90
+2026-08-29,Blinkit,Jaipur,SKU01,4,4,8,0,,100
+2026-08-29,Blinkit,Jaipur,SKU02,4,3,3,0,,75
+2026-08-29,Blinkit,Jaipur,SKU03,4,4,8,0,,100
+2026-08-29,Blinkit,Jaipur,SKU04,4,4,8,0,,100
+2026-08-29,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-08-29,Blinkit,Lucknow,SKU01,4,4,8,0,,100
+2026-08-29,Blinkit,Lucknow,SKU02,4,4,4,0,,100
+2026-08-29,Blinkit,Lucknow,SKU03,4,4,4,0,,100
+2026-08-29,Blinkit,Lucknow,SKU04,4,4,8,0,,100
+2026-08-29,Blinkit,Lucknow,SKU05,4,4,4,0,,100
+2026-08-29,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-08-29,Blinkit,Chandigarh,SKU02,3,3,6,0,,100
+2026-08-29,Blinkit,Chandigarh,SKU03,3,3,6,0,,100
+2026-08-29,Blinkit,Chandigarh,SKU04,3,3,3,0,,100
+2026-08-29,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-08-29,Blinkit,Indore,SKU01,3,3,3,0,,100
+2026-08-29,Blinkit,Indore,SKU02,3,3,6,0,,100
+2026-08-29,Blinkit,Indore,SKU03,3,3,3,0,,100
+2026-08-29,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-08-29,Blinkit,Indore,SKU05,3,3,6,0,,100
+2026-08-29,Zepto,Delhi,SKU01,10,10,20,1,140,100
+2026-08-29,Zepto,Delhi,SKU02,10,9,18,2,63,90
+2026-08-29,Zepto,Delhi,SKU03,10,9,9,0,,90
+2026-08-29,Zepto,Delhi,SKU04,10,9,9,0,,90
+2026-08-29,Zepto,Delhi,SKU05,10,9,9,1,63,90
+2026-08-29,Zepto,Gurugram,SKU01,4,4,4,0,,100
+2026-08-29,Zepto,Gurugram,SKU02,4,3,3,0,,75
+2026-08-29,Zepto,Gurugram,SKU03,4,3,6,0,,75
+2026-08-29,Zepto,Gurugram,SKU04,4,3,3,0,,75
+2026-08-29,Zepto,Gurugram,SKU05,4,3,6,0,,75
+2026-08-29,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-08-29,Zepto,Noida,SKU02,3,3,3,0,,100
+2026-08-29,Zepto,Noida,SKU03,3,3,6,0,,100
+2026-08-29,Zepto,Noida,SKU04,3,3,6,0,,100
+2026-08-29,Zepto,Noida,SKU05,3,3,6,0,,100
+2026-08-29,Zepto,Mumbai,SKU01,11,10,20,1,140,90.9
+2026-08-29,Zepto,Mumbai,SKU02,11,10,10,3,23.3,90.9
+2026-08-29,Zepto,Mumbai,SKU03,11,10,20,1,140,90.9
+2026-08-29,Zepto,Mumbai,SKU04,11,11,11,0,,100
+2026-08-29,Zepto,Mumbai,SKU05,11,10,10,0,,90.9
+2026-08-29,Zepto,Thane,SKU01,3,3,6,0,,100
+2026-08-29,Zepto,Thane,SKU02,3,3,6,0,,100
+2026-08-29,Zepto,Thane,SKU03,3,3,6,0,,100
+2026-08-29,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-08-29,Zepto,Thane,SKU05,3,3,3,0,,100
+2026-08-29,Zepto,Pune,SKU01,6,6,6,0,,100
+2026-08-29,Zepto,Pune,SKU02,6,5,5,1,35,83.3
+2026-08-29,Zepto,Pune,SKU03,6,6,12,1,84,100
+2026-08-29,Zepto,Pune,SKU04,6,6,12,0,,100
+2026-08-29,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-08-29,Zepto,Ahmedabad,SKU01,4,4,4,1,28,100
+2026-08-29,Zepto,Ahmedabad,SKU02,4,4,4,0,,100
+2026-08-29,Zepto,Ahmedabad,SKU03,4,4,8,0,,100
+2026-08-29,Zepto,Ahmedabad,SKU04,4,3,6,0,,75
+2026-08-29,Zepto,Ahmedabad,SKU05,4,4,8,0,,100
+2026-08-29,Zepto,Bangalore,SKU01,11,9,9,1,63,81.8
+2026-08-29,Zepto,Bangalore,SKU02,11,10,20,4,35,90.9
+2026-08-29,Zepto,Bangalore,SKU03,11,10,10,2,35,90.9
+2026-08-29,Zepto,Bangalore,SKU04,11,10,20,0,,90.9
+2026-08-29,Zepto,Bangalore,SKU05,11,9,9,1,63,81.8
+2026-08-29,Zepto,Hyderabad,SKU01,8,7,7,1,49,87.5
+2026-08-29,Zepto,Hyderabad,SKU02,8,7,7,1,49,87.5
+2026-08-29,Zepto,Hyderabad,SKU03,8,8,8,0,,100
+2026-08-29,Zepto,Hyderabad,SKU04,8,7,7,0,,87.5
+2026-08-29,Zepto,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-08-29,Zepto,Chennai,SKU01,7,7,7,3,16.3,100
+2026-08-29,Zepto,Chennai,SKU02,7,7,7,0,,100
+2026-08-29,Zepto,Chennai,SKU03,7,6,12,0,,85.7
+2026-08-29,Zepto,Chennai,SKU04,7,7,14,0,,100
+2026-08-29,Zepto,Chennai,SKU05,7,6,6,0,,85.7
+2026-08-29,Zepto,Kolkata,SKU01,7,6,12,0,,85.7
+2026-08-29,Zepto,Kolkata,SKU02,7,7,7,0,,100
+2026-08-29,Zepto,Kolkata,SKU03,7,6,6,0,,85.7
+2026-08-29,Zepto,Kolkata,SKU04,7,7,14,0,,100
+2026-08-29,Zepto,Kolkata,SKU05,7,6,6,0,,85.7
+2026-08-29,Zepto,Jaipur,SKU01,3,3,6,0,,100
+2026-08-29,Zepto,Jaipur,SKU02,3,3,6,0,,100
+2026-08-29,Zepto,Jaipur,SKU03,3,3,6,0,,100
+2026-08-29,Zepto,Jaipur,SKU04,3,3,6,0,,100
+2026-08-29,Zepto,Jaipur,SKU05,3,3,6,0,,100
+2026-08-29,Zepto,Lucknow,SKU01,3,3,3,1,21,100
+2026-08-29,Zepto,Lucknow,SKU02,3,3,3,1,21,100
+2026-08-29,Zepto,Lucknow,SKU03,3,3,6,1,42,100
+2026-08-29,Zepto,Lucknow,SKU04,3,3,6,0,,100
+2026-08-29,Zepto,Lucknow,SKU05,3,3,6,0,,100
+2026-08-29,Instamart,Delhi,SKU01,9,9,9,0,,100
+2026-08-29,Instamart,Delhi,SKU02,9,8,16,3,37.3,88.9
+2026-08-29,Instamart,Delhi,SKU03,9,9,18,0,,100
+2026-08-29,Instamart,Delhi,SKU04,9,8,16,1,112,88.9
+2026-08-29,Instamart,Delhi,SKU05,9,8,8,1,56,88.9
+2026-08-29,Instamart,Gurugram,SKU01,4,4,8,1,56,100
+2026-08-29,Instamart,Gurugram,SKU02,4,4,4,2,14,100
+2026-08-29,Instamart,Gurugram,SKU03,4,3,3,0,,75
+2026-08-29,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-08-29,Instamart,Gurugram,SKU05,4,3,3,0,,75
+2026-08-29,Instamart,Noida,SKU01,3,3,6,0,,100
+2026-08-29,Instamart,Noida,SKU02,3,3,6,0,,100
+2026-08-29,Instamart,Noida,SKU03,3,3,6,0,,100
+2026-08-29,Instamart,Noida,SKU04,3,3,3,0,,100
+2026-08-29,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-08-29,Instamart,Mumbai,SKU01,10,9,18,1,126,90
+2026-08-29,Instamart,Mumbai,SKU02,10,9,9,2,31.5,90
+2026-08-29,Instamart,Mumbai,SKU03,10,9,18,0,,90
+2026-08-29,Instamart,Mumbai,SKU04,10,9,9,0,,90
+2026-08-29,Instamart,Mumbai,SKU05,10,9,18,1,126,90
+2026-08-29,Instamart,Thane,SKU01,3,3,6,0,,100
+2026-08-29,Instamart,Thane,SKU02,3,3,6,0,,100
+2026-08-29,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-08-29,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-08-29,Instamart,Thane,SKU05,3,3,6,0,,100
+2026-08-29,Instamart,Pune,SKU01,6,6,6,1,42,100
+2026-08-29,Instamart,Pune,SKU02,6,5,10,3,23.3,83.3
+2026-08-29,Instamart,Pune,SKU03,6,6,6,0,,100
+2026-08-29,Instamart,Pune,SKU04,6,6,6,0,,100
+2026-08-29,Instamart,Pune,SKU05,6,5,10,0,,83.3
+2026-08-29,Instamart,Ahmedabad,SKU01,3,3,3,0,,100
+2026-08-29,Instamart,Ahmedabad,SKU02,3,3,6,1,42,100
+2026-08-29,Instamart,Ahmedabad,SKU03,3,3,3,0,,100
+2026-08-29,Instamart,Ahmedabad,SKU04,3,3,3,0,,100
+2026-08-29,Instamart,Ahmedabad,SKU05,3,3,6,0,,100
+2026-08-29,Instamart,Bangalore,SKU01,11,10,20,0,,90.9
+2026-08-29,Instamart,Bangalore,SKU02,11,10,20,4,35,90.9
+2026-08-29,Instamart,Bangalore,SKU03,11,11,11,2,38.5,100
+2026-08-29,Instamart,Bangalore,SKU04,11,11,22,0,,100
+2026-08-29,Instamart,Bangalore,SKU05,11,10,20,0,,90.9
+2026-08-29,Instamart,Hyderabad,SKU01,8,7,7,1,49,87.5
+2026-08-29,Instamart,Hyderabad,SKU02,8,8,8,1,56,100
+2026-08-29,Instamart,Hyderabad,SKU03,8,7,7,1,49,87.5
+2026-08-29,Instamart,Hyderabad,SKU04,8,8,16,0,,100
+2026-08-29,Instamart,Hyderabad,SKU05,8,7,14,0,,87.5
+2026-08-29,Instamart,Chennai,SKU01,6,6,12,0,,100
+2026-08-29,Instamart,Chennai,SKU02,6,5,10,2,35,83.3
+2026-08-29,Instamart,Chennai,SKU03,6,6,6,0,,100
+2026-08-29,Instamart,Chennai,SKU04,6,5,10,1,70,83.3
+2026-08-29,Instamart,Chennai,SKU05,6,6,12,0,,100
+2026-08-29,Instamart,Kolkata,SKU01,7,6,6,1,42,85.7
+2026-08-29,Instamart,Kolkata,SKU02,7,7,7,1,49,100
+2026-08-29,Instamart,Kolkata,SKU03,7,6,6,1,42,85.7
+2026-08-29,Instamart,Kolkata,SKU04,7,6,6,1,42,85.7
+2026-08-29,Instamart,Kolkata,SKU05,7,6,6,0,,85.7
+2026-08-29,Instamart,Kochi,SKU01,2,2,4,0,,100
+2026-08-29,Instamart,Kochi,SKU02,2,2,4,0,,100
+2026-08-29,Instamart,Kochi,SKU03,2,2,4,0,,100
+2026-08-29,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-08-29,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-08-29,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-08-29,Instamart,Coimbatore,SKU02,2,2,4,0,,100
+2026-08-29,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-08-29,Instamart,Coimbatore,SKU04,2,2,2,1,14,100
+2026-08-29,Instamart,Coimbatore,SKU05,2,2,4,1,28,100
+2026-08-29,BB Now,Delhi,SKU01,5,5,5,1,35,100
+2026-08-29,BB Now,Delhi,SKU02,5,5,5,0,,100
+2026-08-29,BB Now,Delhi,SKU03,5,4,4,0,,80
+2026-08-29,BB Now,Delhi,SKU04,5,4,4,0,,80
+2026-08-29,BB Now,Delhi,SKU05,5,4,8,0,,80
+2026-08-29,BB Now,Gurugram,SKU01,2,2,2,0,,100
+2026-08-29,BB Now,Gurugram,SKU02,2,2,2,0,,100
+2026-08-29,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-08-29,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-08-29,BB Now,Gurugram,SKU05,2,2,2,0,,100
+2026-08-29,BB Now,Noida,SKU01,2,2,4,0,,100
+2026-08-29,BB Now,Noida,SKU02,2,2,2,0,,100
+2026-08-29,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-08-29,BB Now,Noida,SKU04,2,2,2,0,,100
+2026-08-29,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-08-29,BB Now,Mumbai,SKU01,5,5,10,0,,100
+2026-08-29,BB Now,Mumbai,SKU02,5,5,5,0,,100
+2026-08-29,BB Now,Mumbai,SKU03,5,4,8,0,,80
+2026-08-29,BB Now,Mumbai,SKU04,5,5,5,0,,100
+2026-08-29,BB Now,Mumbai,SKU05,5,5,5,0,,100
+2026-08-29,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-08-29,BB Now,Thane,SKU02,2,2,2,0,,100
+2026-08-29,BB Now,Thane,SKU03,2,2,4,0,,100
+2026-08-29,BB Now,Thane,SKU04,2,2,2,0,,100
+2026-08-29,BB Now,Thane,SKU05,2,2,4,0,,100
+2026-08-29,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-08-29,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-08-29,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-08-29,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-08-29,BB Now,Pune,SKU05,3,3,3,0,,100
+2026-08-29,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-08-29,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-08-29,BB Now,Ahmedabad,SKU03,2,2,4,0,,100
+2026-08-29,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-08-29,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-08-29,BB Now,Bangalore,SKU01,5,4,4,1,28,80
+2026-08-29,BB Now,Bangalore,SKU02,5,4,4,1,28,80
+2026-08-29,BB Now,Bangalore,SKU03,5,4,4,0,,80
+2026-08-29,BB Now,Bangalore,SKU04,5,5,10,1,70,100
+2026-08-29,BB Now,Bangalore,SKU05,5,5,10,0,,100
+2026-08-29,BB Now,Hyderabad,SKU01,4,4,8,0,,100
+2026-08-29,BB Now,Hyderabad,SKU02,4,3,6,0,,75
+2026-08-29,BB Now,Hyderabad,SKU03,4,4,8,0,,100
+2026-08-29,BB Now,Hyderabad,SKU04,4,3,6,0,,75
+2026-08-29,BB Now,Hyderabad,SKU05,4,3,6,0,,75
+2026-08-29,BB Now,Chennai,SKU01,3,3,3,0,,100
+2026-08-29,BB Now,Chennai,SKU02,3,3,6,1,42,100
+2026-08-29,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-08-29,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-08-29,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-08-29,BB Now,Kolkata,SKU01,3,3,6,0,,100
+2026-08-29,BB Now,Kolkata,SKU02,3,3,3,0,,100
+2026-08-29,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-08-29,BB Now,Kolkata,SKU04,3,3,3,0,,100
+2026-08-29,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-08-29,Flipkart Minutes,Delhi,SKU01,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Delhi,SKU02,4,4,4,0,,100
+2026-08-29,Flipkart Minutes,Delhi,SKU03,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Delhi,SKU04,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Delhi,SKU05,4,3,6,0,,75
+2026-08-29,Flipkart Minutes,Gurugram,SKU01,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Gurugram,SKU02,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Gurugram,SKU03,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Gurugram,SKU04,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Noida,SKU01,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Noida,SKU02,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Noida,SKU03,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Noida,SKU04,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Noida,SKU05,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Mumbai,SKU01,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Mumbai,SKU02,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Mumbai,SKU03,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Mumbai,SKU04,4,4,4,0,,100
+2026-08-29,Flipkart Minutes,Mumbai,SKU05,4,4,8,0,,100
+2026-08-29,Flipkart Minutes,Thane,SKU01,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Thane,SKU02,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Thane,SKU04,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Pune,SKU01,2,2,4,2,14,100
+2026-08-29,Flipkart Minutes,Pune,SKU02,2,2,2,2,7,100
+2026-08-29,Flipkart Minutes,Pune,SKU03,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-08-29,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-08-29,Flipkart Minutes,Bangalore,SKU01,5,4,4,1,28,80
+2026-08-29,Flipkart Minutes,Bangalore,SKU02,5,4,8,0,,80
+2026-08-29,Flipkart Minutes,Bangalore,SKU03,5,4,8,0,,80
+2026-08-29,Flipkart Minutes,Bangalore,SKU04,5,5,5,0,,100
+2026-08-29,Flipkart Minutes,Bangalore,SKU05,5,4,8,0,,80
+2026-08-29,Flipkart Minutes,Hyderabad,SKU01,3,3,3,0,,100
+2026-08-29,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-08-29,Flipkart Minutes,Hyderabad,SKU03,3,3,3,1,21,100
+2026-08-29,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-08-29,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-09-05,Blinkit,Delhi,SKU01,14,12,12,4,21,85.7
+2026-09-05,Blinkit,Delhi,SKU02,14,13,26,2,91,92.9
+2026-09-05,Blinkit,Delhi,SKU03,14,14,28,1,196,100
+2026-09-05,Blinkit,Delhi,SKU04,14,13,26,1,182,92.9
+2026-09-05,Blinkit,Delhi,SKU05,14,12,24,0,,85.7
+2026-09-05,Blinkit,Gurugram,SKU01,5,4,4,0,,80
+2026-09-05,Blinkit,Gurugram,SKU02,5,5,5,1,35,100
+2026-09-05,Blinkit,Gurugram,SKU03,5,4,8,0,,80
+2026-09-05,Blinkit,Gurugram,SKU04,5,4,8,0,,80
+2026-09-05,Blinkit,Gurugram,SKU05,5,4,8,0,,80
+2026-09-05,Blinkit,Noida,SKU01,5,5,5,1,35,100
+2026-09-05,Blinkit,Noida,SKU02,5,5,5,1,35,100
+2026-09-05,Blinkit,Noida,SKU03,5,4,4,0,,80
+2026-09-05,Blinkit,Noida,SKU04,5,5,5,0,,100
+2026-09-05,Blinkit,Noida,SKU05,5,5,5,1,35,100
+2026-09-05,Blinkit,Mumbai,SKU01,14,13,13,0,,92.9
+2026-09-05,Blinkit,Mumbai,SKU02,14,14,14,4,24.5,100
+2026-09-05,Blinkit,Mumbai,SKU03,14,13,26,0,,92.9
+2026-09-05,Blinkit,Mumbai,SKU04,14,14,28,0,,100
+2026-09-05,Blinkit,Mumbai,SKU05,14,12,12,0,,85.7
+2026-09-05,Blinkit,Thane,SKU01,4,3,3,0,,75
+2026-09-05,Blinkit,Thane,SKU02,4,3,3,1,21,75
+2026-09-05,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-09-05,Blinkit,Thane,SKU04,4,4,8,0,,100
+2026-09-05,Blinkit,Thane,SKU05,4,4,4,0,,100
+2026-09-05,Blinkit,Pune,SKU01,8,7,7,2,24.5,87.5
+2026-09-05,Blinkit,Pune,SKU02,8,8,8,1,56,100
+2026-09-05,Blinkit,Pune,SKU03,8,7,14,0,,87.5
+2026-09-05,Blinkit,Pune,SKU04,8,7,7,0,,87.5
+2026-09-05,Blinkit,Pune,SKU05,8,7,7,1,49,87.5
+2026-09-05,Blinkit,Ahmedabad,SKU01,5,4,4,0,,80
+2026-09-05,Blinkit,Ahmedabad,SKU02,5,5,10,0,,100
+2026-09-05,Blinkit,Ahmedabad,SKU03,5,5,10,0,,100
+2026-09-05,Blinkit,Ahmedabad,SKU04,5,4,8,0,,80
+2026-09-05,Blinkit,Ahmedabad,SKU05,5,5,10,0,,100
+2026-09-05,Blinkit,Bangalore,SKU01,15,14,14,0,,93.3
+2026-09-05,Blinkit,Bangalore,SKU02,15,14,28,2,98,93.3
+2026-09-05,Blinkit,Bangalore,SKU03,15,14,28,1,196,93.3
+2026-09-05,Blinkit,Bangalore,SKU04,15,13,26,0,,86.7
+2026-09-05,Blinkit,Bangalore,SKU05,15,13,26,0,,86.7
+2026-09-05,Blinkit,Hyderabad,SKU01,11,10,10,3,23.3,90.9
+2026-09-05,Blinkit,Hyderabad,SKU02,11,10,10,3,23.3,90.9
+2026-09-05,Blinkit,Hyderabad,SKU03,11,10,10,0,,90.9
+2026-09-05,Blinkit,Hyderabad,SKU04,11,10,20,0,,90.9
+2026-09-05,Blinkit,Hyderabad,SKU05,11,9,18,0,,81.8
+2026-09-05,Blinkit,Chennai,SKU01,9,8,8,0,,88.9
+2026-09-05,Blinkit,Chennai,SKU02,9,8,8,1,56,88.9
+2026-09-05,Blinkit,Chennai,SKU03,9,8,8,3,18.7,88.9
+2026-09-05,Blinkit,Chennai,SKU04,9,9,18,0,,100
+2026-09-05,Blinkit,Chennai,SKU05,9,8,8,0,,88.9
+2026-09-05,Blinkit,Kolkata,SKU01,10,9,9,1,63,90
+2026-09-05,Blinkit,Kolkata,SKU02,10,10,20,3,46.7,100
+2026-09-05,Blinkit,Kolkata,SKU03,10,10,10,0,,100
+2026-09-05,Blinkit,Kolkata,SKU04,10,10,20,0,,100
+2026-09-05,Blinkit,Kolkata,SKU05,10,9,18,0,,90
+2026-09-05,Blinkit,Jaipur,SKU01,4,3,3,0,,75
+2026-09-05,Blinkit,Jaipur,SKU02,4,3,6,1,42,75
+2026-09-05,Blinkit,Jaipur,SKU03,4,4,4,0,,100
+2026-09-05,Blinkit,Jaipur,SKU04,4,4,8,0,,100
+2026-09-05,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-09-05,Blinkit,Lucknow,SKU01,4,4,8,1,56,100
+2026-09-05,Blinkit,Lucknow,SKU02,4,4,4,2,14,100
+2026-09-05,Blinkit,Lucknow,SKU03,4,4,4,1,28,100
+2026-09-05,Blinkit,Lucknow,SKU04,4,4,8,0,,100
+2026-09-05,Blinkit,Lucknow,SKU05,4,4,4,1,28,100
+2026-09-05,Blinkit,Chandigarh,SKU01,3,3,3,0,,100
+2026-09-05,Blinkit,Chandigarh,SKU02,3,3,3,0,,100
+2026-09-05,Blinkit,Chandigarh,SKU03,3,3,6,0,,100
+2026-09-05,Blinkit,Chandigarh,SKU04,3,3,6,0,,100
+2026-09-05,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-09-05,Blinkit,Indore,SKU01,3,3,3,0,,100
+2026-09-05,Blinkit,Indore,SKU02,3,3,6,0,,100
+2026-09-05,Blinkit,Indore,SKU03,3,3,6,1,42,100
+2026-09-05,Blinkit,Indore,SKU04,3,3,3,0,,100
+2026-09-05,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-09-05,Zepto,Delhi,SKU01,10,10,20,0,,100
+2026-09-05,Zepto,Delhi,SKU02,10,10,10,1,70,100
+2026-09-05,Zepto,Delhi,SKU03,10,9,9,1,63,90
+2026-09-05,Zepto,Delhi,SKU04,10,10,10,0,,100
+2026-09-05,Zepto,Delhi,SKU05,10,9,18,0,,90
+2026-09-05,Zepto,Gurugram,SKU01,4,3,6,0,,75
+2026-09-05,Zepto,Gurugram,SKU02,4,4,4,2,14,100
+2026-09-05,Zepto,Gurugram,SKU03,4,4,4,0,,100
+2026-09-05,Zepto,Gurugram,SKU04,4,4,8,0,,100
+2026-09-05,Zepto,Gurugram,SKU05,4,3,6,0,,75
+2026-09-05,Zepto,Noida,SKU01,3,3,3,1,21,100
+2026-09-05,Zepto,Noida,SKU02,3,3,6,1,42,100
+2026-09-05,Zepto,Noida,SKU03,3,3,6,0,,100
+2026-09-05,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-09-05,Zepto,Noida,SKU05,3,3,3,0,,100
+2026-09-05,Zepto,Mumbai,SKU01,11,11,11,2,38.5,100
+2026-09-05,Zepto,Mumbai,SKU02,11,10,20,4,35,90.9
+2026-09-05,Zepto,Mumbai,SKU03,11,10,20,0,,90.9
+2026-09-05,Zepto,Mumbai,SKU04,11,10,10,0,,90.9
+2026-09-05,Zepto,Mumbai,SKU05,11,10,20,1,140,90.9
+2026-09-05,Zepto,Thane,SKU01,3,3,3,1,21,100
+2026-09-05,Zepto,Thane,SKU02,3,3,6,1,42,100
+2026-09-05,Zepto,Thane,SKU03,3,3,3,0,,100
+2026-09-05,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-09-05,Zepto,Thane,SKU05,3,3,6,0,,100
+2026-09-05,Zepto,Pune,SKU01,6,6,6,0,,100
+2026-09-05,Zepto,Pune,SKU02,6,5,10,0,,83.3
+2026-09-05,Zepto,Pune,SKU03,6,5,10,0,,83.3
+2026-09-05,Zepto,Pune,SKU04,6,6,6,0,,100
+2026-09-05,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-09-05,Zepto,Ahmedabad,SKU01,4,4,4,0,,100
+2026-09-05,Zepto,Ahmedabad,SKU02,4,3,3,1,21,75
+2026-09-05,Zepto,Ahmedabad,SKU03,4,4,4,0,,100
+2026-09-05,Zepto,Ahmedabad,SKU04,4,4,4,0,,100
+2026-09-05,Zepto,Ahmedabad,SKU05,4,4,8,1,56,100
+2026-09-05,Zepto,Bangalore,SKU01,11,10,10,1,70,90.9
+2026-09-05,Zepto,Bangalore,SKU02,11,10,10,0,,90.9
+2026-09-05,Zepto,Bangalore,SKU03,11,10,20,2,70,90.9
+2026-09-05,Zepto,Bangalore,SKU04,11,11,11,0,,100
+2026-09-05,Zepto,Bangalore,SKU05,11,10,20,1,140,90.9
+2026-09-05,Zepto,Hyderabad,SKU01,8,7,7,0,,87.5
+2026-09-05,Zepto,Hyderabad,SKU02,8,7,7,1,49,87.5
+2026-09-05,Zepto,Hyderabad,SKU03,8,7,7,1,49,87.5
+2026-09-05,Zepto,Hyderabad,SKU04,8,7,7,0,,87.5
+2026-09-05,Zepto,Hyderabad,SKU05,8,8,16,0,,100
+2026-09-05,Zepto,Chennai,SKU01,7,7,14,0,,100
+2026-09-05,Zepto,Chennai,SKU02,7,6,6,0,,85.7
+2026-09-05,Zepto,Chennai,SKU03,7,7,7,1,49,100
+2026-09-05,Zepto,Chennai,SKU04,7,7,14,0,,100
+2026-09-05,Zepto,Chennai,SKU05,7,6,12,0,,85.7
+2026-09-05,Zepto,Kolkata,SKU01,7,6,6,1,42,85.7
+2026-09-05,Zepto,Kolkata,SKU02,7,7,7,3,16.3,100
+2026-09-05,Zepto,Kolkata,SKU03,7,7,7,1,49,100
+2026-09-05,Zepto,Kolkata,SKU04,7,6,12,0,,85.7
+2026-09-05,Zepto,Kolkata,SKU05,7,6,12,0,,85.7
+2026-09-05,Zepto,Jaipur,SKU01,3,3,6,2,21,100
+2026-09-05,Zepto,Jaipur,SKU02,3,3,3,1,21,100
+2026-09-05,Zepto,Jaipur,SKU03,3,3,3,1,21,100
+2026-09-05,Zepto,Jaipur,SKU04,3,3,3,1,21,100
+2026-09-05,Zepto,Jaipur,SKU05,3,3,6,0,,100
+2026-09-05,Zepto,Lucknow,SKU01,3,3,6,0,,100
+2026-09-05,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-09-05,Zepto,Lucknow,SKU03,3,3,6,0,,100
+2026-09-05,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-09-05,Zepto,Lucknow,SKU05,3,3,3,0,,100
+2026-09-05,Instamart,Delhi,SKU01,9,8,16,1,112,88.9
+2026-09-05,Instamart,Delhi,SKU02,9,8,16,0,,88.9
+2026-09-05,Instamart,Delhi,SKU03,9,8,8,2,28,88.9
+2026-09-05,Instamart,Delhi,SKU04,9,9,9,0,,100
+2026-09-05,Instamart,Delhi,SKU05,9,8,16,1,112,88.9
+2026-09-05,Instamart,Gurugram,SKU01,4,3,3,0,,75
+2026-09-05,Instamart,Gurugram,SKU02,4,4,8,0,,100
+2026-09-05,Instamart,Gurugram,SKU03,4,4,8,2,28,100
+2026-09-05,Instamart,Gurugram,SKU04,4,4,8,1,56,100
+2026-09-05,Instamart,Gurugram,SKU05,4,3,6,0,,75
+2026-09-05,Instamart,Noida,SKU01,3,3,3,0,,100
+2026-09-05,Instamart,Noida,SKU02,3,3,3,0,,100
+2026-09-05,Instamart,Noida,SKU03,3,3,3,0,,100
+2026-09-05,Instamart,Noida,SKU04,3,3,3,1,21,100
+2026-09-05,Instamart,Noida,SKU05,3,3,3,0,,100
+2026-09-05,Instamart,Mumbai,SKU01,10,9,18,2,63,90
+2026-09-05,Instamart,Mumbai,SKU02,10,9,9,1,63,90
+2026-09-05,Instamart,Mumbai,SKU03,10,9,18,0,,90
+2026-09-05,Instamart,Mumbai,SKU04,10,9,9,0,,90
+2026-09-05,Instamart,Mumbai,SKU05,10,10,10,0,,100
+2026-09-05,Instamart,Thane,SKU01,3,3,3,0,,100
+2026-09-05,Instamart,Thane,SKU02,3,3,3,1,21,100
+2026-09-05,Instamart,Thane,SKU03,3,3,3,0,,100
+2026-09-05,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-09-05,Instamart,Thane,SKU05,3,3,6,0,,100
+2026-09-05,Instamart,Pune,SKU01,6,6,12,1,84,100
+2026-09-05,Instamart,Pune,SKU02,6,5,5,0,,83.3
+2026-09-05,Instamart,Pune,SKU03,6,6,6,0,,100
+2026-09-05,Instamart,Pune,SKU04,6,5,5,1,35,83.3
+2026-09-05,Instamart,Pune,SKU05,6,5,10,1,70,83.3
+2026-09-05,Instamart,Ahmedabad,SKU01,3,3,3,0,,100
+2026-09-05,Instamart,Ahmedabad,SKU02,3,3,6,3,14,100
+2026-09-05,Instamart,Ahmedabad,SKU03,3,3,3,1,21,100
+2026-09-05,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-09-05,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-09-05,Instamart,Bangalore,SKU01,11,10,20,0,,90.9
+2026-09-05,Instamart,Bangalore,SKU02,11,10,10,3,23.3,90.9
+2026-09-05,Instamart,Bangalore,SKU03,11,10,20,3,46.7,90.9
+2026-09-05,Instamart,Bangalore,SKU04,11,10,10,0,,90.9
+2026-09-05,Instamart,Bangalore,SKU05,11,10,20,1,140,90.9
+2026-09-05,Instamart,Hyderabad,SKU01,8,7,14,1,98,87.5
+2026-09-05,Instamart,Hyderabad,SKU02,8,8,16,3,37.3,100
+2026-09-05,Instamart,Hyderabad,SKU03,8,8,8,0,,100
+2026-09-05,Instamart,Hyderabad,SKU04,8,7,7,0,,87.5
+2026-09-05,Instamart,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-09-05,Instamart,Chennai,SKU01,6,5,5,0,,83.3
+2026-09-05,Instamart,Chennai,SKU02,6,5,10,0,,83.3
+2026-09-05,Instamart,Chennai,SKU03,6,6,6,1,42,100
+2026-09-05,Instamart,Chennai,SKU04,6,5,5,1,35,83.3
+2026-09-05,Instamart,Chennai,SKU05,6,5,5,0,,83.3
+2026-09-05,Instamart,Kolkata,SKU01,7,7,14,1,98,100
+2026-09-05,Instamart,Kolkata,SKU02,7,6,12,0,,85.7
+2026-09-05,Instamart,Kolkata,SKU03,7,6,6,0,,85.7
+2026-09-05,Instamart,Kolkata,SKU04,7,7,7,0,,100
+2026-09-05,Instamart,Kolkata,SKU05,7,7,14,0,,100
+2026-09-05,Instamart,Kochi,SKU01,2,2,4,0,,100
+2026-09-05,Instamart,Kochi,SKU02,2,2,4,0,,100
+2026-09-05,Instamart,Kochi,SKU03,2,2,4,0,,100
+2026-09-05,Instamart,Kochi,SKU04,2,2,4,1,28,100
+2026-09-05,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-09-05,Instamart,Coimbatore,SKU01,2,2,4,0,,100
+2026-09-05,Instamart,Coimbatore,SKU02,2,2,2,0,,100
+2026-09-05,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-09-05,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-09-05,Instamart,Coimbatore,SKU05,2,2,2,0,,100
+2026-09-05,BB Now,Delhi,SKU01,5,5,10,0,,100
+2026-09-05,BB Now,Delhi,SKU02,5,5,10,1,70,100
+2026-09-05,BB Now,Delhi,SKU03,5,4,4,0,,80
+2026-09-05,BB Now,Delhi,SKU04,5,4,8,0,,80
+2026-09-05,BB Now,Delhi,SKU05,5,4,8,0,,80
+2026-09-05,BB Now,Gurugram,SKU01,2,2,2,1,14,100
+2026-09-05,BB Now,Gurugram,SKU02,2,2,4,2,14,100
+2026-09-05,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-09-05,BB Now,Gurugram,SKU04,2,2,4,0,,100
+2026-09-05,BB Now,Gurugram,SKU05,2,2,4,0,,100
+2026-09-05,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-09-05,BB Now,Noida,SKU02,2,2,2,1,14,100
+2026-09-05,BB Now,Noida,SKU03,2,2,4,2,14,100
+2026-09-05,BB Now,Noida,SKU04,2,2,2,0,,100
+2026-09-05,BB Now,Noida,SKU05,2,2,4,0,,100
+2026-09-05,BB Now,Mumbai,SKU01,5,5,5,1,35,100
+2026-09-05,BB Now,Mumbai,SKU02,5,5,10,0,,100
+2026-09-05,BB Now,Mumbai,SKU03,5,5,10,1,70,100
+2026-09-05,BB Now,Mumbai,SKU04,5,5,5,1,35,100
+2026-09-05,BB Now,Mumbai,SKU05,5,4,8,0,,80
+2026-09-05,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-09-05,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-09-05,BB Now,Thane,SKU03,2,2,4,0,,100
+2026-09-05,BB Now,Thane,SKU04,2,2,2,0,,100
+2026-09-05,BB Now,Thane,SKU05,2,2,4,0,,100
+2026-09-05,BB Now,Pune,SKU01,3,3,6,0,,100
+2026-09-05,BB Now,Pune,SKU02,3,3,3,0,,100
+2026-09-05,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-09-05,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-09-05,BB Now,Pune,SKU05,3,3,3,0,,100
+2026-09-05,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-09-05,BB Now,Ahmedabad,SKU02,2,2,4,0,,100
+2026-09-05,BB Now,Ahmedabad,SKU03,2,2,4,0,,100
+2026-09-05,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-09-05,BB Now,Ahmedabad,SKU05,2,2,4,0,,100
+2026-09-05,BB Now,Bangalore,SKU01,5,5,5,0,,100
+2026-09-05,BB Now,Bangalore,SKU02,5,5,5,0,,100
+2026-09-05,BB Now,Bangalore,SKU03,5,5,5,1,35,100
+2026-09-05,BB Now,Bangalore,SKU04,5,5,10,1,70,100
+2026-09-05,BB Now,Bangalore,SKU05,5,5,10,0,,100
+2026-09-05,BB Now,Hyderabad,SKU01,4,3,3,0,,75
+2026-09-05,BB Now,Hyderabad,SKU02,4,4,8,0,,100
+2026-09-05,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-09-05,BB Now,Hyderabad,SKU04,4,4,8,0,,100
+2026-09-05,BB Now,Hyderabad,SKU05,4,4,4,0,,100
+2026-09-05,BB Now,Chennai,SKU01,3,3,6,0,,100
+2026-09-05,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-09-05,BB Now,Chennai,SKU03,3,3,6,0,,100
+2026-09-05,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-09-05,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-09-05,BB Now,Kolkata,SKU01,3,3,3,1,21,100
+2026-09-05,BB Now,Kolkata,SKU02,3,3,3,0,,100
+2026-09-05,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-09-05,BB Now,Kolkata,SKU04,3,3,3,0,,100
+2026-09-05,BB Now,Kolkata,SKU05,3,3,3,0,,100
+2026-09-05,Flipkart Minutes,Delhi,SKU01,4,4,4,1,28,100
+2026-09-05,Flipkart Minutes,Delhi,SKU02,4,4,8,1,56,100
+2026-09-05,Flipkart Minutes,Delhi,SKU03,4,3,6,0,,75
+2026-09-05,Flipkart Minutes,Delhi,SKU04,4,4,8,0,,100
+2026-09-05,Flipkart Minutes,Delhi,SKU05,4,4,4,0,,100
+2026-09-05,Flipkart Minutes,Gurugram,SKU01,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Gurugram,SKU03,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Noida,SKU02,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Noida,SKU05,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Mumbai,SKU01,4,4,8,0,,100
+2026-09-05,Flipkart Minutes,Mumbai,SKU02,4,4,8,0,,100
+2026-09-05,Flipkart Minutes,Mumbai,SKU03,4,4,4,0,,100
+2026-09-05,Flipkart Minutes,Mumbai,SKU04,4,4,4,0,,100
+2026-09-05,Flipkart Minutes,Mumbai,SKU05,4,4,8,0,,100
+2026-09-05,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Thane,SKU02,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Pune,SKU01,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Pune,SKU02,2,2,4,3,9.3,100
+2026-09-05,Flipkart Minutes,Pune,SKU03,2,2,4,1,28,100
+2026-09-05,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-09-05,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-09-05,Flipkart Minutes,Bangalore,SKU01,5,4,8,1,56,80
+2026-09-05,Flipkart Minutes,Bangalore,SKU02,5,4,8,1,56,80
+2026-09-05,Flipkart Minutes,Bangalore,SKU03,5,5,5,1,35,100
+2026-09-05,Flipkart Minutes,Bangalore,SKU04,5,5,10,0,,100
+2026-09-05,Flipkart Minutes,Bangalore,SKU05,5,4,8,0,,80
+2026-09-05,Flipkart Minutes,Hyderabad,SKU01,3,3,6,2,21,100
+2026-09-05,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-09-05,Flipkart Minutes,Hyderabad,SKU03,3,3,3,0,,100
+2026-09-05,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-09-05,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-09-12,Blinkit,Delhi,SKU01,14,12,12,0,,85.7
+2026-09-12,Blinkit,Delhi,SKU02,14,13,26,1,182,92.9
+2026-09-12,Blinkit,Delhi,SKU03,14,12,24,1,168,85.7
+2026-09-12,Blinkit,Delhi,SKU04,14,13,26,0,,92.9
+2026-09-12,Blinkit,Delhi,SKU05,14,12,12,0,,85.7
+2026-09-12,Blinkit,Gurugram,SKU01,5,4,8,1,56,80
+2026-09-12,Blinkit,Gurugram,SKU02,5,5,5,0,,100
+2026-09-12,Blinkit,Gurugram,SKU03,5,4,8,0,,80
+2026-09-12,Blinkit,Gurugram,SKU04,5,4,4,0,,80
+2026-09-12,Blinkit,Gurugram,SKU05,5,5,5,0,,100
+2026-09-12,Blinkit,Noida,SKU01,5,5,5,0,,100
+2026-09-12,Blinkit,Noida,SKU02,5,4,4,0,,80
+2026-09-12,Blinkit,Noida,SKU03,5,5,10,0,,100
+2026-09-12,Blinkit,Noida,SKU04,5,4,8,1,56,80
+2026-09-12,Blinkit,Noida,SKU05,5,4,8,0,,80
+2026-09-12,Blinkit,Mumbai,SKU01,14,12,12,0,,85.7
+2026-09-12,Blinkit,Mumbai,SKU02,14,13,13,0,,92.9
+2026-09-12,Blinkit,Mumbai,SKU03,14,12,24,1,168,85.7
+2026-09-12,Blinkit,Mumbai,SKU04,14,14,28,0,,100
+2026-09-12,Blinkit,Mumbai,SKU05,14,13,13,0,,92.9
+2026-09-12,Blinkit,Thane,SKU01,4,3,3,0,,75
+2026-09-12,Blinkit,Thane,SKU02,4,4,8,0,,100
+2026-09-12,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-09-12,Blinkit,Thane,SKU04,4,4,4,0,,100
+2026-09-12,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-09-12,Blinkit,Pune,SKU01,8,8,8,0,,100
+2026-09-12,Blinkit,Pune,SKU02,8,7,14,2,49,87.5
+2026-09-12,Blinkit,Pune,SKU03,8,7,7,0,,87.5
+2026-09-12,Blinkit,Pune,SKU04,8,7,7,0,,87.5
+2026-09-12,Blinkit,Pune,SKU05,8,8,16,1,112,100
+2026-09-12,Blinkit,Ahmedabad,SKU01,5,5,5,0,,100
+2026-09-12,Blinkit,Ahmedabad,SKU02,5,5,10,0,,100
+2026-09-12,Blinkit,Ahmedabad,SKU03,5,5,10,0,,100
+2026-09-12,Blinkit,Ahmedabad,SKU04,5,5,5,0,,100
+2026-09-12,Blinkit,Ahmedabad,SKU05,5,5,5,0,,100
+2026-09-12,Blinkit,Bangalore,SKU01,15,15,15,2,52.5,100
+2026-09-12,Blinkit,Bangalore,SKU02,15,14,28,2,98,93.3
+2026-09-12,Blinkit,Bangalore,SKU03,15,13,26,0,,86.7
+2026-09-12,Blinkit,Bangalore,SKU04,15,15,30,0,,100
+2026-09-12,Blinkit,Bangalore,SKU05,15,13,26,0,,86.7
+2026-09-12,Blinkit,Hyderabad,SKU01,11,9,9,1,63,81.8
+2026-09-12,Blinkit,Hyderabad,SKU02,11,10,10,2,35,90.9
+2026-09-12,Blinkit,Hyderabad,SKU03,11,11,22,1,154,100
+2026-09-12,Blinkit,Hyderabad,SKU04,11,10,20,0,,90.9
+2026-09-12,Blinkit,Hyderabad,SKU05,11,10,10,1,70,90.9
+2026-09-12,Blinkit,Chennai,SKU01,9,9,18,0,,100
+2026-09-12,Blinkit,Chennai,SKU02,9,8,8,0,,88.9
+2026-09-12,Blinkit,Chennai,SKU03,9,8,8,1,56,88.9
+2026-09-12,Blinkit,Chennai,SKU04,9,9,9,0,,100
+2026-09-12,Blinkit,Chennai,SKU05,9,9,18,0,,100
+2026-09-12,Blinkit,Kolkata,SKU01,10,9,9,2,31.5,90
+2026-09-12,Blinkit,Kolkata,SKU02,10,10,20,2,70,100
+2026-09-12,Blinkit,Kolkata,SKU03,10,9,18,1,126,90
+2026-09-12,Blinkit,Kolkata,SKU04,10,10,10,1,70,100
+2026-09-12,Blinkit,Kolkata,SKU05,10,9,9,0,,90
+2026-09-12,Blinkit,Jaipur,SKU01,4,4,4,0,,100
+2026-09-12,Blinkit,Jaipur,SKU02,4,4,8,0,,100
+2026-09-12,Blinkit,Jaipur,SKU03,4,3,3,0,,75
+2026-09-12,Blinkit,Jaipur,SKU04,4,4,8,0,,100
+2026-09-12,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-09-12,Blinkit,Lucknow,SKU01,4,4,8,0,,100
+2026-09-12,Blinkit,Lucknow,SKU02,4,4,8,1,56,100
+2026-09-12,Blinkit,Lucknow,SKU03,4,4,8,0,,100
+2026-09-12,Blinkit,Lucknow,SKU04,4,4,4,0,,100
+2026-09-12,Blinkit,Lucknow,SKU05,4,4,8,0,,100
+2026-09-12,Blinkit,Chandigarh,SKU01,3,3,3,0,,100
+2026-09-12,Blinkit,Chandigarh,SKU02,3,3,3,0,,100
+2026-09-12,Blinkit,Chandigarh,SKU03,3,3,6,0,,100
+2026-09-12,Blinkit,Chandigarh,SKU04,3,3,3,0,,100
+2026-09-12,Blinkit,Chandigarh,SKU05,3,3,3,0,,100
+2026-09-12,Blinkit,Indore,SKU01,3,3,3,0,,100
+2026-09-12,Blinkit,Indore,SKU02,3,3,6,0,,100
+2026-09-12,Blinkit,Indore,SKU03,3,3,3,0,,100
+2026-09-12,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-09-12,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-09-12,Zepto,Delhi,SKU01,10,9,9,0,,90
+2026-09-12,Zepto,Delhi,SKU02,10,8,16,0,,80
+2026-09-12,Zepto,Delhi,SKU03,10,9,9,0,,90
+2026-09-12,Zepto,Delhi,SKU04,10,10,20,0,,100
+2026-09-12,Zepto,Delhi,SKU05,10,9,9,0,,90
+2026-09-12,Zepto,Gurugram,SKU01,4,3,3,1,21,75
+2026-09-12,Zepto,Gurugram,SKU02,4,4,8,0,,100
+2026-09-12,Zepto,Gurugram,SKU03,4,4,4,1,28,100
+2026-09-12,Zepto,Gurugram,SKU04,4,3,3,2,10.5,75
+2026-09-12,Zepto,Gurugram,SKU05,4,4,4,0,,100
+2026-09-12,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-09-12,Zepto,Noida,SKU02,3,3,3,2,10.5,100
+2026-09-12,Zepto,Noida,SKU03,3,3,6,0,,100
+2026-09-12,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-09-12,Zepto,Noida,SKU05,3,3,6,0,,100
+2026-09-12,Zepto,Mumbai,SKU01,11,10,20,1,140,90.9
+2026-09-12,Zepto,Mumbai,SKU02,11,11,22,0,,100
+2026-09-12,Zepto,Mumbai,SKU03,11,10,10,1,70,90.9
+2026-09-12,Zepto,Mumbai,SKU04,11,10,10,0,,90.9
+2026-09-12,Zepto,Mumbai,SKU05,11,11,22,0,,100
+2026-09-12,Zepto,Thane,SKU01,3,3,3,0,,100
+2026-09-12,Zepto,Thane,SKU02,3,3,6,0,,100
+2026-09-12,Zepto,Thane,SKU03,3,3,6,0,,100
+2026-09-12,Zepto,Thane,SKU04,3,3,3,0,,100
+2026-09-12,Zepto,Thane,SKU05,3,3,6,0,,100
+2026-09-12,Zepto,Pune,SKU01,6,6,12,0,,100
+2026-09-12,Zepto,Pune,SKU02,6,6,6,1,42,100
+2026-09-12,Zepto,Pune,SKU03,6,6,6,1,42,100
+2026-09-12,Zepto,Pune,SKU04,6,5,10,0,,83.3
+2026-09-12,Zepto,Pune,SKU05,6,5,5,0,,83.3
+2026-09-12,Zepto,Ahmedabad,SKU01,4,4,8,2,28,100
+2026-09-12,Zepto,Ahmedabad,SKU02,4,4,4,1,28,100
+2026-09-12,Zepto,Ahmedabad,SKU03,4,4,8,0,,100
+2026-09-12,Zepto,Ahmedabad,SKU04,4,4,4,0,,100
+2026-09-12,Zepto,Ahmedabad,SKU05,4,4,8,1,56,100
+2026-09-12,Zepto,Bangalore,SKU01,11,10,20,0,,90.9
+2026-09-12,Zepto,Bangalore,SKU02,11,10,10,2,35,90.9
+2026-09-12,Zepto,Bangalore,SKU03,11,11,11,0,,100
+2026-09-12,Zepto,Bangalore,SKU04,11,10,20,1,140,90.9
+2026-09-12,Zepto,Bangalore,SKU05,11,10,20,0,,90.9
+2026-09-12,Zepto,Hyderabad,SKU01,8,8,8,1,56,100
+2026-09-12,Zepto,Hyderabad,SKU02,8,8,8,2,28,100
+2026-09-12,Zepto,Hyderabad,SKU03,8,7,7,1,49,87.5
+2026-09-12,Zepto,Hyderabad,SKU04,8,7,14,1,98,87.5
+2026-09-12,Zepto,Hyderabad,SKU05,8,8,16,1,112,100
+2026-09-12,Zepto,Chennai,SKU01,7,7,7,0,,100
+2026-09-12,Zepto,Chennai,SKU02,7,7,7,2,24.5,100
+2026-09-12,Zepto,Chennai,SKU03,7,6,6,0,,85.7
+2026-09-12,Zepto,Chennai,SKU04,7,6,6,0,,85.7
+2026-09-12,Zepto,Chennai,SKU05,7,6,6,1,42,85.7
+2026-09-12,Zepto,Kolkata,SKU01,7,7,14,2,49,100
+2026-09-12,Zepto,Kolkata,SKU02,7,7,7,1,49,100
+2026-09-12,Zepto,Kolkata,SKU03,7,7,7,0,,100
+2026-09-12,Zepto,Kolkata,SKU04,7,6,12,0,,85.7
+2026-09-12,Zepto,Kolkata,SKU05,7,7,14,0,,100
+2026-09-12,Zepto,Jaipur,SKU01,3,3,6,0,,100
+2026-09-12,Zepto,Jaipur,SKU02,3,3,3,0,,100
+2026-09-12,Zepto,Jaipur,SKU03,3,3,3,0,,100
+2026-09-12,Zepto,Jaipur,SKU04,3,3,6,0,,100
+2026-09-12,Zepto,Jaipur,SKU05,3,3,6,0,,100
+2026-09-12,Zepto,Lucknow,SKU01,3,3,6,0,,100
+2026-09-12,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-09-12,Zepto,Lucknow,SKU03,3,3,3,0,,100
+2026-09-12,Zepto,Lucknow,SKU04,3,3,6,0,,100
+2026-09-12,Zepto,Lucknow,SKU05,3,3,6,0,,100
+2026-09-12,Instamart,Delhi,SKU01,9,9,18,0,,100
+2026-09-12,Instamart,Delhi,SKU02,9,9,9,0,,100
+2026-09-12,Instamart,Delhi,SKU03,9,9,18,0,,100
+2026-09-12,Instamart,Delhi,SKU04,9,9,18,0,,100
+2026-09-12,Instamart,Delhi,SKU05,9,8,8,0,,88.9
+2026-09-12,Instamart,Gurugram,SKU01,4,3,6,0,,75
+2026-09-12,Instamart,Gurugram,SKU02,4,3,6,0,,75
+2026-09-12,Instamart,Gurugram,SKU03,4,4,8,0,,100
+2026-09-12,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-09-12,Instamart,Gurugram,SKU05,4,4,8,0,,100
+2026-09-12,Instamart,Noida,SKU01,3,3,6,0,,100
+2026-09-12,Instamart,Noida,SKU02,3,3,3,0,,100
+2026-09-12,Instamart,Noida,SKU03,3,3,6,0,,100
+2026-09-12,Instamart,Noida,SKU04,3,3,6,0,,100
+2026-09-12,Instamart,Noida,SKU05,3,3,3,0,,100
+2026-09-12,Instamart,Mumbai,SKU01,10,9,18,0,,90
+2026-09-12,Instamart,Mumbai,SKU02,10,10,20,2,70,100
+2026-09-12,Instamart,Mumbai,SKU03,10,9,18,0,,90
+2026-09-12,Instamart,Mumbai,SKU04,10,9,18,0,,90
+2026-09-12,Instamart,Mumbai,SKU05,10,9,9,1,63,90
+2026-09-12,Instamart,Thane,SKU01,3,3,3,0,,100
+2026-09-12,Instamart,Thane,SKU02,3,3,6,0,,100
+2026-09-12,Instamart,Thane,SKU03,3,3,3,0,,100
+2026-09-12,Instamart,Thane,SKU04,3,3,3,0,,100
+2026-09-12,Instamart,Thane,SKU05,3,3,6,0,,100
+2026-09-12,Instamart,Pune,SKU01,6,6,12,0,,100
+2026-09-12,Instamart,Pune,SKU02,6,5,10,0,,83.3
+2026-09-12,Instamart,Pune,SKU03,6,5,5,0,,83.3
+2026-09-12,Instamart,Pune,SKU04,6,5,10,0,,83.3
+2026-09-12,Instamart,Pune,SKU05,6,5,10,0,,83.3
+2026-09-12,Instamart,Ahmedabad,SKU01,3,3,3,1,21,100
+2026-09-12,Instamart,Ahmedabad,SKU02,3,3,6,0,,100
+2026-09-12,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-09-12,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-09-12,Instamart,Ahmedabad,SKU05,3,3,6,0,,100
+2026-09-12,Instamart,Bangalore,SKU01,11,10,10,0,,90.9
+2026-09-12,Instamart,Bangalore,SKU02,11,10,10,4,17.5,90.9
+2026-09-12,Instamart,Bangalore,SKU03,11,9,18,0,,81.8
+2026-09-12,Instamart,Bangalore,SKU04,11,11,22,0,,100
+2026-09-12,Instamart,Bangalore,SKU05,11,10,10,1,70,90.9
+2026-09-12,Instamart,Hyderabad,SKU01,8,7,14,0,,87.5
+2026-09-12,Instamart,Hyderabad,SKU02,8,7,7,3,16.3,87.5
+2026-09-12,Instamart,Hyderabad,SKU03,8,7,7,2,24.5,87.5
+2026-09-12,Instamart,Hyderabad,SKU04,8,7,7,0,,87.5
+2026-09-12,Instamart,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-09-12,Instamart,Chennai,SKU01,6,6,12,0,,100
+2026-09-12,Instamart,Chennai,SKU02,6,5,10,1,70,83.3
+2026-09-12,Instamart,Chennai,SKU03,6,5,5,0,,83.3
+2026-09-12,Instamart,Chennai,SKU04,6,5,5,0,,83.3
+2026-09-12,Instamart,Chennai,SKU05,6,6,6,0,,100
+2026-09-12,Instamart,Kolkata,SKU01,7,6,6,2,21,85.7
+2026-09-12,Instamart,Kolkata,SKU02,7,6,12,0,,85.7
+2026-09-12,Instamart,Kolkata,SKU03,7,6,12,0,,85.7
+2026-09-12,Instamart,Kolkata,SKU04,7,6,6,0,,85.7
+2026-09-12,Instamart,Kolkata,SKU05,7,7,14,1,98,100
+2026-09-12,Instamart,Kochi,SKU01,2,2,2,1,14,100
+2026-09-12,Instamart,Kochi,SKU02,2,2,2,0,,100
+2026-09-12,Instamart,Kochi,SKU03,2,2,2,0,,100
+2026-09-12,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-09-12,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-09-12,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-09-12,Instamart,Coimbatore,SKU02,2,2,4,0,,100
+2026-09-12,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-09-12,Instamart,Coimbatore,SKU04,2,2,4,0,,100
+2026-09-12,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-09-12,BB Now,Delhi,SKU01,5,5,5,0,,100
+2026-09-12,BB Now,Delhi,SKU02,5,4,8,0,,80
+2026-09-12,BB Now,Delhi,SKU03,5,5,5,0,,100
+2026-09-12,BB Now,Delhi,SKU04,5,4,4,0,,80
+2026-09-12,BB Now,Delhi,SKU05,5,5,5,0,,100
+2026-09-12,BB Now,Gurugram,SKU01,2,2,4,0,,100
+2026-09-12,BB Now,Gurugram,SKU02,2,2,2,0,,100
+2026-09-12,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-09-12,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-09-12,BB Now,Gurugram,SKU05,2,2,2,0,,100
+2026-09-12,BB Now,Noida,SKU01,2,2,4,0,,100
+2026-09-12,BB Now,Noida,SKU02,2,2,2,0,,100
+2026-09-12,BB Now,Noida,SKU03,2,2,2,0,,100
+2026-09-12,BB Now,Noida,SKU04,2,2,4,0,,100
+2026-09-12,BB Now,Noida,SKU05,2,2,4,0,,100
+2026-09-12,BB Now,Mumbai,SKU01,5,4,8,0,,80
+2026-09-12,BB Now,Mumbai,SKU02,5,5,10,0,,100
+2026-09-12,BB Now,Mumbai,SKU03,5,4,4,0,,80
+2026-09-12,BB Now,Mumbai,SKU04,5,5,10,0,,100
+2026-09-12,BB Now,Mumbai,SKU05,5,5,5,0,,100
+2026-09-12,BB Now,Thane,SKU01,2,2,2,0,,100
+2026-09-12,BB Now,Thane,SKU02,2,2,2,0,,100
+2026-09-12,BB Now,Thane,SKU03,2,2,2,0,,100
+2026-09-12,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-09-12,BB Now,Thane,SKU05,2,2,4,0,,100
+2026-09-12,BB Now,Pune,SKU01,3,3,6,0,,100
+2026-09-12,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-09-12,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-09-12,BB Now,Pune,SKU04,3,3,3,0,,100
+2026-09-12,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-09-12,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-09-12,BB Now,Ahmedabad,SKU02,2,2,4,0,,100
+2026-09-12,BB Now,Ahmedabad,SKU03,2,2,2,0,,100
+2026-09-12,BB Now,Ahmedabad,SKU04,2,2,2,0,,100
+2026-09-12,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-09-12,BB Now,Bangalore,SKU01,5,5,5,1,35,100
+2026-09-12,BB Now,Bangalore,SKU02,5,5,5,1,35,100
+2026-09-12,BB Now,Bangalore,SKU03,5,5,5,1,35,100
+2026-09-12,BB Now,Bangalore,SKU04,5,5,5,1,35,100
+2026-09-12,BB Now,Bangalore,SKU05,5,5,5,0,,100
+2026-09-12,BB Now,Hyderabad,SKU01,4,3,6,0,,75
+2026-09-12,BB Now,Hyderabad,SKU02,4,4,8,2,28,100
+2026-09-12,BB Now,Hyderabad,SKU03,4,4,8,0,,100
+2026-09-12,BB Now,Hyderabad,SKU04,4,4,8,0,,100
+2026-09-12,BB Now,Hyderabad,SKU05,4,4,8,0,,100
+2026-09-12,BB Now,Chennai,SKU01,3,3,3,0,,100
+2026-09-12,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-09-12,BB Now,Chennai,SKU03,3,3,6,0,,100
+2026-09-12,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-09-12,BB Now,Chennai,SKU05,3,3,3,0,,100
+2026-09-12,BB Now,Kolkata,SKU01,3,3,3,1,21,100
+2026-09-12,BB Now,Kolkata,SKU02,3,3,3,0,,100
+2026-09-12,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-09-12,BB Now,Kolkata,SKU04,3,3,3,0,,100
+2026-09-12,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-09-12,Flipkart Minutes,Delhi,SKU01,4,4,4,0,,100
+2026-09-12,Flipkart Minutes,Delhi,SKU02,4,4,4,1,28,100
+2026-09-12,Flipkart Minutes,Delhi,SKU03,4,4,4,0,,100
+2026-09-12,Flipkart Minutes,Delhi,SKU04,4,3,3,0,,75
+2026-09-12,Flipkart Minutes,Delhi,SKU05,4,4,4,0,,100
+2026-09-12,Flipkart Minutes,Gurugram,SKU01,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Gurugram,SKU02,2,2,2,1,14,100
+2026-09-12,Flipkart Minutes,Gurugram,SKU03,2,2,2,0,,100
+2026-09-12,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-09-12,Flipkart Minutes,Noida,SKU02,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-09-12,Flipkart Minutes,Mumbai,SKU01,4,4,4,1,28,100
+2026-09-12,Flipkart Minutes,Mumbai,SKU02,4,4,8,2,28,100
+2026-09-12,Flipkart Minutes,Mumbai,SKU03,4,4,8,0,,100
+2026-09-12,Flipkart Minutes,Mumbai,SKU04,4,4,8,0,,100
+2026-09-12,Flipkart Minutes,Mumbai,SKU05,4,4,4,0,,100
+2026-09-12,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Thane,SKU02,2,2,2,0,,100
+2026-09-12,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Thane,SKU05,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Pune,SKU01,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Pune,SKU02,2,2,2,0,,100
+2026-09-12,Flipkart Minutes,Pune,SKU03,2,2,4,1,28,100
+2026-09-12,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-09-12,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-09-12,Flipkart Minutes,Bangalore,SKU01,5,5,5,0,,100
+2026-09-12,Flipkart Minutes,Bangalore,SKU02,5,4,4,0,,80
+2026-09-12,Flipkart Minutes,Bangalore,SKU03,5,5,5,0,,100
+2026-09-12,Flipkart Minutes,Bangalore,SKU04,5,5,10,0,,100
+2026-09-12,Flipkart Minutes,Bangalore,SKU05,5,5,5,0,,100
+2026-09-12,Flipkart Minutes,Hyderabad,SKU01,3,3,6,0,,100
+2026-09-12,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-09-12,Flipkart Minutes,Hyderabad,SKU03,3,3,6,0,,100
+2026-09-12,Flipkart Minutes,Hyderabad,SKU04,3,3,3,0,,100
+2026-09-12,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-09-19,Blinkit,Delhi,SKU01,14,14,14,1,98,100
+2026-09-19,Blinkit,Delhi,SKU02,14,13,26,1,182,92.9
+2026-09-19,Blinkit,Delhi,SKU03,14,13,26,0,,92.9
+2026-09-19,Blinkit,Delhi,SKU04,14,13,13,1,91,92.9
+2026-09-19,Blinkit,Delhi,SKU05,14,13,13,0,,92.9
+2026-09-19,Blinkit,Gurugram,SKU01,5,5,10,0,,100
+2026-09-19,Blinkit,Gurugram,SKU02,5,5,10,0,,100
+2026-09-19,Blinkit,Gurugram,SKU03,5,5,10,0,,100
+2026-09-19,Blinkit,Gurugram,SKU04,5,5,5,1,35,100
+2026-09-19,Blinkit,Gurugram,SKU05,5,5,5,0,,100
+2026-09-19,Blinkit,Noida,SKU01,5,5,5,0,,100
+2026-09-19,Blinkit,Noida,SKU02,5,4,8,0,,80
+2026-09-19,Blinkit,Noida,SKU03,5,5,10,0,,100
+2026-09-19,Blinkit,Noida,SKU04,5,5,5,0,,100
+2026-09-19,Blinkit,Noida,SKU05,5,5,10,0,,100
+2026-09-19,Blinkit,Mumbai,SKU01,14,12,12,1,84,85.7
+2026-09-19,Blinkit,Mumbai,SKU02,14,12,24,3,56,85.7
+2026-09-19,Blinkit,Mumbai,SKU03,14,12,24,0,,85.7
+2026-09-19,Blinkit,Mumbai,SKU04,14,14,14,0,,100
+2026-09-19,Blinkit,Mumbai,SKU05,14,12,12,1,84,85.7
+2026-09-19,Blinkit,Thane,SKU01,4,3,6,2,21,75
+2026-09-19,Blinkit,Thane,SKU02,4,4,4,1,28,100
+2026-09-19,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-09-19,Blinkit,Thane,SKU04,4,4,4,1,28,100
+2026-09-19,Blinkit,Thane,SKU05,4,4,4,1,28,100
+2026-09-19,Blinkit,Pune,SKU01,8,8,8,2,28,100
+2026-09-19,Blinkit,Pune,SKU02,8,8,8,1,56,100
+2026-09-19,Blinkit,Pune,SKU03,8,8,8,1,56,100
+2026-09-19,Blinkit,Pune,SKU04,8,8,16,0,,100
+2026-09-19,Blinkit,Pune,SKU05,8,7,7,0,,87.5
+2026-09-19,Blinkit,Ahmedabad,SKU01,5,5,10,0,,100
+2026-09-19,Blinkit,Ahmedabad,SKU02,5,4,8,0,,80
+2026-09-19,Blinkit,Ahmedabad,SKU03,5,5,10,0,,100
+2026-09-19,Blinkit,Ahmedabad,SKU04,5,4,8,0,,80
+2026-09-19,Blinkit,Ahmedabad,SKU05,5,4,8,0,,80
+2026-09-19,Blinkit,Bangalore,SKU01,15,13,13,1,91,86.7
+2026-09-19,Blinkit,Bangalore,SKU02,15,14,14,3,32.7,93.3
+2026-09-19,Blinkit,Bangalore,SKU03,15,14,14,0,,93.3
+2026-09-19,Blinkit,Bangalore,SKU04,15,13,13,0,,86.7
+2026-09-19,Blinkit,Bangalore,SKU05,15,14,14,0,,93.3
+2026-09-19,Blinkit,Hyderabad,SKU01,11,10,10,1,70,90.9
+2026-09-19,Blinkit,Hyderabad,SKU02,11,10,20,2,70,90.9
+2026-09-19,Blinkit,Hyderabad,SKU03,11,11,22,1,154,100
+2026-09-19,Blinkit,Hyderabad,SKU04,11,9,18,0,,81.8
+2026-09-19,Blinkit,Hyderabad,SKU05,11,10,10,1,70,90.9
+2026-09-19,Blinkit,Chennai,SKU01,9,8,16,0,,88.9
+2026-09-19,Blinkit,Chennai,SKU02,9,8,16,1,112,88.9
+2026-09-19,Blinkit,Chennai,SKU03,9,8,8,0,,88.9
+2026-09-19,Blinkit,Chennai,SKU04,9,9,9,0,,100
+2026-09-19,Blinkit,Chennai,SKU05,9,8,8,0,,88.9
+2026-09-19,Blinkit,Kolkata,SKU01,10,9,18,0,,90
+2026-09-19,Blinkit,Kolkata,SKU02,10,9,18,2,63,90
+2026-09-19,Blinkit,Kolkata,SKU03,10,9,18,1,126,90
+2026-09-19,Blinkit,Kolkata,SKU04,10,8,16,0,,80
+2026-09-19,Blinkit,Kolkata,SKU05,10,9,9,0,,90
+2026-09-19,Blinkit,Jaipur,SKU01,4,4,4,0,,100
+2026-09-19,Blinkit,Jaipur,SKU02,4,3,6,0,,75
+2026-09-19,Blinkit,Jaipur,SKU03,4,4,4,0,,100
+2026-09-19,Blinkit,Jaipur,SKU04,4,4,8,0,,100
+2026-09-19,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-09-19,Blinkit,Lucknow,SKU01,4,4,8,0,,100
+2026-09-19,Blinkit,Lucknow,SKU02,4,4,8,0,,100
+2026-09-19,Blinkit,Lucknow,SKU03,4,4,4,0,,100
+2026-09-19,Blinkit,Lucknow,SKU04,4,4,8,0,,100
+2026-09-19,Blinkit,Lucknow,SKU05,4,4,8,0,,100
+2026-09-19,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-09-19,Blinkit,Chandigarh,SKU02,3,3,6,2,21,100
+2026-09-19,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-09-19,Blinkit,Chandigarh,SKU04,3,3,3,0,,100
+2026-09-19,Blinkit,Chandigarh,SKU05,3,3,6,1,42,100
+2026-09-19,Blinkit,Indore,SKU01,3,3,3,0,,100
+2026-09-19,Blinkit,Indore,SKU02,3,3,3,0,,100
+2026-09-19,Blinkit,Indore,SKU03,3,3,3,0,,100
+2026-09-19,Blinkit,Indore,SKU04,3,3,3,0,,100
+2026-09-19,Blinkit,Indore,SKU05,3,3,6,0,,100
+2026-09-19,Zepto,Delhi,SKU01,10,9,9,0,,90
+2026-09-19,Zepto,Delhi,SKU02,10,9,18,3,42,90
+2026-09-19,Zepto,Delhi,SKU03,10,9,18,0,,90
+2026-09-19,Zepto,Delhi,SKU04,10,9,9,0,,90
+2026-09-19,Zepto,Delhi,SKU05,10,10,10,0,,100
+2026-09-19,Zepto,Gurugram,SKU01,4,4,8,0,,100
+2026-09-19,Zepto,Gurugram,SKU02,4,4,8,0,,100
+2026-09-19,Zepto,Gurugram,SKU03,4,4,8,0,,100
+2026-09-19,Zepto,Gurugram,SKU04,4,3,3,0,,75
+2026-09-19,Zepto,Gurugram,SKU05,4,4,8,0,,100
+2026-09-19,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-09-19,Zepto,Noida,SKU02,3,3,3,0,,100
+2026-09-19,Zepto,Noida,SKU03,3,3,3,0,,100
+2026-09-19,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-09-19,Zepto,Noida,SKU05,3,3,6,0,,100
+2026-09-19,Zepto,Mumbai,SKU01,11,10,20,0,,90.9
+2026-09-19,Zepto,Mumbai,SKU02,11,9,9,2,31.5,81.8
+2026-09-19,Zepto,Mumbai,SKU03,11,10,10,1,70,90.9
+2026-09-19,Zepto,Mumbai,SKU04,11,9,18,1,126,81.8
+2026-09-19,Zepto,Mumbai,SKU05,11,10,20,1,140,90.9
+2026-09-19,Zepto,Thane,SKU01,3,3,3,0,,100
+2026-09-19,Zepto,Thane,SKU02,3,3,3,0,,100
+2026-09-19,Zepto,Thane,SKU03,3,3,3,1,21,100
+2026-09-19,Zepto,Thane,SKU04,3,3,3,0,,100
+2026-09-19,Zepto,Thane,SKU05,3,3,3,0,,100
+2026-09-19,Zepto,Pune,SKU01,6,6,6,0,,100
+2026-09-19,Zepto,Pune,SKU02,6,6,12,0,,100
+2026-09-19,Zepto,Pune,SKU03,6,5,10,0,,83.3
+2026-09-19,Zepto,Pune,SKU04,6,5,10,0,,83.3
+2026-09-19,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-09-19,Zepto,Ahmedabad,SKU01,4,4,8,0,,100
+2026-09-19,Zepto,Ahmedabad,SKU02,4,4,4,1,28,100
+2026-09-19,Zepto,Ahmedabad,SKU03,4,4,4,0,,100
+2026-09-19,Zepto,Ahmedabad,SKU04,4,4,8,0,,100
+2026-09-19,Zepto,Ahmedabad,SKU05,4,3,3,0,,75
+2026-09-19,Zepto,Bangalore,SKU01,11,10,10,2,35,90.9
+2026-09-19,Zepto,Bangalore,SKU02,11,11,11,1,77,100
+2026-09-19,Zepto,Bangalore,SKU03,11,11,11,0,,100
+2026-09-19,Zepto,Bangalore,SKU04,11,10,10,0,,90.9
+2026-09-19,Zepto,Bangalore,SKU05,11,10,10,1,70,90.9
+2026-09-19,Zepto,Hyderabad,SKU01,8,8,8,2,28,100
+2026-09-19,Zepto,Hyderabad,SKU02,8,7,14,0,,87.5
+2026-09-19,Zepto,Hyderabad,SKU03,8,8,16,0,,100
+2026-09-19,Zepto,Hyderabad,SKU04,8,7,7,0,,87.5
+2026-09-19,Zepto,Hyderabad,SKU05,8,8,8,0,,100
+2026-09-19,Zepto,Chennai,SKU01,7,6,12,1,84,85.7
+2026-09-19,Zepto,Chennai,SKU02,7,6,6,5,8.4,85.7
+2026-09-19,Zepto,Chennai,SKU03,7,6,6,1,42,85.7
+2026-09-19,Zepto,Chennai,SKU04,7,6,12,0,,85.7
+2026-09-19,Zepto,Chennai,SKU05,7,7,14,0,,100
+2026-09-19,Zepto,Kolkata,SKU01,7,6,6,0,,85.7
+2026-09-19,Zepto,Kolkata,SKU02,7,6,6,3,14,85.7
+2026-09-19,Zepto,Kolkata,SKU03,7,6,6,0,,85.7
+2026-09-19,Zepto,Kolkata,SKU04,7,7,14,0,,100
+2026-09-19,Zepto,Kolkata,SKU05,7,7,7,0,,100
+2026-09-19,Zepto,Jaipur,SKU01,3,3,3,0,,100
+2026-09-19,Zepto,Jaipur,SKU02,3,3,3,0,,100
+2026-09-19,Zepto,Jaipur,SKU03,3,3,3,0,,100
+2026-09-19,Zepto,Jaipur,SKU04,3,3,6,0,,100
+2026-09-19,Zepto,Jaipur,SKU05,3,3,3,0,,100
+2026-09-19,Zepto,Lucknow,SKU01,3,3,3,0,,100
+2026-09-19,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-09-19,Zepto,Lucknow,SKU03,3,3,6,0,,100
+2026-09-19,Zepto,Lucknow,SKU04,3,3,6,0,,100
+2026-09-19,Zepto,Lucknow,SKU05,3,3,3,0,,100
+2026-09-19,Instamart,Delhi,SKU01,9,8,16,0,,88.9
+2026-09-19,Instamart,Delhi,SKU02,9,9,18,0,,100
+2026-09-19,Instamart,Delhi,SKU03,9,8,16,0,,88.9
+2026-09-19,Instamart,Delhi,SKU04,9,9,18,1,126,100
+2026-09-19,Instamart,Delhi,SKU05,9,8,16,0,,88.9
+2026-09-19,Instamart,Gurugram,SKU01,4,4,4,0,,100
+2026-09-19,Instamart,Gurugram,SKU02,4,4,8,1,56,100
+2026-09-19,Instamart,Gurugram,SKU03,4,4,8,0,,100
+2026-09-19,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-09-19,Instamart,Gurugram,SKU05,4,3,6,0,,75
+2026-09-19,Instamart,Noida,SKU01,3,3,3,0,,100
+2026-09-19,Instamart,Noida,SKU02,3,3,6,1,42,100
+2026-09-19,Instamart,Noida,SKU03,3,3,6,1,42,100
+2026-09-19,Instamart,Noida,SKU04,3,3,6,0,,100
+2026-09-19,Instamart,Noida,SKU05,3,3,3,0,,100
+2026-09-19,Instamart,Mumbai,SKU01,10,9,9,1,63,90
+2026-09-19,Instamart,Mumbai,SKU02,10,9,18,1,126,90
+2026-09-19,Instamart,Mumbai,SKU03,10,9,18,2,63,90
+2026-09-19,Instamart,Mumbai,SKU04,10,9,18,0,,90
+2026-09-19,Instamart,Mumbai,SKU05,10,9,9,1,63,90
+2026-09-19,Instamart,Thane,SKU01,3,3,6,0,,100
+2026-09-19,Instamart,Thane,SKU02,3,3,3,0,,100
+2026-09-19,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-09-19,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-09-19,Instamart,Thane,SKU05,3,3,3,0,,100
+2026-09-19,Instamart,Pune,SKU01,6,6,6,0,,100
+2026-09-19,Instamart,Pune,SKU02,6,5,5,0,,83.3
+2026-09-19,Instamart,Pune,SKU03,6,6,12,0,,100
+2026-09-19,Instamart,Pune,SKU04,6,5,10,0,,83.3
+2026-09-19,Instamart,Pune,SKU05,6,5,5,0,,83.3
+2026-09-19,Instamart,Ahmedabad,SKU01,3,3,3,0,,100
+2026-09-19,Instamart,Ahmedabad,SKU02,3,3,6,0,,100
+2026-09-19,Instamart,Ahmedabad,SKU03,3,3,3,0,,100
+2026-09-19,Instamart,Ahmedabad,SKU04,3,3,3,0,,100
+2026-09-19,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-09-19,Instamart,Bangalore,SKU01,11,10,20,0,,90.9
+2026-09-19,Instamart,Bangalore,SKU02,11,10,10,2,35,90.9
+2026-09-19,Instamart,Bangalore,SKU03,11,10,10,1,70,90.9
+2026-09-19,Instamart,Bangalore,SKU04,11,10,10,1,70,90.9
+2026-09-19,Instamart,Bangalore,SKU05,11,11,22,1,154,100
+2026-09-19,Instamart,Hyderabad,SKU01,8,7,7,0,,87.5
+2026-09-19,Instamart,Hyderabad,SKU02,8,7,14,0,,87.5
+2026-09-19,Instamart,Hyderabad,SKU03,8,7,14,0,,87.5
+2026-09-19,Instamart,Hyderabad,SKU04,8,7,7,0,,87.5
+2026-09-19,Instamart,Hyderabad,SKU05,8,7,14,0,,87.5
+2026-09-19,Instamart,Chennai,SKU01,6,5,5,1,35,83.3
+2026-09-19,Instamart,Chennai,SKU02,6,5,10,2,35,83.3
+2026-09-19,Instamart,Chennai,SKU03,6,6,6,2,21,100
+2026-09-19,Instamart,Chennai,SKU04,6,6,12,0,,100
+2026-09-19,Instamart,Chennai,SKU05,6,6,6,0,,100
+2026-09-19,Instamart,Kolkata,SKU01,7,7,14,1,98,100
+2026-09-19,Instamart,Kolkata,SKU02,7,6,6,3,14,85.7
+2026-09-19,Instamart,Kolkata,SKU03,7,7,14,0,,100
+2026-09-19,Instamart,Kolkata,SKU04,7,7,7,0,,100
+2026-09-19,Instamart,Kolkata,SKU05,7,7,14,0,,100
+2026-09-19,Instamart,Kochi,SKU01,2,2,4,0,,100
+2026-09-19,Instamart,Kochi,SKU02,2,2,2,0,,100
+2026-09-19,Instamart,Kochi,SKU03,2,2,2,0,,100
+2026-09-19,Instamart,Kochi,SKU04,2,2,4,0,,100
+2026-09-19,Instamart,Kochi,SKU05,2,2,4,0,,100
+2026-09-19,Instamart,Coimbatore,SKU01,2,2,4,0,,100
+2026-09-19,Instamart,Coimbatore,SKU02,2,2,2,0,,100
+2026-09-19,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-09-19,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-09-19,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-09-19,BB Now,Delhi,SKU01,5,4,4,0,,80
+2026-09-19,BB Now,Delhi,SKU02,5,4,4,0,,80
+2026-09-19,BB Now,Delhi,SKU03,5,4,4,1,28,80
+2026-09-19,BB Now,Delhi,SKU04,5,5,10,0,,100
+2026-09-19,BB Now,Delhi,SKU05,5,5,5,0,,100
+2026-09-19,BB Now,Gurugram,SKU01,2,2,2,0,,100
+2026-09-19,BB Now,Gurugram,SKU02,2,2,2,0,,100
+2026-09-19,BB Now,Gurugram,SKU03,2,2,2,0,,100
+2026-09-19,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-09-19,BB Now,Gurugram,SKU05,2,2,4,0,,100
+2026-09-19,BB Now,Noida,SKU01,2,2,4,0,,100
+2026-09-19,BB Now,Noida,SKU02,2,2,2,0,,100
+2026-09-19,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-09-19,BB Now,Noida,SKU04,2,2,4,0,,100
+2026-09-19,BB Now,Noida,SKU05,2,2,4,0,,100
+2026-09-19,BB Now,Mumbai,SKU01,5,4,8,0,,80
+2026-09-19,BB Now,Mumbai,SKU02,5,5,10,1,70,100
+2026-09-19,BB Now,Mumbai,SKU03,5,4,8,3,18.7,80
+2026-09-19,BB Now,Mumbai,SKU04,5,4,8,0,,80
+2026-09-19,BB Now,Mumbai,SKU05,5,5,10,0,,100
+2026-09-19,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-09-19,BB Now,Thane,SKU02,2,2,2,0,,100
+2026-09-19,BB Now,Thane,SKU03,2,2,2,0,,100
+2026-09-19,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-09-19,BB Now,Thane,SKU05,2,2,4,0,,100
+2026-09-19,BB Now,Pune,SKU01,3,3,3,1,21,100
+2026-09-19,BB Now,Pune,SKU02,3,3,6,1,42,100
+2026-09-19,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-09-19,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-09-19,BB Now,Pune,SKU05,3,3,3,0,,100
+2026-09-19,BB Now,Ahmedabad,SKU01,2,2,2,1,14,100
+2026-09-19,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-09-19,BB Now,Ahmedabad,SKU03,2,2,4,2,14,100
+2026-09-19,BB Now,Ahmedabad,SKU04,2,2,2,0,,100
+2026-09-19,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-09-19,BB Now,Bangalore,SKU01,5,4,8,0,,80
+2026-09-19,BB Now,Bangalore,SKU02,5,5,5,2,17.5,100
+2026-09-19,BB Now,Bangalore,SKU03,5,4,8,1,56,80
+2026-09-19,BB Now,Bangalore,SKU04,5,4,4,0,,80
+2026-09-19,BB Now,Bangalore,SKU05,5,5,10,0,,100
+2026-09-19,BB Now,Hyderabad,SKU01,4,3,3,1,21,75
+2026-09-19,BB Now,Hyderabad,SKU02,4,3,6,2,21,75
+2026-09-19,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-09-19,BB Now,Hyderabad,SKU04,4,4,8,0,,100
+2026-09-19,BB Now,Hyderabad,SKU05,4,4,8,0,,100
+2026-09-19,BB Now,Chennai,SKU01,3,3,6,0,,100
+2026-09-19,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-09-19,BB Now,Chennai,SKU03,3,3,6,0,,100
+2026-09-19,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-09-19,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-09-19,BB Now,Kolkata,SKU01,3,3,3,0,,100
+2026-09-19,BB Now,Kolkata,SKU02,3,3,6,1,42,100
+2026-09-19,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-09-19,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-09-19,BB Now,Kolkata,SKU05,3,3,3,0,,100
+2026-09-19,Flipkart Minutes,Delhi,SKU01,4,3,3,1,21,75
+2026-09-19,Flipkart Minutes,Delhi,SKU02,4,4,8,0,,100
+2026-09-19,Flipkart Minutes,Delhi,SKU03,4,4,8,0,,100
+2026-09-19,Flipkart Minutes,Delhi,SKU04,4,4,4,0,,100
+2026-09-19,Flipkart Minutes,Delhi,SKU05,4,4,8,0,,100
+2026-09-19,Flipkart Minutes,Gurugram,SKU01,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Gurugram,SKU02,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Gurugram,SKU03,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Gurugram,SKU05,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Noida,SKU01,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Noida,SKU02,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Noida,SKU05,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Mumbai,SKU01,4,4,8,0,,100
+2026-09-19,Flipkart Minutes,Mumbai,SKU02,4,3,6,1,42,75
+2026-09-19,Flipkart Minutes,Mumbai,SKU03,4,4,8,0,,100
+2026-09-19,Flipkart Minutes,Mumbai,SKU04,4,4,4,0,,100
+2026-09-19,Flipkart Minutes,Mumbai,SKU05,4,4,4,0,,100
+2026-09-19,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Thane,SKU02,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Thane,SKU03,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Pune,SKU01,2,2,2,1,14,100
+2026-09-19,Flipkart Minutes,Pune,SKU02,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Pune,SKU03,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-09-19,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-09-19,Flipkart Minutes,Bangalore,SKU01,5,4,8,1,56,80
+2026-09-19,Flipkart Minutes,Bangalore,SKU02,5,5,5,0,,100
+2026-09-19,Flipkart Minutes,Bangalore,SKU03,5,4,8,0,,80
+2026-09-19,Flipkart Minutes,Bangalore,SKU04,5,5,5,0,,100
+2026-09-19,Flipkart Minutes,Bangalore,SKU05,5,5,10,0,,100
+2026-09-19,Flipkart Minutes,Hyderabad,SKU01,3,3,3,0,,100
+2026-09-19,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-09-19,Flipkart Minutes,Hyderabad,SKU03,3,3,6,0,,100
+2026-09-19,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-09-19,Flipkart Minutes,Hyderabad,SKU05,3,3,3,0,,100
+2026-09-26,Blinkit,Delhi,SKU01,14,12,12,0,,85.7
+2026-09-26,Blinkit,Delhi,SKU02,14,12,24,1,168,85.7
+2026-09-26,Blinkit,Delhi,SKU03,14,12,12,2,42,85.7
+2026-09-26,Blinkit,Delhi,SKU04,14,12,12,1,84,85.7
+2026-09-26,Blinkit,Delhi,SKU05,14,14,28,1,196,100
+2026-09-26,Blinkit,Gurugram,SKU01,5,4,4,0,,80
+2026-09-26,Blinkit,Gurugram,SKU02,5,4,8,1,56,80
+2026-09-26,Blinkit,Gurugram,SKU03,5,4,8,0,,80
+2026-09-26,Blinkit,Gurugram,SKU04,5,4,4,1,28,80
+2026-09-26,Blinkit,Gurugram,SKU05,5,4,8,0,,80
+2026-09-26,Blinkit,Noida,SKU01,5,5,10,0,,100
+2026-09-26,Blinkit,Noida,SKU02,5,4,4,0,,80
+2026-09-26,Blinkit,Noida,SKU03,5,4,8,0,,80
+2026-09-26,Blinkit,Noida,SKU04,5,5,10,0,,100
+2026-09-26,Blinkit,Noida,SKU05,5,4,4,0,,80
+2026-09-26,Blinkit,Mumbai,SKU01,14,12,24,1,168,85.7
+2026-09-26,Blinkit,Mumbai,SKU02,14,13,26,2,91,92.9
+2026-09-26,Blinkit,Mumbai,SKU03,14,13,26,4,45.5,92.9
+2026-09-26,Blinkit,Mumbai,SKU04,14,12,12,0,,85.7
+2026-09-26,Blinkit,Mumbai,SKU05,14,13,13,0,,92.9
+2026-09-26,Blinkit,Thane,SKU01,4,4,4,0,,100
+2026-09-26,Blinkit,Thane,SKU02,4,4,4,0,,100
+2026-09-26,Blinkit,Thane,SKU03,4,4,8,0,,100
+2026-09-26,Blinkit,Thane,SKU04,4,4,8,0,,100
+2026-09-26,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-09-26,Blinkit,Pune,SKU01,8,8,8,0,,100
+2026-09-26,Blinkit,Pune,SKU02,8,8,8,0,,100
+2026-09-26,Blinkit,Pune,SKU03,8,8,16,1,112,100
+2026-09-26,Blinkit,Pune,SKU04,8,7,7,0,,87.5
+2026-09-26,Blinkit,Pune,SKU05,8,8,8,0,,100
+2026-09-26,Blinkit,Ahmedabad,SKU01,5,4,8,1,56,80
+2026-09-26,Blinkit,Ahmedabad,SKU02,5,5,5,0,,100
+2026-09-26,Blinkit,Ahmedabad,SKU03,5,5,5,0,,100
+2026-09-26,Blinkit,Ahmedabad,SKU04,5,5,10,0,,100
+2026-09-26,Blinkit,Ahmedabad,SKU05,5,5,5,1,35,100
+2026-09-26,Blinkit,Bangalore,SKU01,15,15,30,3,70,100
+2026-09-26,Blinkit,Bangalore,SKU02,15,14,14,2,49,93.3
+2026-09-26,Blinkit,Bangalore,SKU03,15,13,13,3,30.3,86.7
+2026-09-26,Blinkit,Bangalore,SKU04,15,15,15,0,,100
+2026-09-26,Blinkit,Bangalore,SKU05,15,13,13,0,,86.7
+2026-09-26,Blinkit,Hyderabad,SKU01,11,11,22,2,77,100
+2026-09-26,Blinkit,Hyderabad,SKU02,11,11,22,3,51.3,100
+2026-09-26,Blinkit,Hyderabad,SKU03,11,9,9,2,31.5,81.8
+2026-09-26,Blinkit,Hyderabad,SKU04,11,11,11,0,,100
+2026-09-26,Blinkit,Hyderabad,SKU05,11,11,22,0,,100
+2026-09-26,Blinkit,Chennai,SKU01,9,8,8,3,18.7,88.9
+2026-09-26,Blinkit,Chennai,SKU02,9,8,8,3,18.7,88.9
+2026-09-26,Blinkit,Chennai,SKU03,9,8,8,0,,88.9
+2026-09-26,Blinkit,Chennai,SKU04,9,8,8,1,56,88.9
+2026-09-26,Blinkit,Chennai,SKU05,9,8,8,0,,88.9
+2026-09-26,Blinkit,Kolkata,SKU01,10,9,9,0,,90
+2026-09-26,Blinkit,Kolkata,SKU02,10,9,9,1,63,90
+2026-09-26,Blinkit,Kolkata,SKU03,10,9,18,3,42,90
+2026-09-26,Blinkit,Kolkata,SKU04,10,8,8,1,56,80
+2026-09-26,Blinkit,Kolkata,SKU05,10,9,18,0,,90
+2026-09-26,Blinkit,Jaipur,SKU01,4,4,8,2,28,100
+2026-09-26,Blinkit,Jaipur,SKU02,4,4,4,1,28,100
+2026-09-26,Blinkit,Jaipur,SKU03,4,4,8,0,,100
+2026-09-26,Blinkit,Jaipur,SKU04,4,4,4,0,,100
+2026-09-26,Blinkit,Jaipur,SKU05,4,4,4,1,28,100
+2026-09-26,Blinkit,Lucknow,SKU01,4,3,3,0,,75
+2026-09-26,Blinkit,Lucknow,SKU02,4,4,8,0,,100
+2026-09-26,Blinkit,Lucknow,SKU03,4,4,4,1,28,100
+2026-09-26,Blinkit,Lucknow,SKU04,4,4,4,0,,100
+2026-09-26,Blinkit,Lucknow,SKU05,4,4,4,1,28,100
+2026-09-26,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-09-26,Blinkit,Chandigarh,SKU02,3,3,3,0,,100
+2026-09-26,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-09-26,Blinkit,Chandigarh,SKU04,3,3,6,0,,100
+2026-09-26,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-09-26,Blinkit,Indore,SKU01,3,3,3,1,21,100
+2026-09-26,Blinkit,Indore,SKU02,3,3,6,1,42,100
+2026-09-26,Blinkit,Indore,SKU03,3,3,6,0,,100
+2026-09-26,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-09-26,Blinkit,Indore,SKU05,3,3,6,0,,100
+2026-09-26,Zepto,Delhi,SKU01,10,8,16,0,,80
+2026-09-26,Zepto,Delhi,SKU02,10,9,18,4,31.5,90
+2026-09-26,Zepto,Delhi,SKU03,10,9,18,1,126,90
+2026-09-26,Zepto,Delhi,SKU04,10,10,10,0,,100
+2026-09-26,Zepto,Delhi,SKU05,10,9,18,0,,90
+2026-09-26,Zepto,Gurugram,SKU01,4,3,3,1,21,75
+2026-09-26,Zepto,Gurugram,SKU02,4,4,4,0,,100
+2026-09-26,Zepto,Gurugram,SKU03,4,4,4,0,,100
+2026-09-26,Zepto,Gurugram,SKU04,4,3,6,0,,75
+2026-09-26,Zepto,Gurugram,SKU05,4,4,4,0,,100
+2026-09-26,Zepto,Noida,SKU01,3,3,3,0,,100
+2026-09-26,Zepto,Noida,SKU02,3,3,6,1,42,100
+2026-09-26,Zepto,Noida,SKU03,3,3,6,0,,100
+2026-09-26,Zepto,Noida,SKU04,3,3,6,0,,100
+2026-09-26,Zepto,Noida,SKU05,3,3,3,0,,100
+2026-09-26,Zepto,Mumbai,SKU01,11,9,18,1,126,81.8
+2026-09-26,Zepto,Mumbai,SKU02,11,10,20,1,140,90.9
+2026-09-26,Zepto,Mumbai,SKU03,11,11,11,0,,100
+2026-09-26,Zepto,Mumbai,SKU04,11,11,22,2,77,100
+2026-09-26,Zepto,Mumbai,SKU05,11,10,20,0,,90.9
+2026-09-26,Zepto,Thane,SKU01,3,3,6,0,,100
+2026-09-26,Zepto,Thane,SKU02,3,3,3,0,,100
+2026-09-26,Zepto,Thane,SKU03,3,3,3,0,,100
+2026-09-26,Zepto,Thane,SKU04,3,3,3,0,,100
+2026-09-26,Zepto,Thane,SKU05,3,3,3,0,,100
+2026-09-26,Zepto,Pune,SKU01,6,5,5,1,35,83.3
+2026-09-26,Zepto,Pune,SKU02,6,6,12,2,42,100
+2026-09-26,Zepto,Pune,SKU03,6,6,6,0,,100
+2026-09-26,Zepto,Pune,SKU04,6,6,6,0,,100
+2026-09-26,Zepto,Pune,SKU05,6,6,12,0,,100
+2026-09-26,Zepto,Ahmedabad,SKU01,4,4,4,0,,100
+2026-09-26,Zepto,Ahmedabad,SKU02,4,4,8,0,,100
+2026-09-26,Zepto,Ahmedabad,SKU03,4,4,8,0,,100
+2026-09-26,Zepto,Ahmedabad,SKU04,4,4,8,0,,100
+2026-09-26,Zepto,Ahmedabad,SKU05,4,3,6,0,,75
+2026-09-26,Zepto,Bangalore,SKU01,11,11,22,2,77,100
+2026-09-26,Zepto,Bangalore,SKU02,11,11,11,1,77,100
+2026-09-26,Zepto,Bangalore,SKU03,11,10,10,0,,90.9
+2026-09-26,Zepto,Bangalore,SKU04,11,9,9,1,63,81.8
+2026-09-26,Zepto,Bangalore,SKU05,11,9,18,0,,81.8
+2026-09-26,Zepto,Hyderabad,SKU01,8,7,7,0,,87.5
+2026-09-26,Zepto,Hyderabad,SKU02,8,7,14,0,,87.5
+2026-09-26,Zepto,Hyderabad,SKU03,8,7,7,1,49,87.5
+2026-09-26,Zepto,Hyderabad,SKU04,8,7,14,0,,87.5
+2026-09-26,Zepto,Hyderabad,SKU05,8,7,14,0,,87.5
+2026-09-26,Zepto,Chennai,SKU01,7,6,12,3,28,85.7
+2026-09-26,Zepto,Chennai,SKU02,7,6,6,1,42,85.7
+2026-09-26,Zepto,Chennai,SKU03,7,6,12,1,84,85.7
+2026-09-26,Zepto,Chennai,SKU04,7,7,7,1,49,100
+2026-09-26,Zepto,Chennai,SKU05,7,7,14,0,,100
+2026-09-26,Zepto,Kolkata,SKU01,7,6,12,1,84,85.7
+2026-09-26,Zepto,Kolkata,SKU02,7,7,14,1,98,100
+2026-09-26,Zepto,Kolkata,SKU03,7,6,6,2,21,85.7
+2026-09-26,Zepto,Kolkata,SKU04,7,7,14,0,,100
+2026-09-26,Zepto,Kolkata,SKU05,7,7,14,0,,100
+2026-09-26,Zepto,Jaipur,SKU01,3,3,3,2,10.5,100
+2026-09-26,Zepto,Jaipur,SKU02,3,3,6,0,,100
+2026-09-26,Zepto,Jaipur,SKU03,3,3,6,1,42,100
+2026-09-26,Zepto,Jaipur,SKU04,3,3,3,0,,100
+2026-09-26,Zepto,Jaipur,SKU05,3,3,3,1,21,100
+2026-09-26,Zepto,Lucknow,SKU01,3,3,3,1,21,100
+2026-09-26,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-09-26,Zepto,Lucknow,SKU03,3,3,3,1,21,100
+2026-09-26,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-09-26,Zepto,Lucknow,SKU05,3,3,3,0,,100
+2026-09-26,Instamart,Delhi,SKU01,9,8,8,1,56,88.9
+2026-09-26,Instamart,Delhi,SKU02,9,9,9,1,63,100
+2026-09-26,Instamart,Delhi,SKU03,9,8,8,0,,88.9
+2026-09-26,Instamart,Delhi,SKU04,9,8,16,0,,88.9
+2026-09-26,Instamart,Delhi,SKU05,9,9,9,0,,100
+2026-09-26,Instamart,Gurugram,SKU01,4,4,4,1,28,100
+2026-09-26,Instamart,Gurugram,SKU02,4,3,3,2,10.5,75
+2026-09-26,Instamart,Gurugram,SKU03,4,4,8,0,,100
+2026-09-26,Instamart,Gurugram,SKU04,4,3,6,0,,75
+2026-09-26,Instamart,Gurugram,SKU05,4,4,8,0,,100
+2026-09-26,Instamart,Noida,SKU01,3,3,3,0,,100
+2026-09-26,Instamart,Noida,SKU02,3,3,6,0,,100
+2026-09-26,Instamart,Noida,SKU03,3,3,3,0,,100
+2026-09-26,Instamart,Noida,SKU04,3,3,3,0,,100
+2026-09-26,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-09-26,Instamart,Mumbai,SKU01,10,9,9,4,15.8,90
+2026-09-26,Instamart,Mumbai,SKU02,10,9,18,3,42,90
+2026-09-26,Instamart,Mumbai,SKU03,10,10,20,0,,100
+2026-09-26,Instamart,Mumbai,SKU04,10,8,16,1,112,80
+2026-09-26,Instamart,Mumbai,SKU05,10,10,10,1,70,100
+2026-09-26,Instamart,Thane,SKU01,3,3,3,0,,100
+2026-09-26,Instamart,Thane,SKU02,3,3,6,0,,100
+2026-09-26,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-09-26,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-09-26,Instamart,Thane,SKU05,3,3,3,0,,100
+2026-09-26,Instamart,Pune,SKU01,6,5,10,4,17.5,83.3
+2026-09-26,Instamart,Pune,SKU02,6,5,5,6,5.8,83.3
+2026-09-26,Instamart,Pune,SKU03,6,6,6,0,,100
+2026-09-26,Instamart,Pune,SKU04,6,6,6,0,,100
+2026-09-26,Instamart,Pune,SKU05,6,6,12,1,84,100
+2026-09-26,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-09-26,Instamart,Ahmedabad,SKU02,3,3,3,0,,100
+2026-09-26,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-09-26,Instamart,Ahmedabad,SKU04,3,3,3,0,,100
+2026-09-26,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-09-26,Instamart,Bangalore,SKU01,11,10,20,1,140,90.9
+2026-09-26,Instamart,Bangalore,SKU02,11,11,22,2,77,100
+2026-09-26,Instamart,Bangalore,SKU03,11,11,22,2,77,100
+2026-09-26,Instamart,Bangalore,SKU04,11,10,20,2,70,90.9
+2026-09-26,Instamart,Bangalore,SKU05,11,9,9,1,63,81.8
+2026-09-26,Instamart,Hyderabad,SKU01,8,7,7,2,24.5,87.5
+2026-09-26,Instamart,Hyderabad,SKU02,8,7,14,2,49,87.5
+2026-09-26,Instamart,Hyderabad,SKU03,8,7,7,0,,87.5
+2026-09-26,Instamart,Hyderabad,SKU04,8,8,8,0,,100
+2026-09-26,Instamart,Hyderabad,SKU05,8,7,14,1,98,87.5
+2026-09-26,Instamart,Chennai,SKU01,6,5,10,0,,83.3
+2026-09-26,Instamart,Chennai,SKU02,6,5,10,0,,83.3
+2026-09-26,Instamart,Chennai,SKU03,6,5,5,0,,83.3
+2026-09-26,Instamart,Chennai,SKU04,6,6,6,1,42,100
+2026-09-26,Instamart,Chennai,SKU05,6,6,12,0,,100
+2026-09-26,Instamart,Kolkata,SKU01,7,7,14,1,98,100
+2026-09-26,Instamart,Kolkata,SKU02,7,6,6,1,42,85.7
+2026-09-26,Instamart,Kolkata,SKU03,7,7,14,0,,100
+2026-09-26,Instamart,Kolkata,SKU04,7,6,6,0,,85.7
+2026-09-26,Instamart,Kolkata,SKU05,7,6,12,0,,85.7
+2026-09-26,Instamart,Kochi,SKU01,2,2,2,0,,100
+2026-09-26,Instamart,Kochi,SKU02,2,2,4,0,,100
+2026-09-26,Instamart,Kochi,SKU03,2,2,2,0,,100
+2026-09-26,Instamart,Kochi,SKU04,2,2,4,0,,100
+2026-09-26,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-09-26,Instamart,Coimbatore,SKU01,2,2,4,0,,100
+2026-09-26,Instamart,Coimbatore,SKU02,2,2,2,0,,100
+2026-09-26,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-09-26,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-09-26,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-09-26,BB Now,Delhi,SKU01,5,5,5,1,35,100
+2026-09-26,BB Now,Delhi,SKU02,5,5,10,1,70,100
+2026-09-26,BB Now,Delhi,SKU03,5,5,10,1,70,100
+2026-09-26,BB Now,Delhi,SKU04,5,4,4,0,,80
+2026-09-26,BB Now,Delhi,SKU05,5,4,4,0,,80
+2026-09-26,BB Now,Gurugram,SKU01,2,2,2,0,,100
+2026-09-26,BB Now,Gurugram,SKU02,2,2,4,0,,100
+2026-09-26,BB Now,Gurugram,SKU03,2,2,2,0,,100
+2026-09-26,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-09-26,BB Now,Gurugram,SKU05,2,2,4,0,,100
+2026-09-26,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-09-26,BB Now,Noida,SKU02,2,2,2,2,7,100
+2026-09-26,BB Now,Noida,SKU03,2,2,2,0,,100
+2026-09-26,BB Now,Noida,SKU04,2,2,4,1,28,100
+2026-09-26,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-09-26,BB Now,Mumbai,SKU01,5,4,4,0,,80
+2026-09-26,BB Now,Mumbai,SKU02,5,5,10,3,23.3,100
+2026-09-26,BB Now,Mumbai,SKU03,5,5,5,0,,100
+2026-09-26,BB Now,Mumbai,SKU04,5,5,5,0,,100
+2026-09-26,BB Now,Mumbai,SKU05,5,5,10,0,,100
+2026-09-26,BB Now,Thane,SKU01,2,2,2,0,,100
+2026-09-26,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-09-26,BB Now,Thane,SKU03,2,2,4,0,,100
+2026-09-26,BB Now,Thane,SKU04,2,2,2,0,,100
+2026-09-26,BB Now,Thane,SKU05,2,2,2,0,,100
+2026-09-26,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-09-26,BB Now,Pune,SKU02,3,3,3,0,,100
+2026-09-26,BB Now,Pune,SKU03,3,3,3,0,,100
+2026-09-26,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-09-26,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-09-26,BB Now,Ahmedabad,SKU01,2,2,2,0,,100
+2026-09-26,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-09-26,BB Now,Ahmedabad,SKU03,2,2,4,1,28,100
+2026-09-26,BB Now,Ahmedabad,SKU04,2,2,4,1,28,100
+2026-09-26,BB Now,Ahmedabad,SKU05,2,2,4,0,,100
+2026-09-26,BB Now,Bangalore,SKU01,5,5,5,0,,100
+2026-09-26,BB Now,Bangalore,SKU02,5,4,4,0,,80
+2026-09-26,BB Now,Bangalore,SKU03,5,5,5,0,,100
+2026-09-26,BB Now,Bangalore,SKU04,5,4,4,0,,80
+2026-09-26,BB Now,Bangalore,SKU05,5,4,8,0,,80
+2026-09-26,BB Now,Hyderabad,SKU01,4,4,8,0,,100
+2026-09-26,BB Now,Hyderabad,SKU02,4,3,6,1,42,75
+2026-09-26,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-09-26,BB Now,Hyderabad,SKU04,4,3,6,0,,75
+2026-09-26,BB Now,Hyderabad,SKU05,4,4,4,0,,100
+2026-09-26,BB Now,Chennai,SKU01,3,3,6,1,42,100
+2026-09-26,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-09-26,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-09-26,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-09-26,BB Now,Chennai,SKU05,3,3,3,0,,100
+2026-09-26,BB Now,Kolkata,SKU01,3,3,6,0,,100
+2026-09-26,BB Now,Kolkata,SKU02,3,3,6,0,,100
+2026-09-26,BB Now,Kolkata,SKU03,3,3,3,0,,100
+2026-09-26,BB Now,Kolkata,SKU04,3,3,3,0,,100
+2026-09-26,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-09-26,Flipkart Minutes,Delhi,SKU01,4,3,3,0,,75
+2026-09-26,Flipkart Minutes,Delhi,SKU02,4,3,3,0,,75
+2026-09-26,Flipkart Minutes,Delhi,SKU03,4,4,4,0,,100
+2026-09-26,Flipkart Minutes,Delhi,SKU04,4,4,8,0,,100
+2026-09-26,Flipkart Minutes,Delhi,SKU05,4,4,8,0,,100
+2026-09-26,Flipkart Minutes,Gurugram,SKU01,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Gurugram,SKU03,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Gurugram,SKU04,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Noida,SKU01,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Noida,SKU02,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Mumbai,SKU01,4,4,4,0,,100
+2026-09-26,Flipkart Minutes,Mumbai,SKU02,4,4,8,0,,100
+2026-09-26,Flipkart Minutes,Mumbai,SKU03,4,4,8,0,,100
+2026-09-26,Flipkart Minutes,Mumbai,SKU04,4,4,4,0,,100
+2026-09-26,Flipkart Minutes,Mumbai,SKU05,4,4,8,0,,100
+2026-09-26,Flipkart Minutes,Thane,SKU01,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Thane,SKU02,2,2,2,0,,100
+2026-09-26,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Thane,SKU05,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Pune,SKU01,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Pune,SKU02,2,2,4,1,28,100
+2026-09-26,Flipkart Minutes,Pune,SKU03,2,2,4,1,28,100
+2026-09-26,Flipkart Minutes,Pune,SKU04,2,2,4,1,28,100
+2026-09-26,Flipkart Minutes,Pune,SKU05,2,2,4,0,,100
+2026-09-26,Flipkart Minutes,Bangalore,SKU01,5,4,8,0,,80
+2026-09-26,Flipkart Minutes,Bangalore,SKU02,5,4,4,0,,80
+2026-09-26,Flipkart Minutes,Bangalore,SKU03,5,5,5,0,,100
+2026-09-26,Flipkart Minutes,Bangalore,SKU04,5,5,10,0,,100
+2026-09-26,Flipkart Minutes,Bangalore,SKU05,5,4,8,0,,80
+2026-09-26,Flipkart Minutes,Hyderabad,SKU01,3,3,3,0,,100
+2026-09-26,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-09-26,Flipkart Minutes,Hyderabad,SKU03,3,3,6,0,,100
+2026-09-26,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-09-26,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-10-03,Blinkit,Delhi,SKU01,14,12,12,3,28,85.7
+2026-10-03,Blinkit,Delhi,SKU02,14,14,28,7,28,100
+2026-10-03,Blinkit,Delhi,SKU03,14,12,12,2,42,85.7
+2026-10-03,Blinkit,Delhi,SKU04,14,13,13,1,91,92.9
+2026-10-03,Blinkit,Delhi,SKU05,14,13,26,0,,92.9
+2026-10-03,Blinkit,Gurugram,SKU01,5,5,5,0,,100
+2026-10-03,Blinkit,Gurugram,SKU02,5,4,4,0,,80
+2026-10-03,Blinkit,Gurugram,SKU03,5,4,4,0,,80
+2026-10-03,Blinkit,Gurugram,SKU04,5,5,5,0,,100
+2026-10-03,Blinkit,Gurugram,SKU05,5,5,5,0,,100
+2026-10-03,Blinkit,Noida,SKU01,5,5,5,1,35,100
+2026-10-03,Blinkit,Noida,SKU02,5,4,4,0,,80
+2026-10-03,Blinkit,Noida,SKU03,5,5,5,1,35,100
+2026-10-03,Blinkit,Noida,SKU04,5,5,5,0,,100
+2026-10-03,Blinkit,Noida,SKU05,5,5,10,0,,100
+2026-10-03,Blinkit,Mumbai,SKU01,14,13,13,0,,92.9
+2026-10-03,Blinkit,Mumbai,SKU02,14,12,12,3,28,85.7
+2026-10-03,Blinkit,Mumbai,SKU03,14,12,24,1,168,85.7
+2026-10-03,Blinkit,Mumbai,SKU04,14,14,14,1,98,100
+2026-10-03,Blinkit,Mumbai,SKU05,14,12,24,0,,85.7
+2026-10-03,Blinkit,Thane,SKU01,4,4,4,1,28,100
+2026-10-03,Blinkit,Thane,SKU02,4,4,8,1,56,100
+2026-10-03,Blinkit,Thane,SKU03,4,4,8,1,56,100
+2026-10-03,Blinkit,Thane,SKU04,4,3,3,0,,75
+2026-10-03,Blinkit,Thane,SKU05,4,4,4,0,,100
+2026-10-03,Blinkit,Pune,SKU01,8,7,14,1,98,87.5
+2026-10-03,Blinkit,Pune,SKU02,8,7,7,1,49,87.5
+2026-10-03,Blinkit,Pune,SKU03,8,7,14,0,,87.5
+2026-10-03,Blinkit,Pune,SKU04,8,8,16,0,,100
+2026-10-03,Blinkit,Pune,SKU05,8,7,14,0,,87.5
+2026-10-03,Blinkit,Ahmedabad,SKU01,5,5,5,1,35,100
+2026-10-03,Blinkit,Ahmedabad,SKU02,5,5,5,1,35,100
+2026-10-03,Blinkit,Ahmedabad,SKU03,5,4,4,1,28,80
+2026-10-03,Blinkit,Ahmedabad,SKU04,5,5,5,0,,100
+2026-10-03,Blinkit,Ahmedabad,SKU05,5,4,4,0,,80
+2026-10-03,Blinkit,Bangalore,SKU01,15,15,30,1,210,100
+2026-10-03,Blinkit,Bangalore,SKU02,15,15,30,2,105,100
+2026-10-03,Blinkit,Bangalore,SKU03,15,14,14,0,,93.3
+2026-10-03,Blinkit,Bangalore,SKU04,15,15,30,1,210,100
+2026-10-03,Blinkit,Bangalore,SKU05,15,13,13,0,,86.7
+2026-10-03,Blinkit,Hyderabad,SKU01,11,11,22,0,,100
+2026-10-03,Blinkit,Hyderabad,SKU02,11,11,11,2,38.5,100
+2026-10-03,Blinkit,Hyderabad,SKU03,11,10,20,1,140,90.9
+2026-10-03,Blinkit,Hyderabad,SKU04,11,11,11,1,77,100
+2026-10-03,Blinkit,Hyderabad,SKU05,11,10,20,0,,90.9
+2026-10-03,Blinkit,Chennai,SKU01,9,8,16,0,,88.9
+2026-10-03,Blinkit,Chennai,SKU02,9,8,8,2,28,88.9
+2026-10-03,Blinkit,Chennai,SKU03,9,8,8,0,,88.9
+2026-10-03,Blinkit,Chennai,SKU04,9,9,18,1,126,100
+2026-10-03,Blinkit,Chennai,SKU05,9,9,18,1,126,100
+2026-10-03,Blinkit,Kolkata,SKU01,10,9,9,0,,90
+2026-10-03,Blinkit,Kolkata,SKU02,10,10,20,7,20,100
+2026-10-03,Blinkit,Kolkata,SKU03,10,9,18,1,126,90
+2026-10-03,Blinkit,Kolkata,SKU04,10,9,18,1,126,90
+2026-10-03,Blinkit,Kolkata,SKU05,10,10,10,1,70,100
+2026-10-03,Blinkit,Jaipur,SKU01,4,4,8,0,,100
+2026-10-03,Blinkit,Jaipur,SKU02,4,4,4,1,28,100
+2026-10-03,Blinkit,Jaipur,SKU03,4,4,4,1,28,100
+2026-10-03,Blinkit,Jaipur,SKU04,4,4,4,0,,100
+2026-10-03,Blinkit,Jaipur,SKU05,4,4,4,0,,100
+2026-10-03,Blinkit,Lucknow,SKU01,4,3,6,4,10.5,75
+2026-10-03,Blinkit,Lucknow,SKU02,4,4,8,3,18.7,100
+2026-10-03,Blinkit,Lucknow,SKU03,4,3,6,0,,75
+2026-10-03,Blinkit,Lucknow,SKU04,4,3,3,0,,75
+2026-10-03,Blinkit,Lucknow,SKU05,4,4,4,1,28,100
+2026-10-03,Blinkit,Chandigarh,SKU01,3,3,3,0,,100
+2026-10-03,Blinkit,Chandigarh,SKU02,3,3,6,2,21,100
+2026-10-03,Blinkit,Chandigarh,SKU03,3,3,3,1,21,100
+2026-10-03,Blinkit,Chandigarh,SKU04,3,3,3,2,10.5,100
+2026-10-03,Blinkit,Chandigarh,SKU05,3,3,3,0,,100
+2026-10-03,Blinkit,Indore,SKU01,3,3,3,1,21,100
+2026-10-03,Blinkit,Indore,SKU02,3,3,3,0,,100
+2026-10-03,Blinkit,Indore,SKU03,3,3,3,1,21,100
+2026-10-03,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-10-03,Blinkit,Indore,SKU05,3,3,6,0,,100
+2026-10-03,Zepto,Delhi,SKU01,10,9,18,5,25.2,90
+2026-10-03,Zepto,Delhi,SKU02,10,8,16,3,37.3,80
+2026-10-03,Zepto,Delhi,SKU03,10,9,9,0,,90
+2026-10-03,Zepto,Delhi,SKU04,10,9,18,0,,90
+2026-10-03,Zepto,Delhi,SKU05,10,8,8,0,,80
+2026-10-03,Zepto,Gurugram,SKU01,4,3,6,0,,75
+2026-10-03,Zepto,Gurugram,SKU02,4,3,3,0,,75
+2026-10-03,Zepto,Gurugram,SKU03,4,3,3,0,,75
+2026-10-03,Zepto,Gurugram,SKU04,4,4,4,0,,100
+2026-10-03,Zepto,Gurugram,SKU05,4,3,6,0,,75
+2026-10-03,Zepto,Noida,SKU01,3,3,6,1,42,100
+2026-10-03,Zepto,Noida,SKU02,3,3,6,2,21,100
+2026-10-03,Zepto,Noida,SKU03,3,3,3,0,,100
+2026-10-03,Zepto,Noida,SKU04,3,3,6,0,,100
+2026-10-03,Zepto,Noida,SKU05,3,3,3,0,,100
+2026-10-03,Zepto,Mumbai,SKU01,11,10,20,0,,90.9
+2026-10-03,Zepto,Mumbai,SKU02,11,10,10,1,70,90.9
+2026-10-03,Zepto,Mumbai,SKU03,11,10,10,0,,90.9
+2026-10-03,Zepto,Mumbai,SKU04,11,10,10,0,,90.9
+2026-10-03,Zepto,Mumbai,SKU05,11,10,20,0,,90.9
+2026-10-03,Zepto,Thane,SKU01,3,3,3,0,,100
+2026-10-03,Zepto,Thane,SKU02,3,3,3,0,,100
+2026-10-03,Zepto,Thane,SKU03,3,3,3,0,,100
+2026-10-03,Zepto,Thane,SKU04,3,3,3,0,,100
+2026-10-03,Zepto,Thane,SKU05,3,3,6,0,,100
+2026-10-03,Zepto,Pune,SKU01,6,6,6,2,21,100
+2026-10-03,Zepto,Pune,SKU02,6,6,12,1,84,100
+2026-10-03,Zepto,Pune,SKU03,6,6,6,1,42,100
+2026-10-03,Zepto,Pune,SKU04,6,6,12,0,,100
+2026-10-03,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-10-03,Zepto,Ahmedabad,SKU01,4,4,8,1,56,100
+2026-10-03,Zepto,Ahmedabad,SKU02,4,4,8,0,,100
+2026-10-03,Zepto,Ahmedabad,SKU03,4,3,3,0,,75
+2026-10-03,Zepto,Ahmedabad,SKU04,4,3,3,1,21,75
+2026-10-03,Zepto,Ahmedabad,SKU05,4,3,6,0,,75
+2026-10-03,Zepto,Bangalore,SKU01,11,11,22,3,51.3,100
+2026-10-03,Zepto,Bangalore,SKU02,11,10,10,4,17.5,90.9
+2026-10-03,Zepto,Bangalore,SKU03,11,10,10,1,70,90.9
+2026-10-03,Zepto,Bangalore,SKU04,11,11,11,1,77,100
+2026-10-03,Zepto,Bangalore,SKU05,11,11,22,0,,100
+2026-10-03,Zepto,Hyderabad,SKU01,8,7,14,0,,87.5
+2026-10-03,Zepto,Hyderabad,SKU02,8,8,16,4,28,100
+2026-10-03,Zepto,Hyderabad,SKU03,8,7,7,0,,87.5
+2026-10-03,Zepto,Hyderabad,SKU04,8,7,14,0,,87.5
+2026-10-03,Zepto,Hyderabad,SKU05,8,7,7,1,49,87.5
+2026-10-03,Zepto,Chennai,SKU01,7,7,7,2,24.5,100
+2026-10-03,Zepto,Chennai,SKU02,7,7,7,1,49,100
+2026-10-03,Zepto,Chennai,SKU03,7,6,12,1,84,85.7
+2026-10-03,Zepto,Chennai,SKU04,7,7,14,0,,100
+2026-10-03,Zepto,Chennai,SKU05,7,6,12,0,,85.7
+2026-10-03,Zepto,Kolkata,SKU01,7,6,12,2,42,85.7
+2026-10-03,Zepto,Kolkata,SKU02,7,6,12,5,16.8,85.7
+2026-10-03,Zepto,Kolkata,SKU03,7,7,7,2,24.5,100
+2026-10-03,Zepto,Kolkata,SKU04,7,7,7,0,,100
+2026-10-03,Zepto,Kolkata,SKU05,7,6,12,0,,85.7
+2026-10-03,Zepto,Jaipur,SKU01,3,3,3,0,,100
+2026-10-03,Zepto,Jaipur,SKU02,3,3,6,0,,100
+2026-10-03,Zepto,Jaipur,SKU03,3,3,3,0,,100
+2026-10-03,Zepto,Jaipur,SKU04,3,3,3,0,,100
+2026-10-03,Zepto,Jaipur,SKU05,3,3,3,1,21,100
+2026-10-03,Zepto,Lucknow,SKU01,3,3,3,0,,100
+2026-10-03,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-10-03,Zepto,Lucknow,SKU03,3,3,6,0,,100
+2026-10-03,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-10-03,Zepto,Lucknow,SKU05,3,3,3,0,,100
+2026-10-03,Instamart,Delhi,SKU01,9,8,8,0,,88.9
+2026-10-03,Instamart,Delhi,SKU02,9,8,8,2,28,88.9
+2026-10-03,Instamart,Delhi,SKU03,9,8,8,1,56,88.9
+2026-10-03,Instamart,Delhi,SKU04,9,8,8,0,,88.9
+2026-10-03,Instamart,Delhi,SKU05,9,9,9,0,,100
+2026-10-03,Instamart,Gurugram,SKU01,4,4,4,0,,100
+2026-10-03,Instamart,Gurugram,SKU02,4,4,8,0,,100
+2026-10-03,Instamart,Gurugram,SKU03,4,3,3,0,,75
+2026-10-03,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-10-03,Instamart,Gurugram,SKU05,4,3,3,0,,75
+2026-10-03,Instamart,Noida,SKU01,3,3,3,0,,100
+2026-10-03,Instamart,Noida,SKU02,3,3,3,1,21,100
+2026-10-03,Instamart,Noida,SKU03,3,3,3,1,21,100
+2026-10-03,Instamart,Noida,SKU04,3,3,6,1,42,100
+2026-10-03,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-10-03,Instamart,Mumbai,SKU01,10,9,18,0,,90
+2026-10-03,Instamart,Mumbai,SKU02,10,9,9,4,15.8,90
+2026-10-03,Instamart,Mumbai,SKU03,10,9,18,2,63,90
+2026-10-03,Instamart,Mumbai,SKU04,10,9,9,0,,90
+2026-10-03,Instamart,Mumbai,SKU05,10,9,9,0,,90
+2026-10-03,Instamart,Thane,SKU01,3,3,3,0,,100
+2026-10-03,Instamart,Thane,SKU02,3,3,3,0,,100
+2026-10-03,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-10-03,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-10-03,Instamart,Thane,SKU05,3,3,6,0,,100
+2026-10-03,Instamart,Pune,SKU01,6,6,6,2,21,100
+2026-10-03,Instamart,Pune,SKU02,6,5,5,0,,83.3
+2026-10-03,Instamart,Pune,SKU03,6,6,12,0,,100
+2026-10-03,Instamart,Pune,SKU04,6,5,5,1,35,83.3
+2026-10-03,Instamart,Pune,SKU05,6,5,10,0,,83.3
+2026-10-03,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-10-03,Instamart,Ahmedabad,SKU02,3,3,6,0,,100
+2026-10-03,Instamart,Ahmedabad,SKU03,3,3,3,0,,100
+2026-10-03,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-10-03,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-10-03,Instamart,Bangalore,SKU01,11,11,22,0,,100
+2026-10-03,Instamart,Bangalore,SKU02,11,11,11,1,77,100
+2026-10-03,Instamart,Bangalore,SKU03,11,10,10,1,70,90.9
+2026-10-03,Instamart,Bangalore,SKU04,11,10,20,0,,90.9
+2026-10-03,Instamart,Bangalore,SKU05,11,11,22,0,,100
+2026-10-03,Instamart,Hyderabad,SKU01,8,7,7,2,24.5,87.5
+2026-10-03,Instamart,Hyderabad,SKU02,8,8,16,1,112,100
+2026-10-03,Instamart,Hyderabad,SKU03,8,7,14,0,,87.5
+2026-10-03,Instamart,Hyderabad,SKU04,8,8,16,0,,100
+2026-10-03,Instamart,Hyderabad,SKU05,8,8,16,0,,100
+2026-10-03,Instamart,Chennai,SKU01,6,5,10,0,,83.3
+2026-10-03,Instamart,Chennai,SKU02,6,5,5,0,,83.3
+2026-10-03,Instamart,Chennai,SKU03,6,6,12,0,,100
+2026-10-03,Instamart,Chennai,SKU04,6,5,5,0,,83.3
+2026-10-03,Instamart,Chennai,SKU05,6,6,12,0,,100
+2026-10-03,Instamart,Kolkata,SKU01,7,7,7,1,49,100
+2026-10-03,Instamart,Kolkata,SKU02,7,6,12,2,42,85.7
+2026-10-03,Instamart,Kolkata,SKU03,7,6,12,1,84,85.7
+2026-10-03,Instamart,Kolkata,SKU04,7,6,12,0,,85.7
+2026-10-03,Instamart,Kolkata,SKU05,7,6,12,1,84,85.7
+2026-10-03,Instamart,Kochi,SKU01,2,2,2,0,,100
+2026-10-03,Instamart,Kochi,SKU02,2,2,2,1,14,100
+2026-10-03,Instamart,Kochi,SKU03,2,2,4,0,,100
+2026-10-03,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-10-03,Instamart,Kochi,SKU05,2,2,4,0,,100
+2026-10-03,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-10-03,Instamart,Coimbatore,SKU02,2,2,4,2,14,100
+2026-10-03,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-10-03,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-10-03,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-10-03,BB Now,Delhi,SKU01,5,4,4,0,,80
+2026-10-03,BB Now,Delhi,SKU02,5,5,10,1,70,100
+2026-10-03,BB Now,Delhi,SKU03,5,5,10,0,,100
+2026-10-03,BB Now,Delhi,SKU04,5,5,5,0,,100
+2026-10-03,BB Now,Delhi,SKU05,5,5,5,0,,100
+2026-10-03,BB Now,Gurugram,SKU01,2,2,4,0,,100
+2026-10-03,BB Now,Gurugram,SKU02,2,2,4,0,,100
+2026-10-03,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-10-03,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-10-03,BB Now,Gurugram,SKU05,2,2,2,0,,100
+2026-10-03,BB Now,Noida,SKU01,2,2,4,0,,100
+2026-10-03,BB Now,Noida,SKU02,2,2,4,0,,100
+2026-10-03,BB Now,Noida,SKU03,2,2,2,0,,100
+2026-10-03,BB Now,Noida,SKU04,2,2,2,0,,100
+2026-10-03,BB Now,Noida,SKU05,2,2,4,0,,100
+2026-10-03,BB Now,Mumbai,SKU01,5,5,5,1,35,100
+2026-10-03,BB Now,Mumbai,SKU02,5,5,5,1,35,100
+2026-10-03,BB Now,Mumbai,SKU03,5,5,10,1,70,100
+2026-10-03,BB Now,Mumbai,SKU04,5,5,5,0,,100
+2026-10-03,BB Now,Mumbai,SKU05,5,5,5,0,,100
+2026-10-03,BB Now,Thane,SKU01,2,2,2,0,,100
+2026-10-03,BB Now,Thane,SKU02,2,2,2,0,,100
+2026-10-03,BB Now,Thane,SKU03,2,2,4,0,,100
+2026-10-03,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-10-03,BB Now,Thane,SKU05,2,2,2,0,,100
+2026-10-03,BB Now,Pune,SKU01,3,3,6,0,,100
+2026-10-03,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-10-03,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-10-03,BB Now,Pune,SKU04,3,3,3,0,,100
+2026-10-03,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-10-03,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-10-03,BB Now,Ahmedabad,SKU02,2,2,4,0,,100
+2026-10-03,BB Now,Ahmedabad,SKU03,2,2,2,0,,100
+2026-10-03,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-10-03,BB Now,Ahmedabad,SKU05,2,2,4,0,,100
+2026-10-03,BB Now,Bangalore,SKU01,5,4,4,0,,80
+2026-10-03,BB Now,Bangalore,SKU02,5,4,4,0,,80
+2026-10-03,BB Now,Bangalore,SKU03,5,4,8,0,,80
+2026-10-03,BB Now,Bangalore,SKU04,5,5,10,0,,100
+2026-10-03,BB Now,Bangalore,SKU05,5,5,5,0,,100
+2026-10-03,BB Now,Hyderabad,SKU01,4,4,4,1,28,100
+2026-10-03,BB Now,Hyderabad,SKU02,4,3,6,0,,75
+2026-10-03,BB Now,Hyderabad,SKU03,4,4,4,3,9.3,100
+2026-10-03,BB Now,Hyderabad,SKU04,4,3,6,0,,75
+2026-10-03,BB Now,Hyderabad,SKU05,4,3,6,0,,75
+2026-10-03,BB Now,Chennai,SKU01,3,3,6,0,,100
+2026-10-03,BB Now,Chennai,SKU02,3,3,6,0,,100
+2026-10-03,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-10-03,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-10-03,BB Now,Chennai,SKU05,3,3,3,0,,100
+2026-10-03,BB Now,Kolkata,SKU01,3,3,3,0,,100
+2026-10-03,BB Now,Kolkata,SKU02,3,3,6,0,,100
+2026-10-03,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-10-03,BB Now,Kolkata,SKU04,3,3,3,0,,100
+2026-10-03,BB Now,Kolkata,SKU05,3,3,3,0,,100
+2026-10-03,Flipkart Minutes,Delhi,SKU01,4,4,8,0,,100
+2026-10-03,Flipkart Minutes,Delhi,SKU02,4,4,4,2,14,100
+2026-10-03,Flipkart Minutes,Delhi,SKU03,4,4,8,1,56,100
+2026-10-03,Flipkart Minutes,Delhi,SKU04,4,4,4,0,,100
+2026-10-03,Flipkart Minutes,Delhi,SKU05,4,3,6,0,,75
+2026-10-03,Flipkart Minutes,Gurugram,SKU01,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Gurugram,SKU03,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Noida,SKU02,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Noida,SKU03,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Noida,SKU04,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Noida,SKU05,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Mumbai,SKU01,4,4,8,0,,100
+2026-10-03,Flipkart Minutes,Mumbai,SKU02,4,4,8,4,14,100
+2026-10-03,Flipkart Minutes,Mumbai,SKU03,4,4,8,1,56,100
+2026-10-03,Flipkart Minutes,Mumbai,SKU04,4,4,8,0,,100
+2026-10-03,Flipkart Minutes,Mumbai,SKU05,4,4,4,0,,100
+2026-10-03,Flipkart Minutes,Thane,SKU01,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Thane,SKU02,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Thane,SKU03,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Thane,SKU04,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Pune,SKU01,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Pune,SKU02,2,2,2,2,7,100
+2026-10-03,Flipkart Minutes,Pune,SKU03,2,2,4,1,28,100
+2026-10-03,Flipkart Minutes,Pune,SKU04,2,2,2,0,,100
+2026-10-03,Flipkart Minutes,Pune,SKU05,2,2,4,0,,100
+2026-10-03,Flipkart Minutes,Bangalore,SKU01,5,5,10,0,,100
+2026-10-03,Flipkart Minutes,Bangalore,SKU02,5,5,5,0,,100
+2026-10-03,Flipkart Minutes,Bangalore,SKU03,5,5,5,0,,100
+2026-10-03,Flipkart Minutes,Bangalore,SKU04,5,4,8,0,,80
+2026-10-03,Flipkart Minutes,Bangalore,SKU05,5,5,10,0,,100
+2026-10-03,Flipkart Minutes,Hyderabad,SKU01,3,3,3,2,10.5,100
+2026-10-03,Flipkart Minutes,Hyderabad,SKU02,3,3,3,1,21,100
+2026-10-03,Flipkart Minutes,Hyderabad,SKU03,3,3,3,0,,100
+2026-10-03,Flipkart Minutes,Hyderabad,SKU04,3,3,3,0,,100
+2026-10-03,Flipkart Minutes,Hyderabad,SKU05,3,3,3,0,,100
+2026-10-10,Blinkit,Delhi,SKU01,14,13,26,3,60.7,92.9
+2026-10-10,Blinkit,Delhi,SKU02,14,13,26,0,,92.9
+2026-10-10,Blinkit,Delhi,SKU03,14,12,24,0,,85.7
+2026-10-10,Blinkit,Delhi,SKU04,14,13,26,1,182,92.9
+2026-10-10,Blinkit,Delhi,SKU05,14,13,13,0,,92.9
+2026-10-10,Blinkit,Gurugram,SKU01,5,5,10,0,,100
+2026-10-10,Blinkit,Gurugram,SKU02,5,4,4,0,,80
+2026-10-10,Blinkit,Gurugram,SKU03,5,5,10,0,,100
+2026-10-10,Blinkit,Gurugram,SKU04,5,4,4,0,,80
+2026-10-10,Blinkit,Gurugram,SKU05,5,5,5,0,,100
+2026-10-10,Blinkit,Noida,SKU01,5,5,10,0,,100
+2026-10-10,Blinkit,Noida,SKU02,5,4,4,2,14,80
+2026-10-10,Blinkit,Noida,SKU03,5,5,5,0,,100
+2026-10-10,Blinkit,Noida,SKU04,5,5,10,0,,100
+2026-10-10,Blinkit,Noida,SKU05,5,4,8,1,56,80
+2026-10-10,Blinkit,Mumbai,SKU01,14,13,13,1,91,92.9
+2026-10-10,Blinkit,Mumbai,SKU02,14,13,26,1,182,92.9
+2026-10-10,Blinkit,Mumbai,SKU03,14,13,13,0,,92.9
+2026-10-10,Blinkit,Mumbai,SKU04,14,13,13,0,,92.9
+2026-10-10,Blinkit,Mumbai,SKU05,14,13,26,0,,92.9
+2026-10-10,Blinkit,Thane,SKU01,4,4,4,0,,100
+2026-10-10,Blinkit,Thane,SKU02,4,3,3,2,10.5,75
+2026-10-10,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-10-10,Blinkit,Thane,SKU04,4,4,8,0,,100
+2026-10-10,Blinkit,Thane,SKU05,4,3,3,0,,75
+2026-10-10,Blinkit,Pune,SKU01,8,7,14,0,,87.5
+2026-10-10,Blinkit,Pune,SKU02,8,8,16,1,112,100
+2026-10-10,Blinkit,Pune,SKU03,8,7,7,0,,87.5
+2026-10-10,Blinkit,Pune,SKU04,8,8,8,1,56,100
+2026-10-10,Blinkit,Pune,SKU05,8,7,14,0,,87.5
+2026-10-10,Blinkit,Ahmedabad,SKU01,5,4,8,2,28,80
+2026-10-10,Blinkit,Ahmedabad,SKU02,5,4,4,2,14,80
+2026-10-10,Blinkit,Ahmedabad,SKU03,5,4,8,0,,80
+2026-10-10,Blinkit,Ahmedabad,SKU04,5,5,5,1,35,100
+2026-10-10,Blinkit,Ahmedabad,SKU05,5,5,10,0,,100
+2026-10-10,Blinkit,Bangalore,SKU01,15,13,13,2,45.5,86.7
+2026-10-10,Blinkit,Bangalore,SKU02,15,13,26,4,45.5,86.7
+2026-10-10,Blinkit,Bangalore,SKU03,15,14,28,2,98,93.3
+2026-10-10,Blinkit,Bangalore,SKU04,15,14,28,1,196,93.3
+2026-10-10,Blinkit,Bangalore,SKU05,15,14,28,1,196,93.3
+2026-10-10,Blinkit,Hyderabad,SKU01,11,10,10,3,23.3,90.9
+2026-10-10,Blinkit,Hyderabad,SKU02,11,11,11,0,,100
+2026-10-10,Blinkit,Hyderabad,SKU03,11,11,11,1,77,100
+2026-10-10,Blinkit,Hyderabad,SKU04,11,10,10,1,70,90.9
+2026-10-10,Blinkit,Hyderabad,SKU05,11,11,11,0,,100
+2026-10-10,Blinkit,Chennai,SKU01,9,8,16,0,,88.9
+2026-10-10,Blinkit,Chennai,SKU02,9,8,8,1,56,88.9
+2026-10-10,Blinkit,Chennai,SKU03,9,8,8,0,,88.9
+2026-10-10,Blinkit,Chennai,SKU04,9,9,9,0,,100
+2026-10-10,Blinkit,Chennai,SKU05,9,8,16,0,,88.9
+2026-10-10,Blinkit,Kolkata,SKU01,10,10,20,2,70,100
+2026-10-10,Blinkit,Kolkata,SKU02,10,9,18,7,18,90
+2026-10-10,Blinkit,Kolkata,SKU03,10,10,10,0,,100
+2026-10-10,Blinkit,Kolkata,SKU04,10,9,9,0,,90
+2026-10-10,Blinkit,Kolkata,SKU05,10,10,20,0,,100
+2026-10-10,Blinkit,Jaipur,SKU01,4,4,8,0,,100
+2026-10-10,Blinkit,Jaipur,SKU02,4,4,8,0,,100
+2026-10-10,Blinkit,Jaipur,SKU03,4,3,3,0,,75
+2026-10-10,Blinkit,Jaipur,SKU04,4,3,6,0,,75
+2026-10-10,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-10-10,Blinkit,Lucknow,SKU01,4,3,6,0,,75
+2026-10-10,Blinkit,Lucknow,SKU02,4,4,8,1,56,100
+2026-10-10,Blinkit,Lucknow,SKU03,4,4,8,1,56,100
+2026-10-10,Blinkit,Lucknow,SKU04,4,4,8,1,56,100
+2026-10-10,Blinkit,Lucknow,SKU05,4,3,6,0,,75
+2026-10-10,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-10-10,Blinkit,Chandigarh,SKU02,3,3,6,2,21,100
+2026-10-10,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-10-10,Blinkit,Chandigarh,SKU04,3,3,6,0,,100
+2026-10-10,Blinkit,Chandigarh,SKU05,3,3,3,0,,100
+2026-10-10,Blinkit,Indore,SKU01,3,3,6,2,21,100
+2026-10-10,Blinkit,Indore,SKU02,3,3,6,0,,100
+2026-10-10,Blinkit,Indore,SKU03,3,3,6,1,42,100
+2026-10-10,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-10-10,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-10-10,Zepto,Delhi,SKU01,10,9,18,2,63,90
+2026-10-10,Zepto,Delhi,SKU02,10,9,9,2,31.5,90
+2026-10-10,Zepto,Delhi,SKU03,10,9,9,1,63,90
+2026-10-10,Zepto,Delhi,SKU04,10,9,9,0,,90
+2026-10-10,Zepto,Delhi,SKU05,10,9,18,0,,90
+2026-10-10,Zepto,Gurugram,SKU01,4,4,8,0,,100
+2026-10-10,Zepto,Gurugram,SKU02,4,4,4,2,14,100
+2026-10-10,Zepto,Gurugram,SKU03,4,4,4,0,,100
+2026-10-10,Zepto,Gurugram,SKU04,4,4,8,1,56,100
+2026-10-10,Zepto,Gurugram,SKU05,4,4,4,0,,100
+2026-10-10,Zepto,Noida,SKU01,3,3,6,0,,100
+2026-10-10,Zepto,Noida,SKU02,3,3,6,1,42,100
+2026-10-10,Zepto,Noida,SKU03,3,3,6,0,,100
+2026-10-10,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-10-10,Zepto,Noida,SKU05,3,3,3,0,,100
+2026-10-10,Zepto,Mumbai,SKU01,11,10,10,0,,90.9
+2026-10-10,Zepto,Mumbai,SKU02,11,10,20,0,,90.9
+2026-10-10,Zepto,Mumbai,SKU03,11,10,10,1,70,90.9
+2026-10-10,Zepto,Mumbai,SKU04,11,10,10,0,,90.9
+2026-10-10,Zepto,Mumbai,SKU05,11,10,20,0,,90.9
+2026-10-10,Zepto,Thane,SKU01,3,3,6,0,,100
+2026-10-10,Zepto,Thane,SKU02,3,3,6,0,,100
+2026-10-10,Zepto,Thane,SKU03,3,3,6,1,42,100
+2026-10-10,Zepto,Thane,SKU04,3,3,3,1,21,100
+2026-10-10,Zepto,Thane,SKU05,3,3,3,0,,100
+2026-10-10,Zepto,Pune,SKU01,6,5,5,0,,83.3
+2026-10-10,Zepto,Pune,SKU02,6,6,12,0,,100
+2026-10-10,Zepto,Pune,SKU03,6,5,10,0,,83.3
+2026-10-10,Zepto,Pune,SKU04,6,5,10,0,,83.3
+2026-10-10,Zepto,Pune,SKU05,6,5,10,0,,83.3
+2026-10-10,Zepto,Ahmedabad,SKU01,4,4,8,0,,100
+2026-10-10,Zepto,Ahmedabad,SKU02,4,4,8,0,,100
+2026-10-10,Zepto,Ahmedabad,SKU03,4,3,6,0,,75
+2026-10-10,Zepto,Ahmedabad,SKU04,4,4,8,1,56,100
+2026-10-10,Zepto,Ahmedabad,SKU05,4,4,8,0,,100
+2026-10-10,Zepto,Bangalore,SKU01,11,11,11,2,38.5,100
+2026-10-10,Zepto,Bangalore,SKU02,11,11,22,3,51.3,100
+2026-10-10,Zepto,Bangalore,SKU03,11,10,20,0,,90.9
+2026-10-10,Zepto,Bangalore,SKU04,11,11,11,1,77,100
+2026-10-10,Zepto,Bangalore,SKU05,11,10,20,0,,90.9
+2026-10-10,Zepto,Hyderabad,SKU01,8,8,8,2,28,100
+2026-10-10,Zepto,Hyderabad,SKU02,8,8,16,2,56,100
+2026-10-10,Zepto,Hyderabad,SKU03,8,7,14,1,98,87.5
+2026-10-10,Zepto,Hyderabad,SKU04,8,8,8,0,,100
+2026-10-10,Zepto,Hyderabad,SKU05,8,8,16,0,,100
+2026-10-10,Zepto,Chennai,SKU01,7,6,12,1,84,85.7
+2026-10-10,Zepto,Chennai,SKU02,7,6,12,3,28,85.7
+2026-10-10,Zepto,Chennai,SKU03,7,6,12,0,,85.7
+2026-10-10,Zepto,Chennai,SKU04,7,6,6,0,,85.7
+2026-10-10,Zepto,Chennai,SKU05,7,6,12,1,84,85.7
+2026-10-10,Zepto,Kolkata,SKU01,7,6,12,1,84,85.7
+2026-10-10,Zepto,Kolkata,SKU02,7,6,6,2,21,85.7
+2026-10-10,Zepto,Kolkata,SKU03,7,6,6,0,,85.7
+2026-10-10,Zepto,Kolkata,SKU04,7,6,6,0,,85.7
+2026-10-10,Zepto,Kolkata,SKU05,7,6,6,0,,85.7
+2026-10-10,Zepto,Jaipur,SKU01,3,3,6,1,42,100
+2026-10-10,Zepto,Jaipur,SKU02,3,3,3,0,,100
+2026-10-10,Zepto,Jaipur,SKU03,3,3,6,0,,100
+2026-10-10,Zepto,Jaipur,SKU04,3,3,6,1,42,100
+2026-10-10,Zepto,Jaipur,SKU05,3,3,6,0,,100
+2026-10-10,Zepto,Lucknow,SKU01,3,3,6,0,,100
+2026-10-10,Zepto,Lucknow,SKU02,3,3,6,1,42,100
+2026-10-10,Zepto,Lucknow,SKU03,3,3,6,0,,100
+2026-10-10,Zepto,Lucknow,SKU04,3,3,6,0,,100
+2026-10-10,Zepto,Lucknow,SKU05,3,3,6,0,,100
+2026-10-10,Instamart,Delhi,SKU01,9,8,16,0,,88.9
+2026-10-10,Instamart,Delhi,SKU02,9,8,16,1,112,88.9
+2026-10-10,Instamart,Delhi,SKU03,9,9,9,0,,100
+2026-10-10,Instamart,Delhi,SKU04,9,8,8,0,,88.9
+2026-10-10,Instamart,Delhi,SKU05,9,8,16,0,,88.9
+2026-10-10,Instamart,Gurugram,SKU01,4,4,8,2,28,100
+2026-10-10,Instamart,Gurugram,SKU02,4,4,4,0,,100
+2026-10-10,Instamart,Gurugram,SKU03,4,4,4,0,,100
+2026-10-10,Instamart,Gurugram,SKU04,4,3,6,0,,75
+2026-10-10,Instamart,Gurugram,SKU05,4,3,3,0,,75
+2026-10-10,Instamart,Noida,SKU01,3,3,3,0,,100
+2026-10-10,Instamart,Noida,SKU02,3,3,6,0,,100
+2026-10-10,Instamart,Noida,SKU03,3,3,3,0,,100
+2026-10-10,Instamart,Noida,SKU04,3,3,3,0,,100
+2026-10-10,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-10-10,Instamart,Mumbai,SKU01,10,8,8,2,28,80
+2026-10-10,Instamart,Mumbai,SKU02,10,9,9,1,63,90
+2026-10-10,Instamart,Mumbai,SKU03,10,9,18,1,126,90
+2026-10-10,Instamart,Mumbai,SKU04,10,9,18,0,,90
+2026-10-10,Instamart,Mumbai,SKU05,10,10,20,0,,100
+2026-10-10,Instamart,Thane,SKU01,3,3,3,0,,100
+2026-10-10,Instamart,Thane,SKU02,3,3,3,1,21,100
+2026-10-10,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-10-10,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-10-10,Instamart,Thane,SKU05,3,3,6,0,,100
+2026-10-10,Instamart,Pune,SKU01,6,5,5,0,,83.3
+2026-10-10,Instamart,Pune,SKU02,6,6,12,1,84,100
+2026-10-10,Instamart,Pune,SKU03,6,6,6,0,,100
+2026-10-10,Instamart,Pune,SKU04,6,5,5,0,,83.3
+2026-10-10,Instamart,Pune,SKU05,6,5,10,0,,83.3
+2026-10-10,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-10-10,Instamart,Ahmedabad,SKU02,3,3,6,1,42,100
+2026-10-10,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-10-10,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-10-10,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-10-10,Instamart,Bangalore,SKU01,11,11,11,2,38.5,100
+2026-10-10,Instamart,Bangalore,SKU02,11,9,18,0,,81.8
+2026-10-10,Instamart,Bangalore,SKU03,11,9,18,0,,81.8
+2026-10-10,Instamart,Bangalore,SKU04,11,11,22,0,,100
+2026-10-10,Instamart,Bangalore,SKU05,11,10,10,0,,90.9
+2026-10-10,Instamart,Hyderabad,SKU01,8,8,16,0,,100
+2026-10-10,Instamart,Hyderabad,SKU02,8,8,8,0,,100
+2026-10-10,Instamart,Hyderabad,SKU03,8,7,14,0,,87.5
+2026-10-10,Instamart,Hyderabad,SKU04,8,7,14,0,,87.5
+2026-10-10,Instamart,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-10-10,Instamart,Chennai,SKU01,6,5,10,0,,83.3
+2026-10-10,Instamart,Chennai,SKU02,6,6,12,2,42,100
+2026-10-10,Instamart,Chennai,SKU03,6,6,12,2,42,100
+2026-10-10,Instamart,Chennai,SKU04,6,5,10,0,,83.3
+2026-10-10,Instamart,Chennai,SKU05,6,6,12,0,,100
+2026-10-10,Instamart,Kolkata,SKU01,7,6,6,0,,85.7
+2026-10-10,Instamart,Kolkata,SKU02,7,6,6,2,21,85.7
+2026-10-10,Instamart,Kolkata,SKU03,7,6,6,0,,85.7
+2026-10-10,Instamart,Kolkata,SKU04,7,6,6,0,,85.7
+2026-10-10,Instamart,Kolkata,SKU05,7,6,12,0,,85.7
+2026-10-10,Instamart,Kochi,SKU01,2,2,4,0,,100
+2026-10-10,Instamart,Kochi,SKU02,2,2,2,0,,100
+2026-10-10,Instamart,Kochi,SKU03,2,2,4,0,,100
+2026-10-10,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-10-10,Instamart,Kochi,SKU05,2,2,2,0,,100
+2026-10-10,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-10-10,Instamart,Coimbatore,SKU02,2,2,2,0,,100
+2026-10-10,Instamart,Coimbatore,SKU03,2,2,4,0,,100
+2026-10-10,Instamart,Coimbatore,SKU04,2,2,4,0,,100
+2026-10-10,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-10-10,BB Now,Delhi,SKU01,5,5,10,0,,100
+2026-10-10,BB Now,Delhi,SKU02,5,5,5,0,,100
+2026-10-10,BB Now,Delhi,SKU03,5,5,5,0,,100
+2026-10-10,BB Now,Delhi,SKU04,5,4,8,0,,80
+2026-10-10,BB Now,Delhi,SKU05,5,5,10,0,,100
+2026-10-10,BB Now,Gurugram,SKU01,2,2,4,0,,100
+2026-10-10,BB Now,Gurugram,SKU02,2,2,4,0,,100
+2026-10-10,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-10-10,BB Now,Gurugram,SKU04,2,2,2,0,,100
+2026-10-10,BB Now,Gurugram,SKU05,2,2,4,0,,100
+2026-10-10,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-10-10,BB Now,Noida,SKU02,2,2,4,0,,100
+2026-10-10,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-10-10,BB Now,Noida,SKU04,2,2,4,0,,100
+2026-10-10,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-10-10,BB Now,Mumbai,SKU01,5,5,10,0,,100
+2026-10-10,BB Now,Mumbai,SKU02,5,4,8,1,56,80
+2026-10-10,BB Now,Mumbai,SKU03,5,5,10,0,,100
+2026-10-10,BB Now,Mumbai,SKU04,5,5,5,0,,100
+2026-10-10,BB Now,Mumbai,SKU05,5,5,5,0,,100
+2026-10-10,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-10-10,BB Now,Thane,SKU02,2,2,2,0,,100
+2026-10-10,BB Now,Thane,SKU03,2,2,2,0,,100
+2026-10-10,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-10-10,BB Now,Thane,SKU05,2,2,4,0,,100
+2026-10-10,BB Now,Pune,SKU01,3,3,6,0,,100
+2026-10-10,BB Now,Pune,SKU02,3,3,6,0,,100
+2026-10-10,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-10-10,BB Now,Pune,SKU04,3,3,3,0,,100
+2026-10-10,BB Now,Pune,SKU05,3,3,3,0,,100
+2026-10-10,BB Now,Ahmedabad,SKU01,2,2,4,0,,100
+2026-10-10,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-10-10,BB Now,Ahmedabad,SKU03,2,2,4,0,,100
+2026-10-10,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-10-10,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-10-10,BB Now,Bangalore,SKU01,5,5,10,0,,100
+2026-10-10,BB Now,Bangalore,SKU02,5,4,8,0,,80
+2026-10-10,BB Now,Bangalore,SKU03,5,4,8,1,56,80
+2026-10-10,BB Now,Bangalore,SKU04,5,5,5,0,,100
+2026-10-10,BB Now,Bangalore,SKU05,5,5,5,0,,100
+2026-10-10,BB Now,Hyderabad,SKU01,4,4,4,0,,100
+2026-10-10,BB Now,Hyderabad,SKU02,4,3,3,1,21,75
+2026-10-10,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-10-10,BB Now,Hyderabad,SKU04,4,4,8,1,56,100
+2026-10-10,BB Now,Hyderabad,SKU05,4,4,8,1,56,100
+2026-10-10,BB Now,Chennai,SKU01,3,3,6,0,,100
+2026-10-10,BB Now,Chennai,SKU02,3,3,3,0,,100
+2026-10-10,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-10-10,BB Now,Chennai,SKU04,3,3,6,0,,100
+2026-10-10,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-10-10,BB Now,Kolkata,SKU01,3,3,3,0,,100
+2026-10-10,BB Now,Kolkata,SKU02,3,3,3,0,,100
+2026-10-10,BB Now,Kolkata,SKU03,3,3,3,0,,100
+2026-10-10,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-10-10,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-10-10,Flipkart Minutes,Delhi,SKU01,4,3,6,1,42,75
+2026-10-10,Flipkart Minutes,Delhi,SKU02,4,3,3,1,21,75
+2026-10-10,Flipkart Minutes,Delhi,SKU03,4,4,8,0,,100
+2026-10-10,Flipkart Minutes,Delhi,SKU04,4,3,3,0,,75
+2026-10-10,Flipkart Minutes,Delhi,SKU05,4,4,8,0,,100
+2026-10-10,Flipkart Minutes,Gurugram,SKU01,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Gurugram,SKU03,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Gurugram,SKU05,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Noida,SKU01,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Noida,SKU02,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Noida,SKU04,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Mumbai,SKU01,4,4,8,0,,100
+2026-10-10,Flipkart Minutes,Mumbai,SKU02,4,4,4,0,,100
+2026-10-10,Flipkart Minutes,Mumbai,SKU03,4,3,3,0,,75
+2026-10-10,Flipkart Minutes,Mumbai,SKU04,4,3,6,0,,75
+2026-10-10,Flipkart Minutes,Mumbai,SKU05,4,4,8,0,,100
+2026-10-10,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Thane,SKU02,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Thane,SKU05,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Pune,SKU01,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Pune,SKU02,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Pune,SKU03,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-10-10,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-10-10,Flipkart Minutes,Bangalore,SKU01,5,5,5,0,,100
+2026-10-10,Flipkart Minutes,Bangalore,SKU02,5,5,5,0,,100
+2026-10-10,Flipkart Minutes,Bangalore,SKU03,5,4,4,0,,80
+2026-10-10,Flipkart Minutes,Bangalore,SKU04,5,5,5,0,,100
+2026-10-10,Flipkart Minutes,Bangalore,SKU05,5,5,5,0,,100
+2026-10-10,Flipkart Minutes,Hyderabad,SKU01,3,3,3,0,,100
+2026-10-10,Flipkart Minutes,Hyderabad,SKU02,3,3,3,1,21,100
+2026-10-10,Flipkart Minutes,Hyderabad,SKU03,3,3,3,0,,100
+2026-10-10,Flipkart Minutes,Hyderabad,SKU04,3,3,3,0,,100
+2026-10-10,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-10-17,Blinkit,Delhi,SKU01,14,13,26,3,60.7,92.9
+2026-10-17,Blinkit,Delhi,SKU02,14,13,26,0,,92.9
+2026-10-17,Blinkit,Delhi,SKU03,14,12,24,1,168,85.7
+2026-10-17,Blinkit,Delhi,SKU04,14,13,13,0,,92.9
+2026-10-17,Blinkit,Delhi,SKU05,14,13,26,0,,92.9
+2026-10-17,Blinkit,Gurugram,SKU01,5,5,10,5,14,100
+2026-10-17,Blinkit,Gurugram,SKU02,5,5,10,1,70,100
+2026-10-17,Blinkit,Gurugram,SKU03,5,5,10,0,,100
+2026-10-17,Blinkit,Gurugram,SKU04,5,4,4,0,,80
+2026-10-17,Blinkit,Gurugram,SKU05,5,5,10,1,70,100
+2026-10-17,Blinkit,Noida,SKU01,5,5,10,1,70,100
+2026-10-17,Blinkit,Noida,SKU02,5,5,10,3,23.3,100
+2026-10-17,Blinkit,Noida,SKU03,5,4,8,0,,80
+2026-10-17,Blinkit,Noida,SKU04,5,4,8,0,,80
+2026-10-17,Blinkit,Noida,SKU05,5,4,4,0,,80
+2026-10-17,Blinkit,Mumbai,SKU01,14,12,12,0,,85.7
+2026-10-17,Blinkit,Mumbai,SKU02,14,12,12,0,,85.7
+2026-10-17,Blinkit,Mumbai,SKU03,14,13,26,1,182,92.9
+2026-10-17,Blinkit,Mumbai,SKU04,14,12,12,0,,85.7
+2026-10-17,Blinkit,Mumbai,SKU05,14,12,24,1,168,85.7
+2026-10-17,Blinkit,Thane,SKU01,4,4,8,0,,100
+2026-10-17,Blinkit,Thane,SKU02,4,3,6,1,42,75
+2026-10-17,Blinkit,Thane,SKU03,4,4,8,0,,100
+2026-10-17,Blinkit,Thane,SKU04,4,4,8,0,,100
+2026-10-17,Blinkit,Thane,SKU05,4,3,6,0,,75
+2026-10-17,Blinkit,Pune,SKU01,8,7,14,0,,87.5
+2026-10-17,Blinkit,Pune,SKU02,8,8,8,5,11.2,100
+2026-10-17,Blinkit,Pune,SKU03,8,7,14,0,,87.5
+2026-10-17,Blinkit,Pune,SKU04,8,7,14,0,,87.5
+2026-10-17,Blinkit,Pune,SKU05,8,8,16,1,112,100
+2026-10-17,Blinkit,Ahmedabad,SKU01,5,5,5,0,,100
+2026-10-17,Blinkit,Ahmedabad,SKU02,5,5,5,0,,100
+2026-10-17,Blinkit,Ahmedabad,SKU03,5,5,5,0,,100
+2026-10-17,Blinkit,Ahmedabad,SKU04,5,5,5,0,,100
+2026-10-17,Blinkit,Ahmedabad,SKU05,5,4,8,0,,80
+2026-10-17,Blinkit,Bangalore,SKU01,15,14,14,1,98,93.3
+2026-10-17,Blinkit,Bangalore,SKU02,15,14,14,1,98,93.3
+2026-10-17,Blinkit,Bangalore,SKU03,15,15,15,1,105,100
+2026-10-17,Blinkit,Bangalore,SKU04,15,13,13,0,,86.7
+2026-10-17,Blinkit,Bangalore,SKU05,15,13,26,0,,86.7
+2026-10-17,Blinkit,Hyderabad,SKU01,11,11,22,1,154,100
+2026-10-17,Blinkit,Hyderabad,SKU02,11,10,20,0,,90.9
+2026-10-17,Blinkit,Hyderabad,SKU03,11,10,10,1,70,90.9
+2026-10-17,Blinkit,Hyderabad,SKU04,11,10,20,0,,90.9
+2026-10-17,Blinkit,Hyderabad,SKU05,11,10,10,0,,90.9
+2026-10-17,Blinkit,Chennai,SKU01,9,8,16,1,112,88.9
+2026-10-17,Blinkit,Chennai,SKU02,9,8,16,2,56,88.9
+2026-10-17,Blinkit,Chennai,SKU03,9,9,18,0,,100
+2026-10-17,Blinkit,Chennai,SKU04,9,8,8,0,,88.9
+2026-10-17,Blinkit,Chennai,SKU05,9,8,16,0,,88.9
+2026-10-17,Blinkit,Kolkata,SKU01,10,9,9,0,,90
+2026-10-17,Blinkit,Kolkata,SKU02,10,9,18,2,63,90
+2026-10-17,Blinkit,Kolkata,SKU03,10,9,18,1,126,90
+2026-10-17,Blinkit,Kolkata,SKU04,10,10,10,1,70,100
+2026-10-17,Blinkit,Kolkata,SKU05,10,9,18,1,126,90
+2026-10-17,Blinkit,Jaipur,SKU01,4,4,4,0,,100
+2026-10-17,Blinkit,Jaipur,SKU02,4,4,8,4,14,100
+2026-10-17,Blinkit,Jaipur,SKU03,4,3,3,0,,75
+2026-10-17,Blinkit,Jaipur,SKU04,4,3,3,0,,75
+2026-10-17,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-10-17,Blinkit,Lucknow,SKU01,4,4,4,1,28,100
+2026-10-17,Blinkit,Lucknow,SKU02,4,4,8,2,28,100
+2026-10-17,Blinkit,Lucknow,SKU03,4,4,4,0,,100
+2026-10-17,Blinkit,Lucknow,SKU04,4,4,4,0,,100
+2026-10-17,Blinkit,Lucknow,SKU05,4,3,6,0,,75
+2026-10-17,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-10-17,Blinkit,Chandigarh,SKU02,3,3,6,0,,100
+2026-10-17,Blinkit,Chandigarh,SKU03,3,3,6,0,,100
+2026-10-17,Blinkit,Chandigarh,SKU04,3,3,6,0,,100
+2026-10-17,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-10-17,Blinkit,Indore,SKU01,3,3,3,1,21,100
+2026-10-17,Blinkit,Indore,SKU02,3,3,6,0,,100
+2026-10-17,Blinkit,Indore,SKU03,3,3,3,1,21,100
+2026-10-17,Blinkit,Indore,SKU04,3,3,6,2,21,100
+2026-10-17,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-10-17,Zepto,Delhi,SKU01,10,9,18,0,,90
+2026-10-17,Zepto,Delhi,SKU02,10,10,10,2,35,100
+2026-10-17,Zepto,Delhi,SKU03,10,9,18,0,,90
+2026-10-17,Zepto,Delhi,SKU04,10,10,20,0,,100
+2026-10-17,Zepto,Delhi,SKU05,10,9,9,0,,90
+2026-10-17,Zepto,Gurugram,SKU01,4,3,6,1,42,75
+2026-10-17,Zepto,Gurugram,SKU02,4,3,6,2,21,75
+2026-10-17,Zepto,Gurugram,SKU03,4,4,8,0,,100
+2026-10-17,Zepto,Gurugram,SKU04,4,3,6,0,,75
+2026-10-17,Zepto,Gurugram,SKU05,4,3,3,0,,75
+2026-10-17,Zepto,Noida,SKU01,3,3,6,0,,100
+2026-10-17,Zepto,Noida,SKU02,3,3,3,0,,100
+2026-10-17,Zepto,Noida,SKU03,3,3,6,0,,100
+2026-10-17,Zepto,Noida,SKU04,3,3,6,0,,100
+2026-10-17,Zepto,Noida,SKU05,3,3,6,1,42,100
+2026-10-17,Zepto,Mumbai,SKU01,11,10,20,2,70,90.9
+2026-10-17,Zepto,Mumbai,SKU02,11,10,20,7,20,90.9
+2026-10-17,Zepto,Mumbai,SKU03,11,9,9,2,31.5,81.8
+2026-10-17,Zepto,Mumbai,SKU04,11,11,22,0,,100
+2026-10-17,Zepto,Mumbai,SKU05,11,10,20,3,46.7,90.9
+2026-10-17,Zepto,Thane,SKU01,3,3,6,0,,100
+2026-10-17,Zepto,Thane,SKU02,3,3,6,0,,100
+2026-10-17,Zepto,Thane,SKU03,3,3,6,0,,100
+2026-10-17,Zepto,Thane,SKU04,3,3,3,0,,100
+2026-10-17,Zepto,Thane,SKU05,3,3,6,0,,100
+2026-10-17,Zepto,Pune,SKU01,6,5,5,0,,83.3
+2026-10-17,Zepto,Pune,SKU02,6,6,12,1,84,100
+2026-10-17,Zepto,Pune,SKU03,6,5,10,0,,83.3
+2026-10-17,Zepto,Pune,SKU04,6,6,12,0,,100
+2026-10-17,Zepto,Pune,SKU05,6,6,6,0,,100
+2026-10-17,Zepto,Ahmedabad,SKU01,4,3,6,0,,75
+2026-10-17,Zepto,Ahmedabad,SKU02,4,4,4,2,14,100
+2026-10-17,Zepto,Ahmedabad,SKU03,4,4,4,0,,100
+2026-10-17,Zepto,Ahmedabad,SKU04,4,4,8,0,,100
+2026-10-17,Zepto,Ahmedabad,SKU05,4,4,8,0,,100
+2026-10-17,Zepto,Bangalore,SKU01,11,11,11,1,77,100
+2026-10-17,Zepto,Bangalore,SKU02,11,10,10,1,70,90.9
+2026-10-17,Zepto,Bangalore,SKU03,11,10,10,0,,90.9
+2026-10-17,Zepto,Bangalore,SKU04,11,10,20,1,140,90.9
+2026-10-17,Zepto,Bangalore,SKU05,11,9,9,0,,81.8
+2026-10-17,Zepto,Hyderabad,SKU01,8,7,14,2,49,87.5
+2026-10-17,Zepto,Hyderabad,SKU02,8,7,7,5,9.8,87.5
+2026-10-17,Zepto,Hyderabad,SKU03,8,7,7,0,,87.5
+2026-10-17,Zepto,Hyderabad,SKU04,8,8,16,2,56,100
+2026-10-17,Zepto,Hyderabad,SKU05,8,7,14,0,,87.5
+2026-10-17,Zepto,Chennai,SKU01,7,6,12,0,,85.7
+2026-10-17,Zepto,Chennai,SKU02,7,6,12,1,84,85.7
+2026-10-17,Zepto,Chennai,SKU03,7,7,14,1,98,100
+2026-10-17,Zepto,Chennai,SKU04,7,7,14,0,,100
+2026-10-17,Zepto,Chennai,SKU05,7,7,7,1,49,100
+2026-10-17,Zepto,Kolkata,SKU01,7,7,7,0,,100
+2026-10-17,Zepto,Kolkata,SKU02,7,7,14,3,32.7,100
+2026-10-17,Zepto,Kolkata,SKU03,7,7,14,0,,100
+2026-10-17,Zepto,Kolkata,SKU04,7,6,6,0,,85.7
+2026-10-17,Zepto,Kolkata,SKU05,7,6,12,1,84,85.7
+2026-10-17,Zepto,Jaipur,SKU01,3,3,6,0,,100
+2026-10-17,Zepto,Jaipur,SKU02,3,3,3,1,21,100
+2026-10-17,Zepto,Jaipur,SKU03,3,3,6,1,42,100
+2026-10-17,Zepto,Jaipur,SKU04,3,3,3,2,10.5,100
+2026-10-17,Zepto,Jaipur,SKU05,3,3,3,0,,100
+2026-10-17,Zepto,Lucknow,SKU01,3,3,3,0,,100
+2026-10-17,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-10-17,Zepto,Lucknow,SKU03,3,3,3,1,21,100
+2026-10-17,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-10-17,Zepto,Lucknow,SKU05,3,3,6,0,,100
+2026-10-17,Instamart,Delhi,SKU01,9,8,8,1,56,88.9
+2026-10-17,Instamart,Delhi,SKU02,9,9,9,0,,100
+2026-10-17,Instamart,Delhi,SKU03,9,9,18,1,126,100
+2026-10-17,Instamart,Delhi,SKU04,9,9,9,0,,100
+2026-10-17,Instamart,Delhi,SKU05,9,8,16,0,,88.9
+2026-10-17,Instamart,Gurugram,SKU01,4,4,4,1,28,100
+2026-10-17,Instamart,Gurugram,SKU02,4,3,6,2,21,75
+2026-10-17,Instamart,Gurugram,SKU03,4,3,3,1,21,75
+2026-10-17,Instamart,Gurugram,SKU04,4,4,4,1,28,100
+2026-10-17,Instamart,Gurugram,SKU05,4,4,8,0,,100
+2026-10-17,Instamart,Noida,SKU01,3,3,6,0,,100
+2026-10-17,Instamart,Noida,SKU02,3,3,6,0,,100
+2026-10-17,Instamart,Noida,SKU03,3,3,3,0,,100
+2026-10-17,Instamart,Noida,SKU04,3,3,3,0,,100
+2026-10-17,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-10-17,Instamart,Mumbai,SKU01,10,9,18,1,126,90
+2026-10-17,Instamart,Mumbai,SKU02,10,8,16,2,56,80
+2026-10-17,Instamart,Mumbai,SKU03,10,9,18,0,,90
+2026-10-17,Instamart,Mumbai,SKU04,10,9,9,1,63,90
+2026-10-17,Instamart,Mumbai,SKU05,10,9,9,0,,90
+2026-10-17,Instamart,Thane,SKU01,3,3,6,0,,100
+2026-10-17,Instamart,Thane,SKU02,3,3,3,0,,100
+2026-10-17,Instamart,Thane,SKU03,3,3,6,0,,100
+2026-10-17,Instamart,Thane,SKU04,3,3,6,0,,100
+2026-10-17,Instamart,Thane,SKU05,3,3,3,0,,100
+2026-10-17,Instamart,Pune,SKU01,6,5,10,0,,83.3
+2026-10-17,Instamart,Pune,SKU02,6,6,12,2,42,100
+2026-10-17,Instamart,Pune,SKU03,6,6,6,0,,100
+2026-10-17,Instamart,Pune,SKU04,6,6,12,0,,100
+2026-10-17,Instamart,Pune,SKU05,6,6,12,0,,100
+2026-10-17,Instamart,Ahmedabad,SKU01,3,3,3,0,,100
+2026-10-17,Instamart,Ahmedabad,SKU02,3,3,6,1,42,100
+2026-10-17,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-10-17,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-10-17,Instamart,Ahmedabad,SKU05,3,3,6,0,,100
+2026-10-17,Instamart,Bangalore,SKU01,11,10,10,2,35,90.9
+2026-10-17,Instamart,Bangalore,SKU02,11,10,20,1,140,90.9
+2026-10-17,Instamart,Bangalore,SKU03,11,10,10,0,,90.9
+2026-10-17,Instamart,Bangalore,SKU04,11,9,18,0,,81.8
+2026-10-17,Instamart,Bangalore,SKU05,11,10,20,1,140,90.9
+2026-10-17,Instamart,Hyderabad,SKU01,8,8,16,0,,100
+2026-10-17,Instamart,Hyderabad,SKU02,8,7,14,0,,87.5
+2026-10-17,Instamart,Hyderabad,SKU03,8,7,14,0,,87.5
+2026-10-17,Instamart,Hyderabad,SKU04,8,7,14,0,,87.5
+2026-10-17,Instamart,Hyderabad,SKU05,8,8,8,0,,100
+2026-10-17,Instamart,Chennai,SKU01,6,5,5,0,,83.3
+2026-10-17,Instamart,Chennai,SKU02,6,6,12,0,,100
+2026-10-17,Instamart,Chennai,SKU03,6,6,12,0,,100
+2026-10-17,Instamart,Chennai,SKU04,6,6,12,0,,100
+2026-10-17,Instamart,Chennai,SKU05,6,6,6,0,,100
+2026-10-17,Instamart,Kolkata,SKU01,7,7,7,0,,100
+2026-10-17,Instamart,Kolkata,SKU02,7,6,12,0,,85.7
+2026-10-17,Instamart,Kolkata,SKU03,7,6,12,0,,85.7
+2026-10-17,Instamart,Kolkata,SKU04,7,7,14,0,,100
+2026-10-17,Instamart,Kolkata,SKU05,7,7,7,0,,100
+2026-10-17,Instamart,Kochi,SKU01,2,2,2,0,,100
+2026-10-17,Instamart,Kochi,SKU02,2,2,4,0,,100
+2026-10-17,Instamart,Kochi,SKU03,2,2,2,0,,100
+2026-10-17,Instamart,Kochi,SKU04,2,2,4,0,,100
+2026-10-17,Instamart,Kochi,SKU05,2,2,4,0,,100
+2026-10-17,Instamart,Coimbatore,SKU01,2,2,2,0,,100
+2026-10-17,Instamart,Coimbatore,SKU02,2,2,4,0,,100
+2026-10-17,Instamart,Coimbatore,SKU03,2,2,2,0,,100
+2026-10-17,Instamart,Coimbatore,SKU04,2,2,4,0,,100
+2026-10-17,Instamart,Coimbatore,SKU05,2,2,2,0,,100
+2026-10-17,BB Now,Delhi,SKU01,5,4,8,0,,80
+2026-10-17,BB Now,Delhi,SKU02,5,5,10,0,,100
+2026-10-17,BB Now,Delhi,SKU03,5,4,4,0,,80
+2026-10-17,BB Now,Delhi,SKU04,5,5,10,0,,100
+2026-10-17,BB Now,Delhi,SKU05,5,4,4,0,,80
+2026-10-17,BB Now,Gurugram,SKU01,2,2,2,0,,100
+2026-10-17,BB Now,Gurugram,SKU02,2,2,2,1,14,100
+2026-10-17,BB Now,Gurugram,SKU03,2,2,4,0,,100
+2026-10-17,BB Now,Gurugram,SKU04,2,2,4,0,,100
+2026-10-17,BB Now,Gurugram,SKU05,2,2,2,0,,100
+2026-10-17,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-10-17,BB Now,Noida,SKU02,2,2,2,2,7,100
+2026-10-17,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-10-17,BB Now,Noida,SKU04,2,2,4,1,28,100
+2026-10-17,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-10-17,BB Now,Mumbai,SKU01,5,4,4,0,,80
+2026-10-17,BB Now,Mumbai,SKU02,5,5,10,3,23.3,100
+2026-10-17,BB Now,Mumbai,SKU03,5,5,10,0,,100
+2026-10-17,BB Now,Mumbai,SKU04,5,4,4,1,28,80
+2026-10-17,BB Now,Mumbai,SKU05,5,5,10,0,,100
+2026-10-17,BB Now,Thane,SKU01,2,2,4,0,,100
+2026-10-17,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-10-17,BB Now,Thane,SKU03,2,2,4,0,,100
+2026-10-17,BB Now,Thane,SKU04,2,2,4,0,,100
+2026-10-17,BB Now,Thane,SKU05,2,2,2,0,,100
+2026-10-17,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-10-17,BB Now,Pune,SKU02,3,3,3,0,,100
+2026-10-17,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-10-17,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-10-17,BB Now,Pune,SKU05,3,3,3,0,,100
+2026-10-17,BB Now,Ahmedabad,SKU01,2,2,2,0,,100
+2026-10-17,BB Now,Ahmedabad,SKU02,2,2,2,0,,100
+2026-10-17,BB Now,Ahmedabad,SKU03,2,2,2,0,,100
+2026-10-17,BB Now,Ahmedabad,SKU04,2,2,2,0,,100
+2026-10-17,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-10-17,BB Now,Bangalore,SKU01,5,5,10,0,,100
+2026-10-17,BB Now,Bangalore,SKU02,5,5,5,0,,100
+2026-10-17,BB Now,Bangalore,SKU03,5,4,4,1,28,80
+2026-10-17,BB Now,Bangalore,SKU04,5,5,5,0,,100
+2026-10-17,BB Now,Bangalore,SKU05,5,5,5,0,,100
+2026-10-17,BB Now,Hyderabad,SKU01,4,4,8,0,,100
+2026-10-17,BB Now,Hyderabad,SKU02,4,4,4,0,,100
+2026-10-17,BB Now,Hyderabad,SKU03,4,4,8,0,,100
+2026-10-17,BB Now,Hyderabad,SKU04,4,4,8,0,,100
+2026-10-17,BB Now,Hyderabad,SKU05,4,4,8,0,,100
+2026-10-17,BB Now,Chennai,SKU01,3,3,3,0,,100
+2026-10-17,BB Now,Chennai,SKU02,3,3,6,1,42,100
+2026-10-17,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-10-17,BB Now,Chennai,SKU04,3,3,6,0,,100
+2026-10-17,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-10-17,BB Now,Kolkata,SKU01,3,3,6,1,42,100
+2026-10-17,BB Now,Kolkata,SKU02,3,3,6,2,21,100
+2026-10-17,BB Now,Kolkata,SKU03,3,3,6,0,,100
+2026-10-17,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-10-17,BB Now,Kolkata,SKU05,3,3,3,0,,100
+2026-10-17,Flipkart Minutes,Delhi,SKU01,4,4,4,0,,100
+2026-10-17,Flipkart Minutes,Delhi,SKU02,4,4,8,0,,100
+2026-10-17,Flipkart Minutes,Delhi,SKU03,4,3,6,0,,75
+2026-10-17,Flipkart Minutes,Delhi,SKU04,4,4,4,0,,100
+2026-10-17,Flipkart Minutes,Delhi,SKU05,4,4,8,0,,100
+2026-10-17,Flipkart Minutes,Gurugram,SKU01,2,2,4,2,14,100
+2026-10-17,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Gurugram,SKU03,2,2,2,1,14,100
+2026-10-17,Flipkart Minutes,Gurugram,SKU04,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Noida,SKU01,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Noida,SKU02,2,2,4,1,28,100
+2026-10-17,Flipkart Minutes,Noida,SKU03,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Noida,SKU04,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Mumbai,SKU01,4,4,8,0,,100
+2026-10-17,Flipkart Minutes,Mumbai,SKU02,4,4,8,1,56,100
+2026-10-17,Flipkart Minutes,Mumbai,SKU03,4,4,4,0,,100
+2026-10-17,Flipkart Minutes,Mumbai,SKU04,4,3,3,0,,75
+2026-10-17,Flipkart Minutes,Mumbai,SKU05,4,3,3,0,,75
+2026-10-17,Flipkart Minutes,Thane,SKU01,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Thane,SKU02,2,2,2,1,14,100
+2026-10-17,Flipkart Minutes,Thane,SKU03,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Thane,SKU04,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Thane,SKU05,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Pune,SKU01,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Pune,SKU02,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Pune,SKU03,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Pune,SKU04,2,2,2,0,,100
+2026-10-17,Flipkart Minutes,Pune,SKU05,2,2,4,0,,100
+2026-10-17,Flipkart Minutes,Bangalore,SKU01,5,4,4,0,,80
+2026-10-17,Flipkart Minutes,Bangalore,SKU02,5,5,5,1,35,100
+2026-10-17,Flipkart Minutes,Bangalore,SKU03,5,5,5,1,35,100
+2026-10-17,Flipkart Minutes,Bangalore,SKU04,5,5,5,0,,100
+2026-10-17,Flipkart Minutes,Bangalore,SKU05,5,5,10,0,,100
+2026-10-17,Flipkart Minutes,Hyderabad,SKU01,3,3,6,0,,100
+2026-10-17,Flipkart Minutes,Hyderabad,SKU02,3,3,3,0,,100
+2026-10-17,Flipkart Minutes,Hyderabad,SKU03,3,3,3,0,,100
+2026-10-17,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-10-17,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-10-24,Blinkit,Delhi,SKU01,14,12,12,2,42,85.7
+2026-10-24,Blinkit,Delhi,SKU02,14,13,13,6,15.2,92.9
+2026-10-24,Blinkit,Delhi,SKU03,14,12,12,2,42,85.7
+2026-10-24,Blinkit,Delhi,SKU04,14,12,12,1,84,85.7
+2026-10-24,Blinkit,Delhi,SKU05,14,13,13,0,,92.9
+2026-10-24,Blinkit,Gurugram,SKU01,5,5,5,2,17.5,100
+2026-10-24,Blinkit,Gurugram,SKU02,5,5,5,1,35,100
+2026-10-24,Blinkit,Gurugram,SKU03,5,4,8,3,18.7,80
+2026-10-24,Blinkit,Gurugram,SKU04,5,5,5,0,,100
+2026-10-24,Blinkit,Gurugram,SKU05,5,4,4,0,,80
+2026-10-24,Blinkit,Noida,SKU01,5,5,5,1,35,100
+2026-10-24,Blinkit,Noida,SKU02,5,4,4,3,9.3,80
+2026-10-24,Blinkit,Noida,SKU03,5,5,5,1,35,100
+2026-10-24,Blinkit,Noida,SKU04,5,5,10,1,70,100
+2026-10-24,Blinkit,Noida,SKU05,5,4,8,1,56,80
+2026-10-24,Blinkit,Mumbai,SKU01,14,12,24,1,168,85.7
+2026-10-24,Blinkit,Mumbai,SKU02,14,13,13,4,22.8,92.9
+2026-10-24,Blinkit,Mumbai,SKU03,14,13,13,2,45.5,92.9
+2026-10-24,Blinkit,Mumbai,SKU04,14,12,24,2,84,85.7
+2026-10-24,Blinkit,Mumbai,SKU05,14,12,24,1,168,85.7
+2026-10-24,Blinkit,Thane,SKU01,4,4,4,1,28,100
+2026-10-24,Blinkit,Thane,SKU02,4,4,8,0,,100
+2026-10-24,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-10-24,Blinkit,Thane,SKU04,4,4,4,1,28,100
+2026-10-24,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-10-24,Blinkit,Pune,SKU01,8,7,14,1,98,87.5
+2026-10-24,Blinkit,Pune,SKU02,8,7,7,6,8.2,87.5
+2026-10-24,Blinkit,Pune,SKU03,8,7,7,1,49,87.5
+2026-10-24,Blinkit,Pune,SKU04,8,7,14,0,,87.5
+2026-10-24,Blinkit,Pune,SKU05,8,7,7,0,,87.5
+2026-10-24,Blinkit,Ahmedabad,SKU01,5,5,10,0,,100
+2026-10-24,Blinkit,Ahmedabad,SKU02,5,5,10,4,17.5,100
+2026-10-24,Blinkit,Ahmedabad,SKU03,5,4,4,0,,80
+2026-10-24,Blinkit,Ahmedabad,SKU04,5,5,5,0,,100
+2026-10-24,Blinkit,Ahmedabad,SKU05,5,5,10,1,70,100
+2026-10-24,Blinkit,Bangalore,SKU01,15,14,28,4,49,93.3
+2026-10-24,Blinkit,Bangalore,SKU02,15,14,14,2,49,93.3
+2026-10-24,Blinkit,Bangalore,SKU03,15,14,28,1,196,93.3
+2026-10-24,Blinkit,Bangalore,SKU04,15,13,26,2,91,86.7
+2026-10-24,Blinkit,Bangalore,SKU05,15,14,14,1,98,93.3
+2026-10-24,Blinkit,Hyderabad,SKU01,11,11,22,2,77,100
+2026-10-24,Blinkit,Hyderabad,SKU02,11,10,10,8,8.8,90.9
+2026-10-24,Blinkit,Hyderabad,SKU03,11,10,10,2,35,90.9
+2026-10-24,Blinkit,Hyderabad,SKU04,11,9,9,0,,81.8
+2026-10-24,Blinkit,Hyderabad,SKU05,11,11,22,2,77,100
+2026-10-24,Blinkit,Chennai,SKU01,9,8,8,4,14,88.9
+2026-10-24,Blinkit,Chennai,SKU02,9,9,18,2,63,100
+2026-10-24,Blinkit,Chennai,SKU03,9,8,8,1,56,88.9
+2026-10-24,Blinkit,Chennai,SKU04,9,8,8,1,56,88.9
+2026-10-24,Blinkit,Chennai,SKU05,9,9,18,0,,100
+2026-10-24,Blinkit,Kolkata,SKU01,10,9,18,1,126,90
+2026-10-24,Blinkit,Kolkata,SKU02,10,9,9,1,63,90
+2026-10-24,Blinkit,Kolkata,SKU03,10,9,18,3,42,90
+2026-10-24,Blinkit,Kolkata,SKU04,10,10,20,1,140,100
+2026-10-24,Blinkit,Kolkata,SKU05,10,9,9,1,63,90
+2026-10-24,Blinkit,Jaipur,SKU01,4,4,8,1,56,100
+2026-10-24,Blinkit,Jaipur,SKU02,4,3,3,1,21,75
+2026-10-24,Blinkit,Jaipur,SKU03,4,4,8,1,56,100
+2026-10-24,Blinkit,Jaipur,SKU04,4,4,4,0,,100
+2026-10-24,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-10-24,Blinkit,Lucknow,SKU01,4,3,3,0,,75
+2026-10-24,Blinkit,Lucknow,SKU02,4,3,6,0,,75
+2026-10-24,Blinkit,Lucknow,SKU03,4,4,8,0,,100
+2026-10-24,Blinkit,Lucknow,SKU04,4,4,8,0,,100
+2026-10-24,Blinkit,Lucknow,SKU05,4,4,4,0,,100
+2026-10-24,Blinkit,Chandigarh,SKU01,3,3,3,0,,100
+2026-10-24,Blinkit,Chandigarh,SKU02,3,3,3,2,10.5,100
+2026-10-24,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-10-24,Blinkit,Chandigarh,SKU04,3,3,3,1,21,100
+2026-10-24,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-10-24,Blinkit,Indore,SKU01,3,3,3,1,21,100
+2026-10-24,Blinkit,Indore,SKU02,3,3,3,0,,100
+2026-10-24,Blinkit,Indore,SKU03,3,3,6,0,,100
+2026-10-24,Blinkit,Indore,SKU04,3,3,6,0,,100
+2026-10-24,Blinkit,Indore,SKU05,3,3,6,1,42,100
+2026-10-24,Zepto,Delhi,SKU01,10,9,9,5,12.6,90
+2026-10-24,Zepto,Delhi,SKU02,10,9,18,3,42,90
+2026-10-24,Zepto,Delhi,SKU03,10,10,10,3,23.3,100
+2026-10-24,Zepto,Delhi,SKU04,10,9,9,0,,90
+2026-10-24,Zepto,Delhi,SKU05,10,9,18,0,,90
+2026-10-24,Zepto,Gurugram,SKU01,4,3,3,0,,75
+2026-10-24,Zepto,Gurugram,SKU02,4,3,3,0,,75
+2026-10-24,Zepto,Gurugram,SKU03,4,4,8,0,,100
+2026-10-24,Zepto,Gurugram,SKU04,4,4,4,0,,100
+2026-10-24,Zepto,Gurugram,SKU05,4,3,3,0,,75
+2026-10-24,Zepto,Noida,SKU01,3,3,6,0,,100
+2026-10-24,Zepto,Noida,SKU02,3,3,3,1,21,100
+2026-10-24,Zepto,Noida,SKU03,3,3,3,1,21,100
+2026-10-24,Zepto,Noida,SKU04,3,3,3,0,,100
+2026-10-24,Zepto,Noida,SKU05,3,3,6,0,,100
+2026-10-24,Zepto,Mumbai,SKU01,11,10,10,6,11.7,90.9
+2026-10-24,Zepto,Mumbai,SKU02,11,9,18,3,42,81.8
+2026-10-24,Zepto,Mumbai,SKU03,11,10,20,0,,90.9
+2026-10-24,Zepto,Mumbai,SKU04,11,10,10,1,70,90.9
+2026-10-24,Zepto,Mumbai,SKU05,11,11,22,0,,100
+2026-10-24,Zepto,Thane,SKU01,3,3,3,0,,100
+2026-10-24,Zepto,Thane,SKU02,3,3,3,0,,100
+2026-10-24,Zepto,Thane,SKU03,3,3,6,2,21,100
+2026-10-24,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-10-24,Zepto,Thane,SKU05,3,3,6,1,42,100
+2026-10-24,Zepto,Pune,SKU01,6,5,5,1,35,83.3
+2026-10-24,Zepto,Pune,SKU02,6,6,6,4,10.5,100
+2026-10-24,Zepto,Pune,SKU03,6,5,10,1,70,83.3
+2026-10-24,Zepto,Pune,SKU04,6,6,12,0,,100
+2026-10-24,Zepto,Pune,SKU05,6,5,10,0,,83.3
+2026-10-24,Zepto,Ahmedabad,SKU01,4,4,8,2,28,100
+2026-10-24,Zepto,Ahmedabad,SKU02,4,4,4,2,14,100
+2026-10-24,Zepto,Ahmedabad,SKU03,4,3,6,2,21,75
+2026-10-24,Zepto,Ahmedabad,SKU04,4,4,8,0,,100
+2026-10-24,Zepto,Ahmedabad,SKU05,4,3,6,0,,75
+2026-10-24,Zepto,Bangalore,SKU01,11,9,18,4,31.5,81.8
+2026-10-24,Zepto,Bangalore,SKU02,11,9,18,2,63,81.8
+2026-10-24,Zepto,Bangalore,SKU03,11,10,10,2,35,90.9
+2026-10-24,Zepto,Bangalore,SKU04,11,9,18,1,126,81.8
+2026-10-24,Zepto,Bangalore,SKU05,11,10,10,2,35,90.9
+2026-10-24,Zepto,Hyderabad,SKU01,8,8,8,2,28,100
+2026-10-24,Zepto,Hyderabad,SKU02,8,7,7,1,49,87.5
+2026-10-24,Zepto,Hyderabad,SKU03,8,7,7,0,,87.5
+2026-10-24,Zepto,Hyderabad,SKU04,8,8,8,0,,100
+2026-10-24,Zepto,Hyderabad,SKU05,8,8,8,0,,100
+2026-10-24,Zepto,Chennai,SKU01,7,6,12,3,28,85.7
+2026-10-24,Zepto,Chennai,SKU02,7,7,14,0,,100
+2026-10-24,Zepto,Chennai,SKU03,7,7,14,2,49,100
+2026-10-24,Zepto,Chennai,SKU04,7,7,7,0,,100
+2026-10-24,Zepto,Chennai,SKU05,7,7,7,1,49,100
+2026-10-24,Zepto,Kolkata,SKU01,7,6,12,1,84,85.7
+2026-10-24,Zepto,Kolkata,SKU02,7,7,14,2,49,100
+2026-10-24,Zepto,Kolkata,SKU03,7,6,12,1,84,85.7
+2026-10-24,Zepto,Kolkata,SKU04,7,6,12,0,,85.7
+2026-10-24,Zepto,Kolkata,SKU05,7,7,14,0,,100
+2026-10-24,Zepto,Jaipur,SKU01,3,3,6,0,,100
+2026-10-24,Zepto,Jaipur,SKU02,3,3,6,0,,100
+2026-10-24,Zepto,Jaipur,SKU03,3,3,3,0,,100
+2026-10-24,Zepto,Jaipur,SKU04,3,3,3,0,,100
+2026-10-24,Zepto,Jaipur,SKU05,3,3,3,0,,100
+2026-10-24,Zepto,Lucknow,SKU01,3,3,6,1,42,100
+2026-10-24,Zepto,Lucknow,SKU02,3,3,3,0,,100
+2026-10-24,Zepto,Lucknow,SKU03,3,3,3,2,10.5,100
+2026-10-24,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-10-24,Zepto,Lucknow,SKU05,3,3,3,2,10.5,100
+2026-10-24,Instamart,Delhi,SKU01,9,9,18,3,42,100
+2026-10-24,Instamart,Delhi,SKU02,9,9,18,2,63,100
+2026-10-24,Instamart,Delhi,SKU03,9,8,8,1,56,88.9
+2026-10-24,Instamart,Delhi,SKU04,9,8,16,1,112,88.9
+2026-10-24,Instamart,Delhi,SKU05,9,8,16,4,28,88.9
+2026-10-24,Instamart,Gurugram,SKU01,4,4,8,0,,100
+2026-10-24,Instamart,Gurugram,SKU02,4,4,4,0,,100
+2026-10-24,Instamart,Gurugram,SKU03,4,3,6,0,,75
+2026-10-24,Instamart,Gurugram,SKU04,4,4,4,0,,100
+2026-10-24,Instamart,Gurugram,SKU05,4,3,6,0,,75
+2026-10-24,Instamart,Noida,SKU01,3,3,3,1,21,100
+2026-10-24,Instamart,Noida,SKU02,3,3,6,0,,100
+2026-10-24,Instamart,Noida,SKU03,3,3,6,0,,100
+2026-10-24,Instamart,Noida,SKU04,3,3,6,0,,100
+2026-10-24,Instamart,Noida,SKU05,3,3,3,0,,100
+2026-10-24,Instamart,Mumbai,SKU01,10,10,10,1,70,100
+2026-10-24,Instamart,Mumbai,SKU02,10,10,10,3,23.3,100
+2026-10-24,Instamart,Mumbai,SKU03,10,10,10,0,,100
+2026-10-24,Instamart,Mumbai,SKU04,10,9,18,1,126,90
+2026-10-24,Instamart,Mumbai,SKU05,10,10,10,0,,100
+2026-10-24,Instamart,Thane,SKU01,3,3,6,0,,100
+2026-10-24,Instamart,Thane,SKU02,3,3,3,0,,100
+2026-10-24,Instamart,Thane,SKU03,3,3,3,1,21,100
+2026-10-24,Instamart,Thane,SKU04,3,3,3,0,,100
+2026-10-24,Instamart,Thane,SKU05,3,3,3,0,,100
+2026-10-24,Instamart,Pune,SKU01,6,5,10,1,70,83.3
+2026-10-24,Instamart,Pune,SKU02,6,6,6,1,42,100
+2026-10-24,Instamart,Pune,SKU03,6,6,6,0,,100
+2026-10-24,Instamart,Pune,SKU04,6,5,10,0,,83.3
+2026-10-24,Instamart,Pune,SKU05,6,6,12,1,84,100
+2026-10-24,Instamart,Ahmedabad,SKU01,3,3,3,2,10.5,100
+2026-10-24,Instamart,Ahmedabad,SKU02,3,3,3,2,10.5,100
+2026-10-24,Instamart,Ahmedabad,SKU03,3,3,3,2,10.5,100
+2026-10-24,Instamart,Ahmedabad,SKU04,3,3,6,0,,100
+2026-10-24,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-10-24,Instamart,Bangalore,SKU01,11,11,22,0,,100
+2026-10-24,Instamart,Bangalore,SKU02,11,9,9,3,21,81.8
+2026-10-24,Instamart,Bangalore,SKU03,11,11,11,3,25.7,100
+2026-10-24,Instamart,Bangalore,SKU04,11,10,20,0,,90.9
+2026-10-24,Instamart,Bangalore,SKU05,11,11,11,0,,100
+2026-10-24,Instamart,Hyderabad,SKU01,8,7,14,0,,87.5
+2026-10-24,Instamart,Hyderabad,SKU02,8,7,14,0,,87.5
+2026-10-24,Instamart,Hyderabad,SKU03,8,8,16,0,,100
+2026-10-24,Instamart,Hyderabad,SKU04,8,7,7,1,49,87.5
+2026-10-24,Instamart,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-10-24,Instamart,Chennai,SKU01,6,6,6,0,,100
+2026-10-24,Instamart,Chennai,SKU02,6,5,10,1,70,83.3
+2026-10-24,Instamart,Chennai,SKU03,6,5,5,2,17.5,83.3
+2026-10-24,Instamart,Chennai,SKU04,6,5,10,2,35,83.3
+2026-10-24,Instamart,Chennai,SKU05,6,5,5,2,17.5,83.3
+2026-10-24,Instamart,Kolkata,SKU01,7,7,14,0,,100
+2026-10-24,Instamart,Kolkata,SKU02,7,7,14,0,,100
+2026-10-24,Instamart,Kolkata,SKU03,7,6,12,0,,85.7
+2026-10-24,Instamart,Kolkata,SKU04,7,7,14,0,,100
+2026-10-24,Instamart,Kolkata,SKU05,7,7,14,0,,100
+2026-10-24,Instamart,Kochi,SKU01,2,2,2,0,,100
+2026-10-24,Instamart,Kochi,SKU02,2,2,2,1,14,100
+2026-10-24,Instamart,Kochi,SKU03,2,2,4,0,,100
+2026-10-24,Instamart,Kochi,SKU04,2,2,2,0,,100
+2026-10-24,Instamart,Kochi,SKU05,2,2,4,0,,100
+2026-10-24,Instamart,Coimbatore,SKU01,2,2,4,0,,100
+2026-10-24,Instamart,Coimbatore,SKU02,2,2,2,0,,100
+2026-10-24,Instamart,Coimbatore,SKU03,2,2,4,1,28,100
+2026-10-24,Instamart,Coimbatore,SKU04,2,2,2,0,,100
+2026-10-24,Instamart,Coimbatore,SKU05,2,2,2,0,,100
+2026-10-24,BB Now,Delhi,SKU01,5,4,4,0,,80
+2026-10-24,BB Now,Delhi,SKU02,5,5,5,0,,100
+2026-10-24,BB Now,Delhi,SKU03,5,5,10,1,70,100
+2026-10-24,BB Now,Delhi,SKU04,5,4,8,0,,80
+2026-10-24,BB Now,Delhi,SKU05,5,5,5,1,35,100
+2026-10-24,BB Now,Gurugram,SKU01,2,2,4,0,,100
+2026-10-24,BB Now,Gurugram,SKU02,2,2,2,0,,100
+2026-10-24,BB Now,Gurugram,SKU03,2,2,2,0,,100
+2026-10-24,BB Now,Gurugram,SKU04,2,2,4,1,28,100
+2026-10-24,BB Now,Gurugram,SKU05,2,2,4,1,28,100
+2026-10-24,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-10-24,BB Now,Noida,SKU02,2,2,2,0,,100
+2026-10-24,BB Now,Noida,SKU03,2,2,4,0,,100
+2026-10-24,BB Now,Noida,SKU04,2,2,4,0,,100
+2026-10-24,BB Now,Noida,SKU05,2,2,4,0,,100
+2026-10-24,BB Now,Mumbai,SKU01,5,4,8,0,,80
+2026-10-24,BB Now,Mumbai,SKU02,5,5,10,0,,100
+2026-10-24,BB Now,Mumbai,SKU03,5,4,8,0,,80
+2026-10-24,BB Now,Mumbai,SKU04,5,5,5,0,,100
+2026-10-24,BB Now,Mumbai,SKU05,5,4,8,0,,80
+2026-10-24,BB Now,Thane,SKU01,2,2,2,0,,100
+2026-10-24,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-10-24,BB Now,Thane,SKU03,2,2,2,0,,100
+2026-10-24,BB Now,Thane,SKU04,2,2,2,0,,100
+2026-10-24,BB Now,Thane,SKU05,2,2,4,0,,100
+2026-10-24,BB Now,Pune,SKU01,3,3,3,1,21,100
+2026-10-24,BB Now,Pune,SKU02,3,3,3,0,,100
+2026-10-24,BB Now,Pune,SKU03,3,3,6,1,42,100
+2026-10-24,BB Now,Pune,SKU04,3,3,6,0,,100
+2026-10-24,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-10-24,BB Now,Ahmedabad,SKU01,2,2,4,1,28,100
+2026-10-24,BB Now,Ahmedabad,SKU02,2,2,4,1,28,100
+2026-10-24,BB Now,Ahmedabad,SKU03,2,2,2,0,,100
+2026-10-24,BB Now,Ahmedabad,SKU04,2,2,4,0,,100
+2026-10-24,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-10-24,BB Now,Bangalore,SKU01,5,5,10,1,70,100
+2026-10-24,BB Now,Bangalore,SKU02,5,5,10,3,23.3,100
+2026-10-24,BB Now,Bangalore,SKU03,5,4,8,1,56,80
+2026-10-24,BB Now,Bangalore,SKU04,5,5,5,1,35,100
+2026-10-24,BB Now,Bangalore,SKU05,5,5,10,0,,100
+2026-10-24,BB Now,Hyderabad,SKU01,4,4,4,2,14,100
+2026-10-24,BB Now,Hyderabad,SKU02,4,3,6,1,42,75
+2026-10-24,BB Now,Hyderabad,SKU03,4,4,4,0,,100
+2026-10-24,BB Now,Hyderabad,SKU04,4,4,8,0,,100
+2026-10-24,BB Now,Hyderabad,SKU05,4,3,3,1,21,75
+2026-10-24,BB Now,Chennai,SKU01,3,3,3,0,,100
+2026-10-24,BB Now,Chennai,SKU02,3,3,3,1,21,100
+2026-10-24,BB Now,Chennai,SKU03,3,3,3,0,,100
+2026-10-24,BB Now,Chennai,SKU04,3,3,3,0,,100
+2026-10-24,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-10-24,BB Now,Kolkata,SKU01,3,3,3,3,7,100
+2026-10-24,BB Now,Kolkata,SKU02,3,3,3,1,21,100
+2026-10-24,BB Now,Kolkata,SKU03,3,3,3,2,10.5,100
+2026-10-24,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-10-24,BB Now,Kolkata,SKU05,3,3,6,1,42,100
+2026-10-24,Flipkart Minutes,Delhi,SKU01,4,4,4,0,,100
+2026-10-24,Flipkart Minutes,Delhi,SKU02,4,3,3,0,,75
+2026-10-24,Flipkart Minutes,Delhi,SKU03,4,4,4,0,,100
+2026-10-24,Flipkart Minutes,Delhi,SKU04,4,4,8,0,,100
+2026-10-24,Flipkart Minutes,Delhi,SKU05,4,4,8,0,,100
+2026-10-24,Flipkart Minutes,Gurugram,SKU01,2,2,2,1,14,100
+2026-10-24,Flipkart Minutes,Gurugram,SKU02,2,2,4,0,,100
+2026-10-24,Flipkart Minutes,Gurugram,SKU03,2,2,4,0,,100
+2026-10-24,Flipkart Minutes,Gurugram,SKU04,2,2,4,0,,100
+2026-10-24,Flipkart Minutes,Gurugram,SKU05,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Noida,SKU01,2,2,2,1,14,100
+2026-10-24,Flipkart Minutes,Noida,SKU02,2,2,4,2,14,100
+2026-10-24,Flipkart Minutes,Noida,SKU03,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Noida,SKU04,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Noida,SKU05,2,2,4,0,,100
+2026-10-24,Flipkart Minutes,Mumbai,SKU01,4,3,3,0,,75
+2026-10-24,Flipkart Minutes,Mumbai,SKU02,4,4,4,1,28,100
+2026-10-24,Flipkart Minutes,Mumbai,SKU03,4,4,4,0,,100
+2026-10-24,Flipkart Minutes,Mumbai,SKU04,4,4,8,0,,100
+2026-10-24,Flipkart Minutes,Mumbai,SKU05,4,4,8,0,,100
+2026-10-24,Flipkart Minutes,Thane,SKU01,2,2,4,2,14,100
+2026-10-24,Flipkart Minutes,Thane,SKU02,2,2,4,3,9.3,100
+2026-10-24,Flipkart Minutes,Thane,SKU03,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-10-24,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Pune,SKU01,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Pune,SKU02,2,2,2,1,14,100
+2026-10-24,Flipkart Minutes,Pune,SKU03,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-10-24,Flipkart Minutes,Pune,SKU05,2,2,2,0,,100
+2026-10-24,Flipkart Minutes,Bangalore,SKU01,5,5,5,0,,100
+2026-10-24,Flipkart Minutes,Bangalore,SKU02,5,4,4,0,,80
+2026-10-24,Flipkart Minutes,Bangalore,SKU03,5,5,5,1,35,100
+2026-10-24,Flipkart Minutes,Bangalore,SKU04,5,4,8,0,,80
+2026-10-24,Flipkart Minutes,Bangalore,SKU05,5,5,5,1,35,100
+2026-10-24,Flipkart Minutes,Hyderabad,SKU01,3,3,3,0,,100
+2026-10-24,Flipkart Minutes,Hyderabad,SKU02,3,3,3,0,,100
+2026-10-24,Flipkart Minutes,Hyderabad,SKU03,3,3,3,0,,100
+2026-10-24,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-10-24,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100
+2026-10-31,Blinkit,Delhi,SKU01,14,12,12,1,84,85.7
+2026-10-31,Blinkit,Delhi,SKU02,14,12,24,2,84,85.7
+2026-10-31,Blinkit,Delhi,SKU03,14,13,26,1,182,92.9
+2026-10-31,Blinkit,Delhi,SKU04,14,13,13,0,,92.9
+2026-10-31,Blinkit,Delhi,SKU05,14,12,24,0,,85.7
+2026-10-31,Blinkit,Gurugram,SKU01,5,5,5,0,,100
+2026-10-31,Blinkit,Gurugram,SKU02,5,5,10,0,,100
+2026-10-31,Blinkit,Gurugram,SKU03,5,4,8,0,,80
+2026-10-31,Blinkit,Gurugram,SKU04,5,4,4,0,,80
+2026-10-31,Blinkit,Gurugram,SKU05,5,4,4,0,,80
+2026-10-31,Blinkit,Noida,SKU01,5,5,5,1,35,100
+2026-10-31,Blinkit,Noida,SKU02,5,4,4,2,14,80
+2026-10-31,Blinkit,Noida,SKU03,5,5,10,4,17.5,100
+2026-10-31,Blinkit,Noida,SKU04,5,5,5,1,35,100
+2026-10-31,Blinkit,Noida,SKU05,5,5,10,0,,100
+2026-10-31,Blinkit,Mumbai,SKU01,14,6,6,2,21,42.9
+2026-10-31,Blinkit,Mumbai,SKU02,14,12,24,3,56,85.7
+2026-10-31,Blinkit,Mumbai,SKU03,14,13,13,2,45.5,92.9
+2026-10-31,Blinkit,Mumbai,SKU04,14,13,13,0,,92.9
+2026-10-31,Blinkit,Mumbai,SKU05,14,12,24,0,,85.7
+2026-10-31,Blinkit,Thane,SKU01,4,4,4,1,28,100
+2026-10-31,Blinkit,Thane,SKU02,4,4,8,0,,100
+2026-10-31,Blinkit,Thane,SKU03,4,4,4,0,,100
+2026-10-31,Blinkit,Thane,SKU04,4,4,8,0,,100
+2026-10-31,Blinkit,Thane,SKU05,4,4,8,0,,100
+2026-10-31,Blinkit,Pune,SKU01,8,7,14,0,,87.5
+2026-10-31,Blinkit,Pune,SKU02,8,7,14,0,,87.5
+2026-10-31,Blinkit,Pune,SKU03,8,7,14,1,98,87.5
+2026-10-31,Blinkit,Pune,SKU04,8,8,8,0,,100
+2026-10-31,Blinkit,Pune,SKU05,8,7,7,0,,87.5
+2026-10-31,Blinkit,Ahmedabad,SKU01,5,4,4,0,,80
+2026-10-31,Blinkit,Ahmedabad,SKU02,5,5,5,2,17.5,100
+2026-10-31,Blinkit,Ahmedabad,SKU03,5,5,5,0,,100
+2026-10-31,Blinkit,Ahmedabad,SKU04,5,4,8,0,,80
+2026-10-31,Blinkit,Ahmedabad,SKU05,5,5,10,0,,100
+2026-10-31,Blinkit,Bangalore,SKU01,15,14,28,0,,93.3
+2026-10-31,Blinkit,Bangalore,SKU02,15,14,28,3,65.3,93.3
+2026-10-31,Blinkit,Bangalore,SKU03,15,15,30,1,210,100
+2026-10-31,Blinkit,Bangalore,SKU04,15,14,14,1,98,93.3
+2026-10-31,Blinkit,Bangalore,SKU05,15,14,14,0,,93.3
+2026-10-31,Blinkit,Hyderabad,SKU01,11,10,10,2,35,90.9
+2026-10-31,Blinkit,Hyderabad,SKU02,11,11,11,7,11,100
+2026-10-31,Blinkit,Hyderabad,SKU03,11,11,22,3,51.3,100
+2026-10-31,Blinkit,Hyderabad,SKU04,11,11,11,1,77,100
+2026-10-31,Blinkit,Hyderabad,SKU05,11,10,10,0,,90.9
+2026-10-31,Blinkit,Chennai,SKU01,9,8,8,1,56,88.9
+2026-10-31,Blinkit,Chennai,SKU02,9,9,18,4,31.5,100
+2026-10-31,Blinkit,Chennai,SKU03,9,9,18,0,,100
+2026-10-31,Blinkit,Chennai,SKU04,9,8,8,0,,88.9
+2026-10-31,Blinkit,Chennai,SKU05,9,8,8,0,,88.9
+2026-10-31,Blinkit,Kolkata,SKU01,10,9,18,2,63,90
+2026-10-31,Blinkit,Kolkata,SKU02,10,8,16,2,56,80
+2026-10-31,Blinkit,Kolkata,SKU03,10,10,20,2,70,100
+2026-10-31,Blinkit,Kolkata,SKU04,10,10,10,2,35,100
+2026-10-31,Blinkit,Kolkata,SKU05,10,10,10,0,,100
+2026-10-31,Blinkit,Jaipur,SKU01,4,3,6,0,,75
+2026-10-31,Blinkit,Jaipur,SKU02,4,4,8,2,28,100
+2026-10-31,Blinkit,Jaipur,SKU03,4,3,3,0,,75
+2026-10-31,Blinkit,Jaipur,SKU04,4,4,4,0,,100
+2026-10-31,Blinkit,Jaipur,SKU05,4,4,8,0,,100
+2026-10-31,Blinkit,Lucknow,SKU01,4,4,8,0,,100
+2026-10-31,Blinkit,Lucknow,SKU02,4,4,8,5,11.2,100
+2026-10-31,Blinkit,Lucknow,SKU03,4,4,4,3,9.3,100
+2026-10-31,Blinkit,Lucknow,SKU04,4,3,6,0,,75
+2026-10-31,Blinkit,Lucknow,SKU05,4,3,6,1,42,75
+2026-10-31,Blinkit,Chandigarh,SKU01,3,3,6,0,,100
+2026-10-31,Blinkit,Chandigarh,SKU02,3,3,3,0,,100
+2026-10-31,Blinkit,Chandigarh,SKU03,3,3,3,0,,100
+2026-10-31,Blinkit,Chandigarh,SKU04,3,3,6,0,,100
+2026-10-31,Blinkit,Chandigarh,SKU05,3,3,6,0,,100
+2026-10-31,Blinkit,Indore,SKU01,3,3,3,1,21,100
+2026-10-31,Blinkit,Indore,SKU02,3,3,3,1,21,100
+2026-10-31,Blinkit,Indore,SKU03,3,3,6,2,21,100
+2026-10-31,Blinkit,Indore,SKU04,3,3,6,2,21,100
+2026-10-31,Blinkit,Indore,SKU05,3,3,3,0,,100
+2026-10-31,Zepto,Delhi,SKU01,10,9,9,0,,90
+2026-10-31,Zepto,Delhi,SKU02,10,9,18,0,,90
+2026-10-31,Zepto,Delhi,SKU03,10,9,9,1,63,90
+2026-10-31,Zepto,Delhi,SKU04,10,9,9,1,63,90
+2026-10-31,Zepto,Delhi,SKU05,10,9,18,0,,90
+2026-10-31,Zepto,Gurugram,SKU01,4,4,4,0,,100
+2026-10-31,Zepto,Gurugram,SKU02,4,4,4,0,,100
+2026-10-31,Zepto,Gurugram,SKU03,4,4,4,0,,100
+2026-10-31,Zepto,Gurugram,SKU04,4,3,3,0,,75
+2026-10-31,Zepto,Gurugram,SKU05,4,4,4,0,,100
+2026-10-31,Zepto,Noida,SKU01,3,3,6,0,,100
+2026-10-31,Zepto,Noida,SKU02,3,3,6,0,,100
+2026-10-31,Zepto,Noida,SKU03,3,3,3,0,,100
+2026-10-31,Zepto,Noida,SKU04,3,3,6,0,,100
+2026-10-31,Zepto,Noida,SKU05,3,3,3,0,,100
+2026-10-31,Zepto,Mumbai,SKU01,11,10,20,1,140,90.9
+2026-10-31,Zepto,Mumbai,SKU02,11,9,9,5,12.6,81.8
+2026-10-31,Zepto,Mumbai,SKU03,11,10,20,1,140,90.9
+2026-10-31,Zepto,Mumbai,SKU04,11,11,11,1,77,100
+2026-10-31,Zepto,Mumbai,SKU05,11,10,10,0,,90.9
+2026-10-31,Zepto,Thane,SKU01,3,3,6,0,,100
+2026-10-31,Zepto,Thane,SKU02,3,3,6,0,,100
+2026-10-31,Zepto,Thane,SKU03,3,3,3,0,,100
+2026-10-31,Zepto,Thane,SKU04,3,3,6,0,,100
+2026-10-31,Zepto,Thane,SKU05,3,3,3,0,,100
+2026-10-31,Zepto,Pune,SKU01,6,6,6,0,,100
+2026-10-31,Zepto,Pune,SKU02,6,5,5,2,17.5,83.3
+2026-10-31,Zepto,Pune,SKU03,6,5,5,2,17.5,83.3
+2026-10-31,Zepto,Pune,SKU04,6,5,5,0,,83.3
+2026-10-31,Zepto,Pune,SKU05,6,6,12,0,,100
+2026-10-31,Zepto,Ahmedabad,SKU01,4,4,8,1,56,100
+2026-10-31,Zepto,Ahmedabad,SKU02,4,3,3,1,21,75
+2026-10-31,Zepto,Ahmedabad,SKU03,4,3,3,0,,75
+2026-10-31,Zepto,Ahmedabad,SKU04,4,4,8,0,,100
+2026-10-31,Zepto,Ahmedabad,SKU05,4,4,8,1,56,100
+2026-10-31,Zepto,Bangalore,SKU01,11,9,9,0,,81.8
+2026-10-31,Zepto,Bangalore,SKU02,11,4,4,3,9.3,36.4
+2026-10-31,Zepto,Bangalore,SKU03,11,9,9,0,,81.8
+2026-10-31,Zepto,Bangalore,SKU04,11,10,10,0,,90.9
+2026-10-31,Zepto,Bangalore,SKU05,11,9,18,1,126,81.8
+2026-10-31,Zepto,Hyderabad,SKU01,8,7,14,1,98,87.5
+2026-10-31,Zepto,Hyderabad,SKU02,8,7,7,1,49,87.5
+2026-10-31,Zepto,Hyderabad,SKU03,8,8,8,1,56,100
+2026-10-31,Zepto,Hyderabad,SKU04,8,7,14,0,,87.5
+2026-10-31,Zepto,Hyderabad,SKU05,8,7,7,0,,87.5
+2026-10-31,Zepto,Chennai,SKU01,7,6,6,2,21,85.7
+2026-10-31,Zepto,Chennai,SKU02,7,6,12,2,42,85.7
+2026-10-31,Zepto,Chennai,SKU03,7,7,7,0,,100
+2026-10-31,Zepto,Chennai,SKU04,7,6,6,1,42,85.7
+2026-10-31,Zepto,Chennai,SKU05,7,7,7,1,49,100
+2026-10-31,Zepto,Kolkata,SKU01,7,6,12,0,,85.7
+2026-10-31,Zepto,Kolkata,SKU02,7,6,6,0,,85.7
+2026-10-31,Zepto,Kolkata,SKU03,7,7,14,1,98,100
+2026-10-31,Zepto,Kolkata,SKU04,7,6,12,0,,85.7
+2026-10-31,Zepto,Kolkata,SKU05,7,6,6,0,,85.7
+2026-10-31,Zepto,Jaipur,SKU01,3,3,6,0,,100
+2026-10-31,Zepto,Jaipur,SKU02,3,3,3,0,,100
+2026-10-31,Zepto,Jaipur,SKU03,3,3,3,0,,100
+2026-10-31,Zepto,Jaipur,SKU04,3,3,3,0,,100
+2026-10-31,Zepto,Jaipur,SKU05,3,3,3,0,,100
+2026-10-31,Zepto,Lucknow,SKU01,3,3,3,0,,100
+2026-10-31,Zepto,Lucknow,SKU02,3,3,6,0,,100
+2026-10-31,Zepto,Lucknow,SKU03,3,3,3,0,,100
+2026-10-31,Zepto,Lucknow,SKU04,3,3,3,0,,100
+2026-10-31,Zepto,Lucknow,SKU05,3,3,3,1,21,100
+2026-10-31,Instamart,Delhi,SKU01,9,8,16,0,,88.9
+2026-10-31,Instamart,Delhi,SKU02,9,8,16,0,,88.9
+2026-10-31,Instamart,Delhi,SKU03,9,8,8,2,28,88.9
+2026-10-31,Instamart,Delhi,SKU04,9,8,16,1,112,88.9
+2026-10-31,Instamart,Delhi,SKU05,9,8,8,0,,88.9
+2026-10-31,Instamart,Gurugram,SKU01,4,4,4,1,28,100
+2026-10-31,Instamart,Gurugram,SKU02,4,4,8,1,56,100
+2026-10-31,Instamart,Gurugram,SKU03,4,4,4,1,28,100
+2026-10-31,Instamart,Gurugram,SKU04,4,4,8,0,,100
+2026-10-31,Instamart,Gurugram,SKU05,4,4,4,0,,100
+2026-10-31,Instamart,Noida,SKU01,3,3,6,0,,100
+2026-10-31,Instamart,Noida,SKU02,3,3,3,0,,100
+2026-10-31,Instamart,Noida,SKU03,3,3,3,0,,100
+2026-10-31,Instamart,Noida,SKU04,3,3,6,0,,100
+2026-10-31,Instamart,Noida,SKU05,3,3,6,0,,100
+2026-10-31,Instamart,Mumbai,SKU01,10,8,8,1,56,80
+2026-10-31,Instamart,Mumbai,SKU02,10,9,9,1,63,90
+2026-10-31,Instamart,Mumbai,SKU03,10,9,18,0,,90
+2026-10-31,Instamart,Mumbai,SKU04,10,9,18,0,,90
+2026-10-31,Instamart,Mumbai,SKU05,10,9,9,0,,90
+2026-10-31,Instamart,Thane,SKU01,3,3,6,0,,100
+2026-10-31,Instamart,Thane,SKU02,3,3,6,1,42,100
+2026-10-31,Instamart,Thane,SKU03,3,3,3,1,21,100
+2026-10-31,Instamart,Thane,SKU04,3,3,3,0,,100
+2026-10-31,Instamart,Thane,SKU05,3,3,3,0,,100
+2026-10-31,Instamart,Pune,SKU01,6,6,12,0,,100
+2026-10-31,Instamart,Pune,SKU02,6,5,10,1,70,83.3
+2026-10-31,Instamart,Pune,SKU03,6,5,5,0,,83.3
+2026-10-31,Instamart,Pune,SKU04,6,5,10,0,,83.3
+2026-10-31,Instamart,Pune,SKU05,6,6,6,0,,100
+2026-10-31,Instamart,Ahmedabad,SKU01,3,3,6,0,,100
+2026-10-31,Instamart,Ahmedabad,SKU02,3,3,3,1,21,100
+2026-10-31,Instamart,Ahmedabad,SKU03,3,3,6,0,,100
+2026-10-31,Instamart,Ahmedabad,SKU04,3,3,3,1,21,100
+2026-10-31,Instamart,Ahmedabad,SKU05,3,3,3,0,,100
+2026-10-31,Instamart,Bangalore,SKU01,11,11,11,1,77,100
+2026-10-31,Instamart,Bangalore,SKU02,11,10,20,2,70,90.9
+2026-10-31,Instamart,Bangalore,SKU03,11,9,9,0,,81.8
+2026-10-31,Instamart,Bangalore,SKU04,11,11,22,0,,100
+2026-10-31,Instamart,Bangalore,SKU05,11,11,11,0,,100
+2026-10-31,Instamart,Hyderabad,SKU01,8,8,8,1,56,100
+2026-10-31,Instamart,Hyderabad,SKU02,8,7,7,1,49,87.5
+2026-10-31,Instamart,Hyderabad,SKU03,8,7,14,1,98,87.5
+2026-10-31,Instamart,Hyderabad,SKU04,8,8,8,0,,100
+2026-10-31,Instamart,Hyderabad,SKU05,8,4,8,0,,50
+2026-10-31,Instamart,Chennai,SKU01,6,6,6,1,42,100
+2026-10-31,Instamart,Chennai,SKU02,6,5,10,1,70,83.3
+2026-10-31,Instamart,Chennai,SKU03,6,5,10,1,70,83.3
+2026-10-31,Instamart,Chennai,SKU04,6,5,10,0,,83.3
+2026-10-31,Instamart,Chennai,SKU05,6,6,6,0,,100
+2026-10-31,Instamart,Kolkata,SKU01,7,7,14,0,,100
+2026-10-31,Instamart,Kolkata,SKU02,7,6,12,3,28,85.7
+2026-10-31,Instamart,Kolkata,SKU03,7,6,12,2,42,85.7
+2026-10-31,Instamart,Kolkata,SKU04,7,6,12,1,84,85.7
+2026-10-31,Instamart,Kolkata,SKU05,7,6,12,0,,85.7
+2026-10-31,Instamart,Kochi,SKU01,2,2,2,1,14,100
+2026-10-31,Instamart,Kochi,SKU02,2,2,4,1,28,100
+2026-10-31,Instamart,Kochi,SKU03,2,2,2,0,,100
+2026-10-31,Instamart,Kochi,SKU04,2,2,4,0,,100
+2026-10-31,Instamart,Kochi,SKU05,2,2,2,1,14,100
+2026-10-31,Instamart,Coimbatore,SKU01,2,2,4,1,28,100
+2026-10-31,Instamart,Coimbatore,SKU02,2,2,4,0,,100
+2026-10-31,Instamart,Coimbatore,SKU03,2,2,4,0,,100
+2026-10-31,Instamart,Coimbatore,SKU04,2,2,4,0,,100
+2026-10-31,Instamart,Coimbatore,SKU05,2,2,4,0,,100
+2026-10-31,BB Now,Delhi,SKU01,5,4,8,0,,80
+2026-10-31,BB Now,Delhi,SKU02,5,5,10,0,,100
+2026-10-31,BB Now,Delhi,SKU03,5,4,8,0,,80
+2026-10-31,BB Now,Delhi,SKU04,5,4,4,0,,80
+2026-10-31,BB Now,Delhi,SKU05,5,5,10,0,,100
+2026-10-31,BB Now,Gurugram,SKU01,2,2,2,2,7,100
+2026-10-31,BB Now,Gurugram,SKU02,2,2,2,1,14,100
+2026-10-31,BB Now,Gurugram,SKU03,2,2,2,1,14,100
+2026-10-31,BB Now,Gurugram,SKU04,2,2,4,0,,100
+2026-10-31,BB Now,Gurugram,SKU05,2,2,2,1,14,100
+2026-10-31,BB Now,Noida,SKU01,2,2,2,0,,100
+2026-10-31,BB Now,Noida,SKU02,2,2,2,0,,100
+2026-10-31,BB Now,Noida,SKU03,2,2,2,0,,100
+2026-10-31,BB Now,Noida,SKU04,2,2,2,0,,100
+2026-10-31,BB Now,Noida,SKU05,2,2,2,0,,100
+2026-10-31,BB Now,Mumbai,SKU01,5,4,4,0,,80
+2026-10-31,BB Now,Mumbai,SKU02,5,5,5,1,35,100
+2026-10-31,BB Now,Mumbai,SKU03,5,5,10,1,70,100
+2026-10-31,BB Now,Mumbai,SKU04,5,5,10,0,,100
+2026-10-31,BB Now,Mumbai,SKU05,5,5,5,0,,100
+2026-10-31,BB Now,Thane,SKU01,2,2,2,0,,100
+2026-10-31,BB Now,Thane,SKU02,2,2,4,0,,100
+2026-10-31,BB Now,Thane,SKU03,2,2,2,0,,100
+2026-10-31,BB Now,Thane,SKU04,2,2,2,0,,100
+2026-10-31,BB Now,Thane,SKU05,2,2,2,0,,100
+2026-10-31,BB Now,Pune,SKU01,3,3,3,0,,100
+2026-10-31,BB Now,Pune,SKU02,3,3,3,2,10.5,100
+2026-10-31,BB Now,Pune,SKU03,3,3,6,0,,100
+2026-10-31,BB Now,Pune,SKU04,3,3,3,1,21,100
+2026-10-31,BB Now,Pune,SKU05,3,3,6,0,,100
+2026-10-31,BB Now,Ahmedabad,SKU01,2,2,2,0,,100
+2026-10-31,BB Now,Ahmedabad,SKU02,2,2,4,0,,100
+2026-10-31,BB Now,Ahmedabad,SKU03,2,2,2,0,,100
+2026-10-31,BB Now,Ahmedabad,SKU04,2,2,2,0,,100
+2026-10-31,BB Now,Ahmedabad,SKU05,2,2,2,0,,100
+2026-10-31,BB Now,Bangalore,SKU01,5,5,10,0,,100
+2026-10-31,BB Now,Bangalore,SKU02,5,5,10,0,,100
+2026-10-31,BB Now,Bangalore,SKU03,5,5,5,1,35,100
+2026-10-31,BB Now,Bangalore,SKU04,5,5,5,1,35,100
+2026-10-31,BB Now,Bangalore,SKU05,5,5,5,0,,100
+2026-10-31,BB Now,Hyderabad,SKU01,4,3,3,1,21,75
+2026-10-31,BB Now,Hyderabad,SKU02,4,4,4,0,,100
+2026-10-31,BB Now,Hyderabad,SKU03,4,3,6,0,,75
+2026-10-31,BB Now,Hyderabad,SKU04,4,4,4,0,,100
+2026-10-31,BB Now,Hyderabad,SKU05,4,3,3,0,,75
+2026-10-31,BB Now,Chennai,SKU01,3,3,3,0,,100
+2026-10-31,BB Now,Chennai,SKU02,3,3,3,0,,100
+2026-10-31,BB Now,Chennai,SKU03,3,3,6,0,,100
+2026-10-31,BB Now,Chennai,SKU04,3,3,6,0,,100
+2026-10-31,BB Now,Chennai,SKU05,3,3,6,0,,100
+2026-10-31,BB Now,Kolkata,SKU01,3,3,3,0,,100
+2026-10-31,BB Now,Kolkata,SKU02,3,3,6,0,,100
+2026-10-31,BB Now,Kolkata,SKU03,3,3,3,0,,100
+2026-10-31,BB Now,Kolkata,SKU04,3,3,6,0,,100
+2026-10-31,BB Now,Kolkata,SKU05,3,3,6,0,,100
+2026-10-31,Flipkart Minutes,Delhi,SKU01,4,4,4,1,28,100
+2026-10-31,Flipkart Minutes,Delhi,SKU02,4,4,4,1,28,100
+2026-10-31,Flipkart Minutes,Delhi,SKU03,4,4,4,0,,100
+2026-10-31,Flipkart Minutes,Delhi,SKU04,4,4,8,0,,100
+2026-10-31,Flipkart Minutes,Delhi,SKU05,4,3,6,0,,75
+2026-10-31,Flipkart Minutes,Gurugram,SKU01,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Gurugram,SKU02,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Gurugram,SKU03,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Gurugram,SKU04,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Gurugram,SKU05,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Noida,SKU01,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Noida,SKU02,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Noida,SKU03,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Noida,SKU04,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Noida,SKU05,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Mumbai,SKU01,4,4,4,0,,100
+2026-10-31,Flipkart Minutes,Mumbai,SKU02,4,4,4,0,,100
+2026-10-31,Flipkart Minutes,Mumbai,SKU03,4,4,4,0,,100
+2026-10-31,Flipkart Minutes,Mumbai,SKU04,4,4,8,0,,100
+2026-10-31,Flipkart Minutes,Mumbai,SKU05,4,4,4,0,,100
+2026-10-31,Flipkart Minutes,Thane,SKU01,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Thane,SKU02,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Thane,SKU03,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Thane,SKU04,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Thane,SKU05,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Pune,SKU01,2,2,2,0,,100
+2026-10-31,Flipkart Minutes,Pune,SKU02,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Pune,SKU03,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Pune,SKU04,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Pune,SKU05,2,2,4,0,,100
+2026-10-31,Flipkart Minutes,Bangalore,SKU01,5,5,10,1,70,100
+2026-10-31,Flipkart Minutes,Bangalore,SKU02,5,4,4,1,28,80
+2026-10-31,Flipkart Minutes,Bangalore,SKU03,5,5,5,0,,100
+2026-10-31,Flipkart Minutes,Bangalore,SKU04,5,4,8,0,,80
+2026-10-31,Flipkart Minutes,Bangalore,SKU05,5,5,10,0,,100
+2026-10-31,Flipkart Minutes,Hyderabad,SKU01,3,3,6,0,,100
+2026-10-31,Flipkart Minutes,Hyderabad,SKU02,3,3,6,0,,100
+2026-10-31,Flipkart Minutes,Hyderabad,SKU03,3,3,3,0,,100
+2026-10-31,Flipkart Minutes,Hyderabad,SKU04,3,3,6,0,,100
+2026-10-31,Flipkart Minutes,Hyderabad,SKU05,3,3,6,0,,100

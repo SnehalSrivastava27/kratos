@@ -18,12 +18,13 @@ data, 2026-10-31). No window = all data (2026-08-01..2026-10-31), except `days_o
 (default last 28 days). P&L metrics (`ebitda`, `ebitda_pct`, `opex`, `runway_months`) are monthly: a window counts every month it
 touches. `salary_bill` is the October 2026 payroll file; `stock_on_hand` is the latest weekly snapshot (both ignore the window).
 
-**Filters**: `--channel` (sales channel: Website, Amazon, Flipkart, Nykaa, Myntra, Blinkit, Zepto; for ads metrics the
-platform: Meta, Google, Amazon, Flipkart, Nykaa, Blinkit, Zepto), `--sku` (SKU01 or part of the product name). Case does not
+**Filters**: `--channel` (sales channel: Website, Amazon, Flipkart, Nykaa, Myntra, Purplle, Meesho, Tata CLiQ, JioMart, AJIO, Blinkit, Zepto, Instamart, BB Now, Flipkart Minutes, Health & Glow, Apollo Pharmacy, Amazon Global; for ads metrics the
+platform: Meta, Google, Amazon, Flipkart, Nykaa, Myntra, Purplle, Meesho, Blinkit, Zepto, Instamart; for `rating`, `qc_availability`,
+`payouts` the platform; for `tickets` the order's sales channel), `--sku` (SKU01 or part of the product name). Case does not
 matter. A filter a metric cannot take is an error, never silently ignored.
 
 **`--by`** (one or two, comma-separated, e.g. `--by channel,month`):
-- sales, returns %, RTO, COD, COGS, fees: `channel sku product month day city region tier payment courier zone warehouse status customer_type` (`rto_pct` and `cod_share` are order level, so no `sku`/`product`)
+- sales, returns %, RTO, COD, COGS, fees: `channel channel_group sku product month day city state region tier payment payment_method courier zone warehouse status customer_type` (`rto_pct` and `cod_share` are order level, so no `sku`/`product`)
 - margin and efficiency (`cm1 cm2 cm3 marketing_pct blended_roas mer cac`): `channel month day`
 - `marketing_spend`: `channel month day kind` (kind = meta, google, marketplace, creator)
 - ads: `channel` (= platform) `campaign type source month day` (type = Meta creative type or Google campaign type)
@@ -31,6 +32,9 @@ matter. A filter a metric cannot take is an error, never silently ignored.
 - creators: `creator tier platform format month day`
 - customers: `channel` (acquisition channel) `cohort month city region tier`
 - stock: `warehouse sku`; POs: `supplier material status month`; people: `dept` (`headcount` also `city level`); `opex`: `category vendor month`
+- India layer: `gst_payable` `state month`; `payouts`/`settlement_lag_days`/`receivables` `channel payer status month`; `qc_availability`
+  `channel city sku`; `rating` `channel sku month`; `tickets`/`csat` `category channel via language status agent month`; `whatsapp_roas`
+  `flow bsp category language month`; `compliance_due` `filing authority state status month`
 
 **Output**: `{ok, metric, definition, unit, value, display, ...extras, filters, source_tables, sql}`; with `--by` it is
 `values: [{<dim>, value, display, ...extras}]`, best first (time dims in order; cover lowest first). Quote `display` in your
@@ -77,11 +81,24 @@ next month (m1) and the month after (m2).
 **Stock.** `days_of_cover` = on hand (latest snapshot) / average daily units sold in the window. Keep 4-8 weeks; under 21 days
 (`stockout_risk`) needs a transfer or PO now. `sell_through` = sold / (sold + on hand).
 
-**Payroll.** gross = basic + HRA + special; net pay = gross − employee PF − professional tax − TDS; employer cost = gross +
-employer PF (= P&L salaries). Variable pay is paid annually in April, not accrued.
+**Payroll.** gross = basic + HRA + special; net pay = gross − employee PF − employee ESI − professional tax − TDS; employer cost =
+gross + employer PF + employer ESI (= P&L salaries). ESI (0.75% + 3.25%) applies only up to ₹21,000 gross. Variable pay is paid
+annually in April, not accrued.
+
+**Channels.** `channel_fees.channel_group` groups the 18 channels: D2C, Marketplace, Beauty marketplace, Quick commerce (Blinkit,
+Zepto, Instamart, BB Now, Flipkart Minutes), Offline retail (Health & Glow, Apollo Pharmacy), Export (Amazon Global). `qc_share` =
+quick-commerce share of delivered revenue; `channel_mix` = revenue by group.
+
+**GST.** Prices are GST-inclusive; `orders.gst` = 18/118 of delivered domestic net revenue (HSN 3304). Each warehouse state has its own
+GSTIN; ITC cannot move between them, so Maharashtra (ads, POs, head office) builds unused credit while Delhi and Karnataka pay cash.
+`gst_payable` = cash paid in GSTR-3B after ITC and marketplace TCS (0.5%). Revenue metrics stay GST-inclusive like the P&L.
+
+**Settlements.** Platforms pay net of commission, shipping, 18% GST on fees, TCS 0.5% and TDS 0.1% (sec 194-O), 7-60 days after the
+cycle. `payouts` = net payout, `settlement_lag_days` = payout-weighted days from mid-cycle to cash, `receivables` = still pending on
+2026-10-31.
 
 **Runway** (`runway_months`) = cash balance in `finance_policy.json` / average monthly EBITDA loss. Cash-ish: EBITDA ignores
-marketplace settlement lag, supplier credit, GST and capex.
+marketplace settlement lag (`receivables`), supplier credit, GST timing (`gst_payable`) and capex.
 
 ## Catalog
 
@@ -137,8 +154,21 @@ marketplace settlement lag, supplier credit, GST and capex.
 | `po_delays` | count | POs delayed now + received late; extras `delayed_now`, `arrived_late`, `late_pct`. |
 | `supplier_lead_time` | days | actual PO → receipt days by supplier; extras `promised_days`, `avg_delay`. |
 | `rm_cost_change` | % | first vs latest PO unit cost per material in the window. |
-| `salary_bill` | ₹ | Oct 2026 payroll gross; extras `net_pay`, `employer_cost`, `pf_employee`, `pf_employer`, `tds`, `professional_tax`, `headcount`. |
+| `salary_bill` | ₹ | Oct 2026 payroll gross; extras `net_pay`, `employer_cost`, `pf_employee`, `pf_employer`, `esi_employee`, `esi_employer`, `tds`, `professional_tax`, `headcount`. |
 | `headcount` | count | employees joined on or before the window end. |
+| `qc_share` | % | quick-commerce share of delivered net revenue; extra `qc_revenue`. |
+| `channel_mix` | ₹ | delivered revenue by `channel_group` (default), extra `share_pct`. |
+| `payment_mix` | count | non-cancelled orders by `payment_method` (UPI, Card, Netbanking, Simpl, LazyPay, BNPL, Wallet, Cash, COD); extra `share_pct`. |
+| `gst_payable` | ₹ | gst_monthly cash payable (GSTR-3B); extras `output_gst`, `itc_total`, `tcs_credit`. |
+| `payouts` | ₹ | settlements net payout; extras `gross_sales`, `fees`, `shipping`, `gst_on_fees`, `tcs`, `tds`. |
+| `settlement_lag_days` | days | payout-weighted days from mid-cycle to settlement date. |
+| `receivables` | ₹ | net payout of settlements still pending on 2026-10-31. |
+| `compliance_due` | ₹ | upcoming statutory payments (compliance_calendar); extras `filings`, `next_due`. |
+| `whatsapp_roas` | x | WhatsApp marketing revenue / message cost; extras `cost`, `revenue`, `orders`, `sent`. |
+| `rating` | stars | average star rating of new ratings (reviews.csv); extras `ratings`, `one_star_pct`. |
+| `tickets` | count | support tickets; extras `avg_first_response_mins`, `avg_resolution_hours`, `open`, `csat`. |
+| `csat` | stars | average CSAT on rated tickets; extra `rated`. |
+| `qc_availability` | % | in-stock dark stores / dark stores listing us, latest snapshot (lowest first); extras `on_hand`, `units_sold_week`, `days_of_cover`. |
 
 ## Briefs
 
@@ -149,7 +179,7 @@ returns the lead's 6-10 numbers for the month with the previous month (`prev`, `
 
 ## Marts (also queryable with `kit sql`)
 
-`m_lines` (order lines + product, month, city_tier, is_first, P&L cogs, customer_type), `m_orders` (one row per order),
+`m_lines` (order lines + product, month, city_tier, channel_group, is_first, P&L cogs, customer_type), `m_orders` (one row per order),
 `daily_sales`, `channel_month`, `sku_month`, `rto_by_channel`, `rto_by_payment`, `rto_by_tier`, `rto_by_courier`,
 `ads_daily_all`, `marketing_daily`, `channel_daily`, `creator_perf`, `stock_latest`, `payroll_summary`, `pnl` (pnl_monthly + cm1-3).
 `kit tables` lists their columns.

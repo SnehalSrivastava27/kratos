@@ -8,7 +8,9 @@ as "what a founder would say in a meeting", not as a rate card. The sample data 
 
 - A brand at ₹3-5 Cr a year sells 5-15 SKUs, ships 100-150 orders a day and has 15-30 people.
 - Revenue is split across **own website** (Shopify + a payment gateway) and **marketplaces**: Amazon, Flipkart,
-  Nykaa (beauty), Myntra (fashion + beauty) and **quick commerce** (Blinkit, Zepto, Swiggy Instamart).
+  Nykaa (beauty), Myntra (fashion + beauty), Purplle (beauty, value), Meesho (tier 2-3, zero commission), Tata CLiQ Palette
+  (premium beauty), JioMart and AJIO; **quick commerce** (Blinkit, Zepto, Swiggy Instamart, BigBasket BB Now, Flipkart Minutes);
+  a little **offline modern trade** (Health & Glow, Apollo Pharmacy) and a sliver of **exports** (Amazon Global Selling).
 - A common mix for a young beauty brand: website 40-50%, Amazon + Flipkart 25-30%, Nykaa 10-15%, quick commerce 5-15%
   (quick commerce is the fastest-growing slice in metros).
 - Tier 2 and 3 cities now drive most *new* D2C orders (Unicommerce: ~66% of new D2C orders in FY26), but metros
@@ -45,8 +47,22 @@ customers to its own website, and why the website needs the most ad money.
   dark-store inbound freight and "suggested" ad spend. Total platform cost often lands at 35-50% of selling price. Many brands
   sell to them B2B (they buy stock) rather than marketplace-style; either way cash comes back in ~30 days.
 - **Own website**: Shopify plan + apps (₹10-20k a month), payment gateway ~2% (+GST), settlement T+2 working days.
+- **Purplle**: beauty marketplace with a value-seeking, tier 2-3 audience; ~20-30% margin, ~30 day settlement.
+- **Meesho**: **0% commission**. The seller pays forward shipping (Valmo, Meesho's logistics network) and lives with the highest COD
+  and RTO in the country; prices are the lowest, so it is a reach channel for tier 3 more than a margin channel.
+- **Tata CLiQ Palette, AJIO, JioMart**: smaller beauty shelves; ~12-25% commission plus fixed fees; 15-30 day settlement.
+- **BB Now and Flipkart Minutes**: newer quick-commerce apps. BB Now often buys outright (45 day credit); Flipkart Minutes runs
+  launch rates to win brands.
+- **Offline modern trade** (Health & Glow, Apollo Pharmacy): no ads, but the chain plus its distributor take ~28-35% of selling
+  price, shelf visibility costs extra, and credit runs 45-60 days.
+- **Exports** (Amazon Global Selling): referral ~15% and international shipping of ~₹400-600 a parcel; GST is zero-rated
+  under a Letter of Undertaking (LUT), and you need an IEC.
+- **TCS and TDS on marketplaces**: every e-commerce operator withholds **TCS under GST** (0.5% of taxable value since July 2024, was
+  1%) and **TDS under sec 194-O** (0.1% since October 2024, was 1%). Both come back as credits, but they sit in the gap between
+  what you sold and what you were paid, along with commission, shipping and 18% GST on those fees.
 
-Kesar & Co. data: `channel_fees.csv` (blended per channel), `orders.channel_fee` per line.
+Kesar & Co. data: `channel_fees.csv` (blended per channel, with `channel_group`, `tcs_pct`, `tds_pct`), `orders.channel_fee` per line,
+`settlements.csv` (what each platform actually paid, and when).
 
 ## 4. COD, RTO and returns: the silent margin killer
 
@@ -121,15 +137,20 @@ Kesar & Co. data: `suppliers.csv`, `raw_materials.csv`, `bom.csv`, `purchase_ord
 
 - Keep 4-8 weeks of cover per SKU per warehouse; less before a sale is how stockouts happen.
 - Weekly stock = last week + received - shipped. Plan transfers between warehouses (2 days here) before a regional spike.
-- Quick commerce needs stock in the platform's dark stores, so it ties up extra inventory.
+- Quick commerce needs stock in the platform's dark stores, so it ties up extra inventory. What matters there is
+  **availability** (the share of dark stores that have you in stock): a 10-minute app shows "out of stock" store by store,
+  and a product that keeps going dark loses its search rank. Small brands are listed in a subset of stores per city.
 
-## 10. People and payroll (25-person startup, FY 2026-27)
+Kesar & Co. data: `inventory_snapshot.csv` (our warehouses), `qc_inventory.csv` (dark stores by app, city and SKU).
+
+## 10. People and payroll (28-person startup, FY 2026-27)
 
 - **CTC** (cost to company) = fixed pay + variable/bonus + employer PF. Typical split of monthly fixed pay:
   **basic 40-50%**, **HRA** 50% of basic in metros (40% elsewhere), **special allowance** = the rest.
 - **PF (provident fund)**: 12% of basic from the employee and 12% from the employer, commonly capped at ₹15,000 basic
   (so ₹1,800 each a month at most).
-- **ESI** applies only if gross pay is ₹21,000 a month or less (none in our team).
+- **ESI** applies only if gross pay is ₹21,000 a month or less: 0.75% from the employee, 3.25% from the employer (our three
+  warehouse associates). Due by the 15th with the PF ECR.
 - **Professional tax** is a state tax: Maharashtra ₹200 a month (₹300 in February; women earning up to ₹25,000 are exempt);
   Karnataka ₹200 if salary is ₹25,000+ (limit raised in 2025); Delhi has none.
 - **TDS (income tax) under the new regime**, the default: standard deduction ₹75,000; slabs nil to ₹4 L, 5% to ₹8 L,
@@ -150,8 +171,8 @@ Gross revenue (MRP x units)        - Discounts     - RTO and returns      = Net 
 ```
 
 Healthy targets for a beauty brand this size: contribution after marketing 25-35% of net revenue, marketing 20-30%,
-EBITDA around break-even. Kesar & Co. sits at about -4% to -7% EBITDA, and Finance's rule is that any sale must be EBITDA positive
-(`data/finance_policy.json`).
+EBITDA around break-even. Kesar & Co. sits at about -9% to -16% EBITDA while it opens new channels, and Finance's rule is that any
+sale must be EBITDA positive (`data/finance_policy.json`).
 
 ## 12. The calendar
 
@@ -160,6 +181,41 @@ EBITDA around break-even. Kesar & Co. sits at about -4% to -7% EBITDA, and Finan
   marketplace sales (Amazon Great Indian Festival, Flipkart Big Billion Days, Nykaa Pink Friday). In 2026, Dussehra is 20 Oct and
   Diwali 8 Nov, so the big Kesar & Co. sale is still ahead.
 - Sunscreen sells most in summer and monsoon; serums and face oils pick up in winter and the wedding season.
+- Regional festivals move regional demand: **Onam** (Kerala, late Aug), **Ganesh Chaturthi** (Maharashtra), **Durga Puja**
+  (West Bengal, Assam, Odisha), **Chhath** (Bihar), **Pongal / Makar Sankranti** (Tamil Nadu, Andhra, Telangana, Karnataka,
+  Gujarat, mid Jan), **Holi** (north, March), **Eid**. Creatives in the local language (Malayalam for Onam, Bengali for Pujo)
+  beat a Hindi/English ad there.
+- Marketplace calendar: Flipkart **Big Billion Days** and Amazon **Great Indian Festival** (late Sep / early Oct), Myntra **Big
+  Fashion Festival** and **EORS** (Dec, Jun), Nykaa **Pink Friday** (late Nov), Republic Day sales (Jan). Marketplaces want you to
+  fund part of the discount.
+- **Wedding season** (Dev Uthani Ekadashi in late Nov to Feb) lifts bridal skincare and gifting.
+
+Kesar & Co. data: `festive_calendar.csv` (past events with observed uplift, upcoming with expected uplift).
+
+## 13. India specifics: geography, payments, GST and compliance
+
+- **City tiers**: tier 1 (metros: Delhi NCR, Mumbai, Pune, Bangalore, Hyderabad, Chennai, Kolkata, Ahmedabad), tier 2 (Jaipur,
+  Lucknow, Kochi, Indore, Patna...), tier 3 (everything smaller). COD share and RTO both rise by tier: tier 3 COD RTO can be 2x
+  tier 1. Courier **zones** by pincode: A local (same city), B regional, C metro to metro, D rest of India, E special (North-East,
+  J&K, Kerala); rates and delivery days rise from A to E.
+- **Couriers**: Delhivery, Xpressbees, Blue Dart (fast, pricey, lowest RTO), Shadowfax, Ekart, Ecom Express, DTDC and India Post
+  (cheapest, best tier-3 reach, slowest, highest RTO), usually via an aggregator like Shiprocket that picks per pincode.
+- **Payments**: UPI is ~60% of prepaid orders; cards ~15%; netbanking is fading; BNPL (Simpl, LazyPay, Amazon Pay Later,
+  Flipkart Pay Later) ~10%; wallets small. COD is still 35-40% on the website and 60%+ on Meesho. Cashfree is the common
+  Razorpay backup.
+- **GST**: skincare (HSN 3304) is 18%. Prices to consumers include GST. Selling inside the warehouse's state is CGST + SGST
+  (9% + 9%); selling to another state is IGST 18%. Each state where you hold stock needs its own **GSTIN**, and input tax credit
+  (GST paid on ads, fees, packaging, rent) belongs to the GSTIN that was billed: head-office credit cannot pay a Delhi warehouse's
+  tax. Some credit is blocked (insurance, travel, gifts). Returns: **GSTR-1** by the 11th, **GSTR-3B** (pay) by the 20th.
+- **TDS you deduct**: sec 192 on salaries, 194C (2%) on contractors and job work, 194J (10% professional, 2% technical) on CAs,
+  lawyers, creators and SaaS, 194I (10%) on rent; pay by the 7th, file 24Q/26Q quarterly.
+- **MSME vendors** (Udyam-registered micro and small) must be paid within 45 days (sec 43B(h)); late payment is not deductible
+  and has to be reported on MSME-1 twice a year.
+- **Retention**: WhatsApp (via BSPs like Interakt, WATI, Gupshup) beats email in India: abandoned-cart, COD confirmation, NDR
+  reattempt and reorder flows. Meta charges per message: marketing ~₹0.8-0.9, utility ~₹0.12-0.15.
+
+Kesar & Co. data: `cities.csv`, `orders.state/pincode/payment_method/gst/tax_type`, `gst_monthly.csv`, `vendors.csv`,
+`compliance_calendar.csv`, `whatsapp_campaigns.csv`, `support_tickets.csv`, `reviews.csv`, `cohort_retention.csv`.
 
 ## Sources
 
@@ -175,6 +231,10 @@ EBITDA around break-even. Kesar & Co. sits at about -4% to -7% EBITDA, and Finan
 - COD and RTO: [Razorpay on COD](https://razorpay.com/blog/cash-on-delivery-and-the-challenges/),
   [base.com India e-commerce benchmarks 2026](https://www.base.com/en-IN/blog/india-ecommerce-benchmarks-2026-how-brands-reduce-rto-in-india-and-hit-accuracy-sla-targets),
   [Unicommerce via Devdiscourse](https://www.devdiscourse.com/article/headlines/3880310-tier-2-3-cities-drive-66-pc-of-new-d2c-orders-in-fy26)
+- TCS/TDS on e-commerce: [ClearTax: TCS under GST](https://cleartax.in/s/tcs-under-gst), [ClearTax: section 194-O](https://cleartax.in/s/section-194o)
+- MSME 45-day rule: [ClearTax: section 43B(h)](https://cleartax.in/s/section-43bh-income-tax-act)
+- WhatsApp pricing: [Meta: WhatsApp Business pricing](https://developers.facebook.com/docs/whatsapp/pricing/)
+- ESI: [ESIC contribution rates](https://www.esic.gov.in/contribution)
 - Payment gateway: [Razorpay pricing explained](https://razorpay.com/blog/razorpay-payment-gateway-pricing-explained/), [Razorpay settlements](https://razorpay.com/docs/payments/settlements/faqs/)
 - Shipping zones and rates: [Shiprocket: shipping zones](https://shiprocket.in/blog/shipping-zones-india-explained),
   [Shiprocket support: zones](https://support.shiprocket.in/support/solutions/articles/43000664184-explaining-shipping-zones-how-shipment-zones-affect-order-fulfillment-and-rates-)

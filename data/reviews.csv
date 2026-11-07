@@ -1,0 +1,139 @@
+month,platform,sku,ratings,avg_rating,five_star,four_star,three_star,two_star,one_star,reviews_with_text,top_praise,top_complaint
+2026-08,Website,SKU01,88,4.4,55,20,8,3,2,30,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Website,SKU02,166,4.11,92,37,15,8,14,45,No white cast on brown skin,White cast on dusky skin
+2026-08,Website,SKU03,73,4.33,45,16,6,3,3,24,"Light, not sticky",Too light for dry winter skin
+2026-08,Website,SKU04,20,4.25,12,4,2,1,1,6,"Saffron smell, glow",Too oily for humid weather
+2026-08,Website,SKU05,18,4.39,11,4,2,1,0,5,Great gift box,Mini sizes too small
+2026-08,Amazon,SKU01,10,4.2,6,2,1,0,1,3,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Amazon,SKU02,17,4,9,4,1,1,2,5,No white cast on brown skin,White cast on dusky skin
+2026-08,Amazon,SKU03,9,4.56,6,2,1,0,0,2,"Light, not sticky",Too light for dry winter skin
+2026-08,Amazon,SKU04,2,4.5,1,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-08,Amazon,SKU05,4,4.75,3,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-08,Flipkart,SKU01,5,4,3,1,0,0,1,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Flipkart,SKU02,8,4,4,2,1,0,1,2,No white cast on brown skin,White cast on dusky skin
+2026-08,Flipkart,SKU03,4,4.25,2,1,1,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-08,Flipkart,SKU04,2,4.5,1,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-08,Flipkart,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-08,Nykaa,SKU01,8,4.5,5,2,1,0,0,2,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Nykaa,SKU02,20,4,10,5,2,1,2,6,No white cast on brown skin,White cast on dusky skin
+2026-08,Nykaa,SKU03,6,4.5,4,1,1,0,0,2,"Light, not sticky",Too light for dry winter skin
+2026-08,Nykaa,SKU04,3,4.67,2,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-08,Nykaa,SKU05,3,4.67,2,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-08,Myntra,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Myntra,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-08,Myntra,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-08,Myntra,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-08,Myntra,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-08,Purplle,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Purplle,SKU02,6,3.83,3,1,1,0,1,2,No white cast on brown skin,White cast on dusky skin
+2026-08,Purplle,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-08,Purplle,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-08,Purplle,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-08,Meesho,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Meesho,SKU02,5,3.6,2,1,1,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-08,Meesho,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-08,Meesho,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-08,Meesho,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-08,Tata CLiQ,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Tata CLiQ,SKU02,2,4.5,1,1,0,0,0,1,No white cast on brown skin,White cast on dusky skin
+2026-08,Tata CLiQ,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-08,JioMart,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,JioMart,SKU02,2,4.5,1,1,0,0,0,1,No white cast on brown skin,White cast on dusky skin
+2026-08,AJIO,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,AJIO,SKU02,1,5,1,0,0,0,0,0,No white cast on brown skin,White cast on dusky skin
+2026-08,AJIO,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-08,Blinkit,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-08,Blinkit,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-08,Blinkit,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-08,Blinkit,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-08,Blinkit,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-09,Website,SKU01,73,4.36,45,16,7,3,2,22,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Website,SKU02,172,4.1,95,38,15,9,15,58,No white cast on brown skin,White cast on dusky skin
+2026-09,Website,SKU03,57,4.42,36,13,5,2,1,19,"Light, not sticky",Too light for dry winter skin
+2026-09,Website,SKU04,30,4.2,17,7,3,1,2,9,"Saffron smell, glow",Too oily for humid weather
+2026-09,Website,SKU05,14,4.43,9,3,1,1,0,6,Great gift box,Mini sizes too small
+2026-09,Amazon,SKU01,12,4.25,7,3,1,0,1,4,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Amazon,SKU02,17,4,9,4,1,1,2,5,No white cast on brown skin,White cast on dusky skin
+2026-09,Amazon,SKU03,8,4.5,5,2,1,0,0,3,"Light, not sticky",Too light for dry winter skin
+2026-09,Amazon,SKU04,3,4.67,2,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-09,Amazon,SKU05,3,4.67,2,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-09,Flipkart,SKU01,7,4,4,1,1,0,1,2,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Flipkart,SKU02,11,3.64,5,2,1,1,2,3,No white cast on brown skin,White cast on dusky skin
+2026-09,Flipkart,SKU03,5,4.4,3,1,1,0,0,2,"Light, not sticky",Too light for dry winter skin
+2026-09,Flipkart,SKU04,2,4.5,1,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-09,Flipkart,SKU05,2,4.5,1,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-09,Nykaa,SKU01,10,4.3,6,2,1,1,0,3,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Nykaa,SKU02,24,4.17,14,5,2,1,2,8,No white cast on brown skin,White cast on dusky skin
+2026-09,Nykaa,SKU03,7,4.43,4,2,1,0,0,3,"Light, not sticky",Too light for dry winter skin
+2026-09,Nykaa,SKU04,3,4.67,2,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-09,Nykaa,SKU05,2,4.5,1,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-09,Myntra,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Myntra,SKU02,2,4.5,1,1,0,0,0,1,No white cast on brown skin,White cast on dusky skin
+2026-09,Myntra,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-09,Purplle,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Purplle,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-09,Purplle,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-09,Purplle,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-09,Purplle,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-09,Meesho,SKU01,6,3.83,3,1,1,0,1,2,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Meesho,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-09,Meesho,SKU03,4,3.75,2,1,0,0,1,1,"Light, not sticky",Too light for dry winter skin
+2026-09,Meesho,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-09,Tata CLiQ,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Tata CLiQ,SKU02,1,5,1,0,0,0,0,0,No white cast on brown skin,White cast on dusky skin
+2026-09,Tata CLiQ,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-09,JioMart,SKU02,2,4.5,1,1,0,0,0,1,No white cast on brown skin,White cast on dusky skin
+2026-09,AJIO,SKU02,1,5,1,0,0,0,0,0,No white cast on brown skin,White cast on dusky skin
+2026-09,Blinkit,SKU01,3,4.67,2,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-09,Blinkit,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-09,Blinkit,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-09,Blinkit,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-09,Blinkit,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-10,Website,SKU01,101,4.37,63,22,9,4,3,36,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Website,SKU02,152,4.12,85,33,14,7,13,59,No white cast on brown skin,White cast on dusky skin
+2026-10,Website,SKU03,69,4.3,42,15,6,3,3,23,"Light, not sticky",Too light for dry winter skin
+2026-10,Website,SKU04,32,4.16,18,7,3,2,2,9,"Saffron smell, glow",Too oily for humid weather
+2026-10,Website,SKU05,19,4.42,12,4,2,1,0,5,Great gift box,Mini sizes too small
+2026-10,Amazon,SKU01,19,4.21,11,4,2,1,1,7,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Amazon,SKU02,36,4,19,8,3,2,4,9,No white cast on brown skin,White cast on dusky skin
+2026-10,Amazon,SKU03,16,4.19,9,4,1,1,1,5,"Light, not sticky",Too light for dry winter skin
+2026-10,Amazon,SKU04,4,3.75,2,1,0,0,1,1,"Saffron smell, glow",Too oily for humid weather
+2026-10,Amazon,SKU05,2,4.5,1,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-10,Flipkart,SKU01,8,4,4,2,1,0,1,2,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Flipkart,SKU02,11,3.64,5,2,1,1,2,4,No white cast on brown skin,White cast on dusky skin
+2026-10,Flipkart,SKU03,8,4.5,5,2,1,0,0,3,"Light, not sticky",Too light for dry winter skin
+2026-10,Flipkart,SKU04,4,3.75,2,1,0,0,1,1,"Saffron smell, glow",Too oily for humid weather
+2026-10,Flipkart,SKU05,2,4.5,1,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-10,Nykaa,SKU01,15,4.47,10,3,1,1,0,6,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Nykaa,SKU02,21,4.05,11,5,2,1,2,6,No white cast on brown skin,White cast on dusky skin
+2026-10,Nykaa,SKU03,11,4.55,7,3,1,0,0,3,"Light, not sticky",Too light for dry winter skin
+2026-10,Nykaa,SKU04,5,4.4,3,1,1,0,0,2,"Saffron smell, glow",Too oily for humid weather
+2026-10,Nykaa,SKU05,3,4.67,2,1,0,0,0,1,Great gift box,Mini sizes too small
+2026-10,Myntra,SKU01,2,4.5,1,1,0,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Myntra,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-10,Myntra,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-10,Myntra,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-10,Myntra,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-10,Purplle,SKU01,4,4.25,2,1,1,0,0,2,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Purplle,SKU02,3,4.67,2,1,0,0,0,1,No white cast on brown skin,White cast on dusky skin
+2026-10,Purplle,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-10,Purplle,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-10,Purplle,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-10,Meesho,SKU01,4,3.75,2,1,0,0,1,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Meesho,SKU02,4,3.75,2,1,0,0,1,1,No white cast on brown skin,White cast on dusky skin
+2026-10,Meesho,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-10,Meesho,SKU04,1,5,1,0,0,0,0,0,"Saffron smell, glow",Too oily for humid weather
+2026-10,Meesho,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small
+2026-10,Tata CLiQ,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Tata CLiQ,SKU02,2,4.5,1,1,0,0,0,1,No white cast on brown skin,White cast on dusky skin
+2026-10,Tata CLiQ,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-10,JioMart,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,JioMart,SKU02,1,5,1,0,0,0,0,0,No white cast on brown skin,White cast on dusky skin
+2026-10,AJIO,SKU01,1,5,1,0,0,0,0,0,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,AJIO,SKU02,1,5,1,0,0,0,0,0,No white cast on brown skin,White cast on dusky skin
+2026-10,AJIO,SKU03,1,5,1,0,0,0,0,0,"Light, not sticky",Too light for dry winter skin
+2026-10,Blinkit,SKU01,4,4.25,2,1,1,0,0,1,Visible glow in 2 weeks,Oxidises (turns orange) after a month
+2026-10,Blinkit,SKU02,5,4,3,1,0,0,1,2,No white cast on brown skin,White cast on dusky skin
+2026-10,Blinkit,SKU03,2,4.5,1,1,0,0,0,1,"Light, not sticky",Too light for dry winter skin
+2026-10,Blinkit,SKU04,2,4.5,1,1,0,0,0,1,"Saffron smell, glow",Too oily for humid weather
+2026-10,Blinkit,SKU05,1,5,1,0,0,0,0,0,Great gift box,Mini sizes too small

@@ -1,0 +1,44 @@
+due_date,filing,authority,period,gstin_state,amount,status,filed_on,late_fee,note
+2026-08-31,Professional tax,Maharashtra (Mahakosh),2026-08,Maharashtra,2600,filed,2026-08-28,0,
+2026-09-07,TDS payment - salaries (sec 192),Income Tax (challan 281),2026-08,,4628,filed,2026-09-03,0,
+2026-09-07,TDS payment - vendors and creators (194C/194J/194I),Income Tax (challan 281),2026-08,,47376,filed,2026-09-05,0,"194J 10% on creator fees, 194C 2% on contract manufacturing"
+2026-09-11,GSTR-1 (outward supplies),GSTN,2026-08,Delhi,,filed,2026-09-07,0,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-09-11,GSTR-1 (outward supplies),GSTN,2026-08,Karnataka,,filed,2026-09-08,0,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-09-11,GSTR-1 (outward supplies),GSTN,2026-08,Maharashtra,,filed,2026-09-10,0,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-09-15,ESI contribution,ESIC,2026-08,,2202,filed,2026-09-15,0,"Employees with gross up to Rs 21,000: 0.75% + 3.25%"
+2026-09-15,PF ECR and payment,EPFO,2026-08,,86842,filed,2026-09-12,0,"Employee 12% + employer 12% of basic (capped at Rs 15,000)"
+2026-09-20,GSTR-3B (pay GST),GSTN,2026-08,Delhi,157656,filed,2026-09-17,0,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-09-20,GSTR-3B (pay GST),GSTN,2026-08,Karnataka,132267,filed late,2026-09-22,200,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-09-20,GSTR-3B (pay GST),GSTN,2026-08,Maharashtra,0,filed,2026-09-16,0,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-09-20,Professional tax,Karnataka (PT portal),2026-08,Karnataka,1000,filed,2026-09-20,0,
+2026-09-30,Professional tax,Maharashtra (Mahakosh),2026-09,Maharashtra,2800,filed,2026-09-28,0,
+2026-10-07,TDS payment - salaries (sec 192),Income Tax (challan 281),2026-09,,4628,filed,2026-10-03,0,
+2026-10-07,TDS payment - vendors and creators (194C/194J/194I),Income Tax (challan 281),2026-09,,61560,filed,2026-10-03,0,"194J 10% on creator fees, 194C 2% on contract manufacturing"
+2026-10-11,GSTR-1 (outward supplies),GSTN,2026-09,Delhi,,filed,2026-10-07,0,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-10-11,GSTR-1 (outward supplies),GSTN,2026-09,Karnataka,,filed,2026-10-07,0,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-10-11,GSTR-1 (outward supplies),GSTN,2026-09,Maharashtra,,filed,2026-10-07,0,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-10-15,ESI contribution,ESIC,2026-09,,2202,filed,2026-10-15,0,"Employees with gross up to Rs 21,000: 0.75% + 3.25%"
+2026-10-15,PF ECR and payment,EPFO,2026-09,,90442,filed,2026-10-11,0,"Employee 12% + employer 12% of basic (capped at Rs 15,000)"
+2026-10-20,GSTR-3B (pay GST),GSTN,2026-09,Delhi,147464,filed,2026-10-20,0,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-10-20,GSTR-3B (pay GST),GSTN,2026-09,Karnataka,123373,filed,2026-10-20,0,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-10-20,GSTR-3B (pay GST),GSTN,2026-09,Maharashtra,0,filed,2026-10-18,0,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-10-20,Professional tax,Karnataka (PT portal),2026-09,Karnataka,1000,filed,2026-10-20,0,
+2026-10-30,AOC-4 (FY 2025-26 financial statements),MCA,FY 2025-26,,,filed,2026-10-26,0,AGM held 30 Sep 2026
+2026-10-31,MSME-1 (dues to micro and small vendors over 45 days),MCA,Apr-Sep 2026,,,filed,2026-10-31,0,Nil return: every MSME vendor paid within 45 days (sec 43B(h))
+2026-10-31,Professional tax,Maharashtra (Mahakosh),2026-10,Maharashtra,2800,filed,2026-10-27,0,
+2026-10-31,TDS returns 24Q + 26Q (Q2: Jul-Sep),Income Tax (TRACES),2026-Q2,,,filed,2026-10-27,0,
+2026-11-07,TDS payment - salaries (sec 192),Income Tax (challan 281),2026-10,,4628,upcoming,,,
+2026-11-07,TDS payment - vendors and creators (194C/194J/194I),Income Tax (challan 281),2026-10,,69849,upcoming,,,"194J 10% on creator fees, 194C 2% on contract manufacturing"
+2026-11-11,GSTR-1 (outward supplies),GSTN,2026-10,Delhi,,upcoming,,,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-11-11,GSTR-1 (outward supplies),GSTN,2026-10,Karnataka,,upcoming,,,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-11-11,GSTR-1 (outward supplies),GSTN,2026-10,Maharashtra,,upcoming,,,Invoice-wise B2C/B2B and HSN 3304 summary
+2026-11-15,ESI contribution,ESIC,2026-10,,2202,upcoming,,,"Employees with gross up to Rs 21,000: 0.75% + 3.25%"
+2026-11-15,PF ECR and payment,EPFO,2026-10,,93412,upcoming,,,"Employee 12% + employer 12% of basic (capped at Rs 15,000)"
+2026-11-20,GSTR-3B (pay GST),GSTN,2026-10,Delhi,219098,upcoming,,,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-11-20,GSTR-3B (pay GST),GSTN,2026-10,Karnataka,136914,upcoming,,,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-11-20,GSTR-3B (pay GST),GSTN,2026-10,Maharashtra,0,upcoming,,,Cash payable after ITC and marketplace TCS (gst_monthly.csv)
+2026-11-20,Professional tax,Karnataka (PT portal),2026-10,Karnataka,1200,upcoming,,,
+2026-11-29,MGT-7 (annual return),MCA,FY 2025-26,,,upcoming,,,
+2026-12-15,Advance tax (Q3 instalment),Income Tax,FY 2026-27,,0,upcoming,,,Loss-making: nil
+2026-12-31,GSTR-9 (annual GST return),GSTN,FY 2025-26,Maharashtra; Delhi; Karnataka,,upcoming,,,
+2027-01-31,TDS returns 24Q + 26Q (Q3: Oct-Dec),Income Tax (TRACES),2026-Q3,,,upcoming,,,
