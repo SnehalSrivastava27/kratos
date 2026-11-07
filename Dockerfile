@@ -11,7 +11,7 @@ RUN npm run build --prefix web && npm run build --prefix server
 FROM node:24-alpine
 WORKDIR /app
 RUN apk add --no-cache su-exec
-ENV NODE_ENV=production PORT=8787 DATA_DIR=/data
+ENV NODE_ENV=production PORT=8787 DATA_DIR=/data HOST=0.0.0.0
 COPY server/package.json server/package-lock.json server/
 RUN npm ci --omit=dev --prefix server && npm cache clean --force
 COPY contracts contracts
