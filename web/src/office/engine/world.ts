@@ -161,6 +161,7 @@ function cardboard(s = 1) {
 function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   const root = new THREE.Group();
   const box3 = new THREE.Box3();
+  const sticky = stickyTex(); // one texture for every sticky-note board (per build: disposing the world disposes it)
   /** Places `o`; a solid one leaves its footprint (shrunk by `inset`) for the paths to go round. */
   const add = (o: THREE.Object3D, x: number, y: number, z: number, ry = 0, solid = false, inset = 0) => {
     o.position.set(x, y, z);
@@ -383,7 +384,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
       const a = Math.PI / 4 + (k * Math.PI) / 2;
       add(chair(PAL.chairs[(k + 2) % 6]), mr.x + Math.sin(a) * 1.15, 0, mr.z - 0.4 + Math.cos(a) * 1.15, a + Math.PI, true);
     }
-    add(wallBoard(2.0, 1.0, PAL.ink, stickyTex()), mr.x, 1.45, mr.z - 2.1);
+    add(wallBoard(2.0, 1.0, PAL.ink, sticky), mr.x, 1.45, mr.z - 2.1);
   }
 
   // Reception at the front door: a counter with the brand on it, and the product sample wall opposite.
@@ -414,7 +415,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
   }
 
   // The new wings (layout.ts ANNEX): department bays, glass rooms, the café, the lounge and the Town Hall.
-  for (const a of ANNEX) buildAnnex(m, a, add, root, signs, pouf, sofa);
+  for (const a of ANNEX) buildAnnex(m, a, add, root, signs, pouf, sofa, sticky);
 
   // Plants in the corners and along the walls.
   const plants: [number, number, 'monstera' | 'snake_plant' | 'ficus'][] = [
@@ -434,7 +435,7 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
 type Add = (o: THREE.Object3D, x: number, y: number, z: number, ry?: number, solid?: boolean, inset?: number) => THREE.Object3D;
 
 /** One room of the new wings: its rug and floor sign, then the furniture its kind calls for (all merged with the rest). */
-function buildAnnex(m: Models, a: Annex, add: Add, root: THREE.Group, signs: boolean, pouf: (c: string) => THREE.Object3D, sofa: (s: number) => THREE.Object3D) {
+function buildAnnex(m: Models, a: Annex, add: Add, root: THREE.Group, signs: boolean, pouf: (c: string) => THREE.Object3D, sofa: (s: number) => THREE.Object3D, sticky: THREE.Texture) {
   const { x, z, w, d } = a;
   const back = z - d / 2, front = z + d / 2;
   const col = '#' + new THREE.Color(a.color).lerp(new THREE.Color('#ffffff'), 0.62).getHexString();
@@ -466,7 +467,7 @@ function buildAnnex(m: Models, a: Annex, add: Add, root: THREE.Group, signs: boo
       add(chair(PAL.chairs[k % 6]), cx, 0, tz - 1.15, Math.PI, true);
       add(chair(PAL.chairs[(k + 3) % 6]), cx, 0, tz + 1.15, 0, true);
     }
-    add(wallBoard(Math.min(3.2, w - 3), 1.1, PAL.ink, stickyTex()), x, 1.45, back + 0.52);
+    add(wallBoard(Math.min(3.2, w - 3), 1.1, PAL.ink, sticky), x, 1.45, back + 0.52);
   } else if (a.kind === 'lounge') {
     // Three sofa nooks round coffee tables, poufs on the open side.
     for (const k of [-1, 0, 1]) {

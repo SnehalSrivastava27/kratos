@@ -85,9 +85,12 @@ const [X0, X1, Z0, Z1] = [
   Math.min(...zones.map((z) => z.x - z.w / 2)) - 0.4, Math.max(...zones.map((z) => z.x + z.w / 2)) + 0.6,
   Math.min(...zones.map((z) => z.z - z.d / 2)) - 0.6, FLOOR.maxZ + 0.3,
 ];
-const FIT_PTS = [
-  [X0, 0, Z1], [X1, 0, Z1], [X1, 0, Z0], [X0, 2.6, Z0], [X1, 2.6, Z0], [X0, 2.6, Z1],
-].map(([x, y, z]) => new THREE.Vector3(x, y, z));
+const fitPts = (x0: number, x1: number, z0: number, z1: number) =>
+  [[x0, 0, z1], [x1, 0, z1], [x1, 0, z0], [x0, 2.6, z0], [x1, 2.6, z0], [x0, 2.6, z1]].map(([x, y, z]) => new THREE.Vector3(x, y, z));
+const FIT_PTS = fitPts(X0, X1, Z0, Z1);
+// A portrait phone frames just the original block: the whole department area would put the camera ~150 m back and
+// pile every name tag into one column at the edge. The wings are a pinch / walk away.
+const FIT_PTS_NARROW = fitPts(CORE.minX - 0.4, CORE.maxX + 0.6, CORE.minZ - 0.6, CORE.maxZ + 0.3);
 const ZOOM_OFF = new THREE.Vector3(Math.sin(AZ) * 8.5, 10.5, Math.cos(AZ) * 8.5 + 1);
 
 const v3 = new THREE.Vector3();
@@ -110,7 +113,7 @@ function fitHome(fov: number, aspect: number, narrow: boolean): Pose {
     c.lookAt(tgt);
     c.updateMatrixWorld();
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-    for (const q of FIT_PTS) {
+    for (const q of aspect < 1 ? FIT_PTS_NARROW : FIT_PTS) {
       p.copy(q).project(c);
       x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y);
     }
