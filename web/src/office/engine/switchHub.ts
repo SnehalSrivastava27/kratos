@@ -10,7 +10,7 @@ import { DESKS, deskById, deskOf, personById, roomZone, roster, swMeta, zoneById
 import { FONT, imageTex, paint } from '../tex';
 import { disposeTree, mesh, noOutline, roundedBox, toon, toonUnique } from '../toon';
 import { WALL } from './world';
-import { LANES, corePos } from './layout';
+import { CORE as CORE_BLOCK, LANES, corePos } from './layout';
 
 const TG = '#3390EC';
 const PRIVATE = '#9d4edd'; // private notes between agents
@@ -18,6 +18,8 @@ const hub = zoneById.telegram_hub;
 /** The core stands between the Telegram wall and the lounge sofa. */
 export const CORE: [number, number] = corePos(hub);
 const Y = 0.035; // cables lie on the floor
+/** Top edge of the Switch logo sign hung over the core (the hub's name tag sits on it). */
+const SIGN_TOP = 3.66;
 const SPEED = 7.5;
 const ORB_Y = 1.55; // metres a second
 const TRAIL = [1, 0.78, 0.6, 0.45, 0.32];
@@ -114,7 +116,12 @@ export class SwitchHub {
       // Along the back corridor; rooms in the front row go down the nearer aisle and along the front corridor.
       const B = LANES.back, F = LANES.front;
       const aisle = LANES.aisles.reduce((a, b) => (Math.abs(b - e.x) < Math.abs(a - e.x) ? b : a));
-      const pts = e.z > F
+      const zn = zoneById[id];
+      const pts = e.z < WALL.backZ
+        ? [core, new THREE.Vector3(cx, Y, B), new THREE.Vector3(aisle, Y, B), new THREE.Vector3(aisle, Y, e.z), e] // north wing: up the aisle through its doorway
+        : e.x > CORE_BLOCK.maxX
+          ? [core, new THREE.Vector3(cx, Y, B), new THREE.Vector3(zn.x - zn.w / 2 - 1.0, Y, B), new THREE.Vector3(zn.x - zn.w / 2 - 1.0, Y, e.z), e] // east wing: along the cross corridor, down the room's west side
+          : e.z > F
         ? [core, new THREE.Vector3(cx, Y, B), new THREE.Vector3(aisle, Y, B), new THREE.Vector3(aisle, Y, F), new THREE.Vector3(e.x, Y, F), e]
         : [core, new THREE.Vector3(cx, Y, B), new THREE.Vector3(e.x, Y, B), e];
       const curve = trace(pts);
@@ -148,7 +155,7 @@ export class SwitchHub {
     c.add(label);
     // The Switch wordmark hung over the core, high enough to read across the floor and from the founder's eye level.
     const sign = new THREE.Group();
-    sign.position.set(0, 3.35, 0.2);
+    sign.position.set(0, SIGN_TOP - 0.31, 0.2);
     sign.add(mesh(roundedBox(2.9, 0.62, 0.1, 0.08), toon('#1E1328'), 0, 0, -0.06));
     sign.add(new THREE.Mesh(new THREE.PlaneGeometry(2.7, 0.44), new THREE.MeshBasicMaterial({ map: logoTex(1080, 176, '#1E1328'), toneMapped: false })));
     for (const sx of [-1, 1]) sign.add(mesh(new THREE.CylinderGeometry(0.015, 0.015, 1.2, 6), toon('#2b2d42'), sx * 1.2, 0.9, -0.06));
@@ -330,7 +337,7 @@ export class SwitchHub {
     if (busy) this.ports.instanceMatrix.needsUpdate = true;
 
     if (this.tag) {
-      v.set(CORE[0], 2.25, CORE[1]).project(camera);
+      v.set(CORE[0], SIGN_TOP + 0.08, CORE[1] + 0.2).project(camera); // sits on top of the hanging logo sign, never across it
       this.tag.style.display = v.z > 1 ? 'none' : '';
       this.tag.style.transform = `translate3d(${Math.round((v.x * 0.5 + 0.5) * w)}px, ${Math.round((-v.y * 0.5 + 0.5) * h)}px, 0)`;
     }

@@ -280,7 +280,10 @@ function buildOffice(m: Models, solids: Rect[], signs: boolean) {
     ring.add(legM);
   }
   add(ring, cr.x + 2.3, 0, cr.z - 0.5, -0.5, true, 0.15); // right of the second desk
-  add(wallBoard(2.6, 1.5, PAL.wood, polaroidTex()), WALL.leftX + WALL.t / 2 + 0.06, 1.5, cr.z, Math.PI / 2);
+  // The creator polaroid board stands on two legs at the back of the studio (it moved off the inner wall into the north wing).
+  const pb = cr.z - cr.d / 2 + 0.35;
+  add(wallBoard(2.6, 1.5, PAL.wood, polaroidTex()), cr.x - 1.8, 1.6, pb);
+  for (const sx of [-1, 1]) add(mesh(box(0.08, 0.9, 0.08), toon(PAL.wood)), cr.x - 1.8 + sx * 1.2, 0.45, pb - 0.05, 0, true);
   // Dispatch dock: stacked boxes and a roller conveyor.
   const dock = zoneById.dispatch_dock;
   add(cardboard(1.1), dock.x - 2.3, 0, dock.z - 1.35, 0, true);

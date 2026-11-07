@@ -24,8 +24,8 @@ console.log('nav ok');
 // fixed pieces (war-room glass + table, huddle room, reception counter + sample wall, the Switch core, finance cabinet
 // and safe). The live office runs the same check on its exact furniture: window.__hqReach() (dev).
 import { readFileSync } from 'node:fs';
-import { ANNEX, BOOK_ROWS, BOOK_DEPTH, CORE, DOOR, FLOOR, HACK_SCREEN, WALL, backWall, bookcaseSolids, corePos, innerWall, stations } from './layout.ts';
-const { zones } = JSON.parse(readFileSync(new URL('../../../../contracts/zones.json', import.meta.url)));
+import { ANNEX, BOOK_ROWS, BOOK_DEPTH, CORE, DOOR, FLOOR, HACK_SCREEN, WALL, ZONE_MOVES, backWall, placeZone, bookcaseSolids, corePos, innerWall, stations } from './layout.ts';
+const zones = JSON.parse(readFileSync(new URL('../../../../contracts/zones.json', import.meta.url))).zones.map(placeZone); // as the web floor places them
 const Z = Object.fromEntries(zones.map((z) => [z.id, z]));
 const roster = JSON.parse(readFileSync(new URL('../../../../contracts/roster.json', import.meta.url))).people;
 const DESK = { w: 1.8, d: 0.9 }, SEAT = 0.85;
@@ -36,7 +36,7 @@ for (const p of roster) inZone[p.zone] = (inZone[p.zone] ?? 0) + 1;
 for (const [zone, n] of Object.entries(inZone)) if (zone !== 'war_room') assert.ok((Z[zone]?.desks?.length ?? 0) >= n, `${zone}: ${n} people, ${Z[zone]?.desks?.length ?? 0} desks`);
 // every contract zone is in the original block, every annex room on the new floor, and no two rooms overlap
 const inside = (z, b) => z.x - z.w / 2 >= b.minX - 0.01 && z.x + z.w / 2 <= b.maxX + 0.01 && z.z - z.d / 2 >= b.minZ - 0.01 && z.z + z.d / 2 <= b.maxZ + 0.01;
-for (const z of zones) assert.ok(inside(z, CORE), `${z.id} off the original floor`);
+for (const z of zones) assert.ok(ZONE_MOVES[z.id] ? inside(z, FLOOR) && !inside(z, CORE) : inside(z, CORE), `${z.id} not where it belongs`);
 for (const z of ANNEX) assert.ok(inside(z, FLOOR) && !(z.x > CORE.minX && z.x < CORE.maxX && z.z > CORE.minZ && z.z < CORE.maxZ), `${z.id} off the new wings`);
 for (const z of [...zones, ...ANNEX]) {
   for (const o of [...zones, ...ANNEX]) if (o !== z) assert.ok(Math.abs(o.x - z.x) >= (o.w + z.w) / 2 - 0.01 || Math.abs(o.z - z.z) >= (o.d + z.d) / 2 - 0.01, `${z.id} overlaps ${o.id}`);

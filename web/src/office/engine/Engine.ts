@@ -79,7 +79,12 @@ const inWall = (x: number, z: number) => CAM_WALLS.some((r) => x > r.minX && x <
 // Tilted 3/4 view from the front-right, so both walls read and the floor fills the frame.
 const AZ = 0.12;
 const elevation = (aspect: number) => THREE.MathUtils.clamp(1.25 - 0.3 * aspect, 0.86, 1.02); // portrait panes look down more
-const [X0, X1, Z0, Z1] = [FLOOR.minX - 0.4, FLOOR.maxX + 0.2, FLOOR.minZ - 0.2, FLOOR.maxZ + 0.3];
+// The overview frames where the people are (every department zone, the moved ones too), not the whole 88 m floor:
+// the empty far corners of the wings would only make everyone smaller. Wheel out to see the rest.
+const [X0, X1, Z0, Z1] = [
+  Math.min(...zones.map((z) => z.x - z.w / 2)) - 0.4, Math.max(...zones.map((z) => z.x + z.w / 2)) + 0.6,
+  Math.min(...zones.map((z) => z.z - z.d / 2)) - 0.6, FLOOR.maxZ + 0.3,
+];
 const FIT_PTS = [
   [X0, 0, Z1], [X1, 0, Z1], [X1, 0, Z0], [X0, 2.6, Z0], [X1, 2.6, Z0], [X0, 2.6, Z1],
 ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
@@ -364,6 +369,7 @@ export class OfficeEngine {
       if (arriving.has(p.id)) a.walkIn(DOOR, this.nav);
       this.scene.add(a.person.root);
       this.overlay.append(a.el);
+      a.person.root.scale.setScalar(this.farK);
       this.agents.push(a);
       if (p.id === 'founder') this.founder = a;
     }
@@ -391,6 +397,8 @@ export class OfficeEngine {
   }
   private sitNext = false;
   private lastMove = -99;
+  private farK = 1;
+  private camLift = 0;
   /** The next switch to spectator seats the founder at their own desk (rather than where the feed puts them). */
   sitDown() {
     this.sitNext = true;
@@ -566,6 +574,14 @@ export class OfficeEngine {
     }
     this.confetti.update(dt);
     this.updateCamera(dt, t);
+    // Seen from far off (the overview), people and their tags grow so they still read; the walking view and the
+    // landing hero keep them life-size. Quantised, so it only touches them when the zoom really changes.
+    const far = this.view === 'player' || this.opts.hero || !this.cur ? 1 : Math.round(THREE.MathUtils.clamp(this.cur.dist * this.userShown.zoom / 30, 1, 2.2) * 10) / 10;
+    if (far !== this.farK) {
+      this.farK = far;
+      for (const a of this.agents) a.person.root.scale.setScalar(far);
+      this.overlay.classList.toggle('hq-far', far > 1.3);
+    }
     this.scene.updateMatrixWorld();
     this.hub?.update(dt, t, this.camera, this.size.w, this.size.h);
     for (const a of this.agents) a.project(this.camera, this.size.w, this.size.h);
@@ -651,7 +667,7 @@ export class OfficeEngine {
     const c = this.cur;
     const yaw = c.yaw + u.yaw;
     const near = this.view === 'player' && !!this.player;
-    const pitch = THREE.MathUtils.clamp(c.pitch + u.pitch, near ? 0.06 : 0.22, 1.4);
+    let pitch = THREE.MathUtils.clamp(c.pitch + u.pitch, near ? 0.06 : 0.22, 1.4);
     let dist = c.dist * u.zoom;
     const fov = near ? THREE.MathUtils.lerp(FOLLOW.fov, WIDE_FOV, THREE.MathUtils.clamp((u.zoom - 1.5) / 2.5, 0, 1)) : WIDE_FOV;
     if (Math.abs(this.camera.fov - fov) > 0.01) {
@@ -659,16 +675,22 @@ export class OfficeEngine {
       this.camera.updateProjectionMatrix();
     }
     if (near) {
-      // Stay on your side of the walls: walk the line out from you and stop short of the first wall it meets.
-      const dx = Math.sin(yaw) * Math.cos(pitch), dz = Math.cos(yaw) * Math.cos(pitch), dy = Math.sin(pitch);
-      if (c.ty + dy * dist < WALL.h + 3)
+      // Stay on your side of the walls. Walk the line out from you: where it meets a wall below its top, first try
+      // lifting the camera to look over it (eased), and only if that can't clear it stop short of the wall.
+      const hit = (p: number, d: number) => {
+        const dx = Math.sin(yaw) * Math.cos(p), dz = Math.cos(yaw) * Math.cos(p), dy = Math.sin(p);
         for (let k = 1; k <= 40; k++) {
-          const f = (dist * k) / 40;
-          if (inWall(c.tx + dx * f, c.tz + dz * f)) {
-            dist = Math.max(1.2, (dist * (k - 1)) / 40);
-            break;
-          }
+          const f = (d * k) / 40;
+          if (c.ty + dy * f < WALL.h + 0.4 && inWall(c.tx + dx * f, c.tz + dz * f)) return (k - 1) / 40;
         }
+        return -1;
+      };
+      let lift = 0;
+      if (hit(pitch, dist) >= 0) for (let p = pitch + 0.1; p <= 1.25; p += 0.1) if (hit(p, dist) < 0) { lift = p - pitch; break; }
+      this.camLift += (lift - this.camLift) * Math.min(1, dt * 5);
+      pitch += this.camLift;
+      const f = hit(pitch, dist);
+      if (f >= 0) dist = Math.max(1.2, dist * f);
     }
     this.camera.position.set(c.tx + Math.sin(yaw) * Math.cos(pitch) * dist, c.ty + Math.sin(pitch) * dist, c.tz + Math.cos(yaw) * Math.cos(pitch) * dist);
     this.camera.lookAt(c.tx, c.ty, c.tz);

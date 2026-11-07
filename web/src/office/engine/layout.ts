@@ -60,15 +60,28 @@ export const ANNEX: Annex[] = [
   { id: 'briefing', label: "Captain's Briefing Room", kind: 'meeting', color: '#F4A300', x: -15.3, z: -28.2, w: 16, d: 8.6 },
   { id: 'focus_room', label: 'Focus Room', kind: 'meeting', color: '#3390EC', x: 1.8, z: -28.2, w: 8.2, d: 8.6 },
   { id: 'reading_lounge', label: 'Reading Lounge', kind: 'lounge', color: '#c98b5a', x: 15.1, z: -28.2, w: 9.2, d: 8.6 },
-  { id: 'garden', label: 'Garden Atrium', kind: 'atrium', color: '#3CCB8B', x: -15.3, z: -16.4, w: 16, d: 8.2 },
+  { id: 'garden', label: 'Garden Atrium', kind: 'atrium', color: '#3CCB8B', x: 1.8, z: -16.4, w: 8.2, d: 8.2 },
   // East wing: a 4 m boulevard (x 20..24) down its west side, wide cross corridors between the rows.
   { id: 'boardroom', label: 'Boardroom', kind: 'meeting', color: '#7C3AED', x: 32, z: -28.2, w: 15, d: 8.6 },
   { id: 'sky_lounge', label: 'Sky Lounge', kind: 'lounge', color: '#5b8def', x: 54, z: -28.2, w: 18, d: 8.6 },
   { id: 'cafe', label: 'Café & Pantry', kind: 'pantry', color: '#F4A300', x: 32, z: -13.2, w: 15, d: 10.4 },
   { id: 'atrium', label: 'Atrium', kind: 'atrium', color: '#22D3EE', x: 54, z: -13.2, w: 18, d: 10.4 },
   { id: 'town_hall', label: 'Town Hall', kind: 'townhall', color: '#22D3EE', x: 32, z: 4.4, w: 15, d: 12 },
-  { id: 'glass_room', label: 'Glass Room', kind: 'meeting', color: '#DB2777', x: 54, z: 4.6, w: 10, d: 9.2 },
+  { id: 'glass_room', label: 'Glass Room', kind: 'meeting', color: '#DB2777', x: 59.75, z: 4.6, w: 7.5, d: 9.2 },
 ];
+
+/**
+ * Departments moved out of the original block into the new wings, so it breathes (web-only: the zone ids, desk ids
+ * and every desk's offset inside its zone are the contract's; only the zone's centre moves).
+ * Finance keeps its x, so its cabinet, safe and P&L screen still stand on the west wall (now in the north wing).
+ */
+export const ZONE_MOVES: Record<string, { x: number; z: number }> = {
+  finance_cabin: { x: -20, z: -16.4 }, // north wing, on the west wall
+  creator_studio: { x: 15.1, z: -16.4 }, // north wing, behind the Data Wall
+  growth_pod: { x: 47.2, z: 4.4 }, // east wing front row, by the Town Hall
+};
+/** A contract zone where the web floor puts it. */
+export const placeZone = <Z extends { id: string; x: number; z: number }>(z: Z): Z => (ZONE_MOVES[z.id] ? { ...z, ...ZONE_MOVES[z.id] } : z);
 
 /** The Town Hall's big screen (the hackathon page, facing +z at the back of the room). */
 export const HACK_SCREEN = (() => {
