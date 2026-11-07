@@ -72,7 +72,7 @@ Conventions:
 
 | Feature | Docs | Kratos | Evidence | Gap | Effort | Demo |
 |---|---|---|---|---|---|---|
-| Rooms guardrail checks (`trust-settings`: endpoint + Trust policy id + Trust API key; every message checked before delivery) | `legal/data-handling` ("Switch Rooms guardrail checks"), `switch-rooms/use-cases/guardrails`, `switch-trust/guardrails/policies` | partial | Read only: `server/src/roi.ts:152` (`GET /gateway/trust-settings`, shows "disabled"), [14](14-roi-trust.md) | Needs a hosted Trust account (Free plan: up to 5 managed agents, no card). Docs/source caveats: the check **fails open** on timeout (`core:config.py:694-704`, `trust/client.py`), skips messages with attachments, covers room messages and not the Haiku calls inside a session, and applies server-wide. The key must be Ingest-only or Editor and above (Trust 1.0 rejects Viewer). | M (account) | 5 |
+| Rooms guardrail checks (`trust-settings`: endpoint + Trust policy id + Trust API key; every message checked before delivery) | `legal/data-handling` ("Switch Rooms guardrail checks"), `switch-rooms/use-cases/guardrails`, `switch-trust/guardrails/policies` | partial | Read only: `server/src/roi.ts` `roi()` (`GET /gateway/trust-settings`, shows "disabled"), [14](14-roi-trust.md) | Needs a hosted Trust account (Free plan: up to 5 managed agents, no card). Docs/source caveats: the check **fails open** on timeout (`core:config.py:694-704`, `trust/client.py`), skips messages with attachments, covers room messages and not the Haiku calls inside a session, and applies server-wide. The key must be Ingest-only or Editor and above (Trust 1.0 rejects Viewer). | M (account) | 5 |
 | Guardrail policies: Jailbreak, PII, Secrets, Regex, Topic control, Tool permissions; Block / Redact / Alert | `switch-trust/guardrails/policies` | missing | We have our own: SAFETY block (all 16 agents), tool lockdown | A PII-redact policy is the strongest demo: a customer list pasted into the group arrives `[redacted]` (the docs' own scenario). Every org starts with "Baseline Monitoring (Alert)". | M | 5 |
 | Approval "on the record" by a person in the thread | `switch-rooms/use-cases/incident-response` | done | Finance gate (`@finance-approver`) then the founder's reply, [12](12-feature-survey.md) SW4 | Matches the docs' pattern: agents' instructions hold the change back, and the approval sits in the thread with a name on it. | – | 4 |
 | Session approval cards API (`/agent-sessions/{sid}/approvals`) | not in the official docs (source only, `core:session_activity/service.py:345-520`) | missing | Rejected in [12](12-feature-survey.md) | Undocumented, so it's likely to change. Keep the chat approval. | L | 4 |
@@ -84,16 +84,18 @@ Conventions:
 
 ### ROI: cost and value
 
+All ROI rows: [14](14-roi-trust.md). Code: `server/src/roi.ts` (reads, caps, budgets), `server/src/roi-calc.ts` (pricing, forecast, analyses), `web/src/office/RoiPanel.tsx` (five tabs). Tests: `server/test/sw5.test.mjs`, `server/test/roi-calc.test.mjs`.
+
 | Feature | Docs | Kratos | Evidence | Gap | Effort | Demo |
 |---|---|---|---|---|---|---|
-| Per-agent spend (MTD, $/session, by month) | `switch-trust/cost/index`, `cost/spending-and-caps` | partial | Our own version: `server/src/roi.ts:140-176` reads the Rooms usage counters (`GET /gateway/tenants/{id}/usage`) and prices them with hardcoded list prices (`roi.ts:12`) | Docs' ROI is hosted and needs traces in Trust. Ours is local and counts tokens per agent, which the docs' ROI can't do for Rooms traffic (Rooms shows up as **one** agent). | – | 5 |
-| **Claude Code OpenTelemetry → Trust** (`CLAUDE_CODE_ENABLE_TELEMETRY=1`, OTLP `…/agent/otel`, `Authorization=ApiKey …`, `gen_ai.agent.name`) | `switch-trust/admin/data-sources/opentelemetry` | missing | – | The documented way to get per-agent sessions, turns and cost for Claude Code into Trust without an SDK. Catch: all 16 agents share one working directory and `.claude/settings.json`, and managed-agent definitions have no `env` field (`core:providers/advanced_fields.py`). Per-agent `gen_ai.agent.name` needs a per-agent directory or a launcher wrapper. Leave out `OTEL_LOG_*` to send usage only. | M | 4 |
-| Monthly spend cap per agent + forecast (burn rate, days to cap) | `cost/spending-and-caps` | n/a (hosted) | – | Advisory only: "A cap doesn't stop an agent from spending". The opposite of Rooms budgets (below). | M | 3 |
-| Rooms budgets (`/gateway/tenants/{id}/budgets`, enforced at delivery) | **not in the official docs** (source: `core:budgets.py`, `gateway/tenants.py:711-805`) | partial | Listed read-only; create behind `ROI_BUDGETS=on` (`roi.ts:179-193`) | Undocumented, so call it "switch-core feature" in the blog, not "Switch ROI". | – | 2 |
-| Model pricing overrides (negotiated / unpriced models) | `cost/model-pricing` | deviation | `PRICES` table in `roi.ts:12` | Same idea, kept locally. An unknown model counts tokens but $0 in both. | – | 1 |
-| ROI analyses / Improvements (context_cache_waste, verbosity, model_optimizer, tool_bloat, retry_loop_waste) | `switch-trust/inventory/agents#improvements`, `mcp/playbooks` | partial | `recommend()` (`roi.ts:89-110`): model share, cost centre | Ours is two heuristics. The docs' `model_optimizer` + `tool_bloat` are exactly our two findings (Opus → Haiku, Captain wake-ups). | – | 3 |
-| Value side (deliverables per $) | not in the docs ("Switch ROI … shows what every agent costs", cost only) | **beyond the docs** | `groupUsage` joins posts + pinned docs per agent (`roi.ts:32-88`) | Kratos's "cost per deliverable" is something the hosted ROI doesn't do. Good blog point. | – | 4 |
-| Trust MCP server (`uvx switch-trust-mcp`: `list_llm_sessions`, `get_latest_roi_analyses`, `get_guardrail_outcomes` …, read-only) | `switch-trust/mcp/tools`, `mcp/connect` | missing | – | Only useful once Trust has data. A Viewer key in the *developer's* Claude Code, not the team's. | S (after OTel) | 2 |
+| Per-agent spend (MTD, $/session, by month, trend, totals) | `switch-trust/cost/index`, `cost/spending-and-caps` | **done** (ROI2) | `roi.ts` `roi()`: month to date, the two previous months, one usage read per UTC day (7 to 30) and per hour (last 24 h), past windows cached; `spend.agents[]` has `mtdUsd`, `costPerTurn`, `months`, `costPerSession`; Overview + Agents tabs | $/session is a run of active hours (Switch counts turns, not Claude Code sessions); with OTel on, Trust has the exact per-session figure. Local and per agent, which the hosted ROI can't do for Rooms traffic. | – | 5 |
+| **Claude Code OpenTelemetry → Trust** (`CLAUDE_CODE_ENABLE_TELEMETRY=1`, OTLP `…/agent/otel`, `Authorization=ApiKey …`, `gen_ai.agent.name`) | `switch-trust/admin/data-sources/opentelemetry` | **done** (ROI2, opt-in) | `scripts/trust-otel.py`, called by `switch-up.sh` (step 4b) and `switch-sync-agents.sh` when `TRUST_OTLP_ENDPOINT` + `TRUST_API_KEY` are set; writes the documented env into `AGENT_DIR/.claude/settings.local.json` (gitignored, 600), usage only (no `OTEL_LOG_*`); `DRY_RUN` shows it with the key redacted; unset removes it. `/api/roi` `trust.telemetry` on/off | **One** `gen_ai.agent.name=kratos-team`: Console's controller starts managed agents with `env: {}`, the shared repo as `cwd` and default setting sources (`agent-controller.mjs` `buildWatcherTemplate`, `ClaudeAdapter.startSession`), and definitions have no `env` field, so there is no per-agent place for it. Per-agent split stays in `/api/roi`. | – | 4 |
+| Monthly spend cap per agent + forecast (burn rate, days to cap) | `cost/spending-and-caps` | **done** (ROI2) | `roi-calc.ts` `forecast()` (burn = MTD ÷ days incl. today, Below / Near 80% / Over cap, days to cap, month-end); caps in kv `roi:caps`; `POST/DELETE /api/roi/caps` (host owner, JSON + origin check); Caps tab with cap summary | Advisory, as documented. Optional enforcement: `enforce: true` with `ROI_BUDGETS=on` mirrors the cap to a Rooms `turns` budget at the agent's $/turn. | – | 3 |
+| Rooms budgets (`/gateway/tenants/{id}/budgets`, enforced at delivery) | **not in the official docs** (source: `core:budgets.py`, `gateway/tenants.py:711-805`) | **done** (ROI2) | List always; create / update / delete from the panel and `POST /api/roi/budgets`, `PUT`/`DELETE /api/roi/budgets/{id}`, behind `ROI_BUDGETS=on`, host owner. Fixed: `model` is `""` for every model (switch-core `BudgetCreateRequest.model: str`; we sent `null`) | Undocumented, so call it "switch-core feature" in the blog, not "Switch ROI". Off by default: a reached budget silences an agent. | – | 2 |
+| Model pricing overrides (negotiated / unpriced models) | `cost/model-pricing` | **done** (ROI2) | `switch/pricing.json` (list prices from the claude-api skill, Haiku 5.5 >100K tier noted) merged over defaults by `mergePrices`; changed rows reported as `negotiated`; unknown models flagged `unpriced` per agent and in totals, not a silent $0 | none | – | 1 |
+| ROI analyses / Improvements (context_cache_waste, verbosity, model_optimizer, tool_bloat, retry_loop_waste) | `switch-trust/inventory/agents#improvements`, `mcp/playbooks` | **done** (ROI2) | `roi-calc.ts` `improvements()`: all five, each with agent, finding, 30-day saving, confidence, action; Improvements tab | `tool_bloat` is measured as wake-ups that produce nothing new (Rooms usage carries no tool definitions); the rest follow the hosted definitions on the data Switch counts. | – | 4 |
+| Value side (deliverables per $) | not in the docs ("Switch ROI … shows what every agent costs", cost only) | **beyond the docs** | `groupUsage`: posts + pinned docs + gallery files per agent; `deliverablesPerUsd`, `costPerDeliverable` | Kratos's "cost per deliverable" is something the hosted ROI doesn't do. Good blog point. | – | 4 |
+| Trust MCP server (`uvx switch-trust-mcp`: `list_llm_sessions`, `get_latest_roi_analyses`, `get_guardrail_outcomes` …, read-only) | `switch-trust/mcp/tools`, `mcp/connect` | **done** (ROI2, doc'd) | [14](14-roi-trust.md) "Trust MCP, for the developer": Viewer key, `.mcp.json` in the developer's checkout, never the team's; Trust tab says so | Useful once telemetry is on. | – | 2 |
 
 ### Platform
 
@@ -158,13 +160,15 @@ Conventions:
    - Demo line: paste "call Priya on 98xxxxxx12, priya@…" and the agents see `[redacted]`.
    - Caveats to state on screen: it fails open on timeout, files are not checked, and it applies to every room on the
      server.
-7. **Claude Code OTel to Switch Trust, per agent.** Demo 4, effort M.
-   - Put `CLAUDE_CODE_ENABLE_TELEMETRY=1`, `OTEL_LOGS_EXPORTER=otlp`, `OTEL_TRACES_EXPORTER=otlp`,
-     `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`, `OTEL_EXPORTER_OTLP_ENDPOINT=<…/agent/otel>` and
-     `OTEL_EXPORTER_OTLP_HEADERS` in `.claude/settings.json` `env`. Leave out the `OTEL_LOG_*` content flags.
-   - The hard part is `gen_ai.agent.name` per agent: one shared directory means one name. Options: a per-agent
-     subdirectory with its own `.claude/settings.local.json` (changes `definition.directory`), or accept one "kratos-team"
-     agent in Trust and keep the per-agent split in our `/api/roi`.
+7. **Claude Code OTel to Switch Trust, per agent.** Demo 4, effort M. **Status: done (ROI2), opt-in, as one agent.**
+   - `scripts/trust-otel.py` writes `CLAUDE_CODE_ENABLE_TELEMETRY=1`, `CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1`,
+     `OTEL_LOGS_EXPORTER=otlp`, `OTEL_TRACES_EXPORTER=otlp`, `OTEL_METRICS_EXPORTER=none`,
+     `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`, the endpoint and `OTEL_EXPORTER_OTLP_HEADERS` into the agents'
+     `.claude/settings.local.json` `env` (gitignored, not the committed `settings.json`), from `switch-up.sh` and
+     `switch-sync-agents.sh`, when `TRUST_OTLP_ENDPOINT` + `TRUST_API_KEY` are set. No `OTEL_LOG_*`.
+   - Per-agent `gen_ai.agent.name` is not achievable without moving agents out of the shared repo: Console launches
+     every managed agent with `env: {}` and the definition's directory, and definitions have no `env` field. Trust sees
+     one "kratos-team" agent; the per-agent split stays in `/api/roi`.
    - Don't also wrap with the SDK, or the cost is counted twice.
 8. **`maxTurns` in the lockdown + the runbook commands.** Demo 2, effort S. **Status: `maxTurns` tried in SW7, then removed at review**: Console applies it only as agent frontmatter; Claude Code clearly honours it for subagents, but for a long-lived `--agent` session it is either ignored or a whole-session cap (the Captain took 38 of 96 turns in one run), so it could stop the Captain mid-demo. Verify on a throwaway agent (maxTurns 2, three prompts) before turning it on;
    the GO_LIVE runbook commands are still open.
@@ -187,8 +191,9 @@ Conventions:
   repo with `.env`.
 - **Approval-cards API.** It isn't in the official docs, it needs a live session host, and the docs' own incident
   scenario does approval as a chat reply on the record. That is what we do.
-- **Rooms budgets in the demo.** These are an undocumented switch-core feature, enforced at delivery: a reached cap
-  silences an agent mid-demo. Trust's documented caps are advisory, which is the safer model to copy.
+- **Rooms budgets on by default.** These are an undocumented switch-core feature, enforced at delivery: a reached cap
+  silences an agent mid-demo. Kratos copies Trust's advisory caps by default; editing budgets (and mirroring a cap into
+  one) needs `ROI_BUDGETS=on`.
 - **Trust CLI scan and Discovery.** Python only. Markdown/YAML agents are invisible to them.
 - **Hosted agent evals.** They need a reachable HTTP endpoint per agent. Our local 166-question harness already
   covers it, and the CLI `eval` is the cheaper third-party check.
@@ -208,9 +213,9 @@ Conventions:
    choice, tool bloat, retries). Kratos joins Switch's usage counters with what each agent *delivered* (posts and
    pinned documents) to get cost per deliverable. And Switch ROI counts all Rooms traffic as one agent; the local usage
    counters split it by agent.
-4. **Our two cost findings are two of Switch ROI's five analyses.** "Opus was 96% of the bill" is `model_optimizer`.
-   "The Captain is woken by every report" is close to `tool_bloat` / `verbosity`. We found them by hand from
-   `/gateway/tenants/{id}/usage`.
+4. **Switch ROI's five analyses run on Rooms' own counters.** "Opus was 96% of the bill" is `model_optimizer`; "the
+   Captain re-reads the chat on every wake-up" is `context_cache_waste`; "the Captain is woken by every report" is the
+   Rooms form of `tool_bloat`. All five run locally from `/gateway/tenants/{id}/usage` plus the room's messages.
 5. **The biggest unused feature is one line of chat.** `!assign-agent @d2c-captain` (Switch 0.31 follow-ups) turns the
    group into a chat with the Captain. We built 16 agents and still made the founder type `@d2c-captain` every time.
 6. **We briefed 16 agents and not the room.** The docs' first building block is Room Instructions, "written once, read

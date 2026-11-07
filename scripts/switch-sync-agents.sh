@@ -2,7 +2,8 @@
 # Push switch/agents/<id>.md into the LIVE team agents on the local Switch server (Switch Console),
 # and the stored "Kesar HQ D2C team" template from switch/d2c-team.template.yaml.
 # Idempotent: rerun after editing switch/agents/*.md or switch/lockdown.json. Unchanged agents are left alone.
-# Also applies the hard tool limits in switch/lockdown.json (tool allowlist, auto mode off) to every agent.
+# Also applies the hard tool limits in switch/lockdown.json (tool allowlist, auto mode off) to every agent, and (opt-in,
+# TRUST_OTLP_ENDPOINT + TRUST_API_KEY) Claude Code telemetry to Switch Trust (scripts/trust-otel.py).
 #
 #   scripts/switch-sync-agents.sh
 #   DRY_RUN=1 scripts/switch-sync-agents.sh   # list what would be pushed; no API calls
@@ -18,6 +19,8 @@
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
+MAIN=$(cd "$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)/.." && pwd) # main checkout
+AGENT_DIR=${AGENT_DIR:-$MAIN}             # where Console runs the agents (their .claude/settings.local.json)
 TEMPLATE_NAME="Kesar HQ D2C team"
 export TEAM_MODEL=${TEAM_MODEL:-claude-haiku-5-5} # every team agent runs on Haiku
 CORE_ENV="${SWITCHDASH:-$HOME/Library/Application Support/switchdash}/local-switch-server/native/run/switch-core.env"
@@ -37,6 +40,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   done
   say "each also gets switch/lockdown.json: $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("advanced_config", json.dumps(d["advanced_config"]), "auto_mode", d["auto_mode"])' "$ROOT/switch/lockdown.json")"
   say "would PATCH the stored \"$TEMPLATE_NAME\" template"
+  python3 "$ROOT/scripts/trust-otel.py" "$AGENT_DIR" --dry-run # opt-in: TRUST_OTLP_ENDPOINT + TRUST_API_KEY (key never shown)
   exit 0
 fi
 node "$ROOT/scripts/build-template.mjs" | sed 's/^/• /'
@@ -88,6 +92,9 @@ print(json.dumps({"definition": want}))' "$ROOT/switch/agents/$name.md" "$ROOT/s
   elif gw PATCH "/management/agents/$id" "$TMP/patch" >/dev/null; then say "$name: instructions/model/lockdown updated"
   else say "$name: update FAILED (PATCH refused)"; FAIL=1; fi
 done
+
+# ---- telemetry to Switch Trust (opt-in: TRUST_OTLP_ENDPOINT + TRUST_API_KEY; unset removes it) ----------------
+python3 "$ROOT/scripts/trust-otel.py" "$AGENT_DIR" || FAIL=1
 
 # ---- read back: stored text + the controller applied the revision -------------------------------
 for i in $(seq 1 15); do

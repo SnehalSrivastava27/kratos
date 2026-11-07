@@ -14,6 +14,7 @@
 #   4. stores the team template, creates     7. starts the office server (:8787) and the observer
 #      missing team agents (managed agents,  8. prints the steps only a human can do
 #      like the office's Hire), registers d2c-observer (passive, owner-only)
+#   4b. opt-in: TRUST_OTLP_ENDPOINT + TRUST_API_KEY set → Claude Code OTel (usage only) to Switch Trust (scripts/trust-otel.py)
 # Never calls getUpdates/setWebhook: Switch itself polls the bot.
 set -euo pipefail
 
@@ -86,6 +87,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   say "would join ${#TEAM[@]} agents + d2c-observer to \"$ROOM_NAME\""
   say "would PUT /agents/<id>/addressing-policy on each team agent whose policy differs (rooms already named are kept):"
   team_policy '["<'"$ROOM_NAME"' room id>"]' | sed 's/^/•   /'
+  python3 "$ROOT/scripts/trust-otel.py" "$AGENT_DIR" --dry-run # opt-in: TRUST_OTLP_ENDPOINT + TRUST_API_KEY (key never shown)
   say "then start the office server (:8787) and the observer"
   exit 0
 fi
@@ -174,6 +176,11 @@ elif [ ! -f "$OBS_CREDS" ]; then
 else say "d2c-observer exists ($OBS_ID)"; fi
 gw PUT "/agents/$OBS_ID/addressing-policy" '{"policy":{"rules":[{"rooms":"*","room_groups":"*","users":[],"agents":[],"owner":true,"owner_agents":false,"platform":false}]}}' >/dev/null
 if [ "$ROOT" != "$MAIN" ] && [ -f "$OBS_CREDS" ]; then mkdir -p "$ROOT/observer/.switch/agents"; (umask 077; cp "$OBS_CREDS" "$ROOT/observer/.switch/agents/"); fi
+
+# ---- 4b. telemetry to Switch Trust (opt-in) --------------------------------------------------------
+# With TRUST_OTLP_ENDPOINT + TRUST_API_KEY in the environment, the agents' Claude Code sends usage (no content) over
+# OpenTelemetry to Switch Trust, as one "kratos-team" agent (docs/switch/14-roi-trust.md). Unset: removed again.
+python3 "$ROOT/scripts/trust-otel.py" "$AGENT_DIR" || todo "Telemetry to Switch Trust: fix TRUST_OTLP_ENDPOINT / TRUST_API_KEY (see above), then rerun."
 
 # ---- 5. rooms + invites ----------------------------------------------------------------------
 gw GET /rooms > "$TMP/rooms"
