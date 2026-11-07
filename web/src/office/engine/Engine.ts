@@ -670,13 +670,14 @@ export class OfficeEngine {
     let pitch = THREE.MathUtils.clamp(c.pitch + u.pitch, near ? 0.06 : 0.22, 1.4);
     let dist = c.dist * u.zoom;
     const fov = near ? THREE.MathUtils.lerp(FOLLOW.fov, WIDE_FOV, THREE.MathUtils.clamp((u.zoom - 1.5) / 2.5, 0, 1)) : WIDE_FOV;
-    if (Math.abs(this.camera.fov - fov) > 0.01) {
+    if (Math.abs(this.camera.fov - fov) > 0.01 || this.camera.near !== (near ? 0.1 : 0.5)) {
+      this.camera.near = near ? 0.1 : 0.5; // close behind you by a wall, the near plane must not cut into your head
       this.camera.fov += (fov - this.camera.fov) * Math.min(1, dt * 6);
       this.camera.updateProjectionMatrix();
     }
     if (near) {
-      // Stay on your side of the walls. Walk the line out from you: where it meets a wall below its top, first try
-      // lifting the camera to look over it (eased), and only if that can't clear it stop short of the wall.
+      // Stay on your side of the walls (agent-office clamps the camera inside the room): walk the line out from you and
+      // treat the first wall it meets below the wall's top as in the way.
       const hit = (p: number, d: number) => {
         const dx = Math.sin(yaw) * Math.cos(p), dz = Math.cos(yaw) * Math.cos(p), dy = Math.sin(p);
         for (let k = 1; k <= 40; k++) {
@@ -685,12 +686,17 @@ export class OfficeEngine {
         }
         return -1;
       };
+      // Blocked: rise (eased) until the view clears the wall's top, the open-plan way (there is no ceiling); only if
+      // even a steep look can't clear it, pull in, never closer than an arm's length behind you.
       let lift = 0;
-      if (hit(pitch, dist) >= 0) for (let p = pitch + 0.1; p <= 1.25; p += 0.1) if (hit(p, dist) < 0) { lift = p - pitch; break; }
-      this.camLift += (lift - this.camLift) * Math.min(1, dt * 5);
+      if (hit(pitch, dist) >= 0) {
+        lift = 1.15 - pitch;
+        for (let p = pitch + 0.05; p < 1.15; p += 0.05) if (hit(p, dist) < 0) { lift = Math.min(1.2, p + 0.1) - pitch; break; } // a margin: the ease approaches it from below
+      }
+      this.camLift += (lift - this.camLift) * Math.min(1, dt * 4);
       pitch += this.camLift;
       const f = hit(pitch, dist);
-      if (f >= 0) dist = Math.max(1.2, dist * f);
+      if (f >= 0) dist = Math.max(2.2, dist * f);
     }
     this.camera.position.set(c.tx + Math.sin(yaw) * Math.cos(pitch) * dist, c.ty + Math.sin(pitch) * dist, c.tz + Math.cos(yaw) * Math.cos(pitch) * dist);
     this.camera.lookAt(c.tx, c.ty, c.tz);
