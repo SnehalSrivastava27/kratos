@@ -20,6 +20,7 @@ export interface AuthApi {
   logout(): Promise<void>;
   connect(): Promise<ConnectCode>;
   connectStatus(): Promise<ConnectStatus>;
+  recheck(): Promise<ConnectStatus>;
   workspaces(): Promise<Workspace[]>;
 }
 
@@ -53,6 +54,7 @@ const real: AuthApi = {
   logout: () => req<void>('POST', '/api/auth/logout', {}), // the server's write guard requires a JSON body
   connect: () => req<ConnectCode>('POST', '/api/workspaces/connect', {}),
   connectStatus: () => req<ConnectStatus>('GET', '/api/workspaces/connect/status'),
+  recheck: () => req<ConnectStatus>('POST', '/api/workspaces/connect/recheck', {}),
   workspaces: () => req<Workspace[]>('GET', '/api/workspaces'),
 };
 
@@ -85,5 +87,6 @@ export const api: AuthApi = {
   logout: via('logout'),
   connect: via('connect'),
   connectStatus: via('connectStatus'),
+  recheck: via('recheck'),
   workspaces: via('workspaces'),
 };

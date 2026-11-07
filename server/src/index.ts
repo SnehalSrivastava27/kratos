@@ -8,7 +8,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import { log } from "./log.js";
 import { openStore, closeStore, addEvent, getEvent, recent, roomEvents, roomStats, documents, dbStatus, listEmployees, eventCount, RING_MAX, type OfficeEvent } from "./store.js";
 import { AuthError, signup, login, createSession, deleteSession, sessionUser, sessionCookie, cookieValue, normEmail, limitLogin, isHostOwner, sessionValid, ipKey, sha as shaHex, type User } from "./auth.js";
-import { resolveWs, userWorkspaces, allWorkspaces, publicWs, issueCode, connectStatus, ingest, watchRooms, upgradeAll, type Workspace } from "./workspaces.js";
+import { resolveWs, userWorkspaces, allWorkspaces, publicWs, issueCode, connectStatus, recheck, ingest, watchRooms, upgradeAll, type Workspace } from "./workspaces.js";
 import { rooms, agents, type Roster } from "./derive.js";
 import { handleOffice, syncPending, employeePerson, tagCatchUp } from "./office.js";
 import { startBriefs, briefNow } from "./brief.js";
@@ -133,7 +133,7 @@ const localHops = (req: IncomingMessage) =>
 const isLocalOffice = (req: IncomingMessage) => TRUST_LOOPBACK && LOOPBACK_IP.test(req.socket.remoteAddress ?? "") && localHops(req) && localHost(req);
 /** Reads that reveal local paths. Cross-site pages can't read responses (no CORS), so Host is what matters. */
 const isTrustedRead = (req: IncomingMessage) => hasToken(req, ADMIN_TOKEN) || (isLocalOffice(req) && originOk(req));
-const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|roi\/(budgets(\/[\w-]+)?|caps)|auth\/(signup|login|logout)|workspaces\/connect|qa\/ask)$/;
+const WRITE_ROUTE = /^\/api\/(command|brief|employees(\/[\w-]+)?|library\/categorize|replay(\/stop)?|roi\/(budgets(\/[\w-]+)?|caps)|auth\/(signup|login|logout)|workspaces\/connect(\/recheck)?|qa\/ask)$/;
 /** Every state-changing office/admin/auth route: JSON only (a cross-site "simple" POST can't send it without a preflight
  *  we never answer), a foreign Origin is refused, and without the token the Host must be local or configured. */
 function checkWrite(req: IncomingMessage) {
@@ -305,6 +305,7 @@ async function handle(req: IncomingMessage, res: ServerResponse, url: URL) {
     return send(res, 200, code);
   }
   if (route === "GET /api/workspaces/connect/status") return send(res, 200, connectStatus(needUser(req)));
+  if (route === "POST /api/workspaces/connect/recheck") return send(res, 200, await recheck(needUser(req)));
 
   if (route === "POST /api/events") {
     requireToken(req, OBSERVER_TOKEN);

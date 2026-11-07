@@ -108,6 +108,16 @@ const liveCode = (code: string) =>
   sql().prepare("SELECT id, user_id FROM link_codes WHERE code_hash = ? AND used_at IS NULL AND expires_at > ?").get(sha(code), Date.now()) as { id: number; user_id: string } | undefined;
 
 const lastRecheck = new Map<string, number>();
+/** "Check again" on /connect: re-run setup for the user's newest linked group now, then report. */
+export async function recheck(user: User) {
+  const c = sql().prepare("SELECT workspace_id FROM link_codes WHERE user_id = ? ORDER BY id DESC LIMIT 1").get(user.id) as any;
+  const w = c?.workspace_id ? getWs(c.workspace_id) : null;
+  if (w && w.status !== "ready") {
+    lastRecheck.set(w.id, Date.now());
+    await setup(w.id).catch(() => {});
+  }
+  return connectStatus(user);
+}
 export function connectStatus(user: User) {
   const c = sql().prepare("SELECT * FROM link_codes WHERE user_id = ? ORDER BY id DESC LIMIT 1").get(user.id) as any;
   if (!c) return { state: "expired", detail: "no code yet" };
