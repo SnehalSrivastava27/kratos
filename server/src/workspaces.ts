@@ -107,11 +107,20 @@ export function issueCode(user: User) {
 const liveCode = (code: string) =>
   sql().prepare("SELECT id, user_id FROM link_codes WHERE code_hash = ? AND used_at IS NULL AND expires_at > ?").get(sha(code), Date.now()) as { id: number; user_id: string } | undefined;
 
+const lastRecheck = new Map<string, number>();
 export function connectStatus(user: User) {
   const c = sql().prepare("SELECT * FROM link_codes WHERE user_id = ? ORDER BY id DESC LIMIT 1").get(user.id) as any;
   if (!c) return { state: "expired", detail: "no code yet" };
   const w = c.workspace_id ? getWs(c.workspace_id) : null;
-  if (w) return { state: w.status, workspace: publicWs(w), ...(w.detail ? { detail: w.detail } : {}) };
+  if (w) {
+    // Waiting on the founder (bot admin, Topics on): the page polls every 2 s, so re-check here (at most every 5 s)
+    // instead of waiting for the next message in the group.
+    if (w.status !== "ready" && Date.now() - (lastRecheck.get(w.id) ?? 0) > 5_000) {
+      lastRecheck.set(w.id, Date.now());
+      void setup(w.id).catch(() => {});
+    }
+    return { state: w.status, workspace: publicWs(w), ...(w.detail ? { detail: w.detail } : {}) };
+  }
   if (c.used_at || c.expires_at <= Date.now()) return { state: "expired", ...(c.detail ? { detail: c.detail } : {}) };
   return { state: "waiting", ...(c.detail ? { detail: c.detail } : {}) };
 }
@@ -438,7 +447,7 @@ export async function setup(id: string, upgrade = false) {
         !chat.ok && `@${BOT_USERNAME} can't see this group yet.`,
         chat.ok && !chat.result?.is_forum && "Turn Topics on (group → Edit → Topics).",
         !admin && `Make @${BOT_USERNAME} an admin with "Manage topics" on.`,
-        "Then send any message in the group.",
+        "Kratos checks again every few seconds.",
       ].filter(Boolean).join(" ");
       return save(w);
     }

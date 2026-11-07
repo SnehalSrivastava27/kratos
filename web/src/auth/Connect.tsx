@@ -275,7 +275,8 @@ function Live({ state, pollErr, onNewCode, onAdmin }: { state?: string; pollErr:
   if (state === 'needs_admin') {
     return (
       <Note tone="warn">
-        Got your code, but the bot isn’t an admin with Manage topics yet.{' '}
+        Got your code, but the bot isn’t an admin with Manage topics yet. Make it one and this page moves on by
+        itself in a few seconds.{' '}
         <button className="font-medium underline underline-offset-2" onClick={onAdmin}>Show me the admin steps</button>
       </Note>
     );
